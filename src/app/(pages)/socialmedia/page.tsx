@@ -12,10 +12,10 @@ ERRORS: 500px, shutterfly - malformed XML RSS
 */
 
 const myRSSFeeds = {
-	SOOpx: { url: "https://500px.com/brianwhaley/rss" },
+	// SOOpx: { url: "https://500px.com/brianwhaley/rss" },
 	blog: { url: "https://blog.pixelated.tech/feed/", iconSrcAlt: "Pixelated Views Blog Post" },
 	/* BLURB */
-	ebay: { url: "https://rssbay.net/feed?keyword=sunglasses&globalId=EBAY-US&auction=1&buyitnow=1&condition=-&seller=btw73&time-frame-type=-&time-frame-value=-" },
+	// ebay: { url: "https://rssbay.net/feed?keyword=sunglasses&globalId=EBAY-US&auction=1&buyitnow=1&condition=-&seller=pixelatedtech&time-frame-type=-&time-frame-value=-" },
 	etsy: { url: "https://www.etsy.com/people/bwhaley73/favorites/items.rss" },
 	/* FACEBOOK */
 	flickr: { url : "https://www.flickr.com/services/feeds/photoset.gne?nsid=15473210@N04&set=72157712416706518&lang=en-us&format=rss2" },
@@ -29,16 +29,16 @@ const myRSSFeeds = {
 	pinterest: { url: "https://www.pinterest.com/brianwhaley/feed.rss" },
 	reddit: { url: "https://www.reddit.com/user/btw-73/saved.rss?feed=fc1adaa9f977a389504453447e7c0e6ef68f7037&user=btw-73" },
 	/* https://ssl.reddit.com/prefs/feeds/ */
-	shutterfly: { url: "https://cmd.shutterfly.com/commands/format/rss?site=brianwhaley&page=brianwhaley" },
+	// shutterfly: { url: "https://cmd.shutterfly.com/commands/format/rss?site=brianwhaley&page=brianwhaley" },
 	/* snapchat */
 	/* ShutterStock */
 	/* TickTock */
-	tumblr: { url: "https://pixelatedviews.tumblr.com/rss" },
+	// tumblr: { url: "https://pixelatedviews.tumblr.com/rss" },
 	x: { url : "https://rsshub.app/twitter/user/brianwhaley", iconSrcAlt: 'Tweets from Brian Whaley'},
 	// twitter: { url: "https://twitrss.me/twitter_user_to_rss/?user=brianwhaley" },
 	// twitter: { url : "https://rss.app/feeds/MPULoVcijU5AAHxU.xml", iconSrcAlt: 'Tweets from Brian Whaley'},
 	// twitter: { url: "https://twitrss.me/twitter_user_to_rss/?user=pixelatedviews" }
-	x2: { url : "https://rsshub.app/twitter/user/pixelatedviews", iconSrcAlt: 'Tweets from Pixelated'},
+	// x2: { url : "https://rsshub.app/twitter/user/pixelatedviews", iconSrcAlt: 'Tweets from Pixelated'},
 	// twitter2: { url : "https://rss.app/feeds/B0rl26o7ehFAuBoq.xml", iconSrcAlt: 'Tweets from picelated.views'},
 	youtube: { url: "https://www.youtube.com/feeds/videos.xml%3Fchannel_id=UCKk2eBwml-4mEsmMK-dK6sQ" }
 };
