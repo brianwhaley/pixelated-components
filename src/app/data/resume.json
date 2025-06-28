@@ -1,0 +1,2595 @@
+{
+	"items": [
+	  {
+		"type": [ "h-resume" ],
+		"properties": {
+			"name": [ "Brian T. Whaley" ],
+			"summary": [
+				"Information Technology leader accomplished in building and managing global high-performance teams, launching and managing digital products, and developing and executing unified product and technology strategies.  Managed:",
+				"Diverse range of technologies, in the media, finance, pharmaceutical, and telecommunications industries",
+				"Highly available e-commerce portals, web sites, web applications, and mobile applications",
+				"Project lifecycle, Agile Methodologies (including Scrum and Kanban), benchmarking, best practices implementation, and continuous process improvement",
+				"Sizable departments up to 300 staff, budgets to $50 million, using onshore staff, offshore partners, and hybrid teams"
+			],
+			"contact": [
+				{
+					"value": "Brian T. Whaley",
+					"type": [ "h-card" ],
+					"properties": {
+						"name": [ "Brian T. Whaley" ],
+						"photo": [ "http://example.org/photo.png" ],
+						"url": [ "https://linkedin.com/in/brianwhaley" ],
+						"email": [ "brian.whaley@gmail.com" ],
+						"tel": [ "(973) 710-8008" ],
+						"adr": [
+							{
+								"type": [ "h-adr" ],
+								"properties": {
+									"street-address": [ "10 Jade Circle" ],
+									"locality": [ "Denville" ],
+									"region": [ "NJ" ],
+									"postal-code": [ "07834" ],
+									"country-name": [ "USA" ]
+								}
+							}
+						]
+					}
+				}
+			],
+			"education": [
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "Masters of Science - Information Systems (MSIS)" ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2002-05-23T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Wesley J Howe School of Management, Stevens Institute of Technology" ],
+								"url": [ ],
+								"tel": [ "(201) 216-5000" ],
+								"street-address": [ "1 Castle Point Terrace" ],
+								"locality": [ "Hoboken" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "07030" ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "Bachelor of Arts (BA) - Double Major: Visual Art and Art History" ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "1996-05-16T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Rutgers The State University of New Jersey" ],
+								"url": [ ],
+								"tel": [ "(732) 445-4636" ],
+								"street-address": [ "57 US Highway 1" ],
+								"locality": [ "New Brunswick" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08873" ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "HS Diploma" ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "1991-06-09T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Rutgers Preparatory School" ],
+								"url": [ ],
+								"tel": [ "(732) 545-5600" ],
+								"street-address": [ "1345 Easton Avenue" ],
+								"locality": [ "Somerset" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08873" ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				}
+			],
+			"training": [
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2024-07-01T00:00:00" ],
+						"end": [ "2024-12-31T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "BetterUp" ],
+								"url": [ ],
+								"tel": [ "(844) 303-9595" ],
+								"street-address": [ "3100 E 5th Street, Suite 350"],
+								"locality": [ "Austin" ],
+								"region": [ "TX" ],
+								"postal-code": [ "78702" ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2023-07-26T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "AWS Summit" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ "Jacob Javitz Center"],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2022-04-01T00:00:00" ],
+						"end": [ "2022-04-30T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Duke AYG Leadership Program" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Durham" ],
+								"region": [ "NC" ],
+								"postal-code": [ "27708" ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2021-04-01T00:00:00" ],
+						"end": [ "2022-04-30T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "BetterUp" ],
+								"url": [ ],
+								"tel": [ "(844) 303-9595" ],
+								"street-address": [ "3100 E 5th Street, Suite 350"],
+								"locality": [ "Austin" ],
+								"region": [ "TX" ],
+								"postal-code": [ "78702" ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2018-10-01T00:00:00" ],
+						"end": [ "2018-10-31T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Harvard New People Leader Program" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Cambridge" ],
+								"region": [ "MA" ],
+								"postal-code": [ "02138" ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2021-11-11T00:00:00" ],
+						"end": [ "2021-11-12T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Grokking the Advanced System Design Interview - Educative " ],
+								"url": [ "https://www.educative.io/courses/grokking-the-principles-and-practices-of-advanced-system-design" ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ ],
+								"region": [ ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2021-11-08T00:00:00" ],
+						"end": [ "2021-11-10T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Grokking the System Design Interview - Educative " ],
+								"url": [ "https://www.educative.io/courses/grokking-the-system-design-interview" ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ ],
+								"region": [ ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2018-07-17T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "AWS Summit" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ "Jacob Javitz Center"],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2017-08-14T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "AWS Summit" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ "Jacob Javitz Center"],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2016-06-21T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Cognizant QualitE Convention" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Newark" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2016-06-03T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "BuzzJS Conference" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2013-07-25T00:00:00" ],
+						"end": [ "2013-07-26T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Lean UX with Jeff Gothelf and ADP" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Roseland" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2013-04-15T00:00:00" ],
+						"end": [ "2013-04-17T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "ADP Scrum Training" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Florham Park" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2012-07-23T00:00:00" ],
+						"end": [ "2012-07-24T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Negotiating with Max Bazerman" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ ],
+								"region": [ ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2011-05-11T00:00:00" ],
+						"end": [ "2011-05-13T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Certified Scrum Developer" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Pittsburgh" ],
+								"region": [ "PA" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2010-11-16T00:00:00" ],
+						"end": [ "2010-11-18T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Management Training at Associated Press" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Cranbury" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2010-10-20T00:00:00" ],
+						"end": [ "2010-10-22T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Effective Scrum Developer Using .NET With Visual Studio, RippleRock" ],
+								"url": [ "http://bit.ly/2JAKqpd" ],
+								"tel": [ ],
+								"street-address": [ "The University Club"],
+								"locality": [ "Pittsburgh" ],
+								"region": [ "PA" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2010-10-18T00:00:00" ],
+						"end": [ "2010-10-19T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Scrum Implementation Workshop, RippleRock" ],
+								"url": [ "http://bit.ly/2NZA3Pj" ],
+								"tel": [ ],
+								"street-address": [ "The University Club"],
+								"locality": [ "Pittsburgh" ],
+								"region": [ "PA" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2009-04-05T00:00:00" ],
+						"end": [ "2009-04-10T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Usability Week 2009, Neilsen Norman Group" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Washington" ],
+								"region": [ "D.C." ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2009-03-26T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Presentation Skills, Communispond, BMS" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2008-11-25T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Effective Time Management & Meeting Management, The Projex Group LLC" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2008-06-04T00:00:00" ],
+						"end": [ "2008-06-06T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Requirements Elicitation, Dave Wirick PMP CMA, Babbage Simmell" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2008-03-05T00:00:00" ],
+						"end": [ "2008-03-07T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Microsoft Mix 08" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Las Vegas" ],
+								"region": [ "NV" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2007-04-30T00:00:00" ],
+						"end": [ "2007-05-07T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Microsoft Mix 07" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Las Vegas" ],
+								"region": [ "NV" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2006-11-06T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Visual Studio Connections" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ ],
+								"region": [ ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2003-10-01T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Plumtree 5 EDK" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ ],
+								"region": [ ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2004-09-01T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "The View - Domino Web Coding Bootcamp" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ ],
+								"region": [ ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2004-07-26T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Plumtree Enterprise Web 5.0 Foundations, Vashanth Manikumar" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ ],
+								"region": [ ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2004-04-14T00:00:00" ],
+						"end": [ "2004-04-15T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Business Across Borders, Vanessa Hicks-Voorham, BMS" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2003-08-05T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "The Successful Negotiator, Asherman Associates, BMS" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2003-08-04T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Crystal Reports 8.5 Advanced - ElementK, BMS" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2003-08-04T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Crystal Reports 8.5 Basic Skills - ElementK, BMS" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2003-08-01T00:00:00" ],
+						"end": [ "2003-08-05T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Developing Microsoft ASP.Net Web Applications Using Visual Studio.Net, Darrel Wire" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ ],
+								"region": [ ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2003-07-31T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "ROPES Employee Selection, BMS" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2003-07-31T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Situational Service, Dave Specker, BMS" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2003-07-31T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Situational Leadership, Dave Specker, BMS" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ "2002-07-05T00:00:00" ],
+						"end": [ "2002-07-06T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Crystal Reports Introduction, BMS" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"summary": [ ],
+						"start": [ ],
+						"end": [ "2002-01-01T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Preparing for PMI’s PMP Certification Exam - PMI 2 Day Super-Intensive Course, Boston University Education Affiliate, Bill Ruggles, BMS" ],
+								"url": [ ],
+								"tel": [ ],
+								"street-address": [ ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				}
+			],
+			"qualifications":{
+				"Digital Marketing": [
+					"Designed, architected and implemented an integrated Digital Marketing Technology strategy across web, mobile, blog, email, and social media channels.  Achieved an average of $2M in software, hardware, and licensing costs.",
+					"Designed, built, and launched new Digital products from concept to deployment.  Monitored user activity using ROI metrics, KPI results, analytics tools, and implemented improvements based on results.",
+					"Managed full software product lifecycle for the Content Management, Marketing Automation, Content Delivery Network, and Software Development solutions.  This includes RFP, evaluation, pilot, architecture, build, deploy, migration, sunset, and retirement of COTS and custom solutions.  Consolidated disparate products onto new platforms, generating between $1M and $2M of savings annually.",
+					"Established company's first Mobile Development department.  Developed and maintained mobile applications on iOS, Android, Blackberry, Windows Phone, Nokia, and HTML5, reaching millions of mobile phone users daily.",
+					"Researched and implemented Panda 4.0 SEO recovery efforts, which improved monthly visits from -60% to +20%."
+				],
+				"User Interface / User Experience": [
+					"Transformed the technology platform for web site user interface, using responsive and fluid design, atomic components, mobile first principles, and cross training",
+					"Established Web Center of Excellence.  Rolled out a new corporate standard UI, including responsive web design, reusable style sheets, standard libraries, usability standards, and a style guide.  Established Advisory Board, review and approval process, and continuous improvement programs globally.",
+					"Standardized the quality, development, and delivery of creative assets from 15 different advertising agencies during the project intake process of my development team.  Increased quality and decreased project time by 20%."
+				],
+				"Project Management & SDLC": [
+					"Managed Agile Transformation rollout across the department, developed a training program, scaled across all teams.  Acted as Agile coach for new scrum masters and their teams.",
+					"Evaluated and improved the existing Scrum implementation for the development teams.  Decreased sprint length by 50%, decreased defects by 25%, and increased team participation, ownership, and communication.",
+					"Revamped the department project intake stream.  Defined a single process for work intake, appropriate resource utilization, project tracking, unified roadmap, alignment with business strategy, and established ROI measurements.",
+					"Rolled out department level Continuous Improvement initiative.  Improved documentation, centralized all team artifacts, and increased knowledge sharing with security, infrastructure and networking teams globally.  Decreased the length and frequency of support calls by 15%.",
+					"Implemented test automation, TDD, automated build and deploy, and continuous integration across the team"
+				],
+				"Leadership & People Management": [
+					"Developed annual and five-year strategies, focusing on people, process, technology, operations, and major projects",
+					"Assembled and trained new software development and operations teams from the ground up.  Teams comprised of developers, database administrators, quality assurance testers, graphic designers, business analysts, analytics analysts, project managers, and team leads.  Followed on-shore, off-shore, co-located, and outsourced models.",
+					"Implemented a blended onshore and offshore model to manage costs and provide around-the-clock and follow-the-sun development and operations schedules.  Created a savings of up to 25% annually.",
+					"Improved the hiring and on-boarding process, focusing on flexibility, scalability, and quality.  Turned new hires into productive developers 33% quicker.  Focused on employee engagement through stretch assignments and ComScore surveys.  Achieved average retention rates above 95%."
+				]
+			},
+			"experience": [
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2023-12-05T09:00:00" ],
+						"end": [ "Present" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Vice President Engineering, @Work Corporate Client Enablement" ],
+								"org": [ "American Express" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(800) 528-4800" ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}],
+						"projects" : [
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "@ Work - Corporate Card Platform" ],
+									"url": [ "https://www.americanexpress.com/en-us/account/at-work/login/" ],
+									"photo": [ ],
+									"note": [ ]
+								}
+							}
+						]
+					}
+				},{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2022-05-09T09:00:00" ],
+						"end": [ "2023-12-05T09:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Vice President Engineering, Digital Acquisitions Technology" ],
+								"org": [ "American Express" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(800) 528-4800" ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}],
+						"projects" : [
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "US Consumer Apply - Platinum" ],
+									"url": [ "https://www.americanexpress.com/us/credit-cards/card-application/apply/platinum-card/28810-10-0" ],
+									"photo": [ "https://farm66.static.flickr.com/65535/54437975560_c60db1d2d9_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "US Small Business Apply - Platinum" ],
+									"url": [ "https://www.americanexpress.com/us/credit-cards/card-application/apply/business-platinum-charge-card/45094-9-0" ],
+									"photo": [ "https://farm66.static.flickr.com/65535/54437796864_10aa498181_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "US Consumer High Yield Savings" ],
+									"url": [ "https://www.americanexpress.com/en-us/banking/personal/savings/apply/psa-begin" ],
+									"photo": [ "https://farm66.static.flickr.com/65535/54437608316_bb9e594b28_b.jpg" ],
+									"note": [ ]
+								}
+							}
+						]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2018-09-24T09:00:00" ],
+						"end": [ "2022-05-06T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Engineering Director" ],
+								"org": [ "American Express" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(800) 528-4800" ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2018-02-05T09:00:00" ],
+						"end": [ "2018-03-09T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Consultant, Digital Marketing Operations @ Valeant Pharmaceuticals" ],
+								"org": [ "S-COM" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(954) 433-4100" ],
+								"street-address": [ "880 SW 145th Avenue, Suite 104" ],
+								"locality": [ "Pembroke Pines" ],
+								"region": [ "FL" ],
+								"postal-code": [ "33027" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2017-10-16T09:00:00" ],
+						"end": [ "2017-12-18T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Senior Director Digital Development" ],
+								"org": [ "Northwell Health" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(516) 734-7000" ],
+								"street-address": [ "2000 Marcus Avenue" ],
+								"locality": [ "New Hyde Park " ],
+								"region": [ "NY" ],
+								"postal-code": [ "11042" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2014-09-29T09:00:00" ],
+						"end": [ "2017-09-29T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Director Digital Development" ],
+								"org": [ "PR Newswire" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(800) 776-8090" ],
+								"street-address": [ "210 Hudson Street, Harborside 3 Suite 602" ],
+								"locality": [ "Jersey City" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "07311" ],
+								"country-name": [ "USA" ]
+							}
+						}],
+						"projects" : [
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "PR Newsire" ],
+									"url": [ "https://www.prnewswire.com/" ],
+									"photo": [ "https://farm8.static.flickr.com/7242/27826824772_dd0f28be3f_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Newswire CA" ],
+									"url": [ "https://www.newswire.ca" ],
+									"photo": [ "https://farm8.static.flickr.com/7368/27649680380_13cf1e4a27_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "PR Newswire UK" ],
+									"url": [ "https://www.prnewswire.co.uk" ],
+									"photo": [ ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "PRNJ - PR Newswire for Journalists" ],
+									"url": [ "https://prnmedia.prnewswire.com/" ],
+									"photo": [ "https://farm8.static.flickr.com/7457/27851241571_c053a49eb9_b.jpg" ],
+									"note": [ ]
+								}
+							}							
+						]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2012-08-13T09:00:00" ],
+						"end": [ "2014-09-19T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Senior Director Application Development" ],
+								"org": [ "Automatic Data Processing (ADP)" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "71 Hanover Road" ],
+								"locality": [ "Florham Park" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "07932" ],
+								"country-name": [ "USA" ]
+							}
+						}],
+						"projects" : [
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "ADP 401k - MyKPlan" ],
+									"url": [ "https://www.mykplan.com/" ],
+									"photo": [ "https://farm8.static.flickr.com/7570/27649589100_cba64206fb_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "World Class Exec - Executive Deferred Compensation" ],
+									"url": [ "https://www.worldclassexec.com/" ],
+									"photo": [ "https://farm8.static.flickr.com/7455/27649541440_dd5efcebd7_b.jpg" ],
+									"note": [ ]
+								}
+							}
+						]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2010-04-15T09:00:00" ],
+						"end": [ "Present" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Owner" ],
+								"org": [ "Pixelated" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(973) 710-8008" ],
+								"street-address": [ "10 Jade Circle" ],
+								"locality": [ "Denville" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "07834" ],
+								"country-name": [ "USA" ]
+							}
+						}],
+						"projects" : [
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Palmetto Epoxy" ],
+									"url": [ "https://www.palmetto-epoxy.com/" ],
+									"photo": [ "" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Pixelated Web Site" ],
+									"url": [ "https://www.pixelated.tech/" ],
+									"photo": [ "" ],
+									"note": [ ]
+								}
+							}
+						]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2010-03-29T09:00:00" ],
+						"end": [ "2012-08-10T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Director Digital Platforms" ],
+								"org": [ "The Associated Press (AP)" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(609) 655-4744" ],
+								"street-address": [ "19 Commerce Drive" ],
+								"locality": [ "Cranbury" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08512" ],
+								"country-name": [ "USA" ]
+							}
+						}],
+						"projects" : [
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "AP College Football Hub" ],
+									"url": [ "https://blog.pixelated.tech/2010/10/13/touchdown-aps-new-college-football-site-is-live/" ],
+									"photo": [ "https://farm8.static.flickr.com/7384/27850762921_9bca94069a_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "AP Content API" ],
+									"url": [ "https://developer.ap.org/" ],
+									"photo": [ "https://farm8.static.flickr.com/7459/27927979695_5f79e10ace_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "AP Archive" ],
+									"url": [ "https://www.aparchive.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7326/27927782885_1d64512679_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "AP Exchange" ],
+									"url": [ "https://www.apexchange.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7623/27314670933_b3162d6754_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "AP Images" ],
+									"url": [ "https://www.apimages.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7522/27893547926_55a16ece4a_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "AP Video Hub" ],
+									"url": [ "https://www.apvideohub.com" ],
+									"photo": [ ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "AP.Org Web Site" ],
+									"url": [ "https://www.ap.org" ],
+									"photo": [ "https://farm8.static.flickr.com/7319/27649381300_702858b17d_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "AP Mobile App" ],
+									"url" : [ ] ,
+									"photo": [ "https://farm8.static.flickr.com/7451/27649355180_954d90c3a3_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "iCircular" ],
+									"url": [ "https://dmnews.com/associated-press-debuts-mobile-icircular-program/" ],
+									"photo": [ "https://farm8.static.flickr.com/7642/27315738694_939f35c782_b.jpg" ],
+									"note": [ ]
+								}
+							}
+						]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2008-10-01T09:00:00" ],
+						"end": [ "2010-03-26T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Manager Internet Marketing" ],
+								"org": [ "Bristol Myers Squibb" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(609) 419-5000" ],
+								"street-address": [ "100 Nassau Park Boulevard" ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08540" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2005-09-01T09:00:00" ],
+						"end": [ "2008-10-01T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Manager Enterprise Web Development" ],
+								"org": [ "Bristol Myers Squibb" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(609) 419-5000" ],
+								"street-address": [ "100 Nassau Park Boulevard" ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08540" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2001-06-27T09:00:00" ],
+						"end": [ "2005-09-01T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Senior Advisor" ],
+								"org": [ "Bristol Myers Squibb" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(609) 419-5000" ],
+								"street-address": [ "100 Nassau Park Boulevard" ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08540" ],
+								"country-name": [ "USA" ]
+							}
+						}],
+						"projects" : [
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Plavix Brand Web Site" ],
+									"url": [ "http://www.plavix.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7379/27649213210_a03682962a_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Sprycel Brand Web Site" ],
+									"url": [ "http://www.sprycel.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7436/27314610843_442f404cc1_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Reyataz Photo Contest" ],
+									"url": [ "http://www.reyatazphotocontest.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7411/27314611003_b130d64819_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Abilify Brand Web Site" ],
+									"url": [ "http://www.abilify.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7546/27893393336_4d4e179872_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Atripla Brand Web Site" ],
+									"url": [ "http://www.atripla.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7217/27314610413_88a60beb90_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "I Can With RA" ],
+									"url": [ "http://www.icanwithra.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7355/27314610683_41f3f593f0_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Baraclude Brand Web Site" ],
+									"url": [ "http://www.baraclude.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7545/27893392756_2edfcc577a_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Onglyza Brand Web Site" ],
+									"url": [ "http://www.onglyza.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7456/27893393026_c2f777c166_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "My CML Care" ],
+									"url": [ "http://www.mycmlcare.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7382/27893393116_afb6e4c660_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Aware To Care - Medicaire Part D Outreach Program" ],
+									"url": [ "http://www.awaretocare.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7391/27850591271_bb1f57f9a7_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Glucophage Brand Web Site" ],
+									"url": [ "http://www.glucophage.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7351/27826047932_36aea98758_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Anxiety Relief Web Site" ],
+									"url": [ "http://www.anxiety-relief.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7282/27826048142_838aa005dc_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Pravachol Brand Web Site" ],
+									"url": [ "http://pravachol.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7307/27315427914_31139a9df5_b.jpg" ],
+									"note": [ ]
+								}
+							}
+						]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2000-04-17T09:00:00" ],
+						"end": [ "2001-06-26T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Consultant @ Bristol Myers Squibb" ],
+								"org": [ "VersaTech Consulting" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(732) 726-4200" ],
+								"street-address": [ "900 Route 9 North" ],
+								"locality": [ "Woodbridge" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "07095" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "1999-09-01T09:00:00" ],
+						"end": [ "2000-04-14T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Senior Developer" ],
+								"org": [ "Telcordia Technologies (Formerly Bellcore)" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "6 Corporate Place" ],
+								"locality": [ "Piscataway" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08854" ],
+								"country-name": [ "USA" ]
+							}
+						}],
+						"projects" : [
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Telcordia Web Site" ],
+									"url": [ "http://www.telcordia.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7691/27315452394_f524774794_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Bellcore AR Greenhouse" ],
+									"url": [ "http://www.argreenhouse.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7463/27314493483_1ec420c6f9_b.jpg" ],
+									"note": [ ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Bellcore Web Site" ],
+									"url": [ "http://www.bellcore.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7359/27315452344_a37254b008_b.jpg" ],
+									"note": [ ]
+								}
+							}
+						]
+
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "1999-04-01T09:00:00" ],
+						"end": [ "2000-09-14T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Consultant, Senior Developer @ Telcordia Technologies (Formerly Bellcore)" ],
+								"org": [ "Technisource (now Randstad)" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(954) 493-8701" ],
+								"street-address": [ "1901 West Cypress Creek Road Suite 202" ],
+								"locality": [ "Fort Lauderdale" ],
+								"region": [ "FL" ],
+								"postal-code": [ "33309" ],
+								"country-name": [ ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "1998-10-07T09:00:00" ],
+						"end": [ "1999-04-01T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Consultant, Web Designer / Developer @ Telcordia Technologies (Formerly Bellcore)" ],
+								"org": [ "Technisource (now Randstad)" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(954) 493-8701" ],
+								"street-address": [ "1901 West Cypress Creek Road Suite 202" ],
+								"locality": [ "Fort Lauderdale" ],
+								"region": [ "FL" ],
+								"postal-code": [ "33309" ],
+								"country-name": [ ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "1997-11-01T09:00:00" ],
+						"end": [ "1998-10-06T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Consultant, Web Designer / Developer @ Bristol Myers Squibb" ],
+								"org": [ "Tiffany Computer Systems" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(973) 882-1037" ],
+								"street-address": [ "150 Fairfield Road" ],
+								"locality": [ "Fairfield" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "07004" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "1996-07-01T09:00:00" ],
+						"end": [ "1997-11-01T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Webmaster / Graphic Designer" ],
+								"org": [ "New World Computers Direct (NWCD)" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(732) 417-9009" ],
+								"street-address": [ "120 McGaw Drive" ],
+								"locality": [ "Edison" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08837" ],
+								"country-name": [ "USA" ]
+							}
+						}],
+						"projects" : [
+							{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "NWCD.com" ],
+									"url": [ "https://www.nwcd.com" ],
+									"photo": [ "https://farm8.static.flickr.com/7312/27893242816_ca605dc96e_b.jpg" ],
+									"note": [ ]
+								}
+							}
+						]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "1995-08-01T09:00:00" ],
+						"end": [ "1996-11-01T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Computer Artist, Advertisement Production" ],
+								"org": [ "Greater Media Newspapers" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(732) 254-7000 x 357" ],
+								"street-address": [ "7 Edgeboro Road" ],
+								"locality": [ "East Brunswick" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08816 " ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "1992-01-01T09:00:00" ],
+						"end": [ "1996-08-01T17:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Cashier / Front End Supervisor" ],
+								"org": [ "Mayfair Foodtown Supermarkets" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "Loehmanns Plaza, 233 Route 18" ],
+								"locality": [ "East Brunswick" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08816 " ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				}
+			],
+			"volunteer": [
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2022-02-01T00:00:00" ],
+						"end": [ "2022-06-30T23:59:59" ],
+						"summary": [
+							"RPS Express Mentorship Program" ],
+						"description": [ "Mentorship, career, and industry insights are increasingly important for our Upper School Argonauts facing highly competitive internship and college admission processes. We are seeking alum mentors for our Express Mentorship Program (EMP), running each spring for our RPS Juniors." ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Mentor, RPS Express Mentorship PRogram" ],
+								"org": [ "Rutgers Preparatory School" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(732) 545-5600" ],
+								"street-address": [ "1345 Easton Avenue" ],
+								"locality": [ "Somerset" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08873" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2017-02-01T00:00:00" ],
+						"end": [ "2020-12-31T23:59:59" ],
+						"summary": [
+							"The Design Thinking Certificate Program at Rutgers, in connection with the Rutgers Center for Innovation Education and the Rutgers Professional Science Master's Degree, focuses on teaching innovative thinking as a means of designing products and services that manage complexity, serve human needs, and are sustainable to both businesses and the people they serve. Students work in small teams to complete a project from beginning to end, with guidance from professional designers and educators. " ],
+						"description": [
+							"Membership on the Advisory Council is by invitation only, and is based upon personal and professional accomplishments",
+							"The Council meets once a quarter to discuss the curricula of our Rutgers’ Design Thinking program and to assign mentorships for future class participants",
+							"Chaired the Marketing Committee, focusing on increased program awareness, networking of committee members and students, lead generation, thought leadership, and social media presence",
+							"Technology Stack includes Weebly, Google Analytics, HTML5, CSS3, JavaScript",
+							"See more at: http://designthinking.rutgers.edu/" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "DesignThinking@Rutgers Advisory Board Member" ],
+								"org": [ "Rutgers University" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "35 Berrue Circle" ],
+								"locality": [ "Piscataway" ],
+								"region": [ "NJ" ],
+								"postal-code": [ ],
+								"country-name": [ ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2017-02-01T00:00:00" ],
+						"end": [ "2019-12-01T00:00:00" ],
+						"summary": [ ],
+						"description": [ "Designed, built, and deployed bunniesunited.org web site and social media presence",
+						"Used hosted WordPress solution to manage content and design elements",
+						"Coordinated design and marketing efforts with Facebook page, Twitter account, and Instagram account",
+						"Focused on increasing Adoption, Volunteering, and Donation rates" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Web Developer" ],
+								"org": [ "Bunnies United Network (BUN)" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "P.O. Box 5561" ],
+								"locality": [ "Naperville " ],
+								"region": [ "IL" ],
+								"postal-code": [ "60567" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "1994-01-01T00:00:00" ],
+						"end": [ "1994-12-31T00:00:00" ],
+						"summary": [ "Development of b&w/color/ciba printing, studio photography and lighting, aerial photography, copy work, 35mm, medium and large formats." ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Intern / Photography Assistant" ],
+								"org": [ "Aerographics, Inc. " ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(732) 846-7766" ],
+								"street-address": [ "90A Jersey Avenue" ],
+								"locality": [ "New Brunswick" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08901" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				}
+			],
+			"awards": [
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2023-08-17T09:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "American Express #1 JD Power US Credit Card Satisfaction Study" ],
+								"org": [ "American Express" ],
+								"url": [ "https://www.jdpower.com/business/press-releases/2023-us-credit-card-satisfaction-study" ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2023-08-17T09:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "American Express #1 JD Power US Small Business Credit Card Satisfaction Study" ],
+								"org": [ "American Express" ],
+								"url": [ "https://www.jdpower.com/business/press-releases/2023-us-small-business-credit-card-satisfaction-study" ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2023-07-10T00:00:00" ],
+						"summary": [ ],
+						"description": [ "Member of the following teams: * Business & Rewards Checking * India Data Localization * Project Gambit ( All US Cards Soft Credit Inquiry for pre-approval)" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Edward P Gilligan Award" ],
+								"org": [ "American Express" ],
+								"url": [ "https://x.com/AmericanExpress/status/1681057766482354176" ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2022-08-18T09:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "American Express #1 JD Power US Credit Card Satisfaction Study" ],
+								"org": [ "American Express" ],
+								"url": [ "https://www.jdpower.com/business/press-releases/2022-us-credit-card-satisfaction-study" ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2022-08-18T09:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "American Express #1 JD Power US Small Business Credit Card Satisfaction Study" ],
+								"org": [ "American Express" ],
+								"url": [ "https://www.jdpower.com/business/press-releases/2022-us-small-business-credit-card-satisfaction-study" ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2021-08-19T09:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "American Express #1 JD Power US Credit Card Satisfaction Study" ],
+								"org": [ "American Express" ],
+								"url": [ "https://www.jdpower.com/business/press-releases/2021-us-credit-card-satisfaction-study" ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2021-08-19T09:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "American Express #1 JD Power US Small Business Credit Card Satisfaction Study" ],
+								"org": [ "American Express" ],
+								"url": [ "https://www.jdpower.com/business/press-releases/2021-us-small-business-credit-card-satisfaction-study" ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2020-08-20T09:00:00" ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "American Express #1 JD Power US Credit Card Satisfaction Study" ],
+								"org": [ "American Express" ],
+								"url": [ "https://www.jdpower.com/business/press-releases/2020-us-credit-card-satisfaction-study" ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2020-06-17T09:00:00" ],
+						"summary": [ ],
+						"description": [ "Member of the following teams: * Project Mercury (Paperless Disclosures + Green Card Refresh) * Project Rally (Small Business Card Approval based on bank activity)" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Edward P Gilligan Award" ],
+								"org": [ "American Express" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "200 Vesey Street" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "10281" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2017-06-30T09:00:00" ],
+						"summary": [ ],
+						"description": [ "Media com-tech company Cision rang the opening bell at the New York Stock Exchange on June 30, 2017, announcing its merger with SPAC company Capitol Acquisition Corp III." ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Cision IPO" ],
+								"org": [ "Cision (formerly PR Newswire)" ],
+								"url": [ "https://www.cmswire.com/digital-experience/pr-software-provider-cision-kicks-off-24b-ipo/" ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "602 Plaza Three, Harborside Financial Center" ],
+								"locality": [ "Jersey City" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "07311" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2017-05-01T09:00:00" ],
+						"summary": [ ],
+						"description": [ "Chosen as a delegate of my division, and tasked with integrating Cision's go-forward vision into an updated set of values. Helped to determine and illustrate what success looks like for each value. Served as advocates as the updated values are rolled out across the organization, an important mechanism to integrating those values into the culture." ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Cision Cultural Ambassador Program" ],
+								"org": [ "Cision (formerly PR Newswire)" ],
+								"url": [ "https://vimeo.com/multivu/review/234561346/97de0350d3" ],
+								"email": [ ],
+								"tel": [ ],
+								"street-address": [ "602 Plaza Three, Harborside Financial Center" ],
+								"locality": [ "Jersey City" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "07311" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2012-09-01T09:00:00" ],
+						"summary": [ ],
+						"description": [ "Associated Press ranked #64 in the 2012 InformationWeek 500 Top 250 Innovators" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "InformationWeek Top 500 - Associated Press # 64" ],
+								"org": [ "The Associated Press" ],
+								"url": [ "http://twimgs.com/informationweek/1343/2012top250.pdf" ],
+								"email": [ ],
+								"tel": [ "(609) 655-4744" ],
+								"street-address": [ "19 Commerce Drive" ],
+								"locality": [ "Cranbury" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08512" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2011-09-01T09:00:00" ],
+						"summary": [ ],
+						"description": [ "Associated Press ranked #6 in the InformationWeek Top 500 Most Innovative Users of Business Technology " ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "InformationWeek Top 500 - Associated Press # 6" ],
+								"org": [ "The Associated Press" ],
+								"url": [ "http://www.prnewswire.com/news-releases/results-of-23rd-annual-informationweek-500-honoring-nations-most-innovative-users-of-business-technology-announced-129790528.html" ],
+								"email": [ ],
+								"tel": [ "(609) 655-4744" ],
+								"street-address": [ "19 Commerce Drive" ],
+								"locality": [ "Cranbury" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08512" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ ],
+						"end": [ "2007-09-01T09:00:00" ],
+						"summary": [ ],
+						"description": [ "Given for unique web analytics solution scalable across all BMS Internet Marketing web sites - Shawn Ramer, VP R&D Informatics, Bristol Myers-Squibb" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Innovation Award" ],
+								"org": [ "Bristol Myers Squibb" ],
+								"url": [ ],
+								"email": [ ],
+								"tel": [ "(609) 419-5000" ],
+								"street-address": [ "100 Nassau Park Boulevard" ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08540" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				}
+			],
+			"publications": [],
+			"certifications": [
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ ],
+						"start": [ "2014-12-31T00:00:00" ],
+						"end": [ ],
+						"summary": [ ],
+						"description": [ ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Certified Scrum Master (CSM) #143482" ],
+								"org": [ "Scrum Alliance" ],
+								"url": [ "https://www.scrumalliance.org" ],
+								"email": [ "support@scrumalliance.org" ],
+								"tel": [ ],
+								"street-address": [ "7237 Church Ranch Blvd Unit 410" ],
+								"locality": [ "Broomfield" ],
+								"region": [ "CO" ],
+								"postal-code": [ "80021" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ ],
+					  "start": [ "2011-05-18T00:00:00" ],
+					  "end": [ ],
+					  "summary": [ ],
+					  "description": [ ],
+					  "location": [{
+						  "type": [ "h-card" ],
+						  "properties": {
+							"job-title": [ "Certified Scrum Master (CSM) #143482" ],
+							"org": [ "Scrum Alliance" ],
+							"url": [ "https://www.scrumalliance.org" ],
+							"email": [ "support@scrumalliance.org" ],
+							"tel": [ ],
+							"street-address": [ "7237 Church Ranch Blvd Unit 410" ],
+							"locality": [ "Broomfield" ],
+							"region": [ "CO" ],
+							"postal-code": [ "80021" ],
+							"country-name": [ "USA" ]
+						  }
+					  }]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ ],
+					  "start": [ "2011-05-13T00:00:00" ],
+					  "end": [ ],
+					  "summary": [ ],
+					  "description": [ ],
+					  "location": [{
+						  "type": [ "h-card" ],
+						  "properties": {
+							  "job-title": [ "Certified Scrum Master (CSM) #143482" ],
+							  "org": [ "Scrum Alliance" ],
+							  "url": [ "https://www.scrumalliance.org" ],
+							  "email": [ "support@scrumalliance.org" ],
+							  "tel": [ ],
+							  "street-address": [ "7237 Church Ranch Blvd Unit 410" ],
+							  "locality": [ "Broomfield" ],
+							  "region": [ "CO" ],
+							  "postal-code": [ "80021" ],
+							  "country-name": [ "USA" ]
+						  }
+					  }]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ ],
+					  "start": [ "2005-09-22T00:00:00" ],
+					  "end": [ ],
+					  "summary": [ ],
+					  "description": [ ],
+					  "location": [{
+						  "type": [ "h-card" ],
+						  "properties": {
+							  "job-title": [ "Project Management Professional (PMP) #302172" ],
+							  "org": [ "Project Management Institute" ],
+							  "url": [ "https://www.pmi.org" ],
+							  "email": [ "customercare@pmi.org" ],
+							  "tel": [ "(610) 356-4600" ],
+							  "street-address": [ "14 Campus Boulevard" ],
+							  "locality": [ "Newton Square" ],
+							  "region": [ "PA" ],
+							  "postal-code": [ "19073" ],
+							  "country-name": [ "USA" ]
+						  }
+					  }]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ ],
+					  "start": [ "2000-02-07T00:00:00" ],
+					  "end": [ ],
+					  "summary": [ ],
+					  "description": [ ],
+					  "location": [{
+						  "type": [ "h-card" ],
+						  "properties": {
+							  "job-title": [ "CLP Domino R5 Principal Application Developer (PCLP)" ],
+							  "org": [ "Lotus Development" ],
+							  "url": [ "http://www.lotus.com" ],
+							  "email": [ ],
+							  "tel": [ "(617) 577-8500" ],
+							  "street-address": [ "55 Cambridge Parkway" ],
+							  "locality": [ "Cambridge" ],
+							  "region": [ "MA" ],
+							  "postal-code": [ ],
+							  "country-name": [ "USA" ]
+						  }
+					  }]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ ],
+					  "start": [ "2000-02-01T00:00:00" ],
+					  "end": [ ],
+					  "summary": [ ],
+					  "description": [ ],
+					  "location": [{
+						  "type": [ "h-card" ],
+						  "properties": {
+							  "job-title": [ "Notes R5 Application Developer, Lotus Development (CLP)" ],
+							  "org": [ "Lotus Development" ],
+							  "url": [ "http://www.lotus.com" ],
+							  "email": [ ],
+							  "tel": [ "(617) 577-8500" ],
+							  "street-address": [ "55 Cambridge Parkway" ],
+							  "locality": [ "Cambridge" ],
+							  "region": [ "MA" ],
+							  "postal-code": [ ],
+							  "country-name": [ "USA" ]
+						  }
+					  }]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ ],
+					  "start": [ "2000-01-25T00:00:00" ],
+					  "end": [ ],
+					  "summary": [ ],
+					  "description": [ ],
+					  "location": [{
+						  "type": [ "h-card" ],
+						  "properties": {
+							  "job-title": [ "CLP Notes Principal Application Developer R4 (PCLP)" ],
+							  "org": [ "Lotus Development" ],
+							  "url": [ "http://www.lotus.com" ],
+							  "email": [ ],
+							  "tel": [ "(617) 577-8500" ],
+							  "street-address": [ "55 Cambridge Parkway" ],
+							  "locality": [ "Cambridge" ],
+							  "region": [ "MA" ],
+							  "postal-code": [ ],
+							  "country-name": [ "USA" ]
+						  }
+					  }]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ ],
+					  "start": [ "1999-12-30T00:00:00" ],
+					  "end": [ ],
+					  "summary": [ ],
+					  "description": [ ],
+					  "location": [{
+						  "type": [ "h-card" ],
+						  "properties": {
+							  "job-title": [ "Notes Application Developer R4 (CLP)" ],
+							  "org": [ "Lotus Development" ],
+							  "url": [ "http://www.lotus.com" ],
+							  "email": [ ],
+							  "tel": [ "(617) 577-8500" ],
+							  "street-address": [ "55 Cambridge Parkway" ],
+							  "locality": [ "Cambridge" ],
+							  "region": [ "MA" ],
+							  "postal-code": [ ],
+							  "country-name": [ "USA" ]
+						  }
+					  }]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ ],
+					  "start": [ "1999-12-30T00:00:00" ],
+					  "end": [ ],
+					  "summary": [ ],
+					  "description": [ ],
+					  "location": [{
+						  "type": [ "h-card" ],
+						  "properties": {
+							  "job-title": [ "Notes R4 System Administration 1 (SA1)" ],
+							  "org": [ "Lotus Development" ],
+							  "url": [ "http://www.lotus.com" ],
+							  "email": [ ],
+							  "tel": [ "(617) 577-8500" ],
+							  "street-address": [ "55 Cambridge Parkway" ],
+							  "locality": [ "Cambridge" ],
+							  "region": [ "MA" ],
+							  "postal-code": [ ],
+							  "country-name": [ "USA" ]
+						  }
+					  }]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ ],
+					  "start": [ "1999-12-16T00:00:00" ],
+					  "end": [ ],
+					  "summary": [ ],
+					  "description": [ ],
+					  "location": [{
+						  "type": [ "h-card" ],
+						  "properties": {
+							  "job-title": [ "Notes R4 Application Development 1 (AD1)" ],
+							  "org": [ "Lotus Development" ],
+							  "url": [ "http://www.lotus.com" ],
+							  "email": [ ],
+							  "tel": [ "(617) 577-8500" ],
+							  "street-address": [ "55 Cambridge Parkway" ],
+							  "locality": [ "Cambridge" ],
+							  "region": [ "MA" ],
+							  "postal-code": [ ],
+							  "country-name": [ "USA" ]
+						  }
+					  }]
+					}
+				}
+			],
+			"skills": [{
+				"Front End": "HTML5, CSS3, media queries, grid system, LESS, SASS, JavaScript, jQuery, Bootstrap, React, Angular, TypeScript, Node",
+				"Back End": "Visual Studio C# .Net, VB .Net, ASP .Net, MVC, PHP, Java, PERL, REST, SOAP",
+				"Servers": "IIS, Linux, JBoss, Apache, AWS Cloud, Azure Cloud",
+				"DB": "Oracle, SQL Server, MySQL, MongoDB, PostGreSQL, MySQL",
+				"Search": "FAST, Autonomy, Lucene, Elastic",
+				"Continuous Integration": "CruiseControl, Jenkins, nCover, jMeter, Jira, Rally",
+				"Testing": "Selenium, nUnit / jUnit, WatiN / WatiJ, LoadRunner, Silk Performer, HP Quality Center (HPQC), Fiddler, Firebug",
+				"Source Code": "SVN, VSS, TFS",
+				"CMS": "Drupal, WordPress, Adobe Experience Manager (AEM), SharePoint, SDL Tridion, Dot Net Nuke",
+				"CDN": "Akamai, Limelight, CloudFlare, AWS CloudFront, Azure CDN",
+				"Marketing": "Marketo, Salesforce Integration, Kaltura",
+				"Monitoring": "Gomez, Ovis, Keynote, Monitis",
+				"Analytics": "Omniture, Adobe Analytics, Google Analytics, WebTrends, Adobe Test & Target",
+				"Design": "Adobe Photoshop, Illustrator, Flash, InDesign, Sketch"
+			}],
+			"languages": [],
+			"affiliation": [
+				"Llama husbandry"
+			],
+			"interests": [
+				"Photography, hiking, travel, reading, cooking, gardening, and spending time with my family and pets."
+			],
+			"references": [
+				{
+					"type": [ "h-card" ],
+					"properties": {
+							"name": [ "Available upon request" ],
+							"org": [ ],
+							"job-title": [ ],
+							"url": [ ],
+							"email": [ "upon request" ],
+							"tel": [  "upon request" ],
+							"street-address": [ ],
+							"locality": [ ],
+							"region": [ ],
+							"postal-code": [ ],
+							"country-name": [ ]
+					}
+				}
+			]
+		}
+	  }
+	]
+  }

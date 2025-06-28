@@ -1,0 +1,140 @@
+{
+	"items": [
+		{
+			"type": [ "h-resume" ],
+			"properties": {
+				"references": [
+					{
+						"type": [ "h-card" ],
+						"properties": {
+							"name": [ "Philip Lundrigan" ],
+							"org": [ "American Express" ],
+							"job-title": [ "Vice President Technology III, AR Systems" ],
+							"url": [ "https://www.linkedin.com/in/plundrigan/" ],
+							"email": [ "phil.lundrigan@icloud.com" ],
+							"tel": [ "(425) 753-6453" ],
+							"street-address": [ "" ],
+							"locality": [ "Scottsdale" ],
+							"region": [ "AZ" ],
+							"postal-code": [ "" ],
+							"country-name": [ "USA" ]
+						}
+					},
+					{
+						"type": [ "h-card" ],
+						"properties": {
+							"name": [ "Stephanie Redford" ],
+							"org": [ "American Express" ],
+							"job-title": [ "Vice President IV - Site Reliability Engineering" ],
+							"url": [ "linkedin.com/in/stephanie-redford-aa638916" ],
+							"email": [ "sredford54@yahoo.com" ],
+							"tel": [ "(480) 241-7483" ],
+							"street-address": [ "" ],
+							"locality": [ "Denver" ],
+							"region": [ "CO" ],
+							"postal-code": [ "" ],
+							"country-name": [ "USA" ]
+						}
+					}
+					,
+					{
+						"type": [ "h-card" ],
+						"properties": {
+							"name": [ "Michelle Swartz" ],
+							"org": [ "American Express" ],
+							"job-title": [ "Vice President IV, Developer Experience" ],
+							"url": [ "https://www.linkedin.com/in/michelle-swartz-9a5941/" ],
+							"email": [ "mlswartz5182@gmail.com" ],
+							"tel": [ "" ],
+							"street-address": [ "" ],
+							"locality": [ "Phoenix" ],
+							"region": [ "AZ" ],
+							"postal-code": [ "" ],
+							"country-name": [ "USA" ]
+						}
+					},
+					{
+						"type": [ "h-card" ],
+						"properties": {
+							"name": [ "Sarvenaz Myslycki" ],
+							"org": [ "American Express" ],
+							"job-title": [ "Vice President III Technology" ],
+							"url": [ "https://www.linkedin.com/in/sarvenaz/" ],
+							"email": [ "sarvenaz.myslycki@gmail.com" ],
+							"tel": [ "(561) 352-4873" ],
+							"street-address": [ "" ],
+							"locality": [ "New York" ],
+							"region": [ "NY" ],
+							"postal-code": [ "" ],
+							"country-name": [ "USA" ]
+						}
+					},
+					{
+						"type": [ "h-card" ],
+						"properties": {
+							"name": [ "Miguel Murray" ],
+							"job-title": [ "Head of Digital Experience & Platforms, Global Commercial Services" ],
+							"org": [ "American Express" ],
+							"url": [ "https://www.linkedin.com/in/miguel-murray-b836a34/" ],
+							"email": [ "murraymiguel09@gmail.com" ],
+							"tel": [ "" ],
+							"street-address": [ "" ],
+							"locality": [ "New York" ],
+							"region": [ "NY" ],
+							"postal-code": [ "" ],
+							"country-name": [ "USA" ]
+						}
+					},
+					{
+						"type": [ "h-card" ],
+						"properties": {
+							"name": [ "Stefanie Todd" ],
+							"job-title": [ "Vice President, Digital Product Management" ],
+							"org": [ "American Express" ],
+							"url": [ "https://www.linkedin.com/in/stefanie-todd-927a827/" ],
+							"email": [ "stefanie.r.todd@gmail.com" ],
+							"tel": [ "(778) 214-6286" ],
+							"street-address": [ "" ],
+							"locality": [ "Vancouver" ],
+							"region": [ "BC" ],
+							"postal-code": [ "" ],
+							"country-name": [ "CA" ]
+						}
+					},
+					{
+						"type": [ "h-card" ],
+						"properties": {
+							"name": [ "Saumil Shah" ],
+							"job-title": [ "Chief Technology Officer" ],
+							"org": [ "PR Newswire" ],
+							"url": [ "https://www.linkedin.com/in/saumilhshah/" ],
+							"email": [ "saumilhshah@gmail.com" ],
+							"tel": [ "" ],
+							"street-address": [ "Harborside Financial Center" ],
+							"locality": [ "Jersey City" ],
+							"region": [ "NJ" ],
+							"postal-code": [ "" ],
+							"country-name": [ "USA" ]
+						}
+					},
+					{
+						"type": [ "h-card" ],
+						"properties": {
+							"name": [ "James Sharp" ],
+							"job-title": [ "Developer" ],
+							"org": [ "Bristol Myers Squibb" ],
+							"url": [ "https://www.linkedin.com/in/jimsharp1/" ],
+							"email": [ "jimmyshock@hotmail.com" ],
+							"tel": [ "(609) 284-4827" ],
+							"street-address": [ "" ],
+							"locality": [ "Burlington" ],
+							"region": [ "NJ" ],
+							"postal-code": [ "" ],
+							"country-name": [ "USA" ]
+						}
+					}
+				]
+			}
+		}
+	]
+  }

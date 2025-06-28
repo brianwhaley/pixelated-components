@@ -1,0 +1,95 @@
+
+#page-hero {
+    border: 0px !important;
+}
+
+#page-hero .carouselContainer {
+    height: 150px;
+    border: 0px !important;
+}
+
+#page-hero .carouselCardsContainer {
+    height: 100%;
+}
+
+#page-hero .carouselCardWrapper { --do-nothing: true;}
+
+#page-hero .carouselCard { --do-nothing: true;}
+
+#page-hero .carouselCardLink { --do-nothing: true;}
+
+#page-hero .carouselCardImage { 
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0px !important;
+}
+
+#page-hero .carouselCardHeader { 
+    position: absolute;
+    bottom: 0px;
+    left: 5px;
+    width: 50%;
+}
+#page-hero .carouselCardHeader h3 {
+    text-align: left;
+    font-size: 11px !important;
+    font-weight: normal !important;
+    color: white;
+    text-shadow: -1px 1px 1px black, 
+        1px 1px 1px black, 
+        1px -1px 1px black, 
+        -1px -1px 1px black, 
+        -1px 1px 5px black, 
+        1px 1px 5px black, 
+        1px -1px 5px black, 
+        -1px -1px 5px black;
+}
+
+#page-hero .carouselCardSubHeader { 
+    position: absolute;
+    bottom: 0px;
+    right: 5px;
+    width: 50%;
+    
+}
+#page-hero .carouselCardSubHeader h4 {
+    text-align: right;
+    font-size: 11px !important;
+    font-weight: normal !important;
+    color: white;
+    text-shadow: -1px 1px 1px black, 
+        1px 1px 1px black, 
+        1px -1px 1px black, 
+        -1px -1px 1px black, 
+        -1px 1px 5px black, 
+        1px 1px 5px black, 
+        1px -1px 5px black, 
+        -1px -1px 5px black;
+}
+
+@media screen and (max-width: 480px) {
+    #page-hero .carouselCardHeader { 
+        width: 100%;
+    }
+    #page-hero .carouselCardHeader h3 {
+        text-align: center;
+    }
+    #page-hero .carouselCardSubHeader { 
+        width: 0%;
+        display: none
+        
+    }
+} 
+
+#page-hero .carouselCardBody { --do-nothing: true;}
+
+#page-hero .carouselButtons { 
+    display: none;
+}
+
+#page-hero .carouselButton { 
+    display: none;
+}
+
+#page-hero .carouselLoading { --do-nothing: true;}

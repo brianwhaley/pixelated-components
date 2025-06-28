@@ -1,0 +1,41 @@
+.row-1col, .row-2col, .row-3col, .row-4col, .row-5col, .row-6col, 
+.row-7col, .row-8col, .row-9col, .row-10col, .row-11col, .row-12col {
+    display: grid ;
+	grid-auto-flow: row;
+    gap: 10px; /* Spacing between grid items */
+	justify-items: stretch ;
+	align-items: start ;
+	justify-content: stretch; 
+	align-content: stretch; 
+    padding: 5px; /* Padding around the container */
+    /* border: 1px solid black; /* For visual clarity */
+}
+
+@for $i from 1 through 12 {
+	.row-#{$i}col { grid-template-columns: repeat(#{$i}, 1fr); }
+}
+
+@media (max-width: 480px) {
+	.row-2col, .row-3col, .row-4col { grid-template-columns: repeat(1, 1fr); }
+	.row-5col, .row-6col, .row-7col, .row-8col { grid-template-columns: repeat(2, 1fr); }
+	.row-9col, .row-10col, .row-11col, .row-12col { grid-template-columns: repeat(3, 1fr); }
+}
+
+@for $i from 1 through 12 {
+	@for $k from 1 through 12 {
+		.grid-s#{$i}-e#{$k} { display: grid ; grid-column: #{$i} / span #{$k}; }
+		@media screen and (max-width: 480px) {
+			.grid-s#{$i}-e#{$k} { grid-column: 1 / -1 ; }
+		}
+	}
+}
+
+.gridItem {
+	display: grid ;
+	/* border: 1px solid gray; */
+}
+
+  /* 
+  https://css-tricks.com/snippets/css/complete-guide-grid/
+  https://www.w3schools.com/css/css_grid.asp
+  */

@@ -1,0 +1,58 @@
+{
+	"routes": [
+		{ 
+			"name": "Home", 
+			"path": "/", 
+			"title": "Brian Whaley - Home",
+			"description": "i am involved in lots of projects, including custom web development for small businesses, stock photography, touchup services, home design and remodeling, custom sunglasses, and more.",
+			"keywords": "brian whaley, web development, small business, stock photography, home redesign, remodeling, social media"  
+		} , { 
+			"name": "Work Overview", 
+			"path": "/workoverview", 
+			"title": "Brian Whaley - Work Overview",
+			"description": "An overview of my work experience, including my resume, a readme file, social media accounts, and personal family recipes." ,
+			"keywords": "Brian Whaley, brian whaley, web development, custom, small business, global, high performance teams, digital products, technology strategy, highly available, e-commerce portal, web sites, web applications, onshore, offshore, hybrid teams" 
+		} , { 
+			"name": "Work Portfolio", 
+			"path": "/workportfolio", 
+			"title": "Brian Whaley - Work Portfolio",
+			"description": "A carousel gallery showing screenshots of some of the web properties I have worked on." ,
+			"keywords": "Brian Whaley, brian whaley, carousel, gallery, screenshots, web development, work portfolio" 
+		} , { 
+			"name": "Resume", 
+			"path": "/resume", 
+			"title": "Brian Whaley - Resume",
+			"description": "View the resume of Brian Whaley",
+			"keywords": "brian whaley, resume, curriculum vitae, professional summary, contact information, education, skills, qualifications, work history, projects, voluteer work, certifications, honors and awards, training and conferences, rererences" 
+		} , { 
+			"name": "ReadMe", 
+			"path": "/readme", 
+			"title": "Brian Whaley - ReadMe",
+			"description": "Every good piece of software needs a readme.  So do people.",
+			"keywords": "brian whaley, readme, management style"  
+		} , { 
+			"name": "Social Media", 
+			"path": "/socialmedia", 
+			"title": "Brian Whaley - Social Media",
+			"description": "Links to all my digital footprints",
+			"keywords": "Brian Whaley, social media, photography, stock photography, istock, shutterstock, blurb, shutterfly, x, twitter, 500px, flickr, instagram" 
+		} , { 
+			"name": "Family Recipes", 
+			"path": "/recipes", 
+			"title": "Brian Whaley - Recipes",
+			"description": "Pace / Barbano / Whaley Recipes through the ages",
+			"keywords": "family recipes, pace family, barbano family, whaley family, italian recipes" 
+		} , { 
+			"name": "Sandbox",
+			"routes": [
+				{ 
+					"name": "Buzzword Bingo", 
+					"path": "/buzzwordbingo", 
+					"title": "Brian Whaley - Buzzword Bingo",
+					"description": "Buzzword Bingo is a game that is played in meetings to help keep you awake.",
+					"keywords": "" 
+				} 
+			]
+		} 
+	]
+}
