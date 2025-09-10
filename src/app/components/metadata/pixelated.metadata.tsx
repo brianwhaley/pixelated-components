@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { Route } from "@brianwhaley/pixelated-components/dist/types";
+import type { Route } from "@brianwhaley/pixelated-components";
 
 export function getRouteByKey(obj: any, key: string, value: any): any {
 	if (typeof obj !== 'object' || obj === null) {

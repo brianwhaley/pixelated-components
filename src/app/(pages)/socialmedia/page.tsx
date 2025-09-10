@@ -27,8 +27,9 @@ const myRSSFeeds = {
 	/* iStockPhoto */
 	/* LinkedIn */
 	pinterest: { url: "https://www.pinterest.com/brianwhaley/feed.rss" },
-	reddit: { url: "https://www.reddit.com/user/btw-73/saved.rss?feed=fc1adaa9f977a389504453447e7c0e6ef68f7037&user=btw-73" },
+	/* reddit: { url: "https://www.reddit.com/user/btw-73/saved.rss?feed=fc1adaa9f977a389504453447e7c0e6ef68f7037&user=btw-73" }, */
 	/* https://ssl.reddit.com/prefs/feeds/ */
+	reddit : { url: "https://www.reddit.com/user/btw-73/submitted/.rss" },
 	// shutterfly: { url: "https://cmd.shutterfly.com/commands/format/rss?site=brianwhaley&page=brianwhaley" },
 	/* snapchat */
 	/* ShutterStock */

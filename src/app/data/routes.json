@@ -4,14 +4,8 @@
 			"name": "Home", 
 			"path": "/", 
 			"title": "Brian Whaley - Home",
-			"description": "i am involved in lots of projects, including custom web development for small businesses, stock photography, touchup services, home design and remodeling, custom sunglasses, and more.",
-			"keywords": "brian whaley, web development, small business, stock photography, home redesign, remodeling, social media"  
-		} , { 
-			"name": "Work Overview", 
-			"path": "/workoverview", 
-			"title": "Brian Whaley - Work Overview",
-			"description": "An overview of my work experience, including my resume, a readme file, social media accounts, and personal family recipes." ,
-			"keywords": "Brian Whaley, brian whaley, web development, custom, small business, global, high performance teams, digital products, technology strategy, highly available, e-commerce portal, web sites, web applications, onshore, offshore, hybrid teams" 
+			"description": "i am involved in lots of projects, including custom web development for small businesses, stock photography, custom sunglasses, and more.",
+			"keywords": "brian whaley, web development, custom, small business, global, high performance teams, digital products, technology strategy, highly available, e-commerce portal, web sites, web applications, onshore, offshore, hybrid teams, stock photography, social media"  
 		} , { 
 			"name": "Work Portfolio", 
 			"path": "/workportfolio", 
@@ -42,6 +36,12 @@
 			"title": "Brian Whaley - Recipes",
 			"description": "Pace / Barbano / Whaley Recipes through the ages",
 			"keywords": "family recipes, pace family, barbano family, whaley family, italian recipes" 
+		} , { 
+			"name": "PixelVivid", 
+			"path": "https://www.pixelvivid.com", 
+			"title": "Brian Whaley - PixelVivid",
+			"description": "PixelVivid",
+			"keywords": "PixelVivid" 
 		} , { 
 			"name": "Sandbox",
 			"routes": [
