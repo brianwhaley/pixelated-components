@@ -12,6 +12,13 @@ export default function Footer() {
 			<Analytics id="G-K5QDEDTRB4" />
 			{ /* <GoogleAnalytics gaId="G-1J1W90VBE1" /> */ }
 			
+
+			<br />
+			<div className="centered">
+				<p className="footer-text">&copy; {new Date().getFullYear()} Brian T. Whaley. All rights reserved.</p>
+			</div>
+			<br /><br />
+
 		</div>
 	);
 }

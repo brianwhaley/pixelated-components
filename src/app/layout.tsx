@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from 'next/navigation';
 import { getRouteByKey } from "@/app/components/metadata/pixelated.metadata";
+import { CalloutAnimate } from "@brianwhaley/pixelated-components";
 // import { getRouteByKey } from "@brianwhaley/pixelated-components";
 // import { getMetadata } from "@brianwhaley/pixelated-components";
 import HomeLayout from "@/app/layouts/home-layout";
@@ -28,6 +29,12 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
 		setOrigin(window.location.origin || null);
 		// setHost(window.location.host || null);
 	}, []);
+
+	// useEffect(() => {
+	if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
+		CalloutAnimate();
+	}
+	// }, []);
 
 	return (
 		<html lang="en">
