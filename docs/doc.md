@@ -51,6 +51,12 @@ aws amplify update-branch --app-id d1p5oldpldjwqc --branch-name dev --framework 
 REVERT COMMAND: 
 aws amplify update-app --appId d1p5oldpldjwqc --region us-east-2 --platform WEB_DYNAMIC
 
+, {
+    "source": "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|ttf|map|json)$)([^.]+$)/>",
+    "status": "200",
+    "target": "/index.html"
+  }
+
 # ===== GOOGLE ANALYTICS =====
 
 # ===== GOOGLE PROGRAMMABLE SEARCH =====

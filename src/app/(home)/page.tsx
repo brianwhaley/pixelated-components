@@ -126,7 +126,7 @@ export default function Home() {
                     </div>
                     <div className="griditem if callout">
                         <p>Experience with: Pfizer, Johnson &amp; Johnson, Merck,
-                            Bristol-Myers Squibb, Bayer, and DSM</p>
+                            Bristol-Myers Squibb, Bayer, DSM, and Abbvie</p>
                     </div>
                 </div>
             </div>
@@ -142,6 +142,7 @@ export default function Home() {
                     <img src="/images/logo-bms.svg.png" alt="Bristol-Myers Squibb" />
                     <img src="/images/logo-bayer.svg.png" alt="Bayer" />
                     <img src="/images/logo-dsm.svg.png" alt="DSM" />
+                    <img src="/images/logo-abbvie.png" alt="Abbvie" />
                 </div>
             </div>
 

@@ -15,7 +15,7 @@ export default function Home() {
                 <ResumeName data={ResumeData.items[0].properties.name} />
                 </div>
 
-                <div className="grid3 bigpad divider">
+                <div className="grid3 bigpad">{/*divider*/}
                 <div className="p-contact">
                     <ResumeContact title="Contact Information" data={ResumeData.items[0].properties.contact} />
                 </div>
