@@ -27,10 +27,8 @@ https://localhost:3000
 ## ===== COMMON NPM COMMANDS =====
 
 npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
-
+npm audit fix --force
 npm install @brianwhaley/pixelated-components@latest --force --save
-npm install @brianwhaley/pixelated-components@1.1.10 --force --save
-npm uninstall @brianwhaley/pixelated-components --force --save
 
 rm -rf node_modules && rm -rf package-lock.json && npm install --force
 
@@ -57,7 +55,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "footer, callouts box-capable, bump component version"
+git commit -m "added micro animations"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from 'next/navigation';
 import { getRouteByKey } from "@/app/components/metadata/pixelated.metadata";
-import { CalloutAnimate } from "@brianwhaley/pixelated-components";
+import { MicroAnimations } from "@/app/components/microanimations/pixelated.microanimations";
 // import { getRouteByKey } from "@brianwhaley/pixelated-components";
 // import { getMetadata } from "@brianwhaley/pixelated-components";
 import HomeLayout from "@/app/layouts/home-layout";
@@ -30,11 +30,14 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
 		// setHost(window.location.host || null);
 	}, []);
 
-	// useEffect(() => {
-	if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
-		CalloutAnimate();
-	}
-	// }, []);
+	useEffect(() => {
+		MicroAnimations({ 
+			imgtwist: true,
+			// buttonglow: true,
+			buttonring: true,
+			scrollfadeElements: '.callout , .calloutSmall , .carouselContainer',
+		});
+	}, []);
 
 	return (
 		<html lang="en">

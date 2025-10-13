@@ -31,7 +31,7 @@ export default function Resume() {
 		event.preventDefault();
 		const myContent: React.JSX.Element = <img src={url} alt="Modal Image" />;
 		setModalContent(myContent);
-		handleModalOpen(event);
+		handleModalOpen(event as MouseEvent);
 	};
 
 	/* 

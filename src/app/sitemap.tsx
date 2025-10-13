@@ -15,8 +15,16 @@ async function getOrigin(): Promise<string> {
 
 export default async function SiteMapXML(): Promise<MetadataRoute.Sitemap> {
 	const origin = await getOrigin();
+	type Route = { path?: string; routes?: Route[] };
+	const flattenRoutes = (routes: Route[]): { path: string }[] =>
+		routes.flatMap(route =>
+			route.path
+				? [{ path: route.path }] : route.routes
+					? flattenRoutes(route.routes) : []
+		);
+
 	const sitemap = [
-		...(await createPageURLs(myRoutes.routes, origin)),
+		...(await createPageURLs(flattenRoutes(myRoutes.routes), origin)),
 		...(await createWordPressURLs()),
 		...(await createImageURLs(origin)),
 	];

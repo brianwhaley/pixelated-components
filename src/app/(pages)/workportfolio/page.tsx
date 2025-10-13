@@ -25,7 +25,7 @@ export default function Gallery() {
 
 	return (
 		<>
-			<section id="customs-section">
+			<section id="gallery-section">
 				<div className="section-container">
 					<PageHeader title="Work Portfolio Gallery" />
 					<Carousel 

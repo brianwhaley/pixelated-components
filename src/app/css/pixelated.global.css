@@ -97,15 +97,15 @@ body {
 
 section {
 	/* margin-bottom: 50px; */
-	padding: 10px 0
+	padding: 30px 0
 }
 
 section.section-alt {
 	/* margin-bottom: 50px; */
 	padding: 30px 0;
     background-color: #CCC;
-
 }
+
 
 .section-container {
 	margin: 0px auto;
@@ -127,9 +127,9 @@ section.section-alt {
 }
 
 #page-header {
-	background-color: #369;
-	background-image: url(/images/pix/pix-bg.gif);
-	color: #FFF;
+	background-color: #CCC;
+	background-image: url(/images/pix/pix-bg-bw-big.gif);
+	color: #000;
 	height: 60px;
 	padding: 10px 15px;
 	z-index: 2000;
@@ -208,7 +208,7 @@ footer {
     display: inline-block;
     font-size: 14px !important;
     font-weight: bold;
-	margin: 5px;
+	margin: 10px;
     padding: 5px 20px;
 	/* .rounded; */
 	-moz-border-radius: 5px;
@@ -218,7 +218,7 @@ footer {
 
 .centeredbutton {
 	display: block;
-	margin: 5px auto;
+	margin: 10px auto;
     text-align: center;
 	max-width: 220px;
 	transition: all .2s ease ;
@@ -249,6 +249,19 @@ footer {
 		1px 1px 5px black,
 		1px -1px 5px black,
 		-1px -1px 5px black
+}
+
+.textHalo {
+	color: black;
+	text-shadow:
+		-1px 1px 1px white,
+		1px 1px 1px white,
+		1px -1px 1px white,
+		-1px -1px 1px white,
+		-1px 1px 5px white,
+		1px 1px 5px white,
+		1px -1px 5px white,
+		-1px -1px 5px white
 }
 
 .border-bottom {
@@ -379,6 +392,7 @@ input.gsc-search-button, input.gsc-search-button:hover, input.gsc-search-button:
 
 input.gsc-input {
 	font-size: 1.0em !important;
+	background: none !important;
 }
 
 .gsc-control-cse {
@@ -390,31 +404,39 @@ input.gsc-input {
 
 
 
+
 /* ========================================
-===========  CUSTOM CAROUSEL    ===========
+===========  GALLERY CAROUSEL    ===========
 ======================================== */
 
-main .carouselCardImage {
+#gallery-section {
+	--do-nothing: true;
+}
+#gallery-section .carouselContainer {
+	background: none;
+	border: none;
+}
+#gallery-section .carouselCardImage {
     height: 550px !important;
 	margin-top: 5px !important;
 }
+#gallery-section .carouselCardImage .imgContain {
+	--do-nothing: true;
+}
 @media screen and (max-width: 480px) {
-    main .carouselCardImage {
+    #gallery-section .carouselCardImage {
         height: 300px !important;
     }
 }
-
-main .carouselCardHeader { 
+#gallery-section .carouselCardHeader { 
     display: none;
 }
-
-main .carouselCardSubHeader { 
+#gallery-section .carouselCardSubHeader { 
     position: absolute;
     bottom: 5px;
     width: 100%;
-    
 }
-main .carouselCardSubHeader h4 {
+#gallery-section .carouselCardSubHeader h4 {
     text-align: center;
     font-size: 11px !important;
     font-weight: normal !important;
@@ -427,4 +449,44 @@ main .carouselCardSubHeader h4 {
         1px 1px 5px black, 
         1px -1px 5px black, 
         -1px -1px 5px black;
+}
+
+
+/* ========================================
+=========  FEEDBACK CAROUSEL    ===========
+======================================== */
+
+#feedback-section {
+	margin-bottom: 50px;
+}
+#feedback-section .carouselContainer {
+	background: none;
+	border: none;
+	height: 300px;
+}
+#feedback-section .carouselCardsContainer {
+	width: 60%;
+	height: 300px;
+	margin: 0 auto;
+}
+#feedback-section .carouselCardWrapper {
+	background-color: #CCC; /* white */
+	padding: 10px;
+}
+#feedback-section .carouselCardBody {
+	text-align: center;
+	padding-top: 40px;
+}
+@media screen and (max-width: 480px) {
+	#feedback-section .carouselCardsContainer {
+		width: 90%;
+		font-size: 0.9em;
+	}
+}
+#feedback-section .carouselCardHeader {
+	display: inline;
+	font-size: 1.2em;
+}
+#feedback-section .carouselButtons {
+	display: none;
 }
