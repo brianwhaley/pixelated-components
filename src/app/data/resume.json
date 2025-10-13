@@ -1,0 +1,440 @@
+{
+	"items": [
+	  {
+		"type": [ "h-resume" ],
+		"properties": {
+			"name": [ "Mary Ann Sarao" ],
+			"summary": [
+				"Proactive, highly experienced Pharmaceutical Intelligence expert demonstrated at multiple top-tier pharmaceutical companies. ",
+				"Leads teams to build best practices in intelligence sharing globally. ",
+				"Known for excellent communications skills and motivating and developing key personnel."
+			],
+			"contact": [
+				{
+					"value": "Mary Ann Sarao",
+					"type": [ "h-card" ],
+					"properties": {
+						"name": [ "Mary Ann Sarao" ],
+						"photo": [ "http://example.org/photo.png" ],
+						"url": [ "https://www.linkedin.com/in/mary-ann-sarao/" ],
+						"email": [ "maryann.sarao@gmail.com" ],
+						"tel": [ "(973) 722-2601" ],
+						"adr": [
+							{
+								"type": [ "h-adr" ],
+								"properties": {
+									"street-address": [ "10 Jade Circle" ],
+									"locality": [ "Denville" ],
+									"region": [ "NJ" ],
+									"postal-code": [ "07834" ],
+									"country-name": [ "USA" ]
+								}
+							}
+						]
+					}
+				}
+			],
+			"education": [
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "Masters of Science - Information Research (MLS)" ],
+						"summary": [ ""],
+						"start": [ "" ],
+						"end": [ "2004-06-01T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Rutger University" ],
+								"url": [ "" ],
+								"tel": [ "(848) 932-7550" ],
+								"street-address": [ "4 Huntington Street" ],
+								"locality": [ "New Brunswick" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "08901" ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "Bachelor of Science (BSN) - Major: Nursing" ],
+						"summary": [ ""],
+						"start": [ "" ],
+						"end": [ "1983-06-01T00:00:00" ],
+						"location": [ {
+							"type": [ "h-card" ],
+							"properties": {
+								"org": [ "Seton Hall University" ],
+								"url": [ "" ],
+								"tel": [ "(973) 761-9000" ],
+								"street-address": [ "400 S. Orange Ave." ],
+								"locality": [ "South Orange" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "07079" ],
+								"country-name": [ "USA" ]
+							}
+						} ]
+					}
+				}
+			],
+			"qualifications":{
+				"COMPETITIVE INTELLIGENCE LEADERSHIP": [
+					""
+				],
+				"PHARMACEUTICAL INSIGHTS & BENCHMARKING": [
+					""
+				],
+				"MERGER & ACQUISITION/BUSINESS DEVELOPMENT & LICENSING": [
+					""
+				],
+				"DIGITAL TRANSFORMATION LEADERSHIP": [
+					""
+				]
+			},
+			"experience": [
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2022-09-01T09:00:00" ],
+						"end": [ "Present" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Principal" ],
+								"org": [ "Information Focus" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "Morristown" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2015-03-01T09:00:00" ],
+						"end": [ "2022-08-27T17:00:00" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Director, Global Competitive Intelligence" ],
+								"org": [ "Bayer Consumer Care" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "Whipanny" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2012-08-02T09:00:00" ],
+						"end": [ "2015-03-01T17:00:00" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Director, Global Regulatory Intelligence" ],
+								"org": [ "Pfizer Inc." ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "(0" ],
+								"street-address": [ "" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2010-02-02T09:00:00" ],
+						"end": [ "2012-08-01T17:00:00" ],
+						"summary": [ ""],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Director, Strategic Business Intelligence " ],
+								"org": [ "Pfizer Inc." ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "(" ],
+								"street-address": [ "" ],
+								"locality": [ "Madison " ],
+								"region": [ "NJ" ],
+								"postal-code": [ "11042" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2008-01-01T09:00:00" ],
+						"end": [ "2010-01-01T09:00:00" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Senior Director, Strategic Intelligence" ],
+								"org": [ "DSM Pharmaceutical Products" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "(" ],
+								"street-address": [ "" ],
+								"locality": [ "Parsippany" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2007-01-02T09:00:00" ],
+						"end": [ "2008-01-02T17:00:00" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Lead, Strategic Business Intelligence" ],
+								"org": [ "Merck & Co." ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "Whitehouse" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2003-01-02T09:00:00" ],
+						"end": [ "2007-01-01T17:00:00" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Director, Business Intelligence" ],
+								"org": [ "Pfizer Inc." ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "New York" ],
+								"region": [ "NY" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2001-01-02T09:00:00" ],
+						"end": [ "2003-01-01T17:00:00" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Director, Business Intelligence" ],
+								"org": [ "Johnson & Johnson" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "(" ],
+								"street-address": [ "" ],
+								"locality": [ "Raritan" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "1996-01-02T09:00:00" ],
+						"end": [ "2001-01-02T17:00:00" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Associate Director, Global Business Intelligence" ],
+								"org": [ "Bristol Myers Squibb" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "Princeton" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				}
+			],
+			"volunteer": [
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2017-01-01T00:00:00" ],
+						"end": [ "Present"],
+						"summary": [
+							"Seton Hall University, President's Advisory Group, JV with Hackensack Meridian Health Medical School"
+						],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "President's Advisory Group" ],
+								"org": [ "Seton Hall University" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "South Orange" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				}
+			],
+			"certifications": [
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ "Competitive Intelligence Professional Certification CIP-Level II" ],
+					  "start": [ "2021-01-01T00:00:00" ],
+					  "end": [ "" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Competitive Intelligence Professional Certification CIP-Level II" ],
+								"org": [ "Academy of Competitive Intelligence" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "Boston" ],
+								"region": [ "MA" ],
+								"postal-code": [ "" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ "Digital Transformation Certificate" ],
+					  "start": [ "2011-05-18T00:00:00" ],
+					  "end": [ "" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Digital Transformation Certificate" ],
+								"org": [ "IMD Executive Business School" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "Lucerne" ],
+								"region": [ "" ],
+								"postal-code": [ "" ],
+								"country-name": [ "CHE" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+					  "name": [ "Health Care Compliance Certificate" ],
+					  "start": [ "2011-05-13T00:00:00" ],
+					  "end": [ "" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Health Care Compliance Certificate" ],
+								"org": [ "Seton Hall University Law School" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "Newark" ],
+								"region": [ "NJ" ],
+								"postal-code": [ "" ],
+								"country-name": [ "USA" ]
+							}
+						}]
+					}
+				}
+			],
+			"skills": [{
+				"BUSINESS": "Word, Excel, PowerPoint, MS Teams, SharePoint",
+				"CI TOOLS": "Tableau, PowerBI, Cognos, Northern Light, Citeline, PharmaProjects, Trialtrove, Evaluate, PatSnap, IQVIA, Neilsen, Kantar, Euromonitor, Crunchbase, PitchBook, CB Insights, Refinitiv, Bloomberg, ABIS, Factiva, i2 Analyst Notebook, Cortellis - Regulatory Intelligence and CI, Mintel GNPD" 
+			}],
+			"affiliation": [
+				""
+			]
+
+		}
+	  }
+	]
+  }

@@ -1,0 +1,152 @@
+
+
+body {
+  background: #FFF !important;
+  padding: 20px;
+  max-width: 1024px;
+  margin: 0 auto !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  font-family: Helvetica Neue,Helvetica,Roboto,Verdana,sans-serif;
+}
+  
+header, nav, main, footer {
+  display: inline-block;
+  width: 97%;
+  padding: 10px;
+}
+
+header .logo {
+  float: left;
+  width: 100px;
+}
+  
+header .title {
+  position: relative;
+  display: inline;
+  top: 30px;
+  left: 10px;
+}
+
+header .contactinfo {
+  float: right;
+}
+
+/* 
+main {
+}
+*/
+
+main .quote {
+  margin-left: 20px;
+  margin-right: 20px;
+  font-style: italic ;
+}
+
+img.mas {
+  width: 200px;    
+  display: inline;
+  float: right;
+  padding-left: 20px;
+}
+
+@media screen and (max-width: 480px) {
+  header * {
+    position: static !important;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    float: none !important;
+  }
+}
+
+.logo-row {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.logo-row img {
+  max-height: 35px;
+  padding: 0 10px;
+}
+
+@media screen and (max-width: 480px) {
+  .logo-row img {
+    max-height: 30px;
+  }
+}
+
+.if.callout {
+  border: 1.5px solid #000;
+  background: #F9F9F9;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 20px;
+  height: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media screen and (max-width: 480px) {
+  .if.callout {
+    height: 60px;
+    margin: 0px;
+
+  }
+}
+
+.if.callout p {
+  margin-bottom: 0px;
+}
+
+
+
+
+/* ========================================
+============  SIMPLE MENU   ============
+======================================== */
+
+.menu-wrapper {
+	height: 100%;
+}
+
+.menu, .menu ul {
+	/* ALL LIST LEVELS */
+	display: inline-block;
+	list-style-type: none;
+	margin: 5px;
+  padding: 0px;
+}
+
+.menu a {
+	color: #000;
+	display: block;
+	text-decoration: none;
+}
+
+.menu-item {
+	/* ALL LIST ITEM LEVELS */
+	border: 1px solid #FFF;
+    width: 150px;
+    display: inline-block;
+}
+
+.menu-item a {
+	/* this is the button */
+	background: #DDD;
+    font-size: smaller;
+	font-weight: bold;
+	height: 30px;
+	line-height:30px;
+	text-indent: 10px;
+}
+
+.menu-item a:hover {
+	background: #EEE;
+	text-indent: 5px;
+	border-left: 5px #000 solid;
+}
+

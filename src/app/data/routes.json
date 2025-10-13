@@ -1,0 +1,17 @@
+{
+	"routes": [
+		{ 
+			"name": "Home", 
+			"path": "/", 
+			"title": "InformationFocus - Home",
+			"description": "",
+			"keywords": ""  
+		} , { 
+			"name": "Resume", 
+			"path": "/resume", 
+			"title": "InformationFocus - Resume",
+			"description": "",
+			"keywords": ""  
+		} 
+	]
+}
