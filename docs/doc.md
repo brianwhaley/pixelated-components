@@ -15,5 +15,5 @@ eslint --fix
 npm version patch --force
 git add * -v
 git commit -m "initial version"
-git push pixelvivid dev --tags
-git push pixelvivid dev:main
+git push leadscraper dev --tags
+git push leadscraper dev:main
