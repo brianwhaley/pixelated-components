@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { getAllRoutes, getAllImages } from "../metadata/pixelated.metadata";
-import { getEbayAppToken, getEbayItemsSearch } from "../ebay/pixelated.ebay.functions";
 import type { SitemapEntry } from "@brianwhaley/pixelated-components";
 // import myRoutes from "../../data/routes.json";
 
@@ -111,6 +110,7 @@ export async function createWordPressURLs(){
 }
 
 
+/* 
 const defaultEbayProps = {
 	proxyURL: "https://proxy.pixelated.tech/prod/proxy?url=",
 	baseTokenURL: 'https://api.ebay.com/identity/v1/oauth2/token',
@@ -143,6 +143,7 @@ export async function createEbayItemURLs(origin: string){
 		});
 	return sitemap;
 }
+*/
 
 
 

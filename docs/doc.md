@@ -36,7 +36,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "upgrade to nextjs, reorg home page, fix resume data, bump pixelated-components for micro animations"
+git commit -m "upgrade to nextjs, reorg home page, fix resume data, bump pixelated-components for micro animations, fix sitemap ebay ref"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 
