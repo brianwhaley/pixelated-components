@@ -37,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 		setOrigin(window.location.href || null);
 		// setOrigin(window.location.origin || null);
 		// setHost(window.location.host || null);
-	}, []);
+	}, [pathname]);
 
 	return (
 		<html lang="en">

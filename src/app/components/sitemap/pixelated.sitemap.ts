@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { getAllRoutes, getAllImages } from "../metadata/pixelated.metadata";
 import type { SitemapEntry } from "@brianwhaley/pixelated-components";
