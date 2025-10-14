@@ -5,7 +5,7 @@ import React, { useState, useEffect } from "react";
 import { usePathname } from 'next/navigation';
 import type { Metadata } from "@/app/components/metadata/pixelated.metadata";
 import { getRouteByKey } from "@/app/components/metadata/pixelated.metadata";
-import { MicroAnimations } from "@brianwhaley/pixelated-components";
+import { MicroInteractions } from "@brianwhaley/pixelated-components";
 import Header from "@/app/elements/header";
 import Nav from "@/app/elements/nav";
 import Footer from '@/app/elements/footer';
@@ -23,10 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 	// const [ host, setHost ] = useState<string | null>(null);
 	
 	useEffect(() => {
-		MicroAnimations({ 
-			imgtwist: true,
-			// buttonglow: true,
+		MicroInteractions({ 
 			buttonring: true,
+			formglow: true,
+			imgtwist: true,
+			simplemenubutton: true,
 			scrollfadeElements: '.callout , .calloutSmall , .carouselContainer',
 		});
 	}, []);

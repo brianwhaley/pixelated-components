@@ -1,5 +1,4 @@
 
-
 body {
   background: #FFF !important;
   padding: 20px;
@@ -8,7 +7,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
-  font-family: Helvetica Neue,Helvetica,Roboto,Verdana,sans-serif;
+  font-family: Helvetica Neue, Helvetica, Roboto, Verdana, sans-serif;
 }
   
 header, nav, main, footer {
@@ -33,10 +32,9 @@ header .contactinfo {
   float: right;
 }
 
-/* 
 main {
+  --do-nothing: true;
 }
-*/
 
 main .quote {
   margin-left: 20px;
@@ -100,53 +98,5 @@ img.mas {
 
 .if.callout p {
   margin-bottom: 0px;
-}
-
-
-
-
-/* ========================================
-============  SIMPLE MENU   ============
-======================================== */
-
-.menu-wrapper {
-	height: 100%;
-}
-
-.menu, .menu ul {
-	/* ALL LIST LEVELS */
-	display: inline-block;
-	list-style-type: none;
-	margin: 5px;
-  padding: 0px;
-}
-
-.menu a {
-	color: #000;
-	display: block;
-	text-decoration: none;
-}
-
-.menu-item {
-	/* ALL LIST ITEM LEVELS */
-	border: 1px solid #FFF;
-    width: 150px;
-    display: inline-block;
-}
-
-.menu-item a {
-	/* this is the button */
-	background: #DDD;
-    font-size: smaller;
-	font-weight: bold;
-	height: 30px;
-	line-height:30px;
-	text-indent: 10px;
-}
-
-.menu-item a:hover {
-	background: #EEE;
-	text-indent: 5px;
-	border-left: 5px #000 solid;
 }
 
