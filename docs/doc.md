@@ -36,7 +36,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "bump version"
+git commit -m "update micro interactions, bump version"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 
@@ -47,6 +47,8 @@ https://github.com/aws-amplify/amplify-hosting/issues/3398
 aws amplify update-app --app-id d1p5oldpldjwqc --platform WEB_DYNAMIC --region us-east-2
 
 aws amplify update-branch --app-id d1p5oldpldjwqc --branch-name dev --framework 'Next.js - SSR' --region us-east-2
+
+aws amplify update-branch --app-id d1p5oldpldjwqc --branch-name main --framework 'Next.js - SSR' --region us-east-2
 
 REVERT COMMAND: 
 aws amplify update-app --appId d1p5oldpldjwqc --region us-east-2 --platform WEB_DYNAMIC
