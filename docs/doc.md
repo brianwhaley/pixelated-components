@@ -55,7 +55,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "added micro animations"
+git commit -m "callout boxed fix"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
