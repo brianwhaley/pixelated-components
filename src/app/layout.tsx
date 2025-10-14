@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from 'next/navigation';
 import { getRouteByKey } from "@/app/components/metadata/pixelated.metadata";
-import { MicroAnimations } from "@/app/components/microanimations/pixelated.microanimations";
+import { MicroInteractions } from "@brianwhaley/pixelated-components";
 // import { getRouteByKey } from "@brianwhaley/pixelated-components";
 // import { getMetadata } from "@brianwhaley/pixelated-components";
 import HomeLayout from "@/app/layouts/home-layout";
@@ -31,10 +31,11 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
 	}, []);
 
 	useEffect(() => {
-		MicroAnimations({ 
-			imgtwist: true,
-			// buttonglow: true,
+		MicroInteractions({ 
 			buttonring: true,
+			formglow: true,
+			grayscalehover: true,
+			imgtwist: true,
 			scrollfadeElements: '.callout , .calloutSmall , .carouselContainer',
 		});
 	}, []);
