@@ -11,7 +11,7 @@ import PageLayout from "@/app/layouts/page-layout";
 import "@/app/css/pixelated.global.css";
 import "@/app/css/pixelated.grid.scss";
 import myRoutes from "@/app/data/routes.json";
-import "../globals.css";
+import "./globals.css";
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
 	const pathname = usePathname();

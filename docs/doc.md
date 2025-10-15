@@ -55,7 +55,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "callout title color and callout button link text color fix"
+git commit -m "callout title color and callout button link text color fix, globals.css reference fix"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
