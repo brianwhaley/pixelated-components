@@ -1,6 +1,6 @@
 {
   "name": "brianwhaley",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "private": true,
   "scripts": {
     "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev  -p 3000 --experimental-https",
