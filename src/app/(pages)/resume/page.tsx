@@ -30,8 +30,8 @@ export default function Home() {
                 <div className="grid9 bigpad">
                 <ResumeSummary title="Professional Summary" data={ResumeData.items[0].properties.summary} />
                 <ResumeEvents title="Work History" data={ResumeData.items[0].properties.experience} dateFormat="yyyy" showDate />
-                <ResumeEvents title="Volunteer Work" data={ResumeData.items[0].properties.volunteer} dateFormat="yyyy" showDate />
                 <ResumeEvents title="Certifications" data={ResumeData.items[0].properties.certifications} />
+                <ResumeEvents title="Volunteer Work" data={ResumeData.items[0].properties.volunteer} dateFormat="yyyy" showDate />
                 </div>
             </div>
         </section>

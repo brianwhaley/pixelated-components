@@ -66,9 +66,9 @@ export default function Home() {
                         title="Mary Ann Sarao, Principal" 
                         img="/images/mas-sq.jpg"
                         shape="square"
-                        content="Mary Ann Sarao is an expert in establishing and managing Corporate CI Units in the areas of:
+                        content="Mary Ann Sarao is an expert in establishing and managing Corporate Competitive Intelligence Units in the areas of:
                             Pharmaceuticals and Therapeutic Areas, Health Care, Medical Devices, Consumer Health,
-                            Manufacturing, Regulatory, R&amp;D, Corporate Global Security Platforms,
+                            Manufacturing, Regulatory, Research & Development, Corporate Global Security Platforms,
                             Anti-Counterfeiting, Brand Protection, Investor Relations, and Communications."/>
                 </div>
                 <div className="griditem">

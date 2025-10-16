@@ -100,3 +100,10 @@ img.mas {
   margin-bottom: 0px;
 }
 
+.p-resume {
+    h1 {
+        font-size: 1.75em !important;
+        margin-top: 0px !important;
+        text-align: center;
+    }
+}

@@ -38,15 +38,18 @@
 				{
 					"type": [ "h-event" ],
 					"properties": {
-						"name": [ "Masters of Science - Information Research (MLS)" ],
-						"summary": [ ""],
+						"name": [ "Masters of Science (MLS) Information Research " ],
 						"start": [ "" ],
 						"end": [ "2004-06-01T00:00:00" ],
+						"summary": [ ""],
+						"description": [ "" ],
 						"location": [ {
 							"type": [ "h-card" ],
 							"properties": {
-								"org": [ "Rutger University" ],
+								"job-title": [ "Masters of Science (MLS) Information Research" ],
+								"org": [ "Rutgers University" ],
 								"url": [ "" ],
+								"email": [ "" ],
 								"tel": [ "(848) 932-7550" ],
 								"street-address": [ "4 Huntington Street" ],
 								"locality": [ "New Brunswick" ],
@@ -60,15 +63,18 @@
 				{
 					"type": [ "h-event" ],
 					"properties": {
-						"name": [ "Bachelor of Science (BSN) - Major: Nursing" ],
-						"summary": [ ""],
+						"name": [ "Bachelor of Science (BSN, RN) Nursing" ],
 						"start": [ "" ],
 						"end": [ "1983-06-01T00:00:00" ],
+						"summary": [ ""],
+						"description": [ "" ],
 						"location": [ {
 							"type": [ "h-card" ],
 							"properties": {
+								"job-title": [ "Bachelor of Science (BSN, RN) Nursing" ],
 								"org": [ "Seton Hall University" ],
 								"url": [ "" ],
+								"email": [ "" ],
 								"tel": [ "(973) 761-9000" ],
 								"street-address": [ "400 S. Orange Ave." ],
 								"locality": [ "South Orange" ],
@@ -112,8 +118,33 @@
 								"email": [ "" ],
 								"tel": [ "" ],
 								"street-address": [ "" ],
-								"locality": [ "Morristown" ],
+								"locality": [ "Denville" ],
 								"region": [ "NJ" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				},
+				{
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2023-02-01T09:00:00" ],
+						"end": [ "2025-02-28T17:00:00" ],
+						"summary": [ "" ],
+						"description": [ "" ],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Competitive Intelligence Lead, Immunology, AbbVie" ],
+								"org": [ "Hiregenics" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "" ],
+								"region": [ "" ],
 								"postal-code": [ "" ],
 								"country-name": [ "" ]
 							}
@@ -326,8 +357,8 @@
 					"type": [ "h-event" ],
 					"properties": {
 						"name": [ "" ],
-						"start": [ "2017-01-01T00:00:00" ],
-						"end": [ "Present"],
+						"start": [ "2017-09-01T00:00:00" ],
+						"end": [ "2022-09-01T00:00:00"],
 						"summary": [
 							"Seton Hall University, President's Advisory Group, JV with Hackensack Meridian Health Medical School"
 						],
@@ -342,6 +373,56 @@
 								"street-address": [ "" ],
 								"locality": [ "South Orange" ],
 								"region": [ "NJ" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				}, {
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "2019-09-01T00:00:00" ],
+						"end": [ "2021-09-01T00:00:00"],
+						"summary": [
+							"Co-Chair, Pharma CI Conference"
+						],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Co-Chair" ],
+								"org": [ "Pharma CI Conference" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "" ],
+								"region": [ "" ],
+								"postal-code": [ "" ],
+								"country-name": [ "" ]
+							}
+						}]
+					}
+				}, {
+					"type": [ "h-event" ],
+					"properties": {
+						"name": [ "" ],
+						"start": [ "" ],
+						"end": [ "2018-12-31T00:00:00"],
+						"summary": [
+							"Board Chairman, SCIP (Strategic and Competitive Intelligence Professionals)"
+						],
+						"location": [{
+							"type": [ "h-card" ],
+							"properties": {
+								"job-title": [ "Board Chairman" ],
+								"org": [ "SCIP (Strategic and Competitive Intelligence Professionals)" ],
+								"url": [ "" ],
+								"email": [ "" ],
+								"tel": [ "" ],
+								"street-address": [ "" ],
+								"locality": [ "" ],
+								"region": [ "" ],
 								"postal-code": [ "" ],
 								"country-name": [ "" ]
 							}
@@ -427,8 +508,8 @@
 				}
 			],
 			"skills": [{
-				"BUSINESS": "Word, Excel, PowerPoint, MS Teams, SharePoint",
-				"CI TOOLS": "Tableau, PowerBI, Cognos, Northern Light, Citeline, PharmaProjects, Trialtrove, Evaluate, PatSnap, IQVIA, Neilsen, Kantar, Euromonitor, Crunchbase, PitchBook, CB Insights, Refinitiv, Bloomberg, ABIS, Factiva, i2 Analyst Notebook, Cortellis - Regulatory Intelligence and CI, Mintel GNPD" 
+				"CI TOOLS": "Tableau, PowerBI, Cognos, Northern Light, Citeline, PharmaProjects, Trialtrove, Evaluate, PatSnap, IQVIA, Neilsen, Kantar, Euromonitor, Crunchbase, PitchBook, CB Insights, Refinitiv, Bloomberg, ABIS, Factiva, i2 Analyst Notebook, Cortellis - Regulatory Intelligence and CI, Mintel GNPD",
+				"BUSINESS": "Word, Excel, PowerPoint, MS Teams, SharePoint, Slack"
 			}],
 			"affiliation": [
 				""
