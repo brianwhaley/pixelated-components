@@ -41,14 +41,17 @@
 					"type": [ "h-event" ],
 					"properties": {
 						"name": [ "Masters of Science - Information Systems (MSIS)" ],
-						"summary": [ ],
 						"start": [ ],
 						"end": [ "2002-05-23T00:00:00" ],
+						"summary": [ ],
+						"description": [ ],
 						"location": [ {
 							"type": [ "h-card" ],
 							"properties": {
+								"job-title": [ "Masters of Science - Information Systems (MSIS)" ],
 								"org": [ "Wesley J Howe School of Management, Stevens Institute of Technology" ],
 								"url": [ ],
+								"email": [ ],
 								"tel": [ "(201) 216-5000" ],
 								"street-address": [ "1 Castle Point Terrace" ],
 								"locality": [ "Hoboken" ],
@@ -63,14 +66,17 @@
 					"type": [ "h-event" ],
 					"properties": {
 						"name": [ "Bachelor of Arts (BA) - Double Major: Visual Art and Art History" ],
-						"summary": [ ],
 						"start": [ ],
 						"end": [ "1996-05-16T00:00:00" ],
+						"summary": [ ],
+						"description": [ ],
 						"location": [ {
 							"type": [ "h-card" ],
 							"properties": {
+								"job-title": [ "Bachelor of Arts (BA) - Double Major: Visual Art and Art History" ],
 								"org": [ "Rutgers The State University of New Jersey" ],
 								"url": [ ],
+								"email": [ ],
 								"tel": [ "(732) 445-4636" ],
 								"street-address": [ "57 US Highway 1" ],
 								"locality": [ "New Brunswick" ],
@@ -85,14 +91,17 @@
 					"type": [ "h-event" ],
 					"properties": {
 						"name": [ "HS Diploma" ],
-						"summary": [ ],
 						"start": [ ],
 						"end": [ "1991-06-09T00:00:00" ],
+						"summary": [ ],
+						"description": [ ],
 						"location": [ {
 							"type": [ "h-card" ],
 							"properties": {
+								"job-title": [ "HS Diploma" ],
 								"org": [ "Rutgers Preparatory School" ],
 								"url": [ ],
+								"email": [ ],
 								"tel": [ "(732) 545-5600" ],
 								"street-address": [ "1345 Easton Avenue" ],
 								"locality": [ "Somerset" ],
