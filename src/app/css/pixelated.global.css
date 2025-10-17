@@ -10,7 +10,6 @@
 	-moz-background-clip: padding-box !important;
 	-webkit-background-clip: padding-box !important;
 	background-clip: padding-box !important;
-
 	margin: 0px;
 	padding: 0px;
 	/* -ms-touch-action: none; */
@@ -97,7 +96,7 @@ body {
 
 section {
 	/* margin-bottom: 50px; */
-	padding: 30px 0
+	padding: 30px 0;
 }
 
 section.section-alt {
@@ -106,6 +105,11 @@ section.section-alt {
     background-color: #CCC;
 }
 
+section.section-alt2 {
+	/* margin-bottom: 50px; */
+	padding: 30px 0;
+    background-color: #F9F9F9;
+}
 
 .section-container {
 	margin: 0px auto;
@@ -127,9 +131,9 @@ section.section-alt {
 }
 
 #page-header {
-	background-color: #CCC;
-	background-image: url(/images/pix/pix-bg-bw-big.gif);
-	color: #000;
+	background-color: #369;
+	background-image: url(/images/pix/pix-bg.gif);
+	color: #FFF;
 	height: 60px;
 	padding: 10px 15px;
 	z-index: 2000;
@@ -146,8 +150,7 @@ section.section-alt {
 
 @media screen and (max-width: 480px) {
     #page-hero {
-		--do-nothing: true;
-		/* height: 125px; */
+		height: 125px;
     }
 } 
 
@@ -172,7 +175,7 @@ section.section-alt {
 }
 
 nav {
-	--do-nothing: true 
+	--do-nothing: true;
 }
 
 main {
@@ -225,7 +228,7 @@ footer {
 }
 
 .centeredbutton:hover {
-	font-size: 16px ;
+	font-size: 16px;
 }
 
 .gradient {
@@ -248,7 +251,7 @@ footer {
 		-1px 1px 5px black,
 		1px 1px 5px black,
 		1px -1px 5px black,
-		-1px -1px 5px black
+		-1px -1px 5px black;
 }
 
 .textHalo {
@@ -261,7 +264,7 @@ footer {
 		-1px 1px 5px white,
 		1px 1px 5px white,
 		1px -1px 5px white,
-		-1px -1px 5px white
+		-1px -1px 5px white;
 }
 
 .border-bottom {

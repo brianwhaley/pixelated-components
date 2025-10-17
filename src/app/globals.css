@@ -1,8 +1,19 @@
 /* @import "tailwindcss"; */
 
+#page-header {
+	background-color: #CCC;
+	background-image: url(/images/pix/pix-bg-bw-big.gif);
+	color: #000;
+}
+
 a {
     color: black !important;
 }
 a:hover {
     color: #369 !important;
+}
+
+.p-resume * {
+	/* FIX FOR SAME HEIGHT GRID COLUMNS */
+	align-content: start;
 }
