@@ -36,7 +36,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "more space fixes, bump component library"
+git commit -m "use global and grid css files exported from pixelated-components"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 
