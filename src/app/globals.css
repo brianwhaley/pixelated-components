@@ -1,0 +1,9 @@
+
+@media screen and (max-width: 480px) {
+	.callout.boxed {
+		grid-auto-rows: auto !important;
+	}
+	.row-1col, .row-2col, .row-3col, .row-4col, .row-5col, .row-6col, .row-7col, .row-8col, .row-9col, .row-10col, .row-11col, .row-12col {
+	    grid-auto-rows: auto !important;
+	}
+}

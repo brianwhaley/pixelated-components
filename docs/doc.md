@@ -36,7 +36,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "header link, resume update, home page text changes"
+git commit -m "space fixes, resume data fixes"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 

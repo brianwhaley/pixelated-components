@@ -13,7 +13,7 @@ import "@/app/css/pixelated.global.css";
 import "@/app/css/pixelated.grid.scss";
 import "@/app/css/if.css";
 import myRoutes from "@/app/data/routes.json";
-/* import "../globals.css"; */
+import "./globals.css";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
 
