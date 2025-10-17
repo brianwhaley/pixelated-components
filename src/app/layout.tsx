@@ -6,10 +6,10 @@ import { getRouteByKey } from "@/app/components/metadata/pixelated.metadata";
 import { MicroInteractions } from "@brianwhaley/pixelated-components";
 // import { getRouteByKey } from "@brianwhaley/pixelated-components";
 // import { getMetadata } from "@brianwhaley/pixelated-components";
+import "@brianwhaley/pixelated-components/dist/css/pixelated.global.css";
+import "@brianwhaley/pixelated-components/dist/css/pixelated.grid.scss";
 import HomeLayout from "@/app/layouts/home-layout";
 import PageLayout from "@/app/layouts/page-layout";
-import "@/app/css/pixelated.global.css";
-import "@/app/css/pixelated.grid.scss";
 import myRoutes from "@/app/data/routes.json";
 import "./globals.css";
 

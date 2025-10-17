@@ -55,7 +55,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "bump components, callout grid fix"
+git commit -m "use exported global and grid css from pixelated-components"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
