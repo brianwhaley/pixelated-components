@@ -1,6 +1,6 @@
 {
   "name": "informationfocus",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "private": true,
   "scripts": {
     "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev  -p 3001 --experimental-https",
@@ -10,19 +10,19 @@
     "clean": "rm -rf .next && rm -rf out"
   },
   "dependencies": {
-    "@brianwhaley/pixelated-components": "^2.1.36",
-    "next": "^15.5.5",
+    "@brianwhaley/pixelated-components": "^2.1.42",
+    "next": "^15.5.6",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "sass": "^1.93.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^24.7.2",
+    "@types/node": "^24.8.1",
     "@types/react": "^19",
     "@types/react-dom": "^19.2.2",
     "eslint": "^9",
-    "eslint-config-next": "^15.5.5",
+    "eslint-config-next": "^15.5.6",
     "typescript": "^5"
   }
 }
