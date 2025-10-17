@@ -97,7 +97,7 @@ body {
 
 section {
 	/* margin-bottom: 50px; */
-	padding: 30px 0
+	padding: 30px 0;
 }
 
 section.section-alt {
@@ -134,10 +134,8 @@ section.section-alt2 {
 }
 
 #page-header {
-	background-image: url(/images/pixelvivid/pix-bg.gif);
-	/* background-color: #369; */
-	background-color: rgba(255,255,255,0.3);
-    background-blend-mode: lighten;
+	background-color: #369;
+	background-image: url(/images/pix/pix-bg.gif);
 	color: #FFF;
 	height: 60px;
 	padding: 10px 15px;
@@ -155,10 +153,9 @@ section.section-alt2 {
 
 @media screen and (max-width: 480px) {
     #page-hero {
-		--do-nothing: true;
-		/* height: 125px; */
+		height: 125px;
     }
-} 
+}
 
 #page-hero-overlay {
 	background: rgba(240,240,240,0.5);
@@ -181,7 +178,7 @@ section.section-alt2 {
 }
 
 nav {
-	--do-nothing: true 
+	--do-nothing: true;
 }
 
 main {
@@ -234,7 +231,7 @@ footer {
 }
 
 .centeredbutton:hover {
-	font-size: 16px ;
+	font-size: 16px;
 }
 
 .gradient {
@@ -257,7 +254,7 @@ footer {
 		-1px 1px 5px black,
 		1px 1px 5px black,
 		1px -1px 5px black,
-		-1px -1px 5px black
+		-1px -1px 5px black;
 }
 
 .textHalo {
@@ -270,7 +267,7 @@ footer {
 		-1px 1px 5px white,
 		1px 1px 5px white,
 		1px -1px 5px white,
-		-1px -1px 5px white
+		-1px -1px 5px white;
 }
 
 .border-bottom {
@@ -409,6 +406,7 @@ input.gsc-input {
     background-color: transparent !important;
 	padding: .5em !important;
 }
+
 
 
 
