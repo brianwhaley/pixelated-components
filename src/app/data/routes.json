@@ -25,12 +25,6 @@
 			"description": "Every good piece of software needs a readme.  So do people.",
 			"keywords": "brian whaley, readme, management style"  
 		} , { 
-			"name": "Social Media", 
-			"path": "/socialmedia", 
-			"title": "Brian Whaley - Social Media",
-			"description": "Links to all my digital footprints",
-			"keywords": "Brian Whaley, social media, photography, stock photography, istock, shutterstock, blurb, shutterfly, x, twitter, 500px, flickr, instagram" 
-		} , { 
 			"name": "Family Recipes", 
 			"path": "/recipes", 
 			"title": "Brian Whaley - Recipes",
