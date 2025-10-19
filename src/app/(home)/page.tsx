@@ -106,7 +106,6 @@ export default function Work() {
 								Check out the use of RSS feeds and APIs to generate dynamic cards on the page
 								using my React component library.
 								<br/>
-								<div className="centeredbutton"><a href="socialmedia">My Social Media</a></div>
 							</div>
 						</div>
 					</div>
