@@ -1,6 +1,6 @@
 {
   "name": "brianwhaley",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "private": true,
   "scripts": {
     "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev  -p 3000 --experimental-https",
@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@eslint/js": "^9.37.0",
+    "@eslint/js": "^9.38.0",
     "@eslint/json": "^0.13.2",
     "@next/eslint-plugin-next": "^15.5.6",
     "@next/third-parties": "^15.5.6",
@@ -34,7 +34,7 @@
     "@typescript-eslint/eslint-plugin": "^8.46.1",
     "@typescript-eslint/parser": "^8.46.1",
     "css-loader": "^7.1.2",
-    "eslint": "^9.37.0",
+    "eslint": "^9.38.0",
     "eslint-config-next": "^15.5.6",
     "eslint-plugin-react": "^7.37.5",
     "sass": "^1.93.2",
