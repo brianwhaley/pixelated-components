@@ -4,7 +4,7 @@
 			"name": "Home", 
 			"path": "/", 
 			"title": "Brian Whaley - Home",
-			"description": "i am involved in lots of projects, including custom web development for small businesses, stock photography, custom sunglasses, and more.",
+			"description": "I am involved in lots of projects, including custom web development for small businesses, stock photography, custom sunglasses, and more.",
 			"keywords": "brian whaley, web development, custom, small business, global, high performance teams, digital products, technology strategy, highly available, e-commerce portal, web sites, web applications, onshore, offshore, hybrid teams, stock photography, social media"  
 		} , { 
 			"name": "Work Portfolio", 
@@ -31,8 +31,16 @@
 			"description": "Pace / Barbano / Whaley Recipes through the ages",
 			"keywords": "family recipes, pace family, barbano family, whaley family, italian recipes" 
 		} , { 
+			"name": "Pixelated Tech", 
+			"path": "https://www.pixelated.tech", 
+			"target": "_blank",
+			"title": "Brian Whaley - PixelAted Tech",
+			"description": "Pixelated Technologies",
+			"keywords": "Pixelated Technologies" 
+		} , { 
 			"name": "PixelVivid", 
 			"path": "https://www.pixelvivid.com", 
+			"target": "_blank",
 			"title": "Brian Whaley - PixelVivid",
 			"description": "PixelVivid",
 			"keywords": "PixelVivid" 

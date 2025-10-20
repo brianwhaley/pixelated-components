@@ -55,7 +55,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "remove social media page.  again."
+git commit -m "update accordion menu to use routes json, greyscale accordion menu css"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
