@@ -1,7 +1,11 @@
 {
   "name": "brianwhaley",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "private": true,
+  "author": {
+    "name": "Pixelated Technologies",
+    "url": "https://www.pixelated.tech/"
+  },
   "scripts": {
     "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev  -p 3000 --experimental-https",
     "build": "npm run clean && NODE_ENV=production next build",
@@ -13,7 +17,7 @@
     "dev": "next dev --turbopack"
   },
   "dependencies": {
-    "@brianwhaley/pixelated-components": "^2.1.43",
+    "@brianwhaley/pixelated-components": "^2.1.44",
     "date-fns": "^4.1.0",
     "globals": "^16.4.0",
     "next": "^15.5.6",
