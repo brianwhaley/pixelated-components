@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { PageHeader } from "@/app/components/general/pixelated.general";
+import { PageHeader } from "@brianwhaley/pixelated-components";
 import { Carousel } from "@brianwhaley/pixelated-components";
 import GalleryWrapper from "@/app/elements/gallerywrapper";
 import type { CarouselCardType } from "@brianwhaley/pixelated-components";

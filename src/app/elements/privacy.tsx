@@ -1,4 +1,4 @@
-import { PageHeader } from "@/app/components/general/pixelated.general";
+import { PageHeader } from "@brianwhaley/pixelated-components";
 
 export default function Privacy() {
 	return (

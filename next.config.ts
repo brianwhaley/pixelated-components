@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
 		];
 	},
 
-
+	turbopack: {},
 	// webpack5: true,
 	webpack: (config) => {
 		config.resolve.fallback = { 

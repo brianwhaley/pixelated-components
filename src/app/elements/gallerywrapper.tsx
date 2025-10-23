@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { GetFlickrData, GenerateFlickrCards } from '@brianwhaley/pixelated-components';
 import type { CarouselCardType } from '@brianwhaley/pixelated-components';
 import { getCloudinaryRemoteFetchURL } from "@/app/components/pixelated.cloudinary";
@@ -40,7 +41,13 @@ export default async function GalleryWrapper(
 		const myFlickrCards = await GenerateFlickrCards({flickrImages: myFlickrImages, photoSize: 'Medium'});
 		// REMOVE LINKS
 		if (await myFlickrCards) { 
-			const myScrubbedFlickrCards = await myFlickrCards.map((obj: CarouselCardType) => {
+			let mySortedFlickrCards = [ ...myFlickrCards];
+			mySortedFlickrCards = mySortedFlickrCards.sort((a: any, b: any) => {
+				if (a.headerText < b.headerText) { return 1; } 
+				else if (a.headerText > b.headerText) { return -1; } 
+				else { return 0; }
+			});
+			const myScrubbedFlickrCards = mySortedFlickrCards.map((obj: CarouselCardType) => {
 				delete obj.link;
 				delete obj.headerText;
 				delete obj.bodyText;

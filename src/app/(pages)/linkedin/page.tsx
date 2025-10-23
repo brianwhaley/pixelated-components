@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { PageHeader } from "@/app/components/general/pixelated.general";
+import { PageHeader } from "@brianwhaley/pixelated-components";
 import { LinkedIn } from '@/app/components/linkedin/pixelated.linkedin';
 
 export default function Recommends() {

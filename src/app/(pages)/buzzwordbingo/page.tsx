@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { PageHeader } from "@/app/components/general/pixelated.general";
+import { PageHeader } from "@brianwhaley/pixelated-components";
 import { CalloutHeader } from "@brianwhaley/pixelated-components";
 import { BuzzwordBingo } from "@brianwhaley/pixelated-components";
 import { buzzwords } from "@/app/data/buzzwords";
