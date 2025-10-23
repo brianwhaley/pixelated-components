@@ -1,7 +1,11 @@
 {
   "name": "informationfocus",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "private": true,
+  "author": {
+    "name": "Pixelated Technologies",
+    "url": "https://www.pixelated.tech/"
+  },
   "scripts": {
     "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev  -p 3001 --experimental-https",
     "build": "npm run clean && NODE_ENV=production next build",
@@ -10,19 +14,19 @@
     "clean": "rm -rf .next && rm -rf out"
   },
   "dependencies": {
-    "@brianwhaley/pixelated-components": "^2.1.43",
-    "next": "^15.5.6",
+    "@brianwhaley/pixelated-components": "^2.2.0",
+    "next": "^16.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "sass": "^1.93.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^24.8.1",
+    "@types/node": "^24.9.1",
     "@types/react": "^19",
     "@types/react-dom": "^19.2.2",
-    "eslint": "^9",
-    "eslint-config-next": "^15.5.6",
+    "eslint": "^9.38.0",
+    "eslint-config-next": "^16.0.0",
     "typescript": "^5"
   }
 }
