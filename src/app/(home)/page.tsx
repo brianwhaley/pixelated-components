@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Callout, CalloutHeader } from "@brianwhaley/pixelated-components";
+import { PageSectionHeader } from "@brianwhaley/pixelated-components";
+import { Callout } from "@brianwhaley/pixelated-components";
 
 export default function Home() {
 
@@ -10,11 +11,11 @@ export default function Home() {
             <div className="row-2col">
                 <div className="gridItem">
                     <Callout
+                        style='boxed'
                         layout="vertical"
-                        isboxed={true}
                         title="Mary Ann Sarao, Principal" 
                         img="/images/mas-sq.jpg"
-                        shape="square"
+                        imgShape="square"
                         content="Mary Ann Sarao is an expert in establishing and managing Corporate Competitive Intelligence Units in the areas of:
                             Pharmaceuticals and Therapeutic Areas, Health Care, Medical Devices, Consumer Health,
                             Manufacturing, Regulatory, Research & Development, Corporate Global Security Platforms,
@@ -22,11 +23,11 @@ export default function Home() {
                 </div>
                 <div className="gridItem">
                     <Callout
+                        style='boxed'
                         layout="vertical"
-                        isboxed={true}
                         title="Our Goal" 
                         img="/images/informationfocus-sq.png"
-                        shape="square"
+                        imgShape="square"
                         subtitle="Good CI can be done within legal and ethical guidelines.
                             Information Focus will help guide you every step of the way to building
                             a valuable and sustainable CI unit with the right people,
@@ -38,7 +39,7 @@ export default function Home() {
             </div>
 
             <div>
-                <CalloutHeader title="Capabilities" />
+                <PageSectionHeader title="Capabilities" />
                 <div className="row-4col">
                     <div className="gridItem if callout">
                         <p>Building a New CI Unit from the Ground Up</p>
@@ -86,7 +87,7 @@ export default function Home() {
             <div>
                 <div className="logo-row">
                     <img src="/images/logo-pfizer.png" alt="Pfizer" />
-                    <img src="/images/logo-j&j.svg.png" alt="Johnson & Johnson" />
+                    <img src="/images/logo-jnj.svg.png" alt="Johnson & Johnson" />
                     <img src="/images/logo-merck.png" alt="Merck" />
                     <img src="/images/logo-bms.svg.png" alt="Bristol-Myers Squibb" />
                     <img src="/images/logo-bayer.svg.png" alt="Bayer" />

@@ -36,7 +36,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "use global and grid css files exported from pixelated-components"
+git commit -m "update callout components, page / section headers, sitemap.xml add images"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 

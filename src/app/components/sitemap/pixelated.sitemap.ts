@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { getAllRoutes, getAllImages } from "../metadata/pixelated.metadata";
 import type { SitemapEntry } from "@brianwhaley/pixelated-components";
@@ -107,42 +108,6 @@ export async function createWordPressURLs(){
 	}
 	return sitemap;
 }
-
-
-/* 
-const defaultEbayProps = {
-	proxyURL: "https://proxy.pixelated.tech/prod/proxy?url=",
-	baseTokenURL: 'https://api.ebay.com/identity/v1/oauth2/token',
-	tokenScope: 'https://api.ebay.com/oauth/api_scope',
-	baseSearchURL : 'https://api.ebay.com/buy/browse/v1/item_summary/search',
-	qsSearchURL: '?q=sunglasses&fieldgroups=full&category_ids=79720&aspect_filter=categoryId:79720&filter=sellers:{pixelatedtech}&sort=newlyListed&limit=200',
-	baseItemURL: 'https://api.ebay.com/buy/browse/v1/item',
-	qsItemURL: '/v1|295959752403|0?fieldgroups=PRODUCT,ADDITIONAL_SELLER_DETAILS',
-	appId: 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe', // clientId
-	appCertId: 'PRD-fb4458deef01-0d54-496a-b572-a04b', // clientSecret
-	sbxAppId: 'BrianWha-Pixelate-SBX-ad482b6ae-8cb8fead', // Sandbox
-	sbxAppCertId: '',
-	globalId: 'EBAY-US',
-};
-export async function createEbayItemURLs(origin: string){
-	const sitemap: SitemapEntry[] = [];
-	await getEbayAppToken({apiProps: defaultEbayProps})
-		.then(async (response: any) => {
-			await getEbayItemsSearch({ apiProps: defaultEbayProps, token: response })
-				.then( (items: any) => {
-					for (const item of items.itemSummaries) {
-						sitemap.push({
-							url: `${origin}/store/${item.legacyItemId}` ,
-							lastModified: item.itemCreationDate,
-							changeFrequency: "hourly" as const,
-							priority: 1.0,
-						});
-					}
-				});
-		});
-	return sitemap;
-}
-*/
 
 
 

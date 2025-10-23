@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import { usePathname } from 'next/navigation';
 import type { Metadata } from "@/app/components/metadata/pixelated.metadata";
-import { getRouteByKey } from "@/app/components/metadata/pixelated.metadata";
+import { getRouteByKey } from "@brianwhaley/pixelated-components";
 import { MicroInteractions } from "@brianwhaley/pixelated-components";
 import "@brianwhaley/pixelated-components/dist/css/pixelated.global.css";
 import "@brianwhaley/pixelated-components/dist/css/pixelated.grid.scss";
