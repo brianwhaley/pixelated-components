@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
 			allow: '/',
 			disallow: '',
 		},
-		sitemap: 'https://pixelated.tech/sitemap.xml',
+		sitemap: 'https://www.informationfocus.net/sitemap.xml',
 	};
 }
