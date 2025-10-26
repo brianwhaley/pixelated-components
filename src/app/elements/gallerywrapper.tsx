@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { GetFlickrData, GenerateFlickrCards } from '@brianwhaley/pixelated-components';
 import type { CarouselCardType } from '@brianwhaley/pixelated-components';
-import { getCloudinaryRemoteFetchURL } from "@/app/components/pixelated.cloudinary";
+import { getCloudinaryRemoteFetchURL } from "@brianwhaley/pixelated-components";
 
 export default async function GalleryWrapper(
 	props: { 
@@ -38,21 +38,24 @@ export default async function GalleryWrapper(
 	async function getFlickrCards() {
 		const myPromise = GetFlickrData(flickr);
 		const myFlickrImages = await myPromise;
-		const myFlickrCards = await GenerateFlickrCards({flickrImages: myFlickrImages, photoSize: 'Medium'});
+		const myFlickrCards = GenerateFlickrCards({flickrImages: myFlickrImages, photoSize: 'Medium'});
 		// REMOVE LINKS
-		if (await myFlickrCards) { 
+		if (myFlickrCards) { 
 			let mySortedFlickrCards = [ ...myFlickrCards];
 			mySortedFlickrCards = mySortedFlickrCards.sort((a: any, b: any) => {
 				if (a.headerText < b.headerText) { return 1; } 
 				else if (a.headerText > b.headerText) { return -1; } 
 				else { return 0; }
 			});
-			const myScrubbedFlickrCards = mySortedFlickrCards.map((obj: CarouselCardType) => {
-				delete obj.link;
-				delete obj.headerText;
-				delete obj.bodyText;
-				obj.image = getCloudinaryRemoteFetchURL(obj.image, "dlbon7tpq");
-				return obj;
+			const myScrubbedFlickrCards = mySortedFlickrCards.map((obj, index): CarouselCardType => {
+				return {
+					index: index,
+					cardIndex: index,
+					cardLength: myFlickrCards.length,
+					image: getCloudinaryRemoteFetchURL({url: obj.image, product_env:"dlbon7tpq"}),
+					imageAlt: obj.imageAlt,
+					subHeaderText: obj.subHeaderText
+				};
 			});
 			props.callback(myScrubbedFlickrCards);
 			return myScrubbedFlickrCards;

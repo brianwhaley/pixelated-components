@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Carousel } from "@brianwhaley/pixelated-components";
 import { GetFlickrData, GenerateFlickrCards } from '@brianwhaley/pixelated-components';
 import type { CarouselCardType } from "@brianwhaley/pixelated-components";
-import { getCloudinaryRemoteFetchURL } from "@/app/components/pixelated.cloudinary";
+import { getCloudinaryRemoteFetchURL } from "@brianwhaley/pixelated-components";
 import './hero.css';
 
 
@@ -34,13 +34,19 @@ export default function Hero() {
 			const myFlickrImages = await myPromise;
 			const myFlickrCards = GenerateFlickrCards({flickrImages: myFlickrImages, photoSize: 'Medium'});
 			// REMOVE LINKS
-			const myScrubbedFlickrCards = myFlickrCards.map((obj: CarouselCardType) => {
-				delete obj.link;
-				delete obj.bodyText;
-				obj.image = getCloudinaryRemoteFetchURL(obj.image, "dlbon7tpq");
-				return obj;
-			});
-			setFlickrCards(myScrubbedFlickrCards);
+			if (myFlickrCards) { 
+				const myScrubbedFlickrCards = myFlickrCards.map((obj, index): CarouselCardType => {
+					return {
+						index: index,
+						cardIndex: index,
+						cardLength: myFlickrCards.length,
+						image: getCloudinaryRemoteFetchURL({url:obj.image, product_env:"dlbon7tpq"}),
+						imageAlt: obj.imageAlt,
+						subHeaderText: obj.subHeaderText
+					};
+				});
+				setFlickrCards(myScrubbedFlickrCards);
+			}
 		}
 		getFlickrCards();
 	}, []); // Empty dependency array to run only once
