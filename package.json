@@ -1,6 +1,6 @@
 {
   "name": "informationfocus",
-  "version": "0.1.19",
+  "version": "0.2.0",
   "private": true,
   "author": {
     "name": "Pixelated Technologies",
@@ -14,8 +14,9 @@
     "clean": "rm -rf .next && rm -rf out"
   },
   "dependencies": {
-    "@brianwhaley/pixelated-components": "^2.2.1",
+    "@brianwhaley/pixelated-components": "^2.3.0",
     "next": "^16.0.0",
+    "prop-types": "^15.8.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "sass": "^1.93.2"
