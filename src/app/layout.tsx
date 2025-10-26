@@ -3,11 +3,11 @@
 
 import React, { useState, useEffect } from "react";
 import { usePathname } from 'next/navigation';
-import type { Metadata } from "@/app/components/metadata/pixelated.metadata";
+import type { Metadata } from "@brianwhaley/pixelated-components";
 import { getRouteByKey } from "@brianwhaley/pixelated-components";
 import { MicroInteractions } from "@brianwhaley/pixelated-components";
-import "@brianwhaley/pixelated-components/dist/css/pixelated.global.css";
-import "@brianwhaley/pixelated-components/dist/css/pixelated.grid.scss";
+import "@brianwhaley/pixelated-components/css/pixelated.global.css";
+import "@brianwhaley/pixelated-components/css/pixelated.grid.scss";
 import Header from "@/app/elements/header";
 import Nav from "@/app/elements/nav";
 import Footer from '@/app/elements/footer';
