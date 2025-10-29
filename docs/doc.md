@@ -15,6 +15,6 @@ npm audit fix --force
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "initial version"
+git commit -m "added google ai search for email address match for company names"
 git push leadscraper dev --tags
 git push leadscraper dev:main
