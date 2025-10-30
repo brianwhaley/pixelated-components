@@ -1278,10 +1278,30 @@
 							{
 								"type": [ "h-card" ],
 								"properties": {
+									"name": [ "PixelVivid Web Site" ],
+									"url": [ "https://www.pixelvivid.com/" ],
+									"photo": [ "https://farm66.static.flickr.com/65535/54858225547_3a37e623de.jpg" ],
+									"note": [  ],
+									"x-note": [ "June 27, 2025" ]
+								}
+							},
+							{
+								"type": [ "h-card" ],
+								"properties": {
 									"name": [ "Palmetto Epoxy" ],
 									"url": [ "https://www.palmetto-epoxy.com/" ],
-									"photo": [ "" ],
-									"note": [ ]
+									"photo": [ "https://farm66.static.flickr.com/65535/54593598482_7c25791d94.jpg" ],
+									"note": [  ],
+									"x-note": [ "March 29, 2025" ]
+								}
+							},{
+								"type": [ "h-card" ],
+								"properties": {
+									"name": [ "Information Focus" ],
+									"url": [ "https://www.informationfocus.net/" ],
+									"photo": [ "https://farm66.static.flickr.com/65535/54859918358_8626a5f296.jpg" ],
+									"note": [  ],
+									"x-note": [ "June 26, 2023" ]
 								}
 							},
 							{

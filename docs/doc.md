@@ -55,7 +55,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "bump component library, ,use new server exports path"
+git commit -m "resume update, seo fix for canonical and alternate, bump component library, nextjs 16.0.1"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 

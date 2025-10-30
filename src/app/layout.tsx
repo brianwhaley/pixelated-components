@@ -50,7 +50,6 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
 				<meta name="google-site-verification" content="t2yy9wL1bXPiPQjBqDee2BTgpiGQjwVldlfa4X5CQkU" />
 				<meta name="google-site-verification" content="l7D0Y_JsgtACBKNCeFAXPe-UWqo13fPTUCWhkmHStZ4" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-
 				<meta property="og:site_name" content="Pixelated" />
 				<meta property="og:title" content={metadata?.title} />
 				<meta property="og:url" content={origin ?? undefined} />
@@ -63,9 +62,8 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
 				<meta itemProp="url" content={origin ?? undefined} />
 				<meta itemProp="description" content={metadata?.description} />
 				<meta itemProp="thumbnailUrl" content="/images/pix-bg-512.gif" />
-
-				<link rel="alternate" href={origin ?? undefined} hrefLang="en-us" />
-				<link rel="canonical" href={origin ?? undefined} />
+				{ /*  <link rel="alternate" href={origin ?? undefined} hrefLang="en-us" />
+				<link rel="canonical" href={origin ?? undefined} /> */ }
 				<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
 				<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
 				<link rel="manifest" href="/manifest.webmanifest" />
