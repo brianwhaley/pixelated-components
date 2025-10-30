@@ -59,8 +59,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<meta itemProp="url" content={origin ?? undefined} />
 				<meta itemProp="description" content={metadata?.description} />
 				<meta itemProp="thumbnaillUrl" content="/images/pixelvivid/pix-512.gif" />
-				<link rel="alternate" href={origin ?? undefined} hrefLang="en-us" />
-				<link rel="canonical" href={origin ?? undefined} />
+				{ /* <link rel="alternate" href={origin ?? undefined} hrefLang="en-us" />
+				<link rel="canonical" href={origin ?? undefined} /> */ }
 				<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
 				<link rel="manifest" href="/manifest.webmanifest" />
 				<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />

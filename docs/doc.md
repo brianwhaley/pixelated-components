@@ -36,7 +36,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "update sitemap, robots, manifest, bump component library"
+git commit -m "seo fix for canonical and alternate, bump component library, nextjs 16.0.1"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 
