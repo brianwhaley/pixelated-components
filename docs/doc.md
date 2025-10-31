@@ -55,7 +55,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "resume update, seo fix for canonical and alternate, bump component library, nextjs 16.0.1"
+git commit -m "remove gallerywrapper for FlickrWrapper, add sort by imgAlt to portfolio"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
