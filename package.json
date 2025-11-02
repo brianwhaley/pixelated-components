@@ -1,6 +1,6 @@
 {
   "name": "informationfocus",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "author": {
     "name": "Pixelated Technologies",
@@ -14,19 +14,19 @@
     "clean": "rm -rf .next && rm -rf out"
   },
   "dependencies": {
-    "@brianwhaley/pixelated-components": "^2.3.8",
+    "@brianwhaley/pixelated-components": "^2.3.11",
     "next": "^16.0.1",
     "prop-types": "^15.8.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "sass": "^1.93.2"
+    "sass": "^1.93.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^24.9.2",
     "@types/react": "^19",
     "@types/react-dom": "^19.2.2",
-    "eslint": "^9.38.0",
+    "eslint": "^9.39.0",
     "eslint-config-next": "^16.0.1",
     "typescript": "^5"
   }
