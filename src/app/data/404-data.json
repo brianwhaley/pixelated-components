@@ -1,0 +1,105 @@
+{
+    "images" : [
+
+		{   "img": "https://static.vecteezy.com/system/resources/previews/030/965/305/large_2x/image-of-a-broken-glass-window-on-a-black-background-photo.jpg", 
+			"text": "You Broke It.",
+			"description": "A broken glass window on a black background" 
+        },
+
+		{   "img": "https://t4.ftcdn.net/jpg/03/27/16/69/360_F_327166972_dACgEyWJtXxCshZRKCah4zutflLTyUER.jpg", 
+			"text": "You found the easter eggs.",
+			"description": "Collection of colorful easter eggs" 
+        },
+
+		{   "img": "https://cdn.betakit.com/wp-content/uploads/2014/06/Screen-Shot-2014-06-16-at-10.34.37-AM.png", 
+			"text": "You have reached the End of the Internet",
+			"description": "A computer screen showing the end of the internet popup" 
+        },
+
+		{   "img": "https://css-tricks.com/wp-content/themes/CSS-Tricks-19/images/ripped.jpg", 
+			"text": "Looks like we broke it",
+			"description": "A piece of code broken inside an IDE" 
+		},
+
+		{   "img": "https://content-cdn.tips-and-tricks.co/wp-content/uploads/2023/01/03130637/Unplug.png", 
+			"text": "This Page is Temporarily Unplugged.",
+			"description": "Power cable unplugged from an outlet" 
+        },
+
+		{   "img": "https://cdn.mos.cms.futurecdn.net/s7ciDuGDKyYCHhMgG3guXY.jpg", 
+			"text": "This page has crossed the event horizon.",
+			"description": "An artistic rendition of a black hole in space" 
+		},
+
+		{   "img": "https://www.swissinfo.ch/content/wp-content/uploads/sites/13/2024/02/552212960_highres.jpg", 
+			"text": "This page is buried.",
+			"description": "Survivor being dug out by an avalanche" 
+		},
+
+		{   "img": "https://www.techexplorist.com/wp-content/uploads/2018/08/bermuda-triangle.jpg", 
+			"text": "This page is in the Bermuda Triangle.",
+			"description": "Hole in the ocean with ships getting pulled in" 
+		},
+
+		{   "img": "https://t4.ftcdn.net/jpg/00/42/59/97/360_F_42599724_Zzb2W6TG3VZFdHiSCeJF79FTPrId6lvW.jpg", 
+			"text": "Wherever you go, there you are.",
+			"description": "Chiseled marble text" 
+        },
+
+		{   "img": "https://speckyboy.com/wp-content/uploads/2022/09/wp-plugin-support-thumb.jpg", 
+			"text": "You're not lost.",
+			"description": "Sign on the side of a building" 
+        },
+
+		{   "img": "https://cms-assets.themuse.com/media/lead/6626.jpg", 
+			"text": "No Outlet.",
+			"description": "Street sign saying Dead End" 
+        },
+
+		{   "img": "https://www.photos-public-domain.com/wp-content/uploads/2015/09/road-closed-detour-sign.jpg", 
+			"text": "Dead End.",
+			"description": "Road closed detour sign" 
+        },
+
+		{   "img": "https://lumiere-a.akamaihd.net/v1/images/databank_jedimindtrick_01_169_a491266d.jpeg", 
+			"text": "This is not the page you were looking for.",
+			"description": "Obi-Wan Kenobi using Jedi mind trick" 
+        },
+
+		{   "img": "https://images.squarespace-cdn.com/content/v1/52f17606e4b0c058f609ee0e/1437768478051-DTM26ZMQNZLXGJ3GVBXS/image-asset.jpeg", 
+			"text": "You Shall Not Pass.",
+			"description": "Gandalf blocking the path of the Balrog" 
+        },
+
+		{   "img": "https://static0.polygonimages.com/wordpress/wp-content/uploads/chorus/uploads/chorus_asset/file/23003314/4k_fellowship_movie_screencaps.com_23524.jpg", 
+			"text": "You Shall Not Pass.",
+			"description": "Gandalf standing with his sword and staff" 
+        },
+
+		{   "img": "https://wfumediaphiles.wordpress.com/wp-content/uploads/2018/11/53-48559-seinfeld-soup-nazi-1524772836.jpg", 
+			"text": "No Soup For You.",
+			"description": "Yev Kassem The Soupman from Seinfeld" 
+        },
+
+		{   "img": "https://media.npr.org/assets/img/2013/02/07/mrbean072way-7da3d67475a9f227ced239f0404c20c4316df5e1.jpg", 
+			"text": "I'm Confused....",
+			"description": "Mr. Bean is Confused" 
+        },
+
+		{   "img": "https://www.nationalreview.com/wp-content/uploads/2024/12/Buckaroo-Banzai.jpg", 
+			"text": "No matter where you go, there you are.",
+			"description": "Buckaroo Banzai with microphone and guitar on stage" 
+        },
+
+		{   "img": "https://i.ytimg.com/vi/xkThxevUSJs/maxresdefault.jpg", 
+			"text": "Oops! Something went wrong.", 
+			"description": "Britney Spears singing Oops I Did It again" 
+        },
+
+		{   "img": "https://f8n-ipfs-production.imgix.net/QmfFETmLaZSExHtby5ggtd5BtxRG8BfMvAKmise7dEQems/nft.png", 
+			"text": "Success, Boy.",
+			"description": "Success Boy" 
+        }
+
+	]
+}

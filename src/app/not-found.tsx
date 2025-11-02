@@ -1,14 +1,14 @@
 "use client";
 
+import { FourOhFour } from "@brianwhaley/pixelated-components";
+import data404 from "../app/data/404-data.json";
+const images = data404.images;
+
 export default function NotFound () {
 	return (
 		<section id="notfound-section">
-			<div className="section-container" style={{ position: "relative" }}>
-				<img alt="Page Not Found" src="https://farm6.static.flickr.com/5762/23917768592_1c2353b913_b.jpg" className="horizontal-centered" style={{ padding: "0 5px" }}/>
-				<div className="horizontal-centered" style={{ top: "10px", width: "100%" }}>
-					<h1 className="centered textOutline" style={{ fontSize: "2em" }}>OMG.  You Broke It.</h1>
-					<div className="centeredbutton"><a href="/" target="_self" rel="noopener noreferrer">Go Home</a></div>
-				</div>
+			<div className="section-container">
+				<FourOhFour images={images} />
 			</div>
 		</section>
 	);

@@ -71,7 +71,7 @@ a:hover {
 .accordionMenu > ul > li > a {
 	/* this is the button */
 	background: #CCC;
-	background-image: url(/images/pix/pix-bg-bw.jpg) !important;
+	/* background-image: url(/images/pix/pix-bg-bw.gif) !important; */
 }
 
 .accordionMenu > ul > li > a:hover {
@@ -86,7 +86,7 @@ a:hover {
 .accordionMenu > ul > ul > li > a {
 	/* this is the button */
 	background: #CCC;
-	background-image: url(/images/pix/pix-bg-bw.jpg) !important;
+	/* background-image: url(/images/pix/pix-bg-bw.gif) !important; */
 }
 
 .accordionMenu > ul > ul > li > a:hover {

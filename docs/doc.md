@@ -55,7 +55,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "remove gallerywrapper for FlickrWrapper, add sort by imgAlt to portfolio"
+git commit -m "new 404 component, bump component library"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
