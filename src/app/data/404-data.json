@@ -26,9 +26,29 @@
 			"description": "Power cable unplugged from an outlet" 
         },
 
+		{  "img": "https://churchconsulting.org/wp-content/uploads/2023/04/gps_1.png", 
+			"text": "Recalculating...",
+			"description": "Garmin GPS screen recalculating route" 
+		},
+
 		{   "img": "https://cdn.mos.cms.futurecdn.net/s7ciDuGDKyYCHhMgG3guXY.jpg", 
 			"text": "This page has crossed the event horizon.",
 			"description": "An artistic rendition of a black hole in space" 
+		},
+
+		{   "img": "https://ritholtz.com/wp-content/uploads/2020/03/dontpanic.jpg", 
+			"text": "Mostly Harmless.",
+			"description": "An image of the Hithchiker's Guide to the Galaxy Green Guy" 
+		},
+
+		{   "img": "https://i1.sndcdn.com/avatars-HVWQy6EEIVZS0UKH-mwgAHw-t1080x1080.jpg", 
+			"text": "Dont Panic.",
+			"description": "An image of Earth - Mostly Harmless" 
+		},
+
+		{   "img": "https://cdn.mos.cms.futurecdn.net/XjFKahrnFjkVmR6W3Mh9mS-600-80.jpg.webp", 
+			"text": "That Link is Missing",
+			"description": "An image of the evolution of man" 
 		},
 
 		{   "img": "https://www.swissinfo.ch/content/wp-content/uploads/sites/13/2024/02/552212960_highres.jpg", 
@@ -94,6 +114,11 @@
 		{   "img": "https://i.ytimg.com/vi/xkThxevUSJs/maxresdefault.jpg", 
 			"text": "Oops! Something went wrong.", 
 			"description": "Britney Spears singing Oops I Did It again" 
+        },
+
+		{   "img": "https://www.aaronreedphotography.com/images/xl/Bob-Ross-Portrait.jpg", 
+			"text": "A Happy Accident has occured.", 
+			"description": "Bob Ross painting a happy little tree" 
         },
 
 		{   "img": "https://f8n-ipfs-production.imgix.net/QmfFETmLaZSExHtby5ggtd5BtxRG8BfMvAKmise7dEQems/nft.png", 
