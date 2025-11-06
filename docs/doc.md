@@ -55,7 +55,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "perf fixes in microinteractions, imgs"
+git commit -m "npm version fix"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
