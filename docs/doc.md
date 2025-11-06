@@ -36,7 +36,7 @@ npm version minor
 eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "new 404 component, bump component library"
+git commit -m "fix for partial view microinteractions, img fetchpriority"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 
