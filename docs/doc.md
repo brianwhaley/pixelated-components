@@ -58,7 +58,7 @@ npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
 npm version patch --force
 git add * -v
-git commit -m "npm version fix"
+git commit -m "bump version for env vars"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
