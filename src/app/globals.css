@@ -91,5 +91,6 @@ a:hover {
 
 .accordionMenu > ul > ul > li > a:hover {
 	background: #DDD !important;
-	background-image: url(/images/pix/pix-bg-bw.gif) !important;
+	background-image: url(/images/pix/pix-bg-sm-bw.gif) !important;
+	background-blend-mode: lighten;
 }

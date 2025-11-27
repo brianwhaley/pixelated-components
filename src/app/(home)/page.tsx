@@ -14,12 +14,12 @@ export default function Work() {
 			<section className="section-alt" id="about-section">
 				<div className="section-container">
 					<div className="row-8col">
-						<div className="grid-s1-e8">
+						<div className="grid-s1-e9">
 							<Callout
 								style='boxed'
 								layout='horizontal'
 								url="/workportfolio"
-								img='images/brianwhaley-headshot.jpg'
+								img='/images/brianwhaley-headshot.jpg'
 								title='Work Portfolio'
 								content='I am an Information Technology leader accomplished in building and managing global high-performance teams, 
 									launching and managing digital products, and developing and executing unified product and technology strategies. 
@@ -83,7 +83,7 @@ export default function Work() {
 						<Callout
 							layout='vertical' 
 							url='https://github.com/brianwhaley'
-							img='images/logos/github-logo.png'
+							img='/images/logos/github-logo.png'
 							imgShape='squircle' 
 							title='GitHub Portfolio'
 							content='This is a link to my GitHub account.  I have only uploaded a few pieces of code.
@@ -121,7 +121,7 @@ export default function Work() {
 						<Callout
 							layout='vertical' 
 							url="/recipes" 
-							img='images/pizza-gaine.jpg'
+							img='/images/pizza-gaine.jpg'
 							imgShape='squircle' 
 							title='Family Recipes'
 							content='This is my recipe book. It is a collection of recipes from 3 generations of my family, 

@@ -57,10 +57,10 @@ export default function Resume() {
 			<section className="p-resume" id="resume-section">
 				<div className="section-container">
 					<div className="row-12col">
-						<div className="p-name grid-s1-e12">
+						<div className="p-name grid-s1-e13">
 							<ResumeName data={ResumeData.items[0].properties.name} />
 						</div>
-						<div className="grid-s1-e3 bigpad divider">
+						<div className="grid-s1-e4 bigpad divider">
 							<div className="p-contact">
 								<ResumeContact title="Contact Information" data={ResumeData.items[0].properties.contact} />
 							</div>
@@ -71,7 +71,7 @@ export default function Resume() {
 								<ResumeSkills title="Skills" data={ResumeData.items[0].properties.skills} />
 							</div>
 						</div>
-						<div className="grid-s4-e9 bigpad">
+						<div className="grid-s4-e13 bigpad">
 							<div className="p-summary">
 								<ResumeSummary title="Professional Summary" data={ResumeData.items[0].properties.summary} />
 							</div>
