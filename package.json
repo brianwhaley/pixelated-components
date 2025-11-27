@@ -1,6 +1,6 @@
 {
   "name": "brianwhaley",
-  "version": "2.5.0",
+  "version": "2.6.0",
   "private": true,
   "author": {
     "name": "Pixelated Technologies",
@@ -17,10 +17,10 @@
     "dev": "next dev --turbopack"
   },
   "dependencies": {
-    "@brianwhaley/pixelated-components": "^2.3.16",
+    "@brianwhaley/pixelated-components": "^3.0.3",
     "date-fns": "^4.1.0",
     "globals": "^16.5.0",
-    "next": "^16.0.1",
+    "next": "^16.0.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
@@ -28,24 +28,24 @@
     "@eslint/eslintrc": "^3",
     "@eslint/js": "^9.39.1",
     "@eslint/json": "^0.14.0",
-    "@next/eslint-plugin-next": "^16.0.1",
-    "@next/third-parties": "^16.0.1",
+    "@next/eslint-plugin-next": "^16.0.5",
+    "@next/third-parties": "^16.0.5",
     "@tailwindcss/postcss": "^4.1.17",
-    "@types/node": "^24.10.0",
+    "@types/node": "^24.10.1",
     "@types/prop-types": "^15.7.15",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "@typescript-eslint/eslint-plugin": "^8.46.3",
-    "@typescript-eslint/parser": "^8.46.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.48.0",
+    "@typescript-eslint/parser": "^8.48.0",
     "css-loader": "^7.1.2",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.1",
+    "eslint-config-next": "^16.0.5",
     "eslint-plugin-react": "^7.37.5",
-    "sass": "^1.93.3",
+    "sass": "^1.94.2",
     "sass-loader": "^16.0.6",
     "style-loader": "^4.0.0",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.3"
+    "typescript-eslint": "^8.48.0"
   }
 }
