@@ -34,9 +34,12 @@ npm version major
 npm version minor
 
 eslint --fix
+
+npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
+npm audit fix --force
 npm version patch --force
 git add * -v
-git commit -m "fix for partial view microinteractions, img fetchpriority"
+git commit -m "breaking changes from pixelated-components, image perf fixes, sitemap fixes"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 

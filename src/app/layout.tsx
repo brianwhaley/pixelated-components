@@ -1,14 +1,8 @@
 
-"use client"; 
-
-import React, { useState, useEffect } from "react";
-import { usePathname } from 'next/navigation';
-import type { Metadata } from "@brianwhaley/pixelated-components";
-import { getRouteByKey } from "@brianwhaley/pixelated-components";
-import { MicroInteractions } from "@brianwhaley/pixelated-components";
-import { loadAllImagesFromCloudinary } from "@brianwhaley/pixelated-components";
-import { deferAllCSS } from "@brianwhaley/pixelated-components";
-import { preloadImages } from "@brianwhaley/pixelated-components";
+import { headers } from "next/headers";
+import { getRouteByKey } from "@brianwhaley/pixelated-components/server";
+import { PixelatedServerConfigProvider } from "@brianwhaley/pixelated-components/server";
+import LayoutClient from "@/app/elements/layoutclient";
 import Header from "@/app/elements/header";
 import Nav from "@/app/elements/nav";
 import Footer from '@/app/elements/footer';
@@ -17,39 +11,18 @@ import "@brianwhaley/pixelated-components/css/pixelated.global.css";
 import "@brianwhaley/pixelated-components/css/pixelated.grid.scss";
 import "./globals.css";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
 	
-	useEffect(() => {
-		MicroInteractions({ 
-			buttonring: true,
-			formglow: true,
-			imgtwist: true,
-			simplemenubutton: true,
-			scrollfadeElements: '.callout , .calloutSmall , .carouselContainer',
-		});
-	}, []);
-
-	const pathname = usePathname();
-	const [ metadata, setMetadata ] = useState<Metadata | null>();
-	useEffect(() => {
-		const myMetadata = getRouteByKey(myRoutes.routes, "path", pathname);
-		setMetadata(myMetadata);
-	}, [pathname]);
-
-	const [ url, setURL ] = useState<string>();
-	useEffect(() => {
-		document.addEventListener('DOMContentLoaded', deferAllCSS);
-		preloadImages();
-		deferAllCSS();
-		if (typeof window !== "undefined" ) setURL(window.location.href);
-		loadAllImagesFromCloudinary({ 
-			origin: window.location.origin,
-			product_env: "dlbon7tpq"
-		});
-	}, []);
+	const reqHeaders: Headers = await (headers() as Promise<Headers>);
+	const path = reqHeaders.get("x-path") ?? "/";
+	const origin = reqHeaders.get("x-origin");
+	const url = reqHeaders.get("x-url") ?? `${origin}${path}`;
+	const pathname = path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
+	const metadata = getRouteByKey(myRoutes.routes, "path", pathname);
 
 	return (
-		<html lang="en">
+		<>
+		<LayoutClient /><html lang="en">
 			<head>
 				<title>{metadata?.title}</title>
 				<meta httpEquiv="content-type" content="text/html; charset=UTF-8" />
@@ -69,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<meta itemProp="description" content={metadata?.description} />
 				<meta itemProp="thumbnailUrl" content="/images/pixelvivid/pix-512.gif" />
 				<link rel="canonical" href={url} />
-				{ /* <link rel="alternate" href={url} hrefLang="en-us" /> */ }
+				{/* <link rel="alternate" href={url} hrefLang="en-us" /> */}
 				<link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
 				<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
 				<link rel="manifest" href="/manifest.webmanifest" />
@@ -81,11 +54,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 				<link rel="preconnect" href="https://farm66.static.flickr.com" />
 			</head>
 			<body>
-				<header><Header /></header>
-				<nav><Nav /></nav>
-				<main>{children}</main>
-				<footer><Footer /></footer>
+				<PixelatedServerConfigProvider>
+					<header><Header /></header>
+					<nav><Nav /></nav>
+					<main>{children}</main>
+					<footer><Footer /></footer>
+				</PixelatedServerConfigProvider>
 			</body>
 		</html>
+		</>
 	);
 }

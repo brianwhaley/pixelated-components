@@ -72,7 +72,9 @@ img.mas {
 }
 
 .logo-row img {
-  max-height: 35px;
+  /* max-height: 35px; */
+  height: 35px;
+  width: auto;
   padding: 0 10px;
 }
 

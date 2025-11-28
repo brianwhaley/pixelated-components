@@ -2,7 +2,6 @@
 
 import React from "react";
 import { ResumeName, ResumeContact, ResumeEvents, ResumeSkills, ResumeSummary } from '@brianwhaley/pixelated-components';
-// import '@brianwhaley/pixelated-components/dist/components/resume/pixelated.resume.css';
 import ResumeData from '@/app/data/resume.json';
 
 export default function Home() {
@@ -15,7 +14,7 @@ export default function Home() {
                 <ResumeName data={ResumeData.items[0].properties.name} />
                 </div>
 
-                <div className="grid3 bigpad">{/*divider*/}
+                <div className="grid-s1-e4 bigpad">{/*divider*/}
                 <div className="p-contact">
                     <ResumeContact title="Contact Information" data={ResumeData.items[0].properties.contact} />
                 </div>
@@ -27,7 +26,7 @@ export default function Home() {
                 </div>
                 </div>
 
-                <div className="grid9 bigpad">
+                <div className="grid-s4-e13 bigpad">
                 <ResumeSummary title="Professional Summary" data={ResumeData.items[0].properties.summary} />
                 <ResumeEvents title="Work History" data={ResumeData.items[0].properties.experience} dateFormat="yyyy" showDate />
                 <ResumeEvents title="Certifications" data={ResumeData.items[0].properties.certifications} />

@@ -3,6 +3,7 @@
 import React from "react";
 import { PageSectionHeader } from "@brianwhaley/pixelated-components";
 import { Callout } from "@brianwhaley/pixelated-components";
+import { SmartImage } from "@brianwhaley/pixelated-components";
 
 export default function Home() {
 
@@ -11,6 +12,7 @@ export default function Home() {
             <div className="row-2col">
                 <div className="gridItem">
                     <Callout
+                        aboveFold={true}
                         style='boxed'
                         layout="vertical"
                         title="Mary Ann Sarao, Principal" 
@@ -23,6 +25,7 @@ export default function Home() {
                 </div>
                 <div className="gridItem">
                     <Callout
+                        aboveFold={true}
                         style='boxed'
                         layout="vertical"
                         title="Our Goal" 
@@ -86,13 +89,13 @@ export default function Home() {
 
             <div>
                 <div className="logo-row">
-                    <img src="/images/logo-pfizer.png" alt="Pfizer" />
-                    <img src="/images/logo-jnj.svg.png" alt="Johnson & Johnson" />
-                    <img src="/images/logo-merck.png" alt="Merck" />
-                    <img src="/images/logo-bms.svg.png" alt="Bristol-Myers Squibb" />
-                    <img src="/images/logo-bayer.svg.png" alt="Bayer" />
-                    <img src="/images/logo-dsm.svg.png" alt="DSM" />
-                    <img src="/images/logo-abbvie.png" alt="Abbvie" />
+                    <SmartImage src="/images/logo-pfizer.png" alt="Pfizer" />
+                    <SmartImage src="/images/logo-jnj.svg.png" alt="Johnson & Johnson" />
+                    <SmartImage src="/images/logo-merck.png" alt="Merck" />
+                    <SmartImage src="/images/logo-bms.svg.png" alt="Bristol-Myers Squibb" />
+                    <SmartImage src="/images/logo-bayer.svg.png" alt="Bayer" />
+                    <SmartImage src="/images/logo-dsm.svg.png" alt="DSM" />
+                    <SmartImage src="/images/logo-abbvie.png" alt="Abbvie" />
                 </div>
             </div>
 

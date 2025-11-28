@@ -1,7 +1,7 @@
 
 import type { MetadataRoute } from 'next';
 import { headers } from 'next/headers';
-import { createPageURLs, createImageURLs } from "@brianwhaley/pixelated-components/server";
+import { createPageURLs, createImageURLsFromJSON } from "@brianwhaley/pixelated-components/server";
 // import { createPageURLs, createWordPressURLs, createImageURLs } from "@brianwhaley/pixelated-components";
 // import type { SitemapEntry } from '@brianwhaley/pixelated-components/dist/types';
 import myRoutes from "@/app/data/routes.json";
@@ -17,7 +17,7 @@ export default async function SiteMapXML(): Promise<MetadataRoute.Sitemap> {
 	const origin = await getOrigin();
 	const sitemap = [
 		...(await createPageURLs(myRoutes.routes, origin)),
-		...(await createImageURLs(origin)),
+		...(await createImageURLsFromJSON(origin)),
 	];
 	return sitemap;
 }
