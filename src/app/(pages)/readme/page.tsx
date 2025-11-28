@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { PageSection } from "@brianwhaley/pixelated-components";
 import { Markdown } from "@brianwhaley/pixelated-components";
 const filePath = '/data/readme.md';
 
@@ -15,8 +16,8 @@ export default function Readme() {
 		fetchMarkdown();
 	}, []); 
 	return (
-		<div className="section-container">
+		<PageSection columns={1} id="markdown-container">
 			<Markdown markdowndata={readmeText} />
-		</div>
+		</PageSection>
 	);
 }

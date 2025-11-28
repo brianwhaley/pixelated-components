@@ -1,0 +1,1918 @@
+
+{
+	"items": [
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Grandma's Cukol Bread" ],
+				"summary": [ "" ],
+				"author": [ "Rose Barbano" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"",
+					""
+				],
+				"instructions": [
+					"",
+					""
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"bread"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Grandma's Italian Easter Bread" ],
+				"summary": [ "Other recipes include adding in mixed candied fruits or chopped almonds." ],
+				"author": [ "Rose Barbano" ],
+				"published": [  ],
+				"yield": [ "Multiple Loaves" ],
+				"duration": [ "1 hour" ],
+				"ingredients": [
+					"6 cups flour" ,
+					"1 tsp. Salt" ,
+					"6 tablespoons Anise seed" ,
+					"2 1/4 tsp. Baking powder" ,
+					"1 cup sugar" ,
+					"1 grated lemon rind" ,
+					"5 eggs" ,
+					"1 square or 2 packages of yeast" ,
+					"1 bottle anise extract" ,
+					"About 1/8 lb. Melted margarine" ,
+					"1/4 cup water to mix yeast" ,
+					"Juice from 1 lemon"
+				],
+				"instructions": [
+					"Mix well - flour, salt anise seed, baking powder, sugar and lemon rind." ,
+					"Beat together eggs." ,
+					"Dissolve yeast in water and add 1 tsp. Sugar to yeast." ,
+					"Add anise extract and margarine (after it cools) to eggs." ,
+					"Add dissolved yeast." ,
+					"Mix well." ,
+					"Make a hole in the middle of the flour mixture and add egg mixture to it." ,
+					"Mix well." ,
+					"Turn onto board or table drizzled with flour and knead for about 10 minutes." ,
+					"Grease pot or large bowl and place dough inside to let rise." ,
+					"Place a towel over the pot or bowl and place in warm spot away from drafts. (I put it in the oven or you could put it in a sunny room)." ,
+					"Dough should double in size – a couple of hours." ,
+					"Remove from pot or bowl and knead for just a few minutes to remove bubbles." ,
+					"Place dough in bread pans or shape into round loaves and let rise a second time." ,
+					"Sometimes while I'm kneading the second time I turn the oven on low and them turn it off before I put the loaves in the oven to rise a second time." ,
+					"Bake at 350 for about 35 minutes." ,
+					"Half way through brush a beaten egg on top of the loaves. This makes them shiny."
+				],
+				"nutrition": [  ],
+				"photo": [ "https://live.staticflickr.com/65535/49296220583_82f8a16eef_c.jpg" ],
+				"category": [
+					"bread"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Mom's Zucchini Bread" ],
+				"summary": [ "When we were young, we used to grow huge, huge zucchini in our back yard agrden and didnt know what to do with them.  My mom has been making this ever since." ],
+				"author": [ "Delores Whaley" ],
+				"published": [ "" ],
+				"yield": [ "2 loaves" ],
+				"duration": [ "1 hour 15 minutes" ],
+				"ingredients": [
+					"3 eggs" ,
+					"1 tsp vanilla" ,
+					"1 cup oil" ,
+					"1 3/4 cup sugar" ,
+					"2 cups grated zucchini (drained)" ,
+					"3 tsp cinnamon" ,
+					"1/2 tsp baking powder" ,
+					"1 tsp salt" ,
+					"3 cups flour" ,
+					"1 tsp baking soda" ,
+					"3/4 cup raisins and walnuts"
+				],
+				"instructions": [
+					"Mix all ingredients in a large bowl" ,
+					"Grease 2 bread pans" ,
+					"Bake 1 hour at 350 degrees"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"bread"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Hummus with Tahini" ],
+				"summary": [ "http://mideastfood.about.com/od/appetizerssnacks/r/hummusbitahini.htm" ],
+				"author": [ "" ],
+				"published": [ "" ],
+				"yield": [ "Serves 4 people" ],
+				"duration": [ "20 minutes" ],
+				"ingredients": [
+					"2 - 16 oz can of chickpeas or garbanzo beans" ,
+					"1/4 cup liquid from can of chickpeas" ,
+					"1/8 cup tablespoons lemon juice (depending on taste)" ,
+					"1 1/2 tablespoons tahini sesame paste, found in both dairy and dry specialty foods sections" ,
+					"3/4 teaspoon dried oregano" ,
+					"6 to 8 cloves garlic, crushed" ,
+					"1/2 teaspoon salt" ,
+					"2 tablespoons olive oil" ,
+					"parsley for garnish (optional)"
+				],
+				"instructions": [
+					"Drain chickpeas and set aside liquid from can." ,
+					"Combine remaining ingredients in blender or food processor." ,
+					"Add 1/4 cup of liquid from chickpeas." ,
+					"Blend for 3-5 minutes on low until thoroughly mixed and smooth." ,
+					"Place in serving bowl, and create a shallow well in the center of the hummus." ,
+					"Add a small amount (1-2 tablespoons) of olive oil in the well. Garnish with parsley (optional)." ,
+					"Serve immediately with fresh, warm or toasted pita bread, or cover and refrigerate." ,
+					"Make sure your container is sealed well, or your fridge will smell like garlic!" ,
+					"Hummus can be refrigerated for up to 3 days and can be kept in the freezer for up to one month." ,
+					"Add a little olive oil if it appears to be too dry."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"appetizer"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Mary Ann's Sweet & Spicy Meatballs" ],
+				"summary": [ "" ],
+				"author": [ "Mary Ann Sarao" ],
+				"published": [ "" ],
+				"yield": [ "48 meatballs" ],
+				"duration": [ "20 minutes" ],
+				"ingredients": [
+					"1 1/2 pound lean ground beef" ,
+					"2 tablespoons parsley" ,
+					"1 tablespoon onion powder" ,
+					"3/4 cup sugar free grape jelly" ,
+					"1/4 cup chili sauce" ,
+					"2 heaping tablespoons spicy mustard" ,
+					"1 1/2 teaspoons low salt soy sauce" ,
+					"1/2 teaspoon cinnamon" ,
+					"1/2 teaspoon nutmeg" ,
+					"1/2 teaspoon ginger"
+				],
+				"instructions": [
+					"In a large bowl, mix ground beef, parsley, and onion powder with your hands." ,
+					"Shape the ground beef mix into meatballs approximately 1 inch in diameter." ,
+					"Place the meatballs into a serving dish" ,
+					"Pan fry the meatballs. Do this in batches if necessary." ,
+					"Mix the jelly, chili sauce, mustard, soy sauce, cinnamon, nutmeg, and ginger in a small sauce pan" ,
+					"Heat the sauce ingredients on medium-high heat until all the jelly is melted." ,
+					"Pour the sauce over the meatballs and mix until they are all covered thoroughly." ,
+					"Serve warm"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"appetizer"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Alton Brown's Chicken Fried Steak" ],
+				"summary": [ "http://www.foodnetwork.com/recipes/alton-brown/chicken-fried-steak-recipe/index.html" ],
+				"author": [ "Alton Brown" ],
+				"published": [ "" ],
+				"yield": [ "4-6 steaks" ],
+				"duration": [ "1.5 hours" ],
+				"ingredients": [
+					"2 pounds beef bottom round, trimmed of excess fat" ,
+					"2 teaspoons kosher salt" ,
+					"1 teaspoon freshly ground black pepper" ,
+					"1 cup all-purpose flour" ,
+					"3 whole eggs, beaten" ,
+					"1/4 cup vegetable oil" ,
+					"2 cups chicken broth" ,
+					"1/2 cup whole milk" ,
+					"1/2 teaspoon fresh thyme leaves"
+				],
+				"instructions": [
+					"Preheat oven to 250 degrees F." ,
+					"Cut the meat with the grain into 1/2-inch thick slices." ,
+					"Season each piece on both sides with the salt and pepper." ,
+					"Place the flour into a pie pan." ,
+					"Place the eggs into a separate pie pan." ,
+					"Dredge the meat on both sides in the flour." ,
+					"Tenderize the meat, using a needling device, until each slice is 1/4-inch thick." ,
+					"Once tenderized, dredge the meat again in the flour, followed by the egg and finally in the flour again." ,
+					"Repeat with all the pieces of meat." ,
+					"Place the meat onto a plate and allow it to sit for 10 to 15 minutes before cooking." ,
+					"Place enough of the vegetable oil to cover the bottom of a 12-inch slope-sided skillet and set over medium-high heat." ,
+					"Once the oil begins to shimmer, add the meat in batches, being careful not to overcrowd the pan." ,
+					"Cook each piece on both sides until golden brown, approximately 4 minutes per side." ,
+					"Remove the steaks to a wire rack set in a half sheet pan and place into the oven." ,
+					"Repeat until all of the meat is browned." ,
+					"Add the remaining vegetable oil, or at least 1 tablespoon, to the pan." ,
+					"Whisk in 3 tablespoons of the flour left over from the dredging." ,
+					"Add the chicken broth and deglaze the pan. Whisk until the gravy comes to a boil and begins to thicken." ,
+					"Add the milk and thyme and whisk until the gravy coats the back of a spoon, approximately 5 to 10 minutes." ,
+					"Season to taste, with more salt and pepper, if needed." ,
+					"Serve the gravy over the steaks."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Beef Stroganoff" ],
+				"summary": [ "According to Wikipedia, Beef Stroganoff was invented by a chef working for a Russian general, Count Pavel Stroganov, in the 1890s. It became popular in the U.S. in the 1950s from servicemen returning from Europe and China after WWII. Beef Stroganoff is basically tender strips of beef and mushrooms cooked in a sour cream sauce and served over noodles, rice, or even French fries. You will want to make this with a tender cut of beef, such as tenderloin or top sirloin. For a quick version you can use ground beef instead of beef strips. You can also easily substitute yogurt for sour cream and leave out the mushrooms entirely." ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Serves Four" ],
+				"duration": [ "25 minutes" ],
+				"ingredients": [
+					"2 pounds top lean sirloin roast, trimmed" ,
+					"1 teaspoon salt" ,
+					"1 teaspoon ground black pepper" ,
+					"1 tablespoon butter or margarine" ,
+					"2 tablespoon olive oil" ,
+					"1 tablespoon all-purpose flour" ,
+					"2 cups beef bouillon or broth" ,
+					"1 medium onion" ,
+					"1 cup diced mushrooms" ,
+					"3 tablespoons low fat sour cream, room temperature" ,
+					"1/8 teaspoon nutmeg (optional)" ,
+					"1/2 teaspoon of dry tarragon (optional)" ,
+					"1 bag egg noodles"
+				],
+				"instructions": [
+					"Cut the sirloin into narrow 2-inch long strips about 1/4 inch thick" ,
+					"Sprinkle the meat with salt and pepper to your taste" ,
+					"Heat 1 tablespoon butter and 1 tablespoon olive oil in a medium saucepan" ,
+					"Blend in 1 tablespoon flour" ,
+					"Gradually stir in beef broth, stirring and cooking until thickened and smooth" ,
+					"Dice the onion and the mushrooms" ,
+					"Heat 1 tablespoon of butter and 1 tablespoon olive oil in a separate small saucepan over medium heat" ,
+					"Quickly brown mushrooms and onions" ,
+					"If using nutmeg and/or tarragon, add those here" ,
+					"Add the mushrooms and onions to the beef sauce" ,
+					"Heat another 1 tablespoon of butter and 1 tablespoon olive oil in a small saucepan over medium heat" ,
+					"Quickly brown meat strips on all sides. You may need to do this in batches." ,
+					"Add the browned meat to beef sauce" ,
+					"Cover and cook on low for 20 minutes" ,
+					"While the beef is cooking, put on a pot of boiling water." ,
+					"Once the water comes to a boil, add the bag of egg noodles. Cook for 8 to 10 minutes" ,
+					"When there are only 2 to 3 minutes left for the egg noodles, stir in sour cream to the beef and sauce at a low heat" ,
+					"Serve the beef and the sauce over the egg noodles"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Black Bean Soup" ],
+				"summary": [ "" ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Serves 6 to 8" ],
+				"duration": [ "45 minutes" ],
+				"ingredients": [
+					"1 1/2 cups boneless skinless white-meat chicken, ham, or sausage, chopped into bite size pieces" ,
+					"2 15-ounce cans reduced sodium black beans, rinsed and drained or 1 bag dried black beans" ,
+					"3 cups fat-free, low-sodium chicken broth" ,
+					"5 slices bacon (remove this if you want a lower-fat soup)" ,
+					"1 large onion, finely chopped" ,
+					"1 medium carrot, chopped" ,
+					"2 stalks celery, finely chopped" ,
+					"1 cup frozen corn" ,
+					"1 teaspoon cumin" ,
+					"1 tablespoon thyme" ,
+					"1 teapsoon oregano" ,
+					"1/8 cup chopped fresh cilantro" ,
+					"1 bay leaf" ,
+					"1 teaspoon chili powder" ,
+					"1/2 teaspoon garlic powder" ,
+					"1/4 teaspoon black pepper" ,
+					"Sour ceram for garnish" ,
+					"Grated cheddar for garnish" ,
+					"1 cup rice" ,
+					" " ,
+					"Other possible ingredients: ",
+					"1/2 large red pepper" ,
+					"1 teaspoon worchestershire sauce" ,
+					"4 to 6 cloves garlic" ,
+					"4 teasoons white vinegar"
+				],
+				"instructions": [
+					"Boil black beans for 60 to 90 minutes, or as instructed on the package of black beans" ,
+					"Chop carrots, celery, onion, and chicken" ,
+					"Drain beans" ,
+					"Chop bacon into fine pieces" ,
+					"Add the bacon andfry it in the bottom of large soup pot for 3 to 5 minutes." ,
+					"Add in onions, carrots, peppers, and chicken and sautee for 5 minutes." ,
+					"Stir in cumin, chili powder, thyme, oregano,cilantro,garlic, black pepper, and cook for 1 minute." ,
+					"Blend roughly one third of the black beans in a food processor and add to the pot" ,
+					"Add the rest of the black beans, broth, and bay leaf" ,
+					"Bring to a boil, then cover and simmer for 30 minutes." ,
+					"In another pot, cook one cup rice as instructed on package" ,
+					"Serve soup over rice with sour cream and cheddar on top as garnish"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Brian's Fried Shrimp Parmesan" ],
+				"summary": [ "You just don't see Fried Shrimp Parmesan.  So I decided to try it myself. It takes a long time to make, but it's worth it." ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"1 bag (2 pounds) frozen, peeled, deveined shrimp" ,
+					"3 eggs" ,
+					"1/2 cup milk" ,
+					"2 cups bread crumbs" ,
+					"4 tablespoons olive oil" ,
+					"2 cups grated mozzarella cheese" ,
+					"2 cups Italian tomato sauce" ,
+					"Garlic powder to taste" ,
+					"Black Pepper to taste" ,
+					"Oregano to taste" ,
+					"Basil to taste" ,
+					"Parsley to taste"
+				],
+				"instructions": [
+					"Defrost shrimp in a collander under cold running water" ,
+					"Be sure all the shrimp are peeled and deveined" ,
+					"Be sure all theshrimp also have their tails removed" ,
+					"Preheat oil in a frying pan on medium-high heat" ,
+					"Mix the eggs and milk into a bowl" ,
+					"Place the bread crumbs into a second bowl" ,
+					"Dip each shrimp into the milk and eggs, then into the bread crumbs" ,
+					"Fry each shrimp for 3 to 5 minutes, until golden brown" ,
+					"Set shrimp aside on a plate covered in paper towels, to drain away the excess oil" ,
+					"Once all shrimp are fried, cover the bottom of a pyrex dish with the shrimp" ,
+					"Cover the shrimp with the Italian tomato sauce" ,
+					"Sprinkle with garlic powder, black pepper, oregano, basil, and parsley to taste" ,
+					"Cover with mozarella cheese" ,
+					"If there is still shrimp left over, you can do another layer of shrimp, sauce, and cheese" ,
+					"Bake in the oven for 30 minutes or until cheese around the edges begins to brown"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Brian's Kielbasa and Potatoes" ],
+				"summary": [ "When I was in Munich, Germany, I found a dish just like this being served in a bier garden. They were making this by the cauldron-ful. The food was fantastic, the atmosphere was great, and I had a wonderful time." ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Serves 4 to 6 people" ],
+				"duration": [ "30 minutes" ],
+				"ingredients": [
+					"2 whole kielbasa (approx 2 lb)" ,
+					"5 to 6 large potatoes" ,
+					"1 large onion" ,
+					"1 green bell pepper" ,
+					"Black pepper" ,
+					"2 tablespoons olive oil"
+				],
+				"instructions": [
+					"In a large frying pan, heat the olive oil" ,
+					"Dice the onion and add to the frying pan at high heat" ,
+					"Quarter the kielbasa lengthwise, and dice into small pieces" ,
+					"Once the onion pieces are translucent, add in the kielbasa" ,
+					"Peel and dice the potatoes, and then add to the frying pan" ,
+					"Cover and place at medium heat for 15 minutes, mixing every 3 to 5 minutes" ,
+					"Dice the bell pepper and add to the frying pan" ,
+					"Add black pepper to taste" ,
+					"Place at high heat and mix every 3 to 5 minutes." ,
+					"Stop when the potatoes begin to fall apart, and the kielbasa and potatoes are browned (approx 20 minutes)"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Brian's Lemon Garlic Chicken" ],
+				"summary": [ "" ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Serves 4 to 6 people" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"2 packages (approx. 10 pieces) boneless skinless chicken thighs" ,
+					"2 tablespoons olive oil" ,
+					"5 tablespoons minced garlic" ,
+					"1 lemon, zest and juice" ,
+					"1 cup chicken broth" ,
+					"1 tablespoon Lemon Pepper" ,
+					"1 tablespoon Black pepper" ,
+					"1 teaspoon Salt" ,
+					"1 teaspoon Basil" ,
+					"1 teaspoon Thyme" ,
+					"1 teaspoon corn starch"
+				],
+				"instructions": [
+					"Add oil to a large sauce pan" ,
+					"Once hot, add garlic and lemon zest and juice" ,
+					"After 1 to 2 minutes, add chicken thighs, opened, to the pan" ,
+					"Add chicken broth" ,
+					"Sprinkle lemon pepper, basil, thyme, black pepper, and salt to taste" ,
+					"Let cook for 20 minutes" ,
+					"Add corn starch to 1/8 cup water" ,
+					"Add corn starch to the pan" ,
+					"Serve over rice"
+				],
+				"nutrition": [  ],
+				"photo": [ "https://live.staticflickr.com/65535/49296707366_6844242313_c.jpg" ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Cashew Chicken" ],
+				"summary": [ "A Chinese-American dish that is growing in popularity is Cashew Chicken. This dish actually originated in the United States in Springfield, Missouri. Cashew Chicken can be found at many Chinese buffets across the country. This recipe for Cashew chicken consists of fried chicken bits with cashews and vegetables in a delicious oyster sauce. This recipe differs from others and those at the buffets because the chicken is breaded and then deep fried leaving the chicken pieces nice and crispy. The vegetables I added were green peppers, onions and scallions, but you could also add some sliced mushrooms as well if you want. Cashew Chicken is best served on top of white rice.  For a Bariatric-friendly version of this recipe, do not coat and fry the chicken - just cut into cubes or strips.  http://blogchef.net/cashew-chicken-recipe/" ],
+				"author": [ "BlogChef" ],
+				"published": [ "" ],
+				"yield": [ "Serves 4 to 6 people" ],
+				"duration": [ "45 minutes" ],
+				"ingredients": [
+					"2lbs boneless skinless chicken breasts (cut into 1 inch chunks)" ,
+					"2 cups flour" ,
+					"5 teaspoons corn starch (divided)" ,
+					"2 teaspoons baking soda" ,
+					"3 eggs (beaten)" ,
+					"extra virgin olive oil (for frying)" ,
+					" " ,
+					"Sauce : " ,
+					"2 cups chicken broth" ,
+					"2 tablespoons oyster sauce" ,
+					"2 tablespoons low salt soy sauce" ,
+					"1 teaspoon pepper" ,
+					"1 large green pepper (sliced)" ,
+					"1 large onion (sliced)" ,
+					"2 cups cashews" ,
+					"1/3 cup green onions (chopped)"
+				],
+				"instructions": [
+					"In a bowl mix flour, baking soda and 1 teaspoon of corn starch." ,
+					"In another bowl beat the eggs." ,
+					"Dip chicken pieces first then the flour mixture, then in the egg mixture and then again in the flour mixture." ,
+					"Fry in oil in a wok or in a deep fryer at 350 degrees in batches until golden brown." ,
+					"Drain on paper towels." ,
+					"Heat a tiny bit of oil in the wok and stir fry green pepper and onions for 2-3 minutes." ,
+					"Remove from wok and set aside." ,
+					"To make the sauce- in a bowl mix chicken broth, oyster sauce, soy sauce, sugar, pepper, and 4 tablespoons of cornstarch." ,
+					"Pour sauce into wok and cook over medium heat stirring until well blended and sauce thickens." ,
+					"In a bowl pour sauce over chicken pieces, add green peppers and onions." ,
+					"Mix well and garnish with cashews and green onions." ,
+					"Serve with white rice."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Chicken Kielbasa Gumbo" ],
+				"summary": [ "This recipe is very flexible. It is a great way to recycle leftover chicken meals. Some versions of this recipe also like to use the more flavorful chicken thighs instead of the chicken breasts. You can make it more or less spicy by adjusting the amount of chili powder and black pepper. And some versions of this recipe call for okra or diced tomatoes." ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Serves 6 to 8 people" ],
+				"duration": [ "1 hour 25 minutes" ],
+				"ingredients": [
+					"2 pounds chicken (both white and dark meat)" ,
+					"1 package Kielbasa" ,
+					"4 cups water" ,
+					"3 cups chicken broth" ,
+					"1 can (14.5 ounces) diced tomatoes" ,
+					"1 can black beans" ,
+					"2 ribs celery, chopped" ,
+					"3 medium carrots, chopped" ,
+					"1/2 green bell pepper, chopped" ,
+					"1/2 medium chopped onion, chopped" ,
+					"1 medium potato, chopped" ,
+					"1 cup frozen corn kernels" ,
+					"1/4 teaspoon chili powder" ,
+					"1/2 teaspoon dried basil, crushed" ,
+					"1/2 teaspoon dried oregano, crushed" ,
+					"1 bay leaf" ,
+					"1/8 teaspoon black pepper" ,
+					"2 tablespoons olive oil" ,
+					"1/4 cup chopped parsley" ,
+					"4 tablespoons Flour"
+				],
+				"instructions": [
+					"In a large pot, add the olive oil" ,
+					"Once hot, add the onions and sauté until translucent" ,
+					"Add in the water and broth. Bring to a boil" ,
+					"Dice chicken and add to the broth" ,
+					"Add all of the remaining ingredients" ,
+					"Simmer until vegetables are tender, about 1 hour." ,
+					"Thicken broth with a smooth paste made from 3 tablespoons cold water mixed with the cornstarch or flour." ,
+					"Remove bay leaf before serving" ,
+					"Serve with hot cornbread, rice, or egg noodles."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Chicken Quesadillas" ],
+				"summary": [ "" ],
+				"author": [ "Bran T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "6 quesadillas" ],
+				"duration": [ "20 minutes" ],
+				"ingredients": [
+					"1 small onion" ,
+					"(can also add scallions)" ,
+					"1 green bell pepper" ,
+					"1 can large olives" ,
+					"1 rotisserie chicken" ,
+					"(can also use ground beef, ground chicken,beef strips, or chicken strips)" ,
+					"1/4 stick butter" ,
+					"1 package (8 count) 10 inch burrito wraps" ,
+					"2 packages (16 oz) grated low fat cheese" ,
+					"Black pepper" ,
+					"1 jar salsa" ,
+					"1 small container fat free sour cream"
+				],
+				"instructions": [
+					"Dice the onion and set aside" ,
+					"Dice the bell pepper and set aside" ,
+					"Dice the olives and set aside" ,
+					"De-bone the chicken, dice all the removed chicken, and set aside" ,
+					"Heat a large skillet at medium-high heat" ,
+					"Take a very small pat of butter and melt it in the skillet" ,
+					"Place one burrito wrap in the melted butter" ,
+					"Add cheese to one half of the burrito" ,
+					"Add chicken, onion, bell pepper, olives, and salsa on top of the cheese" ,
+					"Add cheese on top of all the ingredients and fold the burrito in half" ,
+					"Let all this cook 2 to 3 minutes or until the burrito is golden brown on the bottom" ,
+					"Flip over to finish melting the cheese and brown the other side of the burrito" ,
+					"Remove when both sides are golden brown" ,
+					"Repeat steps 7 through 12 for approximately 6 quesadillas"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Chicken Marsala" ],
+				"summary": [ "http://allrecipes.com/Recipe/Chicken-Marsala/Detail.aspx" ],
+				"author": [ "AllRecipes" ],
+				"published": [ "" ],
+				"yield": [ "Serves 4 people" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"1/4 cup all-purpose flour for coating" ,
+					"1/2 teaspoon salt" ,
+					"1/4 teaspoon ground black pepper" ,
+					"1/2 teaspoon garlic powder" ,
+					"Pinch of cayenne" ,
+					"Pinch of thyme" ,
+					"Pinch of paprika" ,
+					"1/2 teaspoon dried oregano" ,
+					"4 skinless, boneless chicken breast halves - pounded 1/4 inch thick" ,
+					"4 tablespoons butter" ,
+					"4 tablespoons olive oil" ,
+					"1 cup sliced mushrooms" ,
+					"1 small onion, diced" ,
+					"1/2 cup Marsala wine" ,
+					"1/2 cup chicken stock"
+				],
+				"instructions": [
+					"In a shallow dish or bowl, mix together the flour, salt, pepper, garlic powder, cayenne, thyme, paprika and oregano." ,
+					"Coat chicken pieces in flour mixture." ,
+					"In a large skillet, melt butter in oil over medium heat. Place chicken in the pan, and lightly brown." ,
+					"Turn over chicken pieces, and add mushrooms." ,
+					"Pour in wine and sherry." ,
+					"Cover skillet" ,
+					"Simmer chicken 10 minutes, turning once, until no longer pink and juices run clear."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Grandma's Cappellettis" ],
+				"summary": [ "The word cappelletto means little hat, or Pope's hat, which is what this pasta should resemble; they're from Modena. They are traditionally served in broth, as are their cousins, tortellini (the difference lies in the stuffing). Indeed, the traditional North Italian Christmas dinner starts with cappelletti in capon broth.  More information is available at http://italianfood.about.com/od/stuffedpasta/r/blr0102a.htm" ],
+				"author": [ "Rose Barbano" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"Dough:",
+					"4 cups of flour" ,
+					"3 eggs" ,
+					"2/3 cup water" ,
+					"Salt to taste" ,
+					" " ,
+					"Filling:" ,
+					"1 1/2 pounds Ground beef" ,
+					"Salt" ,
+					"Pepper" ,
+					"Fresh parsley chopped fine" ,
+					"Grated cheese" ,
+					"1 egg" ,
+					"Chopped spinach (frozen - thawed)"
+				],
+				"instructions": [
+					"Mix dough ingredients to make a medium soft dough comfortable to roll out. Add more flour or water as needed." ,
+					"Thaw spinach, cool and squeeze out all of the water before mixing with meat." ,
+					"Mix all ingredients" ,
+					"Roll out dough and cut into squares." ,
+					"Fill with meat and fold like a triangle and then end to end." ,
+					"Freeze on a cookie sheet." ,
+					"After frozen, the cappellettis can be placed in zip lock bags for use whenever." ,
+					"You should use ground beef that has not been frozen yet so that you could freeze the cappellettis after they are made." ,
+					"Prepare chicken soup or serve with spaghetti sauce. Really good either way."
+				],
+				"nutrition": [  ],
+				"photo": [ "https://live.staticflickr.com/65535/49294952796_3db3aa9d13_w.jpg" ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Grandma's Pizza Gaine" ],
+				"summary": [ "This has been a family tradition at Easter ever since I can remember. The dish is sometimes known as Pizza Rustica, filled pizza, or meat pie. It is similar to a modern day quiche but much more dense and flavorful. Tradition says to make it on Good Friday and serve on Sunday when you can have meat again. Served in small quantities it is a wonderful addition to Easter brunch or an appetizer to a big Easter feast.  More information at http://www.tastebook.com/recipes/628567-Easter-Pizza-Gaine" ],
+				"author": [ "Rose Barbano" ],
+				"published": [ "" ],
+				"yield": [ "1 pie" ],
+				"duration": [ "1 hour 15 minutes" ],
+				"ingredients": [
+					"1lb Canned ham (you can also make this with a wide variety of Italian meats - sausage, pepperoni, salami, prosciutto, etc)" ,
+					"3/4 lb. White American Cheese" ,
+					"1 or 2 Eggs" ,
+					"Black pepper" ,
+					"Grated cheese" ,
+					"3 tablespoons Ricotta cheese"
+				],
+				"instructions": [
+					"Filling:" ,
+					"Boil ham and cut into pieces" ,
+					"Cut up cheese the same way" ,
+					"Grate macaroni cheese" ,
+					"Add black pepper" ,
+					"Add enough egg to loosen mixture" ,
+					"Add ricotta cheese" ,
+					" ",
+					"Crust:" ,
+					"Use regular boxed pie crust mix." ,
+					"Top should be a crisscross design or use the form that you press on the top crust and it puts holes in it. The top crust should not be solid." ,
+					"Bake at 350 for about 30 to 40 minutes."
+				],
+				"nutrition": [  ],
+				"photo": [ "https://live.staticflickr.com/65535/49294951786_4e27b790a0_z.jpg" ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Grandma's Porkette Sandwiches" ],
+				"summary": [ "" ],
+				"author": [ "Rose Barbano" ],
+				"published": [ "" ],
+				"yield": [ "12 to 16 sandwiches" ],
+				"duration": [ "4 hours 30 minutes" ],
+				"ingredients": [
+					"2-4 pound pork loin" ,
+					"Garlic" ,
+					"Dill" ,
+					"Black Pepper" ,
+					"Salt" ,
+					"Your favorite type of rolls"
+				],
+				"instructions": [
+					"Preheat the oven to 450 degrees" ,
+					"Try to trim away as much excess fat from around the pork loin as possible." ,
+					"Cut three to four large slits across the pork loin. This will help it cook faster, and get more spice on the surface." ,
+					"Sprinkle garlic, dill, black pepper, and salt on the pork loin" ,
+					"Cook the pork loin for 4 hours" ,
+					"Check in on the pork loin every half hour. Make sure the bottom is not burning. Add a cup of water to the bottom as necessary." ,
+					"Let the pork loin cool to the touch" ,
+					"Pull the pork apart. Two forks makes this very easy" ,
+					"Cover in garlic, dill, black pepper, and salt." ,
+					"Be careful with the black pepper and salt, and go heavy with the dill."
+				],
+				"nutrition": [  ],
+				"photo": [ "https://live.staticflickr.com/65535/49294465223_fc26cd398b_z.jpg" ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Laurent's Chicken Dijon Creme Fraiche" ],
+				"summary": [ "" ],
+				"author": [ "Laurent Bellan" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"4 tablespoons Olive Oil" ,
+					"2 pounds Boneless Skinless Chicken Thighs" ,
+					"Salt to taste" ,
+					"Black Pepper to taste" ,
+					"6 tablespoons Creme Fraiche" ,
+					"4 tablespoons Dijon Mustard" ,
+					"2 cups Rice" ,
+					"(you can also try 1 small diced onion and /or 1.5 cups diced mushrooms)"
+				],
+				"instructions": [
+					"Put the rice on to cook" ,
+					"In a large saucepan, heat the olive oil over medium heat" ,
+					"Open the chicken thighs and lay them in the pan" ,
+					"Sprinkle the Salt and Black pepper to taste" ,
+					"Let the chicken cook for 7 to 8 minutes" ,
+					"Turn over the chicken, and add more salt and pepper to taste" ,
+					"(if you use the onion and/or mushrooms, add them here)" ,
+					"Let the chicken cook for another 7 to 8 minutes" ,
+					"Platter the chicken and the rice" ,
+					"Add the sauce in the bottom of the pan to a gravy boat for serving"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Mary Ann's Curry Chicken Salad" ],
+				"summary": [ "" ],
+				"author": [ "Mary Ann Sarao" ],
+				"published": [ "" ],
+				"yield": [ "6 to 8 pita sandwiches" ],
+				"duration": [ "10 minutes" ],
+				"ingredients": [
+					"1 whole rotisserie chicken" ,
+					"1 1/2 cups diced carrots" ,
+					"3 to 4 stalks celery" ,
+					"1 oz ( approx 3 tablespoons) yellow curry" ,
+					"1 tsp. black pepper" ,
+					"1 to 1 1/2 cups low fat mayonnaise"
+				],
+				"instructions": [
+					"Strip all the chicken meat from the bones. Do not use the skin." ,
+					"Dice the chicken and place into a large bowl" ,
+					"Chop the diced carrots into smaller pieces. Add to the chicken" ,
+					"Dice the celery into very small pieces. Add to the bowl" ,
+					"Add the mayonnaise to the chicken salad" ,
+					"Sprinkle the curry and black pepper over the mayonnaise" ,
+					"Mix everything together" ,
+					"Make sure that there is enough mayonnaise to make the chicken moist and clump together" ,
+					"Make sure that there is enough curry to taste, but not too much to be overwhelming"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Mom's Spaghetti Sauce and Meatballs" ],
+				"summary": [ "My mom has been making this since I can remember.  She started early Sunday morning, and it cooked all day long.  What is always incredible to me is that the leftovers were always better on the seond day." ],
+				"author": [ "Delores Whaley" ],
+				"published": [ "" ],
+				"yield": [ "4 meals worth of sauce and meat" ],
+				"duration": [ "4 to 6 hours" ],
+				"ingredients": [
+					"3 pounds ground meatloaf meat (pork, veal, beef)" ,
+					"1 pound cube stew beef" ,
+					"3 slices white bread (or 1 cup bread crumbs)" ,
+					"4 large can Hunts Tomato Sauce" ,
+					"3 eggs" ,
+					"Olive oil" ,
+					"1 red onion" ,
+					"Garlic" ,
+					"Black pepper" ,
+					"Basil" ,
+					"Parsley"
+				],
+				"instructions": [
+					"Take 1 pound ground meat and brown in the bottom of a large cauldron" ,
+					"Add in cube beef stew" ,
+					"Add garlic, black pepper, basil and parsley" ,
+					"Let all the meat brown for a few minutes" ,
+					"Add in the cans of tomato sauce" ,
+					"Dice the red onion and add to the sauce" ,
+					"Let the sauce simmer while you make the meatballs" ,
+					"In a large bowl mix the remaining ground meat and the eggs" ,
+					"Add in garlic, black pepper, basil and parsley" ,
+					"Cube the bread slices into 1/2 inch cubes" ,
+					"Add the bread cubes to the meat" ,
+					"Squish with your hands until all ingredients are mixed" ,
+					"Form the meat mix into golf ball sized meatballs" ,
+					"Add olive oil to a frying pan" ,
+					"Place the meatballs into the frying pan" ,
+					"Fry until meatballs are brown and firm" ,
+					"Add the meatballs and any residual into the sauce" ,
+					"Simmer all afternoon (4 to 6 hours) with the lid on"
+				],
+				"nutrition": [  ],
+				"photo": [ "https://live.staticflickr.com/65535/49295148687_ba80324969_z.jpg" ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Pita Pizza" ],
+				"summary": [ "" ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "10 pita pizzas" ],
+				"duration": [ "20 minutes" ],
+				"ingredients": [
+					"1 1/2 cup tomato sauce" ,
+					"10 (4 to 6 inch) pita pocket breads" ,
+					"3 oz. shredded Mozzarella cheese" ,
+					"1 lb. ground beef" ,
+					"Hormel Sliced Turkey Pepperoni" ,
+					"Turkey Sausage" ,
+					"1 Green Bell Pepper" ,
+					"1 medium onion" ,
+					"1 cup mushrooms" ,
+					"1 (4 ounce) can sliced black olives, drained" ,
+					"1 ounce diced pimento peppers, drained" ,
+					"2 small tomatoes, thinly sliced" ,
+					"1 pinch dried basil" ,
+					"1 pinch dried oregano" ,
+					"1 pinch garlic powder"
+				],
+				"instructions": [
+					"Thin crusts can be made by cutting a pita in half horizontally." ,
+					"Thick crusts can be made by not cutting the pita open." ,
+					"Preheat oven to 400 degrees F" ,
+					"Brown ground beef." ,
+					"Warm pitas in the preheated oven or in a microwave for 1 minute, or until soft." ,
+					"Spread 1 to 2 tablespoons tomato sauce on pita bread." ,
+					"Top with hamburger, cheese, or any other toppings you may want" ,
+					"Place pizzas on lightly greased cookie sheet Bake at 400 degrees for 10 minutes until cheese is melted."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Sam Cohen's New Years Chili" ],
+				"summary": [ "" ],
+				"author": [ "Sam Cohen" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "2 hours 30 minutes" ],
+				"ingredients": [
+					"2 pound ground beef, turkey or meatloaf mix (beef, pork, veal)" ,
+					"1 pound stew beef cubes" ,
+					"2 tablespoons olive oil" ,
+					"1 large onion, chopped, divided" ,
+					"1 green bell pepper, chopped" ,
+					"3 cloves garlic, minced" ,
+					"3 tablespoons chopped green onion" ,
+					"1 (15 ounce) cans kidney beans" ,
+					"2 celery stalks, chopped" ,
+					"1 (14.5 ounce) can diced tomatoes" ,
+					"1 (6 ounce) can tomato paste" ,
+					"1 (8 ounce) can tomato sauce" ,
+					"1/2 cup worchestershire sauce" ,
+					"1 tablespoon blackstrap molasses" ,
+					"1/2 cup water" ,
+					"2 tablespoons chili powder" ,
+					"1 tablespoon celery salt" ,
+					"1 tablespoon ground cumin" ,
+					"1 teaspoon garlic powder" ,
+					"1/2 teaspoon cayenne pepper" ,
+					"4 fennel seeds" ,
+					"1 tablespoon salt" ,
+					"1 1/2 teaspoons ground black pepper" ,
+					"Shredded Cheddar cheese - for serving" ,
+					"Sour cream - for serving" ,
+					"Hot sauce - for serving"
+				],
+				"instructions": [
+					"Place the oil in a large pot." ,
+					"Cook ground meat and beef cubes in the large pot over medium-high heat until the meat is crumbly, evenly browned, and no longer pink." ,
+					"Stir in the chopped onions and the green pepper until the onion has softened and turned translucent, about 5 minutes." ,
+					"Add in the dry spices, garlic, and fennel seeds and stir." ,
+					"Stir in the worchestershire sauce and simmer for 10 minutes." ,
+					"Add in the beans, tomatoes, and paste, and mix thoroughly." ,
+					"Bring to a simmer over medium heat, then reduce heat to medium-low." ,
+					"Simmer at least 2 hours, stirring every 15 minutes." ,
+					"If possible, refrigerate overnight to let the flavors soak in. Reheat the chili over medium heat until it begins to simmer again." ,
+					"Top individual servings of chili with cheese, sour cream, hot sauce, or chopped onions."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dinner"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Slow Cooker Barbecue Ribs" ],
+				"summary": [ "" ],
+				"author": [ "Brian Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Makes 8 servings" ],
+				"duration": [ "8 hours 15 minutes" ],
+				"ingredients": [
+					"2 racks baby back ribs" ,
+					"2 containers of your favorite barbecue sauce" ,
+					"1/2 cup Buffalo Wing Sauce" ,
+					"1/4 cup Worchestershire Sauce" ,
+					"1/4 cup red wine vinegar" ,
+					"1/4 cup red cooking wine" ,
+					"1/4 cup garlic powder" ,
+					"1/4 cup parsley" ,
+					"2 tablespoons oregano" ,
+					"2 tablespoons black pepper"
+				],
+				"instructions": [
+					"Cut each of the racks of ribs in half, to help them fit into the slow cooker." ,
+					"Cover the top and bottom of each of the racks of ribs in barbecue sauce." ,
+					"As you lay eachpiece in, sprinkle the top with the spices." ,
+					"Drizzle the vinegar, cooking wine, worchestershire sauce, buffalo sauce, over the stack of ribs" ,
+					"Cover and cook on LOW, and cook 8 hours."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"slow cooker"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Slow Cooker Beef Stew" ],
+				"summary": [ "http://allrecipes.com/Recipe/Hearty-Beef-Stew/Detail.aspx" ],
+				"author": [ "AllRecipes" ],
+				"published": [ "" ],
+				"yield": [ "2 to 4 servings" ],
+				"duration": [ "6 hours 15 minutes" ],
+				"ingredients": [
+					"1 pound cubed beef stew meat" ,
+					"1/4 cup all-purpose flour" ,
+					"1 tablespoon paprika" ,
+					"salt and pepper to taste" ,
+					"2 cups beef broth" ,
+					"1 1/2 tablespoons teriyaki sauce" ,
+					"1 onion, chopped" ,
+					"3 carrots, sliced" ,
+					"1 stalk celery, sliced" ,
+					"2 potatoes, cubed" ,
+					"1/2 pound mushrooms, quartered" ,
+					"2 cloves garlic, minced" ,
+					"1 bay leaf"
+				],
+				"instructions": [
+					"Place beef stew meat into a slow cooker." ,
+					"In a small bowl, mix together flour, paprika, salt, and pepper." ,
+					"Sprinkle over beef stew meat, stirring to coat." ,
+					"Stir in beef broth, teriyaki sauce, onion, carrots, celery, potatoes, mushrooms, garlic and bay leaf." ,
+					"Cover, and cook on Low 6 hours, stirring occasionally."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"slow cooker"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Slow Cooker Chicken Thighs" ],
+				"summary": [ "" ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Makes 6 servings" ],
+				"duration": [ "6 hours 15 minutes" ],
+				"ingredients": [
+					"1 medium onion, halved lengthwise and sliced" ,
+					"4 medium-size new potatoes (about 1 pound), cut into 1 inch cubes" ,
+					"2 cups baby carrots, cut into one inch pieces" ,
+					"1/4 cup chicken broth" ,
+					"1/4 cup dry white wine" ,
+					"3 tablespoons lemon juice" ,
+					"2 tablespoons minced garlic" ,
+					"1/2 teaspoon dried thyme" ,
+					"1 1/4 teaspoons salt, divided" ,
+					"1/2 teaspoon pepper, divided" ,
+					"1 teaspoon paprika" ,
+					"6 bone-in, skinless chicken thighs"
+				],
+				"instructions": [
+					"Place onion in a 6-qt. slow cooker." ,
+					"Top with potatoes and carrots." ,
+					"Combine broth, white wine, minced garlic, lemon juice, thyme, 3/4 teaspoon salt, and 1/4 teaspoon pepper." ,
+					"Pour broth mixture over vegetables." ,
+					"Combine paprika, remaining 1/2 teaspoon salt, and remaining 1/4 teaspoon pepper; rub evenly over chicken thighs." ,
+					"Arrange chicken on top of vegetables." ,
+					"Cover and cook on LOW, and cook 6 hours or until chicken is done and vegetables are tender." ,
+					" " ,
+					"Special Crock Pot Chicken Instructions:" ,
+					"Remember that boneless, skinless chicken breasts can overcook in the crockpot. Make sure that these cuts don't cook longer than 6-7 hours on low." ,
+					"Chicken thighs have a richer flavor, and can cook for a longer period of time; 8-9 hours is typical." ,
+					"Whole chickens cook for the longest time period; 8-10 hours is the norm." ,
+					"Be sure to follow the layering instructions in the recipe; chicken should be placed on top of root vegetables."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"slow cooker"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Slow Cooker Jambalaya" ],
+				"summary": [ "http://www.foodnetwork.com/recipes/robin-miller/slow-cooker-jambalaya-recipe/index.html" ],
+				"author": [ "Food Network - Robin Miller" ],
+				"published": [ "" ],
+				"yield": [ "Serves 8" ],
+				"duration": [ "6 hours 15 minutes" ],
+				"ingredients": [
+					"1 pound boneless skinless chicken breasts, cut into 1-inch cubes" ,
+					"1/2 pound andouille sausage, diced" ,
+					"1 (28-ounce) can diced tomatoes" ,
+					"1 medium onion, chopped" ,
+					"1 green bell pepper, seeded and chopped" ,
+					"1 stalk celery, chopped" ,
+					"1 cup reduced-sodium chicken broth" ,
+					"2 teaspoons dried oregano" ,
+					"2 teaspoons Cajun or Creole seasoning" ,
+					"1 teaspoon hot sauce" ,
+					"2 bay leaves" ,
+					"1/2 teaspoon dried thyme" ,
+					"1 pound frozen peeled and cooked shrimp, thawed" ,
+					"2 cups cooked rice"
+				],
+				"instructions": [
+					"In a slow cooker, combine chicken, sausage, tomatoes, onion, green pepper, celery, and chicken broth." ,
+					"Stir in oregano, Cajun seasoning, hot sauce, bay leaves, and thyme." ,
+					"Cover, and cook on LOW for 7 hours or on HIGH for 3 hours." ,
+					"Stir in the thawed shrimp, cover and cook until the shrimp is heated through, about 5 minutes." ,
+					"Discard bay leaves and spoon mixture over cooked rice."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"slow cooker"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Slow Cooker Pulled Pork" ],
+				"summary": [ "" ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Makes 6 servings" ],
+				"duration": [ "8 hours 15 minutes" ],
+				"ingredients": [
+					"3 Pounds Pork Shoulder, Trimmed of Fat" ,
+					"1 Medium Sweet Onion, Chopped" ,
+					"1/4 Cup Brown Sugar" ,
+					"1/2 Cup Ketchup" ,
+					"1/3 Cup Worcestershire" ,
+					"1/3 Cup Apple Cider Vinegar" ,
+					"1 Tablespoon Ground Mustard" ,
+					"1 Tablespoon Garlic Powder" ,
+					"1/2 Teaspoon Paprika" ,
+					"1/2 cup cilantro, chopped" ,
+					"2 tablespoons chili powder" ,
+					"1 teaspoon dried oregano" ,
+					"1 teaspoon ground cumin" ,
+					"1/4 teaspoon ground cinnamon" ,
+					"1/2 Teaspoon Liquid Smoke" ,
+					"Dash Red Chili Pepper Flakes" ,
+					"Salt to taste" ,
+					"Pepper to taste"
+				],
+				"instructions": [
+					"Combine all ingredients except for onion and pork into crock pot. Whisk all ingredients until well blended." ,
+					"NOTE: If you are in a big rush in the mornings, you can substitute all or some of the spices with a 16 ounce bottle your favorite brand of barbecue sauce and 1/4 cup water." ,
+					"Place pork and onions into mixture, coating both sides of meat." ,
+					"Cook for 8 to 10 hours under 'low' slow cooker setting." ,
+					"After meat is cooked, remove from slow cooker onto plate and break apart with fork." ,
+					"Place meat back into warm sauce to absorb all the juices and spices, and to reheat." ,
+					"Serve on your favorite buns, such as Kaiser Rolls or onion rolls."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"slow cooker"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Slow Cooker Southwest Chicken" ],
+				"summary": [ "" ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Makes 6 servings" ],
+				"duration": [ "6 hours 15 minutes" ],
+				"ingredients": [
+					"2 or 3 chicken breasts (frozen or thawed)" ,
+					"1 can black beans (drained and rinsed)" ,
+					"1 can of corn (drained and reinsed" ,
+					"1 jar of salsa" ,
+					"1 packet taco seasoning" ,
+					"1 16 oz sour cream" ,
+					"1 16 oz salsa con queso"
+				],
+				"instructions": [
+					"In crock pot mix salsa and taco seasoning." ,
+					"Place chicken in crock pot." ,
+					"Cook on low 6 hours." ,
+					"After the 6 hours, use fork to shred chicken in the pot." ,
+					"Then add the sour cream, salsa con queso, black beans, and corn." ,
+					"Cook an additional hour." ,
+					"Serve over rice or in tortillas."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"slow cooker"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Apple Cinnamon Cranberry Sauce" ],
+				"summary": [ "" ],
+				"author": [ "Jason Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Serves 8 to 12" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"1 bag (12 oz) fresh cranberries" ,
+					"2 cups water" ,
+					"2 apples, peeled and quartered" ,
+					"1 cup Splenda for Cooking" ,
+					"1 teaspoon cinnamon"
+				],
+				"instructions": [
+					"Place the cranberries and water to a small saucepan" ,
+					"Bring the water & cranberries to a boil" ,
+					"Boil for 5 minutes" ,
+					"Add in the quartered apples, Splenda, and cinnamon" ,
+					"Boil for another 5 minutes" ,
+					"Remove from heat" ,
+					"Blend the contents in a food processor or blender until thoroughly pureed" ,
+					"Chill and serve"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"side dish"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Mom's Candied Yams" ],
+				"summary": [ "" ],
+				"author": [ "Delores Whaley" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "1 hour 15 minutes" ],
+				"ingredients": [
+					"4 large yams" ,
+					"1 stick margarine" ,
+					"1 box dark brown sugar" ,
+					"1 bag mini marshmallows"
+				],
+				"instructions": [
+					"Peel all the yams" ,
+					"Slice all the yams into 1/2 inch slices (do not quarter the yams - leave the slices whole" ,
+					"Par boil the yams so they are not hard and crunchy, but also not soft and mushy" ,
+					"In a separate sauce pan, melt the stick of margarine" ,
+					"Add the brown sugar, melt into the margarine" ,
+					"Layer the yams into a pyrex dish or casserole dish" ,
+					"Cover the yams with the melted margarine and brown sugar" ,
+					"Place the dish into the oven and bake at 350 degrees for 1 hour" ,
+					"Do not cover while in the oven" ,
+					"Baste the yams every 15 minutes while cooking" ,
+					"Five minutes before complete, cover the yams in mini marshmallows and place back in the oven"
+				],
+				"nutrition": [  ],
+				"photo": [ "https://live.staticflickr.com/65535/49296707761_25f5e353f6_c.jpg" ],
+				"category": [
+					"side dish"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Brian's Cucumber Salad" ],
+				"summary": [ "" ],
+				"author": [ "Brian T. Whaley" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "10 minutes" ],
+				"ingredients": [
+					"3 cucumbers" ,
+					"1 small onion" ,
+					"Your favorite Italian or Balsamic salad dressing"
+				],
+				"instructions": [
+					"Quarter the cucumbers the long way" ,
+					"Dice the cucumbers into bite size pieces" ,
+					"Place the into a large bowl" ,
+					"Dice the onions and place them into the bowl" ,
+					"Cover them in the Italian salad dressing" ,
+					"Mix well, ensuring the cucumbers and onions are covered thoroughly with dressing" ,
+					"Refrigerate, letting them marinate overnight"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"salad"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Mom's Macaroni Salad" ],
+				"summary": [ "" ],
+				"author": [ "Delores Whaley" ],
+				"published": [ "" ],
+				"yield": [ "Serve 6 to 8" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"1 lb cavateppi macaroni" ,
+					"3-4 stalks celery" ,
+					"1 medium onion" ,
+					"mayonnaise" ,
+					"little bit of mustard" ,
+					"1 small can tuna fish" ,
+					"salt" ,
+					"pepper" ,
+					"parsley"
+				],
+				"instructions": [
+					"Bring a pot of water to boil. Boild pasta as recommended until cooked. Place in a large bowl." ,
+					"Dice celery very fine. Add to the bowl." ,
+					"Dice the onion very fine. Add to the bowl." ,
+					"Add in the tuna fish to the bowl." ,
+					"Mix in just enough mayonnaise to cover everything." ,
+					"Add in a little bit of mustard, salt, pepper, and parsley to taste." ,
+					"Chill in the refirgerator overnight. Serve cold."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"salad"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Fruit Sorbet" ],
+				"summary": [ "" ],
+				"author": [ "" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"1 1/2 cups sugar" ,
+					"1 1/2 cups water" ,
+					"1 1/2 cups squeezed fruit juice (if citrus) or bleded fruit otherwise" ,
+					"1 tablespoon zest (if using a citrus fruit)" ,
+					"Mint sprigs (optional)"
+				],
+				"instructions": [
+					"Combine sugar and water in a saucepan." ,
+					"Heat on medium high heat just to a boil, stirring until the sugar has dissolved." ,
+					"Remove from heat and add zest." ,
+					"Cover and let stand for 10 minutes." ,
+					"Puree the fruit in a blender or food processor." ,
+					"If using citrus fruit, juice the fruit instead of puree - the membranes are bitter and shold not be used." ,
+					"Then pour fruit juice through a strainer into a medium sized bowl." ,
+					"Let cool to room temperature." ,
+					"If using an ice cream maker, cover and chill for several hours or overnight." ,
+					"Pour into an ice cream maker and process according to manufacturer directions." ,
+					"Add in Mint sprigs (optional)" ,
+					"Otherwise, freeze overnight and re-blend with the blender. This makes the sorbet lighter and more consistently flavored." ,
+					"For a change, Replace the sugar with sweetened condensed milk to make ice cream."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Helene's Better Than Sex Cake" ],
+				"summary": [ "" ],
+				"author": [ "Helene Borodin" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"1 chocolate cake mix (This is also good with yellow cake)" ,
+					"1 pkg. instant chocolate pudding" ,
+					"4 eggs" ,
+					"1 cup (8 oz) sour cream" ,
+					"1/2 cup oil" ,
+					"1/2 cup water" ,
+					"1 Bar German Sweet Chocolate, grated" ,
+					"(you can substitute 1/2 bag (12 oz) Ghirardelli Milk chocolate chips)" ,
+					"6 oz semi-sweet chocolate chips" ,
+					"1 cup chopped pecans" ,
+					"(sometimes you don't need to add the nuts)" ,
+					"1 tsp. vanilla" ,
+					" " ,
+					"Frosting:" ,
+					"1/2 cup butter" ,
+					"1 cup brown sugar" ,
+					"1/4 cup evaporated milk" ,
+					"1/4 cup sifted powdered sugar"
+				],
+				"instructions": [
+					"In bowl combine 2 tablespoons cake mix, pecans and chocolate chips. Stir to coat; set aside." ,
+					"Combine remaining cake mix, eggs, oil, water, sour cream, vanilla and pudding. Mix well with mixer." ,
+					"Fold in chips and nuts." ,
+					"Pour into greased and floured Bundt pan." ,
+					"Bake 350 degrees for 55 minutes until done." ,
+					"It is a good idea to check on the cake 10 to 15 minutes before the cake is done, as every oven is a little bit different." ,
+					"Cool 25 minutes and remove from pan." ,
+					" " ,
+					"Frosting:" ,
+					"Melt butter" ,
+					"Add brown sugar. Cook until it bubbles." ,
+					"Add milk and cook until smooth." ,
+					"Remove from heat and add sifted powdered sugar." ,
+					"Whisk until smooth." ,
+					"Drizzle over the cake."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "No Bake Cookies" ],
+				"summary": [ "" ],
+				"author": [ "" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"2 cups Splenda" ,
+					"1/2 cup 1% Lowfat milk" ,
+					"1/2 cup orange juice" ,
+					"A pinch of salt" ,
+					"1 teaspoon vanilla extract" ,
+					"1 cup peanut butter" ,
+					"1 cup whey protein isolate (I like chocolate)" ,
+					"1/2 cup chopped nuts (peanuts, cashews, almonds, hazelnuts, sunflower seeds, etc.)" ,
+					"1 cup of flaked coconut" ,
+					"1 cup granola" ,
+					"1 cup quick-cooking oatmeal" ,
+					"1 cup puffed rice cereal" ,
+					"1 cup graham cracker crumbs" ,
+					"1 1/2 tablespoons honey" ,
+					"1 cup raisins" ,
+					"1 cup diced dried fruit" ,
+					"1 cup crushed pretzels"
+				],
+				"instructions": [
+					"In large saucepan, combine Splenda, milk, salt, vanilla and mix well." ,
+					"Bring to a boil for 1 minute." ,
+					"Put on low heat and stir in peanut butter until smooth." ,
+					"If using oatmeal, add it and mix well. Do not use regular or instant oatmeal; quick-cooking oatmeal is essential to the success of this recipe." ,
+					"Remove the saucepan from heat." ,
+					"Mix in any other ingredients, such as whey, coconut flakes, granola, dried fruit, nuts, graham cracker crumbs, etc." ,
+					"Let cool until you can touch the mixture; then drop mixture by spoonfuls onto waxed paper or parchment lined baking sheets." ,
+					"Let cool completely; store at room temperature." ,
+					"You can also pour this mixture into a 9 inch square pyrex dish, let cool, then cut into squares." ,
+					"If you want, you can try to line the pyrex dish with whole graham crackers, or with graham cracker crumbs."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Peanut Butter Cookies" ],
+				"summary": [ "" ],
+				"author": [ "" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"1 egg" ,
+					"1 cup peanut butter" ,
+					"1/2 cup oats" ,
+					"1 cup whey protein isolate (could be unflavored, chocolate, vanilla, etc)" ,
+					"1 cup Splenda for cooking" ,
+					"3 tbsp 1% milk" ,
+					"1 tbsp vanilla" ,
+					"3/4 tsp baking soda" ,
+					"1/4 tsp salt" ,
+					" " ,
+					"Not-Low-Carb options" ,
+					"1/4 cup honey" ,
+					"1/2 cup flour" ,
+					"1 tbsp molasses"
+				],
+				"instructions": [
+					"Chop the oats in a food processor into fine bits" ,
+					"Mix all ingredients" ,
+					"Scoop onto cookie tin, flatten into cookies" ,
+					"Bake 325 degrees for 20 minutes"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Aunt Edith's Cheesecake" ],
+				"summary": [ "" ],
+				"author": [ "Edith Lennetti" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"1 stick butter" ,
+					"2 cups graham cracker crumbs" ,
+					"4 x 8 oz packages cream cheese" ,
+					"6 eggs" ,
+					"3/4 cup sugar" ,
+					"2 pints sour cream" ,
+					"1 tablespoon vanilla"
+				],
+				"instructions": [
+					"Melt butter" ,
+					"Mix with graham cracker crumbs" ,
+					"Pat in bottom and sides of spring form pan" ,
+					"Beat cream cheese and sour cream until mixed well. Add sugar, vanilla and one egg at a time. Mix well" ,
+					"Pour into spring form pan" ,
+					"Bake at 350 degrees for 1 1/2 hours" ,
+					"THE SECRET - After 1 1/2 hours, turn the oven off but leave the cheesecake in for another 2 hours. DO NOT OPEN THE OVEN!" ,
+					" " ,
+					"Variation - Pumpkin Cheesecake : " ,
+					"Use 1 small can of pumpkin instead of sour cream" ,
+					"Use only 3 cream cheese packages" ,
+					"Use only 3 eggs" ,
+					" " ,
+					"Variation - Nutella Cheesecake : " ,
+					"Use Nutella instead of sour cream" ,
+					"Use only 3 cream cheese packages" ,
+					"Use only 3 eggs" ,
+					"Add ground roasted hazelnuts to the crust mix" ,
+					"Pour half of cheesecake mix out onto prepared crust" ,
+					"Add a big dollop of Nutella to the batter still in your mixing bowl." ,
+					"Beat to combine." ,
+					"Pour over the rest and swirl to marble." ,
+					"Halfway through the baking process, sprinkle hazelnuts all around the edges."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Grandma's Biscotti" ],
+				"summary": [ "" ],
+				"author": [ "Rose Barbano" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"9 cups flower" ,
+					"18 heaping tablespoons (1 1/2 cups) sugar" ,
+					"9 heaping tablespoons baking powder" ,
+					"Almonds" ,
+					"10 eggs" ,
+					"2 bottles anisette extract" ,
+					"1 1/8 cup milk" ,
+					"3/4 pound butter or margarine"
+				],
+				"instructions": [
+					"Mix dry ingredients well" ,
+					"Mix together eggs, anisette extract, milk and butter" ,
+					"Beat well" ,
+					"Add to dry mix" ,
+					"Roll dough into rolls about 1/2 inch thick" ,
+					"Bake at 350 - 375 degrees until partially done" ,
+					"Take out of oven and cut diagonally" ,
+					"Bake until done or about 20 minutes all together or until light brown"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Grandma's Fried Twisties" ],
+				"summary": [ "" ],
+				"author": [ "Rose Barbano" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"5 cups flour" ,
+					"6 large egg yolks" ,
+					"1 1/2 to 2 tsp salt" ,
+					"1 tablespoon sugar to every cup flour" ,
+					"5 - 6 tsp baking powder" ,
+					"1 orange rind (grated) and juice from orange" ,
+					"1/2 pint sour cream" ,
+					"1/4 # Oleo (1 bar or a little less)"
+				],
+				"instructions": [
+					"Makes 1 1/2 very large wide bowls" ,
+					"Roll out dough on lightly floured board or table" ,
+					"Do not roll out too thin." ,
+					"Cut dough into rectangles about 3 inches long by 1 inch wide" ,
+					"Cut a slit in the middle of the rectangle about 1 inch long." ,
+					"Pull the top half through the slit to form a bow-tie." ,
+					"Fry in hot oil or Crisco until brown." ,
+					"Remove from oil and put on paper towel to drain and cool." ,
+					"Sprinkle with confectioners sugar when ready to eat."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Grandma's Pizelles" ],
+				"summary": [ "Pizzelle are traditional Italian waffle cookies originally made in the Abruzzo region of south-central Italy. The name comes from the Italian word for 'round and flat' (pizze); this is also the meaning of the word pizza. Many other cultures have developed a pizzelle-type cookie as part of their culture. It is known to be one of the oldest cookies, and is believed to have developed from the ancient Roman crustulum. The cookie dough or batter is put into a pizzelle iron, which resembles a waffle iron. Typically, the iron stamps a snowflake pattern onto both sides of the thin golden-brown cookie, which has a crisp texture once it is cooled. Pizzelle are popular during Christmas and Easter. They are often found at Italian weddings, alongside other traditional pastries such as cannoli and traditional Italian cookies. It is also common for two pizzelle to be sandwiched with cannoli cream or hazelnut spread. Pizzelle, while still warm, can also be rolled using a wodden dowel to create cannoli shells.  More information at http://en.wikipedia.org/wiki/Pizzelle" ],
+				"author": [ "Rose Barbano" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"12 eggs" ,
+					"11 oz Honey" ,
+					"1 bottle anisette extract" ,
+					"4 tsp baking powder" ,
+					"1 1/3 stick margarine" ,
+					"1/3 tablespoons Crisco / margarine (1/3 cup?)" ,
+					"2/3 cup sugar" ,
+					"1 large orange rind (grated) and juice" ,
+					"1 large lemon rind (grated) and juice" ,
+					"5 to 6 cups flour (enough to make the batter thick)"
+				],
+				"instructions": [
+					"Mix everything but the flour together" ,
+					"Add flour gradually, while using an electric mixer" ,
+					"Mix well" ,
+					"Pour two tablespoons or so on hot pizzelle iron." ,
+					" " ,
+					"Variation - Chocolate Pizzelles" ,
+					"Add:" ,
+					"1/2 cup cocoa" ,
+					"1/2 cup sugar" ,
+					"1/2 tsp. baking powder" ,
+					"Do not include the anisette extract" ,
+					"Follow the rest of the Ingredients and Preparation"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Mary Ann's Tiramisu" ],
+				"summary": [ "" ],
+				"author": [ "Mary Ann Sarao" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"",
+					""
+				],
+				"instructions": [
+					"",
+					""
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Mom's Butterball Cookies" ],
+				"summary": [ "Also called clothespin cookies" ],
+				"author": [ "Delores Whaley" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"3/4 pound butter" ,
+					"3/4 cup sugar" ,
+					"3 egg yolks" ,
+					"3 cups flour" ,
+					"1 cup finely chopped walnuts" ,
+					"Confectionary sugar"
+				],
+				"instructions": [
+					"Melt butter, and wait for it to cool." ,
+					"Cream Butter, sugar, and egg yolks" ,
+					"Add flour and walnuts, and mix well" ,
+					"Roll into little balls, about the size of a quarter" ,
+					"Place on an ungreased cookie sheet about 1 inch apart" ,
+					"Bake at 325 degrees until golden brown, approximately 20 to 30 minutes" ,
+					"Cool until they can be handled" ,
+					"While still warm, roll each cookie in confectionary sugar"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Mom's M and M Cookies" ],
+				"summary": [ "" ],
+				"author": [ "Delores Whaley" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"1 cup shortening" ,
+					"1 cup brown sugar (packed)" ,
+					"1/2 cup granulated sugar" ,
+					"2 tsp vanilla extract" ,
+					"2 eggs" ,
+					"2 1/4 cup sifted flower" ,
+					"1 tsp baking soda" ,
+					"1 tsp salt" ,
+					"1 1/2 cup plain M and Ms"
+				],
+				"instructions": [
+					"Blend shortening and sugars" ,
+					"Beat in vanilla and eggs" ,
+					"Sift remaining dry Ingredients together" ,
+					"Add dry Ingredients to the sugar mixture" ,
+					"Mix well" ,
+					"Stir in 1/2 cup M and Ms (reserve remaining M and Ms for decorating)" ,
+					"Drop from teaspoon onto ungreased cookie sheet" ,
+					"Decorate tops of cookies as desired" ,
+					"Bake at 375 degrees for 10 to 12 minutes until golden brown"
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "Valia's Pepper Cookies" ],
+				"summary": [ "" ],
+				"author": [ "Valia" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"Cookies : " ,
+					"5 cups flour" ,
+					"2 cups sugar" ,
+					"1 cup shortening" ,
+					"1/2 cup dark cocoa" ,
+					"2 eggs" ,
+					"6 tsp. baking powder" ,
+					"2 tsp. vanilla" ,
+					"2 tsp. cloves" ,
+					"2 tsp. cinnamon" ,
+					"2 tsp nutmeg" ,
+					"1 tsp allspice" ,
+					"1 tsp black pepper" ,
+					"1 tsp salt" ,
+					"1/2 cup orange juice" ,
+					"1/2 cup milk" ,
+					" " ,
+					"Icing : " ,
+					"1 pound confectioners sugar" ,
+					"1/2 bottle anisette extract (or more if you like)" ,
+					"Water as needed"
+				],
+				"instructions": [
+					"Mix all ingredients" ,
+					"Add milk as needed to make a stiff dough" ,
+					"Bake at 350 degrees for 12 to 15 minutes" ,
+					"In a separate bowl, mix confectioners sugar and anisette extract" ,
+					"Add in water carefully as needed. Keep the icing thick." ,
+					"After cookies are cool to the touch, dip cookies individually upside down into the icing and set aside to harden."
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"dessert"
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		},
+		{
+			"type": "h-recipe" ,
+			"properties": {
+				"name": [ "" ],
+				"summary": [ "" ],
+				"author": [ "" ],
+				"published": [ "" ],
+				"yield": [ "" ],
+				"duration": [ "" ],
+				"ingredients": [
+					"",
+					""
+				],
+				"instructions": [
+					"",
+					""
+				],
+				"nutrition": [  ],
+				"photo": [  ],
+				"category": [
+					"",
+					""
+				],
+				"license": [ "http://creativecommons.org/licenses/by/2.0/" ]
+			}
+		}
+	]
+}

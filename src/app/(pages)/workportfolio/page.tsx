@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { PageSection } from "@brianwhaley/pixelated-components";
 import { PageHeader } from "@brianwhaley/pixelated-components";
 import { Carousel, FlickrWrapper } from "@brianwhaley/pixelated-components";
 import type { CarouselCardType } from "@brianwhaley/pixelated-components";
@@ -32,15 +33,13 @@ export default function Gallery() {
 
 	return (
 		<>
-			<section id="gallery-section">
-				<div className="section-container">
-					<PageHeader title="Work Portfolio Gallery" />
-					<Carousel 
-						cards={flickrCards} 
-						draggable={true}
-						imgFit="contain" />
-				</div>
-			</section>
+			<PageSection columns={1} id="gallery-section">
+				<PageHeader title="Work Portfolio Gallery" />
+				<Carousel 
+					cards={flickrCards} 
+					draggable={true}
+					imgFit="contain" />
+			</PageSection>
 		</>
 	);
 }
