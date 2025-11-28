@@ -6,7 +6,7 @@ import { MicroInteractions } from "@brianwhaley/pixelated-components";
 import { preloadAllCSS } from "@brianwhaley/pixelated-components";
 import { preloadImages } from "@brianwhaley/pixelated-components";
 
-export function LayoutClient() {
+export default function LayoutClient() {
 
 	useEffect(() => {
 		preloadImages();

@@ -58,7 +58,7 @@ npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
 npm version patch --force
 git add * -v
-git commit -m "sitemap fixes, config function renames"
+git commit -m "build fix for amplify"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
