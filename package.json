@@ -1,6 +1,6 @@
 {
   "name": "informationfocus",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "private": true,
   "author": {
     "name": "Pixelated Technologies",
@@ -11,23 +11,24 @@
     "build": "npm run clean && NODE_ENV=production next build",
     "start": "npm run clean && next build && next start",
     "lint": "next lint",
-    "clean": "rm -rf .next && rm -rf out"
+    "clean": "rm -rf .next && rm -rf out",
+    "generate-site-images": "node scripts/generate-site-images.js"
   },
   "dependencies": {
-    "@brianwhaley/pixelated-components": "^2.3.18",
-    "next": "^16.0.1",
+    "@brianwhaley/pixelated-components": "^3.0.6",
+    "next": "^16.0.5",
     "prop-types": "^15.8.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "sass": "^1.93.3"
+    "sass": "^1.94.2"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@types/node": "^24.10.0",
-    "@types/react": "^19",
-    "@types/react-dom": "^19.2.2",
+    "@eslint/eslintrc": "^3.3.3",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.1",
+    "eslint-config-next": "^16.0.5",
     "typescript": "^5"
   }
 }
