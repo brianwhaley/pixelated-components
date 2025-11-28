@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from 'path';
 
 const nextConfig: NextConfig = {
 
@@ -55,9 +56,16 @@ const nextConfig: NextConfig = {
 	turbopack: {},
 	// webpack5: true,
 	webpack: (config) => {
-		config.resolve.fallback = { 
+		config.resolve.fallback = {
 			fs: false,
 			path: false
+		};
+
+		// Ensure the '@' alias resolves to the project `src` directory.
+		// This helps CI/Turbopack/webpack builds resolve imports like '@/app/...'.
+		config.resolve.alias = {
+			...(config.resolve?.alias || {}),
+			'@': path.resolve(__dirname, 'src'),
 		};
 		return config;
 	},

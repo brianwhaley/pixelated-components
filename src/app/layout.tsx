@@ -1,12 +1,12 @@
 import { headers } from "next/headers";
 import { getRouteByKey } from "@brianwhaley/pixelated-components/server";
 import { PixelatedServerConfigProvider } from "@brianwhaley/pixelated-components/server";
-import LayoutClient from "@/app/elements/layoutclient";
-import Header from "@/app/elements/header";
-import Hero from "@/app/elements/hero";
-import Nav from "@/app/elements/nav";
-import Search from '@/app/elements/search';
-import Footer from '@/app/elements/footer';
+import LayoutClient from "./elements/layoutclient";
+import Header from "./elements/header";
+import Hero from "./elements/hero";
+import Nav from "./elements/nav";
+import Search from './elements/search';
+import Footer from './elements/footer';
 import myRoutes from "@/app/data/routes.json";
 import "@brianwhaley/pixelated-components/css/pixelated.global.css";
 import "@brianwhaley/pixelated-components/css/pixelated.grid.scss";
