@@ -9,12 +9,12 @@ git checkout -b dev
 
 npm install puppeteer
 
+eslint --fix
+
 npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
-
-eslint --fix
 npm version patch --force
 git add * -v
-git commit -m "ran email scrape for morris, generated json, updated all packages"
+git commit -m "runs for denville"
 git push leadscraper dev --tags
 git push leadscraper dev:main

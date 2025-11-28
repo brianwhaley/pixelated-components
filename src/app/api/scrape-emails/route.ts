@@ -5,10 +5,10 @@ import path from 'path';
 
 async function requestHandler(req: NextRequest): Promise<NextResponse | undefined> {
 	// let page = parseInt(req.nextUrl.searchParams.get('page') || '1');
-	let page = 9;
+	let page = 1;
 	const perPage = parseInt(req.nextUrl.searchParams.get('perPage') || '100');
-	const fileName = 'companies-morris.txt';
-	const addl_query = "morris county nj contact email address";
+	const fileName = 'companies-nj-denville.txt';
+	const addl_query = "denville new jersey contact email address";
 
 	const filePath = path.join(process.cwd(), 'public', fileName);
 	const companies = fs.readFileSync(filePath, 'utf8').split('\n').map((name: string) => name.trim());
@@ -23,6 +23,12 @@ async function requestHandler(req: NextRequest): Promise<NextResponse | undefine
 			for (let k = (((page - 1) * perPage)); k < (page * perPage); k++ ) {
 				if (k >= companies.length) break;
 				const puppetPage = await browser.newPage();
+				await puppetPage.setDefaultNavigationTimeout(0);
+				await puppetPage.setDefaultTimeout(0);
+
+				// await puppetPage.setDefaultNavigationTimeout(60000); // Set timeout to 60 seconds
+				// await puppetPage.setDefaultTimeout(60000); // Set default timeout to 60 seconds
+
 				const company = companies[k];
 				console.log(`Searching for emails for #${k}: ${company}`);
 				const query = company + ' ' + addl_query;
