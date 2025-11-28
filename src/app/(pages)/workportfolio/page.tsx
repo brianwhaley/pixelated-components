@@ -5,11 +5,11 @@ import { PageSection } from "@brianwhaley/pixelated-components";
 import { PageHeader } from "@brianwhaley/pixelated-components";
 import { Carousel, FlickrWrapper } from "@brianwhaley/pixelated-components";
 import type { CarouselCardType } from "@brianwhaley/pixelated-components";
-import { getFullConfig } from '@brianwhaley/pixelated-components/server';
+import { getFullPixelatedConfig } from '@brianwhaley/pixelated-components/server';
 
 export default function Gallery() {
 
-	const config = getFullConfig();
+	const config = getFullPixelatedConfig();
 	const [ flickrCards, setFlickrCards ] = useState<CarouselCardType[]>([]);
 	const props = { 
 		api_key: config.flickr?.urlProps.api_key ?? "",

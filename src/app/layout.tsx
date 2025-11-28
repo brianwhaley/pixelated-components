@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { getRouteByKey } from "@brianwhaley/pixelated-components/server";
-import { LayoutClient } from './elements/LayoutClient';
 import { PixelatedServerConfigProvider } from "@brianwhaley/pixelated-components/server";
+import { LayoutClient } from "@/app/elements/layoutclient";
 import Header from "@/app/elements/header";
 import Hero from "@/app/elements/hero";
 import Nav from "@/app/elements/nav";

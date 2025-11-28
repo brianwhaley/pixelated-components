@@ -4,12 +4,12 @@ import React, { useState, useEffect } from "react";
 import { Carousel } from "@brianwhaley/pixelated-components";
 import { GetFlickrData, GenerateFlickrCards } from '@brianwhaley/pixelated-components';
 import type { CarouselCardType } from "@brianwhaley/pixelated-components";
-import { getFullConfig } from '@brianwhaley/pixelated-components/server';
+import { getFullPixelatedConfig } from '@brianwhaley/pixelated-components/server';
 import './hero.css';
 
 export default function Hero() {
 
-	const config = getFullConfig();
+	const config = getFullPixelatedConfig();
 	const [flickrCards, setFlickrCards] = useState<CarouselCardType[]>([]);
 
 	useEffect(() => {
