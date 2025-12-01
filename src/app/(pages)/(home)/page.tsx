@@ -12,7 +12,8 @@ export default function Home() {
 				<Callout 
 					variant="split"
 					direction="left"
-					img="https://www.bednarlandscape.com/wp-content/uploads/2023/12/bednar-portfolio-07.jpg"
+					// img="https://www.bednarlandscape.com/wp-content/uploads/2023/12/bednar-portfolio-07.jpg"
+					img="/images/stock/natural-grass-close-up.jpg"
 					title="Welcome to Oak Tree Landscaping"
 					subtitle="Outstanding Landscapes and Breathtaking Results"
 					content="With over 25 years of experience in the landscape industry, 
@@ -39,42 +40,48 @@ export default function Home() {
 				<GridItem>
 					<Callout 
 						variant="overlay"
-						img="https://media.istockphoto.com/id/2044312647/photo/professional-latino-man-using-a-riding-lawnmower-caring-for-a-park-with-a-landscaping-company.jpg?b=1&s=612x612&w=0&k=20&c=n_n3hcmZ1U3SHzwlZX-7wGElqZggxGFuVuDV7i_V9-k="
+						// img="https://media.istockphoto.com/id/2044312647/photo/professional-latino-man-using-a-riding-lawnmower-caring-for-a-park-with-a-landscaping-company.jpg?b=1&s=612x612&w=0&k=20&c=n_n3hcmZ1U3SHzwlZX-7wGElqZggxGFuVuDV7i_V9-k="
+						img="/images/stock/pexels-luis-negron-260501657-13630739.jpg"
 						title="Lawn Care"
 					/>
 				</GridItem>
 				<GridItem>
 					<Callout 
 						variant="overlay"
-						img="https://media.istockphoto.com/id/1324918160/photo/professional-gardener-trimming-hedge.jpg?b=1&s=612x612&w=0&k=20&c=PyPsxSuD3XFWk8eAmFj2I7JFxDjsS1w4AJZICRFBQ_8="
+						// img="https://media.istockphoto.com/id/1324918160/photo/professional-gardener-trimming-hedge.jpg?b=1&s=612x612&w=0&k=20&c=PyPsxSuD3XFWk8eAmFj2I7JFxDjsS1w4AJZICRFBQ_8="
+						img="/images/stock/pexels-shvetsa-5027602.jpg"
 						title="Garden Care"
 					/>
 				</GridItem>
 				<GridItem>
 					<Callout 
 						variant="overlay"
-						img="https://www.bednarlandscape.com/wp-content/uploads/2023/12/bednar-portfolio-07.jpg"
+						// img="https://www.bednarlandscape.com/wp-content/uploads/2023/12/bednar-portfolio-07.jpg"
+						img="/images/stock/natural-grass-close-up.jpg"
 						title="Hardscape"
 					/>
 				</GridItem>
 				<GridItem>
 					<Callout 
 						variant="overlay"
-						img="https://media.istockphoto.com/id/157479391/photo/evening-sidewalk.webp?a=1&b=1&s=612x612&w=0&k=20&c=hhEwI_ou_3OUHtnMD7uPvp_G2mnsE9KzIzrcT2c8b_g="
+						// img="https://media.istockphoto.com/id/157479391/photo/evening-sidewalk.webp?a=1&b=1&s=612x612&w=0&k=20&c=hhEwI_ou_3OUHtnMD7uPvp_G2mnsE9KzIzrcT2c8b_g="
+						img="/images/stock/outside-view-restaurant-cottage-night-time.jpg"
 						title="Lighting"
 					/>
 				</GridItem>
 				<GridItem>
 					<Callout 
 						variant="overlay"
-						img="https://media.istockphoto.com/id/1336134773/photo/nozzle-automatic-lawn-watering-macro-close-up.webp?a=1&b=1&s=612x612&w=0&k=20&c=-486z3g7B7ANj9mJNdODqiSY20brS4qadCVTq005NwM="
+						// img="https://media.istockphoto.com/id/1336134773/photo/nozzle-automatic-lawn-watering-macro-close-up.webp?a=1&b=1&s=612x612&w=0&k=20&c=-486z3g7B7ANj9mJNdODqiSY20brS4qadCVTq005NwM="
+						img="/images/stock/irrigation-2402568_1920.jpg"
 						title="Irrigation"
 					/>
 				</GridItem>
 				<GridItem>
 					<Callout 
 						variant="overlay"
-						img="https://media.istockphoto.com/id/457790295/photo/tree-service-arborist-pruning-trimming-cutting-diseased-branches-with-chainsaw.jpg?s=612x612&w=0&k=20&c=0prSggo7LM7guW7-X3NDj8xq_eRqz6kA0MofEefTuK8="
+						// img="https://media.istockphoto.com/id/457790295/photo/tree-service-arborist-pruning-trimming-cutting-diseased-branches-with-chainsaw.jpg?s=612x612&w=0&k=20&c=0prSggo7LM7guW7-X3NDj8xq_eRqz6kA0MofEefTuK8="
+						img="/images/stock/asian-man-cutting-trees-using-electrical-chainsaw.jpg"
 						title="Tree Services"
 					/>
 				</GridItem>
