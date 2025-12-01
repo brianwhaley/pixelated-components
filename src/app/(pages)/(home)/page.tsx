@@ -81,7 +81,7 @@ export default function Home() {
 					<Callout 
 						variant="overlay"
 						// img="https://media.istockphoto.com/id/457790295/photo/tree-service-arborist-pruning-trimming-cutting-diseased-branches-with-chainsaw.jpg?s=612x612&w=0&k=20&c=0prSggo7LM7guW7-X3NDj8xq_eRqz6kA0MofEefTuK8="
-						img="/images/stock/asian-man-cutting-trees-using-electrical-chainsaw.jpg"
+						img="/images/stock/asian-man-cutting-trees-using-electrical-chainsaw-sm.jpg"
 						title="Tree Services"
 					/>
 				</GridItem>
