@@ -1,42 +1,152 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+	--primary-color: #19471b; /* #1F3A26 */
+  	--secondary-color: #959882; /* #8A9A91 */
+  	--accent1-color: #b26443; /* #A35C48 */
+  	--accent2-color: #beab6c; /* #C5B386 */
+	--text-color: #2C2C2C;	
+	--bg-color: #F4F3EF;
+	--header-font: 'Playfair Display', serif;
+	--body-font: 'Lato', sans-serif;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+	background-color: var(--bg-color) !important;
+	color: var(--text-color);
+	font-family: var(--body-font);
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--header-font); 
+	line-height: 1.1;
+}
+h1 { font-size: clamp(3.0rem, calc(2.8rem + 2vw), 4.0rem) !important; }
+h2 { font-size: clamp(2.0rem, calc(1.9rem + 1.25vw), 2.5rem) !important; }
+h3 { font-size: clamp(1.25rem, calc(1.2rem + 0.5vw), 1.75rem) !important; }
+html { font-size: 1.2rem; }
+
+header {
+	position: relative; 
+
+	#header-section {
+		padding-top: 20px;
+		padding-bottom: 0px;
+	}
+	.panelMenuButton, #panelMenuButton {
+		display: none;
+		position: absolute;
+		top: 5px;
+		left: 5px;
+		z-index: 5;
+	}
+	.panelMenuButton .hamburger {
+		font-size: unset
+	};
+	#logo {
+		height: 150px;
+		width: auto;
+		object-fit: contain;
+	}
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+nav {
+	.menuItem:not(:first-child) {
+    	border-left: 0px transparent ;
+	}
+	.menuItem a {
+		background-color: var(--primary-color) !important;
+		color: var(--bg-color);
+	}
+	.menuItem a.selected {
+		background-color: var(--secondary-color) !important;
+		color: var(--font-color);
+	}
+	
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+.accordionMenuWrapper, .accordionDown, .accordionUp {
+    top: 45px;
+    background-color: var(--accent1-color);
+}
+.accordionMenu > ul > li > a {
+    background-blend-mode: normal;
+    background-color: #ffffff;
+    background-image: none;
+}
+.accordionMenu > ul > li > a:hover {
+	background: var(--accent2-color)
+}
+
+main div:has( > img) {
+	border: 10px solid var(--primary-color);
+}
+
+#home-section {
+	.callout {
+		background: var(--secondary-color);
+	}
+	.callout.split .calloutImage {
+		--do-nothing: true;
+		/* aspect-ratio: 1; */
+	}
+	.calloutBody {
+		padding: 10px;
+	}
+}
+
+#services-section {
+	padding-bottom: 0px;
+	margin-bottom: 30px;
+	.pageSectionHeader {
+		margin: 0px;
+	}
+	.callout.overlay .calloutImage img {
+		aspect-ratio: 3 / 5;
+	}
+	.callout.overlay .calloutBody h2 {
+	color: white;
+	text-shadow:
+		-1px 1px 1px var(--primary-color),
+		1px 1px 1px var(--primary-color),
+		1px -1px 1px var(--primary-color),
+		-1px -1px 1px var(--primary-color),
+		-1px 1px 5px var(--primary-color),
+		1px 1px 5px var(--primary-color),
+		1px -1px 5px var(--primary-color),
+		-1px -1px 5px var(--primary-color);
+
+	}
+}
+
+@media screen and (max-width: 768px) {
+    nav, 
+	.menuWrapper {
+        display: none;
+    }
+	header .panelMenuButton, 
+	header #panelMenuButton {
+        display: block;
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    main {
+		padding-top: 0px;
+	}
+	main .page-section-content {
+		gap: 0px !important;
+    	padding: 30px !important;
+	}
+	nav section.page-section {
+    	padding: 0px;
+	}
+	.callout {
+		margin: 15px 0;
+	}
+	#home-section .page-section-content {
+		padding-top: 0px !important;
+	}
+	#services-section .callout.overlay .calloutImage img {
+    aspect-ratio: 1;
+}
 }

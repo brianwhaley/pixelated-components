@@ -1,0 +1,47 @@
+{
+	"routes": [
+		{
+			"name": "Home", 
+			"path": "/", 
+			"title": "Oak Tree Landscaping - Home",
+			"description": "",
+			"keywords": ""  
+		} , {
+			"name": "About Us", 
+			"path": "/about", 
+			"title": "Oak Tree Landscaping - About Us",
+			"description": "",
+			"keywords": ""  
+		} , {
+			"name": "Commercial", 
+			"path": "/commercial", 
+			"title": "Oak Tree Landscaping - Commercial",
+			"description": "",
+			"keywords": ""  
+		} , {
+			"name": "Residential", 
+			"path": "/residential", 
+			"title": "Oak Tree Landscaping - Residential",
+			"description": "",
+			"keywords": ""  
+		} , {
+			"name": "Our Projects", 
+			"path": "/projects", 
+			"title": "Oak Tree Landscaping - Our Projects",
+			"description": "",
+			"keywords": ""  
+		} , {
+			"name": "Blog", 
+			"path": "/blog", 
+			"title": "Oak Tree Landscaping - Blog",
+			"description": "",
+			"keywords": "" 
+		} , {
+			"name": "Contact Us", 
+			"path": "/contact", 
+			"title": "Oak Tree Landscaping - Contact Us",
+			"description": "",
+			"keywords": "" 
+		}
+	]
+}
