@@ -13,7 +13,7 @@ export default function Home() {
                 <div className="gridItem">
                     <Callout
                         aboveFold={true}
-                        style='boxed'
+                        variant='boxed'
                         layout="vertical"
                         title="Mary Ann Sarao, Principal" 
                         img="/images/mas-sq.jpg"
@@ -26,7 +26,7 @@ export default function Home() {
                 <div className="gridItem">
                     <Callout
                         aboveFold={true}
-                        style='boxed'
+                        variant='boxed'
                         layout="vertical"
                         title="Our Goal" 
                         img="/images/informationfocus-sq.png"
