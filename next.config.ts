@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
 
   /* config options here */
-	transpilePackages: ['@brianwhaley/pixelated-components'],
+	transpilePackages: ['@pixelated-tech/components'],
 	trailingSlash: false,
 	typescript: {
 		ignoreBuildErrors: true,

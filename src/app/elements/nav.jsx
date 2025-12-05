@@ -1,6 +1,6 @@
 "use client";
 
-import { MenuSimple } from '@brianwhaley/pixelated-components';
+import { MenuSimple } from '@pixelated-tech/components';
 import myroutes from '../data/routes.json';
 const allRoutes = myroutes.routes;
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { SmartImage } from "@brianwhaley/pixelated-components";
+import { SmartImage } from "@pixelated-tech/components";
 
 export default function Header() {
 	return (

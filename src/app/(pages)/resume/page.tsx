@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ResumeName, ResumeContact, ResumeEvents, ResumeSkills, ResumeSummary } from '@brianwhaley/pixelated-components';
+import { ResumeName, ResumeContact, ResumeEvents, ResumeSkills, ResumeSummary } from '@pixelated-tech/components';
 import ResumeData from '@/app/data/resume.json';
 
 export default function Home() {

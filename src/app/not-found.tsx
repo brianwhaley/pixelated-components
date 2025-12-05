@@ -1,6 +1,6 @@
 "use client";
 
-import { FourOhFour } from "@brianwhaley/pixelated-components";
+import { FourOhFour } from "@pixelated-tech/components";
 import data404 from "../app/data/404-data.json";
 const images = data404.images;
 
