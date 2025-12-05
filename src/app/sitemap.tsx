@@ -2,8 +2,8 @@ export const runtime = 'nodejs';
 
 import type { MetadataRoute } from 'next';
 import { headers } from 'next/headers';
-import { getFullPixelatedConfig } from "@brianwhaley/pixelated-components/server";
-import { createPageURLs, createImageURLs, createContentfulURLs, createImageURLsFromJSON } from "@brianwhaley/pixelated-components/server";
+// import { getFullPixelatedConfig } from "@brianwhaley/pixelated-components/server";
+import { createPageURLs, createImageURLsFromJSON } from "@brianwhaley/pixelated-components/server";
 // , createContentfulAssetURLs
 
 import myRoutes from "@/app/data/routes.json";
@@ -15,13 +15,7 @@ import myRoutes from "@/app/data/routes.json";
 	delivery_access_token: "lA5uOeG6iPbrJ2J_R-ntwUdKQesrBNqrHi-qX52Bzh4",
 }; */
 
-const config = getFullPixelatedConfig();
-const contentfulApiProps = {
-	base_url: config.contentful?.base_url ?? "",
-	space_id: config.contentful?.space_id ?? "",
-	environment: config.contentful?.environment ?? "",
-	delivery_access_token: config.contentful?.delivery_access_token ?? "",
-};
+// const config = getFullPixelatedConfig();
 
 async function getOrigin(): Promise<string> {
 	const headerList = await headers();
@@ -34,9 +28,6 @@ export default async function SiteMapXML(): Promise<MetadataRoute.Sitemap> {
 	const origin = await getOrigin();
 	const sitemap = [
 		...(await createPageURLs(myRoutes.routes, origin)),
-		...(await createContentfulURLs({ apiProps: contentfulApiProps, origin: origin })),
-		// ...(await createImageURLs(origin)),
-		// ...(await createContentfulAssetURLs("https://images.palmetto-epoxy.com")),
 		...(await createImageURLsFromJSON(origin)),
 	];
 	return sitemap;

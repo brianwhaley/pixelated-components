@@ -1,9 +1,9 @@
 {
     "images" : [
 
-		{   "img": "https://www.informationfocus.net/images/informationfocus-sq.png", 
+		{   "img": "/images/oaktree-square.png", 
 			"text": "Page Not Found.",
-			"description": "InformationFocus Page Not Found" 
+			"description": "Oaktree Landscaping Page Not Found" 
         }
 
 	]
