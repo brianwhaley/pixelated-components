@@ -15,6 +15,6 @@ npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
 npm version patch --force
 git add * -v
-git commit -m "runs for denville"
+git commit -m "bumping versions"
 git push leadscraper dev --tags
 git push leadscraper dev:main
