@@ -1,8 +1,8 @@
 "use client";
 
-import { PageSection } from "@brianwhaley/pixelated-components";
-import { SmartImage } from "@brianwhaley/pixelated-components";
-import { MenuAccordion, MenuAccordionButton } from "@brianwhaley/pixelated-components";
+import { PageSection } from "@pixelated-tech/components";
+import { SmartImage } from "@pixelated-tech/components";
+import { MenuAccordion, MenuAccordionButton } from "@pixelated-tech/components";
 import myroutes from '../data/routes.json';
 const allRoutes = myroutes.routes;
 

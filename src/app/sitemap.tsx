@@ -2,8 +2,8 @@ export const runtime = 'nodejs';
 
 import type { MetadataRoute } from 'next';
 import { headers } from 'next/headers';
-// import { getFullPixelatedConfig } from "@brianwhaley/pixelated-components/server";
-import { createPageURLs, createImageURLsFromJSON } from "@brianwhaley/pixelated-components/server";
+// import { getFullPixelatedConfig } from "@pixelated-tech/components/server";
+import { createPageURLs, createImageURLsFromJSON } from "@pixelated-tech/components/server";
 // , createContentfulAssetURLs
 
 import myRoutes from "@/app/data/routes.json";

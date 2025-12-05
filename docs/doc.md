@@ -10,7 +10,7 @@ https://www.palmettocoastal.net/
 https://fathernatureinc.com/
 
 
-## ===== FIRST TIME =====
+## ===== DEPLOY SCRIPT - FIRST TIME =====
 git remote add oaktreelandscaping https://github.com/brianwhaley/oaktreelandscaping.git
 git branch -M dev
 git push -u oaktreelandscaping dev
@@ -18,11 +18,11 @@ git branch -M main
 git push -u oaktreelandscaping main
 
 
-## ===== ALL OTHER TIMESS
+## ===== DEPLOY SCRIPT - ALL OTHER TIMESS
 echo "Updating packages..." && npm outdated | awk 'NR>1 {print $1"@"$4}' | while read pkg; do echo "$pkg" >> /tmp/npm-updates.log && printf "." && npm install --force --save "$pkg" > /dev/null 2>&1; done && echo "\n\n✓ Updated packages:" && cat /tmp/npm-updates.log && rm /tmp/npm-updates.log
 npm audit fix --force
 npm version patch --force
 git add * -v
-git commit -m "404 fix, Oak Tree to Oaktree"
+git commit -m "migrating components from @brianwhaley to @pixelated-tech"
 git push -u oaktreelandscaping dev --tags
 git push oaktreelandscaping dev:main

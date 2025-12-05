@@ -1,9 +1,9 @@
 "use client";
 
-import { PageHeader, PageSection, PageSectionHeader } from "@brianwhaley/pixelated-components";
-import { FormEngine } from "@brianwhaley/pixelated-components";
-import { emailFormData } from "@brianwhaley/pixelated-components";
-import { Loading, ToggleLoading } from "@brianwhaley/pixelated-components";
+import { PageHeader, PageSection, PageSectionHeader } from "@pixelated-tech/components";
+import { FormEngine } from "@pixelated-tech/components";
+import { emailFormData } from "@pixelated-tech/components";
+import { Loading, ToggleLoading } from "@pixelated-tech/components";
 import { Calendly } from "@/app/elements/calendly";
 import formData from "@/app/data/contactform.json";
 

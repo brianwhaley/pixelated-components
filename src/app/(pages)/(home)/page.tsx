@@ -1,7 +1,7 @@
 "use client";
 
-import { PageSection, GridItem, PageSectionHeader } from "@brianwhaley/pixelated-components";
-import { Callout } from "@brianwhaley/pixelated-components";
+import { PageSection, GridItem, PageSectionHeader } from "@pixelated-tech/components";
+import { Callout } from "@pixelated-tech/components";
 
 export default function Home() {
     

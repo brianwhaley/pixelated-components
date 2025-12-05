@@ -1,15 +1,15 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import { headers } from 'next/headers';
-import { getRouteByKey } from '@brianwhaley/pixelated-components/server';
-import { PixelatedServerConfigProvider } from '@brianwhaley/pixelated-components/server';
+import { getRouteByKey } from '@pixelated-tech/components/server';
+import { PixelatedServerConfigProvider } from '@pixelated-tech/components/server';
 import LayoutClient from '@/app/elements/layout-client';
 import Header from '@/app/elements/header';
 import Nav from '@/app/elements/nav';
 import Footer from '@/app/elements/footer';
 import myRoutes from "@/app/data/routes.json";
-import "@brianwhaley/pixelated-components/css/pixelated.global.css";
-import "@brianwhaley/pixelated-components/css/pixelated.grid.scss";
-import "@brianwhaley/pixelated-components/css/pixelated.font.scss";
+import "@pixelated-tech/components/css/pixelated.global.css";
+import "@pixelated-tech/components/css/pixelated.grid.scss";
+import "@pixelated-tech/components/css/pixelated.font.scss";
 import './globals.css';
 
 export default async function RootLayout({

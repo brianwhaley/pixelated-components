@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { PageSection } from "@brianwhaley/pixelated-components";
-import { MenuSimple } from "@brianwhaley/pixelated-components";
+import { PageSection } from "@pixelated-tech/components";
+import { MenuSimple } from "@pixelated-tech/components";
 import myroutes from '../data/routes.json';
 const allRoutes = myroutes.routes;
 

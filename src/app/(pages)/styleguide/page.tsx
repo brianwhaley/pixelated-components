@@ -1,6 +1,6 @@
 "use client";
 
-import { PageHeader, PageSection } from "@brianwhaley/pixelated-components";
+import { PageHeader, PageSection } from "@pixelated-tech/components";
 
 export default function Home() {
     

@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { PageSection } from "@brianwhaley/pixelated-components";
-import { GoogleAnalytics, GoogleAnalyticsEvent } from "@brianwhaley/pixelated-components";
+import { PageSection } from "@pixelated-tech/components";
+import { GoogleAnalytics, GoogleAnalyticsEvent } from "@pixelated-tech/components";
 // import { GoogleAnalytics } from '@next/third-parties/google';
 
 
