@@ -5,8 +5,8 @@ import React, { useState } from "react";
 import { ResumeName, ResumeContact, ResumeQualifications, ResumeSkills, 
 	ResumeSummary, ResumeEvents, ResumeProjects, ResumeReferences, 
 	PageSection,
-	GridItem} from "@brianwhaley/pixelated-components";
-import { Modal, handleModalOpen } from "@brianwhaley/pixelated-components";
+	GridItem} from "@pixelated-tech/components";
+import { Modal, handleModalOpen } from "@pixelated-tech/components";
 import ResumeData from "@/app/data/resume.json";
 // import ReferencesData from '@/app/data/references.json';
 

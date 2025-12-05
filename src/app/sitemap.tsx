@@ -1,8 +1,8 @@
 
 import type { MetadataRoute } from 'next';
 import { headers } from 'next/headers';
-import { createPageURLs, createImageURLsFromJSON } from "@brianwhaley/pixelated-components/server";
-// import type { SitemapEntry } from '@brianwhaley/pixelated-components/dist/types';
+import { createPageURLs, createImageURLsFromJSON } from "@pixelated-tech/components/server";
+// import type { SitemapEntry } from '@pixelated-tech/components/dist/types';
 import myRoutes from "@/app/data/routes.json";
 
 async function getOrigin(): Promise<string> {

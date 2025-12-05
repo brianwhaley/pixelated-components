@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { PageHeader, PageSection } from "@brianwhaley/pixelated-components";
-import { RecipeBook } from "@brianwhaley/pixelated-components";
+import { PageHeader, PageSection } from "@pixelated-tech/components";
+import { RecipeBook } from "@pixelated-tech/components";
 import RecipeData from "@/app/data/recipes.json";
 
 export default function Recipes() {

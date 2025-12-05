@@ -1,8 +1,8 @@
 "use client";
 
-import { PageHeader, PageSectionHeader } from "@brianwhaley/pixelated-components";
-import { Callout } from "@brianwhaley/pixelated-components";
-import { PageSection, GridItem } from "@brianwhaley/pixelated-components";
+import { PageHeader, PageSectionHeader } from "@pixelated-tech/components";
+import { Callout } from "@pixelated-tech/components";
+import { PageSection, GridItem } from "@pixelated-tech/components";
 import SocialTags from "@/app/elements/socialtags";
 
 

@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { PageSection } from "@brianwhaley/pixelated-components";
-import { PageHeader } from "@brianwhaley/pixelated-components";
-import { Carousel, FlickrWrapper } from "@brianwhaley/pixelated-components";
-import type { CarouselCardType } from "@brianwhaley/pixelated-components";
-import { getFullPixelatedConfig } from '@brianwhaley/pixelated-components/server';
+import { PageSection } from "@pixelated-tech/components";
+import { PageHeader } from "@pixelated-tech/components";
+import { Carousel, FlickrWrapper } from "@pixelated-tech/components";
+import type { CarouselCardType } from "@pixelated-tech/components";
+import { getFullPixelatedConfig } from '@pixelated-tech/components/server';
 
 export default function Gallery() {
 

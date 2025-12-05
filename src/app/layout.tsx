@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
-import { getRouteByKey } from "@brianwhaley/pixelated-components/server";
-import { PixelatedServerConfigProvider } from "@brianwhaley/pixelated-components/server";
+import { getRouteByKey } from "@pixelated-tech/components/server";
+import { PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
 import LayoutClient from "./elements/layout-client";
 import Header from "./elements/header";
 import Hero from "./elements/hero";
@@ -8,8 +8,8 @@ import Nav from "./elements/nav";
 import Search from './elements/search';
 import Footer from './elements/footer';
 import myRoutes from "@/app/data/routes.json";
-import "@brianwhaley/pixelated-components/css/pixelated.global.css";
-import "@brianwhaley/pixelated-components/css/pixelated.grid.scss";
+import "@pixelated-tech/components/css/pixelated.global.css";
+import "@pixelated-tech/components/css/pixelated.grid.scss";
 // LOAD THIS AS LAST CSS FILE
 import "./globals.css";
 

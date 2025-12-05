@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { GoogleAnalytics } from "@brianwhaley/pixelated-components";
+import { GoogleAnalytics } from "@pixelated-tech/components";
 // import { GoogleAnalytics } from '@next/third-parties/google';
 
 

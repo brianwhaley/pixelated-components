@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { PageHeader } from "@brianwhaley/pixelated-components";
-import { PageSection } from "@brianwhaley/pixelated-components";
-import { CalloutHeader } from "@brianwhaley/pixelated-components";
-import { BuzzwordBingo } from "@brianwhaley/pixelated-components";
+import { PageHeader } from "@pixelated-tech/components";
+import { PageSection } from "@pixelated-tech/components";
+import { CalloutHeader } from "@pixelated-tech/components";
+import { BuzzwordBingo } from "@pixelated-tech/components";
 import { buzzwords } from "@/app/data/buzzwords";
 
 export default function BuzzWordBingo () {

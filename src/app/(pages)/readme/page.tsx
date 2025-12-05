@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { PageSection } from "@brianwhaley/pixelated-components";
-import { Markdown } from "@brianwhaley/pixelated-components";
+import { PageSection } from "@pixelated-tech/components";
+import { Markdown } from "@pixelated-tech/components";
 const filePath = '/data/readme.md';
 
 export default function Readme() {

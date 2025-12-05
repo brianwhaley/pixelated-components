@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Carousel } from "@brianwhaley/pixelated-components";
-import { GetFlickrData, GenerateFlickrCards } from '@brianwhaley/pixelated-components';
-import type { CarouselCardType } from "@brianwhaley/pixelated-components";
-import { getFullPixelatedConfig } from '@brianwhaley/pixelated-components/server';
+import { Carousel } from "@pixelated-tech/components";
+import { GetFlickrData, GenerateFlickrCards } from '@pixelated-tech/components';
+import type { CarouselCardType } from "@pixelated-tech/components";
+import { getFullPixelatedConfig } from '@pixelated-tech/components/server';
 import './hero.css';
 
 export default function Hero() {

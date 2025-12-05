@@ -28,7 +28,7 @@ https://localhost:3000
 
 npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
-npm install @brianwhaley/pixelated-components@latest --force --save
+npm install @pixelated-tech/components@latest --force --save
 
 rm -rf node_modules && rm -rf package-lock.json && npm install --force
 
@@ -58,7 +58,7 @@ npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
 npm version patch --force
 git add * -v
-git commit -m "bump components, security fix"
+git commit -m "migrate components from @brianwhaley to @pixelated"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 

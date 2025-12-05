@@ -1,4 +1,4 @@
-import { PageHeader } from "@brianwhaley/pixelated-components";
+import { PageHeader } from "@pixelated-tech/components";
 
 export default function Terms() {
 	return (
