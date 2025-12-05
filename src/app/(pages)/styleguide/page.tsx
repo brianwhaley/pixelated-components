@@ -7,7 +7,7 @@ export default function Home() {
 	return (
 		<>
 
-			<PageHeader title="Style Guide - Oak Tree Landscaping" />
+			<PageHeader title="Style Guide - Oaktree Landscaping" />
 
 			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
 				<h2>Color Palette</h2>

@@ -59,14 +59,14 @@ Layout: The icon sits to the left of the text.
 
 Icon: A solid, stylized silhouette of a Live Oak tree with a thick trunk (representing strength) and wide canopy. The roots are slightly visible, turning into geometric blocks to symbolize hardscaping.
 
-Text: "OAK TREE" in Playfair Display (All Caps, wide tracking) in Deep Green. Below it, smaller, "LANDSCAPING" in Lato (All Caps) in Spanish Moss color.
+Text: "OAKTREE" in Playfair Display (All Caps, wide tracking) in Deep Green. Below it, smaller, "LANDSCAPING" in Lato (All Caps) in Spanish Moss color.
 
 Option B: Vertical Version (Truck Doors/Uniforms/Social Media)
 Layout: Stacked.
 
 Icon: The same tree icon, but enclosed in a thin, elegant circle (Gold color) or a hexagon (to suggest paving/structure).
 
-Text: "OAK TREE" is stacked directly underneath the icon.
+Text: "OAKTREE" is stacked directly underneath the icon.
 
 [Image Description for Designer]: Imagine a vector graphic of a Southern Live Oak. The canopy is not individual leaves, but solid, flowing shapes (like a cloud). The trunk is thick. The ground beneath the tree isn't grass, but three distinct rectangular stones, symbolizing the hardscape focus. Color is #1F3A26 on a #F4F3EF background.
 

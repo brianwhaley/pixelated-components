@@ -7,6 +7,9 @@ import Header from '@/app/elements/header';
 import Nav from '@/app/elements/nav';
 import Footer from '@/app/elements/footer';
 import myRoutes from "@/app/data/routes.json";
+import "@brianwhaley/pixelated-components/css/pixelated.global.css";
+import "@brianwhaley/pixelated-components/css/pixelated.grid.scss";
+import "@brianwhaley/pixelated-components/css/pixelated.font.scss";
 import './globals.css';
 
 export default async function RootLayout({
@@ -31,7 +34,7 @@ export default async function RootLayout({
 				<meta name="description" content={meta?.description} />
 				<meta name="keywords" content={meta?.keywords} />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
-				<meta property="og:site_name" content="Oak Tree Landscaping" />
+				<meta property="og:site_name" content="Oaktree Landscaping" />
 				<meta property="og:title" content={meta?.title} />
 				<meta property="og:url" content={url} />
 				<meta property="og:type" content="website" />
@@ -39,7 +42,7 @@ export default async function RootLayout({
 				<meta property="og:image" content="" />
 				<meta property="og:image:width" content="512" />
 				<meta property="og:image:height" content="512" />
-				<meta itemProp="name" content="Oak Tree Landscaping" />
+				<meta itemProp="name" content="Oaktree Landscaping" />
 				<meta itemProp="url" content={url} />
 				<meta itemProp="description" content={meta?.description} />
 				<meta itemProp="thumbnailUrl" content="" />

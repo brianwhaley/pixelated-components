@@ -1,0 +1,10 @@
+{
+    "images" : [
+
+		{   "img": "https://www.informationfocus.net/images/informationfocus-sq.png", 
+			"text": "Page Not Found.",
+			"description": "InformationFocus Page Not Found" 
+        }
+
+	]
+}

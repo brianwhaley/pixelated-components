@@ -1,0 +1,122 @@
+{
+	"fields" : [
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "from",
+				"name" : "from",
+				"value" : "palmettoepoxy@gmail.com"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "to",
+				"name" : "to",
+				"value" : "palmettoepoxy@gmail.com"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "subject",
+				"name" : "subject",
+				"value" : "Palmetto Epoxy Contact Us Submit"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "text",
+				"id" : "firstname",
+				"name" : "firstname",
+				"defaultValue" : null,
+				"size" : "40",
+				"display" : "vertical",
+				"required" : "required",
+				"label" : "First Name (required) : ",
+				"tooltip" : "Please type in your First Name"
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "text",
+				"id" : "lastname",
+				"name" : "lastname",
+				"defaultValue" : null,
+				"size" : "40",
+				"display" : "vertical",
+				"required" : "required",
+				"label" : "Last Name (required) : ",
+				"tooltip" : "Please type in your Last Name"
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "email",
+				"id" : "email",
+				"name" : "email",
+				"defaultValue" : null,
+				"size" : "40",
+				"display" : "vertical",
+				"required" : "required",
+				"label" : "Email Address (required) : ",
+				"validate" : "isValidEmailAddress",
+				"tooltip" : "Please type in your Email Address"
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "tel",
+				"id" : "telephone",
+				"name" : "telephone",
+				"defaultValue" : null,
+				"size" : "40",
+				"display" : "vertical",
+				"required" : "required",
+				"label" : "Telephone (required) : ",
+				"validate" : "isValidUSPhoneNumber",
+				"tooltip" : "Please type in your Telephone Number"
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "subject",
+				"id" : "messagesubject",
+				"name" : "messagesubject",
+				"defaultValue" : null,
+				"size" : "40",
+				"display" : "vertical",
+				"required" : "required",
+				"label" : "Subject (required) : ",
+				"tooltip" : "Please type in the subject of your message"
+			}
+		},
+		{
+			"component" : "FormTextarea",
+			"props" : {
+				"id" : "message",
+				"name" : "message",
+				"rows" : "5",
+				"cols" : "30",
+				"defaultValue" : null,
+				"display" : "vertical",
+				"required" : "required",
+				"label" : "Message (required) : ",
+				"tooltip": "Please enter the details of your request"
+			}
+		},
+		{
+			"component" : "FormButton",
+			"props" : {
+				"type" : "submit",
+				"id" : "submit",
+				"text" : "Submit Request"
+			}
+		}
+	]
+}

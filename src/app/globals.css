@@ -19,10 +19,15 @@ h1, h2, h3, h4, h5, h6 {
     font-family: var(--header-font); 
 	line-height: 1.1;
 }
-h1 { font-size: clamp(3.0rem, calc(2.8rem + 2vw), 4.0rem) !important; }
-h2 { font-size: clamp(2.0rem, calc(1.9rem + 1.25vw), 2.5rem) !important; }
-h3 { font-size: clamp(1.25rem, calc(1.2rem + 0.5vw), 1.75rem) !important; }
-html { font-size: 1.2rem; }
+
+:root { 
+	--font-size1-min: 4rem;
+	--font-size1-max: 5rem;
+	--font-size2-min: 2rem;
+	--font-size2-max: 3rem;
+	--font-size3-min: 1.35rem;
+	--font-size3-max: 1.75rem;
+}
 
 header {
 	position: relative; 

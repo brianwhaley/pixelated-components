@@ -23,7 +23,7 @@ export default function Footer() {
 				<hr style={{ margin: "0 auto", width: "80%" }} />
 				<br />
 				<div className="centered">
-					<p className="footer-text">&copy; {new Date().getFullYear()} Oak Tree Landscaping. All rights reserved.</p>
+					<p className="footer-text">&copy; {new Date().getFullYear()} Oaktree Landscaping. All rights reserved.</p>
 				</div>
 			</div>
 		</PageSection>

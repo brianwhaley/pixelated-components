@@ -16,7 +16,7 @@ export default function Header() {
 				<SmartImage
 					id="logo"
 					src="/images/oaktree-horizontal.png"
-					alt="Oak Tree Landscaping"
+					alt="Oaktree Landscaping"
 					width={1462}
 					height={424}
 				/>

@@ -14,7 +14,7 @@ export default function Home() {
 					direction="left"
 					// img="https://www.bednarlandscape.com/wp-content/uploads/2023/12/bednar-portfolio-07.jpg"
 					img="/images/stock/natural-grass-close-up.jpg"
-					title="Welcome to Oak Tree Landscaping"
+					title="Welcome to Oaktree Landscaping"
 					subtitle="Outstanding Landscapes and Breathtaking Results"
 					content="With over 25 years of experience in the landscape industry, 
 					our company has become a trusted name in creating exquisite 
@@ -92,7 +92,7 @@ export default function Home() {
 					<div className="row-3col">
 						<div className="gridItem" style={{ textAlign: 'center' }}>
 							<h3>Location</h3>
-							<div>Oak Tree Landscaping</div>
+							<div>Oaktree Landscaping</div>
 							<div>123 William Hilton Parkway</div>
 							<div>Hilton Head Island, SC 29930</div>
 							<h3>Contact Us</h3>
