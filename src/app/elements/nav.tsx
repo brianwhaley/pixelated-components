@@ -11,8 +11,7 @@ const allRoutes = myroutes.routes;
 export default function Nav() {
 	return (
 		<>
-		<PageSection maxWidth="100%" id="navigation-section" 
-			columns={1} padding="0px" margin="0px">
+		<PageSection columns={1} maxWidth="100%" id="navigation-section" >
 			<MenuSimple menuItems={allRoutes} />
 		</PageSection>
 		</>
