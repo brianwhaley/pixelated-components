@@ -1,12 +1,14 @@
 {
   "name": "oaktreelandscaping",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev -p 3000 --experimental-https",
+    "build": "npm run clean && NODE_ENV=production next build",
+    "start": "npm run clean && next build && next start",
+    "lint": "next lint",
+    "clean": "rm -rf .next && rm -rf out",
+    "generate-site-images": "node scripts/generate-site-images.js"
   },
   "dependencies": {
     "@pixelated-tech/components": "^3.1.6",
