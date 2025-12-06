@@ -39,6 +39,13 @@ git config --global remote.brianwhaley.url https://github.com/brianwhaley/brianw
 git config --global core.editor "code --wait"
 git fetch
 
+eslint --fix --ext .jsx --ext .js .
+[//]: # npm --no-git-tag-version version patch
+npm version major
+npm version minor
+
+eslint --fix
+
 
 ## ===== CREATE NEW DEV BRANCH =====
 
@@ -47,18 +54,11 @@ git checkout -b dev
 
 ## ===== BUILD BRIANWHALEY APP =====
 
-eslint --fix --ext .jsx --ext .js .
-[//]: # npm --no-git-tag-version version patch
-npm version major
-npm version minor
-
-eslint --fix
-
 npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
 npm version patch --force
 git add * -v
-git commit -m "migrate components from @brianwhaley to @pixelated"
+git commit -m "new sitemap, metadata components"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 

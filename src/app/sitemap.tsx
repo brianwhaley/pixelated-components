@@ -1,30 +1,16 @@
+export const runtime = 'nodejs';
 
 import type { MetadataRoute } from 'next';
-import { headers } from 'next/headers';
-import { createPageURLs, createImageURLsFromJSON } from "@pixelated-tech/components/server";
-// import type { SitemapEntry } from '@pixelated-tech/components/dist/types';
+import { generateSitemap, type SitemapConfig, getOriginFromNextHeaders } from "@pixelated-tech/components/server";
 import myRoutes from "@/app/data/routes.json";
 
-async function getOrigin(): Promise<string> {
-	const headerList = await headers();
-	const protocol = headerList.get('x-forwarded-proto') || 'http';
-	const host = headerList.get('host') || 'localhost:3000';
-	return `${protocol}://${host}`;
-}
-
 export default async function SiteMapXML(): Promise<MetadataRoute.Sitemap> {
-	const origin = await getOrigin();
-	type Route = { path?: string; routes?: Route[] };
-	const flattenRoutes = (routes: Route[]): { path: string }[] =>
-		routes.flatMap(route =>
-			route.path
-				? [{ path: route.path }] : route.routes
-					? flattenRoutes(route.routes) : []
-		);
-
-	const sitemap = [
-		...(await createPageURLs(flattenRoutes(myRoutes.routes), origin)),
-		...(await createImageURLsFromJSON(origin)),
-	];
+	const origin = await getOriginFromNextHeaders();
+	const config: SitemapConfig = {
+		createPageURLs: true,
+		createImageURLsFromJSON: true,
+		routes: myRoutes.routes,
+	};
+	const sitemap = await generateSitemap(config, origin);
 	return sitemap;
 }
