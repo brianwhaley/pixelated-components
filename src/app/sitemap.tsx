@@ -6,7 +6,6 @@ import myRoutes from "@/app/data/routes.json";
 
 export default async function SiteMapXML(): Promise<MetadataRoute.Sitemap> {
 	const origin = await getOriginFromNextHeaders();
-	
 	const config: SitemapConfig = {
 		createPageURLs: true,
 		createImageURLsFromJSON: true,
