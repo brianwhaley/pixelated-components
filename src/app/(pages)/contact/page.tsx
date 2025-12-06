@@ -4,7 +4,7 @@ import { PageHeader, PageSection, PageSectionHeader } from "@pixelated-tech/comp
 import { FormEngine } from "@pixelated-tech/components";
 import { emailFormData } from "@pixelated-tech/components";
 import { Loading, ToggleLoading } from "@pixelated-tech/components";
-import { Calendly } from "@/app/elements/calendly";
+import { Calendly } from "@pixelated-tech/components";
 import formData from "@/app/data/contactform.json";
 
 export default function Contact() {
@@ -30,6 +30,14 @@ export default function Contact() {
 
 			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
 				<PageSectionHeader title="Contact Information" />
+				<div style={{ margin: '0 auto' }}>
+					<h3>Address:</h3>
+					<p>1234 Oak Street, Hilton Head Island, South Carolina 20030</p>
+					<h3>Email:</h3>
+					<p><a href="mailto:oaktreelandscaper@gmail.com">oaktreelandscaper@gmail.com</a></p>
+					<h3>Phone:</h3>
+					<p>(843) 123-4567</p>
+				</div>
 			</PageSection>
 
 			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
@@ -45,12 +53,14 @@ export default function Contact() {
 
 			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
 				<PageSectionHeader title="Request a Quote" />
-				<FormEngine 
-					name="newrequest" 
-					id="newRequestForm" 
-					formData={formData} 
-					onSubmitHandler={handleSubmit} 
-				/>
+				<div style={{ margin: '0 auto', border: '2px solid var(--accent1-color)', padding: '20px', borderRadius: '20px' }}>
+					<FormEngine 
+						name="newrequest" 
+						id="newRequestForm" 
+						formData={formData} 
+						onSubmitHandler={handleSubmit} 
+					/>
+				</div>
 			</PageSection>
 
 			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">

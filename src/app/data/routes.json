@@ -13,15 +13,9 @@
 			"description": "",
 			"keywords": ""  
 		} , {
-			"name": "Commercial", 
-			"path": "/commercial", 
-			"title": "Oaktree Landscaping - Commercial",
-			"description": "",
-			"keywords": ""  
-		} , {
-			"name": "Residential", 
-			"path": "/residential", 
-			"title": "Oaktree Landscaping - Residential",
+			"name": "Services", 
+			"path": "/services", 
+			"title": "Oaktree Landscaping - Services",
 			"description": "",
 			"keywords": ""  
 		} , {

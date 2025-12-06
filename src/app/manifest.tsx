@@ -13,8 +13,6 @@ export default function manifest(): MetadataRoute.Manifest {
 			name: "Brian Whaley",
 			url: "https://www.pixelated.tech"
 		}, 
-		// @ts-expect-error - Object literal may only specify known properties, and 'author' does not exist in type 'Manifest'.ts(2353)
-		default_locale: "en",
 		display: "standalone",
 		homepage_url: "https://www.palmetto-epoxy.com",
 		icons: [{

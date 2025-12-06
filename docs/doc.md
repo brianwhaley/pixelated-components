@@ -23,6 +23,6 @@ echo "Updating packages..." && npm outdated | awk 'NR>1 {print $1"@"$4}' | while
 npm audit fix --force
 npm version patch --force
 git add * -v
-git commit -m "migrating components from @brianwhaley to @pixelated-tech"
+git commit -m "new sitemap, metadata generators"
 git push -u oaktreelandscaping dev --tags
 git push oaktreelandscaping dev:main

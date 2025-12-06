@@ -1,34 +1,17 @@
 export const runtime = 'nodejs';
 
 import type { MetadataRoute } from 'next';
-import { headers } from 'next/headers';
-// import { getFullPixelatedConfig } from "@pixelated-tech/components/server";
-import { createPageURLs, createImageURLsFromJSON } from "@pixelated-tech/components/server";
-// , createContentfulAssetURLs
-
+import { generateSitemap, type SitemapConfig, getOriginFromNextHeaders } from "@pixelated-tech/components/server";
 import myRoutes from "@/app/data/routes.json";
 
-/* const contentfulApiProps = {
-	base_url: "https://cdn.contentful.com",
-	space_id: "0b82pebh837v",
-	environment: "master",
-	delivery_access_token: "lA5uOeG6iPbrJ2J_R-ntwUdKQesrBNqrHi-qX52Bzh4",
-}; */
-
-// const config = getFullPixelatedConfig();
-
-async function getOrigin(): Promise<string> {
-	const headerList = await headers();
-	const protocol = headerList.get('x-forwarded-proto') || 'http';
-	const host = headerList.get('host') || 'localhost:3000';
-	return `${protocol}://${host}`;
-}
-
 export default async function SiteMapXML(): Promise<MetadataRoute.Sitemap> {
-	const origin = await getOrigin();
-	const sitemap = [
-		...(await createPageURLs(myRoutes.routes, origin)),
-		...(await createImageURLsFromJSON(origin)),
-	];
+	const origin = await getOriginFromNextHeaders();
+	
+	const config: SitemapConfig = {
+		createPageURLs: true,
+		createImageURLsFromJSON: true,
+		routes: myRoutes.routes,
+	};
+	const sitemap = await generateSitemap(config, origin);
 	return sitemap;
 }
