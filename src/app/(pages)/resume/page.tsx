@@ -14,7 +14,7 @@ export default function Home() {
                 <ResumeName data={ResumeData.items[0].properties.name} />
                 </div>
 
-                <div className="grid-s1-e4 bigpad">{/*divider*/}
+                <div className="grid-s1-e4">{/*divider*/}
                 <div className="p-contact">
                     <ResumeContact title="Contact Information" data={ResumeData.items[0].properties.contact} />
                 </div>
@@ -26,7 +26,7 @@ export default function Home() {
                 </div>
                 </div>
 
-                <div className="grid-s4-e13 bigpad">
+                <div className="grid-s4-e13">
                 <ResumeSummary title="Professional Summary" data={ResumeData.items[0].properties.summary} />
                 <ResumeEvents title="Work History" data={ResumeData.items[0].properties.experience} dateFormat="yyyy" showDate />
                 <ResumeEvents title="Certifications" data={ResumeData.items[0].properties.certifications} />

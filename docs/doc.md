@@ -38,9 +38,10 @@ git checkout -b dev
 
 npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
+npm run lint
 npm version patch --force
 git add * -v
-git commit -m "fix for missing proxy file"
+git commit -m "bump components, kebab case css, breaking component changes"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 
