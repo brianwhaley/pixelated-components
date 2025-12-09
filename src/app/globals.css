@@ -29,6 +29,11 @@ h1, h2, h3, h4, h5, h6 {
 	--font-size3-max: 1.75rem;
 }
 
+body.buttonring button:hover, body.buttonring .button:hover, body.buttonring .centered-button:hover {
+    outline-width: 5px !important;
+    outline-color: var(--accent1-color) !important;
+}
+
 header {
 	position: relative; 
 
@@ -54,14 +59,14 @@ header {
 }
 
 nav {
-	.menuItem:not(:first-child) {
+	.menu-item:not(:first-child) {
     	border-left: 0px transparent ;
 	}
-	.menuItem a {
+	.menu-item a {
 		background-color: var(--primary-color) !important;
 		color: var(--bg-color);
 	}
-	.menuItem a.selected {
+	.menu-item a.selected {
 		background-color: var(--secondary-color) !important;
 		color: var(--font-color);
 	}
@@ -81,50 +86,14 @@ nav {
 	background: var(--accent2-color)
 }
 
-main div:has( > img) {
-	border: 10px solid var(--primary-color);
-}
-
-#home-section {
-	.callout {
-		background: var(--secondary-color);
-	}
-	.callout.split .calloutImage {
-		--do-nothing: true;
-		/* aspect-ratio: 1; */
-	}
-	.calloutBody {
-		padding: 10px;
-	}
-}
-
-#services-section {
-	padding-bottom: 0px;
-	margin-bottom: 30px;
-	.pageSectionHeader {
-		margin: 0px;
-	}
-	.callout.overlay .calloutImage img {
-		aspect-ratio: 3 / 5;
-	}
-	.callout.overlay .calloutBody h2 {
-	color: white;
-	text-shadow:
-		-1px 1px 1px var(--primary-color),
-		1px 1px 1px var(--primary-color),
-		1px -1px 1px var(--primary-color),
-		-1px -1px 1px var(--primary-color),
-		-1px 1px 5px var(--primary-color),
-		1px 1px 5px var(--primary-color),
-		1px -1px 5px var(--primary-color),
-		-1px -1px 5px var(--primary-color);
-
-	}
+main div:has( > img),
+main div:has( > a > img) {
+	border: 10px solid var(--primary-color) !important;
 }
 
 @media screen and (max-width: 768px) {
     nav, 
-	.menuWrapper {
+	.menu-wrapper {
         display: none;
     }
 	header .panelMenuButton, 
@@ -151,7 +120,80 @@ main div:has( > img) {
 	#home-section .page-section-content {
 		padding-top: 0px !important;
 	}
-	#services-section .callout.overlay .calloutImage img {
+	#services-section .callout.overlay .callout-image img {
     aspect-ratio: 1;
+	}
 }
+
+
+#home-section {
+	.callout {
+		background: var(--secondary-color);
+	}
+	.callout.split .callout-image {
+		--do-nothing: true;
+		/* aspect-ratio: 1; */
+	}
+	.callout-body {
+		padding: 10px;
+	}
+}
+
+#services-section {
+	padding-bottom: 0px;
+	margin-bottom: 30px;
+	.page-section-header {
+		margin: 0px;
+	}
+	.callout.overlay .callout-image img {
+		aspect-ratio: 3 / 5;
+	}
+	.callout.overlay .callout-body h2 {
+	color: white;
+	text-shadow:
+		-1px 1px 1px var(--primary-color),
+		1px 1px 1px var(--primary-color),
+		1px -1px 1px var(--primary-color),
+		-1px -1px 1px var(--primary-color),
+		-1px 1px 5px var(--primary-color),
+		1px 1px 5px var(--primary-color),
+		1px -1px 5px var(--primary-color),
+		-1px -1px 5px var(--primary-color);
+
+	}
+	.callout.overlay .callout-button {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	#services-section .callout.overlay .callout-image img {
+		aspect-ratio: 1;
+	}
+}
+
+
+#feedback-section {
+	.carousel-container, 
+	.carousel-cards-container {
+		height: 350px;
+	}
+	.carousel-card-wrapper {
+		background-color: var(--accent2-color);
+		padding: 30px;
+		border-radius: 10px;
+	}
+}
+
+@media screen and (max-width: 480px) {
+	#feedback-section .carousel-container,
+	#feedback-section .carousel-cards-container {
+		height: 450px;
+	}
+}
+
+
+#contact-us-section form div:has( > img ),
+#contact-us-section form div:has( > a >img ) {
+	border: none !important;
 }

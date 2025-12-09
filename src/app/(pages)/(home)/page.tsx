@@ -1,6 +1,6 @@
 "use client";
 
-import { PageSection, GridItem, PageSectionHeader } from "@pixelated-tech/components";
+import { PageSection, PageGridItem, PageSectionHeader } from "@pixelated-tech/components";
 import { Callout } from "@pixelated-tech/components";
 
 export default function Home() {
@@ -34,57 +34,71 @@ export default function Home() {
 			<PageSection columns={3} id="services-section" 
 				maxWidth="100%" padding="5%" gap="5%" 
 				background="var(--accent1-color)">
-				<GridItem columnStart={1} columnEnd={-1}>
+				<PageGridItem columnStart={1} columnEnd={-1}>
 					<PageSectionHeader title="Commercial & Residential Services" />
-				</GridItem>
-				<GridItem>
+				</PageGridItem>
+				<PageGridItem>
 					<Callout 
 						variant="overlay"
+						url="/services#callout-lawn-care"
 						// img="https://media.istockphoto.com/id/2044312647/photo/professional-latino-man-using-a-riding-lawnmower-caring-for-a-park-with-a-landscaping-company.jpg?b=1&s=612x612&w=0&k=20&c=n_n3hcmZ1U3SHzwlZX-7wGElqZggxGFuVuDV7i_V9-k="
 						img="/images/stock/pexels-luis-negron-260501657-13630739.jpg"
 						title="Lawn Care"
+						buttonText="View"
 					/>
-				</GridItem>
-				<GridItem>
+				</PageGridItem>
+				<PageGridItem>
 					<Callout 
 						variant="overlay"
+						url="/services#callout-garden-care"
 						// img="https://media.istockphoto.com/id/1324918160/photo/professional-gardener-trimming-hedge.jpg?b=1&s=612x612&w=0&k=20&c=PyPsxSuD3XFWk8eAmFj2I7JFxDjsS1w4AJZICRFBQ_8="
-						img="/images/stock/pexels-shvetsa-5027602.jpg"
+						// img="/images/stock/pexels-shvetsa-5027602.jpg"
+						img="/images/stock/worker-cutting-bush-with-hedge-shears-outdoors-closeup-gardening-tool.jpg"
 						title="Garden Care"
+						buttonText="View"
 					/>
-				</GridItem>
-				<GridItem>
+				</PageGridItem>
+				<PageGridItem>
 					<Callout 
 						variant="overlay"
+						url="/services#callout-hardscape"
 						// img="https://www.bednarlandscape.com/wp-content/uploads/2023/12/bednar-portfolio-07.jpg"
 						img="/images/stock/natural-grass-close-up.jpg"
 						title="Hardscape"
+						buttonText="View"
 					/>
-				</GridItem>
-				<GridItem>
+				</PageGridItem>
+				<PageGridItem>
 					<Callout 
 						variant="overlay"
+						url="/services#callout-lighting"
 						// img="https://media.istockphoto.com/id/157479391/photo/evening-sidewalk.webp?a=1&b=1&s=612x612&w=0&k=20&c=hhEwI_ou_3OUHtnMD7uPvp_G2mnsE9KzIzrcT2c8b_g="
-						img="/images/stock/outside-view-restaurant-cottage-night-time.jpg"
+						// img="/images/stock/outside-view-restaurant-cottage-night-time.jpg"
+						img="/images/stock/rooftop-sunset-city-view.jpg"
 						title="Lighting"
+						buttonText="View"
 					/>
-				</GridItem>
-				<GridItem>
+				</PageGridItem>
+				<PageGridItem>
 					<Callout 
 						variant="overlay"
+						url="/services#callout-irrigation"
 						// img="https://media.istockphoto.com/id/1336134773/photo/nozzle-automatic-lawn-watering-macro-close-up.webp?a=1&b=1&s=612x612&w=0&k=20&c=-486z3g7B7ANj9mJNdODqiSY20brS4qadCVTq005NwM="
-						img="/images/stock/irrigation-2402568_1920.jpg"
+						img="/images/stock/automatic-sprinkler-lawn-watering-system-sprays-water-circle-lawn-summer-day.jpg"
 						title="Irrigation"
+						buttonText="View"
 					/>
-				</GridItem>
-				<GridItem>
+				</PageGridItem>
+				<PageGridItem>
 					<Callout 
 						variant="overlay"
+						url="/services#callout-tree-services"
 						// img="https://media.istockphoto.com/id/457790295/photo/tree-service-arborist-pruning-trimming-cutting-diseased-branches-with-chainsaw.jpg?s=612x612&w=0&k=20&c=0prSggo7LM7guW7-X3NDj8xq_eRqz6kA0MofEefTuK8="
-						img="/images/stock/asian-man-cutting-trees-using-electrical-chainsaw-sm.jpg"
+						img="/images/stock/asian-man-cutting-trees-using-electrical-chainsaw.jpg"
 						title="Tree Services"
+						buttonText="View"
 					/>
-				</GridItem>
+				</PageGridItem>
 			</PageSection>
 
 

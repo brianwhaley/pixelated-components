@@ -1,13 +1,13 @@
 "use client";
 
-import { PageHeader, PageSection } from "@pixelated-tech/components";
+import { PageTitleHeader, PageSection } from "@pixelated-tech/components";
 
 export default function Home() {
     
 	return (
 		<>
 
-			<PageHeader title="Style Guide - Oaktree Landscaping" />
+			<PageTitleHeader title="Style Guide - Oaktree Landscaping" />
 
 			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
 				<h2>Color Palette</h2>

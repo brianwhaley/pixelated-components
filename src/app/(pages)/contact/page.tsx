@@ -1,6 +1,6 @@
 "use client";
 
-import { PageHeader, PageSection, PageSectionHeader } from "@pixelated-tech/components";
+import { PageTitleHeader, PageSection, PageSectionHeader } from "@pixelated-tech/components";
 import { FormEngine } from "@pixelated-tech/components";
 import { emailFormData } from "@pixelated-tech/components";
 import { Loading, ToggleLoading } from "@pixelated-tech/components";
@@ -26,9 +26,32 @@ export default function Contact() {
 		<>
 			<Loading />
 
-			<PageHeader title="Contact Oaktree Landscaping" />
+			<PageTitleHeader title="Contact Oaktree Landscaping" />
 
-			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="schedule-quote-section">
+				<PageSectionHeader title="Schedule a Quote" />
+				<div suppressHydrationWarning={true}>
+					<Calendly 
+						url="https://calendly.com/oaktreelandscaper/30min?background_color=f4f3ef&primary_color=19471b" 
+						width="320px" 
+						height="800px" 
+					></Calendly>
+				</div>
+			</PageSection>
+
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="contact-us-section">
+				<PageSectionHeader title="Contact Us" />
+				<div style={{ margin: '0 auto', border: '2px solid var(--accent1-color)', padding: '20px', borderRadius: '20px' }}>
+					<FormEngine 
+						name="contact-us" 
+						id="contact-us-form" 
+						formData={formData} 
+						onSubmitHandler={handleSubmit} 
+					/>
+				</div>
+			</PageSection>
+
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="contact-info-section">
 				<PageSectionHeader title="Contact Information" />
 				<div style={{ margin: '0 auto' }}>
 					<h3>Address:</h3>
@@ -38,33 +61,6 @@ export default function Contact() {
 					<h3>Phone:</h3>
 					<p>(843) 123-4567</p>
 				</div>
-			</PageSection>
-
-			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
-				<PageSectionHeader title="Schedule a Quote" />
-				<div suppressHydrationWarning={true}>
-					<Calendly 
-						url="https://calendly.com/oaktreelandscaper/30min?background_color=f4f3ef&primary_color=19471b" 
-						width="320px" 
-						height="500px" 
-					></Calendly>
-				</div>
-			</PageSection>
-
-			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
-				<PageSectionHeader title="Request a Quote" />
-				<div style={{ margin: '0 auto', border: '2px solid var(--accent1-color)', padding: '20px', borderRadius: '20px' }}>
-					<FormEngine 
-						name="newrequest" 
-						id="newRequestForm" 
-						formData={formData} 
-						onSubmitHandler={handleSubmit} 
-					/>
-				</div>
-			</PageSection>
-
-			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
-				<PageSectionHeader title="Customer Support" />
 			</PageSection>
 
 		</>

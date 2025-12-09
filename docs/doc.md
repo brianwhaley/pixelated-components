@@ -21,6 +21,7 @@ git push -u oaktreelandscaping main
 ## ===== DEPLOY SCRIPT - ALL OTHER TIMESS
 echo "Updating packages..." && npm outdated | awk 'NR>1 {print $1"@"$4}' | while read pkg; do echo "$pkg" >> /tmp/npm-updates.log && printf "." && npm install --force --save "$pkg" > /dev/null 2>&1; done && echo "\n\n✓ Updated packages:" && cat /tmp/npm-updates.log && rm /tmp/npm-updates.log
 npm audit fix --force
+npm run lint
 npm version patch --force
 git add * -v
 git commit -m "fix for site images in sitemap"
