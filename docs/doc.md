@@ -56,9 +56,10 @@ git checkout -b dev
 
 npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
+npm run lint
 npm version patch --force
 git add * -v
-git commit -m "new sitemap, metadata components"
+git commit -m "kebab case css, bump pixelated components"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 

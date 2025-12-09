@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { ResumeName, ResumeContact, ResumeQualifications, ResumeSkills, 
 	ResumeSummary, ResumeEvents, ResumeProjects, ResumeReferences, 
 	PageSection,
-	GridItem} from "@pixelated-tech/components";
+	PageGridItem} from "@pixelated-tech/components";
 import { Modal, handleModalOpen } from "@pixelated-tech/components";
 import ResumeData from "@/app/data/resume.json";
 // import ReferencesData from '@/app/data/references.json';
@@ -57,10 +57,10 @@ export default function Resume() {
 	return (
 		<>
 			<PageSection columns={12} className="p-resume" id="resume-section">
-				<GridItem columnStart={1} columnEnd={13} className="p-name">
+				<PageGridItem columnStart={1} columnEnd={13} className="p-name">
 					<ResumeName data={ResumeData.items[0].properties.name} />
-				</GridItem>
-				<GridItem columnStart={1} columnEnd={4} className="bigpad divider">
+				</PageGridItem>
+				<PageGridItem columnStart={1} columnEnd={4} className="divider">
 					<div className="p-contact">
 						<ResumeContact title="Contact Information" data={ResumeData.items[0].properties.contact} />
 					</div>
@@ -70,8 +70,8 @@ export default function Resume() {
 					<div className="p-skills">
 						<ResumeSkills title="Skills" data={ResumeData.items[0].properties.skills} />
 					</div>
-				</GridItem>
-				<GridItem columnStart={4} columnEnd={13} className="bigpad">
+				</PageGridItem>
+				<PageGridItem columnStart={4} columnEnd={13}>
 					<div className="p-summary">
 						<ResumeSummary title="Professional Summary" data={ResumeData.items[0].properties.summary} />
 					</div>
@@ -99,7 +99,7 @@ export default function Resume() {
 					<div className="p-references">
 						<ResumeReferences title="References" data={ResumeData.items[0].properties.references} collapsible={true} />
 					</div>
-				</GridItem>
+				</PageGridItem>
 			</PageSection>
 
 			<Modal modalContent={modalContent} />

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { PageHeader } from "@pixelated-tech/components";
+import { PageTitleHeader } from "@pixelated-tech/components";
 import { PageSection } from "@pixelated-tech/components";
 import { CalloutHeader } from "@pixelated-tech/components";
 import { BuzzwordBingo } from "@pixelated-tech/components";
@@ -10,7 +10,7 @@ import { buzzwords } from "@/app/data/buzzwords";
 export default function BuzzWordBingo () {
 	return (
 		<PageSection columns={1}id="customs-section">
-			<PageHeader title="Buzzword Bingo" />
+			<PageTitleHeader title="Buzzword Bingo" />
 			<BuzzwordBingo buzzwords={buzzwords} />
 			<br /><br />
 			<CalloutHeader title="Instructions : " />

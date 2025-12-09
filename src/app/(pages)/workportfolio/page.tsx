@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { PageSection } from "@pixelated-tech/components";
-import { PageHeader } from "@pixelated-tech/components";
+import { PageTitleHeader } from "@pixelated-tech/components";
 import { Carousel, FlickrWrapper } from "@pixelated-tech/components";
 import type { CarouselCardType } from "@pixelated-tech/components";
 import { getFullPixelatedConfig } from '@pixelated-tech/components/server';
@@ -34,7 +34,7 @@ export default function Gallery() {
 	return (
 		<>
 			<PageSection columns={1} id="gallery-section">
-				<PageHeader title="Work Portfolio Gallery" />
+				<PageTitleHeader title="Work Portfolio Gallery" />
 				<Carousel 
 					cards={flickrCards} 
 					draggable={true}

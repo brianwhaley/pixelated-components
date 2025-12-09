@@ -1,8 +1,8 @@
 "use client";
 
-import { PageHeader, PageSectionHeader } from "@pixelated-tech/components";
+import { PageTitleHeader, PageSectionHeader } from "@pixelated-tech/components";
 import { Callout } from "@pixelated-tech/components";
-import { PageSection, GridItem } from "@pixelated-tech/components";
+import { PageSection, PageGridItem } from "@pixelated-tech/components";
 import SocialTags from "@/app/elements/socialtags";
 
 
@@ -12,10 +12,10 @@ export default function Work() {
 		<>
 
 			<PageSection columns={8} background="#DDD" id="about-section">
-				<GridItem columnStart={1} columnEnd={9}>
-					<PageHeader title="About Brian Whaley" />
-				</GridItem>
-				<GridItem columnStart={1} columnEnd={9}>
+				<PageGridItem columnStart={1} columnEnd={9}>
+					<PageTitleHeader title="About Brian Whaley" />
+				</PageGridItem>
+				<PageGridItem columnStart={1} columnEnd={9}>
 					<Callout
 						variant='boxed'
 						layout='horizontal'
@@ -27,7 +27,7 @@ export default function Work() {
 							I have managed Highly available e-commerce portals, web sites, web applications, and mobile applications, 
 							in the media, finance, pharmaceutical, and telecommunications industries, 
 							leading departments up to 300 staff, budgets to $50 million, using onshore staff, offshore partners, and hybrid teams'/>
-				</GridItem>
+				</PageGridItem>
 			</PageSection>
 
 			<PageSectionHeader title="Career Overview" />
@@ -90,9 +90,9 @@ export default function Work() {
 			</PageSection>
 
 			<PageSection columns={1} background="#DDD" id="social-section">
-				<GridItem>
+				<PageGridItem>
 					<SocialTags />
-				</GridItem>
+				</PageGridItem>
 			</PageSection>
 				
 

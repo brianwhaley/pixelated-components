@@ -49,7 +49,7 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 						<div id="page-header" className="fixed-header"><Header /></div>
 						<div id="fixed-header-spacer"></div>
 						{ ( pathname === '/' ) ? <div><Hero /></div> : null }
-						<div id="page-search" className="noMobile"><Search id="009500278966481927899:bcssp73qony" /></div>
+						<div id="page-search" className="no-mobile"><Search id="009500278966481927899:bcssp73qony" /></div>
 					</header>
 					<nav>
 						<Nav />

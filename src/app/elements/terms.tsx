@@ -1,9 +1,9 @@
-import { PageHeader } from "@pixelated-tech/components";
+import { PageTitleHeader } from "@pixelated-tech/components";
 
 export default function Terms() {
 	return (
 		<>
-			<PageHeader title="Terms of Service" />
+			<PageTitleHeader title="Terms of Service" />
 			<div className="callout-body">
                     By using anything offered by Pixelated, you automatically agree to this legal agreement. You also accept any updated version of this agreement by continuing to use the Services.<br/>
 				<br/>
