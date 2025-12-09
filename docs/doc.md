@@ -59,7 +59,7 @@ npm audit fix --force
 npm run lint
 npm version patch --force
 git add * -v
-git commit -m "kebab case css, bump pixelated components"
+git commit -m "fix css leak from resume component"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
