@@ -194,6 +194,12 @@ main div:has( > a > img) {
 
 
 #contact-us-section form div:has( > img ),
-#contact-us-section form div:has( > a >img ) {
+#contact-us-section form div:has( > a >img ),
+#logos-section div:has( > img ),
+#logos-section div:has( > a >img ),
+#notfound-section div:has( > img ),
+#notfound-section div:has( > a >img ) {
 	border: none !important;
 }
+
+ 

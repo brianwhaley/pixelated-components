@@ -1,13 +1,30 @@
 "use client";
 
 import { PageTitleHeader, PageSection } from "@pixelated-tech/components";
-
+import { SmartImage } from "@pixelated-tech/components";
 export default function Home() {
     
 	return (
 		<>
 
 			<PageTitleHeader title="Style Guide - Oaktree Landscaping" />
+
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="logos-section">
+				<h2>Logos</h2>
+				<h3>Horizontal</h3>
+					<div>
+						<SmartImage 
+							src="/images/logo/oaktree-logo-horizontal.png"
+							alt="Oaktree Landscaping Horizontal Logo"
+							/>
+					</div>
+				<h3>Vertical</h3>
+					<div><SmartImage 
+						src="/images/logo/oaktree-logo-vertical.png"
+						alt="Oaktree Landscaping Vertical Logo"
+						/>
+					</div>
+			</PageSection>
 
 			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
 				<h2>Color Palette</h2>

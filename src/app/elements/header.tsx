@@ -15,10 +15,10 @@ export default function Header() {
 			<PageSection columns={1} id="header-section">
 				<SmartImage
 					id="logo"
-					src="/images/oaktree-horizontal.png"
+					src="/images/logo/oaktree-logo-horizontal.png"
 					alt="Oaktree Landscaping"
-					width={1462}
-					height={424}
+					width={3500}
+					height={811}
 				/>
 			</PageSection>
 		</>
