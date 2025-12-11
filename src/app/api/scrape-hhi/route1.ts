@@ -11,32 +11,32 @@ interface Lead {
 }
 
 async function requestHandler(req: NextRequest): Promise<NextResponse> {
-  try {
-    const url = 'https://www.hiltonheadchamber.org/membership/member-directory/';
-    const { data } = await axios.get(url);
+	try {
+		const url = 'https://www.hiltonheadchamber.org/membership/member-directory/';
+		const { data } = await axios.get(url);
 
-    const $ = cheerio.load(data);
-    const results: Lead[] = [];
+		const $ = cheerio.load(data);
+		const results: Lead[] = [];
 
-    $('.c-card__member').each((i, el) => {
-      const name = $(el).find('.c-card__member-title a').text().trim();
-      // const address = $(el).find('.mn-directory-listing__address').text().trim().replace(/\s+/g, ' ');
-      const phone = $(el).find('.c-card__member-links a.phone-link').attr('href') || null;
-      const website = $(el).find('.c-card__member-links a.website-link').attr('href') || null;
-      results.push({
-        name,
-        phone,
-        website,
-      });
-    });
+		$('.c-card__member').each((i, el) => {
+			const name = $(el).find('.c-card__member-title a').text().trim();
+			// const address = $(el).find('.mn-directory-listing__address').text().trim().replace(/\s+/g, ' ');
+			const phone = $(el).find('.c-card__member-links a.phone-link').attr('href') || null;
+			const website = $(el).find('.c-card__member-links a.website-link').attr('href') || null;
+			results.push({
+				name,
+				phone,
+				website,
+			});
+		});
 
-    // res.status(200).json({ businesses: results });
-    return NextResponse.json({ leads: results });
-  } catch (error) {
-    console.error('Scraping error:', error);
-    // res.status(500).json({ error: 'Failed to scrape data.' });
-    return NextResponse.json({ error: 'Failed to scrape data.' });
-  }
+		// res.status(200).json({ businesses: results });
+		return NextResponse.json({ leads: results });
+	} catch (error) {
+		console.error('Scraping error:', error);
+		// res.status(500).json({ error: 'Failed to scrape data.' });
+		return NextResponse.json({ error: 'Failed to scrape data.' });
+	}
 }
 
 export { requestHandler as GET };
