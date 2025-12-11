@@ -1,3 +1,4 @@
+ 
 const fs = require('fs');
 const path = require('path');
 
@@ -19,5 +20,12 @@ function listFiles(dir, exts = ['.jpg','.jpeg','.png','.webp','.avif','.gif']) {
 }
 
 const files = listFiles(publicDir);
-fs.writeFileSync(outFile, JSON.stringify(files, null, 2), 'utf8');
-console.log('Wrote', outFile, 'with', files.length, 'images');
+const manifest = {
+	metadata: {
+		generatedAt: new Date().toISOString(),
+		imageCount: files.length,
+	},
+	images: files,
+};
+fs.writeFileSync(outFile, JSON.stringify(manifest, null, 2), 'utf8');
+console.log('Wrote', outFile, 'with', files.length, 'images and metadata');
