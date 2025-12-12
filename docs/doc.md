@@ -41,7 +41,7 @@ npm audit fix --force
 npm run lint
 npm version patch --force
 git add * -v
-git commit -m "bump componentlibrary"
+git commit -m "blocalbusiness schema"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 

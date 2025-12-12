@@ -2,6 +2,7 @@
 import { headers } from "next/headers";
 import { getRouteByKey } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
+import { LocalBusinessSchema } from "@pixelated-tech/components";
 import { PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
 import LayoutClient from "@/app/elements/layoutclient";
 import Header from "@/app/elements/header";
@@ -38,7 +39,24 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 					image_width: "512",
 					favicon: "/images/favicon.ico"
 				}) }
-			</head>
+				<LocalBusinessSchema
+					name="InformationFocus"
+					streetAddress="10 Jade Circle"
+					addressLocality="Denville"
+					addressRegion="NJ"
+					postalCode="07834"
+					addressCountry="US"
+					telephone="+1-973-722-2601"
+					url="https://informationfocus.com"
+					email="maryann@informationfocus.com"
+					image="/images/informationfocus-sq.png"
+					priceRange="$"
+					description="Information technology consulting and services for businesses."
+					sameAs={[
+						"https://www.facebook.com/informationfocus",
+						"https://www.linkedin.com/company/informationfocus"
+					]}
+				/>			</head>
 			<body>
 				<PixelatedServerConfigProvider>
 					<header><Header /></header>
