@@ -32,7 +32,7 @@ npm audit fix --force
 npm run lint
 npm version patch --force
 git add * -v
-git commit -m "bump components, fix linting"
+git commit -m "schema.org localbusiness"
 git push palmetto-epoxy dev --tags
 git push palmetto-epoxy dev:main
 
