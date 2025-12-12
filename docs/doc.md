@@ -59,7 +59,7 @@ npm audit fix --force
 npm run lint --fix
 npm version patch --force
 git add * -v
-git commit -m "new local business schema, new recipe data format"
+git commit -m "additional local business schema data"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
