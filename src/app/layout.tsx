@@ -47,6 +47,7 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 					addressLocality="Denville"
 					addressRegion="NJ"
 					postalCode="07834"
+					addressCountry="US"
 					telephone="+1-973-710-8008"
 					url="https://brianwhaley.com"
 					email="brian.whaley@gmail.com"
