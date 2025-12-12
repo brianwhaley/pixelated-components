@@ -55,6 +55,15 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 					description="Professional web developer and technology consultant specializing in custom web development, mobile applications, and digital products."
 					sameAs={[
 						"https://www.linkedin.com/in/brianwhaley",
+						"http://www.facebook.com/brian.t.whaley",
+						"http://twitter.com/brianwhaley",
+						"http://www.youtube.com/user/brianwhaley",
+						"http://www.pinterest.com/brianwhaley",
+						"http://reddit.com/user/btw-73",
+						"https://maps.app.goo.gl/j5Tpcxxr9roydxd2A",
+						"http://pixelatedviews.tumblr.com",
+						"https://www.etsy.com/people/bwhaley73",
+						"http://trees.ancestry.com/tree/7237865",
 						"https://github.com/brianwhaley",
 						"https://www.goodreads.com/user/show/49377228-brian-whaley"
 					]}
