@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { getRouteByKey } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
+import { LocalBusinessSchema } from "@pixelated-tech/components";
 import { PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
 import LayoutClient from "./elements/layout-client";
 import Header from "./elements/header";
@@ -40,6 +41,22 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 					image_width: "512",
 					favicon: "/images/favicon.ico"
 				}) }
+				<LocalBusinessSchema
+					name="Brian Whaley"
+					streetAddress="10 Jade Circle"
+					addressLocality="Denville"
+					addressRegion="NJ"
+					postalCode="07834"
+					telephone="+1-973-710-8008"
+					url="https://brianwhaley.com"
+					email="brian.whaley@gmail.com"
+					description="Professional web developer and technology consultant specializing in custom web development, mobile applications, and digital products."
+					sameAs={[
+						"https://www.linkedin.com/in/brianwhaley",
+						"https://github.com/brianwhaley",
+						"https://www.goodreads.com/user/show/49377228-brian-whaley"
+					]}
+				/>
 				<meta name="google-site-verification" content="t2yy9wL1bXPiPQjBqDee2BTgpiGQjwVldlfa4X5CQkU" />
 				<meta name="google-site-verification" content="l7D0Y_JsgtACBKNCeFAXPe-UWqo13fPTUCWhkmHStZ4" />
 			</head>

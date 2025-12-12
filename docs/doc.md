@@ -56,10 +56,10 @@ git checkout -b dev
 
 npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
-npm run lint
+npm run lint --fix
 npm version patch --force
 git add * -v
-git commit -m "fix css leak from resume component"
+git commit -m "new local business schema, new recipe data format"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
