@@ -1,6 +1,6 @@
 {
   "name": "palmetto-epoxy",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "private": true,
   "author": {
     "name": "Pixelated Technologies",
@@ -18,24 +18,24 @@
     "dev": "next dev --turbopack"
   },
   "dependencies": {
-    "@pixelated-tech/components": "^3.2.4",
+    "@pixelated-tech/components": "^3.2.5",
     "md5": "^2.3.0",
-    "next": "^16.0.8",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1"
+    "next": "^16.0.10",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
-    "@next/third-parties": "^16.0.8",
+    "@next/third-parties": "^16.0.10",
     "@tailwindcss/postcss": "^4.1.18",
-    "@types/node": "^25.0.0",
+    "@types/node": "^25.0.1",
     "@types/prop-types": "^15.7.15",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.49.0",
     "@typescript-eslint/parser": "^8.49.0",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.8",
+    "eslint-config-next": "^16.0.10",
     "sass": "^1.96.0",
     "sass-loader": "^16.0.6",
     "tailwindcss": "^4.1.18",
