@@ -59,7 +59,7 @@ npm audit fix --force
 npm run lint --fix
 npm version patch --force
 git add * -v
-git commit -m "additional local business schema data"
+git commit -m "https://www.cve.org/CVERecord?id=CVE-2025-55184"
 git push brianwhaley dev --tags
 git push brianwhaley dev:main
 
