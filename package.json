@@ -1,6 +1,6 @@
 {
   "name": "leadscraper",
-  "version": "0.2.0",
+  "version": "2.4.0",
   "private": true,
   "scripts": {
     "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev  -p 3002 --experimental-https",
