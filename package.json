@@ -1,6 +1,6 @@
 {
   "name": "leadscraper",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "private": true,
   "scripts": {
     "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev  -p 3002 --experimental-https",
@@ -10,18 +10,18 @@
     "clean": "rm -rf .next && rm -rf out"
   },
   "dependencies": {
-    "next": "^16.0.8",
-    "puppeteer": "^24.32.1",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1"
+    "next": "^16.0.10",
+    "puppeteer": "^24.33.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
-    "@types/node": "^25.0.0",
+    "@types/node": "^25.0.2",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.8",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.0.10",
     "typescript": "^5"
   }
 }
