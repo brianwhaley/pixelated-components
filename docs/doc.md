@@ -15,6 +15,6 @@ npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
 npm version patch --force
 git add * -v
-git commit -m "bump components, fix lint"
+git commit -m "https://www.cve.org/CVERecord?id=CVE-2025-55184"
 git push leadscraper dev --tags
 git push leadscraper dev:main
