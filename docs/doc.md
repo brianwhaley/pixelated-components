@@ -24,6 +24,6 @@ npm audit fix --force
 npm run lint
 npm version patch --force
 git add * -v
-git commit -m "https://www.cve.org/CVERecord?id=CVE-2025-55184"
+git commit -m "new domain, wired up wordpress blog, wordpress to sitemap"
 git push -u oaktreelandscaping dev --tags
 git push oaktreelandscaping dev:main

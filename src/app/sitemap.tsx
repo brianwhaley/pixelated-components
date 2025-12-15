@@ -9,6 +9,7 @@ export default async function SiteMapXML(): Promise<MetadataRoute.Sitemap> {
 	const config: SitemapConfig = {
 		createPageURLs: true,
 		createImageURLsFromJSON: true,
+		createWordPressURLs: true,
 		routes: myRoutes.routes,
 	};
 	const sitemap = await generateSitemap(config, origin);
