@@ -1,22 +1,27 @@
 "use client";
 
+import React, { useState } from "react";
 import { PageTitleHeader, PageSection, PageSectionHeader } from "@pixelated-tech/components";
 import { FormEngine } from "@pixelated-tech/components";
 import { emailFormData } from "@pixelated-tech/components";
 import { Loading, ToggleLoading } from "@pixelated-tech/components";
+import { Modal, handleModalOpen } from "@pixelated-tech/components";
 import { Calendly } from "@pixelated-tech/components";
 import formData from "@/app/data/contactform.json";
 
 export default function Contact() {
-    
-    
+
+	const myContent = <div className="centered"><br /><br />Thank you for contacting us!<br />We will get back to you as soon as we can.<br /><br /><br /></div>;
+
+    const [modalContent /*, setModalContent */ ] = useState<React.ReactNode>(myContent);
+	
 	function handleSubmit(e: Event) {
 		ToggleLoading({show: true});
 		emailFormData(e, postSubmit);
 	}
 
 	function postSubmit(e: Event) {
-		// alert("Thank you for contacting us! We will get back to you as soon as we can.");
+		handleModalOpen(e as MouseEvent);
 		ToggleLoading({show: false});
 		const myForm = e.target as HTMLFormElement;
 		myForm.reset();
@@ -25,6 +30,7 @@ export default function Contact() {
 	return (
 		<>
 			<Loading />
+			<Modal modalContent={modalContent} />
 
 			<PageTitleHeader title="Contact Oaktree Landscaping" />
 

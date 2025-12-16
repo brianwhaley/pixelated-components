@@ -6,7 +6,7 @@
 				"type" : "hidden",
 				"id" : "from",
 				"name" : "from",
-				"value" : "palmettoepoxy@gmail.com"
+				"value" : "oaktreelandscaper@gmail.com"
 			}
 		},{
 			"component" : "FormInput",
@@ -14,7 +14,7 @@
 				"type" : "hidden",
 				"id" : "to",
 				"name" : "to",
-				"value" : "palmettoepoxy@gmail.com"
+				"value" : "oaktreelandscaper@gmail.com"
 			}
 		},{
 			"component" : "FormInput",
@@ -22,7 +22,7 @@
 				"type" : "hidden",
 				"id" : "subject",
 				"name" : "subject",
-				"value" : "Palmetto Epoxy Contact Us Submit"
+				"value" : "Oaktree Landscaping Contact Us Submit"
 			}
 		},{
 			"component" : "FormInput",
