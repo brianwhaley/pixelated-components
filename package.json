@@ -1,6 +1,6 @@
 {
   "name": "oaktreelandscaping",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "private": true,
   "scripts": {
     "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev -p 3000 --experimental-https",
@@ -11,12 +11,12 @@
     "generate-site-images": "node scripts/generate-site-images.js"
   },
   "dependencies": {
-    "@pixelated-tech/components": "^3.2.8",
+    "@pixelated-tech/components": "^3.2.11",
     "md5": "^2.3.0",
     "next": "^16.0.10",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "sass": "^1.96.0"
+    "sass": "^1.97.0"
   },
   "devDependencies": {
     "@types/node": "^25.0.2",
