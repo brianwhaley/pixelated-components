@@ -75,7 +75,7 @@ export default function Home() {
 				mollit anim id est laborum.</p>
 			</PageSection>
 
-			<PageSection columns={1} maxWidth="1024px" padding="20px" id="fonts-section">
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="information-architecture-section">
 				<h2>Information Architecture</h2>
 				<ul>
 					<li>Home
@@ -93,8 +93,10 @@ export default function Home() {
 							<li>Testimonials</li>
 						</ul>
 					</li>
-					<li>Commercial
+					<li>Services
 						<ul>
+							<li>Commercial</li>
+							<li>Residential</li>
 							<li>Lawn Care</li>
 							<li>Garden Care</li>
 							<li>Irrigation</li>
@@ -102,16 +104,12 @@ export default function Home() {
 							<li>Tree Services</li>
 						</ul>
 					</li>
-					<li>Residential
+					<li>Our Projects
 						<ul>
-							<li>Lawn Care</li>
-							<li>Garden Care</li>
-							<li>Irrigation</li>
-							<li>Hardscaping</li>
-							<li>Tree Services</li>
+							<li>Plaza - Commercial Landscaping</li>
+							<li>Hampton Lake - Residential Landscaping</li>
 						</ul>
 					</li>
-					<li>Our Projects</li>
 					<li>Blog
 						<ul>
 							<li>Landscaping Tips</li>
@@ -128,6 +126,20 @@ export default function Home() {
 							<li>Schedule a Quote</li>
 							<li>Customer Support</li>
 							<li>Email and Phone</li>
+						</ul>
+					</li>
+				</ul>
+			</PageSection>
+
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="integrations-section">
+				<h2>Integrations</h2>
+				<ul>
+					<li>Home
+						<ul>
+							<li>Calendly</li>
+							<li>Cloudinary</li>
+							<li>Google Analytics</li>
+							<li>Wordpress</li>
 						</ul>
 					</li>
 				</ul>

@@ -182,6 +182,7 @@ main div:has( > a > img) {
 		background-color: var(--accent2-color);
 		padding: 30px;
 		border-radius: 10px;
+		border: 5px solid var(--bg-color);
 	}
 }
 
@@ -198,7 +199,8 @@ main div:has( > a > img) {
 #logos-section div:has( > img ),
 #logos-section div:has( > a >img ),
 #notfound-section div:has( > img ),
-#notfound-section div:has( > a >img ) {
+#notfound-section div:has( > a >img ),
+.gravatar-avatar-container {
 	border: none !important;
 }
 

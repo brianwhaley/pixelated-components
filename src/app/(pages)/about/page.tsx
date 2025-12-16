@@ -8,10 +8,10 @@ import { Carousel } from "@pixelated-tech/components";
 
 export default function About() {
 	const email1 = "oaktreelandscaper@gmail.com"
-	const email2 = "brian@pixelated.tech"; 
+	// const email2 = "brian@pixelated.tech"; 
 
 	const [profile1, setProfile1] = useState<GravatarProfile | null>(null);
-	const [profile2, setProfile2] = useState<GravatarProfile | null>(null);
+	// const [profile2, setProfile2] = useState<GravatarProfile | null>(null);
 
 	useEffect(() => {
 		if (email1) {
@@ -19,12 +19,12 @@ export default function About() {
 				setProfile1(data);
 			});
 		}
-		if (email2) {
+		/* if (email2) {
 			getGravatarProfile(email2).then((data) => {
 				setProfile2(data);
 			});
-		}
-	}, [email1,email2]);
+		} */
+	}, [email1 /* ,email2 */ ]);
 
 	const mycards = [
 	{
@@ -50,28 +50,27 @@ export default function About() {
 
 			<PageTitleHeader title="About Oaktree Landscaping" />
 
-			<PageSection columns={2} maxWidth="1024px" padding="20px" id="team-section">
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="team-section">
 
-				<PageGridItem columnStart={1} columnEnd={3}>
-					<PageSectionHeader title="Our Team" />
-				</PageGridItem>
+				<PageSectionHeader title="Our Team" />
 
-				<PageGridItem>
+				<PageGridItem >
 					<GravatarCard 
 						profile={profile1}
-						layout="vertical" 
-						avatarSize={200}
+						layout="horizontal"
+						thumbnailUrl="/images/rene_garcia_sq.jpg"
+						avatarSize={300}
+
 					/>
 				</PageGridItem>
 
-
-				<PageGridItem>
+				{ /* <PageGridItem>
 					<GravatarCard 
 						profile={profile2}
 						layout="vertical"
 						avatarSize={200}
 					/>
-				</PageGridItem>
+				</PageGridItem> */ }
 
 			</PageSection>
 

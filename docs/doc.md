@@ -24,6 +24,6 @@ npm audit fix --force
 npm run lint
 npm version patch --force
 git add * -v
-git commit -m "Google Analytics"
+git commit -m "add blog page, gravatar fixes on about, integrations on styleguide, css fixes in glboals"
 git push -u oaktreelandscaping dev --tags
 git push oaktreelandscaping dev:main
