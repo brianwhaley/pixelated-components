@@ -121,7 +121,7 @@ main div:has( > a > img) {
 		padding-top: 0px !important;
 	}
 	#services-section .callout.overlay .callout-image img {
-    aspect-ratio: 1;
+    	aspect-ratio: 1;
 	}
 }
 
@@ -203,5 +203,3 @@ main div:has( > a > img) {
 .gravatar-avatar-container {
 	border: none !important;
 }
-
- 

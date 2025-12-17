@@ -8,6 +8,7 @@ import LayoutClient from '@/app/elements/layout-client';
 import Header from '@/app/elements/header';
 import Nav from '@/app/elements/nav';
 import Footer from '@/app/elements/footer';
+import UnderConstruction from './elements/underconstruction';
 import myRoutes from "@/app/data/routes.json";
 import "@pixelated-tech/components/css/pixelated.global.css";
 import "@pixelated-tech/components/css/pixelated.grid.scss";
@@ -19,6 +20,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+	if (process.env.NODE_ENV === 'production') {
+		return <UnderConstruction />;
+	}
 
 	const reqHeaders: Headers = await (headers() as Promise<Headers>);
 	const path = reqHeaders.get("x-path") ?? "/";

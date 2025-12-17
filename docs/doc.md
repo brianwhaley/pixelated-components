@@ -24,6 +24,6 @@ npm audit fix --force
 npm run lint
 npm version patch --force
 git add * -v
-git commit -m "fix for wordpress images"
+git commit -m "under construction"
 git push -u oaktreelandscaping dev --tags
 git push oaktreelandscaping dev:main
