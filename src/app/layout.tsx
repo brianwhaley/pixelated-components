@@ -21,7 +21,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-	if (process.env.NODE_ENV === 'production') {
+	if (process.env.UNDER_CONSTRUCTION === 'true') {
 		return <UnderConstruction />;
 	}
 
