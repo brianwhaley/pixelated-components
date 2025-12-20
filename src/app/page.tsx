@@ -25,25 +25,27 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen">
-      <SidePanel className="w-64 bg-gray-100">
+      <SidePanel isOpen={true} onClose={() => {}} className="w-64 bg-gray-100">
         <nav className="p-4">
           {routes.map((route) => (
-            <Accordion key={route.name} className="mb-2">
-              <Accordion.Item>
-                <Accordion.Header className="cursor-pointer p-2 hover:bg-gray-200">
-                  {route.name}
-                </Accordion.Header>
-                <Accordion.Content className="pl-4">
-                  {route.items.length > 0 ? (
-                    route.items.map((item) => (
-                      <a
-                        key={item.path}
-                        href={item.path}
-                        className="block p-2 hover:bg-gray-200"
-                      >
-                        {item.name}
-                      </a>
-                    ))
+            <Accordion
+              key={route.name}
+              className="mb-2"
+              items={[
+                {
+                  title: route.name,
+                  content: route.items.length > 0 ? (
+                    <div className="pl-4">
+                      {route.items.map((item) => (
+                        <a
+                          key={item.path}
+                          href={item.path}
+                          className="block p-2 hover:bg-gray-200"
+                        >
+                          {item.name}
+                        </a>
+                      ))}
+                    </div>
                   ) : (
                     <a
                       href={route.path}
@@ -51,10 +53,10 @@ export default function Home() {
                     >
                       {route.name}
                     </a>
-                  )}
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
+                  ),
+                },
+              ]}
+            />
           ))}
         </nav>
       </SidePanel>

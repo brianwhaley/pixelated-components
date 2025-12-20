@@ -1,4 +1,4 @@
-import { Login } from '@pixelated-tech/components';
+import Login from '../../components/Login';
 
 export default function LoginPage() {
   return (
