@@ -17,6 +17,7 @@
     "next-auth": "^4.24.13",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "sass": "^1.97.1",
     "ssh2": "^1.17.0"
   },
   "devDependencies": {
