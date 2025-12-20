@@ -3,12 +3,13 @@
 import { SidePanel, Accordion } from '@pixelated-tech/components';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import routes from '@/data/routes.json';
 
 export default function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [panelOpen, setPanelOpen] = useState(true);
 
   useEffect(() => {
     if (status === 'loading') return; // Still loading
@@ -25,7 +26,14 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen">
-      <SidePanel isOpen={true} onClose={() => {}} className="w-64 bg-gray-100">
+      <SidePanel 
+        isOpen={panelOpen} 
+        onClose={() => setPanelOpen(false)} 
+        onToggle={() => setPanelOpen(!panelOpen)}
+        showTab={true}
+        tabLabel="Menu"
+        className="w-64 bg-gray-100"
+      >
         <nav className="p-4">
           {routes.map((route) => (
             <Accordion
