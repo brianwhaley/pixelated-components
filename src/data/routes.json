@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Dashboard",
+    "path": "/",
+    "items": []
+  },
+  {
+    "name": "Deployments",
+    "path": "/deploy",
+    "items": [
+      {
+        "name": "New Deployment",
+        "path": "/deploy"
+      }
+    ]
+  }
+]
