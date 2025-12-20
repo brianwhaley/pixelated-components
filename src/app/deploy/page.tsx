@@ -35,9 +35,11 @@ export default function DeployPage() {
       });
 
       const data = await response.json();
-      setResult(data.message || 'Deployment completed');
+      setResult(JSON.stringify(data, null, 2));
+      console.log('Deploy result:', data);
     } catch (error) {
       setResult('Error: ' + (error as Error).message);
+      console.error('Deploy error:', error);
     } finally {
       setLoading(false);
     }
@@ -138,7 +140,7 @@ export default function DeployPage() {
 
       {result && (
         <div className="mt-4 p-4 bg-gray-100 rounded">
-          <pre>{result}</pre>
+          <pre className="text-black">{result}</pre>
         </div>
       )}
     </div>

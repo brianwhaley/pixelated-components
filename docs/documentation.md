@@ -28,11 +28,17 @@ Example output: `RZJ0yls+FdikOyfQ8UX0MB4bJFS9e73Wfaai1EVsUi8=`
 3. Enable the Google Identity API:
    - Navigate to 'APIs & Services' > 'Library'
    - Search for 'Google Identity' and enable it
-4. Create OAuth 2.0 credentials:
+4. Set up the OAuth consent screen:
+   - Go to 'APIs & Services' > 'OAuth consent screen'
+   - Choose 'External' user type (allows anyone to use the app)
+   - Fill in the required app information
+5. Create OAuth 2.0 credentials:
    - Go to 'APIs & Services' > 'Credentials'
    - Click 'Create Credentials' > 'OAuth 2.0 Client IDs'
    - Choose 'Web application'
    - Add authorized redirect URIs:
      - For local development: `http://localhost:3000/api/auth/callback/google`
      - For production: `https://your-amplify-domain.com/api/auth/callback/google`
-5. Copy the Client ID and Client Secret from the credentials page
+6. Copy the Client ID and Client Secret from the credentials page
+
+**Note:** If you get "Access blocked: [App] can only be used within its organization", change the OAuth consent screen user type to 'External'.

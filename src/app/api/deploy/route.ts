@@ -1,6 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Client, ClientChannel } from 'ssh2';
-import fs from 'fs';
 import sites from '@/data/sites.json';
 
 interface SiteConfig {
@@ -18,7 +16,9 @@ interface SiteConfig {
 }
 
 export async function POST(request: NextRequest) {
+  console.log('Deploy API called');
   const { site, environments, versionType, commitMessage } = await request.json();
+  console.log('Received:', { site, environments, versionType, commitMessage });
 
   if (!site || !environments || !versionType || !commitMessage) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const config = siteConfig[env as 'dev' | 'prod'];
 
     try {
-      const result = await executeScript(config, versionType, commitMessage);
+      const result = await executeScript(site, versionType, commitMessage);
       results[env] = result;
     } catch (error) {
       results[env] = `Error: ${(error as Error).message}`;
@@ -50,43 +50,18 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ message: 'Deployment results', results });
 }
 
-function executeScript(config: SiteConfig['dev'] | SiteConfig['prod'], versionType: string, commitMessage: string): Promise<string> {
+function executeScript(siteName: string, versionType: string, commitMessage: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    const conn = new Client();
-
-    conn.on('ready', () => {
-      const script = `echo "Updating packages..." && npm outdated | awk 'NR>1 {print $1"@"$4}' | while read pkg; do echo "$pkg" >> /tmp/npm-updates.log && printf "." && npm install --force --save "$pkg" > /dev/null 2>&1; done && echo "\\n\\n✓ Updated packages:" && cat /tmp/npm-updates.log && rm /tmp/npm-updates.log
+    // Generate the deployment script
+    const script = `echo "Updating packages..." && npm outdated | awk 'NR>1 {print $1"@"$4}' | while read pkg; do echo "$pkg" >> /tmp/npm-updates.log && printf "." && npm install --force --save "$pkg" > /dev/null 2>&1; done && echo "\\n\\n✓ Updated packages:" && cat /tmp/npm-updates.log && rm /tmp/npm-updates.log
 npm run lint
 npm audit fix --force
 npm version ${versionType} --force
 git add * -v
 git commit -m "${commitMessage.replace(/"/g, '\\"')}"
-git push -u pixelated dev --tags
-git push pixelated dev:main`;
+git push -u ${siteName} dev --tags
+git push ${siteName} dev:main`;
 
-      conn.exec(script, (err: Error | undefined, stream: ClientChannel) => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        let output = '';
-        stream.on('close', (code: number) => {
-          conn.end();
-          resolve(`Exit code: ${code}\n${output}`);
-        }).on('data', (data: Buffer) => {
-          output += data.toString();
-        }).stderr.on('data', (data: Buffer) => {
-          output += data.toString();
-        });
-      });
-    }).on('error', (err: Error) => {
-      reject(err);
-    }).connect({
-      host: config.host,
-      port: 22,
-      username: config.user,
-      privateKey: fs.readFileSync(config.keyPath),
-    });
+    resolve(script);
   });
 }
