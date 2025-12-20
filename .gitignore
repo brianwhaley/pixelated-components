@@ -1,12 +1,16 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/.local
-/.next/
-/certificates
-/node_modules
 .DS_Store
 *.pem
 .env*
 *.tsbuildinfo
 next-env.d.ts
+/.local
+/certificates
+/node_modules
+/.pnp
+.pnp.*
+/coverage
+/.next/
+/out/
+/build
+npm-debug.log*
+.pnpm-debug.log*
