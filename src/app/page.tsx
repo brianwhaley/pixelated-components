@@ -11,6 +11,14 @@ export default function Home() {
   const router = useRouter();
   const [panelOpen, setPanelOpen] = useState(true);
 
+  const hamburgerIcon = (
+    <div className="flex flex-col space-y-1">
+      <div className="w-4 h-0.5 bg-gray-600"></div>
+      <div className="w-4 h-0.5 bg-gray-600"></div>
+      <div className="w-4 h-0.5 bg-gray-600"></div>
+    </div>
+  );
+
   useEffect(() => {
     if (status === 'loading') return; // Still loading
     if (!session) router.push('/login');
@@ -31,6 +39,7 @@ export default function Home() {
         onClose={() => setPanelOpen(false)} 
         onToggle={() => setPanelOpen(!panelOpen)}
         showTab={true}
+        tabIcon={hamburgerIcon}
         tabLabel="Menu"
         className="w-64 bg-gray-100"
       >
