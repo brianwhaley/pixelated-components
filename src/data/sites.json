@@ -1,0 +1,28 @@
+[
+  {
+    "name": "pixelated",
+    "dev": {
+      "host": "dev.pixelated.tech",
+      "user": "ubuntu",
+      "keyPath": "/path/to/key"
+    },
+    "prod": {
+      "host": "pixelated.tech",
+      "user": "ubuntu",
+      "keyPath": "/path/to/key"
+    }
+  },
+  {
+    "name": "informationfocus",
+    "dev": {
+      "host": "dev.informationfocus.com",
+      "user": "ubuntu",
+      "keyPath": "/path/to/key"
+    },
+    "prod": {
+      "host": "informationfocus.com",
+      "user": "ubuntu",
+      "keyPath": "/path/to/key"
+    }
+  }
+]

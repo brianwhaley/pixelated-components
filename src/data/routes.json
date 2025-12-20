@@ -8,10 +8,16 @@
     "name": "Deployments",
     "path": "/deploy",
     "items": [
-      {
-        "name": "New Deployment",
-        "path": "/deploy"
-      }
+      { "name": "New Deployment", "path": "/deploy" },
+      { "name": "History", "path": "/deploy/history" }
+    ]
+  },
+  {
+    "name": "Sites",
+    "path": "/sites",
+    "items": [
+      { "name": "Manage Sites", "path": "/sites" },
+      { "name": "Add Site", "path": "/sites/add" }
     ]
   }
 ]
