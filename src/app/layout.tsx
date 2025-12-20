@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { getRouteByKey } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
-import { LocalBusinessSchema } from "@pixelated-tech/components";
+import { LocalBusinessSchema } from "@pixelated-tech/components/server";
 import { PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
 import LayoutClient from "./elements/layout-client";
 import Header from "./elements/header";
@@ -78,7 +78,7 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 						<div id="page-header" className="fixed-header"><Header /></div>
 						<div id="fixed-header-spacer"></div>
 						{ ( pathname === '/' ) ? <div><Hero /></div> : null }
-						<div id="page-search" className="no-mobile"><Search id="009500278966481927899:bcssp73qony" /></div>
+						<div id="page-search" className="no-mobile"><Search /></div>
 					</header>
 					<nav>
 						<Nav />

@@ -1,4 +1,18 @@
 {
+	"siteInfo": {
+		"name": "Brian Whaley",
+		"author": "Brian Whaley",
+		"description": "Brian Whaley - Web Development, Technology Strategy, and Digital Innovation",
+		"url": "https://www.brianwhaley.com",
+		"email": "brian@brianwhaley.com",
+		"favicon": "/favicon.ico",
+		"favicon_sizes": "64x64 32x32 24x24 16x16",
+		"favicon_type": "image/x-icon",
+		"theme_color": "#ffffff",
+		"background_color": "#ffffff",
+		"default_locale": "en",
+		"display": "standalone"
+	},
 	"routes": [
 		{ 
 			"name": "Home", 

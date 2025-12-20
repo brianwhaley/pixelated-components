@@ -4,14 +4,10 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { GoogleSearch as GSearch } from "@pixelated-tech/components";
 
-interface SearchProps {
-	id: string;
-}
-
-export default function Search(props: SearchProps) {
+export default function Search() {
 	return (
 		<div className="section-container" suppressHydrationWarning>
-			<GSearch id={props.id} />
+			<GSearch id="56d5332a6e6df4229"  />
 		</div>
 	);
 }
