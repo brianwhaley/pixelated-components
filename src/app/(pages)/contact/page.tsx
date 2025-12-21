@@ -18,7 +18,7 @@ export default function Contact() {
 	
 	function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		ToggleLoading({show: true});
-		emailFormData(e as Event, postSubmit);
+		emailFormData(e as unknown as Event, postSubmit);
 	}
 
 	function postSubmit(e: FormEvent<HTMLFormElement>) {
