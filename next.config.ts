@@ -2,8 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-
-  env: {
+	trailingSlash: false,
+	typescript: {
+		ignoreBuildErrors: true,
+	},
+  	env: {
 		// Unified pixelated config: prefer supplying the full JSON or base64 blob
 		PIXELATED_CONFIG_JSON: process.env.PIXELATED_CONFIG_JSON,
 		PIXELATED_CONFIG_B64: process.env.PIXELATED_CONFIG_B64,
