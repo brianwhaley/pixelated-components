@@ -1,6 +1,6 @@
 {
   "name": "oaktreelandscaping",
-  "version": "0.1.32",
+  "version": "0.1.33",
   "private": true,
   "scripts": {
     "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev -p 3000 --experimental-https",
