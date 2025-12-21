@@ -51,7 +51,7 @@ export default function Contact() {
 					<FormEngine 
 						name="contact-us" 
 						id="contact-us-form" 
-						formData={formData} 
+						formData={formData as any} 
 						onSubmitHandler={handleSubmit} 
 					/>
 				</div>
