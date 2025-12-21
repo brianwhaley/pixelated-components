@@ -16,18 +16,20 @@ export default function Home() {
 					img="/images/stock/natural-grass-close-up.jpg"
 					title="Welcome to Oaktree Landscaping"
 					subtitle="Outstanding Landscapes and Breathtaking Results"
-					content="With over 25 years of experience in the landscape industry, 
+					content="With over 7 years of experience in the landscape industry, 
 					our company has become a trusted name in creating exquisite 
-					landscapes and maintaining lush lawns in the local area. 
-					We take immense pride in our work, and our dedication to excellence 
-					is evident in every project we undertake. At our company, 
-					we understand that every customer is unique, 
+					landscapes and maintaining lush lawns in the local area
+					for both Residential and Commercial properties.  
+					We take immense pride in our work, and our dedication to 
+					excellence is evident in every project we undertake. 
+					At our company, we understand that every customer is unique, 
 					with their own distinct vision and preferences. 
-					That's why we go above and beyond to design vibrant landscapes 
-					that are tailored to meet the individual needs and desires of each client. 
-					From stunning flower beds to serene water features, 
-					we pay meticulous attention to detail to ensure that every element 
-					of the landscape reflects the customer's personal style." 
+					That's why we go above and beyond to tailor the 
+					individual needs and desires of each client. 
+					From stunning flower beds, serene water features to 
+					corporate site maintenance we pay meticulous attention to 
+					detail to ensure that every element of the landscape skills 
+					reflects the customer's personal style and preferences." 
 				/>
 			</PageSection>
 

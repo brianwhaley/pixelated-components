@@ -2,7 +2,7 @@
 import { headers } from 'next/headers';
 import { getRouteByKey } from '@pixelated-tech/components/server';
 import { generateMetaTags } from "@pixelated-tech/components/server";
-import { LocalBusinessSchema } from '@pixelated-tech/components';
+import { LocalBusinessSchema } from '@pixelated-tech/components/server';
 import { PixelatedServerConfigProvider } from '@pixelated-tech/components/server';
 import LayoutClient from '@/app/elements/layout-client';
 import Header from '@/app/elements/header';
