@@ -2,9 +2,9 @@ import type { NextConfig } from "next";
 import path from 'path';
 
 const nextConfig: NextConfig = {
-
-  
-	/* config options here */
+	experimental: {
+    	optimizeCss: true,
+  	},
 	transpilePackages: ['@pixelated-tech/components'],
 	trailingSlash: false,
 	typescript: {
@@ -27,8 +27,6 @@ const nextConfig: NextConfig = {
 			},
 		],
 	},
-
-
 
 	async redirects() {
 		return [
@@ -60,16 +58,12 @@ const nextConfig: NextConfig = {
 			fs: false,
 			path: false
 		};
-
-		// Ensure the '@' alias resolves to the project `src` directory.
-		// This helps CI/Turbopack/webpack builds resolve imports like '@/app/...'.
 		config.resolve.alias = {
 			...(config.resolve?.alias || {}),
 			'@': path.resolve(__dirname, 'src'),
 		};
 		return config;
 	},
-	// output:'export'
 
 };
 
