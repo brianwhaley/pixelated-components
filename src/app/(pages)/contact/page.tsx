@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import { PageTitleHeader, PageSection, PageSectionHeader } from "@pixelated-tech/components";
 import { FormEngine } from "@pixelated-tech/components";
 import { emailFormData } from "@pixelated-tech/components";
@@ -16,12 +16,12 @@ export default function Contact() {
 
     const [modalContent /*, setModalContent */ ] = useState<React.ReactNode>(myContent);
 	
-	function handleSubmit(e: Event) {
+	function handleSubmit(e: FormEvent<HTMLFormElement>) {
 		ToggleLoading({show: true});
 		emailFormData(e, postSubmit);
 	}
 
-	function postSubmit(e: Event) {
+	function postSubmit(e: FormEvent<HTMLFormElement>) {
 		handleModalOpen(e as MouseEvent);
 		ToggleLoading({show: false});
 		const myForm = e.target as HTMLFormElement;
