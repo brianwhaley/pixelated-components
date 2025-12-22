@@ -3,14 +3,37 @@
 		"name": "Oaktree Landscaping",
 		"author": "Oaktree Landscaping",
 		"description": "Oaktree Landscaping - Professional Landscaping Services",
+		"keywords": "oaktree landscaping, bluffton, hilton head island, lowcountry, south carolina, professional landscaping, lawn care, garden design",
 		"url": "https://www.oaktreelandscaping.com",
+		"email": "oaktreelandscaper@gmail.com",
 		"favicon": "/favicon.ico",
 		"favicon_sizes": "64x64 32x32 24x24 16x16",
 		"favicon_type": "image/x-icon",
 		"theme_color": "#ffffff",
 		"background_color": "#ffffff",
 		"default_locale": "en",
-		"display": "standalone"
+		"display": "standalone",
+		"image": "/images/logo/oaktree-logo-vertical.jpg",
+		"image_height": "512",
+		"image_width": "512",
+		"telephone": "",
+		"address": {
+			"streetAddress": "",
+			"addressLocality": "Bluffton",
+			"addressRegion": "SC",
+			"postalCode": "29909",
+			"addressCountry": "US"
+		},
+		"priceRange": "$$",
+		"sameAs": [
+			"https://www.facebook.com/oaktreelandscaper",
+			"https://www.instagram.com/oaktreelandscaper",
+			"https://oaktreelandscaping.wordpress.com",
+			"https://x.com/OaktreeLndscape",
+			"https://www.linkedin.com/in/oaktree-landscaping/",
+			"https://share.google/DQWYZ0XO8H2zXA7bh",
+			"https://www.yelp.com/user_details?userid=andHa8MtqORJtmY9rHnxHg"
+		]
 	},
 	"routes": [
 		{
