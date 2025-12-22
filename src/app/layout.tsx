@@ -4,6 +4,7 @@ import { getRouteByKey } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
 import { LocalBusinessSchema } from "@pixelated-tech/components/server";
 import { PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
+import { VisualDesignStyles } from "@pixelated-tech/components/server";
 import LayoutClient from "@/app/elements/layoutclient";
 import Header from "@/app/elements/header";
 import Nav from "@/app/elements/nav";
@@ -58,6 +59,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 							"https://www.linkedin.com/company/informationfocus"
 						]}
 					/>
+					<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
 				</head>
 				<body>
 					<PixelatedServerConfigProvider>
