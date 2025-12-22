@@ -28,37 +28,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 			<LayoutClient />
 			<html lang="en">
 				<head>
-					{generateMetaTags({
+					{ generateMetaTags({
 						title: metadata?.title ?? "",
 						description: metadata?.description ?? "",
 						keywords: metadata?.keywords ?? "",
-						site_name: "InformationFocus",
-						email: "maryann@informationfocus.com",
 						origin: origin ?? "",
-						url: url ?? "",
-						image: "/images/informationfocus-sq.png",
-						image_height: "512",
-						image_width: "512",
-						favicon: "/images/favicon.ico"
-					})}
-					<LocalBusinessSchema
-						name="InformationFocus"
-						streetAddress="10 Jade Circle"
-						addressLocality="Denville"
-						addressRegion="NJ"
-						postalCode="07834"
-						addressCountry="US"
-						telephone="+1-973-722-2601"
-						url="https://informationfocus.com"
-						email="maryann@informationfocus.com"
-						image="/images/informationfocus-sq.png"
-						priceRange="$"
-						description="Information technology consulting and services for businesses."
-						sameAs={[
-							"https://www.facebook.com/informationfocus",
-							"https://www.linkedin.com/company/informationfocus"
-						]}
-					/>
+						url: url ?? ""
+					}) }
+					<LocalBusinessSchema siteInfo={myRoutes.siteInfo} />
 					<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
 				</head>
 				<body>

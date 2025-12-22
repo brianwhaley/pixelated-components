@@ -3,14 +3,31 @@
 		"name": "Information Focus",
 		"author": "Mary Ann Sarao",
 		"description": "Information Focus - Professional Services",
+		"keywords": "information focus, professional services, consulting",
 		"url": "https://www.informationfocus.net",
+		"email": "maryann.sarao@gmail.com",
 		"favicon": "/favicon.ico",
 		"favicon_sizes": "64x64 32x32 24x24 16x16",
 		"favicon_type": "image/x-icon",
 		"theme_color": "#ffffff",
 		"background_color": "#ffffff",
 		"default_locale": "en",
-		"display": "standalone"
+		"display": "standalone",
+		"image": "/images/informationfocus-sq.png",
+		"image_height": "512",
+		"image_width": "512",
+		"telephone": "+1-973-722-2601",
+		"address": {
+			"streetAddress": "10 Jade Circle",
+			"addressLocality": "Denville",
+			"addressRegion": "NJ",
+			"postalCode": "07834",
+			"addressCountry": "US"
+		},
+		"priceRange": "$",
+		"sameAs": [
+			"https://www.linkedin.com/in/mary-ann-sarao"
+		]
 	},
 	"routes": [
 		{ 
