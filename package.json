@@ -1,6 +1,6 @@
 {
   "name": "informationfocus",
-  "version": "2.2.21",
+  "version": "2.2.22",
   "private": true,
   "author": {
     "name": "Pixelated Technologies",
@@ -15,7 +15,7 @@
     "generate-site-images": "node scripts/generate-site-images.js"
   },
   "dependencies": {
-    "@pixelated-tech/components": "^3.3.2",
+    "@pixelated-tech/components": "^3.3.3",
     "html-entities": "^2.6.0",
     "md5": "^2.3.0",
     "next": "^16.1.0",
