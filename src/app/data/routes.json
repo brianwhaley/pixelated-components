@@ -3,6 +3,7 @@
 		"name": "Brian Whaley",
 		"author": "Brian Whaley",
 		"description": "Brian Whaley - Web Development, Technology Strategy, and Digital Innovation",
+		"keywords": "brian whaley, web development, technology strategy, digital innovation",
 		"url": "https://www.brianwhaley.com",
 		"email": "brian@brianwhaley.com",
 		"favicon": "/favicon.ico",
@@ -11,7 +12,23 @@
 		"theme_color": "#ffffff",
 		"background_color": "#ffffff",
 		"default_locale": "en",
-		"display": "standalone"
+		"display": "standalone",
+		"image": "/images/brianwhaley-headshot.jpg",
+		"image_height": "512",
+		"image_width": "512",
+		"telephone": "+1-973-710-8008",
+		"address": {
+			"streetAddress": "10 Jade Circle",
+			"addressLocality": "Denville",
+			"addressRegion": "NJ",
+			"postalCode": "07834",
+			"addressCountry": "US"
+		},
+		"priceRange": "$$",
+		"sameAs": [
+			"https://www.linkedin.com/in/brianwhaley",
+			"https://github.com/brianwhaley"
+		]
 	},
 	"routes": [
 		{ 
