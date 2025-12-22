@@ -3,13 +3,13 @@ import { getRouteByKey } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
 import { LocalBusinessSchema } from "@pixelated-tech/components/server";
 import { PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
+import { VisualDesignStyles } from "@pixelated-tech/components/server";
 import { LayoutClient } from "./elements/layoutclient";
 import Header from "@/app/elements/header";
 import Footer from "@/app/elements/footer";
 import myRoutes from "@/app/data/routes.json";
 import "@pixelated-tech/components/css/pixelated.global.css";
 import "@pixelated-tech/components/css/pixelated.grid.scss";
-import "@pixelated-tech/components/css/pixelated.font.scss";
 import "@/app/globals.css";
 
 export default async function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
@@ -67,6 +67,7 @@ export default async function RootLayout({children,}: Readonly<{children: React.
 					/>
 					<link rel="preload" fetchPriority="high" as="image" type="image/webp" 
 						href="https://www.palmetto-epoxy.com/images/palmetto-epoxy-logo.jpg" ></link>
+					<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
 				</head>
 				<body>
 					<PixelatedServerConfigProvider>

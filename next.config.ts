@@ -1,25 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-	/* config options here */
+	experimental: {
+    	optimizeCss: true,
+  	},
 	transpilePackages: ['@pixelated-tech/components'],
 	trailingSlash: false,
 	typescript: {
 		ignoreBuildErrors: true,
 	},
-	/* images: {
-		remotePatterns: [
-			{
-				protocol: "https", 
-				hostname: "www.palmetto-epoxy.com", 
-			},
-			{
-				protocol: "https", 
-				hostname: "images.ctfassets.net/", 
-			},
-		],
-	}, */
-
 
 	env: {
 		// Unified pixelated config: prefer supplying the full JSON or base64 blob
@@ -38,8 +27,6 @@ const nextConfig: NextConfig = {
 		],
 	},
 
-
-
 	async redirects() {
 		return [
 			{ source: '/cart', destination: '/', permanent: true, },
@@ -56,7 +43,6 @@ const nextConfig: NextConfig = {
 	},
 
 	turbopack: {},
-	// webpack5: true,
 	webpack: (config) => {
 		config.resolve.fallback = { 
 			fs: false,
