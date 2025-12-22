@@ -1,6 +1,6 @@
 {
   "name": "pixelated-admin",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3006 --experimental-https",
@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@auth/core": "^0.41.1",
-    "@pixelated-tech/components": "^3.3.2",
+    "@pixelated-tech/components": "^3.3.3",
     "next": "16.1.0",
     "next-auth": "^4.24.7",
     "react": "19.2.3",
