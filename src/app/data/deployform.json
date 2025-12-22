@@ -1,0 +1,80 @@
+{
+  "fields": [
+    {
+      "component": "FormCheckbox",
+      "props": {
+        "id": "sites",
+        "name": "sites",
+        "label": "Sites to Deploy",
+        "options": [
+          { "value": "brianwhaley", "text": "brianwhaley" },
+          { "value": "informationfocus", "text": "informationfocus" },
+          { "value": "leadscraper", "text": "leadscraper" },
+          { "value": "oaktreelandscaping", "text": "oaktreelandscaping" },
+          { "value": "palmetto-epoxy", "text": "palmetto-epoxy" },
+          { "value": "pixelated", "text": "pixelated" },
+          { "value": "pixelated-admin", "text": "pixelated-admin" },
+          { "value": "pixelated-components", "text": "pixelated-components" },
+          { "value": "pixelated-template", "text": "pixelated-template" },
+          { "value": "pixelvivid", "text": "pixelvivid" }
+        ],
+        "checked": [],
+        "display": "vertical",
+        "required": true
+      }
+    },
+    {
+      "component": "FormCheckbox",
+      "props": {
+        "id": "environments",
+        "name": "environments",
+        "label": "Environments to Deploy",
+        "options": [
+          { "value": "dev", "text": "Development" },
+          { "value": "prod", "text": "Production" }
+        ],
+        "checked": [],
+        "display": "vertical",
+        "required": true
+      }
+    },
+    {
+      "component": "FormRadio",
+      "props": {
+        "id": "versionType",
+        "name": "versionType",
+        "label": "Version Type",
+        "options": [
+          { "value": "patch", "text": "Patch" },
+          { "value": "minor", "text": "Minor" },
+          { "value": "major", "text": "Major" }
+        ],
+        "checked": "patch",
+        "display": "vertical"
+      }
+    },
+    {
+      "component": "FormTextarea",
+      "props": {
+        "id": "commitMessage",
+        "label": "Commit Message",
+        "value": "",
+        "required": true,
+        "rows": 3,
+		"cols": 50,
+        "display": "vertical",
+        "className": "w-full"
+      }
+    },
+    {
+      "component": "FormButton",
+      "props": {
+        "id": "submit",
+        "type": "submit",
+        "disabled": true,
+        "className": "w-full",
+        "text": "Deploy"
+      }
+    }
+  ]
+}

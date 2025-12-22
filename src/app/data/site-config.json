@@ -1,0 +1,61 @@
+{
+	"siteTemplate": "default",
+	"contentSlots": {
+		"hero": {
+			"headline": "Contextual Hero Slot",
+			"copy": "This hero content is defined at the site level and will be placed by whichever template is active.",
+			"cta": "Talk to us",
+			"image": "/site-images/hero-pattern.jpg"
+		},
+		"nav": {
+			"links": [
+				{ "label": "Platform", "href": "/platform" },
+				{ "label": "Solutions", "href": "/solutions" },
+				{ "label": "Pricing", "href": "/pricing" }
+			]
+		},
+		"footer": {
+			"text": "© 2025 Pixelated Labs. Built with template slots.",
+			"links": [
+				{ "label": "Privacy", "href": "/privacy" },
+				{ "label": "Terms", "href": "/terms" }
+			]
+		}
+	},
+	"theme": {
+		"colors": {
+			"primaryColor": "#369",
+			"secondaryColor": "#BCD",
+			"accent1Color": "#CCC",
+			"accent2Color": "#EEE",
+			"bgColor": "#fff",
+			"textColor": "#000"
+		},
+		"fonts": {
+			"headerFont": "\"Montserrat\", Verdana, sans-serif",
+			"bodyFont": "\"Roboto\", Arial, sans-serif"
+		}
+	},
+	"pages": {
+		"/": {
+			"template": "hero",
+			"label": "Home"
+		},
+		"/services": {
+			"template": "grid",
+			"label": "Services",
+			"slots": {
+				"heroHeadline": "Service Tiles",
+				"heroCopy": "Each card highlights a different service offering."
+			}
+		},
+		"/docs": {
+			"template": "hero",
+			"label": "Docs",
+			"slots": {
+				"heroHeadline": "Documentation Templates",
+				"heroCta": "Browse guides"
+			}
+		}
+	}
+}

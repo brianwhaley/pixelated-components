@@ -1,0 +1,46 @@
+.chrome-standard {
+  background: #f5f5f5;
+  color: #1d1d1d;
+}
+
+.standard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #111827;
+  color: white;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-size: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+
+.standard-nav {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  background: #1f2937;
+}
+
+.standard-nav a {
+  color: #f8fafc;
+  font-weight: 600;
+}
+
+.standard-footer {
+  margin-top: auto;
+  padding: 1rem 1.5rem;
+  font-size: 0.85rem;
+  background: #111827;
+  color: #d1d5db;
+  text-align: center;
+}
+
+.site-footer-links {
+    justify-content: center;
+}

@@ -1,0 +1,89 @@
+.drawer-floating {
+  min-height: 100vh;
+  display: flex;
+  background: #0b1120;
+  color: #e2e8f0;
+}
+
+.drawer-panel {
+  width: 240px;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(180deg, #111827, #0f172a 70%);
+  border-right: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.drawer-panel ul {
+  list-style: none;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.drawer-content {
+  flex: 1;
+  padding: 2.5rem;
+  position: relative;
+}
+
+.drawer-content header {
+  margin-bottom: 1rem;
+}
+
+.floating-cta {
+  position: sticky;
+  top: auto;
+  float: right;
+  border: none;
+  background: #ec4899;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.drawer-nav {
+  margin: 2rem 0;
+  display: flex;
+  gap: 1rem;
+}
+
+.drawer-nav a {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.drawer-footer {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(226, 232, 240, 0.4);
+  padding-top: 1rem;
+}
+
+.drawer-footer-links {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.drawer-footer a {
+  color: #fcd34d;
+}
+
+.drawer-hero {
+  background: rgba(248, 250, 252, 0.08);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.drawer-hero-cta {
+  margin-top: 1rem;
+  border: none;
+  background: #ec4899;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}

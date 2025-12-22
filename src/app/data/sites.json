@@ -1,0 +1,52 @@
+[
+  {
+    "name": "brianwhaley",
+    "localPath": "/Users/btwhaley/Git/brianwhaley",
+    "remote": "brianwhaley"
+  },
+  {
+    "name": "informationfocus",
+    "localPath": "/Users/btwhaley/Git/informationfocus",
+    "remote": "informationfocus"
+  },
+  {
+    "name": "leadscraper",
+    "localPath": "/Users/btwhaley/Git/leadscraper",
+    "remote": "leadscraper"
+  },
+  {
+    "name": "oaktreelandscaping",
+    "localPath": "/Users/btwhaley/Git/oaktreelandscaping",
+    "remote": "oaktreelandscaping"
+  },
+  {
+    "name": "palmetto-epoxy",
+    "localPath": "/Users/btwhaley/Git/palmetto-epoxy",
+    "remote": "palmetto-epoxy"
+  },
+  {
+    "name": "pixelated",
+    "localPath": "/Users/btwhaley/Git/pixelated",
+    "remote": "pixelated"
+  },
+  {
+    "name": "pixelated-admin",
+    "localPath": "/Users/btwhaley/Git/pixelated-admin",
+    "remote": "pixelatedadmin"
+  },
+  {
+    "name": "pixelated-components",
+    "localPath": "/Users/btwhaley/Git/pixelated-components",
+    "remote": "pixelated-components"
+  },
+  {
+    "name": "pixelated-template",
+    "localPath": "/Users/btwhaley/Git/pixelated-template",
+    "remote": "pixelatedtemplate"
+  },
+  {
+    "name": "pixelvivid",
+    "localPath": "/Users/btwhaley/Git/pixelvivid",
+    "remote": "pixelvivid"
+  }
+]

@@ -1,6 +1,6 @@
 /// <reference types="vitest/globals" />
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import DeployPage from '../page';
+import DeployPage from '@/app/(pages)/newdeployment/page';
 import { vi } from 'vitest';
 
 // Mock fetch

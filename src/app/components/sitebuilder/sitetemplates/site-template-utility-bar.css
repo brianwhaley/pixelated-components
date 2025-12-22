@@ -1,0 +1,41 @@
+.utility-bar {
+  min-height: 100vh;
+  background: #f4f6fb;
+  display: flex;
+  flex-direction: column;
+}
+
+.utility-top {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.5rem;
+  padding: 0.75rem 2rem;
+  background: #111827;
+  color: white;
+  font-size: 0.85rem;
+}
+
+.utility-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.15);
+}
+
+.utility-header nav {
+  display: flex;
+  gap: 1rem;
+}
+
+.utility-header a {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.utility-footer {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.15);
+  padding: 1rem 2rem;
+  color: #1e1b4b;
+}

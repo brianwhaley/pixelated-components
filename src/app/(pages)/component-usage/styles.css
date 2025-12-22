@@ -1,0 +1,31 @@
+.usage-table,
+.usage-table th,
+.usage-table td {
+  border: 2px solid #ddd;
+}
+
+.site-header {
+  position: relative;
+  height: 200px; /* header cell height to accommodate rotated label */
+  vertical-align: bottom;
+  padding: 0.5rem 0.75rem;
+}
+
+.site-header-label {
+  position: absolute;
+  bottom: 8px; /* position the label near the bottom of the header cell */
+  left: 0px;
+  transform: translate(0px, 100%) rotate(-90deg);
+  transform-origin: 0 0;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.check-cell {
+  text-align: center;
+}
+
+.text-green-600 {
+	color: #16a34a;
+	font-weight: 900;
+}

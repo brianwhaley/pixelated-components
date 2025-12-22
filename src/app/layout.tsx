@@ -1,36 +1,44 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+
+import Nav from "./components/Nav";
+import { headers } from "next/headers";
+import { getRouteByKey } from "@pixelated-tech/components/server";
+import { generateMetaTags } from "@pixelated-tech/components/server";
+import { LocalBusinessSchema } from "@pixelated-tech/components/server";
+import { VisualDesignStyles } from "@pixelated-tech/components/server";
+import myRoutes from "@/app/data/routes.json";
+import "@pixelated-tech/components/css/pixelated.global.css";
+import "@pixelated-tech/components/css/pixelated.grid.scss";
 import "./globals.css";
-import { Providers } from "@/components/providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export const metadata: Metadata = {
-  title: "Pixelated Admin",
-  description: "Centralized deployment manager for pixelated sites",
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+	const reqHeaders: Headers = await (headers() as Promise<Headers>);
+	const path = reqHeaders.get("x-path") ?? "/";
+	const origin = reqHeaders.get("x-origin");
+	const url = reqHeaders.get("x-url") ?? `${origin}${path}`;
+	const pathname = path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
+	const metadata = getRouteByKey(myRoutes.routes, "path", pathname);
+
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>
-          {children}
-        </Providers>
+      <head>
+		{ generateMetaTags({
+			title: metadata?.title ?? "",
+			description: metadata?.description ?? "",
+			keywords: metadata?.keywords ?? "",
+			origin: origin ?? "",
+			url: url ?? ""
+		}) }
+		<LocalBusinessSchema siteInfo={myRoutes.siteInfo} />
+        <VisualDesignStyles visualdesign={myRoutes.visualdesign} />
+      </head>
+      <body>
+        <Nav />
+        {children}
       </body>
     </html>
   );
