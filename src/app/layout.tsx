@@ -33,7 +33,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 						description: metadata?.description ?? "",
 						keywords: metadata?.keywords ?? "",
 						origin: origin ?? "",
-						url: url ?? ""
+						url: url ?? "",
+						siteInfo: myRoutes.siteInfo
 					}) }
 					<LocalBusinessSchema siteInfo={myRoutes.siteInfo} />
 					<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
