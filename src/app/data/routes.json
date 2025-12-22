@@ -34,14 +34,14 @@
 			"name": "Home", 
 			"path": "/", 
 			"title": "InformationFocus - Home",
-			"description": "",
-			"keywords": ""  
+			"description": "InformationFocus by Mary Ann Sarao - Competitive Intelligence Consulting",
+			"keywords": "information focus, competitive intelligence, consulting, pharma,pharmaceutical industry"  
 		} , { 
 			"name": "Resume", 
 			"path": "/resume", 
 			"title": "InformationFocus - Resume",
-			"description": "",
-			"keywords": ""  
+			"description": "InformationFocus by Mary Ann Sarao - Competitive Intelligence Consulting",
+			"keywords": "information focus, competitive intelligence, consulting, pharma, pharmaceutical industry, resume"  
 		} 
 	],
 	"visualdesign": {
