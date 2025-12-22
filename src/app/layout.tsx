@@ -4,6 +4,7 @@ import { getRouteByKey } from '@pixelated-tech/components/server';
 import { generateMetaTags } from "@pixelated-tech/components/server";
 import { LocalBusinessSchema } from '@pixelated-tech/components/server';
 import { PixelatedServerConfigProvider } from '@pixelated-tech/components/server';
+import { VisualDesignStyles } from '@pixelated-tech/components/server';
 import LayoutClient from '@/app/elements/layout-client';
 import Header from '@/app/elements/header';
 import Nav from '@/app/elements/nav';
@@ -12,7 +13,6 @@ import UnderConstruction from './elements/underconstruction';
 import myRoutes from "@/app/data/routes.json";
 import "@pixelated-tech/components/css/pixelated.global.css";
 import "@pixelated-tech/components/css/pixelated.grid.scss";
-import "@pixelated-tech/components/css/pixelated.font.scss";
 import './globals.css';
 
 export default async function RootLayout({
@@ -73,6 +73,7 @@ export default async function RootLayout({
 				<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" />
 			</head>
 			<body>
+				<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
 				<PixelatedServerConfigProvider>
 					<header>
 						<Header />

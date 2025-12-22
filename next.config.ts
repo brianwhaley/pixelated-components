@@ -1,13 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+	experimental: {
+    	optimizeCss: true,
+  	},
+	transpilePackages: ['@pixelated-tech/components'],
 	trailingSlash: false,
 	typescript: {
 		ignoreBuildErrors: true,
 	},
   	env: {
-		// Unified pixelated config: prefer supplying the full JSON or base64 blob
 		PIXELATED_CONFIG_JSON: process.env.PIXELATED_CONFIG_JSON,
 		PIXELATED_CONFIG_B64: process.env.PIXELATED_CONFIG_B64,
 	},
@@ -21,6 +23,19 @@ const nextConfig: NextConfig = {
 				pathname: '**', // Optional: allows any pathname
 			},
 		],
+	},
+
+	async redirects() {
+		return [];
+	},
+
+	turbopack: {},
+	webpack: (config) => {
+		config.resolve.fallback = { 
+			fs: false,
+			path: false
+		};
+		return config;
 	},
 
 };

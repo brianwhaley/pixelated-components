@@ -78,37 +78,35 @@ export default function About() {
 				
 				<PageSectionHeader title="Our History" />
 
-				<p>In the heart of the South Carolina Lowcountry, Oaktree Landscaping 
-					began its journey in Bluffton with little more than one truck 
-					and a dedication to quality residential care. Founded by Rene in the late 90s, 
-					the company built its reputation one yard at a time. 
-					They focused on mastering the unique challenges of Lowcountry soil and climate, 
-					offering personalized services that transformed modest residential plots into lush, 
-					sustainable sanctuaries. His hands-on approach and commitment to 
-					individual homeowner satisfaction quickly fostered a loyal clientele, 
-					establishing a strong foundation rooted in trust and meticulous attention to detail.</p>
+				<p>In the heart of the South Carolina Lowcountry, Oaktree Landscaping began 
+					its journey in Beaufort with little more than one truck and a dedication 
+					to quality residential care. Founded by Rene in 2018, the company built 
+					its reputation one yard at a time. They focused on mastering the unique 
+					challenges of Lowcountry soil and climate, offering personalized services 
+					that transformed modest residential plots into lush, sustainable 
+					sanctuaries. His hands-on approach and commitment to individual 
+					homeowner satisfaction quickly fostered a loyal clientele, establishing 
+					a strong foundation rooted in trust and meticulous attention to detail.</p>
 				
 				<p>As their reputation flourished through word-of-mouth, Oaktree Landscaping 
-					strategically expanded its operations to meet the growing demands of 
-					Bluffton&lsquo;s booming commercial sector. The small, family-owned business 
-					gradually scaled up to handle larger, more complex projects, from designing 
-					intricate hardscapes for new community developments to maintaining the 
-					extensive grounds of local resorts and business parks. This period marked 
-					significant growth, requiring investment in specialized equipment and the 
-					hiring of expert landscape architects. Yet, despite taking on bigger 
-					commercial challenges, the company remained true to its founding principles of 
-					reliability and aesthetic excellence, adapting its bespoke service model 
-					to suit the professional landscape.</p>
+					strategically expanded its operations to meet the growing demands of areas 
+					booming commercial sector. The small, family-owned business gradually 
+					scaled up moving to more complex projects, from Banks, Plazas and 
+					business parks. Yet, despite taking on bigger commercial challenges, 
+					the company remained true to its founding principles of reliability 
+					and aesthetic excellence, adapting its bespoke service model to 
+					suit the professional landscape.</p>
 				
-				<p>At Oaktree Landscaping, the philosophy remains simple: 
-					every project is a testament to the art of superior landscaping. 
-					The goal is to exceed expectations not just through the beauty 
-					of the finished work, but through exceptional service and a profound respect 
-					for the regional environment. We are dedicated to delivering unparalleled quality 
-					using sustainable practices that enhance the natural beauty of the Lowcountry, 
-					ensuring that every green space we touch—whether a private residence 
-					or a commercial plaza—flourishes in harmony with the community it serves. 
-					The commitment is unwavering: creating lasting beauty, one landscape at a time.</p>
+				<p>At Oaktree Landscaping, the philosophy remains simple: every project 
+					is a testament to the art of superior landscaping. The goal is 
+					to exceed expectations not just through the beauty of the finished work, 
+					but through exceptional service and a profound respect for the 
+					regional environment. We are dedicated to delivering unparalleled 
+					quality using sustainable practices that enhance the natural beauty 
+					of the Lowcountry, ensuring that every green space we touch—whether 
+					a private residence or a commercial plaza—flourishes in harmony 
+					with the community it serves. The commitment is unwavering: 
+					creating lasting beauty, one landscape at a time.</p>
 
 			</PageSection>
 

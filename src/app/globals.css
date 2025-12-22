@@ -1,33 +1,3 @@
-:root {
-	--primary-color: #19471b; /* #1F3A26 */
-  	--secondary-color: #959882; /* #8A9A91 */
-  	--accent1-color: #b26443; /* #A35C48 */
-  	--accent2-color: #beab6c; /* #C5B386 */
-	--text-color: #2C2C2C;	
-	--bg-color: #F4F3EF;
-	--header-font: 'Playfair Display', serif;
-	--body-font: 'Lato', sans-serif;
-}
-
-body {
-	background-color: var(--bg-color) !important;
-	color: var(--text-color);
-	font-family: var(--body-font);
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--header-font); 
-	line-height: 1.1;
-}
-
-:root { 
-	--font-size1-min: 4rem;
-	--font-size1-max: 5rem;
-	--font-size2-min: 2rem;
-	--font-size2-max: 3rem;
-	--font-size3-min: 1.35rem;
-	--font-size3-max: 1.75rem;
-}
 
 body.buttonring button:hover, body.buttonring .button:hover, body.buttonring .centered-button:hover {
     outline-width: 5px !important;
@@ -48,9 +18,9 @@ header {
 		left: 5px;
 		z-index: 5;
 	}
-	.panelMenuButton .hamburger {
+	/* .panelMenuButton .hamburger {
 		font-size: unset
-	};
+	}; */
 	#logo {
 		height: 150px;
 		width: auto;
@@ -68,7 +38,7 @@ nav {
 	}
 	.menu-item a.selected {
 		background-color: var(--secondary-color) !important;
-		color: var(--font-color);
+		color: var(--text-color);
 	}
 	
 }
