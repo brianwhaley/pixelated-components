@@ -3,6 +3,7 @@ import { getRouteByKey } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
 import { LocalBusinessSchema } from "@pixelated-tech/components/server";
 import { PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
+import { VisualDesignStyles } from "@pixelated-tech/components/server";
 import LayoutClient from "./elements/layout-client";
 import Header from "./elements/header";
 import Hero from "./elements/hero";
@@ -71,6 +72,7 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 				/>
 				<meta name="google-site-verification" content="t2yy9wL1bXPiPQjBqDee2BTgpiGQjwVldlfa4X5CQkU" />
 				<meta name="google-site-verification" content="l7D0Y_JsgtACBKNCeFAXPe-UWqo13fPTUCWhkmHStZ4" />
+				<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
 			</head>
 			<body>
 				<PixelatedServerConfigProvider>
