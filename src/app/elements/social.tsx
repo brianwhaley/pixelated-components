@@ -21,7 +21,7 @@ export default function Social() {
 						<div className="gridItem"><Callout variant="full" layout="vertical" imgShape="squircle" url="https://www.reddit.com/user/palmettoepoxy/" img="/images/logos/reddit-logo.png" imgAlt="Reddit" /></div>
 						<div className="gridItem"><Callout variant="full" layout="vertical" imgShape="squircle" url="https://nextdoor.com/pages/palmetto-epoxy-bluffton-sc/" img="/images/logos/nextdoor-logo.png" imgAlt="Nextdoor" /></div>
 						<div className="gridItem"><Callout variant="full" layout="vertical" imgShape="squircle" url="https://www.houzz.com/hznb/professionals/flooring-contractors/palmetto-epoxy-pfvwus-pf~1171449525" img="/images/logos/houzz-logo.jpg" imgAlt="Houzz" /></div>
-						<div className="gridItem"><Callout variant="full" layout="vertical" imgShape="squircle" url="https://www.votedlowcountrysbest.com/listing/palmetto-epoxy.html " img="/images/logos/lowcountrysbest-logo.jpg" imgAlt="Lowcountrys Best" /></div>
+						<div className="gridItem"><Callout variant="full" layout="vertical" imgShape="squircle" url="https://www.votedlowcountrysbest.com/listing/palmetto-epoxy.html" img="/images/logos/lowcountrysbest-logo.jpg" imgAlt="Lowcountrys Best" /></div>
 						<div className="gridItem"><Callout variant="full" layout="vertical" imgShape="squircle" url="https://bni-sclowcountry.com/en-US/memberdetails?encryptedMemberId=nF5nozAX3%2BzPl0hTaNt4zQ%3D%3D" img="/images/logos/bni-logo.png" imgAlt="BNI" /></div>
 					</div>
 				</div>

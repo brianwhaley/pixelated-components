@@ -3,14 +3,41 @@
 		"name": "Palmetto Epoxy",
 		"author": "Palmetto Epoxy",
 		"description": "Palmetto Epoxy - Professional Epoxy Flooring Services in Bluffton, South Carolina",
+		"keywords": "palmetto epoxy, bluffton, south carolina, epoxy flooring, professional services",
 		"url": "https://www.palmetto-epoxy.com",
+		"email": "palmettoepoxy@gmail.com",
 		"favicon": "/favicon.ico",
 		"favicon_sizes": "64x64 32x32 24x24 16x16",
 		"favicon_type": "image/x-icon",
 		"theme_color": "#ffffff",
 		"background_color": "#ffffff",
 		"default_locale": "en",
-		"display": "standalone"
+		"display": "standalone",
+		"image": "/images/palmetto-epoxy-logo.jpg",
+		"image_height": "512",
+		"image_width": "512",
+		"telephone": "+1 (516) 510-8186",
+		"address": {
+			"streetAddress": "116 Beckenridge Circle",
+			"addressLocality": "Bluffton",
+			"addressRegion": "SC",
+			"postalCode": "29910",
+			"addressCountry": "US"
+		},
+		"priceRange": "$",
+		"sameAs": [
+			"https://www.facebook.com/palmettoepoxy",
+			"https://www.instagram.com/palmetto_epoxy/",
+			"https://x.com/palmetto_epoxy",
+			"https://www.youtube.com/@PalmettoEpoxy",
+			"https://www.yelp.com/biz/palmetto-epoxy-bluffton",
+			"https://www.reddit.com/user/palmettoepoxy/",
+			"https://nextdoor.com/pages/palmetto-epoxy-bluffton-sc/",
+			"https://www.houzz.com/hznb/professionals/flooring-contractors/palmetto-epoxy-pfvwus-pf~1171449525",
+			"https://www.votedlowcountrysbest.com/listing/palmetto-epoxy.html",
+			"https://bni-sclowcountry.com/en-US/memberdetails?encryptedMemberId=nF5nozAX3%2BzPl0hTaNt4zQ%3D%3D"
+
+		]
 	},
 	"routes": [
 		{ 
