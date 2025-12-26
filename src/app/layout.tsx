@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import { getRouteByKey } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
 import { LocalBusinessSchema } from "@pixelated-tech/components/server";
-import { PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
 import { VisualDesignStyles } from "@pixelated-tech/components/server";
 import LayoutClient from "@/app/elements/layoutclient";
 import Header from "@/app/elements/header";
@@ -40,12 +39,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 					<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
 				</head>
 				<body>
-					<PixelatedServerConfigProvider>
-						<header><Header /></header>
-						<nav><Nav /></nav>
-						<main>{children}</main>
-						<footer><Footer /></footer>
-					</PixelatedServerConfigProvider>
+					<header><Header /></header>
+					<nav><Nav /></nav>
+					<main>{children}</main>
+					<footer><Footer /></footer>
 				</body>
 			</html>
 		</>
