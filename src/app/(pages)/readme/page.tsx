@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { PageSection } from "@pixelated-tech/components";
+import { PageSection, PageTitleHeader } from "@pixelated-tech/components";
 import { Markdown } from "@pixelated-tech/components";
 const filePath = '/data/readme.md';
 
@@ -17,6 +17,7 @@ export default function Readme() {
 	}, []); 
 	return (
 		<PageSection columns={1} id="markdown-container">
+			<PageTitleHeader title="Brian Whaley - ReadMe" />
 			<Markdown markdowndata={readmeText} />
 		</PageSection>
 	);

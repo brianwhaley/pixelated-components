@@ -51,7 +51,9 @@ const nextConfig: NextConfig = {
 		];
 	},
 
-	turbopack: {},
+	turbopack: {
+		root: __dirname,
+	},
 	// webpack5: true,
 	webpack: (config) => {
 		config.resolve.fallback = {

@@ -83,7 +83,7 @@
 					"path": "/buzzwordbingo", 
 					"title": "Brian Whaley - Buzzword Bingo",
 					"description": "Buzzword Bingo is a game that is played in meetings to help keep you awake.",
-					"keywords": "" 
+					"keywords": "brian whaley, buzzword bingo, corporate speak bingo, meeting bingo, business buzzwords" 
 				} 
 			]
 		}
@@ -105,12 +105,12 @@
 		"font-size3-max": { "value": "1.35rem", "type": "size", "group": "typography", "label": "Font size 3 max" },
 		"font-size4-min": { "value": "1.00rem", "type": "size", "group": "typography", "label": "Font size 4 min" },
 		"font-size4-max": { "value": "1.25rem", "type": "size", "group": "typography", "label": "Font size 4 max" },
-		"font-size5-min": { "value": "0.85rem", "type": "size", "group": "typography", "label": "Font size 5 min" },
+		"font-size5-min": { "value": "0.83rem", "type": "size", "group": "typography", "label": "Font size 5 min" },
 		"font-size5-max": { "value": "1.00rem", "type": "size", "group": "typography", "label": "Font size 5 max" },
-		"font-size6-min": { "value": "0.75rem", "type": "size", "group": "typography", "label": "Font size 6 min" },
+		"font-size6-min": { "value": "0.67rem", "type": "size", "group": "typography", "label": "Font size 6 min" },
 		"font-size6-max": { "value": "0.85rem", "type": "size", "group": "typography", "label": "Font size 6 max" },
-		"font-min-screen": { "value": "20rem", "type": "size", "group": "typography", "label": "Font min screen" },
-		"font-max-screen": { "value": "90rem", "type": "size", "group": "typography", "label": "Font max screen" },
+		"font-min-screen": { "value": "375px", "type": "size", "group": "typography", "label": "Font min screen" },
+		"font-max-screen": { "value": "1440px", "type": "size", "group": "typography", "label": "Font max screen" },
 		"border-radius": { "value": "0.5rem", "type": "size", "group": "layout", "label": "Border radius" },
 		"box-shadow": { "value": "0 2px 4px rgba(0,0,0,0.1)", "type": "shadow", "group": "layout", "label": "Box shadow" },
 		"transition": { "value": "all 0.3s ease", "type": "transition", "group": "layout", "label": "Transition" }
