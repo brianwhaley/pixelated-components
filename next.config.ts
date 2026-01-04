@@ -13,8 +13,12 @@ const nextConfig: NextConfig = {
 		ignoreBuildErrors: true,
 	},
 	env: {
-		PIXELATED_CONFIG_JSON: process.env.PIXELATED_CONFIG_JSON,
-		PIXELATED_CONFIG_B64: process.env.PIXELATED_CONFIG_B64,
+		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+		NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+		GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
+		GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+		GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+		GOOGLE_REFRESH_TOKEN: process.env.GOOGLE_REFRESH_TOKEN,
 	},
 
 	images: {
