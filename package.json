@@ -1,6 +1,6 @@
 {
   "name": "pixelated-admin",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "dev": "npm run clean && NODE_OPTIONS='--inspect' next dev -p 3006 --experimental-https",
