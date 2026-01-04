@@ -27,9 +27,15 @@ export default async function RootLayout({
 	const pathname = path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
 	const metadata = getRouteByKey(myRoutes.routes, "path", pathname);
 
-	// Check authentication for protected routes
+	// Check if running on localhost - redirect to login if not (except for login page)
+	const hostname = reqHeaders.get("host")?.split(':')[0];
+	if (hostname && hostname !== 'localhost' && hostname !== '127.0.0.1' && pathname !== '/login') {
+		redirect('/login');
+	}
+
+	// Check authentication for protected routes (localhost only)
 	const session = await getServerSession(authOptions);
-	if (!session && pathname !== '/login') {
+	if (!session && pathname !== '/login' && hostname === 'localhost') {
 		redirect('/login');
 	}
 

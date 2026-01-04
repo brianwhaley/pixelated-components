@@ -70,6 +70,6 @@ npm audit fix --force
 npm run lint --fix
 npm version patch --force
 git add . -v
-git commit -m "login, site health, component usage, config builder, form builder, page builder, contentful migration, new deployment (local only)"
+git commit -m "login redirect fix"
 git push -u pixelatedadmin dev --tags
 git push pixelatedadmin dev:main
