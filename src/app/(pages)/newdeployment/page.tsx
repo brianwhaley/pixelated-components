@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FormEngine, Loading, ToggleLoading, PageSection } from '@pixelated-tech/components';
 import sites from '@/app/data/sites.json';
 import formData from '@/app/data/deployform.json';
@@ -46,7 +46,7 @@ interface RadioFieldProps {
 interface TextFieldProps {
   id?: string;
   value?: string;
-  onChange?: (value: string | React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange?: (value: string) => void;
 }
 
 interface ButtonFieldProps {
@@ -63,6 +63,15 @@ export default function DeployPage() {
   const [commitMessage, setCommitMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<DeploymentResponse | null>(null);
+  const [isLocalhost, setIsLocalhost] = useState(false);
+
+  useEffect(() => {
+    // Check if running on localhost
+    if (typeof window !== 'undefined') {
+      const hostname = window.location.hostname;
+      setIsLocalhost(hostname === 'localhost' || hostname === '127.0.0.1');
+    }
+  }, []);
 
   const handleSubmit = async (_event: React.FormEvent) => {
     setLoading(true);
@@ -135,15 +144,12 @@ export default function DeployPage() {
         (baseField.props as TextFieldProps) = {
           ...field.props,
           value: commitMessage,
-          onChange: (value: string | React.ChangeEvent<HTMLTextAreaElement>) => {
-            const stringValue = typeof value === 'string' ? value : value.target?.value || '';
-            setCommitMessage(stringValue);
-          }
+          onChange: (value: string) => setCommitMessage(value)
         };
       } else if (field.props.id === 'submit') {
         (baseField.props as ButtonFieldProps) = {
           ...field.props,
-          disabled: loading || selectedSites.length === 0 || selectedEnvironments.length === 0 || !versionType || !String(commitMessage || '').trim(),
+          disabled: loading || selectedSites.length === 0 || selectedEnvironments.length === 0 || !versionType || !commitMessage.trim(),
           text: loading ? 'Deploying...' : 'Deploy'
         };
       }
@@ -158,7 +164,6 @@ export default function DeployPage() {
         <Loading />
         <div className="max-w-2xl w-full mx-4">
         <h1 className="text-2xl font-bold mb-6 text-center">New Deployment</h1>
-        
         <div className="bg-white p-8 rounded-lg shadow-md">
           <FormEngine
             formData={dynamicFormData}

@@ -61,3 +61,15 @@ The Gemini API key is required for AI-powered SEO recommendations in the ConfigB
 6. Add it to your environment variables as `NEXT_PUBLIC_GEMINI_API_KEY`
 
 **Note:** Gemini API has a generous free tier for development, but monitor usage in Google Cloud Console for production costs.
+
+
+## ===== BUILD APP =====
+
+npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
+npm audit fix --force
+npm run lint --fix
+npm version patch --force
+git add . -v
+git commit -m "login, site health, component usage, config builder, form builder, page builder, contentful migration, new deployment (local only)"
+git push -u pixelatedadmin dev --tags
+git push pixelatedadmin dev:main

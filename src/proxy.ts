@@ -32,6 +32,12 @@ export function proxy(req: NextRequest) {
 	headers.set("x-origin", String(origin));
 	headers.set("x-url", String(url));
 
+	// Check if running on localhost - redirect to home if not
+	const hostname = req.headers.get('host')?.split(':')[0];
+	if (hostname && hostname !== 'localhost' && hostname !== '127.0.0.1') {
+		return NextResponse.redirect(new URL('/', req.url));
+	}
+
 	// Rate limiting for auth endpoints
 	if (req.nextUrl.pathname === '/api/auth/signin/google' || req.nextUrl.pathname === '/login') {
 		const ip = req.ip || req.headers.get('x-forwarded-for') || 'unknown';
