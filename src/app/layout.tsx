@@ -31,13 +31,27 @@ export default async function RootLayout({
 	const hostname = reqHeaders.get("host")?.split(':')[0];
 	const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
 
-	// For non-localhost, only allow login page
-	if (!isLocalhost && pathname !== '/login') {
-		redirect('/login');
+	// Restrict new deployment page to localhost only
+	if (pathname === '/newdeployment' && !isLocalhost) {
+		// Check if user is authenticated
+		let session;
+		try {
+			session = await getServerSession(authOptions);
+		} catch (error) {
+			console.error('Session check failed:', error);
+			session = null;
+		}
+		
+		// If authenticated, redirect to home; if not, redirect to login
+		if (session) {
+			redirect('/');
+		} else {
+			redirect('/login');
+		}
 	}
 
-	// Check authentication for localhost routes
-	if (isLocalhost && pathname !== '/login') {
+	// Check authentication for all routes (except login page)
+	if (pathname !== '/login') {
 		let session;
 		try {
 			session = await getServerSession(authOptions);
