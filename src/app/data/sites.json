@@ -2,51 +2,87 @@
   {
     "name": "brianwhaley",
     "localPath": "/Users/btwhaley/Git/brianwhaley",
-    "remote": "brianwhaley"
+    "remote": "brianwhaley",
+    "healthCheckId": "8907c3f0-265e-4942-8bbc-767b4bc03ea9",
+    "url": "https://www.brianwhaley.com",
+    "ga4PropertyId": "494828096",
+    "gscSiteUrl": "https://www.brianwhaley.com"
   },
   {
     "name": "informationfocus",
     "localPath": "/Users/btwhaley/Git/informationfocus",
-    "remote": "informationfocus"
+    "remote": "informationfocus",
+    "healthCheckId": "c075c675-ebc7-4661-b715-fe0303c6c012",
+    "url": "https://www.informationfocus.net",
+    "ga4PropertyId": "517625381",
+    "gscSiteUrl": "sc-domain:informationfocus.net"
   },
   {
     "name": "leadscraper",
     "localPath": "/Users/btwhaley/Git/leadscraper",
-    "remote": "leadscraper"
+    "remote": "leadscraper",
+    "ga4PropertyId": "GA4_PROPERTY_ID_HERE",
+    "gscSiteUrl": "sc-domain:leadscraper.com"
   },
   {
     "name": "oaktreelandscaping",
     "localPath": "/Users/btwhaley/Git/oaktreelandscaping",
-    "remote": "oaktreelandscaping"
+    "remote": "oaktreelandscaping",
+    "healthCheckId": "a98e1373-2f41-45f6-89d2-5ff71c60c238",
+    "url": "https://www.oaktree-landscaping.com",
+    "ga4PropertyId": "516538573",
+    "gscSiteUrl": "sc-domain:oaktree-landscaping.com"
   },
   {
     "name": "palmetto-epoxy",
     "localPath": "/Users/btwhaley/Git/palmetto-epoxy",
-    "remote": "palmetto-epoxy"
+    "remote": "palmetto-epoxy",
+    "healthCheckId": "985f8951-64f6-422c-b5a8-e357b3f36a68",
+    "url": "https://www.palmetto-epoxy.com",
+    "ga4PropertyId": "492316713",
+    "gscSiteUrl": "sc-domain:palmetto-epoxy.com"
   },
   {
     "name": "pixelated",
     "localPath": "/Users/btwhaley/Git/pixelated",
-    "remote": "pixelated"
+    "remote": "pixelated",
+    "healthCheckId": "92f4a0d8-db33-4115-9a20-71886509eb9b",
+    "url": "https://www.pixelated.tech",
+    "ga4PropertyId": "414312932",
+    "gscSiteUrl": "sc-domain:pixelated.tech"
   },
   {
     "name": "pixelated-admin",
     "localPath": "/Users/btwhaley/Git/pixelated-admin",
-    "remote": "pixelatedadmin"
+    "remote": "pixelatedadmin",
+    "healthCheckId": "87fde80b-6a16-4a61-bd4d-43050634e2af",
+    "url": "https://admin.pixelated.tech",
+    "ga4PropertyId": "414312932",
+    "gscSiteUrl": "https://admin.pixelated.tech"
   },
   {
     "name": "pixelated-components",
     "localPath": "/Users/btwhaley/Git/pixelated-components",
-    "remote": "pixelated-components"
+    "remote": "pixelated-components",
+    "healthCheckId": "865c6d61-e882-4386-9d35-a275ebefd587",
+    "url": "https://storybook.pixelated.tech",
+    "ga4PropertyId": "414312932",
+    "gscSiteUrl": "https://storybook.pixelated.tech"
   },
   {
     "name": "pixelated-template",
     "localPath": "/Users/btwhaley/Git/pixelated-template",
-    "remote": "pixelatedtemplate"
+    "remote": "pixelatedtemplate",
+    "ga4PropertyId": "GA4_PROPERTY_ID_HERE",
+    "gscSiteUrl": "sc-domain:pixelatedtemplate.com"
   },
   {
     "name": "pixelvivid",
     "localPath": "/Users/btwhaley/Git/pixelvivid",
-    "remote": "pixelvivid"
+    "remote": "pixelvivid",
+    "healthCheckId": "42cb79db-889f-4bbb-b698-0548e168a5fa",
+    "url": "https://www.pixelvivid.com",
+    "ga4PropertyId": "494907112",
+    "gscSiteUrl": "https://www.pixelvivid.com"
   }
 ]

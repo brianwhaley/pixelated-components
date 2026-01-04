@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { PageSection } from "@pixelated-tech/components";
+import { PageSection, Loading, ToggleLoading } from "@pixelated-tech/components";
 import './styles.css';
 
 interface Site {
@@ -23,6 +23,7 @@ export default function ComponentUsagePage() {
   useEffect(() => {
     async function fetchData() {
       try {
+        ToggleLoading({ show: true });
         const response = await fetch('/api/component-usage');
         if (!response.ok) {
           throw new Error('Failed to fetch component usage data');
@@ -32,6 +33,7 @@ export default function ComponentUsagePage() {
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
+        ToggleLoading({ show: false });
         setLoading(false);
       }
     }
@@ -44,8 +46,9 @@ export default function ComponentUsagePage() {
       <PageSection maxWidth="1024px" columns={1}>
         <div className="min-h-screen bg-gray-50 p-8">
           <div className="max-w-7xl mx-auto">
+          	<h1 className="text-3xl font-bold mb-8">Component Usage Analytics</h1>
             <div className="text-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+              <Loading />
               <p className="mt-4 text-gray-600">Loading component usage data...</p>
             </div>
           </div>
@@ -59,6 +62,7 @@ export default function ComponentUsagePage() {
       <PageSection maxWidth="1024px" columns={1}>
         <div className="min-h-screen bg-gray-50 p-8">
           <div className="max-w-7xl mx-auto">
+          	<h1 className="text-3xl font-bold mb-8">Component Usage Analytics</h1>
             <div className="text-center">
               <p className="text-red-600">Error: {error}</p>
             </div>
