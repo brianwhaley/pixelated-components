@@ -20,23 +20,34 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
 
-	const reqHeaders: Headers = await (headers() as Promise<Headers>);
+	const reqHeaders = await headers();
 	const path = reqHeaders.get("x-path") ?? "/";
 	const origin = reqHeaders.get("x-origin");
 	const url = reqHeaders.get("x-url") ?? `${origin}${path}`;
 	const pathname = path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
 	const metadata = getRouteByKey(myRoutes.routes, "path", pathname);
 
-	// Check if running on localhost - redirect to login if not (except for login page)
+	// Check if running on localhost
 	const hostname = reqHeaders.get("host")?.split(':')[0];
-	if (hostname && hostname !== 'localhost' && hostname !== '127.0.0.1' && pathname !== '/login') {
+	const isLocalhost = hostname === 'localhost' || hostname === '127.0.0.1';
+
+	// For non-localhost, only allow login page
+	if (!isLocalhost && pathname !== '/login') {
 		redirect('/login');
 	}
 
-	// Check authentication for protected routes (localhost only)
-	const session = await getServerSession(authOptions);
-	if (!session && pathname !== '/login' && hostname === 'localhost') {
-		redirect('/login');
+	// Check authentication for localhost routes
+	if (isLocalhost && pathname !== '/login') {
+		let session;
+		try {
+			session = await getServerSession(authOptions);
+		} catch (error) {
+			console.error('Session check failed:', error);
+			session = null;
+		}
+		if (!session) {
+			redirect('/login');
+		}
 	}
 
   return (
