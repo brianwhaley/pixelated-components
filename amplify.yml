@@ -15,7 +15,6 @@ frontend:
         - echo "Building Next.js app..."
         - node -v
         - npm run build
-        - npm run generate-site-images
   artifacts:
     baseDirectory: .next
     files:
