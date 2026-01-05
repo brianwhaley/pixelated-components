@@ -3,11 +3,18 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm ci
+        - rm -f package-lock.json
+        - npm cache clean --force
+        - rm -rf node_modules
+        - rm -rf .next
+        - rm -rf out
+        - npm install --force
+        - npm run generate-site-images
         - echo "Dependencies installed"
     build:
       commands:
         - echo "Building Next.js app..."
+        - node -v
         - npm run build
         - npm run generate-site-images
   artifacts:
@@ -16,6 +23,6 @@ frontend:
       - '**/*'
   cache:
     paths:
-      - node_modules/**/*
       - .next/cache/**/*
       - .next/static/**/*
+      - node_modules/**/*
