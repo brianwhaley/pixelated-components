@@ -40,9 +40,9 @@ npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
 npm audit fix --force
 npm run lint
 npm version patch --force
-git add * -v
+git add . -v
 git commit -m "add amplify.yaml"
-git push informationfocus dev --tags
+git push -u informationfocus dev --tags
 git push informationfocus dev:main
 
 ## ===== AWS AMPLIFY CHANGES =====
