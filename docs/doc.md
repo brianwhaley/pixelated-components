@@ -41,7 +41,7 @@ npm audit fix --force
 npm run lint
 npm version patch --force
 git add . -v
-git commit -m "add amplify.yaml"
+git commit -m "add amplify.yml"
 git push -u informationfocus dev --tags
 git push informationfocus dev:main
 
