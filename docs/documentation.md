@@ -70,6 +70,6 @@ npm audit fix --force
 npm run lint --fix
 npm version patch --force
 git add . -v
-git commit -m "login redirect fix fix fix fix fix fix"
+git commit -m "add amplify.yml"
 git push -u pixelatedadmin dev --tags
 git push pixelatedadmin dev:main
