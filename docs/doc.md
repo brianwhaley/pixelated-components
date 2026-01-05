@@ -27,7 +27,7 @@ npm run lint
 npm run build
 npm version patch --force
 git add . -v
-git commit -m "bump version for amplify.yml"
+git commit -m "fix buildclean script to use rm -rf for optional dist removal"
 git push -u pixelated-components dev --tags --force
 git push pixelated-components dev:main -f
 npm login
