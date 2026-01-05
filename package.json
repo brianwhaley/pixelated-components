@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.5.10",
+	"version": "3.5.11",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -60,7 +60,7 @@
 	"scripts": {
 		"build": "npm run validate-exports && npm run buildClean && npm run tsc && npm run rsync && npm run tscClean ",
 		"build-webpack": "webpack --config webpack.config.cjs && tsc --emitDeclarationOnly --outDir dist/types",
-		"buildClean": "rm -r dist ",
+		"buildClean": "rm -rf dist",
 		"tsc": "npx tsc --project tsconfig.json",
 		"tscClean": "rm -r dist/{images,stories,tests} ",
 		"rsync": "rsync -a --include='*.css' --include='*.scss' --include='*.json' --include='*/' --exclude='*' src/ dist",
