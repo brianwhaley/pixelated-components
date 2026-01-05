@@ -3,9 +3,19 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm ci --legacy-peer-deps
+        - rm -f package-lock.json
+        - npm cache clean --force
+        - rm -rf node_modules
+        - rm -rf .next
+        - rm -rf out
+        - npm install --force
+        - npm run generate-site-images
+        - echo "Dependencies installed"
     build:
       commands:
+        - echo "Building Next.js app..."
+        - node -v
+        - npm run build --legacy-peer-deps
         - npm run buildStorybook --legacy-peer-deps
   artifacts:
     baseDirectory: storybook-static
@@ -13,5 +23,7 @@ frontend:
       - '**/*'
   cache:
     paths:
+      - .next/cache/**/*
+      - .next/static/**/*
       - .npm/**/*
       - node_modules/**/*
