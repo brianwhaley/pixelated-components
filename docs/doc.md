@@ -41,7 +41,7 @@ npm audit fix --force
 npm run lint
 npm version patch --force
 git add * -v
-git commit -m "bump component library version"
+git commit -m "add amplify.yaml"
 git push informationfocus dev --tags
 git push informationfocus dev:main
 
