@@ -3,9 +3,11 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm install
+        - npm ci
+        - echo "Dependencies installed"
     build:
       commands:
+        - echo "Building Next.js app..."
         - npm run build
         - npm run generate-site-images
   artifacts:
@@ -17,8 +19,3 @@ frontend:
       - node_modules/**/*
       - .next/cache/**/*
       - .next/static/**/*
-backend:
-  phases:
-    build:
-      commands:
-        - echo "No backend build steps required"
