@@ -60,6 +60,7 @@ For a complete working example of Pixelated Components in action, check out the 
 - [Sites](#sites)
 
 ### SEO & Schema
+- [FAQAccordion](#faqaccordion)
 - [404 Page](#404-page)
 - [GoogleAnalytics](#googleanalytics)
 - [GoogleMap](#googlemap)
@@ -1509,6 +1510,80 @@ if (!validation.valid) {
 ---
 
 ## SEO & Schema
+
+### FAQAccordion
+
+Interactive FAQ accordion component with search functionality, category icons, and schema.org FAQPage structured data support. Features accessibility-first design with keyboard navigation, screen reader support, and ARIA attributes.
+
+```tsx
+import { FAQAccordion } from '@pixelated-tech/components';
+
+const faqsData = {
+  mainEntity: [
+    {
+      name: "What is React?",
+      category: "Technical Details",
+      acceptedAnswer: {
+        text: "React is a JavaScript library for building user interfaces using components and a virtual DOM."
+      }
+    },
+    {
+      name: "How do I get started?",
+      category: "Getting Started", 
+      acceptedAnswer: {
+        text: [
+          "First, install React using npm or yarn.",
+          "Then create a new project and start building components.",
+          "Don't forget to set up your development environment with proper tooling."
+        ]
+      }
+    }
+  ]
+};
+
+<FAQAccordion faqsData={faqsData} />
+```
+
+#### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `faqsData` | `Object` | - | FAQ data object following schema.org FAQPage structure |
+
+#### Features
+- ✅ **Search Functionality** - Real-time search through questions and answers
+- ✅ **Category Icons** - Visual categorization with emoji icons
+- ✅ **Multi-paragraph Answers** - Support for string or array of strings for rich content
+- ✅ **Accessibility** - Full keyboard navigation, ARIA labels, screen reader support
+- ✅ **Schema.org Compliant** - Structured data for SEO with FAQPage markup
+- ✅ **Expand/Collapse Controls** - Buttons to expand or collapse all FAQs
+- ✅ **Responsive Design** - Mobile-friendly layout with proper touch targets
+
+#### Supported Categories
+- 🚀 Getting Started
+- ⏱️ Process & Timeline  
+- ⚙️ Technical Details
+- 📝 Content & Management
+- 🛠️ Support & Maintenance
+- 📋 Ownership & Legal
+- 💼 Services
+
+#### Data Structure
+The `faqsData` prop should follow the schema.org FAQPage structure:
+
+```typescript
+{
+  mainEntity: Array<{
+    name: string;           // Question text
+    category: string;       // Category for icon display
+    acceptedAnswer: {
+      text: string | string[];  // Answer (string or array of paragraphs)
+    };
+  }>;
+}
+```
+
+---
 
 ### JSON-LD Schemas
 

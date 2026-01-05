@@ -181,6 +181,7 @@ Components for development, configuration, and site building:
 ### SEO & Schema
 Search engine optimization and structured data:
 - **404** - Custom 404 error page component
+- **FAQAccordion** - Interactive FAQ component with schema.org markup and search
 - **GoogleAnalytics** - Google Analytics integration
 - **GoogleMap** - Interactive Google Maps component
 - **GoogleSearch** - Google Custom Search integration

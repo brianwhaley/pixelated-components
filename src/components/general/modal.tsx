@@ -91,6 +91,7 @@ export function Modal({ modalContent, modalID, isOpen = false, handleCloseEvent 
 			onClick={handleModalClick}
 			onKeyDown={handleModalKeyDown}
 			tabIndex={-1}
+			role="presentation"
 			aria-label="Modal overlay"
 		>
 			<div className="modal-content" role="dialog" aria-modal="true">

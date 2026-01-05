@@ -47,6 +47,7 @@ npm run test:run         # Single run (for CI)
 - **schema-localbusiness.tsx**: 100% statements
 - **schema-recipe.tsx**: 100% statements
 - **schema-services.tsx**: 100% statements
+- **faq-accordion.tsx**: 100% statements
 - **schema-website.tsx**: 100% statements
 - **schema-blogposting.tsx**: 100% statements
 - **buzzwordbingo.tsx**: 100% statements

@@ -9,7 +9,6 @@ import { usePixelatedConfig } from '../config/config.client';
 const CLOUDINARY_DOMAIN = 'https://res.cloudinary.com/';
 const CLOUDINARY_TRANSFORMS = 'f_auto,c_limit,q_auto,dpr_auto';
 
-
 function parseNumber(v?: string | number): number | undefined {
 	if (typeof v === 'number') return v > 0 ? v : undefined;
 	if (typeof v === 'string') {
@@ -49,17 +48,17 @@ function generateSrcSet(
 		cloudinaryDomain: opts.cloudinaryDomain })} ${w}w`).join(', ');
 }
 
-
-
-
-const SMARTIMAGE_PROP_TYPES = {
+SmartImage.propTypes = {
 	cloudinaryEnv: PropTypes.string,
 	cloudinaryDomain: PropTypes.string,
 	cloudinaryTransforms: PropTypes.string,
+	// shared props
 	src: PropTypes.string.isRequired,
 	alt: PropTypes.string.isRequired,
-	width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	// width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	// height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	width: PropTypes.number,
+	height: PropTypes.number,
 	aboveFold: PropTypes.bool,
 	loading: PropTypes.oneOf(['lazy', 'eager']),
 	preload: PropTypes.bool,
@@ -74,48 +73,29 @@ const SMARTIMAGE_PROP_TYPES = {
 	title: PropTypes.string,
 	quality: PropTypes.number,
 	placeholder: PropTypes.oneOf(['blur', 'empty']),
-	blurDataURL: PropTypes.string,
 	variant: PropTypes.oneOf(['cloudinary', 'nextjs', 'img']),
 };
-SmartImage.propTypes = SMARTIMAGE_PROP_TYPES;
 export type SmartImageType = InferProps<typeof SmartImage.propTypes> & React.ImgHTMLAttributes<HTMLImageElement>;
 export function SmartImage(props: SmartImageType) {
-	const {
-		src,
-		alt,
-		id, name, title,
-		cloudinaryEnv,
-		cloudinaryDomain = CLOUDINARY_DOMAIN,
-		cloudinaryTransforms = CLOUDINARY_TRANSFORMS,
-		quality = 75,
-		width = 500,
-		height = 500,
-		aboveFold = false,
-		fetchPriority = 'auto',
-		loading = 'lazy',
-		decoding = 'async',
-		preload = false,
-		variant = 'cloudinary',
-		...imgProps
-	} = props;
-
-	const newProps = { ...props };
 	const config = usePixelatedConfig();
 	const cloudCfg = config?.cloudinary;
-	newProps.cloudinaryEnv = safeString(cloudinaryEnv ?? cloudCfg?.product_env);
-	newProps.cloudinaryDomain = safeString(cloudCfg?.baseUrl ?? cloudinaryDomain);
-	newProps.cloudinaryTransforms = safeString(cloudinaryTransforms ?? cloudCfg?.transforms);
-	newProps.fetchPriority = aboveFold ? 'high' : (fetchPriority as any);
-	newProps.loading = aboveFold ? 'eager' : (loading as any);
-	newProps.decoding = aboveFold ? 'sync' : (decoding as any);
-	newProps.preload = aboveFold ? true : preload;
-	newProps.src = safeString(src) ?? (src as any) ?? undefined;
-	newProps.id = safeString(id);
-	newProps.name = safeString(name);
-	newProps.title = safeString(title);
-	newProps.alt = safeString(alt) ?? '';
-	newProps.width = parseNumber(width ?? undefined) ?? 500;
-	newProps.height = parseNumber(height ?? undefined) ?? 500;
+	const variant = props.variant || 'cloudinary';
+	const newProps = { ...props };
+	newProps.cloudinaryEnv = safeString(props.cloudinaryEnv ?? cloudCfg?.product_env);
+	newProps.cloudinaryDomain = safeString(cloudCfg?.baseUrl ?? CLOUDINARY_DOMAIN);
+	newProps.cloudinaryTransforms = safeString(CLOUDINARY_TRANSFORMS ?? cloudCfg?.transforms);
+	newProps.fetchPriority = props.aboveFold ? 'high' : 'auto';
+	newProps.loading = props.aboveFold ? 'eager' : 'lazy';
+	newProps.decoding = props.aboveFold ? 'sync' : 'async';
+	newProps.preload = props.aboveFold ? true : props.preload || false;
+	newProps.src = safeString(props.src) ?? (props.src as any) ?? undefined;
+	newProps.id = safeString(props.id);
+	newProps.name = safeString(props.name);
+	newProps.title = safeString(props.title);
+	newProps.alt = safeString(props.alt) ?? '';
+	newProps.width = parseNumber(props.width ?? 500);
+	newProps.height = parseNumber(props.height ?? 500);
+	newProps.quality = parseNumber(props.quality ?? 75);
 
 	const filename = (newProps.src).split('/').pop()?.split('?')[0] || '';
 	const imageName = filename.replace(/\.[^.]+$/, '');
@@ -123,44 +103,42 @@ export function SmartImage(props: SmartImageType) {
 	newProps.name = newProps.name || newProps.id || sanitizeString(newProps.title) || sanitizeString(newProps.alt) || sanitizeString(imageName);
 	newProps.title = newProps.title || newProps.alt || sanitizeString(imageName);
 
-	let finalSrc = String(newProps.src);
+	newProps.src = String(newProps.src);
 
 	/* ===== CLOUDINARY VARIANT ===== */
 
-	let responsiveSrcSet: string | undefined;
-	let responsiveSizes: string | undefined;
 	if (variant === 'cloudinary' && newProps.cloudinaryEnv) {
 
-		finalSrc = buildCloudinaryUrl({ 
+		newProps.src = buildCloudinaryUrl({ 
 			src: newProps.src, 
 			productEnv: newProps.cloudinaryEnv, 
 			cloudinaryDomain: newProps.cloudinaryDomain, 
-			quality, 
+			quality: newProps.quality,
 			width: newProps.width ?? undefined, 
 			transforms: newProps.cloudinaryTransforms ?? undefined });
 
 		if (newProps.width) {
 			const widths = [Math.ceil(newProps.width * 0.5), newProps.width, Math.ceil(newProps.width * 1.5), Math.ceil(newProps.width * 2)];
-			responsiveSrcSet = generateSrcSet(
+			newProps.srcSet = generateSrcSet(
 				String(newProps.src), 
 				newProps.cloudinaryEnv, 
 				widths, { 
-					quality, 
+					quality: newProps.quality, 
 					transforms: newProps.cloudinaryTransforms ?? undefined, 
 					cloudinaryDomain: newProps.cloudinaryDomain 
 				});
-			responsiveSizes = `${newProps.width}px`;
+			newProps.sizes = `${newProps.width}px`;
 		} else {
 			const breakpoints = [320, 640, 768, 1024, 1280, 1536];
-			responsiveSrcSet = generateSrcSet(
+			newProps.srcSet = generateSrcSet(
 				String(newProps.src), 
 				newProps.cloudinaryEnv, 
 				breakpoints, { 
-					quality, 
+					quality: newProps.quality, 
 					transforms: newProps.cloudinaryTransforms ?? undefined, 
 					cloudinaryDomain: newProps.cloudinaryDomain 
 				});
-			responsiveSizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
+			newProps.sizes = '(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw';
 		}
 	} 
 
@@ -168,28 +146,25 @@ export function SmartImage(props: SmartImageType) {
 	/* variant is not cloudinary and not img (ie nextjs)
 	or variant is cloudinary and no cloudinaryEnv */
 
-	const isDecorative = newProps.alt === '';
-	const decorativeProps = isDecorative ? ({ 'aria-hidden': true, role: 'presentation' } as any) : {};
+	if (newProps.alt === '') {
+		newProps['aria-hidden'] = true;
+		newProps.role = 'presentation';
+	};
+
+	/* clean up props */
+	delete newProps.variant;
+	delete newProps.aboveFold;
+	delete newProps.cloudinaryEnv;
+	delete newProps.cloudinaryDomain;
+	delete newProps.cloudinaryTransforms;
 
 	if (variant !== 'img') {
 		try {
 			return (
-				<Image
-					{...imgProps}
-					{...decorativeProps}
-					src={finalSrc}
-					alt={newProps.alt}
-					id={newProps.id}
-					name={newProps.name}
-					title={newProps.title}
-					width={newProps.width}
-					height={newProps.height}
-					sizes={imgProps.sizes || responsiveSizes}
-					quality={quality}
-					fetchPriority={newProps.fetchPriority}
-					loading={newProps.loading}
-					decoding={newProps.decoding}
-					preload={newProps.preload}
+				<Image 
+					{ ...(newProps as any) }
+					src={newProps.src} // required
+					alt={newProps.alt} // required
 				/>
 			);
 		} catch (e) {
@@ -198,25 +173,11 @@ export function SmartImage(props: SmartImageType) {
 	}
 
 	/* ===== IMG VARIANT ===== */
-	const imgRef = React.useRef<HTMLImageElement | null>(null);
 	return (
-		<img
-			{...imgProps}
-			{...decorativeProps}
-			ref={imgRef}
-			src={finalSrc}
-			alt={newProps.alt}
-			id={newProps.id}
-			name={newProps.name}
-			title={newProps.title}
-			width={newProps.width}
-			height={newProps.height}
-			srcSet={responsiveSrcSet || imgProps.srcSet}
-			sizes={imgProps.sizes || responsiveSizes}
-			fetchPriority={newProps.fetchPriority}
-			loading={newProps.loading}
-			decoding={newProps.decoding}
-		/>
+		<img 
+			{...newProps as any} 
+			ref={React.useRef<HTMLImageElement | null>(null)}
+			alt={newProps.alt} />
 	);
 
 }

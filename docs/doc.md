@@ -27,7 +27,7 @@ npm run lint
 npm run build
 npm version patch --force
 git add . -v
-git commit -m "added faq accordion component, schema faq component, fixed site health components for pixelated admin,adjustments to validate-exports "
+git commit -m "stories and tests for faq-accordion, smartimage refactor"
 git push -u pixelated-components dev --tags --force
 git push pixelated-components dev:main -f
 npm login

@@ -22,7 +22,10 @@ FAQAccordion.propTypes = {
 				name: PropTypes.string,
 				category: PropTypes.string,
 				acceptedAnswer: PropTypes.shape({
-					text: PropTypes.string,
+					text: PropTypes.oneOfType([
+						PropTypes.string,
+						PropTypes.arrayOf(PropTypes.string)
+					]),
 				}),
 			})
 		),
@@ -38,10 +41,13 @@ export function FAQAccordion({ faqsData }: FAQAccordionType) {
 	const filteredFaqs = useMemo(() => {
 		if (!faqsData.mainEntity) return [];
 		if (!searchTerm) return faqsData.mainEntity;
-		return faqsData.mainEntity.filter((faq: any) =>
-			faq.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-			faq.acceptedAnswer.text.toLowerCase().includes(searchTerm.toLowerCase())
-		);
+		return faqsData.mainEntity.filter((faq: any) => {
+			const answerText = Array.isArray(faq.acceptedAnswer.text) 
+				? faq.acceptedAnswer.text.join(' ') 
+				: faq.acceptedAnswer.text;
+			return faq.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+				answerText.toLowerCase().includes(searchTerm.toLowerCase());
+		});
 	}, [faqsData.mainEntity, searchTerm]);
 
 	const expandAll = () => {
@@ -58,7 +64,15 @@ export function FAQAccordion({ faqsData }: FAQAccordionType) {
 
 	// Transform FAQ data to Accordion format
 	const accordionItems: AccordionItem[] = filteredFaqs.map((faq: any, index: number) => {
-		const content: React.ReactNode = <div dangerouslySetInnerHTML={{ __html: faq.acceptedAnswer.text }} />;
+		const content: React.ReactNode = Array.isArray(faq.acceptedAnswer.text) ? (
+			<div>
+				{faq.acceptedAnswer.text.map((paragraph: string, pIndex: number) => (
+					<p key={pIndex} dangerouslySetInnerHTML={{ __html: paragraph }} />
+				))}
+			</div>
+		) : (
+			<div dangerouslySetInnerHTML={{ __html: faq.acceptedAnswer.text }} />
+		);
 		return {
 			title: `${categoryIcons[faq.category as CategoryKey] || '❓'} ${faq.name}`,
 			content,
