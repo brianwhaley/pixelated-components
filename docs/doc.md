@@ -59,7 +59,7 @@ npm audit fix --force
 npm run lint
 npm version patch --force
 git add * -v
-git commit -m "bump component version"
+git commit -m "add amplify.yaml"
 git push -u brianwhaley dev --tags
 git push brianwhaley dev:main
 

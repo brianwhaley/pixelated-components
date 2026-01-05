@@ -1,0 +1,21 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+        - echo "Dependencies installed"
+    build:
+      commands:
+        - echo "Building Next.js app..."
+        - npm run build
+        - npm run generate-site-images
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*
+      - .next/static/**/*
