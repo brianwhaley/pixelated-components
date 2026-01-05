@@ -155,7 +155,8 @@ async function runPrepCommands(siteName: string, versionType: string, commitMess
 
 		// Commit changes
 		await execAsync(`git add . -v`, { timeout: 60000, cwd: localPath });
-		await execAsync(`git commit -m "${commitMessage.replace(/"/g, '\\"')}"`, { timeout: 60000, cwd: localPath });
+		const escapedMessage = commitMessage.replace(/'/g, "'\\''");
+		await execAsync(`git commit -m "${escapedMessage}"`, { timeout: 60000, cwd: localPath });
 		results.push(`Committed changes: ${commitMessage}`);
 
 		// Get the new version

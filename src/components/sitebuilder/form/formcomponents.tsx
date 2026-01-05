@@ -72,7 +72,7 @@ const useFormComponent = (props: any) => {
 		const customOnChange = props.onChange || (props.parent && props.parent.onChange);
 		if (customOnChange) {
 			try {
-				customOnChange(event);
+				customOnChange(value);
 			} catch {
 				// swallow handler errors to avoid breaking validation flow
 			}
