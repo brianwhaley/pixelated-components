@@ -54,8 +54,8 @@ git checkout -b dev
 
 ## ===== BUILD BRIANWHALEY APP =====
 
-npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --save
-npm audit fix
+npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
+npm audit fix --force
 npm run lint
 npm version patch --force
 git add * -v
