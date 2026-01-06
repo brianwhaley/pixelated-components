@@ -63,10 +63,11 @@ This document outlines planned improvements and refactoring initiatives for the 
 ### High Priority Refactoring (Development Speed Focus)
 - [ ] **API Client Abstraction**: Create centralized `ApiClient` class with consistent error handling, caching, and retry logic to eliminate repeated fetch/error patterns across components.
 - [ IP ] **Reusable SiteHealthTemplate Hook**: Extract `useSiteHealthData` hook to eliminate 80% of boilerplate code duplicated across 15+ site-health components.
-  - [x] Phase 1: Extract shared utilities (Completed - Created site-health-utils.ts, updated site-health-performance.tsx)
+  - [ ] Phase 1: Extract shared utilities (Completed - Created site-health-utils.ts, updated site-health-performance.tsx)
   - [ ] Phase 2: Enhance SiteHealthTemplate with endpoint support (Pending)
   - [ ] Phase 3: Migrate components (Pending)
   - [ ] Phase 4: Final cleanup (Pending)- [ ] **SEO Integration Modularization**: Split 1, 193-line monolithic file into focused modules: `page-analyzer.ts`, `site-crawler.ts`, `header-analyzer.ts`, and `metric-scorers.ts`.
+- [ ] **SEO Integration Modularization**: Split 1, 193-line monolithic file into focused modules: `page-analyzer.ts`, `site-crawler.ts`, `header-analyzer.ts`, and `metric-scorers.ts`.
 - [ ] **Component Memoization**: Add `React.memo` and `useMemo` to reduce unnecessary re-renders by 30-50% in large components.
 
 ### Medium Priority Improvements

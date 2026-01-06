@@ -4,6 +4,7 @@ import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { SiteHealthTemplate } from './site-health-template';
 import { getScoreIndicator } from './site-health-indicators';
+import { formatAuditItem, getAuditScoreIcon, getScoreColor } from './site-health-utils';
 
 // On-Site SEO Audit Interface
 interface OnSiteSEOAudit {
@@ -171,13 +172,6 @@ export function SiteHealthOnSiteSEO({ siteName }: SiteHealthOnSiteSEOType) {
 
 				// Process data to aggregate audits by type across all pages
 				const aggregatedOnPageAudits = restructureAuditsByType(data.pagesAnalyzed);
-				const getScoreColor = (score: number | null) => {
-					return getScoreIndicator(score).color;
-				};
-
-				const getAuditScoreIcon = (score: number | null) => {
-					return getScoreIndicator(score).icon;
-				};
 
 				const formatPageIssue = (item: Record<string, unknown>): string => {
 					// Handle page-specific results from restructured data
@@ -233,127 +227,8 @@ export function SiteHealthOnSiteSEO({ siteName }: SiteHealthOnSiteSEOType) {
 					return formatAuditItem(item);
 				};
 
-				const formatAuditItem = (item: Record<string, unknown>): string => {
-					// Handle specific SEO element formatting based on the user's list
-
-					// Title Tags
-					if (item.title && typeof item.title === 'string') {
-						return `Title: "${item.title}" (${item.length || 'unknown'} chars)`;
-					}
-
-					// Meta tags
-					if (item.name && typeof item.name === 'string' && item.content) {
-						return `${item.name}: ${String(item.content)}`;
-					}
-
-					// Headings
-					if (item.tag && typeof item.tag === 'string' && item.tag.match(/^h[1-6]$/i)) {
-						return `${item.tag}: "${item.text || ''}"`;
-					}
-
-					// Links and URLs
-					if (item.url && typeof item.url === 'string') {
-						if (item.issue && typeof item.issue === 'string') {
-							return `${item.url} - ${item.issue}`;
-						}
-						return item.url;
-					}
-
-					// Images with alt tags
-					if (item.src && typeof item.src === 'string') {
-						return `Image: ${item.src} ${item.alt ? '(has alt)' : '(missing alt)'}`;
-					}
-
-					// Robots.txt directives
-					if (item.directive && typeof item.directive === 'string') {
-						return `${item.directive}: ${item.value || ''}`;
-					}
-
-					// Sitemap entries
-					if (item.loc && typeof item.loc === 'string') {
-						return item.loc;
-					}
-
-					// Default formatting
-					return Object.entries(item)
-						.map(([key, value]) => `${key}: ${String(value)}`)
-						.join(', ');
-				};
-
 				return (
 					<>
-						<h4 className="health-site-name">
-							{data.site.replace('-', ' ')}
-						</h4>
-						<p className="health-site-url">
-              URL: {data.url}
-						</p>
-
-						{/* Overall SEO Score */}
-						{data.overallScore !== null && (
-							<div className="health-score-container">
-								<div className="health-score-item">
-									<div className="health-score-label">On-Site SEO Score</div>
-									<div className="health-score-value" style={{ color: getScoreColor(data.overallScore) }}>
-										{Math.round((data.overallScore || 0) * 100)}%
-									</div>
-									<div className="health-score-bar">
-										<div
-											className="health-score-fill"
-											style={{
-												width: `${(data.overallScore || 0) * 100}%`,
-												backgroundColor: getScoreColor(data.overallScore)
-											}}
-										/>
-									</div>
-								</div>
-							</div>
-						)}
-
-						{/* On-Page SEO Audits */}
-						{aggregatedOnPageAudits.length > 0 && (
-							<div>
-								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
-                  On-Page SEO Audits
-								</h5>
-								<div className="health-audit-list">
-									{aggregatedOnPageAudits
-										.filter(audit => audit.scoreDisplayMode !== 'notApplicable')
-										.map((audit) => (
-											<div key={audit.id} className="health-audit-item">
-												<span className="health-audit-icon">
-													{getAuditScoreIcon(audit.score)}
-												</span>
-												<div className="health-audit-content">
-													<span className="health-audit-title">
-														{audit.score === null ? '(N/A)' : `(${Math.round((audit.score || 0) * 100)}%)`} {audit.title}
-													</span>
-													{audit.displayValue && audit.score !== 1 && (
-														<p className="health-audit-description">
-															{audit.displayValue}
-														</p>
-													)}
-													{audit.details && audit.details.items && Array.isArray(audit.details.items) && audit.details.items.length > 0 && audit.score !== 1 && (
-														<div className="health-audit-details">
-															<div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
-																{audit.details.items
-																	.filter((item: Record<string, unknown>) => (item.score as number) !== 1)
-																	.map((item: Record<string, unknown>, idx: number) => (
-																		<div key={idx} style={{ marginBottom: '0.125rem' }}>
-																			{formatPageIssue(item)}
-																		</div>
-																	))}
-															</div>
-														</div>
-													)}
-												</div>
-											</div>
-										))}
-								</div>
-							</div>
-						)}
-
-						{/* On-Site SEO Audits */}
 						{data.onSiteAudits.length > 0 && (
 							<div style={{ marginTop: data.pagesAnalyzed.length > 0 ? '2rem' : '0' }}>
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>

@@ -5,6 +5,7 @@ import PropTypes, { InferProps } from 'prop-types';
 import { SiteHealthTemplate } from './site-health-template';
 import type { CoreWebVitalsResponse } from './site-health-types';
 import { getScoreIndicator } from './site-health-indicators';
+import { formatScore, getScoreColor } from './site-health-utils';
 
 SiteHealthOverview.propTypes = {
 	siteName: PropTypes.string.isRequired,
@@ -46,14 +47,6 @@ export function SiteHealthOverview({ siteName }: SiteHealthOverviewType) {
 				}
 
 				// Helper functions
-				const getScoreColor = (score: number | null) => {
-					return getScoreIndicator(score).color;
-				};
-
-				const formatScore = (score: number | null) => {
-					if (score === null) return 'N/A';
-					return `${Math.round(score * 100)}%`;
-				};
 
 				const getStatusColor = (status: 'good' | 'needs-improvement' | 'poor' | null) => {
 					switch (status) {

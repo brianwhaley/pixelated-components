@@ -425,7 +425,7 @@ th, td {
 }
 
 /* Helper & Semantic classes */
-.health-audit-list > * + * { margin-top: 0.5rem; }
+.health-audit-list > * + * { margin-top: 0.0rem; }
 .health-section-list > * + * { margin-top: 1rem; }
 
 .health-text-muted { color: #9ca3af; }
@@ -448,14 +448,6 @@ th, td {
   color: #166534;
   border-radius: 0.25rem;
   font-weight: 500;
-}
-
-.health-truncate-text {
-  max-width: 20rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: inline-block;
 }
 
 .health-empty-state {

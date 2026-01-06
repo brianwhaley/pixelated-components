@@ -5,6 +5,7 @@ import PropTypes, { InferProps } from 'prop-types';
 import { SiteHealthTemplate } from './site-health-template';
 import type { CoreWebVitalsResponse } from './site-health-types';
 import { getScoreIndicator } from './site-health-indicators';
+import { formatAuditItem, getAuditScoreIcon, getScoreColor } from './site-health-utils';
 
 SiteHealthSEO.propTypes = {
 	siteName: PropTypes.string.isRequired,
@@ -29,108 +30,6 @@ export function SiteHealthSEO({ siteName }: SiteHealthSEOType) {
 			fetchData={fetchSEOData}
 		>
 			{(data) => {
-				const getScoreColor = (score: number | null) => {
-					return getScoreIndicator(score).color;
-				};
-
-				const getAuditScoreIcon = (score: number | null) => {
-					return getScoreIndicator(score).icon;
-				};
-
-				// Helper function to display audit item details
-				const formatAuditItem = (item: Record<string, unknown>, auditTitle?: string): string => {
-					// Handle URLs
-					if (item.url && typeof item.url === 'string') {
-						return item.url;
-					}
-
-					// Handle sources (like JavaScript files)
-					if (item.source && typeof item.source === 'string') {
-						return item.source;
-					}
-
-					// Handle text descriptions
-					if (item.text && typeof item.text === 'string') {
-						return item.text;
-					}
-
-					// Handle entities (like "Google Tag Manager")
-					if (item.entity && typeof item.entity === 'string') {
-						return item.entity;
-					}
-
-					// Handle nodes with selectors
-					if (item.node && typeof item.node === 'object' && 'selector' in item.node) {
-						return `Element: ${(item.node as { selector: string }).selector}`;
-					}
-
-					// Handle nodes with snippets
-					if (item.node && typeof item.node === 'object' && 'snippet' in item.node) {
-						const snippet = (item.node as { snippet: string }).snippet;
-						return `Element: ${snippet.length > 50 ? snippet.substring(0, 50) + '...' : snippet}`;
-					}
-
-					// Handle origins (like domains)
-					if (item.origin && typeof item.origin === 'string') {
-						return item.origin;
-					}
-
-					// Handle labels
-					if (item.label && typeof item.label === 'string') {
-						return item.label;
-					}
-
-					// Handle numeric values with units
-					if (item.value && typeof item.value === 'object' && 'type' in item.value && (item.value as { type: string }).type === 'numeric') {
-						const value = item.value as unknown as { value: number; granularity?: number };
-						return `${value.value}${item.unit || ''}`;
-					}
-
-					// Handle statistics
-					if (item.statistic && typeof item.statistic === 'string' && item.value) {
-						if (typeof item.value === 'object' && 'type' in item.value && (item.value as { type: string }).type === 'numeric') {
-							const value = item.value as unknown as { value: number };
-							return `${item.statistic}: ${value.value}`;
-						}
-						return item.statistic;
-					}
-
-					// Handle timing data with audit context
-					if (typeof item === 'number') {
-						let context = '';
-						if (auditTitle) {
-							if (auditTitle.toLowerCase().includes('server') || auditTitle.toLowerCase().includes('backend')) {
-								context = ' server response';
-							} else if (auditTitle.toLowerCase().includes('network') || auditTitle.toLowerCase().includes('request')) {
-								context = ' network request';
-							} else if (auditTitle.toLowerCase().includes('render') || auditTitle.toLowerCase().includes('blocking')) {
-								context = ' render blocking';
-							} else if (auditTitle.toLowerCase().includes('javascript') || auditTitle.toLowerCase().includes('js')) {
-								context = ' JavaScript';
-							} else if (auditTitle.toLowerCase().includes('image') || auditTitle.toLowerCase().includes('media')) {
-								context = ' media resource';
-							}
-						}
-						return `${(item as number).toFixed(2)}ms${context}`;
-					}
-
-					if (item.value && typeof item.value === 'number') {
-						const unit = item.unit || 'ms';
-						let context = '';
-						if (auditTitle && unit === 'ms') {
-							if (auditTitle.toLowerCase().includes('server')) {
-								context = ' server time';
-							} else if (auditTitle.toLowerCase().includes('network')) {
-								context = ' network time';
-							}
-						}
-						return `${item.value.toFixed(2)}${unit}${context}`;
-					}
-
-					// If we can't find anything meaningful, show a generic message
-					return 'Details available';
-				};
-
 				if (!data?.data || data.data.length === 0) {
 					return (
 						<p style={{ color: '#6b7280' }}>No SEO data available for this site.</p>
