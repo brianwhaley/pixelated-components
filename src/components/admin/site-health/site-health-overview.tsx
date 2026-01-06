@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { SiteHealthTemplate } from './site-health-template';
 import type { CoreWebVitalsResponse } from './site-health-types';
@@ -12,22 +12,14 @@ SiteHealthOverview.propTypes = {
 };
 export type SiteHealthOverviewType = InferProps<typeof SiteHealthOverview.propTypes>;
 export function SiteHealthOverview({ siteName }: SiteHealthOverviewType) {
-	const fetchCWVData = useCallback(async (site: string) => {
-		const response = await fetch(`/api/site-health/core-web-vitals?siteName=${encodeURIComponent(site)}`);
-		const result: CoreWebVitalsResponse = await response.json();
-
-		if (!result.success) {
-			throw new Error(result.error || 'Failed to fetch Core Web Vitals data');
-		}
-
-		return result;
-	}, []);
-
 	return (
 		<SiteHealthTemplate<CoreWebVitalsResponse>
 			siteName={siteName}
 			title="PageSpeed - Site Overview"
-			fetchData={fetchCWVData}
+			endpoint={{
+				endpoint: '/api/site-health/core-web-vitals',
+				responseTransformer: (result) => result, // Result is already in the correct format
+			}}
 		>
 			{(data) => {
 				if (!data?.data || data.data.length === 0) {

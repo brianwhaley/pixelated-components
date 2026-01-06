@@ -11,7 +11,7 @@ global.fetch = mockFetch;
 
 // Mock the SiteHealthTemplate component
 vi.mock('../components/admin/site-health/site-health-template', () => ({
-  SiteHealthTemplate: ({ children, fetchData, siteName }: any) => {
+  SiteHealthTemplate: ({ children, endpoint, siteName }: any) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [data, setData] = useState(null);
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -21,14 +21,27 @@ vi.mock('../components/admin/site-health/site-health-template', () => ({
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     useEffect(() => {
-      if (!siteName) return;
+      if (!siteName || !endpoint) return;
 
       setLoading(true);
-      fetchData(siteName)
+      
+      // Simulate endpoint-based fetching like SiteHealthTemplate does
+      const url = new URL(endpoint.endpoint, 'http://localhost');
+      url.searchParams.set('siteName', encodeURIComponent(siteName));
+
+      mockFetch(url.toString())
+        .then((response: any) => response.json())
+        .then((result: any) => {
+          if (!result.success) {
+            throw new Error(result.error || 'API request failed');
+          }
+          // Apply response transformer if provided
+          return endpoint.responseTransformer ? endpoint.responseTransformer(result) : result;
+        })
         .then(setData)
         .catch((err: Error) => setError(err.message))
         .finally(() => setLoading(false));
-    }, [siteName, fetchData]);
+    }, [siteName, endpoint]);
 
     if (!siteName) return null;
     if (loading) return <div>Loading...</div>;

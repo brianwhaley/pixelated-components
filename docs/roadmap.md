@@ -63,10 +63,10 @@ This document outlines planned improvements and refactoring initiatives for the 
 ### High Priority Refactoring (Development Speed Focus)
 - [ ] **API Client Abstraction**: Create centralized `ApiClient` class with consistent error handling, caching, and retry logic to eliminate repeated fetch/error patterns across components.
 - [ IP ] **Reusable SiteHealthTemplate Hook**: Extract `useSiteHealthData` hook to eliminate 80% of boilerplate code duplicated across 15+ site-health components.
-  - [ ] Phase 1: Extract shared utilities (Completed - Created site-health-utils.ts, updated site-health-performance.tsx)
-  - [ ] Phase 2: Enhance SiteHealthTemplate with endpoint support (Pending)
-  - [ ] Phase 3: Migrate components (Pending)
-  - [ ] Phase 4: Final cleanup (Pending)- [ ] **SEO Integration Modularization**: Split 1, 193-line monolithic file into focused modules: `page-analyzer.ts`, `site-crawler.ts`, `header-analyzer.ts`, and `metric-scorers.ts`.
+  - [x] Phase 1: Extract shared utilities (✅ COMPLETED - Created site-health-utils.ts, updated 6 components: accessibility, on-site-seo, overview, performance, security, seo)
+  - [x] Phase 2: Enhance SiteHealthTemplate with endpoint support (✅ COMPLETED - Added endpoint config, migrated 5 PSI-based components to declarative API calls)
+  - [x] Phase 3: Create reusable useSiteHealthData hook (✅ COMPLETED - Created hook, refactored SiteHealthTemplate, fixed on-site-seo to show both on-page and on-site metrics)
+  - [ IP ] Phase 4: Final cleanup (IN PROGRESS)- [ ] **SEO Integration Modularization**: Split 1, 193-line monolithic file into focused modules: `page-analyzer.ts`, `site-crawler.ts`, `header-analyzer.ts`, and `metric-scorers.ts`.
 - [ ] **SEO Integration Modularization**: Split 1, 193-line monolithic file into focused modules: `page-analyzer.ts`, `site-crawler.ts`, `header-analyzer.ts`, and `metric-scorers.ts`.
 - [ ] **Component Memoization**: Add `React.memo` and `useMemo` to reduce unnecessary re-renders by 30-50% in large components.
 

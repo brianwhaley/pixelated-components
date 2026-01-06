@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { SiteHealthTemplate } from './site-health-template';
 import type { CoreWebVitalsResponse } from './site-health-types';
@@ -16,21 +16,16 @@ SiteHealthSecurity.propTypes = {
 };
 export type SiteHealthSecurityType = InferProps<typeof SiteHealthSecurity.propTypes>;
 export function SiteHealthSecurity({ siteName }: SiteHealthSecurityType) {
-	const fetchSecurityData = useCallback(async (site: string): Promise<CombinedSecurityData> => {
-		// Fetch PSI data for best practices security audits
-		const psiResponse = await fetch(`/api/site-health/core-web-vitals?siteName=${encodeURIComponent(site)}`);
-		const psiResult: CoreWebVitalsResponse = await psiResponse.json();
-
-		return {
-			psiData: psiResult.success ? psiResult : undefined
-		};
-	}, []);
-
 	return (
 		<SiteHealthTemplate<CombinedSecurityData>
 			siteName={siteName}
-			title="PageSpeed - Site Security"
-			fetchData={fetchSecurityData}
+			title="PageSpeed - Security"
+			endpoint={{
+				endpoint: '/api/site-health/core-web-vitals',
+				responseTransformer: (result: CoreWebVitalsResponse) => ({
+					psiData: result.success ? result : undefined
+				}),
+			}}
 		>
 			{(data) => {
 				const psiData = data?.psiData?.data?.[0];

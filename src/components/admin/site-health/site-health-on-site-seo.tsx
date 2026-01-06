@@ -229,10 +229,53 @@ export function SiteHealthOnSiteSEO({ siteName }: SiteHealthOnSiteSEOType) {
 
 				return (
 					<>
-						{data.onSiteAudits.length > 0 && (
-							<div style={{ marginTop: data.pagesAnalyzed.length > 0 ? '2rem' : '0' }}>
+						{aggregatedOnPageAudits.length > 0 && (
+							<div>
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
-                  On-Site SEO Audits
+									On-Page SEO Audits
+								</h5>
+								<div className="health-audit-list">
+									{aggregatedOnPageAudits
+										.filter(audit => audit.scoreDisplayMode !== 'notApplicable')
+										.sort((a, b) => (b.score || 0) - (a.score || 0))
+										.map((audit) => (
+											<div key={audit.id} className="health-audit-item">
+												<span className="health-audit-icon">
+													{getAuditScoreIcon(audit.score)}
+												</span>
+												<div className="health-audit-content">
+													<span className="health-audit-title">
+														{audit.score === null ? '(N/A)' : `(${Math.round((audit.score || 0) * 100)}%)`} {audit.title}
+													</span>
+													{audit.displayValue && audit.score !== 1 && (
+														<p className="health-audit-description">
+															{audit.displayValue}
+														</p>
+													)}
+													{audit.details && audit.details.items && Array.isArray(audit.details.items) && audit.details.items.length > 0 && audit.score !== 1 && (
+														<div className="health-audit-details">
+															<div style={{ fontSize: '0.75rem', color: '#6b7280', marginTop: '0.25rem' }}>
+																{audit.details.items
+																	.filter((item: Record<string, unknown>) => (item.score as number) !== 1)
+																	.map((item: Record<string, unknown>, idx: number) => (
+																		<div key={idx} style={{ marginBottom: '0.125rem' }}>
+																			{formatPageIssue(item)}
+																		</div>
+																	))}
+															</div>
+														</div>
+													)}
+												</div>
+											</div>
+										))}
+								</div>
+							</div>
+						)}
+
+						{data.onSiteAudits.length > 0 && (
+							<div style={{ marginTop: aggregatedOnPageAudits.length > 0 ? '2rem' : '0' }}>
+								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
+									On-Site SEO Audits
 								</h5>
 								<div className="health-audit-list">
 									{data.onSiteAudits
@@ -273,7 +316,7 @@ export function SiteHealthOnSiteSEO({ siteName }: SiteHealthOnSiteSEOType) {
 						)}
 
 						<p className="health-timestamp">
-              Last checked: {new Date(data.timestamp).toLocaleString()}
+							Last checked: {new Date(data.timestamp).toLocaleString()}
 						</p>
 					</>
 				);
