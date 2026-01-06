@@ -15,8 +15,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] Buffer Integration (or Sendible, Sprout Social, Hootsuite)
 - [ ] Zapier Integration
 - [ ] Hero Banner: headline, subtext, CTA, background image/video, overlay.
-- [ ] Accessibility Enhancer: wrapper component that automatically improves accessibility across Pixelated sites by adding ARIA labels, roles, and states to existing components. Includes color contrast checking, keyboard navigation helpers, alt-text suggestions for images, and automated accessibility audits.
-- [ ] SEO Dashboard with AI Integration: component that analyzes site content, suggests optimizations, integrates with AI for meta descriptions and keyword research.
 
 ### CI / CD Improvements
 - [ ] Add CI workflow to run tests and lints on pull requests.
@@ -45,10 +43,8 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **A/B Testing Framework**: Built-in experimentation system for testing different layouts, content, and CTAs with automatic winner selection
 - [ ] **Personalization Engine**: Dynamic content delivery based on user behavior, location, and preferences
 - [ ] **Hot Module Replacement for Configs**: Live preview of configuration changes without full rebuilds
-- [ ] **Automated Dependency Updates**: Smart update system that tests component changes across all sites before deployment
 - [ ] **Rollback System**: One-click rollback to previous versions with automatic database and asset restoration
 - [ ] **Performance Budget Tracker**: Automated monitoring of Core Web Vitals with alerts when sites exceed performance budgets
-- [ IP ] **ConfigBuilder SEO Enhancement**: Upgrade ConfigBuilder with AI-powered meta description generation, keyword optimization suggestions, and automated schema markup
 - [ ] **Conversion Funnel Builder**: Visual funnel creation with automated tracking, A/B testing, and optimization recommendations
 - [ ] **Automated Security Scanner**: Regular security audits with vulnerability detection and automated fixes
 - [ ] **GDPR Compliance Toolkit**: Automated cookie consent, data mapping, and privacy policy generation
@@ -78,12 +74,7 @@ This document outlines planned improvements and refactoring initiatives for the 
 ## Component Library Enhancements
 
 ### UI Component Architecture Standardization (High Priority)
-- [ ] **Modal Component Modernization**: Replace direct DOM manipulation with React state-based modal using proper TypeScript interfaces.
 - [ ] **Standardized Component Interface**: Create consistent component interfaces with `BaseComponentProps` and `InteractiveComponentProps` extending patterns.
-
-### Image & Media Component Optimization (High Priority)
-- [ IP ] **SmartImage Component Breakdown**: Split 223-line monolithic SmartImage component into composable parts: `Image.tsx`, `LazyImage.tsx`, `ResponsiveImage.tsx`, and `Media.tsx`.
-- [ ] **Image Optimization Standardization**: Implement unified image optimization with error boundaries, loading states, and fallback handling.
 
 ### Configuration & State Management (Medium Priority)
 - [ ] **Unified Configuration System**: Create centralized configuration with `ConfigContext.tsx`, `ConfigProvider.tsx`, `useConfig.ts` hook, and service-specific config modules.
@@ -98,44 +89,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 
 ### Testing Infrastructure (Medium Priority)
 - [ ] **Testing Utilities**: Create comprehensive testing utilities including `renderWithProviders.tsx`, mock utilities for config and API, and component test helpers.
-
-
-## Implementation Timeline
-
-### Phase 1 (Next 2-3 weeks): Foundation
-- API Client Abstraction
-- SiteHealthTemplate Hook
-- Modal Component Modernization
-- Basic testing utilities
-
-### Phase 2 (Next 3-4 weeks): Architecture
-- SEO Integration Modularization
-- Component Memoization
-- CMS API Client standardization
-- Unified Configuration System
-
-### Phase 3 (Next 2-3 weeks): Optimization
-- Bundle optimization with dynamic imports
-- Image/Media component optimization
-- Type safety improvements
-
-### Phase 4 (Ongoing): Enhancement
-- Component composition improvements
-- Advanced testing infrastructure
-- Performance monitoring and optimization
-
-## Priority Matrix
-
-| Category | Dev Speed | Performance | Risk | Impact |
-|----------|-----------|-------------|------|---------|
-| Admin Features | 🔥🔥🔥 | 🔥 | 🟢-🟡 | High |
-| UI Architecture | 🔥🔥🔥 | 🔥 | 🟢-🟡 | High |
-| Image/Media | 🔥🔥 | 🔥🔥 | 🟡 | High |
-| Configuration | 🔥🔥 | 🔥 | 🟢 | Medium |
-| API Integration | 🔥🔥🔥 | 🔥 | 🟡 | High |
-| Composition | 🔥 | 🟢 | 🟡 | Medium |
-| Testing | 🔥 | 🟢 | 🟢 | Medium |
-| Bundle Opt | 🟢 | 🔥🔥🔥 | 🟢 | High |
 
 ## Contributing to Roadmap
 

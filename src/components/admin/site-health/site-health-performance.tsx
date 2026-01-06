@@ -251,7 +251,7 @@ export function SiteHealthPerformance({ siteName }: SiteHealthPerformanceType) {
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
                   Performance Opportunities
 								</h5>
-								<div className="space-y-2">
+								<div className="health-audit-list">
 									{[
 										...(siteData.categories.performance?.audits || []),
 										...(siteData.categories.pwa?.audits || [])

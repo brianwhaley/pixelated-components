@@ -70,7 +70,7 @@ export function Component(props: ComponentType) { ... }
 ## Testing
 
 ### Test File Structure
-- Place tests alongside components: `component-name.test.tsx`
+- Place tests in the `src/tests` directory: `component-name.test.tsx`
 - Use descriptive test names
 - Test both success and error cases
 

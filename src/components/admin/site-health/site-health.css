@@ -67,8 +67,7 @@
 
 .site-health-select select:focus {
   outline: none;
-  ring: 2px;
-  ring-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary);
   border-color: var(--color-primary);
 }
 
@@ -418,10 +417,49 @@ td {
 
 table {
   width: 100%;
-  table-layout: fixed;
 }
 
 th, td {
   word-wrap: break-word;
   overflow-wrap: break-word;
+}
+
+/* Helper & Semantic classes */
+.health-audit-list > * + * { margin-top: 0.5rem; }
+.health-section-list > * + * { margin-top: 1rem; }
+
+.health-text-muted { color: #9ca3af; }
+.health-text-secondary { color: var(--color-text-secondary); }
+.health-text-error { color: var(--color-error); }
+
+.health-visualization-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16rem;
+}
+
+.health-version-tag {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  background-color: #dcfce7;
+  color: #166534;
+  border-radius: 0.25rem;
+  font-weight: 500;
+}
+
+.health-truncate-text {
+  max-width: 20rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+.health-empty-state {
+  text-align: center;
+  padding: 1rem 0;
+  color: var(--color-text-secondary);
 }

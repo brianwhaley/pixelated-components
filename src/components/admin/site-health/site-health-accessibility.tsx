@@ -183,7 +183,7 @@ export function SiteHealthAccessibility({ siteName }: SiteHealthAccessibilityTyp
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
                   Accessibility Issues & Recommendations
 								</h5>
-								<div className="space-y-2">
+								<div className="health-audit-list">
 									{siteData.categories.accessibility.audits
 										.filter((audit: any) => audit.scoreDisplayMode !== 'notApplicable')
 										.sort((a: any, b: any) => {

@@ -145,7 +145,7 @@ export function SiteHealthAxeCore({ siteName }: SiteHealthAxeCoreType) {
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
                   Accessibility Violations
 								</h5>
-								<div className="space-y-2">
+								<div className="health-audit-list">
 									{result.violations
 										.sort((a: any, b: any) => {
 											const impactOrder = { critical: 4, serious: 3, moderate: 2, minor: 1 };
@@ -211,7 +211,7 @@ export function SiteHealthAxeCore({ siteName }: SiteHealthAxeCoreType) {
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem', color: '#f59e0b' }}>
                   Incomplete Tests ({result.incomplete.length})
 								</h5>
-								<div className="space-y-2">
+								<div className="health-audit-list">
 									{result.incomplete
 										.sort((a: any, b: any) => a.id.localeCompare(b.id))
 										.slice(0, 10)

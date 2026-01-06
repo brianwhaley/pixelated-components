@@ -183,7 +183,7 @@ export function SiteHealthSEO({ siteName }: SiteHealthSEOType) {
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
                   SEO Issues & Recommendations
 								</h5>
-								<div className="space-y-2">
+								<div className="health-audit-list">
 									{siteData.categories.seo.audits
 										.filter((audit: any) => audit.scoreDisplayMode !== 'notApplicable')
 										.sort((a: any, b: any) => (b.score || 0) - (a.score || 0))

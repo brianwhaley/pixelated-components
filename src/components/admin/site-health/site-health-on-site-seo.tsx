@@ -100,8 +100,8 @@ function restructureAuditsByType(pagesAnalyzed: PageAnalysis[]): OnSiteSEOAudit[
 			scoreDisplayMode: audit.scoreDisplayMode,
 			displayValue: `${passCount}/${totalCount} pages pass`,
 			category: audit.category,
-			details: allPageResults.length > 0 ? {
-				items: allPageResults
+			details: (overallScore !== null && overallScore < 1 && allPageResults.length > 0) ? {
+				items: allPageResults.filter(r => r.score !== 1) // Only show failed pages in details
 			} : undefined
 		};
 
@@ -316,7 +316,7 @@ export function SiteHealthOnSiteSEO({ siteName }: SiteHealthOnSiteSEOType) {
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
                   On-Page SEO Audits
 								</h5>
-								<div className="space-y-2">
+								<div className="health-audit-list">
 									{aggregatedOnPageAudits
 										.filter(audit => audit.scoreDisplayMode !== 'notApplicable')
 										.map((audit) => (
@@ -326,7 +326,7 @@ export function SiteHealthOnSiteSEO({ siteName }: SiteHealthOnSiteSEOType) {
 												</span>
 												<div className="health-audit-content">
 													<span className="health-audit-title">
-                          ({Math.round((audit.score || 0) * 100)}%) {audit.title}
+														{audit.score === null ? '(N/A)' : `(${Math.round((audit.score || 0) * 100)}%)`} {audit.title}
 													</span>
 													{audit.displayValue && audit.score !== 1 && (
 														<p className="health-audit-description">
@@ -359,7 +359,7 @@ export function SiteHealthOnSiteSEO({ siteName }: SiteHealthOnSiteSEOType) {
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
                   On-Site SEO Audits
 								</h5>
-								<div className="space-y-2">
+								<div className="health-audit-list">
 									{data.onSiteAudits
 										.filter(audit => audit.scoreDisplayMode !== 'notApplicable')
 										.sort((a, b) => (b.score || 0) - (a.score || 0))
@@ -370,7 +370,7 @@ export function SiteHealthOnSiteSEO({ siteName }: SiteHealthOnSiteSEOType) {
 												</span>
 												<div className="health-audit-content">
 													<span className="health-audit-title">
-                          ({Math.round((audit.score || 0) * 100)}%) {audit.title}
+														{audit.score === null ? '(N/A)' : `(${Math.round((audit.score || 0) * 100)}%)`} {audit.title}
 													</span>
 													{audit.displayValue && audit.score !== 1 && (
 														<p className="health-audit-description">

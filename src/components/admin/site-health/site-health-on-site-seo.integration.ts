@@ -61,7 +61,12 @@ const dataCollectors: Record<string, (...args: any[]) => any> = {
 	collectInternationalSEOData,
 	collectFacetedNavigationData,
 	collectBrowserCachingData,
-	collectGzipCompressionData
+	collectGzipCompressionData,
+	collectSchemaBlogPostingData,
+	collectSchemaFAQData,
+	collectSchemaLocalBusinessData,
+	collectSchemaServicesData,
+	collectSchemaWebsiteData
 };
 
 /**
@@ -76,7 +81,12 @@ const scorers: Record<string, (data: any) => { score: number; displayValue: stri
 	calculateInternationalSEOData,
 	calculateFacetedNavigationScore,
 	calculateBrowserCachingScore,
-	calculateGzipCompressionScore
+	calculateGzipCompressionScore,
+	calculateSchemaBlogPostingScore,
+	calculateSchemaFAQScore,
+	calculateSchemaLocalBusinessScore,
+	calculateSchemaServicesScore,
+	calculateSchemaWebsiteScore
 };
 
 /**
@@ -590,6 +600,154 @@ async function collectGzipCompressionData(url: string) {
 }
 
 /**
+ * Schema Detection Data Collectors
+ */
+function collectSchemaBlogPostingData(html: string) {
+	const hasBlogPostingSchema = /"@type"\s*:\s*"BlogPosting"/i.test(html) ||
+		/"@type":\s*"BlogPosting"/i.test(html) ||
+		/itemtype="https?:\/\/schema\.org\/BlogPosting"/i.test(html);
+
+	return {
+		present: hasBlogPostingSchema
+	};
+}
+
+function collectSchemaFAQData(html: string) {
+	const hasFAQSchema = /"@type"\s*:\s*"FAQPage"/i.test(html) ||
+		/"@type":\s*"FAQPage"/i.test(html) ||
+		/itemtype="https?:\/\/schema\.org\/FAQPage"/i.test(html);
+
+	return {
+		present: hasFAQSchema
+	};
+}
+
+function collectSchemaLocalBusinessData(html: string) {
+	const hasLocalBusinessSchema = /"@type"\s*:\s*"LocalBusiness"/i.test(html) ||
+		/"@type":\s*"LocalBusiness"/i.test(html) ||
+		/itemtype="https?:\/\/schema\.org\/LocalBusiness"/i.test(html);
+
+	return {
+		present: hasLocalBusinessSchema
+	};
+}
+
+function collectSchemaServicesData(html: string) {
+	const hasServicesSchema = /"@type"\s*:\s*"Service"/i.test(html) ||
+		/"@type":\s*"Service"/i.test(html) ||
+		/itemtype="https?:\/\/schema\.org\/Service"/i.test(html);
+
+	return {
+		present: hasServicesSchema
+	};
+}
+
+function collectSchemaWebsiteData(html: string) {
+	const hasWebsiteSchema = /"@type"\s*:\s*"WebSite"/i.test(html) ||
+		/"@type":\s*"WebSite"/i.test(html) ||
+		/itemtype="https?:\/\/schema\.org\/WebSite"/i.test(html);
+
+	return {
+		present: hasWebsiteSchema
+	};
+}
+
+/**
+ * Detect if a specific page is a blog page
+ */
+function detectBlogPage(html: string, url: string): boolean {
+	// Check URL patterns for blog pages (most reliable)
+	const blogUrlPatterns = /\/(blog|news|articles|posts|journal)(\/|$)/i;
+	const hasBlogUrl = blogUrlPatterns.test(url);
+
+	// Check for blog schema on this page (very reliable)
+	const hasBlogPostingSchema = /"@type"\s*:\s*"BlogPosting"/i.test(html) ||
+		/"@type":\s*"BlogPosting"/i.test(html) ||
+		/itemtype="https?:\/\/schema\.org\/BlogPosting"/i.test(html);
+
+	// Check for blog-specific headings (h1 or h2)
+	const hasBlogHeading = /<(h1|h2)[^>]*>.*?\b(blog|news|articles|journal|posts)\b.*?<\/\1>/i.test(html);
+
+	// Check for article structure with a date that isn't just a copyright year
+	const hasArticle = /<article[^>]*>/i.test(html);
+	const hasSpecificDate = /<time[^>]*datetime=["']\d{4}-\d{2}-\d{2}/i.test(html) || 
+		/\b(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4}\b/i.test(html);
+
+	return hasBlogUrl || hasBlogPostingSchema || (hasArticle && hasSpecificDate) || (hasBlogHeading && hasArticle);
+}
+
+/**
+ * Detect if a specific page is an FAQ page
+ */
+function detectFAQPage(html: string, url: string): boolean {
+	// Check URL patterns for FAQ pages
+	const faqUrlPatterns = /\/(faq|faqs|frequently-asked-questions)(\/|$)/i;
+	const hasFAQUrl = faqUrlPatterns.test(url);
+
+	// Check for FAQ schema on this page
+	const hasFAQSchema = /"@type"\s*:\s*"FAQPage"/i.test(html) ||
+		/"@type":\s*"FAQPage"/i.test(html) ||
+		/itemtype="https?:\/\/schema\.org\/FAQPage"/i.test(html);
+
+	// Check for FAQ-specific headings
+	const hasFAQHeading = /<(h1|h2)[^>]*>.*?\b(faq|faqs|frequently asked questions)\b.*?<\/\1>/i.test(html);
+
+	// Check for multiple question/answer structures (dt/dd or details/summary)
+	const dtCount = (html.match(/<dt[^>]*>/gi) || []).length;
+	const ddCount = (html.match(/<dd[^>]*>/gi) || []).length;
+	const detailsCount = (html.match(/<details[^>]*>/gi) || []).length;
+	
+	const hasFAQStructure = (dtCount >= 3 && ddCount >= 3) || detailsCount >= 3;
+
+	return hasFAQUrl || hasFAQSchema || (hasFAQHeading && hasFAQStructure);
+}
+
+/**
+ * Detect if a specific page is a LocalBusiness page (usually homepage)
+ */
+function detectLocalBusinessPage(html: string, url: string): boolean {
+	const urlObj = new URL(url);
+	const isHomepage = urlObj.pathname === '/' || urlObj.pathname === '';
+	
+	// Check for LocalBusiness schema
+	const hasLocalBusinessSchema = /"@type"\s*:\s*"LocalBusiness"/i.test(html) ||
+		/"@type":\s*"LocalBusiness"/i.test(html) ||
+		/itemtype="https?:\/\/schema\.org\/LocalBusiness"/i.test(html);
+
+	return isHomepage || hasLocalBusinessSchema;
+}
+
+/**
+ * Detect if a specific page is a Service page
+ */
+function detectServicePage(html: string, url: string): boolean {
+	const serviceUrlPatterns = /\/services\/|\/service\/|\/capabilities\/|\/what-we-do\//i;
+	const hasServiceUrl = serviceUrlPatterns.test(url);
+
+	// Check for Service schema
+	const hasServiceSchema = /"@type"\s*:\s*"Service"/i.test(html) ||
+		/"@type":\s*"Service"/i.test(html) ||
+		/itemtype="https?:\/\/schema\.org\/Service"/i.test(html);
+
+	return hasServiceUrl || hasServiceSchema;
+}
+
+/**
+ * Detect if a specific page is a WebSite page (usually homepage)
+ */
+function detectWebsitePage(html: string, url: string): boolean {
+	const urlObj = new URL(url);
+	const isHomepage = urlObj.pathname === '/' || urlObj.pathname === '';
+
+	// Check for WebSite schema
+	const hasWebsiteSchema = /"@type"\s*:\s*"WebSite"/i.test(html) ||
+		/"@type":\s*"WebSite"/i.test(html) ||
+		/itemtype="https?:\/\/schema\.org\/WebSite"/i.test(html);
+
+	return isHomepage || hasWebsiteSchema;
+}
+
+/**
  * Gzip Compression Scorer
  */
 function calculateGzipCompressionScore(data: Awaited<ReturnType<typeof collectGzipCompressionData>>) {
@@ -621,6 +779,59 @@ function calculateGzipCompressionScore(data: Awaited<ReturnType<typeof collectGz
 				'transfer-encoding': data.transferEncoding
 			}
 		}
+	};
+}
+
+/**
+ * Schema Detection Scorers
+ */
+function calculateSchemaBlogPostingScore(data: ReturnType<typeof collectSchemaBlogPostingData>) {
+	const score = data.present ? 1 : 0;
+	const displayValue = data.present ? 'BlogPosting schema found' : 'BlogPosting schema not found';
+
+	return {
+		score,
+		displayValue
+	};
+}
+
+function calculateSchemaFAQScore(data: ReturnType<typeof collectSchemaFAQData>) {
+	const score = data.present ? 1 : 0;
+	const displayValue = data.present ? 'FAQ schema found' : 'FAQ schema not found';
+
+	return {
+		score,
+		displayValue
+	};
+}
+
+function calculateSchemaLocalBusinessScore(data: ReturnType<typeof collectSchemaLocalBusinessData>) {
+	const score = data.present ? 1 : 0;
+	const displayValue = data.present ? 'LocalBusiness schema found' : 'LocalBusiness schema not found';
+
+	return {
+		score,
+		displayValue
+	};
+}
+
+function calculateSchemaServicesScore(data: ReturnType<typeof collectSchemaServicesData>) {
+	const score = data.present ? 1 : 0;
+	const displayValue = data.present ? 'Service schema found' : 'Service schema not found';
+
+	return {
+		score,
+		displayValue
+	};
+}
+
+function calculateSchemaWebsiteScore(data: ReturnType<typeof collectSchemaWebsiteData>) {
+	const score = data.present ? 1 : 0;
+	const displayValue = data.present ? 'WebSite schema found' : 'WebSite schema not found';
+
+	return {
+		score,
+		displayValue
 	};
 }
 
@@ -824,6 +1035,13 @@ async function analyzeSinglePage(url: string): Promise<PageAnalysis> {
 		// Don't close the page here - let it be reused or closed by caller
 		// await page.close();
 
+		// Detect page types
+		const isBlogPage = detectBlogPage(html, url);
+		const isFAQPage = detectFAQPage(html, url);
+		const isLocalBusinessPage = detectLocalBusinessPage(html, url);
+		const isServicePage = detectServicePage(html, url);
+		const isWebsitePage = detectWebsitePage(html, url);
+
 		const audits: OnSiteSEOAudit[] = [];
 
 		// Process on-page metrics from configuration
@@ -831,11 +1049,23 @@ async function analyzeSinglePage(url: string): Promise<PageAnalysis> {
 		const onPageCategory = config.categories['on-page'];
 
 		for (const metric of Object.values(onPageCategory.metrics)) {
-			let score: number = 0;
+			let score: number | null = 0;
 			let displayValue: string = '';
 			let details: any = undefined;
 
-			// Use data collector and scorer if available
+			// Special handling for schema metrics - only check on relevant page types
+			if (metric.id === 'schema-blogposting') {
+				if (!isBlogPage) continue;
+			} else if (metric.id === 'schema-faq') {
+				if (!isFAQPage) continue;
+			} else if (metric.id === 'schema-localbusiness') {
+				if (!isLocalBusinessPage) continue;
+			} else if (metric.id === 'schema-services') {
+				if (!isServicePage) continue;
+			} else if (metric.id === 'schema-website') {
+				if (!isWebsitePage) continue;
+			}
+
 			if (metric.dataCollector && metric.scorer) {
 				const collector = dataCollectors[metric.dataCollector];
 				const scorer = scorers[metric.scorer];
@@ -1132,9 +1362,32 @@ export async function performOnSiteSEOAnalysis(baseUrl: string): Promise<OnSiteS
 
 		// Analyze each page
 		const pagesAnalyzed: PageAnalysis[] = [];
+		const schemaResults: Record<string, Array<{ url: string, title: string, score: number }>> = {
+			'schema-blogposting': [],
+			'schema-faq': [],
+			'schema-localbusiness': [],
+			'schema-services': [],
+			'schema-website': []
+		};
+
 		for (const pageUrl of pagesToAnalyze) {
 			try {
 				const pageAnalysis = await analyzeSinglePage(pageUrl);
+				
+				// Extract and remove schema audits from page-level audits to avoid duplication
+				const schemaIds = Object.keys(schemaResults);
+				pageAnalysis.audits = pageAnalysis.audits.filter(audit => {
+					if (schemaIds.includes(audit.id)) {
+						schemaResults[audit.id].push({
+							url: pageAnalysis.url,
+							title: pageAnalysis.title || '',
+							score: audit.score || 0
+						});
+						return false; // Remove from page-level audits
+					}
+					return true;
+				});
+
 				pagesAnalyzed.push(pageAnalysis);
 			} catch (error) {
 				console.warn(`Failed to analyze ${pageUrl}:`, error);
@@ -1143,6 +1396,63 @@ export async function performOnSiteSEOAnalysis(baseUrl: string): Promise<OnSiteS
 
 		// Perform site-wide audits
 		const onSiteAudits = await performSiteWideAudits(baseUrl);
+
+		// Handle Schema Metrics with specific aggregation logic
+		const schemaConfigs = [
+			{ id: 'schema-blogposting', title: 'BlogPosting Schema', optional: true, failMsg: 'BlogPosting schema not found' },
+			{ id: 'schema-faq', title: 'FAQ Schema', optional: false, failMsg: 'FAQ schema not found', emptyMsg: 'No FAQ pages detected - sites should have FAQ content' },
+			{ id: 'schema-localbusiness', title: 'LocalBusiness Schema', optional: false, failMsg: 'LocalBusiness schema not found' },
+			{ id: 'schema-services', title: 'Service Schema', optional: false, failMsg: 'Service schema not found' },
+			{ id: 'schema-website', title: 'WebSite Schema', optional: false, failMsg: 'WebSite schema not found' }
+		];
+
+		for (const config of schemaConfigs) {
+			const results = schemaResults[config.id];
+			
+			if (results.length === 0) {
+				if (config.optional) {
+					// Optional and none found -> N/A (white dot)
+					onSiteAudits.push({
+						id: config.id,
+						title: config.title,
+						score: null,
+						scoreDisplayMode: 'binary',
+						displayValue: `No ${config.title.split(' ')[0]} pages detected`,
+						category: 'on-site'
+					});
+				} else {
+					// Required but none found -> 0% (red dot)
+					onSiteAudits.push({
+						id: config.id,
+						title: config.title,
+						score: 0,
+						scoreDisplayMode: 'binary',
+						displayValue: config.emptyMsg || `No ${config.title.split(' ')[0]} pages detected`,
+						category: 'on-site'
+					});
+				}
+			} else {
+				const passCount = results.filter(r => r.score === 1).length;
+				const totalCount = results.length;
+				const score = passCount / totalCount;
+				const failedPages = results.filter(r => r.score === 0).map(r => ({
+					page: r.title || r.url,
+					url: r.url,
+					score: 0,
+					displayValue: config.failMsg
+				}));
+
+				onSiteAudits.push({
+					id: config.id,
+					title: config.title,
+					score: score,
+					scoreDisplayMode: 'binary',
+					displayValue: `${passCount}/${totalCount} pages pass`,
+					category: 'on-site',
+					details: score < 1 ? { items: failedPages } : undefined
+				});
+			}
+		}
 
 		// Calculate overall score (simplified - average of all page scores)
 		let totalScore = 0;

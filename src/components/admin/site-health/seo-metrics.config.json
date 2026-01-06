@@ -148,16 +148,6 @@
           "scoreLogic": "present",
           "displayTemplate": "{{count}} manifest link(s) found"
         },
-        "schema-markup": {
-          "id": "schema-markup",
-          "title": "Schema Markup",
-          "description": "Checks for structured data markup",
-          "scoreDisplayMode": "binary",
-          "pattern": "(<script[^>]*type=[\"']application/ld\\+json[\"'][^>]*>[^<]*</script>)|(<[^>]*itemtype=[\"'][^\"']*[\"'][^>]*>)",
-          "countLogic": "count",
-          "scoreLogic": "present",
-          "displayTemplate": "{{count}} schema markup element(s) found"
-        },
         "twitter-cards": {
           "id": "twitter-cards",
           "title": "Twitter Cards",
@@ -239,15 +229,45 @@
           "scoreLogic": "present",
           "displayTemplate": "{{count}} pagination link(s) found"
         },
-        "local-seo-elements": {
-          "id": "local-seo-elements",
-          "title": "Local SEO Elements",
-          "description": "Checks for local business schema markup",
+        "schema-blogposting": {
+          "id": "schema-blogposting",
+          "title": "BlogPosting Schema",
+          "description": "Checks for BlogPosting structured data markup",
           "scoreDisplayMode": "binary",
-          "pattern": "(<script[^>]*type=[\"']application/ld\\+json[\"'][^>]*>[^<]*\"@type\"[^<]*\"LocalBusiness\"[^<]*</script>)|(<[^>]*itemtype=[\"'][^\"']*LocalBusiness[^\"']*[\"'][^>]*>)",
-          "countLogic": "count",
-          "scoreLogic": "present",
-          "displayTemplate": "{{count}} local business schema element(s) found"
+          "dataCollector": "collectSchemaBlogPostingData",
+          "scorer": "calculateSchemaBlogPostingScore"
+        },
+        "schema-faq": {
+          "id": "schema-faq",
+          "title": "FAQ Schema",
+          "description": "Checks for FAQPage structured data markup",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectSchemaFAQData",
+          "scorer": "calculateSchemaFAQScore"
+        },
+        "schema-localbusiness": {
+          "id": "schema-localbusiness",
+          "title": "LocalBusiness Schema",
+          "description": "Checks for LocalBusiness structured data markup",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectSchemaLocalBusinessData",
+          "scorer": "calculateSchemaLocalBusinessScore"
+        },
+        "schema-services": {
+          "id": "schema-services",
+          "title": "Service Schema",
+          "description": "Checks for Service structured data markup",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectSchemaServicesData",
+          "scorer": "calculateSchemaServicesScore"
+        },
+        "schema-website": {
+          "id": "schema-website",
+          "title": "WebSite Schema",
+          "description": "Checks for WebSite structured data markup",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectSchemaWebsiteData",
+          "scorer": "calculateSchemaWebsiteScore"
         },
         "amp-validation": {
           "id": "amp-validation",

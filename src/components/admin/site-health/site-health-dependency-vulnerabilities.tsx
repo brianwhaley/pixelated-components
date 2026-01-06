@@ -95,7 +95,7 @@ export function SiteHealthDependencyVulnerabilities({ siteName }: SiteHealthDepe
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
                   Vulnerabilities ({data.summary.total})
 								</h5>
-								<div className="space-y-2">
+								<div className="health-audit-list">
 									{data.vulnerabilities.map((vuln: any, index: any) => (
 										<div key={index} className={`health-vulnerability-item health-vulnerability-${vuln.severity}`}>
 											<div className="health-vulnerability-header">

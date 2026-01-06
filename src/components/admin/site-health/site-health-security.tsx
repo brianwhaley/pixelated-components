@@ -236,7 +236,7 @@ export function SiteHealthSecurity({ siteName }: SiteHealthSecurityType) {
 								<h5 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '1rem' }}>
                   Security Best Practices
 								</h5>
-								<div className="space-y-2">
+								<div className="health-audit-list">
 									{psiData.categories['best-practices'].audits
 										.filter((audit: any) => audit.scoreDisplayMode !== 'notApplicable')
 										.sort((a: any, b: any) => (b.score || 0) - (a.score || 0))

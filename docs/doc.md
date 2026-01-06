@@ -27,7 +27,7 @@ npm run lint
 npm run build
 npm version patch --force
 git add . -v
-git commit -m "fix buildclean script to use rm -rf for optional dist removal"
+git commit -m "remove tailwind, add new seo metrics to on-site seo component, smartimage fallback error handling"
 git push -u pixelated-components dev --tags --force
 git push pixelated-components dev:main -f
 npm login

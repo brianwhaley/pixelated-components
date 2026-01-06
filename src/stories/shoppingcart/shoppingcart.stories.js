@@ -1,5 +1,5 @@
 import React from 'react';
-import { AddToShoppingCart, ClearShoppingCart, SetShippingInfo } from '@/components/shoppingcart/shoppingcart.functions';
+import { addToShoppingCart, clearShoppingCart, setShippingInfo } from '@/components/shoppingcart/shoppingcart.functions';
 import { ShoppingCart } from '@/components/shoppingcart/shoppingcart.components';
 
 const sbPayPalApiKey = "AT10GG2ZHoApTtEw7dJoU6XRDYkf3wEvK2k_-eZ9GOvOK-REphG8yKCyZCqFi95OrxKgrdctlfWxayHG";
@@ -41,11 +41,11 @@ const ParentShoppingCart = () => {
 	return (
 	  	<>
 			<div>
-				<button type="button" onClick={()=>AddToShoppingCart(item1)}>Add item1 To Cart</button><br />
-				<button type="button" onClick={()=>AddToShoppingCart(item2)}>Add item2 To Cart</button><br />
-				<button type="button" onClick={()=>AddToShoppingCart(item3)}>Add item3 To Cart</button><br />
-				<button type="button" onClick={()=>ClearShoppingCart()}>Clear Shopping Cart</button><br />
-				<button type="button" onClick={()=>SetShippingInfo('')}>Clear Shippin Info</button><br />
+				<button type="button" onClick={()=>addToShoppingCart(item1)}>Add item1 To Cart</button><br />
+				<button type="button" onClick={()=>addToShoppingCart(item2)}>Add item2 To Cart</button><br />
+				<button type="button" onClick={()=>addToShoppingCart(item3)}>Add item3 To Cart</button><br />
+				<button type="button" onClick={()=>clearShoppingCart()}>Clear Shopping Cart</button><br />
+				<button type="button" onClick={()=>setShippingInfo('')}>Clear Shippin Info</button><br />
 			</div>
             <br />
 			<div>

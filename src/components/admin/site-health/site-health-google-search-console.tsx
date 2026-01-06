@@ -56,8 +56,8 @@ export function SiteHealthGoogleSearchConsole({ siteName, startDate, endDate }: 
 			{(data) => {
 				if (!data || data.length === 0) {
 					return (
-						<div className="flex items-center justify-center h-64">
-							<div className="text-gray-500">No indexing data available for the selected date range</div>
+						<div className="health-visualization-placeholder">
+							<div className="health-text-secondary">No indexing data available for the selected date range</div>
 						</div>
 					);
 				}

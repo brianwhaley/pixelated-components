@@ -255,13 +255,23 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 				...field.props,
 				value: (config.visualdesign && (config.visualdesign as any)[field.props.name]) ? ((config.visualdesign as any)[field.props.name].value ?? (config.visualdesign as any)[field.props.name]) : '',
 				defaultValue: (config.visualdesign && (config.visualdesign as any)[field.props.name]) ? ((config.visualdesign as any)[field.props.name].value ?? (config.visualdesign as any)[field.props.name]) : (field.props as any).defaultValue || '',
-				onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-					const value = event.target.value;
+				onChange: (value: any) => {
+					// Handle both direct values and event objects
+					let actualValue = value;
+					if (value && typeof value === 'object' && value.target) {
+						actualValue = value.target.value;
+					}
+
 					setConfig((prev: any) => ({
 						...prev,
 						visualdesign: {
 							...(prev.visualdesign || {}),
-							[field.props.name]: { value }
+							[field.props.name]: {
+								...(prev.visualdesign && (prev.visualdesign as any)[field.props.name] 
+									? (prev.visualdesign as any)[field.props.name] 
+									: {}),
+								value: actualValue
+							}
 						}
 					}));
 				}

@@ -23,8 +23,8 @@ export function Table (props: TableType) {
 	function getHeadings (data: Array<{ [key: string]: any }>) {
 		const headings = Object.keys(data[0]).map((key, i) => {
 			return (props.sortable && props.sortable == true) 
-				? <th key={i} onClick={() => { sortTable(key); }}>{key} <span className="sortArrow" /></th>
-				: <th key={i}>{key}</th>;
+				? <th key={i} onClick={() => { sortTable(key); }}><span>{key}</span> <span className="sortArrow" /></th>
+				: <th key={i}><span>{key}</span></th>;
 		});
 		return <tr>{headings}</tr>;
 	}

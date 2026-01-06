@@ -53,8 +53,8 @@ export function SiteHealthCloudwatch({ siteName, startDate, endDate }: SiteHealt
 			{(data) => {
 				if (!data || data.length === 0) {
 					return (
-						<div className="flex items-center justify-center h-64">
-							<div className="text-gray-500">No uptime data available. Route53 health checks may not be configured to send metrics to CloudWatch.</div>
+						<div className="health-visualization-placeholder">
+							<div className="health-text-secondary">No uptime data available. Route53 health checks may not be configured to send metrics to CloudWatch.</div>
 						</div>
 					);
 				}
@@ -64,8 +64,8 @@ export function SiteHealthCloudwatch({ siteName, startDate, endDate }: SiteHealt
 
 				if (!hasActualData) {
 					return (
-						<div className="flex items-center justify-center h-64">
-							<div className="text-gray-500">
+						<div className="health-visualization-placeholder">
+							<div className="health-text-secondary">
 								Health check exists but has no metric data in CloudWatch for the selected period.<br/>
 								Route53 health checks must be configured to send metrics to CloudWatch for historical data.
 							</div>

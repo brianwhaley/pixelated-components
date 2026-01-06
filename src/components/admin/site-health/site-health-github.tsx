@@ -49,13 +49,13 @@ export function SiteHealthGit({ siteName, startDate, endDate }: SiteHealthGitTyp
 				// Prepare table data
 				const tableData = (data.commits || []).map((commit: any) => ({
 					Date: new Date(commit.date).toLocaleDateString(),
-					Message: <span className="max-w-xs truncate inline-block" title={commit.message}>{commit.message}</span>,
+					Message: <span className="health-truncate-text" title={commit.message}>{commit.message}</span>,
 					Version: commit.version ? (
-						<span className="px-2 py-1 text-xs bg-green-100 text-green-800 rounded">
+						<span className="health-version-tag">
 							{commit.version.split('~')[0]}
 						</span>
 					) : (
-						<span className="text-gray-400">-</span>
+						<span className="health-text-muted">-</span>
 					)
 				}));
 
@@ -65,9 +65,9 @@ export function SiteHealthGit({ siteName, startDate, endDate }: SiteHealthGitTyp
 							{siteName.replace('-', ' ')}
 						</h4>
 
-						<div className="space-y-4">
+						<div className="health-section-list">
 							{tableData.length === 0 ? (
-								<p className="text-gray-500 text-center py-4">No recent commits found</p>
+								<p className="health-empty-state">No recent commits found</p>
 							) : (
 								<Table id="git-table" data={tableData} altRowColor="#DDD" />
 							)}

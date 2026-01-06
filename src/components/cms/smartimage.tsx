@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import Image from 'next/image';
 import { buildCloudinaryUrl } from './cloudinary';
@@ -48,6 +48,8 @@ function generateSrcSet(
 		cloudinaryDomain: opts.cloudinaryDomain })} ${w}w`).join(', ');
 }
 
+type smartImageVariant = 'cloudinary' | 'nextjs' | 'img';
+
 SmartImage.propTypes = {
 	cloudinaryEnv: PropTypes.string,
 	cloudinaryDomain: PropTypes.string,
@@ -79,8 +81,33 @@ export type SmartImageType = InferProps<typeof SmartImage.propTypes> & React.Img
 export function SmartImage(props: SmartImageType) {
 	const config = usePixelatedConfig();
 	const cloudCfg = config?.cloudinary;
-	const variant = props.variant || 'cloudinary';
+	
+	// State to track current variant - only changes on actual errors (rare)
+	const [currentVariant, setCurrentVariant] = useState<smartImageVariant>(
+		(props.variant as smartImageVariant) || 'cloudinary'
+	);
+	
+	const handleError = (error?: any) => {
+		if (currentVariant === 'cloudinary') {
+			console.warn(`SmartImage: Cloudinary variant failed for "${props.src}", falling back to Next.js Image`, error);
+			setCurrentVariant('nextjs');
+		} else if (currentVariant === 'nextjs') {
+			console.warn(`SmartImage: Next.js Image variant failed for "${props.src}", falling back to HTML img`, error);
+			setCurrentVariant('img');
+		}
+		// No more fallbacks after 'img'
+	};
+	
+	// Reset variant if props change (different image)
+	React.useEffect(() => {
+		setCurrentVariant((props.variant as smartImageVariant) || 'cloudinary');
+	}, [props.src, props.variant]);
+	
+	const variant = currentVariant;
 	const newProps = { ...props };
+	
+	// Always create ref to maintain consistent hook count across re-renders
+	const imgRef = React.useRef<HTMLImageElement | null>(null);
 	newProps.cloudinaryEnv = safeString(props.cloudinaryEnv ?? cloudCfg?.product_env);
 	newProps.cloudinaryDomain = safeString(cloudCfg?.baseUrl ?? CLOUDINARY_DOMAIN);
 	newProps.cloudinaryTransforms = safeString(CLOUDINARY_TRANSFORMS ?? cloudCfg?.transforms);
@@ -120,7 +147,7 @@ export function SmartImage(props: SmartImageType) {
 		if (newProps.width) {
 			const widths = [Math.ceil(newProps.width * 0.5), newProps.width, Math.ceil(newProps.width * 1.5), Math.ceil(newProps.width * 2)];
 			newProps.srcSet = generateSrcSet(
-				String(newProps.src), 
+				newProps.src, 
 				newProps.cloudinaryEnv, 
 				widths, { 
 					quality: newProps.quality, 
@@ -131,7 +158,7 @@ export function SmartImage(props: SmartImageType) {
 		} else {
 			const breakpoints = [320, 640, 768, 1024, 1280, 1536];
 			newProps.srcSet = generateSrcSet(
-				String(newProps.src), 
+				newProps.src, 
 				newProps.cloudinaryEnv, 
 				breakpoints, { 
 					quality: newProps.quality, 
@@ -165,10 +192,13 @@ export function SmartImage(props: SmartImageType) {
 					{ ...(newProps as any) }
 					src={newProps.src} // required
 					alt={newProps.alt} // required
+					onError={handleError}
 				/>
 			);
 		} catch (e) {
-			if (typeof console !== 'undefined') console.warn('next/image unavailable, falling back to <img>', e);
+			console.warn(`SmartImage: Next.js Image threw exception for "${props.src}", falling back to plain img`, e);
+			// Force fallback to img variant
+			setCurrentVariant('img');
 		}
 	}
 
@@ -176,7 +206,7 @@ export function SmartImage(props: SmartImageType) {
 	return (
 		<img 
 			{...newProps as any} 
-			ref={React.useRef<HTMLImageElement | null>(null)}
+			ref={imgRef}
 			alt={newProps.alt} />
 	);
 
