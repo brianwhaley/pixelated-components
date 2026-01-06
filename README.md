@@ -115,6 +115,31 @@ npm install react react-dom prop-types
 
 This library is written in TypeScript and provides full type definitions. No additional setup required.
 
+### Release Process
+
+This project uses an automated release script to ensure consistent versioning and branch synchronization:
+
+```bash
+# Run the release script (must be on dev branch)
+npm run release
+# Or run directly:
+./scripts/release.sh
+```
+
+The release script will:
+- Update dependencies and run security audits
+- Run linting and build the project
+- Prompt for version bump type (patch/minor/major/custom/none)
+- Commit changes with proper versioning
+- Push dev branch to remote
+- Force-sync main branch to match dev
+- Create and push git tags
+- **Optionally** publish to npm (with OTP authentication)
+
+**Important**: Always run releases from the `dev` branch. The script ensures both `dev` and `main` branches stay synchronized.
+
+**Universal Usage**: This script is designed to work with any Pixelated project and automatically detects project settings.
+
 ### Reference Implementation
 
 For a complete working example of Pixelated Components in action, check out the [pixelated-admin](https://github.com/brianwhaley/pixelated-admin) project. This admin interface demonstrates:

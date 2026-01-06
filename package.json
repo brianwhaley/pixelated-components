@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.6.0",
+	"version": "3.6.1",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -83,7 +83,8 @@
 		"test:ui": "vitest --ui",
 		"test:coverage": "vitest run --coverage",
 		"test:run": "vitest run",
-		"lint": "eslint --fix"
+		"lint": "eslint --fix",
+		"release": "./scripts/release.sh"
 	},
 	"scripts-old": {
 		"buildBabel": "npm run buildClean && NODE_ENV=production babel src --out-dir dist --copy-files",

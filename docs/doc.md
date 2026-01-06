@@ -21,17 +21,30 @@ npm unpublish @brianwhaley/pixelated-components --force
 
 
 ## DEPLOYMENT SCRIPT
-npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
-npm audit fix --force
-npm run lint
-npm run build
-npm version patch --force
-git add . -v
-git commit -m "remove tailwind, add new seo metrics to on-site seo component, smartimage fallback error handling"
-git push -u pixelated-components dev --tags --force
-git push pixelated-components dev:main -f
-npm login
-npm publish --access public --otp=000000
+# New improved release script that properly syncs dev and main branches
+npm run release
+# Or run directly:
+./scripts/release.sh
+
+# Features:
+# - Interactive version bumping (patch/minor/major/custom/none)
+# - Proper dev->main branch synchronization
+# - Optional npm publishing with OTP prompts
+# - Works with any Pixelated project
+# - Automatic git tagging
+
+# Old script (deprecated - doesn't properly sync branches):
+# npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save
+# npm audit fix --force
+# npm run lint
+# npm run build
+# npm version patch --force
+# git add . -v
+# git commit -m "remove tailwind, add new seo metrics to on-site seo component, smartimage fallback error handling"
+# git push -u pixelated-components dev --tags --force
+# git push pixelated-components dev:main -f
+# npm login
+# npm publish --access public --otp=000000
 
 
 
