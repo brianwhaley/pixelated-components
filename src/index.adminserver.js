@@ -14,6 +14,7 @@ export * from './components/admin/site-health/site-health-cloudwatch.integration
 export * from './components/admin/site-health/seo-constants';
 export * from './components/admin/site-health/site-health-security.integration';
 export * from './components/admin/site-health/site-health-types';
+export * from './components/admin/site-health/site-health-utils';
 export * from './components/admin/site-health/site-health-uptime.integration';
 export * from './components/admin/sites/sites.integration';
 export * from './components/cms/contentful.management';
