@@ -28,15 +28,15 @@ prompt_version_type() {
     echo "5) no version bump" >&2
     read -p "Enter choice (1-5): " choice >&2
     case $choice in
-        1) echo "patch" ;;
-        2) echo "minor" ;;
-        3) echo "major" ;;
+        1) version_type="patch" ;;
+        2) version_type="minor" ;;
+        3) version_type="major" ;;
         4)
             read -p "Enter custom version: " custom_version >&2
-            echo "$custom_version"
+            version_type="$custom_version"
             ;;
-        5) echo "none" ;;
-        *) echo "patch" ;; # default
+        5) version_type="none" ;;
+        *) version_type="patch" ;; # default
     esac
 }
 
@@ -86,7 +86,7 @@ echo "🔨 Step 3: Building project..."
 npm run build
 
 echo "🏷️  Step 4: Version bump..."
-version_type=$(prompt_version_type)
+prompt_version_type
 if [ "$version_type" != "none" ]; then
     if [ "$version_type" = "patch" ] || [ "$version_type" = "minor" ] || [ "$version_type" = "major" ]; then
         npm version $version_type --force --no-git-tag-version
@@ -106,7 +106,18 @@ else
 fi
 
 echo "📤 Step 6: Pushing dev branch..."
-git push $REMOTE_NAME dev
+# Try to push, if it fails due to remote changes, pull and try again
+if ! git push $REMOTE_NAME dev; then
+    echo "⚠️  Push failed, pulling remote changes and trying again..."
+    git pull $REMOTE_NAME dev --no-edit || {
+        echo "❌ Failed to pull remote changes. Please resolve conflicts manually."
+        exit 1
+    }
+    git push $REMOTE_NAME dev || {
+        echo "❌ Still failed to push after pulling. Please check git status."
+        exit 1
+    }
+fi
 
 echo "🔄 Step 7: Updating main branch..."
 # Force main to match dev exactly
