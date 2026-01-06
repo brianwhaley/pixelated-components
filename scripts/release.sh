@@ -7,16 +7,47 @@ set -e  # Exit on any error
 
 # Get project name from package.json
 PROJECT_NAME=$(node -p "require('./package.json').name" 2>/dev/null || echo "unknown-project")
-# Find the remote that matches the project name or has our branches
-REMOTE_NAME=$(git remote | grep "pixelated-components" | head -1)
-if [ -z "$REMOTE_NAME" ]; then
-    REMOTE_NAME=$(git remote | grep "pixelated" | head -1)
-fi
-if [ -z "$REMOTE_NAME" ]; then
-    REMOTE_NAME=$(git remote | xargs -I {} sh -c 'git ls-remote --heads {} dev >/dev/null 2>&1 && echo {}' | head -1)
-fi
-if [ -z "$REMOTE_NAME" ]; then
-    REMOTE_NAME=$(git remote | head -1)  # Fallback to first remote
+
+# Function to prompt for remote selection
+prompt_remote_selection() {
+    echo "Available git remotes:" >&2
+    local remotes=($(git remote))
+    local i=1
+    for remote in "${remotes[@]}"; do
+        echo "$i) $remote" >&2
+        ((i++))
+    done
+    
+    local choice
+    read -p "Select remote to use (1-${#remotes[@]}): " choice >&2
+    
+    case $choice in
+        [1-9]|[1-9][0-9])
+            if [ "$choice" -le "${#remotes[@]}" ]; then
+                echo "${remotes[$((choice-1))]}"
+            else
+                echo "${remotes[0]}"  # Default to first if invalid
+            fi
+            ;;
+        *) echo "${remotes[0]}" ;;  # Default to first remote
+    esac
+}
+
+# Select remote
+if [ -t 0 ]; then
+    REMOTE_NAME=$(prompt_remote_selection)
+else
+    # Non-interactive: use smart detection
+    REMOTE_NAME=$(git remote | grep "pixelated-components" | head -1)
+    if [ -z "$REMOTE_NAME" ]; then
+        REMOTE_NAME=$(git remote | grep "pixelated" | head -1)
+    fi
+    if [ -z "$REMOTE_NAME" ]; then
+        REMOTE_NAME=$(git remote | xargs -I {} sh -c 'git ls-remote --heads {} dev >/dev/null 2>&1 && echo {}' | head -1)
+    fi
+    if [ -z "$REMOTE_NAME" ]; then
+        REMOTE_NAME=$(git remote | head -1)  # Fallback to first remote
+    fi
 fi
 
 echo "🚀 Starting Release Process for $PROJECT_NAME"
