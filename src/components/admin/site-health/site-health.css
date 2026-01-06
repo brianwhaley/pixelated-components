@@ -455,3 +455,10 @@ th, td {
   padding: 1rem 0;
   color: var(--color-text-secondary);
 }
+
+/* Print Styles */
+@media print {
+  .site-health-header {
+    display: none;
+  }
+}

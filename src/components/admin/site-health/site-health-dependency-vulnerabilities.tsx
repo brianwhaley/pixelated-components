@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { SiteHealthTemplate } from './site-health-template';
 import type { DependencyData } from './site-health-types';
@@ -10,22 +10,14 @@ SiteHealthDependencyVulnerabilities.propTypes = {
 };
 export type SiteHealthDependencyVulnerabilitiesType = InferProps<typeof SiteHealthDependencyVulnerabilities.propTypes>;
 export function SiteHealthDependencyVulnerabilities({ siteName }: SiteHealthDependencyVulnerabilitiesType) {
-	const fetchDependencyData = useCallback(async (site: string): Promise<DependencyData> => {
-		const response = await fetch(`/api/site-health/security?siteName=${encodeURIComponent(site)}`);
-		const result: DependencyData = await response.json();
-
-		if (!result.success) {
-			throw new Error(result.error || 'Failed to fetch dependency data');
-		}
-
-		return result;
-	}, []);
-
 	return (
 		<SiteHealthTemplate<DependencyData>
 			siteName={siteName}
 			title="Dependency Vulnerability"
-			fetchData={fetchDependencyData}
+			endpoint={{
+				endpoint: '/api/site-health/security',
+				responseTransformer: (result) => result, // Result is already in the correct format
+			}}
 		>
 			{(data) => {
 				if (!data) {

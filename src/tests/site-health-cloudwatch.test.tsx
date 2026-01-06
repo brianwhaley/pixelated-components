@@ -10,7 +10,7 @@ global.fetch = mockFetch;
 
 // Mock the SiteHealthTemplate component
 vi.mock('../components/admin/site-health/site-health-template', () => ({
-  SiteHealthTemplate: ({ children, fetchData, siteName }: any) => {
+  SiteHealthTemplate: ({ children, endpoint, siteName, startDate, endDate }: any) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [data, setData] = useState(null);
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -23,11 +23,28 @@ vi.mock('../components/admin/site-health/site-health-template', () => ({
       if (!siteName) return;
 
       setLoading(true);
-      fetchData(siteName)
+      // Simulate the endpoint call with params
+      const params = new URLSearchParams({ siteName });
+      if (endpoint.params?.startDate) params.append('startDate', endpoint.params.startDate);
+      if (endpoint.params?.endDate) params.append('endDate', endpoint.params.endDate);
+      const url = `http://localhost:3000${endpoint.endpoint}?${params.toString()}`;
+      global.fetch(url, { method: 'GET' })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(result => {
+          if (!result.success) {
+            throw new Error(result.error || 'API request failed');
+          }
+          return endpoint.responseTransformer ? endpoint.responseTransformer(result) : result;
+        })
         .then(setData)
         .catch((err: Error) => setError(err.message))
         .finally(() => setLoading(false));
-    }, [siteName, fetchData]);
+    }, [siteName, endpoint]);
 
     if (!siteName) return null;
     if (loading) return <div>Loading...</div>;
@@ -145,7 +162,7 @@ describe('SiteHealthCloudwatch', () => {
     render(<SiteHealthCloudwatch siteName="test-site" />);
 
     await waitFor(() => {
-      expect(screen.getByText('Error: Failed to fetch CloudWatch data: 500')).toBeInTheDocument();
+      expect(screen.getByText('Error: HTTP error! status: 500')).toBeInTheDocument();
     });
   });
 
@@ -161,7 +178,7 @@ describe('SiteHealthCloudwatch', () => {
     render(<SiteHealthCloudwatch siteName="test-site" />);
 
     await waitFor(() => {
-      expect(screen.getByText('Error: Route53 Health Check ID not configured for this site')).toBeInTheDocument();
+      expect(screen.getByText('Error: Health Check ID not configured for site test-site')).toBeInTheDocument();
     });
   });
 
@@ -174,7 +191,7 @@ describe('SiteHealthCloudwatch', () => {
     render(<SiteHealthCloudwatch siteName="test-site" startDate="2024-01-01" endDate="2024-01-31" />);
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledWith('/api/site-health/cloudwatch?siteName=test-site&startDate=2024-01-01&endDate=2024-01-31');
+      expect(mockFetch).toHaveBeenCalledWith('http://localhost:3000/api/site-health/cloudwatch?siteName=test-site&startDate=2024-01-01&endDate=2024-01-31', { method: 'GET' });
     });
   });
 });

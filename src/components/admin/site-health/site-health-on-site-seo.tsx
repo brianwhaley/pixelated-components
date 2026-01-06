@@ -112,52 +112,19 @@ function restructureAuditsByType(pagesAnalyzed: PageAnalysis[]): OnSiteSEOAudit[
 	return restructuredAudits.sort((a, b) => (b.score || 0) - (a.score || 0));
 }
 
-// Fetch real SEO data from API
-async function fetchOnSiteSEOData(siteName: string): Promise<OnSiteSEOData> {
-	try {
-		const response = await fetch(`/api/site-health/on-site-seo?siteName=${encodeURIComponent(siteName)}`);
-
-		if (!response.ok) {
-			throw new Error(`API request failed: ${response.status} ${response.statusText}`);
-		}
-
-		const data = await response.json();
-
-		if (data.status === 'error') {
-			throw new Error(data.error || 'SEO analysis failed');
-		}
-
-		// Process data to aggregate audits by type across all pages
-		// const aggregatedOnPageAudits = restructureAuditsByType(data.pagesAnalyzed);
-
-		return data;
-	} catch (error) {
-		console.error('Error fetching SEO data:', error);
-		// Return error structure that the template can display
-		return {
-			site: siteName,
-			url: '',
-			overallScore: null,
-			pagesAnalyzed: [],
-			onSiteAudits: [],
-			totalPages: 0,
-			timestamp: new Date().toISOString(),
-			status: 'error',
-			error: error instanceof Error ? error.message : 'Failed to fetch SEO data'
-		};
-	}
-}
-
 SiteHealthOnSiteSEO.propTypes = {
 	siteName: PropTypes.string.isRequired,
 };
 export type SiteHealthOnSiteSEOType = InferProps<typeof SiteHealthOnSiteSEO.propTypes>;
 export function SiteHealthOnSiteSEO({ siteName }: SiteHealthOnSiteSEOType) {
 	return (
-		<SiteHealthTemplate
+		<SiteHealthTemplate<OnSiteSEOData>
 			siteName={siteName}
 			title="On-Site SEO"
-			fetchData={fetchOnSiteSEOData}
+			endpoint={{
+				endpoint: '/api/site-health/on-site-seo',
+				responseTransformer: (result) => result.data, // Extract the data from the response
+			}}
 		>
 			{(data: OnSiteSEOData | null) => {
 				if (!data) return null;

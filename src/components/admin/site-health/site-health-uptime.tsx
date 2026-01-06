@@ -10,22 +10,14 @@ SiteHealthUptime.propTypes = {
 };
 export type SiteHealthUptimeType = InferProps<typeof SiteHealthUptime.propTypes>;
 export function SiteHealthUptime({ siteName }: SiteHealthUptimeType) {
-	const fetchUptimeData = async (site: string) => {
-		const response = await fetch(`/api/site-health/uptime?siteName=${encodeURIComponent(site)}`);
-		const result: UptimeData = await response.json();
-
-		if (!result.success) {
-			throw new Error('Failed to load health status');
-		}
-
-		return result;
-	};
-
 	return (
 		<SiteHealthTemplate<UptimeData>
 			siteName={siteName}
 			title="Health Status"
-			fetchData={fetchUptimeData}
+			endpoint={{
+				endpoint: '/api/site-health/uptime',
+				responseTransformer: (result) => result, // Result is already in the correct format
+			}}
 		>
 			{(data) => {
 				if (!data) {

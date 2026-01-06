@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { SiteHealthTemplate } from './site-health-template';
 import type { AxeCoreResponse, AxeViolation, AxeNode } from './site-health-types';
@@ -11,17 +11,6 @@ SiteHealthAxeCore.propTypes = {
 };
 export type SiteHealthAxeCoreType = InferProps<typeof SiteHealthAxeCore.propTypes>;
 export function SiteHealthAxeCore({ siteName }: SiteHealthAxeCoreType) {
-	const fetchAxeCoreData = useCallback(async (site: string) => {
-		const response = await fetch(`/api/site-health/axe-core?siteName=${encodeURIComponent(site)}`);
-		const result: AxeCoreResponse = await response.json();
-
-		if (!result.success) {
-			throw new Error(result.error || 'Failed to fetch axe-core data');
-		}
-
-		return result;
-	}, []);
-
 	const getImpactColor = (impact: string) => {
 		return getImpactIndicator(impact).color;
 	};
@@ -47,7 +36,10 @@ export function SiteHealthAxeCore({ siteName }: SiteHealthAxeCoreType) {
 		<SiteHealthTemplate<AxeCoreResponse>
 			siteName={siteName}
 			title="Axe-Core Accessibility"
-			fetchData={fetchAxeCoreData}
+			endpoint={{
+				endpoint: '/api/site-health/axe-core',
+				responseTransformer: (result) => result, // Result is already in the correct format
+			}}
 		>
 			{(data) => {
 				if (!data?.data || data.data.length === 0) {

@@ -18,44 +18,43 @@ SiteHealthGoogleAnalytics.propTypes = {
 };
 export type SiteHealthGoogleAnalyticsType = InferProps<typeof SiteHealthGoogleAnalytics.propTypes>;
 export function SiteHealthGoogleAnalytics({ siteName, startDate, endDate }: SiteHealthGoogleAnalyticsType) {
-	const fetchAnalyticsData = async (site: string) => {
-		const params = new URLSearchParams({ siteName: site });
-		if (startDate) params.append('startDate', startDate);
-		if (endDate) params.append('endDate', endDate);
-		const response = await fetch(`/api/site-health/google-analytics?${params.toString()}`);
-
-		if (!response.ok) {
-			throw new Error(`Failed to fetch analytics data: ${response.status}`);
-		}
-
-		const result = await response.json();
-
-		if (!result.success) {
-			// Handle specific error types
-			if (result.error?.includes('invalid_grant') || result.error?.includes('authentication')) {
-				throw new Error('Google Analytics authentication expired. Please re-authorize the application.');
-			} else if (result.error?.includes('GA4 Property ID not configured')) {
-				throw new Error('GA4 Property ID not configured for this site');
-			} else {
-				throw new Error(result.error || 'Failed to load analytics data');
-			}
-		}
-
-		return result.data;
-	};
-
 	return (
 		<SiteHealthTemplate<GoogleAnalyticsData[]>
 			siteName={siteName}
 			title="Google Analytics"
 			columnSpan={2}
-			fetchData={fetchAnalyticsData}
+			endpoint={{
+				endpoint: '/api/site-health/google-analytics',
+				params: {
+					...(startDate && { startDate }),
+					...(endDate && { endDate }),
+				},
+				responseTransformer: (result) => result.data, // Extract the data array from the response
+			}}
 		>
 			{(data) => {
-				if (!data || data.length === 0) {
+				// Ensure data is an array
+				if (!data || !Array.isArray(data) || data.length === 0) {
 					return (
 						<div className="health-visualization-placeholder">
 							<div className="health-text-secondary">No data available for the selected date range</div>
+						</div>
+					);
+				}
+
+				// Filter out any invalid data points
+				const validData = data.filter((point: any) => 
+					point && 
+					typeof point === 'object' && 
+					typeof point.date === 'string' && 
+					typeof point.currentPageViews === 'number' && 
+					typeof point.previousPageViews === 'number'
+				);
+
+				if (validData.length === 0) {
+					return (
+						<div className="health-visualization-placeholder">
+							<div className="health-text-secondary">Invalid data format received from Google Analytics API.</div>
 						</div>
 					);
 				}
@@ -65,8 +64,8 @@ export function SiteHealthGoogleAnalytics({ siteName, startDate, endDate }: Site
 						<div style={{ width: '100%', height: '400px', border: '1px solid #ddd' }}>
 							<ResponsiveContainer width="100%" height="100%">
 								<ComposedChart
-									data={data}
-									key={`chart-${data.length}`}
+									data={validData}
+									key={`chart-${validData.length}`}
 									margin={{ top: 40, right: 30, left: 20, bottom: 5 }}
 								>
 									<text x="50%" y={20} textAnchor="middle" fontSize="16" fontWeight="bold" fill="#374151">

@@ -18,7 +18,6 @@ SiteHealthTemplate.propTypes = {
 	siteName: PropTypes.string.isRequired,
 	title: PropTypes.string,
 	children: PropTypes.func.isRequired,
-	fetchData: PropTypes.func,
 	endpoint: PropTypes.shape({
 		endpoint: PropTypes.string.isRequired,
 		method: PropTypes.oneOf(['GET', 'POST', 'PUT', 'DELETE']),
@@ -36,8 +35,7 @@ export function SiteHealthTemplate<T>(
 ) {
 	const typedProps = props as SiteHealthTemplateType & {
 		children: (data: T | null) => React.ReactNode;
-		fetchData?: (siteName: string, cache?: boolean) => Promise<T>;
-		endpoint?: EndpointConfig;
+		endpoint: EndpointConfig;
 	};
 
 	const [data, setData] = useState<T | null>(null);
@@ -46,10 +44,6 @@ export function SiteHealthTemplate<T>(
 
 	// Default fetch function for endpoint-based requests
 	const fetchFromEndpoint = useCallback(async (useCache: boolean = true): Promise<T> => {
-		if (!typedProps.endpoint) {
-			throw new Error('Endpoint configuration is required when not using custom fetchData');
-		}
-
 		const { endpoint: endpointUrl, method = 'GET', headers = {}, params = {}, body, responseTransformer } = typedProps.endpoint;
 
 		// Build URL with siteName parameter
@@ -106,13 +100,7 @@ export function SiteHealthTemplate<T>(
 			const cacheParam = urlParams.get('cache');
 			const useCache = typedProps.enableCacheControl ?? true ? (cacheParam !== 'false') : true;
 
-			// Use custom fetchData if provided, otherwise use endpoint configuration
-			let result: T;
-			if (typedProps.fetchData) {
-				result = await typedProps.fetchData(typedProps.siteName, useCache);
-			} else {
-				result = await fetchFromEndpoint(useCache);
-			}
+			const result = await fetchFromEndpoint(useCache);
 
 			setData(result);
 			setError(null);
@@ -122,7 +110,7 @@ export function SiteHealthTemplate<T>(
 		} finally {
 			setLoading(false);
 		}
-	}, [typedProps.siteName, typedProps.fetchData, fetchFromEndpoint, typedProps.enableCacheControl]);
+	}, [typedProps.siteName, fetchFromEndpoint, typedProps.enableCacheControl]);
 
 	useEffect(() => {
 		loadData();

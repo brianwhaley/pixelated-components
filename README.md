@@ -271,6 +271,8 @@ import { Accordion, Callout } from '@pixelated-tech/components';
 
 For detailed usage examples and API documentation, see the [Component Reference Guide](docs/components.md).
 
+For administrative components and site management features, see the [Admin Components Guide](docs/admin.md).
+
 ### Storybook Interactive Demos
 
 Explore all components with live, interactive examples:

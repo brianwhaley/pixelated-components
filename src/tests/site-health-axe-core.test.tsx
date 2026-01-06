@@ -11,7 +11,7 @@ global.fetch = mockFetch;
 
 // Mock the SiteHealthTemplate component
 vi.mock('../components/admin/site-health/site-health-template', () => ({
-  SiteHealthTemplate: ({ children, fetchData, siteName }: any) => {
+  SiteHealthTemplate: ({ children, endpoint, siteName }: any) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [data, setData] = useState(null);
     // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -24,11 +24,25 @@ vi.mock('../components/admin/site-health/site-health-template', () => ({
       if (!siteName) return;
 
       setLoading(true);
-      fetchData(siteName)
+      // Simulate the endpoint call
+      const url = `http://localhost:3000${endpoint.endpoint}?siteName=${siteName}`;
+      global.fetch(url, { method: 'GET' })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(result => {
+          if (!result.success) {
+            throw new Error(result.error || 'API request failed');
+          }
+          return endpoint.responseTransformer ? endpoint.responseTransformer(result) : result;
+        })
         .then(setData)
         .catch((err: Error) => setError(err.message))
         .finally(() => setLoading(false));
-    }, [siteName, fetchData]);
+    }, [siteName, endpoint]);
 
     if (!siteName) return null;
     if (loading) return <div>Loading...</div>;
@@ -105,6 +119,7 @@ describe('SiteHealthAxeCore', () => {
 
   it('fetches data and renders site information', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve(mockResponse)
     });
 
@@ -119,6 +134,7 @@ describe('SiteHealthAxeCore', () => {
 
   it('displays accessibility summary statistics', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve(mockResponse)
     });
 
@@ -135,6 +151,7 @@ describe('SiteHealthAxeCore', () => {
 
   it('renders violation details with impact indicators', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve(mockResponse)
     });
 
@@ -149,6 +166,7 @@ describe('SiteHealthAxeCore', () => {
 
   it('displays error message when API fails', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve({
         success: false,
         error: 'API Error'
@@ -164,6 +182,7 @@ describe('SiteHealthAxeCore', () => {
 
   it('shows no data message when data array is empty', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve({
         success: true,
         data: []
@@ -180,6 +199,7 @@ describe('SiteHealthAxeCore', () => {
   it('handles error status in data', async () => {
     const errorData = { ...mockData, status: 'error' as const, error: 'Data error' };
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve({
         success: true,
         data: [errorData]
@@ -195,6 +215,7 @@ describe('SiteHealthAxeCore', () => {
 
   it('formats node information correctly', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve(mockResponse)
     });
 
@@ -207,6 +228,7 @@ describe('SiteHealthAxeCore', () => {
 
   it('displays impact breakdown statistics', async () => {
     mockFetch.mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve(mockResponse)
     });
 

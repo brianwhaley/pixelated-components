@@ -97,8 +97,10 @@ const mockCWVData = {
 };
 
 export const AxeCoreHealthCard = () => {
-  const mockFetchData = async () => {
-    return {
+  const mockEndpoint = {
+    endpoint: 'https://api.example.com/axe-core',
+    method: 'GET' as const,
+    responseTransformer: () => ({
       site: 'example.com',
       url: 'https://example.com',
       violations: [
@@ -134,13 +136,13 @@ export const AxeCoreHealthCard = () => {
       passes: 45,
       incomplete: 2,
       inapplicable: 12
-    };
+    })
   };
 
   return (
     <SiteHealthTemplate
       siteName="example.com"
-      fetchData={mockFetchData}
+      endpoint={mockEndpoint}
     >
       {(data) => {
         if (!data) return <div>Loading...</div>;
@@ -226,8 +228,10 @@ export const AxeCoreHealthCard = () => {
 AxeCoreHealthCard.storyName = 'Axe Core Accessibility';
 
 export const OverviewHealthCard = () => {
-  const mockFetchData = async () => {
-    return {
+  const mockEndpoint = {
+    endpoint: 'https://api.example.com/core-web-vitals',
+    method: 'GET' as const,
+    responseTransformer: () => ({
       site: 'example.com',
       url: 'https://example.com',
       metrics: {
@@ -255,13 +259,13 @@ export const OverviewHealthCard = () => {
         seo: { score: 88, displayValue: 'Good' },
         pwa: { score: 75, displayValue: 'Good' }
       }
-    };
+    })
   };
 
   return (
     <SiteHealthTemplate
       siteName="example.com"
-      fetchData={mockFetchData}
+      endpoint={mockEndpoint}
     >
       {(data) => {
         if (!data) return <div>Loading...</div>;
@@ -344,18 +348,20 @@ export const OverviewHealthCard = () => {
 OverviewHealthCard.storyName = 'Core Web Vitals Overview';
 
 export const TemplateWithMockData = () => {
-  const mockFetchData = async () => {
-    return {
+  const mockEndpoint = {
+    endpoint: 'https://api.example.com/template-data',
+    method: 'GET' as const,
+    responseTransformer: () => ({
       score: 85,
       status: 'Good',
       details: 'Site performance is excellent'
-    };
+    })
   };
 
   return (
     <SiteHealthTemplate
       siteName="example.com"
-      fetchData={mockFetchData}
+      endpoint={mockEndpoint}
     >
       {(data) => {
         if (!data) return <div>Loading...</div>;

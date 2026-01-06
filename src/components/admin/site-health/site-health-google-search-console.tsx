@@ -20,44 +20,45 @@ SiteHealthGoogleSearchConsole.propTypes = {
 };
 export type SiteHealthGoogleSearchConsoleType = InferProps<typeof SiteHealthGoogleSearchConsole.propTypes>;
 export function SiteHealthGoogleSearchConsole({ siteName, startDate, endDate }: SiteHealthGoogleSearchConsoleType) {
-	const fetchSearchConsoleData = async (site: string) => {
-		const params = new URLSearchParams({ siteName: site });
-		if (startDate) params.append('startDate', startDate);
-		if (endDate) params.append('endDate', endDate);
-		const response = await fetch(`/api/site-health/google-search-console?${params.toString()}`);
-
-		if (!response.ok) {
-			throw new Error(`Failed to fetch search console data: ${response.status}`);
-		}
-
-		const result = await response.json();
-
-		if (!result.success) {
-			// Handle specific error types
-			if (result.error?.includes('invalid_grant') || result.error?.includes('authentication')) {
-				throw new Error('Google Search Console authentication expired. Please re-authorize the application.');
-			} else if (result.error?.includes('GSC Site URL not configured')) {
-				throw new Error('GSC Site URL not configured for this site');
-			} else {
-				throw new Error(result.error || 'Failed to load search console data');
-			}
-		}
-
-		return result.data;
-	};
-
 	return (
 		<SiteHealthTemplate<GoogleSearchConsoleData[]>
 			siteName={siteName}
 			title="Google Search Console"
 			columnSpan={2}
-			fetchData={fetchSearchConsoleData}
+			endpoint={{
+				endpoint: '/api/site-health/google-search-console',
+				params: {
+					...(startDate && { startDate }),
+					...(endDate && { endDate }),
+				},
+				responseTransformer: (result) => result.data, // Extract the data array from the response
+			}}
 		>
 			{(data) => {
-				if (!data || data.length === 0) {
+				// Ensure data is an array
+				if (!data || !Array.isArray(data) || data.length === 0) {
 					return (
 						<div className="health-visualization-placeholder">
 							<div className="health-text-secondary">No indexing data available for the selected date range</div>
+						</div>
+					);
+				}
+
+				// Filter out any invalid data points
+				const validData = data.filter((point: any) => 
+					point && 
+					typeof point === 'object' && 
+					typeof point.date === 'string' && 
+					typeof point.currentImpressions === 'number' && 
+					typeof point.currentClicks === 'number' &&
+					typeof point.previousImpressions === 'number' &&
+					typeof point.previousClicks === 'number'
+				);
+
+				if (validData.length === 0) {
+					return (
+						<div className="health-visualization-placeholder">
+							<div className="health-text-secondary">Invalid data format received from Google Search Console API.</div>
 						</div>
 					);
 				}
@@ -66,7 +67,7 @@ export function SiteHealthGoogleSearchConsole({ siteName, startDate, endDate }: 
 					<div>
 						<div style={{ width: '100%', height: '400px', border: '1px solid #ddd' }}>
 							<ResponsiveContainer width="100%" height="100%">
-								<ComposedChart data={data} margin={{ top: 40, right: 30, left: 20, bottom: 5 }}>
+								<ComposedChart data={validData} margin={{ top: 40, right: 30, left: 20, bottom: 5 }}>
 									<text x="50%" y={20} textAnchor="middle" fontSize="16" fontWeight="bold" fill="#374151">
                     Impressions vs Clicks (Current vs Previous Period)
 									</text>

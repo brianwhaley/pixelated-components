@@ -20,38 +20,23 @@ SiteHealthCloudwatch.propTypes = {
 };
 export type SiteHealthCloudwatchType = InferProps<typeof SiteHealthCloudwatch.propTypes>;
 export function SiteHealthCloudwatch({ siteName, startDate, endDate }: SiteHealthCloudwatchType) {
-	const fetchCloudwatchData = async (site: string) => {
-		const params = new URLSearchParams({ siteName: site });
-		if (startDate) params.append('startDate', startDate);
-		if (endDate) params.append('endDate', endDate);
-		const response = await fetch(`/api/site-health/cloudwatch?${params.toString()}`);
-
-		if (!response.ok) {
-			throw new Error(`Failed to fetch CloudWatch data: ${response.status}`);
-		}
-
-		const result = await response.json();
-
-		if (!result.success) {
-			if (result.error?.includes('Health Check ID not configured')) {
-				throw new Error('Route53 Health Check ID not configured for this site');
-			} else {
-				throw new Error(result.error || 'Failed to load CloudWatch health check data');
-			}
-		}
-
-		return result.data;
-	};
-
 	return (
 		<SiteHealthTemplate<CloudwatchHealthCheckData[]>
 			siteName={siteName}
 			title="CloudWatch Uptime"
 			columnSpan={2}
-			fetchData={fetchCloudwatchData}
+			endpoint={{
+				endpoint: '/api/site-health/cloudwatch',
+				params: {
+					...(startDate && { startDate }),
+					...(endDate && { endDate }),
+				},
+				responseTransformer: (result) => result.data, // Extract the data array from the response
+			}}
 		>
 			{(data) => {
-				if (!data || data.length === 0) {
+				// Ensure data is an array
+				if (!data || !Array.isArray(data) || data.length === 0) {
 					return (
 						<div className="health-visualization-placeholder">
 							<div className="health-text-secondary">No uptime data available. Route53 health checks may not be configured to send metrics to CloudWatch.</div>
@@ -60,7 +45,7 @@ export function SiteHealthCloudwatch({ siteName, startDate, endDate }: SiteHealt
 				}
 
 				// Check if all data points have zero checks (no actual data)
-				const hasActualData = data.some((point: any) => point.totalChecks > 0);
+				const hasActualData = data.some((point: any) => point && typeof point === 'object' && point.totalChecks > 0);
 
 				if (!hasActualData) {
 					return (
@@ -73,13 +58,32 @@ export function SiteHealthCloudwatch({ siteName, startDate, endDate }: SiteHealt
 					);
 				}
 
+				// Filter out any invalid data points
+				const validData = data.filter((point: any) => 
+					point && 
+					typeof point === 'object' && 
+					typeof point.date === 'string' && 
+					typeof point.successCount === 'number' && 
+					typeof point.failureCount === 'number' &&
+					typeof point.totalChecks === 'number' &&
+					typeof point.successRate === 'number'
+				);
+
+				if (validData.length === 0) {
+					return (
+						<div className="health-visualization-placeholder">
+							<div className="health-text-secondary">Invalid data format received from CloudWatch API.</div>
+						</div>
+					);
+				}
+
 				return (
 					<div>
 						<div style={{ width: '100%', height: '400px', border: '1px solid #ddd' }}>
 							<ResponsiveContainer width="100%" height="100%">
 								<ComposedChart
-									data={data}
-									key={`cloudwatch-chart-${data.length}`}
+									data={validData}
+									key={`cloudwatch-chart-${validData.length}`}
 									margin={{ top: 40, right: 30, left: 20, bottom: 5 }}
 								>
 									<text x="50%" y={20} textAnchor="middle" fontSize="16" fontWeight="bold" fill="#374151">
