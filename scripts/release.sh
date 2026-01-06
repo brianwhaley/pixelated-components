@@ -34,21 +34,7 @@ prompt_remote_selection() {
 }
 
 # Select remote
-if [ -t 0 ]; then
-    REMOTE_NAME=$(prompt_remote_selection)
-else
-    # Non-interactive: use smart detection
-    REMOTE_NAME=$(git remote | grep "pixelated-components" | head -1)
-    if [ -z "$REMOTE_NAME" ]; then
-        REMOTE_NAME=$(git remote | grep "pixelated" | head -1)
-    fi
-    if [ -z "$REMOTE_NAME" ]; then
-        REMOTE_NAME=$(git remote | xargs -I {} sh -c 'git ls-remote --heads {} dev >/dev/null 2>&1 && echo {}' | head -1)
-    fi
-    if [ -z "$REMOTE_NAME" ]; then
-        REMOTE_NAME=$(git remote | head -1)  # Fallback to first remote
-    fi
-fi
+REMOTE_NAME=$(prompt_remote_selection)
 
 echo "🚀 Starting Release Process for $PROJECT_NAME"
 echo "================================================="
@@ -60,33 +46,21 @@ get_current_version() {
 
 # Function to prompt for version bump type
 prompt_version_type() {
-    if [ -t 0 ]; then
-        # Interactive mode
-        echo "Current version: $(get_current_version)" >&2
-        echo "Select version bump type:" >&2
-        echo "1) patch (x.x.1)" >&2
-        echo "2) minor (x.1.0)" >&2
-        echo "3) major (1.x.x)" >&2
-        echo "4) custom version" >&2
-        echo "5) no version bump" >&2
-        read -p "Enter choice (1-5): " choice >&2
-    else
-        # Non-interactive mode - use default
-        echo "Non-interactive mode detected, using default patch version bump" >&2
-        choice="1"
-    fi
-    
+    echo "Current version: $(get_current_version)" >&2
+    echo "Select version bump type:" >&2
+    echo "1) patch (x.x.1)" >&2
+    echo "2) minor (x.1.0)" >&2
+    echo "3) major (1.x.x)" >&2
+    echo "4) custom version" >&2
+    echo "5) no version bump" >&2
+    read -p "Enter choice (1-5): " choice >&2
     case $choice in
         1) version_type="patch" ;;
         2) version_type="minor" ;;
         3) version_type="major" ;;
         4)
-            if [ -t 0 ]; then
-                read -p "Enter custom version: " custom_version >&2
-            else
-                echo "Custom version requires interactive mode" >&2
-                version_type="patch"
-            fi
+            read -p "Enter custom version: " custom_version >&2
+            version_type="$custom_version"
             ;;
         5) version_type="none" ;;
         *) version_type="patch" ;; # default
@@ -95,40 +69,28 @@ prompt_version_type() {
 
 # Function to prompt for commit message
 prompt_commit_message() {
-    if [ -t 0 ]; then
-        read -p "Enter commit message (or press enter for default): " commit_msg
-        if [ -z "$commit_msg" ]; then
-            echo "chore: release $(get_current_version)"
-        else
-            echo "$commit_msg"
-        fi
-    else
+    read -p "Enter commit message (or press enter for default): " commit_msg
+    if [ -z "$commit_msg" ]; then
         echo "chore: release $(get_current_version)"
+    else
+        echo "$commit_msg"
     fi
 }
 
 # Function to prompt for publishing
 prompt_publish() {
-    if [ -t 0 ]; then
-        read -p "Do you want to publish to npm? (y/n): " should_publish
-        if [ "$should_publish" = "y" ] || [ "$should_publish" = "Y" ]; then
-            echo "yes"
-        else
-            echo "no"
-        fi
+    read -p "Do you want to publish to npm? (y/n): " should_publish
+    if [ "$should_publish" = "y" ] || [ "$should_publish" = "Y" ]; then
+        echo "yes"
     else
-        echo "no"  # Default to no in non-interactive mode
+        echo "no"
     fi
 }
 
 # Function to prompt for OTP
 prompt_otp() {
-    if [ -t 0 ]; then
-        read -p "Enter npm OTP: " otp
-        echo "$otp"
-    else
-        echo ""  # No OTP in non-interactive mode
-    fi
+    read -p "Enter npm OTP: " otp
+    echo "$otp"
 }
 
 # Check if we're on dev branch
