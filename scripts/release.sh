@@ -19,21 +19,33 @@ get_current_version() {
 
 # Function to prompt for version bump type
 prompt_version_type() {
-    echo "Current version: $(get_current_version)" >&2
-    echo "Select version bump type:" >&2
-    echo "1) patch (x.x.1)" >&2
-    echo "2) minor (x.1.0)" >&2
-    echo "3) major (1.x.x)" >&2
-    echo "4) custom version" >&2
-    echo "5) no version bump" >&2
-    read -p "Enter choice (1-5): " choice >&2
+    if [ -t 0 ]; then
+        # Interactive mode
+        echo "Current version: $(get_current_version)" >&2
+        echo "Select version bump type:" >&2
+        echo "1) patch (x.x.1)" >&2
+        echo "2) minor (x.1.0)" >&2
+        echo "3) major (1.x.x)" >&2
+        echo "4) custom version" >&2
+        echo "5) no version bump" >&2
+        read -p "Enter choice (1-5): " choice >&2
+    else
+        # Non-interactive mode - use default
+        echo "Non-interactive mode detected, using default patch version bump" >&2
+        choice="1"
+    fi
+    
     case $choice in
         1) version_type="patch" ;;
         2) version_type="minor" ;;
         3) version_type="major" ;;
         4)
-            read -p "Enter custom version: " custom_version >&2
-            version_type="$custom_version"
+            if [ -t 0 ]; then
+                read -p "Enter custom version: " custom_version >&2
+            else
+                echo "Custom version requires interactive mode" >&2
+                version_type="patch"
+            fi
             ;;
         5) version_type="none" ;;
         *) version_type="patch" ;; # default
@@ -42,28 +54,40 @@ prompt_version_type() {
 
 # Function to prompt for commit message
 prompt_commit_message() {
-    read -p "Enter commit message (or press enter for default): " commit_msg
-    if [ -z "$commit_msg" ]; then
-        echo "chore: release $(get_current_version)"
+    if [ -t 0 ]; then
+        read -p "Enter commit message (or press enter for default): " commit_msg
+        if [ -z "$commit_msg" ]; then
+            echo "chore: release $(get_current_version)"
+        else
+            echo "$commit_msg"
+        fi
     else
-        echo "$commit_msg"
+        echo "chore: release $(get_current_version)"
     fi
 }
 
 # Function to prompt for publishing
 prompt_publish() {
-    read -p "Do you want to publish to npm? (y/n): " should_publish
-    if [ "$should_publish" = "y" ] || [ "$should_publish" = "Y" ]; then
-        echo "yes"
+    if [ -t 0 ]; then
+        read -p "Do you want to publish to npm? (y/n): " should_publish
+        if [ "$should_publish" = "y" ] || [ "$should_publish" = "Y" ]; then
+            echo "yes"
+        else
+            echo "no"
+        fi
     else
-        echo "no"
+        echo "no"  # Default to no in non-interactive mode
     fi
 }
 
 # Function to prompt for OTP
 prompt_otp() {
-    read -p "Enter npm OTP: " otp
-    echo "$otp"
+    if [ -t 0 ]; then
+        read -p "Enter npm OTP: " otp
+        echo "$otp"
+    else
+        echo ""  # No OTP in non-interactive mode
+    fi
 }
 
 # Check if we're on dev branch
@@ -106,17 +130,20 @@ else
 fi
 
 echo "📤 Step 6: Pushing dev branch..."
-# Try to push, if it fails due to remote changes, pull and try again
+# Try to push, if it fails due to remote changes, fetch and rebase
 if ! git push $REMOTE_NAME dev; then
-    echo "⚠️  Push failed, pulling remote changes and trying again..."
-    git pull $REMOTE_NAME dev --no-edit || {
-        echo "❌ Failed to pull remote changes. Please resolve conflicts manually."
+    echo "⚠️  Push failed, fetching remote changes and rebasing..."
+    git fetch $REMOTE_NAME
+    if git rebase $REMOTE_NAME/dev; then
+        echo "✅ Rebased successfully, pushing..."
+        git push $REMOTE_NAME dev || {
+            echo "❌ Failed to push after rebase. Please check git status."
+            exit 1
+        }
+    else
+        echo "❌ Rebase failed. Please resolve conflicts and run 'git rebase --continue' or 'git rebase --abort'"
         exit 1
-    }
-    git push $REMOTE_NAME dev || {
-        echo "❌ Still failed to push after pulling. Please check git status."
-        exit 1
-    }
+    fi
 fi
 
 echo "🔄 Step 7: Updating main branch..."
