@@ -4,6 +4,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { PageGridItem } from '../../general/semantic';
 import "./site-health.css";
+import { useSiteHealthMockData } from './site-health-mock-context';
 
 interface EndpointConfig {
 	endpoint: string;
@@ -28,6 +29,7 @@ SiteHealthTemplate.propTypes = {
 	}),
 	enableCacheControl: PropTypes.bool,
 	columnSpan: PropTypes.number,
+	data: PropTypes.any,
 };
 export type SiteHealthTemplateType = InferProps<typeof SiteHealthTemplate.propTypes>;
 export function SiteHealthTemplate<T>(
@@ -35,15 +37,21 @@ export function SiteHealthTemplate<T>(
 ) {
 	const typedProps = props as SiteHealthTemplateType & {
 		children: (data: T | null) => React.ReactNode;
-		endpoint: EndpointConfig;
+		endpoint?: EndpointConfig;
+		data?: T;
 	};
 
-	const [data, setData] = useState<T | null>(null);
+	const mockDataMap = useSiteHealthMockData();
+	const storyMockData = typedProps.title ? (mockDataMap?.[typedProps.title] as T | undefined) : undefined;
+	const [data, setData] = useState<T | null>(typedProps.data ?? storyMockData ?? null);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
 	// Default fetch function for endpoint-based requests
 	const fetchFromEndpoint = useCallback(async (useCache: boolean = true): Promise<T> => {
+		if (!typedProps.endpoint) {
+			throw new Error('Endpoint is not configured for SiteHealthTemplate');
+		}
 		const { endpoint: endpointUrl, method = 'GET', headers = {}, params = {}, body, responseTransformer } = typedProps.endpoint;
 
 		// Build URL with siteName parameter
@@ -113,8 +121,39 @@ export function SiteHealthTemplate<T>(
 	}, [typedProps.siteName, fetchFromEndpoint, typedProps.enableCacheControl]);
 
 	useEffect(() => {
+		if (!typedProps.siteName) {
+			return;
+		}
+
+		if (storyMockData || typeof typedProps.data !== 'undefined') {
+			return;
+		}
+
 		loadData();
-	}, [loadData]);
+	}, [loadData, typedProps.siteName, typedProps.data, storyMockData]);
+
+	useEffect(() => {
+		if (!typedProps.siteName) {
+			setData(null);
+			setLoading(false);
+			setError(null);
+			return;
+		}
+
+		if (storyMockData) {
+			setData(storyMockData as T);
+			setLoading(false);
+			setError(null);
+			return;
+		}
+
+		if (typeof typedProps.data !== 'undefined') {
+			setData(typedProps.data as T);
+			setLoading(false);
+			setError(null);
+			return;
+		}
+	}, [typedProps.siteName, typedProps.data, storyMockData]);
 
 	// If no site selected, show nothing
 	if (!typedProps.siteName) {

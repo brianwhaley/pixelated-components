@@ -13,6 +13,19 @@ import { SiteHealthDependencyVulnerabilities } from '../../components/admin/site
 import { SiteHealthGit } from '../../components/admin/site-health/site-health-github';
 import { SiteHealthUptime } from '../../components/admin/site-health/site-health-uptime';
 import { SiteHealthCloudwatch } from '../../components/admin/site-health/site-health-cloudwatch';
+import { SiteHealthMockProvider } from '../../components/admin/site-health/site-health-mock-context';
+import {
+  mockAxeCoreResponse,
+  mockCloudwatchData,
+  mockCoreWebVitalsResponse,
+  mockDependencyData,
+  mockGitData,
+  mockGoogleAnalyticsData,
+  mockGoogleSearchConsoleData,
+  mockOnSiteSEOData,
+  mockUptimeData,
+  templateStoryMock
+} from './site-health.mocks';
 
 export default {
   title: 'Admin/Site Health',
@@ -20,707 +33,165 @@ export default {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'Site health monitoring components for displaying accessibility, performance, and other site metrics.'
+        component: 'Site health monitoring components built on SiteHealthTemplate and mocked API data for Storybook.'
       }
     }
   }
 };
 
-// Mock data for SiteHealthAxeCore
-const mockAxeData = {
-  site: 'example.com',
-  url: 'https://example.com',
-  violations: [
-    {
-      id: 'color-contrast',
-      impact: 'serious',
-      description: 'Elements must have sufficient color contrast',
-      help: 'Ensure text has enough contrast against background',
-      helpUrl: 'https://dequeuniversity.com/rules/axe/4.8/color-contrast',
-      nodes: [
-        {
-          target: ['.header h1'],
-          html: '<h1>Welcome</h1>',
-          failureSummary: 'Fix any of the following: Element has insufficient color contrast of 2.5:1'
-        }
-      ]
-    },
-    {
-      id: 'image-alt',
-      impact: 'critical',
-      description: 'Images must have alternate text',
-      help: 'Provide alternative text for images',
-      helpUrl: 'https://dequeuniversity.com/rules/axe/4.8/image-alt',
-      nodes: [
-        {
-          target: ['img[alt=""]'],
-          html: '<img src="logo.png" alt="">',
-          failureSummary: 'Fix any of the following: aria-label attribute does not exist or is empty'
-        }
-      ]
-    }
-  ],
-  passes: 45,
-  incomplete: 2,
-  inapplicable: 12
-};
+const storyMocks = {
+  'Axe-Core Accessibility': mockAxeCoreResponse,
+  'PageSpeed - Site Overview': mockCoreWebVitalsResponse,
+  'PageSpeed - Performance': mockCoreWebVitalsResponse,
+  'PageSpeed - Security': { psiData: mockCoreWebVitalsResponse },
+  'PageSpeed - SEO': mockCoreWebVitalsResponse,
+  'PageSpeed - Accessibility': mockCoreWebVitalsResponse,
+  'Google Analytics': mockGoogleAnalyticsData,
+  'Google Search Console': mockGoogleSearchConsoleData,
+  'On-Site SEO': mockOnSiteSEOData,
+  'Dependency Vulnerability': mockDependencyData,
+  'Git Push Notes': mockGitData,
+  'Health Status': mockUptimeData,
+  'CloudWatch Uptime': mockCloudwatchData
+} as const;
 
-// Mock data for SiteHealthOverview
-const mockCWVData = {
-  site: 'example.com',
-  url: 'https://example.com',
-  metrics: {
-    cls: 0.05,
-    fid: 85,
-    lcp: 1200,
-    fcp: 800,
-    ttfb: 150,
-    speedIndex: 1100,
-    interactive: 1300,
-    totalBlockingTime: 50,
-    firstMeaningfulPaint: 900
-  },
-  scores: {
-    performance: 85,
-    accessibility: 90,
-    bestPractices: 95,
-    seo: 88,
-    pwa: 75
-  },
-  categories: {
-    performance: { score: 85, displayValue: 'Good' },
-    accessibility: { score: 90, displayValue: 'Good' },
-    bestPractices: { score: 95, displayValue: 'Good' },
-    seo: { score: 88, displayValue: 'Good' },
-    pwa: { score: 75, displayValue: 'Good' }
-  }
-};
+type StoryTitle = keyof typeof storyMocks;
 
-export const AxeCoreHealthCard = () => {
-  const mockEndpoint = {
-    endpoint: 'https://api.example.com/axe-core',
-    method: 'GET' as const,
-    responseTransformer: () => ({
-      site: 'example.com',
-      url: 'https://example.com',
-      violations: [
-        {
-          id: 'color-contrast',
-          impact: 'serious',
-          description: 'Elements must have sufficient color contrast',
-          help: 'Ensure text has enough contrast against background',
-          helpUrl: 'https://dequeuniversity.com/rules/axe/4.8/color-contrast',
-          nodes: [
-            {
-              target: ['.header h1'],
-              html: '<h1>Welcome</h1>',
-              failureSummary: 'Fix any of the following: Element has insufficient color contrast of 2.5:1'
-            }
-          ]
-        },
-        {
-          id: 'image-alt',
-          impact: 'critical',
-          description: 'Images must have alternate text',
-          help: 'Provide alternative text for images',
-          helpUrl: 'https://dequeuniversity.com/rules/axe/4.8/image-alt',
-          nodes: [
-            {
-              target: ['img[alt=""]'],
-              html: '<img src="logo.png" alt="">',
-              failureSummary: 'Fix any of the following: aria-label attribute does not exist or is empty'
-            }
-          ]
-        }
-      ],
-      passes: 45,
-      incomplete: 2,
-      inapplicable: 12
-    })
-  };
+const MockedStory = ({ title, children }: { title: StoryTitle; children: React.ReactNode }) => (
+  <SiteHealthMockProvider mocks={{ [title]: storyMocks[title] }}>
+    {children}
+  </SiteHealthMockProvider>
+);
 
-  return (
-    <SiteHealthTemplate
-      siteName="example.com"
-      endpoint={mockEndpoint}
-    >
-      {(data) => {
-        if (!data) return <div>Loading...</div>;
-
-        const summary = {
-          violations: data.violations.length,
-          passes: data.passes,
-          critical: data.violations.filter((v: any) => v.impact === 'critical').length,
-          serious: data.violations.filter((v: any) => v.impact === 'serious').length,
-          moderate: data.violations.filter((v: any) => v.impact === 'moderate').length,
-          minor: data.violations.filter((v: any) => v.impact === 'minor').length
-        };
-
-        const getImpactColor = (impact: string) => {
-          switch (impact) {
-            case 'critical': return '#ef4444';
-            case 'serious': return '#f59e0b';
-            case 'moderate': return '#3b82f6';
-            case 'minor': return '#6b7280';
-            default: return '#6b7280';
-          }
-        };
-
-        return (
-          <div>
-            <div className="health-score-container">
-              <div className="health-score-item">
-                <div className="health-score-label">Accessibility Score</div>
-                <div className="health-score-value" style={{ color: summary.violations === 0 ? '#10b981' : '#ef4444' }}>
-                  {summary.passes}/{summary.passes + summary.violations}
-                </div>
-              </div>
-            </div>
-
-            <div className="health-score-container">
-              <div className="health-score-item">
-                <div className="health-score-label">Test Results</div>
-                <div className="health-score-grid">
-                  <div className="health-stat-item">
-                    <span className="health-stat-label">Passed: </span>
-                    <span className="health-stat-value" style={{ color: '#10b981' }}>
-                      {summary.passes}
-                    </span>
-                  </div>
-                  <div className="health-stat-item">
-                    <span className="health-stat-label">Violations: </span>
-                    <span className="health-stat-value" style={{ color: summary.violations > 0 ? '#ef4444' : '#10b981' }}>
-                      {summary.violations}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {summary.violations > 0 && (
-              <div className="health-score-container">
-                <div className="health-score-item">
-                  <div className="health-score-label">Violation Impact Levels</div>
-                  <div className="health-score-grid">
-                    <div className="health-stat-item">
-                      <span className="health-stat-label">Critical: </span>
-                      <span className="health-stat-value" style={{ color: getImpactColor('critical') }}>
-                        {summary.critical}
-                      </span>
-                    </div>
-                    <div className="health-stat-item">
-                      <span className="health-stat-label">Serious: </span>
-                      <span className="health-stat-value" style={{ color: getImpactColor('serious') }}>
-                        {summary.serious}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        );
-      }}
-    </SiteHealthTemplate>
-  );
-};
+export const AxeCoreHealthCard = () => (
+  <MockedStory title="Axe-Core Accessibility">
+    <SiteHealthAxeCore siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 AxeCoreHealthCard.storyName = 'Axe Core Accessibility';
 
-export const OverviewHealthCard = () => {
-  const mockEndpoint = {
-    endpoint: 'https://api.example.com/core-web-vitals',
-    method: 'GET' as const,
-    responseTransformer: () => ({
-      site: 'example.com',
-      url: 'https://example.com',
-      metrics: {
-        cls: 0.05,
-        fid: 85,
-        lcp: 1200,
-        fcp: 800,
-        ttfb: 150,
-        speedIndex: 1100,
-        interactive: 1300,
-        totalBlockingTime: 50,
-        firstMeaningfulPaint: 900
-      },
-      scores: {
-        performance: 85,
-        accessibility: 90,
-        bestPractices: 95,
-        seo: 88,
-        pwa: 75
-      },
-      categories: {
-        performance: { score: 85, displayValue: 'Good' },
-        accessibility: { score: 90, displayValue: 'Good' },
-        bestPractices: { score: 95, displayValue: 'Good' },
-        seo: { score: 88, displayValue: 'Good' },
-        pwa: { score: 75, displayValue: 'Good' }
-      }
-    })
-  };
-
-  return (
-    <SiteHealthTemplate
-      siteName="example.com"
-      endpoint={mockEndpoint}
-    >
-      {(data) => {
-        if (!data) return <div>Loading...</div>;
-
-        const getScoreColor = (score: number) => {
-          if (score >= 90) return '#10b981';
-          if (score >= 50) return '#f59e0b';
-          return '#ef4444';
-        };
-
-        return (
-          <div>
-            <div className="health-score-container">
-              <div className="health-score-item">
-                <div className="health-score-label">Overall Performance Score</div>
-                <div className="health-score-value" style={{ color: getScoreColor(data.scores.performance) }}>
-                  {data.scores.performance}
-                </div>
-              </div>
-            </div>
-
-            <div className="health-score-container">
-              <div className="health-score-item">
-                <div className="health-score-label">Core Web Vitals</div>
-                <div className="health-score-grid">
-                  <div className="health-stat-item">
-                    <span className="health-stat-label">LCP: </span>
-                    <span className="health-stat-value" style={{ color: data.metrics.lcp <= 2500 ? '#10b981' : '#ef4444' }}>
-                      {(data.metrics.lcp / 1000).toFixed(1)}s
-                    </span>
-                  </div>
-                  <div className="health-stat-item">
-                    <span className="health-stat-label">FID: </span>
-                    <span className="health-stat-value" style={{ color: data.metrics.fid <= 100 ? '#10b981' : '#f59e0b' }}>
-                      {data.metrics.fid}ms
-                    </span>
-                  </div>
-                  <div className="health-stat-item">
-                    <span className="health-stat-label">CLS: </span>
-                    <span className="health-stat-value" style={{ color: data.metrics.cls <= 0.1 ? '#10b981' : '#f59e0b' }}>
-                      {data.metrics.cls}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="health-score-container">
-              <div className="health-score-item">
-                <div className="health-score-label">Lighthouse Scores</div>
-                <div className="health-score-grid">
-                  <div className="health-stat-item">
-                    <span className="health-stat-label">Performance: </span>
-                    <span className="health-stat-value" style={{ color: getScoreColor(data.scores.performance) }}>
-                      {data.scores.performance}
-                    </span>
-                  </div>
-                  <div className="health-stat-item">
-                    <span className="health-stat-label">Accessibility: </span>
-                    <span className="health-stat-value" style={{ color: getScoreColor(data.scores.accessibility) }}>
-                      {data.scores.accessibility}
-                    </span>
-                  </div>
-                  <div className="health-stat-item">
-                    <span className="health-stat-label">SEO: </span>
-                    <span className="health-stat-value" style={{ color: getScoreColor(data.scores.seo) }}>
-                      {data.scores.seo}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-      }}
-    </SiteHealthTemplate>
-  );
-};
+export const OverviewHealthCard = () => (
+  <MockedStory title="PageSpeed - Site Overview">
+    <SiteHealthOverview siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 OverviewHealthCard.storyName = 'Core Web Vitals Overview';
 
-export const TemplateWithMockData = () => {
-  const mockEndpoint = {
-    endpoint: 'https://api.example.com/template-data',
-    method: 'GET' as const,
-    responseTransformer: () => ({
-      score: 85,
-      status: 'Good',
-      details: 'Site performance is excellent'
-    })
-  };
+export const TemplateWithMockData = () => (
+  <SiteHealthTemplate
+    siteName="pixelated.tech"
+    title="Site Health Template Example"
+    data={templateStoryMock}
+  >
+    {(data) => {
+      if (!data) return <div>Loading...</div>;
 
-  return (
-    <SiteHealthTemplate
-      siteName="example.com"
-      endpoint={mockEndpoint}
-    >
-      {(data) => {
-        if (!data) return <div>Loading...</div>;
-
-        return (
-          <div className="health-score-container">
-            <div className="health-score-item">
-              <div className="health-score-label">Template Example</div>
-              <div className="health-score-value" style={{ color: '#10b981' }}>
-                {data.score}
-              </div>
-            </div>
-            <div className="health-score-item">
-              <div className="health-score-label">Status</div>
-              <div className="health-score-value">{data.status}</div>
+      return (
+        <div className="health-score-container">
+          <div className="health-score-item">
+            <div className="health-score-label">Template Example</div>
+            <div className="health-score-value" style={{ color: '#10b981' }}>
+              {data.score}
             </div>
           </div>
-        );
-      }}
-    </SiteHealthTemplate>
-  );
-};
+          <div className="health-score-item">
+            <div className="health-score-label">Status</div>
+            <div className="health-score-value">{data.status}</div>
+          </div>
+        </div>
+      );
+    }}
+  </SiteHealthTemplate>
+);
 
 TemplateWithMockData.storyName = 'Site Health Template';
 
-export const PerformanceHealthCard = () => {
-  const MockPerformanceComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>Performance Metrics</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#10b981' }}>88</span>
-            <span className="score-label">Good</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metrics-grid">
-            <div className="metric-item">
-              <span className="metric-name">First Contentful Paint</span>
-              <span className="metric-value" style={{ color: '#10b981' }}>800ms</span>
-            </div>
-            <div className="metric-item">
-              <span className="metric-name">Speed Index</span>
-              <span className="metric-value" style={{ color: '#10b981' }}>1.1s</span>
-            </div>
-            <div className="metric-item">
-              <span className="metric-name">Time to Interactive</span>
-              <span className="metric-value" style={{ color: '#f59e0b' }}>1.3s</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockPerformanceComponent />;
-};
+export const PerformanceHealthCard = () => (
+  <MockedStory title="PageSpeed - Performance">
+    <SiteHealthPerformance siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 PerformanceHealthCard.storyName = 'Performance Metrics';
 
-export const SecurityHealthCard = () => {
-  const MockSecurityComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>Security Scan</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#10b981' }}>95</span>
-            <span className="score-label">Excellent</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metric">
-            <span className="metric-label">Vulnerabilities Found:</span>
-            <span className="metric-value" style={{ color: '#10b981' }}>0</span>
-          </div>
-          <div className="health-metric">
-            <span className="metric-label">Security Headers:</span>
-            <span className="metric-value" style={{ color: '#10b981' }}>All Present</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockSecurityComponent />;
-};
+export const SecurityHealthCard = () => (
+  <MockedStory title="PageSpeed - Security">
+    <SiteHealthSecurity siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 SecurityHealthCard.storyName = 'Security Scan';
 
-export const SEOHealthCard = () => {
-  const MockSEOComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>SEO Analysis</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#f59e0b' }}>78</span>
-            <span className="score-label">Needs Improvement</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metric">
-            <span className="metric-label">Meta Description:</span>
-            <span className="metric-value" style={{ color: '#ef4444' }}>Missing</span>
-          </div>
-          <div className="health-metric">
-            <span className="metric-label">Title Tag:</span>
-            <span className="metric-value" style={{ color: '#10b981' }}>Present</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockSEOComponent />;
-};
+export const SEOHealthCard = () => (
+  <MockedStory title="PageSpeed - SEO">
+    <SiteHealthSEO siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 SEOHealthCard.storyName = 'SEO Analysis';
 
-export const AccessibilityHealthCard = () => {
-  const MockAccessibilityComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>Accessibility Audit</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#10b981' }}>90</span>
-            <span className="score-label">Good</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metric">
-            <span className="metric-label">WCAG Compliance:</span>
-            <span className="metric-value" style={{ color: '#10b981' }}>AA</span>
-          </div>
-          <div className="health-metric">
-            <span className="metric-label">Issues Found:</span>
-            <span className="metric-value" style={{ color: '#f59e0b' }}>3</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockAccessibilityComponent />;
-};
+export const AccessibilityHealthCard = () => (
+  <MockedStory title="PageSpeed - Accessibility">
+    <SiteHealthAccessibility siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 AccessibilityHealthCard.storyName = 'Accessibility Audit';
 
-export const GoogleAnalyticsHealthCard = () => {
-  const MockGoogleAnalyticsComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>Google Analytics</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#10b981' }}>Active</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metric">
-            <span className="metric-label">Page Views (30d):</span>
-            <span className="metric-value">12,543</span>
-          </div>
-          <div className="health-metric">
-            <span className="metric-label">Unique Visitors:</span>
-            <span className="metric-value">8,921</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockGoogleAnalyticsComponent />;
-};
+export const GoogleAnalyticsHealthCard = () => (
+  <MockedStory title="Google Analytics">
+    <SiteHealthGoogleAnalytics siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 GoogleAnalyticsHealthCard.storyName = 'Google Analytics';
 
-export const GoogleSearchConsoleHealthCard = () => {
-  const MockGoogleSearchConsoleComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>Google Search Console</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#10b981' }}>Active</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metric">
-            <span className="metric-label">Impressions (30d):</span>
-            <span className="metric-value">45,231</span>
-          </div>
-          <div className="health-metric">
-            <span className="metric-label">Clicks (30d):</span>
-            <span className="metric-value">1,234</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockGoogleSearchConsoleComponent />;
-};
+export const GoogleSearchConsoleHealthCard = () => (
+  <MockedStory title="Google Search Console">
+    <SiteHealthGoogleSearchConsole siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 GoogleSearchConsoleHealthCard.storyName = 'Google Search Console';
 
-export const OnSiteSEOHealthCard = () => {
-  const MockOnSiteSEOComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>On-Site SEO</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#f59e0b' }}>82</span>
-            <span className="score-label">Good</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metric">
-            <span className="metric-label">Title Tags:</span>
-            <span className="metric-value" style={{ color: '#10b981' }}>15/15</span>
-          </div>
-          <div className="health-metric">
-            <span className="metric-label">Meta Descriptions:</span>
-            <span className="metric-value" style={{ color: '#f59e0b' }}>12/15</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockOnSiteSEOComponent />;
-};
+export const OnSiteSEOHealthCard = () => (
+  <MockedStory title="On-Site SEO">
+    <SiteHealthOnSiteSEO siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 OnSiteSEOHealthCard.storyName = 'On-Site SEO';
 
-export const DependencyVulnerabilitiesHealthCard = () => {
-  const MockDependencyComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>Dependency Vulnerabilities</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#ef4444' }}>65</span>
-            <span className="score-label">At Risk</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metric">
-            <span className="metric-label">High Severity:</span>
-            <span className="metric-value" style={{ color: '#ef4444' }}>3</span>
-          </div>
-          <div className="health-metric">
-            <span className="metric-label">Medium Severity:</span>
-            <span className="metric-value" style={{ color: '#f59e0b' }}>7</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockDependencyComponent />;
-};
+export const DependencyVulnerabilitiesHealthCard = () => (
+  <MockedStory title="Dependency Vulnerability">
+    <SiteHealthDependencyVulnerabilities siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 DependencyVulnerabilitiesHealthCard.storyName = 'Dependency Vulnerabilities';
 
-export const GitHubHealthCard = () => {
-  const MockGitHubComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>GitHub Integration</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#10b981' }}>Active</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metric">
-            <span className="metric-label">Last Commit:</span>
-            <span className="metric-value">2 hours ago</span>
-          </div>
-          <div className="health-metric">
-            <span className="metric-label">Open Issues:</span>
-            <span className="metric-value">5</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockGitHubComponent />;
-};
+export const GitHubHealthCard = () => (
+  <MockedStory title="Git Push Notes">
+    <SiteHealthGit siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 GitHubHealthCard.storyName = 'GitHub Integration';
 
-export const UptimeHealthCard = () => {
-  const MockUptimeComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>Uptime Monitoring</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#10b981' }}>99.9%</span>
-            <span className="score-label">Excellent</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metric">
-            <span className="metric-label">Uptime (30d):</span>
-            <span className="metric-value" style={{ color: '#10b981' }}>99.9%</span>
-          </div>
-          <div className="health-metric">
-            <span className="metric-label">Response Time:</span>
-            <span className="metric-value">245ms</span>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockUptimeComponent />;
-};
+export const UptimeHealthCard = () => (
+  <MockedStory title="Health Status">
+    <SiteHealthUptime siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 UptimeHealthCard.storyName = 'Uptime Monitoring';
 
-export const CloudwatchHealthCard = () => {
-  const MockCloudwatchComponent = () => {
-    return (
-      <div className="site-health-card">
-        <div className="site-health-header">
-          <h3>CloudWatch Uptime</h3>
-          <div className="site-health-score">
-            <span className="score-value" style={{ color: '#10b981' }}>99.8%</span>
-            <span className="score-label">Excellent</span>
-          </div>
-        </div>
-        <div className="site-health-content">
-          <div className="health-metric">
-            <span className="metric-label">Uptime (24h):</span>
-            <span className="metric-value" style={{ color: '#10b981' }}>99.8%</span>
-          </div>
-          <div className="health-metric">
-            <span className="metric-label">Response Time:</span>
-            <span className="metric-value">180ms</span>
-          </div>
-          <div className="health-chart">
-            <div style={{ width: '100%', height: '200px', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span>CloudWatch Uptime Chart</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  return <MockCloudwatchComponent />;
-};
+export const CloudwatchHealthCard = () => (
+  <MockedStory title="CloudWatch Uptime">
+    <SiteHealthCloudwatch siteName="pixelated.tech" />
+  </MockedStory>
+);
 
 CloudwatchHealthCard.storyName = 'CloudWatch Uptime Monitoring';

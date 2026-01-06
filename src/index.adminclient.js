@@ -17,6 +17,7 @@ export * from './components/admin/site-health/site-health-security';
 export * from './components/admin/site-health/site-health-seo';
 export * from './components/admin/site-health/site-health-template';
 export * from './components/admin/site-health/site-health-uptime';
+export * from './components/admin/site-health/site-health-mock-context';
 
 // Client-safe admin components (can run on both client and server)
 export * from './components/admin/site-health/google.api.utils';

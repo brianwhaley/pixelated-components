@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.6.6",
+	"version": "3.6.7",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -166,8 +166,8 @@
 		"react-dom": "^19.2.0"
 	},
 	"optionalDependencies": {
-		"@aws-sdk/client-cloudwatch": "^3.962.0",
-		"@aws-sdk/client-route-53": "^3.962.0",
+		"@aws-sdk/client-cloudwatch": "^3.964.0",
+		"@aws-sdk/client-route-53": "^3.964.0",
 		"googleapis": "^169.0.0",
 		"md5": "^2.3.0",
 		"puppeteer": "^24.34.0",
