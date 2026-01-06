@@ -7,7 +7,17 @@ set -e  # Exit on any error
 
 # Get project name from package.json
 PROJECT_NAME=$(node -p "require('./package.json').name" 2>/dev/null || echo "unknown-project")
-REMOTE_NAME=$(git remote | head -1)  # Use first remote as default
+# Find the remote that matches the project name or has our branches
+REMOTE_NAME=$(git remote | grep "pixelated-components" | head -1)
+if [ -z "$REMOTE_NAME" ]; then
+    REMOTE_NAME=$(git remote | grep "pixelated" | head -1)
+fi
+if [ -z "$REMOTE_NAME" ]; then
+    REMOTE_NAME=$(git remote | xargs -I {} sh -c 'git ls-remote --heads {} dev >/dev/null 2>&1 && echo {}' | head -1)
+fi
+if [ -z "$REMOTE_NAME" ]; then
+    REMOTE_NAME=$(git remote | head -1)  # Fallback to first remote
+fi
 
 echo "🚀 Starting Release Process for $PROJECT_NAME"
 echo "================================================="
