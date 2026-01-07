@@ -12,7 +12,7 @@ import {
   ResumeReferences,
   ResumeReference,
   ResumeProjects,
-} from '../components/structured/resume';
+} from '../components/general/resume';
 import { PixelatedClientConfigProvider } from '../components/config/config.client';
 
 // Mock SmartImage

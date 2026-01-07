@@ -1,5 +1,5 @@
 import React from 'react';
-import { RecipeBook } from '@/components/structured/recipe';
+import { RecipeBook } from '@/components/general/recipe';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import RecipeData from '@/data/recipes.json';
 import '@/css/pixelated.global.css';

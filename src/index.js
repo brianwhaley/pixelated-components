@@ -1,67 +1,67 @@
 // sorted alphabetically and grouped by folder for easier reading
 
-export * from './components/callout/callout';
-
-export * from './components/carousel/carousel';
-export * from './components/carousel/carousel.drag';
-export * from './components/carousel/tiles';
-
-export * from './components/cms/calendly';
-export * from './components/cms/cloudinary';
-export * from './components/cms/contentful.delivery';
-export * from './components/cms/contentful.items.components';
-export * from './components/cms/contentful.management';
-export * from './components/cms/flickr';
-export * from './components/cms/google.reviews.components';
-export * from './components/cms/google.reviews.functions';
-export * from './components/cms/gravatar.components';
-export * from './components/cms/gravatar.functions';
-export * from './components/cms/hubspot.components';
-export * from './components/cms/instagram.components';
-export * from './components/cms/instagram.functions';
-export * from './components/cms/smartimage';
-export * from './components/cms/wordpress.components';
-export * from './components/cms/wordpress.functions';
-export * from './components/cms/yelp';
-
 export * from './components/config/config';
 export * from './components/config/config.client';
 export * from './components/config/config.server';
 export * from './components/config/config.types';
 
+export * from './components/general/404';
 export * from './components/general/accordion';
+export * from './components/general/buzzwordbingo';
+export * from './components/general/calendly';
+export * from './components/general/callout';
+export * from './components/general/carousel';
+export * from './components/general/carousel.drag';
+export * from './components/general/cloudinary';
+export * from './components/general/contentful.delivery';
+export * from './components/general/contentful.items.components';
+export * from './components/general/contentful.management';
 export * from './components/general/css';
+export * from './components/general/faq-accordion';
+export * from './components/general/flickr';
+export * from './components/general/google.reviews.components';
+export * from './components/general/google.reviews.functions';
+export * from './components/general/googleanalytics';
+export * from './components/general/googlemap';
+export * from './components/general/googlesearch';
+export * from './components/general/gravatar.components';
+export * from './components/general/gravatar.functions';
+export * from './components/general/hubspot.components';
 export * from './components/general/image';
+export * from './components/general/instagram.components';
+export * from './components/general/instagram.functions';
 export * from './components/general/loading';
+export * from './components/general/manifest';
+export * from './components/general/markdown';
+export * from './components/general/menu-accordion';
+export * from './components/general/menu-expando';
+export * from './components/general/menu-simple';
+export * from './components/general/metadata.components';
+export * from './components/general/metadata.functions';
 export * from './components/general/microinteractions';
 export * from './components/general/modal';
+export * from './components/general/nerdjoke';
+export * from './components/general/recipe';
+export * from './components/general/resume';
+export * from './components/general/schema-blogposting';
+export * from './components/general/schema-blogposting.functions';
+export * from './components/general/schema-faq';
+export * from './components/general/schema-localbusiness';
+export * from './components/general/schema-recipe';
+export * from './components/general/schema-services';
+export * from './components/general/schema-website';
 export * from './components/general/semantic';
 export * from './components/general/sidepanel';
-export * from './components/general/table';
+export * from './components/general/sitemap';
+export * from './components/general/smartimage';
+export * from './components/general/socialcard';
 export * from './components/general/tab';
-
-export * from './components/menu/menu-accordion';
-export * from './components/menu/menu-expando';
-export * from './components/menu/menu-simple';
-
-export * from './components/nerdjoke/nerdjoke';
-
-export * from './components/seo/404';
-export * from './components/seo/faq-accordion';
-export * from './components/seo/googleanalytics';
-export * from './components/seo/googlemap';
-export * from './components/seo/googlesearch';
-export * from './components/seo/manifest';
-export * from './components/seo/metadata.components';
-export * from './components/seo/metadata.functions';
-export * from './components/seo/schema-blogposting';
-export * from './components/seo/schema-blogposting.functions';
-export * from './components/seo/schema-faq';
-export * from './components/seo/schema-localbusiness';
-export * from './components/seo/schema-recipe';
-export * from './components/seo/schema-services';
-export * from './components/seo/schema-website';
-export * from './components/seo/sitemap';
+export * from './components/general/table';
+export * from './components/general/tiles';
+export * from './components/general/timeline';
+export * from './components/general/wordpress.components';
+export * from './components/general/wordpress.functions';
+export * from './components/general/yelp';
 
 export * from './components/shoppingcart/ebay.components';
 export * from './components/shoppingcart/ebay.functions';
@@ -101,13 +101,6 @@ export * from './components/sitebuilder/page/lib/pageStorageTypes';
 export * from './components/sitebuilder/page/lib/propTypeIntrospection';
 export * from './components/sitebuilder/page/lib/types';
 export * from './components/sitebuilder/page/lib/usePageBuilder';
-
-export * from './components/structured/buzzwordbingo';
-export * from './components/structured/markdown';
-export * from './components/structured/recipe';
-export * from './components/structured/resume';
-export * from './components/structured/socialcard';
-export * from './components/structured/timeline';
 
 export * from './components/utilities/functions';
 export * from './components/utilities/gemini-api.client';

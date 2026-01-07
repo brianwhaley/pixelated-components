@@ -8,11 +8,11 @@ import {
   RecipePickList,
   BackToTop,
   mapSchemaRecipeToDisplay,
-} from '../components/structured/recipe';
-import { PixelatedClientConfigProvider } from '../components/config/config.client';
+} from '@/components/general/recipe';
+import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 // Mock the SmartImage component
-vi.mock('../components/cms/smartimage', () => ({
+vi.mock('@/components/general/smartimage', () => ({
   SmartImage: (props: any) => {
     const { src, alt, title, className, onClick } = props;
     return React.createElement('img', {

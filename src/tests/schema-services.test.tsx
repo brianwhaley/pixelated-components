@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
-import { ServicesSchema, type ServicesSchemaType } from '../components/seo/schema-services';
+import { ServicesSchema, type ServicesSchemaType } from '@/components/general/schema-services';
 
 describe('ServicesSchema', () => {
 	const defaultProps: ServicesSchemaType = {

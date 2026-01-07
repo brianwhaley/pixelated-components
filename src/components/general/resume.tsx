@@ -4,7 +4,7 @@ import React from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { format } from "date-fns";
 import { usePixelatedConfig } from "../config/config.client";
-import { SmartImage } from "../cms/smartimage";
+import { SmartImage } from "./smartimage";
 import "../../css/pixelated.grid.scss";
 import "./resume.css";
 

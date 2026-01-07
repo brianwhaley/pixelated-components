@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.6.7",
+	"version": "3.7.0",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -146,7 +146,9 @@
 		"prop-types": "^15.8.1",
 		"react": "^19.2.3",
 		"react-dom": "^19.2.3",
+		"react-redux": "^9.2.0",
 		"react-test-renderer": "^19.2.3",
+		"redux": "^5.0.1",
 		"sass": "^1.97.2",
 		"sass-loader": "^16.0.6",
 		"storybook": "^10.1.11",
@@ -171,7 +173,9 @@
 		"googleapis": "^169.0.0",
 		"md5": "^2.3.0",
 		"puppeteer": "^24.34.0",
-		"recharts": "^3.6.0"
+		"react-redux": "*",
+		"recharts": "^3.6.0",
+		"redux": "*"
 	},
 	"type": "module"
 }

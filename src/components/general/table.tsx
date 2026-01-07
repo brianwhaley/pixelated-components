@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { SmartImage } from '../cms/smartimage';
+import { SmartImage } from './smartimage';
 import './table.css';
 
 function isImageURL(url: string) {

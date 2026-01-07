@@ -1,5 +1,5 @@
 import React from 'react';
-import { SmartImage, SmartImageType } from '@/components/cms/smartimage';
+import { SmartImage, SmartImageType } from '@/components/general/smartimage';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import type { PixelatedConfig } from '@/components/config/config.types';
 

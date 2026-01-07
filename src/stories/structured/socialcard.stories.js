@@ -1,5 +1,5 @@
 import React from 'react';
-import { SocialCards } from '@/components/structured/socialcard';
+import { SocialCards } from '@/components/general/socialcard';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import '@/css/pixelated.global.css';
 

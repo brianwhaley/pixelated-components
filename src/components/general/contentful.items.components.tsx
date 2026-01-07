@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes, { InferProps } from "prop-types";
-import { Carousel } from '../carousel/carousel';
-import type { CarouselCardType } from "../carousel/carousel";
+import { Carousel } from './carousel';
+import type { CarouselCardType } from "./carousel";
 import { getContentfulEntriesByType, getContentfulEntryByEntryID } from "./contentful.delivery";
 import { usePixelatedConfig } from '../config/config.client';
 import { addToShoppingCart  } from "../shoppingcart/shoppingcart.functions";
@@ -11,7 +11,7 @@ import { AddToCartButton, /* GoToCartButton */ ViewItemDetails } from "../shoppi
 import { getCloudinaryRemoteFetchURL as getImg} from "./cloudinary";
 import type { ShoppingCartType } from "../shoppingcart/shoppingcart.functions";
 // import { Loading, ToggleLoading } from "../general/pixelated.loading";	
-import { SmartImage } from "./smartimage";
+import { SmartImage } from "../general/smartimage";
 import "../../css/pixelated.grid.scss";
 import "./contentful.items.css";
 const debug = false;

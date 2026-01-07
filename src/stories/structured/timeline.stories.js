@@ -1,5 +1,5 @@
 import React from 'react';
-import { Timeline } from "@/components/structured/timeline";
+import { Timeline } from "@/components/general/timeline";
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import '@/css/pixelated.global.css';
 

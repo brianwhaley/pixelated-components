@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { NerdJoke } from '../components/nerdjoke/nerdjoke';
+import { NerdJoke } from '../components/general/nerdjoke';
 
 const mockJokeData = {
   question: 'Why did the programmer quit his job?',

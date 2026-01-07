@@ -5,7 +5,7 @@
 
 import React from "react";
 import PropTypes, { InferProps } from "prop-types";
-import { SmartImage } from "../cms/smartimage";
+import { SmartImage } from "./smartimage";
 import { usePixelatedConfig } from "../config/config.client";
 import "./markdown.css";
 

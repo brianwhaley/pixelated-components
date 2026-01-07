@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 // import { type GravatarProfile } from './gravatar.functions';
-import { SmartImage } from './smartimage';
+import { SmartImage } from '../general/smartimage';
 import { usePixelatedConfig } from '../config/config.client';
 import './gravatar.css';
 

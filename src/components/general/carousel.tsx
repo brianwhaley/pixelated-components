@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { SmartImage } from '../cms/smartimage';
+import { SmartImage } from './smartimage';
 import { usePixelatedConfig } from '../config/config.client';
 import { DragHandler } from './carousel.drag';
 import './carousel.css';

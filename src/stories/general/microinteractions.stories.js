@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Callout } from "@/components/callout/callout";
+import { Callout } from "@/components/general/callout";
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 const cloudinaryAPI = "https://res.cloudinary.com/pixelated-tech/image/fetch/w_600,h_600,c_fill,q_auto,f_auto/";
 import { MicroInteractions } from "@/components/general/microinteractions";

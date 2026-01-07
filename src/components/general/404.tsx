@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes, { InferProps } from 'prop-types';
 // import { getCloudinaryRemoteFetchURL } from "../cms/cloudinary";
-import { SmartImage } from "../cms/smartimage";
+import { SmartImage } from "../general/smartimage";
 import { usePixelatedConfig } from "../config/config.client";
 import "./404.css";
 

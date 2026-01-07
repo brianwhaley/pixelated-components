@@ -40,22 +40,11 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **Template Marketplace**: Pre-built industry-specific templates (restaurant, law firm, contractor, etc.) that users can clone and customize
 - [ ] **Configuration Wizard**: Step-by-step setup wizard that collects business info, generates site configuration, and creates initial content structure
 - [ ] **Content Migration Tools**: Automated importers for WordPress, Squarespace, Wix, and other platforms to migrate content to pixelated sites
-- [ ] **A/B Testing Framework**: Built-in experimentation system for testing different layouts, content, and CTAs with automatic winner selection
-- [ ] **Personalization Engine**: Dynamic content delivery based on user behavior, location, and preferences
-- [ ] **Hot Module Replacement for Configs**: Live preview of configuration changes without full rebuilds
-- [ ] **Rollback System**: One-click rollback to previous versions with automatic database and asset restoration
-- [ ] **Performance Budget Tracker**: Automated monitoring of Core Web Vitals with alerts when sites exceed performance budgets
-- [ ] **Conversion Funnel Builder**: Visual funnel creation with automated tracking, A/B testing, and optimization recommendations
 - [ ] **Automated Security Scanner**: Regular security audits with vulnerability detection and automated fixes
 - [ ] **GDPR Compliance Toolkit**: Automated cookie consent, data mapping, and privacy policy generation
 - [ ] **API Gateway**: Unified API management for connecting to CRM, email marketing, payment processors, and other business tools
 - [ ] **Webhook Automation**: Event-driven automation for form submissions, new content, user registrations, and business workflows
 - [ ] **Third-Party Sync Engine**: Bidirectional sync with tools like HubSpot, Mailchimp, QuickBooks, and project management systems
-- [ ] **Testing Strategy for Config Failure Scenarios**: Comprehensive testing framework for config-dependent components and error handling
-  - Test components with missing config providers
-  - Test error pages without config dependencies
-  - Test app initialization with invalid environment variables
-  - Include chaos engineering tests that simulate config failures
 - [ ] **Documentation Auto-Generator**: Automatically generated API docs, component usage guides, and deployment instructions
 
 ## Admin Feature Enhancements
@@ -81,10 +70,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 
 ### API Integration Standardization (High Priority)
 - [ ] **CMS API Client**: Create standardized CMS API clients (`ContentfulClient.ts`, `WordPressClient.ts`) with base `ApiClient.ts` for consistent error handling.
-- [ ] **Request Deduplication Hook**: Implement `useApi` hook with automatic deduplication and caching to prevent duplicate API calls.
-
-### Component Composition Patterns (Medium Priority)
-- [ ] **Compound Component Pattern**: Implement compound component patterns like `Form = { Root, Field, Submit, Error }` and `FormField = { Input, Label, Error }`.
 
 ### Testing Infrastructure (Medium Priority)
 - [ ] **Testing Utilities**: Create comprehensive testing utilities including `renderWithProviders.tsx`, mock utilities for config and API, and component test helpers.

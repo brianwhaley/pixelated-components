@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Carousel, CarouselCardType } from '../components/carousel/carousel';
+import { Carousel, CarouselCardType } from '../components/general/carousel';
 
 // Mock the config hook
 vi.mock('../components/config/config.client', () => ({
@@ -22,12 +22,12 @@ vi.mock('../components/cms/smartimage', () => ({
 }));
 
 // Mock DragHandler
-vi.mock('../components/carousel/carousel.drag', () => ({
+vi.mock('../components/general/carousel.drag', () => ({
 	DragHandler: vi.fn(),
 }));
 
 // Import the mocked DragHandler
-import { DragHandler } from '../components/carousel/carousel.drag';
+import { DragHandler } from '../components/general/carousel.drag';
 
 const mockCards: CarouselCardType[] = [
 	{

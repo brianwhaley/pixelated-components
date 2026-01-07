@@ -7,7 +7,7 @@
  * runtime values for form generation.
  */
 
-import { variants, shapes, layouts, directions } from "../../../callout/callout";
+import { variants, shapes, layouts, directions } from "../../../general/callout";
 import { 
 	layoutTypes, 
 	autoFlowValues, 

@@ -8,21 +8,20 @@ import {
 	createEbayItemURLs,
 	generateSitemap,
 	type SitemapEntry
-} from '../components/seo/sitemap';
+} from '@/components/general/sitemap';
 
 // Mock external dependencies
-vi.mock('../components/cms/wordpress.functions');
-vi.mock('../components/cms/contentful.delivery');
-vi.mock('../components/shoppingcart/ebay.functions');
-vi.mock('../components/config/config');
-vi.mock('../components/seo/metadata.functions');
-
+vi.mock('@/components/general/wordpress.functions');
+vi.mock('@/components/general/contentful.delivery');
+vi.mock('@/components/shoppingcart/ebay.functions');
+vi.mock('@/components/config/config');
+vi.mock('@/components/general/metadata.functions');
 // Import mocked modules
-import * as wordpressModule from '../components/cms/wordpress.functions';
-import * as contentfulModule from '../components/cms/contentful.delivery';
-import * as ebayModule from '../components/shoppingcart/ebay.functions';
-import * as configModule from '../components/config/config';
-import * as metadataModule from '../components/seo/metadata.functions';
+import * as wordpressModule from '@/components/general/wordpress.functions';
+import * as contentfulModule from '@/components/general/contentful.delivery';
+import * as ebayModule from '@/components/shoppingcart/ebay.functions';
+import * as configModule from '@/components/config/config';
+import * as metadataModule from '@/components/general/metadata.functions';
 
 // Mock fetch globally
 global.fetch = vi.fn();

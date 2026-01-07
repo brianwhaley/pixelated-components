@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render } from '@testing-library/react';
-import { LocalBusinessSchema, type LocalBusinessSchemaType } from '../components/seo/schema-localbusiness';
-import { PixelatedClientConfigProvider } from '../components/config/config.client';
+import { LocalBusinessSchema, type LocalBusinessSchemaType } from '@/components/general/schema-localbusiness';
+import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 describe('LocalBusinessSchema', () => {
 	const defaultProps: LocalBusinessSchemaType = {

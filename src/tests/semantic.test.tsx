@@ -1,10 +1,10 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { PageTitleHeader, PageSection, PageNav, PageFooter, PageSectionBackgroundImage } from '../components/general/semantic';
+import { PageTitleHeader, PageSection, PageNav, PageFooter, PageSectionBackgroundImage } from '@/components/general/semantic';
 
 // Mock SmartImage component
-vi.mock('../components/cms/smartimage', () => ({
+vi.mock('@/components/general/smartimage', () => ({
   SmartImage: (props: any) => React.createElement('img', {
     src: props.src,
     alt: props.alt,
@@ -17,7 +17,7 @@ vi.mock('../components/cms/smartimage', () => ({
 }));
 
 // Mock usePixelatedConfig hook
-vi.mock('../components/config/config.client', () => ({
+vi.mock('@/components/config/config.client', () => ({
   usePixelatedConfig: () => ({
     cloudinary: {
       product_env: 'test',

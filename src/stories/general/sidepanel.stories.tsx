@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SidePanel, SidePanelType } from '@/components/general/sidepanel';
-import { MenuAccordion } from '@/components/menu/menu-accordion';
+import { MenuAccordion } from '@/components/general/menu-accordion';
 
 export default {
 	title: 'General',

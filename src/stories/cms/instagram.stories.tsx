@@ -1,5 +1,5 @@
 import React from 'react';
-import { InstagramTiles } from '@/components/cms/instagram.components';
+import { InstagramTiles } from '@/components/general/instagram.components';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 const mockConfig = {

@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { GoogleReviewsCard } from '../components/cms/google.reviews.components';
-import { getGoogleReviewsByPlaceId } from '../components/cms/google.reviews.functions';
+import '@testing-library/jest-dom';
+import { GoogleReviewsCard } from '@/components/general/google.reviews.components';
+import { getGoogleReviewsByPlaceId } from '@/components/general/google.reviews.functions';
 
 // Mock the functions
-vi.mock('../components/cms/google.reviews.functions', () => ({
+vi.mock('@/components/general/google.reviews.functions', () => ({
 	getGoogleReviewsByPlaceId: vi.fn(),
 }));
 

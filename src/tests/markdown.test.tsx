@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Markdown } from '../components/structured/markdown';
+import { Markdown } from '../components/general/markdown';
 
 // Mock SmartImage component
 vi.mock('../components/cms/smartimage', () => ({

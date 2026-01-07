@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Carousel } from "@/components/carousel/carousel";
-import { getContentfulEntriesByType } from "@/components/cms/contentful.delivery";
+import { Carousel } from "@/components/general/carousel";
+import { getContentfulEntriesByType } from "@/components/general/contentful.delivery";
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import '@/css/pixelated.global.css';
 

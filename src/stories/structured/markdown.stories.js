@@ -1,5 +1,5 @@
 import React from 'react';
-import { Markdown } from '@/components/structured/markdown';
+import { Markdown } from '@/components/general/markdown';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import markdowndata from '@/data/readme.md';
 import '@/css/pixelated.global.css';

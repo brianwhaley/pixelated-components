@@ -7,7 +7,7 @@ import {
   MenuAccordionItem,
   MenuAccordionButton,
   MenuItem 
-} from '../components/menu/menu-accordion';
+} from '../components/general/menu-accordion';
 
 describe('MenuAccordion Component', () => {
   const mockMenuData: MenuItem[] = [

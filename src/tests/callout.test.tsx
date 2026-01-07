@@ -9,7 +9,7 @@ import {
   shapes,
   layouts,
   directions
-} from '../components/callout/callout';
+} from '../components/general/callout';
 import { PixelatedClientConfigProvider } from '../components/config/config.client';
 
 // Mock the SmartImage component before importing Callout

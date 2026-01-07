@@ -1,5 +1,5 @@
 import React from 'react';
-import { getRouteByKey } from '@/components/seo/metadata.functions';
+import { getRouteByKey } from '@/components/general/metadata.functions';
 import myRoutes from '@/data/routes.json';
 import '@/css/pixelated.grid.scss';
 

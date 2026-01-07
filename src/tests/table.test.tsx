@@ -1,10 +1,10 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { Table } from '../components/general/table';
+import { Table } from '@/components/general/table';
 
 // Mock SmartImage component
-vi.mock('../components/cms/smartimage', () => ({
+vi.mock('@/components/general/smartimage', () => ({
   SmartImage: (props: any) => {
     const { src, alt, title } = props;
     return React.createElement('img', {

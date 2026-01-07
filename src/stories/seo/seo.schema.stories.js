@@ -1,6 +1,6 @@
 import React from 'react';
-import { LocalBusinessSchema } from '@/components/seo/schema-localbusiness';
-import { WebsiteSchema } from '@/components/seo/schema-website';
+import { LocalBusinessSchema } from '@/components/general/schema-localbusiness';
+import { WebsiteSchema } from '@/components/general/schema-website';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import routesData from '@/data/routes.json';
 

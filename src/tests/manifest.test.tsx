@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { generateManifest, type ManifestOptions } from '../components/seo/manifest';
-import type { SiteInfo } from '../components/config/config.types';
+import { generateManifest, type ManifestOptions } from '@/components/general/manifest';
+import type { SiteInfo } from '@/components/config/config.types';
 
 const mockSiteInfo: SiteInfo = {
 	name: "Test App",

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { GravatarCard, type GravatarCardType } from '@/components/cms/gravatar.components';
-import { getGravatarProfile, type GravatarProfile } from '@/components/cms/gravatar.functions';
+import { GravatarCard, type GravatarCardType } from '@/components/general/gravatar.components';
+import { getGravatarProfile, type GravatarProfile } from '@/components/general/gravatar.functions';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 const mockConfig = {

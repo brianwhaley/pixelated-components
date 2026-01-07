@@ -1,4 +1,4 @@
-import type { BlogPostType } from '../cms/wordpress.functions';
+import type { BlogPostType } from '../general/wordpress.functions';
 import { decode } from 'html-entities';
 
 export interface BlogPostingSchema {

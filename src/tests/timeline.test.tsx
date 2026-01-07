@@ -1,11 +1,11 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { Timeline } from '../components/structured/timeline';
-import { PixelatedClientConfigProvider } from '../components/config/config.client';
+import { Timeline } from '@/components/general/timeline';
+import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 // Mock SmartImage
-vi.mock('../components/cms/smartimage', () => ({
+vi.mock('@/components/general/smartimage', () => ({
   SmartImage: (props: any) => {
     const { src, alt, title, className } = props;
     return React.createElement('img', {

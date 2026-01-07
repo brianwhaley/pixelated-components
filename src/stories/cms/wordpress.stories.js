@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { BlogPostSummary, BlogPostList } from '@/components/cms/wordpress.components';
+import { BlogPostSummary, BlogPostList } from '@/components/general/wordpress.components';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
-import { getWordPressItems } from '@/components/cms/wordpress.functions';
+import { getWordPressItems } from '@/components/general/wordpress.functions';
 
 const mockConfig = {
 	cloudinary: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Carousel } from '@/components/carousel/carousel';
+import { Carousel } from '@/components/general/carousel';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import '@/css/pixelated.global.css';
 import './carousel.stories.css';

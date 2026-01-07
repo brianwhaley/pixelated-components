@@ -1,20 +1,20 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { SmartImage } from '../components/cms/smartimage';
+import { SmartImage } from '@/components/general/smartimage';
 
 // Mock the usePixelatedConfig hook
-vi.mock('../components/config/config.client', () => ({
+vi.mock('@/components/config/config.client', () => ({
 usePixelatedConfig: vi.fn(),
 }));
 
 // Mock the buildCloudinaryUrl function
-vi.mock('../components/cms/cloudinary', () => ({
+vi.mock('@/components/general/cloudinary', () => ({
 buildCloudinaryUrl: vi.fn(),
 }));
 
-import { usePixelatedConfig } from '../components/config/config.client';
-import { buildCloudinaryUrl } from '../components/cms/cloudinary';
+import { usePixelatedConfig } from '@/components/config/config.client';
+import { buildCloudinaryUrl } from '@/components/general/cloudinary';
 
 const mockUsePixelatedConfig = vi.mocked(usePixelatedConfig);
 const mockBuildCloudinaryUrl = vi.mocked(buildCloudinaryUrl);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleAnalytics } from '@/components/seo/googleanalytics';
+import { GoogleAnalytics } from '@/components/general/googleanalytics';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 const mockConfig = {

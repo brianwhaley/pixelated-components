@@ -2,12 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes, { InferProps } from "prop-types";
-import { Carousel } from '../carousel/carousel';
-import { SmartImage } from "../cms/smartimage";
+import { Carousel } from '../general/carousel';
+import { SmartImage } from "../general/smartimage";
 import { defaultEbayProps, ebaySunglassCategory, getEbayItems, getEbayItem, getShoppingCartItem } from "./ebay.functions";
 import { addToShoppingCart } from "./shoppingcart.functions";
 import { AddToCartButton, /* GoToCartButton */ ViewItemDetails } from "./shoppingcart.components";
-import { getCloudinaryRemoteFetchURL as getImg} from "../cms/cloudinary";
+import { getCloudinaryRemoteFetchURL as getImg} from "../general/cloudinary";
 import { Loading , ToggleLoading } from "../general/loading";
 import { usePixelatedConfig } from "../config/config.client";
 import "../../css/pixelated.grid.scss";

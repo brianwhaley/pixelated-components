@@ -6,32 +6,31 @@
 // Admin
 export * from './components/admin/sites/sites.integration';
 
-// CMS
-export * from './components/cms/contentful.delivery';
-export * from './components/cms/contentful.management';
-export * from './components/cms/flickr';
-export * from './components/cms/google.reviews.functions';
-export * from './components/cms/gravatar.functions';
-export * from './components/cms/instagram.functions';
-export * from './components/cms/wordpress.functions';
-
 // Config
 export * from './components/config/config';
 export * from './components/config/config.server';
 export * from './components/config/config.types';
 
 // SEO
-export * from './components/seo/googlemap';
-export * from './components/seo/manifest';
-export * from './components/seo/metadata.functions';
-export * from './components/seo/schema-blogposting';
-export * from './components/seo/schema-blogposting.functions';
-export * from './components/seo/schema-faq';
-export * from './components/seo/schema-localbusiness';
-export * from './components/seo/schema-recipe';
-export * from './components/seo/schema-services';
-export * from './components/seo/schema-website';
-export * from './components/seo/sitemap';
+export * from './components/general/contentful.delivery';
+export * from './components/general/contentful.management';
+export * from './components/general/flickr';
+export * from './components/general/googlemap';
+export * from './components/general/google.reviews.functions';
+export * from './components/general/gravatar.functions';
+export * from './components/general/instagram.functions';
+export * from './components/general/manifest';
+export * from './components/general/metadata.functions';
+export * from './components/general/resume';
+export * from './components/general/schema-blogposting';
+export * from './components/general/schema-blogposting.functions';
+export * from './components/general/schema-faq';
+export * from './components/general/schema-localbusiness';
+export * from './components/general/schema-recipe';
+export * from './components/general/schema-services';
+export * from './components/general/schema-website';
+export * from './components/general/sitemap';
+export * from './components/general/wordpress.functions';
 
 // Shopping Cart
 export * from './components/shoppingcart/ebay.functions';
@@ -54,9 +53,6 @@ export * from './components/sitebuilder/page/lib/pageStorageLocal'; // used for 
 export * from './components/sitebuilder/page/lib/pageStorageTypes';
 export * from './components/sitebuilder/page/lib/propTypeIntrospection';
 export * from './components/sitebuilder/page/lib/types';
-
-// Structured
-export * from './components/structured/resume';
 
 // Utilities
 export * from './components/utilities/functions';

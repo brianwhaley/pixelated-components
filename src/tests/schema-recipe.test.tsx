@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
-import { RecipeSchema, type RecipeSchemaType } from '../components/seo/schema-recipe';
+import { RecipeSchema, type RecipeSchemaType } from '@/components/general/schema-recipe';
 
 describe('RecipeSchema', () => {
 	const defaultRecipe: RecipeSchemaType['recipe'] = {

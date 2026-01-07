@@ -1,5 +1,5 @@
 import React from 'react';
-import { ContentfulItems } from '@/components/cms/contentful.items.components';
+import { ContentfulItems } from '@/components/general/contentful.items.components';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import '@/css/pixelated.global.css';
 

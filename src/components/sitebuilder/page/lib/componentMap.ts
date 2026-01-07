@@ -1,5 +1,5 @@
 import { PageTitleHeader, PageSectionHeader } from "../../../general/semantic";
-import { Callout } from "../../../callout/callout";
+import { Callout } from "../../../general/callout";
 import { PageSection, PageGridItem, PageFlexItem } from "../../../general/semantic";
 
 /**

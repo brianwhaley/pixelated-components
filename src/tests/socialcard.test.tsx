@@ -5,11 +5,11 @@ import {
   SocialCards,
   SocialCard,
   SocialCardsLoading,
-} from '../components/structured/socialcard';
-import { PixelatedClientConfigProvider } from '../components/config/config.client';
+} from '@/components/general/socialcard';
+import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 // Mock SmartImage
-vi.mock('../components/cms/smartimage', () => ({
+vi.mock('@/components/general/smartimage', () => ({
   SmartImage: (props: any) => {
     const { src, alt, title, className, onClick } = props;
     return React.createElement('img', {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getGoogleReviewsByPlaceId } from '../components/cms/google.reviews.functions';
+import { getGoogleReviewsByPlaceId } from '../components/general/google.reviews.functions';
 
 // Mock fetch
 global.fetch = vi.fn();

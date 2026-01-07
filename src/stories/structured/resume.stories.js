@@ -1,5 +1,5 @@
 import React from 'react';
-import { Resume } from '@/components/structured/resume';
+import { Resume } from '@/components/general/resume';
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import ResumeData from '@/data/resume.json';
 import ReferencesData from '@/data/references.json';

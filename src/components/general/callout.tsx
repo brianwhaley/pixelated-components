@@ -3,7 +3,7 @@
 import React, { /* useState, useEffect */ } from "react";
 import PropTypes, { InferProps } from 'prop-types';
 import { usePixelatedConfig } from "../config/config.client";
-import { SmartImage } from '../cms/smartimage';
+import { SmartImage } from './smartimage';
 
 import "./callout.scss";
 

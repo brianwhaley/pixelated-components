@@ -3,7 +3,7 @@
 import React, { useLayoutEffect, useRef, useState } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { usePixelatedConfig } from "../config/config.client";
-import { SmartImage } from "../cms/smartimage";
+import { SmartImage } from "./smartimage";
 import "../../css/pixelated.grid.scss";
 import "./semantic.scss";
 

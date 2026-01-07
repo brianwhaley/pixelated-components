@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
-import { WebsiteSchema, type WebsiteSchemaType } from '../components/seo/schema-website';
-import { PixelatedClientConfigProvider } from '../components/config/config.client';
+import { WebsiteSchema, type WebsiteSchemaType } from '@/components/general/schema-website';
+import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 describe('WebsiteSchema', () => {
 	const defaultProps: WebsiteSchemaType = {

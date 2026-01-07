@@ -4,9 +4,9 @@
  * Uses generic Contentful management functions with PageBuilder-specific logic
  */
 
-import type { ContentfulConfig } from '../../../cms/contentful.management';
-import { createEntry, updateEntry, deleteEntry, searchEntriesByField } from '../../../cms/contentful.management';
-import { getContentfulEntriesByType } from '../../../cms/contentful.delivery';
+import type { ContentfulConfig } from '../../../general/contentful.management';
+import { createEntry, updateEntry, deleteEntry, searchEntriesByField } from '../../../general/contentful.management';
+import { getContentfulEntriesByType } from '../../../general/contentful.delivery';
 import type { PageData } from './types';
 import type {
 	ListPagesResponse,

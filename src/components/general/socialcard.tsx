@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from "prop-types";
 import { mergeDeep } from '../utilities/functions';
-import { SmartImage } from '../cms/smartimage';
+import { SmartImage } from './smartimage';
 import { usePixelatedConfig } from '../config/config.client';
 import './socialcard.css';
 

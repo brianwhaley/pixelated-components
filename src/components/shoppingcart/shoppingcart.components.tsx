@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { PayPal } from "./paypal";
-import { CalloutHeader } from "../callout/callout";
+import { CalloutHeader } from "../general/callout";
 import { FormEngine } from "../sitebuilder/form/formengine";
 import { FormButton } from '../sitebuilder/form/formcomponents';
 import { emailJSON } from "../sitebuilder/form/formemailer";
@@ -15,7 +15,7 @@ import { Table } from "../general/table";
 import { getCart, getShippingInfo, setShippingInfo, setDiscountCodes, getRemoteDiscountCodes, getCheckoutData, removeFromShoppingCart, clearShoppingCart, formatAsUSD, getCartItemCount } from "./shoppingcart.functions";
 import type { ShoppingCartType as CartItemType, AddressType, CheckoutType } from "./shoppingcart.functions";
 import { usePixelatedConfig } from '../config/config.client';
-import { SmartImage } from '../cms/smartimage';
+import { SmartImage } from '../general/smartimage';
 import shippingToData from "./shipping.to.json";
 import "./shoppingcart.css";
 

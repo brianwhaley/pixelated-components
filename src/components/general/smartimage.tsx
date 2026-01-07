@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import Image from 'next/image';
-import { buildCloudinaryUrl } from './cloudinary';
+import { buildCloudinaryUrl } from '../general/cloudinary';
 import { usePixelatedConfig } from '../config/config.client';
 
 const CLOUDINARY_DOMAIN = 'https://res.cloudinary.com/';

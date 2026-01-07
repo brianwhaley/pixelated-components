@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Callout } from "@/components/callout/callout";
+import { Callout } from "@/components/general/callout";
 import { Modal, handleModalOpen } from "@/components/general/modal";
 import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
