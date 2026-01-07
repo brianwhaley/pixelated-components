@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.7.0",
+	"version": "3.7.1",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -39,7 +39,8 @@
 			"default": "./dist/index.adminclient.js"
 		},
 		"./dist/components/*": "./dist/components/*",
-		"./css/*": "./dist/css/*"
+		"./css/*": "./dist/css/*",
+		"./scripts/*": "./dist/scripts/*"
 	},
 	"homepage": "https://github.com/brianwhaley/pixelated-components#readme",
 	"bugs": {
@@ -63,10 +64,10 @@
 		"buildClean": "rm -rf dist",
 		"tsc": "npx tsc --project tsconfig.json",
 		"tscClean": "rm -rf dist/{images,stories,tests}",
-		"rsync": "(cd src && tar -cf - $(find . -name \"*.css\" -o -name \"*.scss\" -o -name \"*.json\")) | tar -C dist -xf -",
-		"rsync1": "find src -type f \\( -name \"*.css\" -o -name \"*.scss\" -o -name \"*.json\" \\) -exec sh -c 'mkdir -p dist/$(dirname \"${1#src/}\") && cp \"$1\" dist/\"${1#src/}\"' _ {} \\;",
-		"rsync2": "rsync -a --include='*.css' --include='*.scss' --include='*.json' --include='*/' --exclude='*' src/ dist",
-		"validate-exports": "node scripts/validate-exports.cjs",
+		"rsync": "(cd src && tar -cf - $(find . -name \"*.css\" -o -name \"*.scss\" -o -name \"*.json\") scripts/) | tar -C dist -xf -",
+		"rsync1": "find src -type f \\( -name \"*.css\" -o -name \"*.scss\" -o -name \"*.json\" \\) -exec sh -c 'mkdir -p dist/$(dirname \"${1#src/}\") && cp \"$1\" dist/\"${1#src/}\"' _ {} \\; ; find src/scripts -type f -exec sh -c 'mkdir -p dist/$(dirname \"${1#src/}\") && cp \"$1\" dist/\"${1#src/}\"' _ {} \\;",
+		"rsync2": "rsync -a --include='*.css' --include='*.scss' --include='*.json' --include='scripts/**' --include='*/' --exclude='*' src/ dist",
+		"validate-exports": "npx tsx src/scripts/validate-exports.js",
 		"copy2brianwhaley": "rm -rf ../brianwhaley/node_modules/@pixelated-tech/components/dist && cp -r dist ../brianwhaley/node_modules/@pixelated-tech/components/",
 		"copy2informationfocus": "rm -rf ../informationfocus/node_modules/@pixelated-tech/components/dist && cp -r dist ../informationfocus/node_modules/@pixelated-tech/components/",
 		"copy2oaktreelandscaping": "rm -rf ../oaktreelandscaping/node_modules/@pixelated-tech/components/dist && cp -r dist ../oaktreelandscaping/node_modules/@pixelated-tech/components/",
@@ -84,7 +85,7 @@
 		"test:coverage": "vitest run --coverage",
 		"test:run": "vitest run",
 		"lint": "eslint --fix",
-		"release": "./scripts/release.sh"
+		"release": "./src/scripts/release.sh"
 	},
 	"scripts-old": {
 		"buildBabel": "npm run buildClean && NODE_ENV=production babel src --out-dir dist --copy-files",

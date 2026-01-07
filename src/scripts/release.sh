@@ -174,6 +174,7 @@ fi
 echo "🔐 Step 9: Publishing to npm..."
 should_publish=$(prompt_publish)
 if [ "$should_publish" = "yes" ]; then
+    npm login
     otp=$(prompt_otp)
     npm publish --access public --otp=$otp
     echo "✅ Successfully published to npm!"

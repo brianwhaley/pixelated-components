@@ -6,7 +6,7 @@ import reactPlugin from 'eslint-plugin-react';
 // import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
 import a11yPlugin from 'eslint-plugin-jsx-a11y';
-import pixelatedRules from './eslint-rules/index.js';
+import propTypesInferProps from './src/scripts/proptypes-inferprops.js';
 
 export default [
 	{
@@ -27,7 +27,11 @@ export default [
 			react: reactPlugin,
 			import: importPlugin,
 			'jsx-a11y': a11yPlugin,
-			'pixelated': pixelatedRules,
+			'pixelated': {
+				rules: {
+					'prop-types-inferprops': propTypesInferProps,
+				},
+			},
 		},
 		rules: {
 			...js.configs.recommended.rules,
@@ -65,7 +69,6 @@ export default [
 			"*.config.*",
 			"**/*example*",
 			"**/*Example*",
-			"eslint-rules/",
 		],
 	}
 ];
