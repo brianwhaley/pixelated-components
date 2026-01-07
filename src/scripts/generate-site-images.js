@@ -1,8 +1,11 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const publicDir = path.join(__dirname, '..', 'public');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const publicDir = path.join(process.cwd(), 'public');
 const outFile = path.join(publicDir, 'site-images.json');
 
 function listFiles(dir, exts = ['.jpg','.jpeg','.png','.webp','.avif','.gif']) {
