@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { getRouteByKey } from "@pixelated-tech/components/server";
+import { getRouteByKey, SiteInfo } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
 import { WebsiteSchema, LocalBusinessSchema, ServicesSchema } from "@pixelated-tech/components/server";
 import { PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
@@ -39,7 +39,7 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 					url: url ?? "",
 					siteInfo: siteInfo
 				}) }
-				<WebsiteSchema siteInfo={siteInfo} />
+				<WebsiteSchema siteInfo={siteInfo as SiteInfo} />
 				<LocalBusinessSchema siteInfo={siteInfo} />
 				<ServicesSchema siteInfo={siteInfo} />
 				<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
