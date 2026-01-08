@@ -10,12 +10,14 @@ import { encrypt, decrypt, isEncrypted } from '../components/config/crypto';
  *   npx tsx src/scripts/config-vault.js decrypt <filePath> <key>
  */
 
-const [,, command, targetPath, key] = process.argv;
+const [,, command, targetPath, argKey] = process.argv;
+const key = argKey || process.env.PIXELATED_CONFIG_KEY;
 
 if (!command || !targetPath || !key) {
 	console.log('Usage:');
-	console.log('  encrypt <filePath> <key> - Encrypts the file in place');
-	console.log('  decrypt <filePath> <key> - Decrypts the file in place');
+	console.log('  encrypt <filePath> [key] - Encrypts the file in place');
+	console.log('  decrypt <filePath> [key] - Decrypts the file in place');
+	console.log('\nNote: Key can be passed as argument or via PIXELATED_CONFIG_KEY env var.');
 	process.exit(1);
 }
 

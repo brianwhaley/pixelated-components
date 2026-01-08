@@ -38,6 +38,7 @@ REMOTE_NAME=$(prompt_remote_selection)
 
 echo "🚀 Starting Release Process for $PROJECT_NAME"
 echo "================================================="
+echo ""
 
 # Function to get current version
 get_current_version() {
@@ -113,13 +114,22 @@ else
 fi
 npm audit fix --force 2>/dev/null || true
 
+echo ""
 echo "🔍 Step 2: Running lint..."
+echo "================================================="
+echo ""
 npm run lint
 
+echo ""
 echo "🔨 Step 3: Building project..."
+echo "================================================="
+echo ""
 npm run build
 
+echo ""
 echo "🏷️  Step 4: Version bump..."
+echo "================================================="
+echo ""
 prompt_version_type
 if [ "$version_type" != "none" ]; then
     if [ "$version_type" = "patch" ] || [ "$version_type" = "minor" ] || [ "$version_type" = "major" ]; then
@@ -130,7 +140,10 @@ if [ "$version_type" != "none" ]; then
     fi
 fi
 
+echo ""
 echo "💾 Step 5: Committing changes..."
+echo "================================================="
+echo ""
 if npm run | grep -q "config:encrypt"; then
     echo "🔒 Encrypting configuration..."
     npm run config:encrypt
@@ -143,7 +156,10 @@ else
     git commit -m "$commit_message"
 fi
 
+echo ""
 echo "📤 Step 6: Pushing dev branch..."
+echo "================================================="
+echo ""
 # Try to push, if it fails due to remote changes, fetch and rebase
 if ! git push $REMOTE_NAME dev; then
     echo "⚠️  Push failed, fetching remote changes and rebasing..."
@@ -160,7 +176,10 @@ if ! git push $REMOTE_NAME dev; then
     fi
 fi
 
+echo ""
 echo "🔄 Step 7: Updating main branch..."
+echo "================================================="
+echo ""
 # Force main to match dev exactly
 git push $REMOTE_NAME dev:main --force
 
@@ -173,7 +192,10 @@ if git show-ref --verify --quiet refs/heads/main; then
     git checkout dev
 fi
 
+echo ""
 echo "🏷️  Step 8: Creating and pushing git tag..."
+echo "================================================="
+echo ""
 new_version=$(get_current_version)
 if ! git tag -l | grep -q "v$new_version"; then
     git tag "v$new_version"
@@ -187,7 +209,10 @@ if npm run | grep -q "config:decrypt"; then
     npm run config:decrypt
 fi
 
+echo ""
 echo "🔐 Step 9: Publishing to npm..."
+echo "================================================="
+echo ""
 should_publish=$(prompt_publish)
 if [ "$should_publish" = "yes" ]; then
     npm login
@@ -200,6 +225,8 @@ else
 fi
 
 echo ""
+echo ""
+echo "================================================="
 echo "✅ Release complete!"
 echo "📦 Version: $(get_current_version)"
 echo "📋 Branches updated: dev, main"
