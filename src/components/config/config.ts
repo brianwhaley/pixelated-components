@@ -9,24 +9,22 @@ const debug = false;
  * This function is intended for server-side use only.
  */
 export function getFullPixelatedConfig(): PixelatedConfig {
-	let raw = process.env.PIXELATED_CONFIG_JSON || (process.env.PIXELATED_CONFIG_B64 && Buffer.from(process.env.PIXELATED_CONFIG_B64, 'base64').toString('utf8'));
-	let source = process.env.PIXELATED_CONFIG_JSON ? 'PIXELATED_CONFIG_JSON' : (process.env.PIXELATED_CONFIG_B64 ? 'PIXELATED_CONFIG_B64' : 'none');
+	let raw = '';
+	let source = 'none';
 
-	// If not in environment, try reading from the conventional file location
-	if (!raw) {
-		const configPath = path.join(process.cwd(), 'src/app/config/pixelated.config.json');
-		if (fs.existsSync(configPath)) {
-			try {
-				raw = fs.readFileSync(configPath, 'utf8');
-				source = 'src/app/config/pixelated.config.json';
-			} catch (err) {
-				console.error(`Failed to read config file at ${configPath}`, err);
-			}
+	// Try reading from the conventional file location
+	const configPath = path.join(process.cwd(), 'src/app/config/pixelated.config.json');
+	if (fs.existsSync(configPath)) {
+		try {
+			raw = fs.readFileSync(configPath, 'utf8');
+			source = 'src/app/config/pixelated.config.json';
+		} catch (err) {
+			console.error(`Failed to read config file at ${configPath}`, err);
 		}
 	}
 
 	if (!raw) {
-		console.error('PIXELATED_CONFIG not found: neither environment variables nor src/app/config/pixelated.config.json are available.');
+		console.error('PIXELATED_CONFIG not found: src/app/config/pixelated.config.json is not available.');
 		return {} as PixelatedConfig;
 	}
 

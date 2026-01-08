@@ -75,8 +75,8 @@ A Next.js application for managing Pixelated CMS sites with AI-powered content o
 - **Third-Party Integrations**: Calendly, HubSpot, PayPal, eBay, etc.
 
 ### Configuration System
-Components rely on a centralized config system loaded from environment variables:
-- Server-side: `getFullPixelatedConfig()` reads `PIXELATED_CONFIG_JSON` or `PIXELATED_CONFIG_B64`
+Components rely on a centralized config system:
+- Server-side: `getFullPixelatedConfig()` reads from `src/app/config/pixelated.config.json` and uses `PIXELATED_CONFIG_KEY` for decryption.
 - Client-side: `getClientOnlyPixelatedConfig()` strips secrets (tokens, keys, passwords)
 - Config types defined in `config.types.ts` for integrations like Contentful, Cloudinary, HubSpot
 

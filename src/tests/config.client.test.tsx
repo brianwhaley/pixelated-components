@@ -55,7 +55,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
         </PixelatedClientConfigProvider>
       );
 
-      expect(consoleSpy).toHaveBeenCalledWith('Pixelated config is empty. Check that PIXELATED_CONFIG_JSON or PIXELATED_CONFIG_B64 environment variables are set.');
+      expect(consoleSpy).toHaveBeenCalledWith('Pixelated config is empty. Check that src/app/config/pixelated.config.json is available.');
       expect(screen.getByTestId('config-check')).toHaveTextContent('no-config');
 
       consoleSpy.mockRestore();
@@ -329,50 +329,10 @@ describe('Config Utility Functions', () => {
   beforeEach(() => {
     // Reset environment variables
     process.env = { ...originalEnv };
-    delete process.env.PIXELATED_CONFIG_JSON;
-    delete process.env.PIXELATED_CONFIG_B64;
   });
 
   afterEach(() => {
     process.env = originalEnv;
-  });
-
-  describe('getFullPixelatedConfig', () => {
-    it('should return empty config when no environment variables are set', () => {
-      const config = getFullPixelatedConfig();
-      expect(config).toEqual({});
-    });
-
-    it('should parse PIXELATED_CONFIG_JSON correctly', () => {
-      const testConfig = { cloudinary: { product_env: 'test' } };
-      process.env.PIXELATED_CONFIG_JSON = JSON.stringify(testConfig);
-
-      const config = getFullPixelatedConfig();
-      expect(config).toEqual(testConfig);
-    });
-
-    it('should parse PIXELATED_CONFIG_B64 correctly', () => {
-      const testConfig = { cloudinary: { product_env: 'test' } };
-      const encoded = Buffer.from(JSON.stringify(testConfig)).toString('base64');
-      process.env.PIXELATED_CONFIG_B64 = encoded;
-
-      const config = getFullPixelatedConfig();
-      expect(config).toEqual(testConfig);
-    });
-
-    it('should handle invalid JSON in PIXELATED_CONFIG_JSON', () => {
-      process.env.PIXELATED_CONFIG_JSON = 'invalid json';
-
-      const config = getFullPixelatedConfig();
-      expect(config).toEqual({});
-    });
-
-    it('should handle invalid base64 in PIXELATED_CONFIG_B64', () => {
-      process.env.PIXELATED_CONFIG_B64 = 'invalid base64';
-
-      const config = getFullPixelatedConfig();
-      expect(config).toEqual({});
-    });
   });
 
   describe('getClientOnlyPixelatedConfig', () => {

@@ -43,7 +43,7 @@ export const usePixelatedConfig = (): PixelatedConfig | null => {
 	}
 	// Also return null if config is empty (no environment config loaded)
 	if (Object.keys(ctx).length === 0) {
-		console.warn('Pixelated config is empty. Check that PIXELATED_CONFIG_JSON or PIXELATED_CONFIG_B64 environment variables are set.');
+		console.warn('Pixelated config is empty. Check that src/app/config/pixelated.config.json is available.');
 		return null;
 	}
 	return ctx;

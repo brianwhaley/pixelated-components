@@ -61,14 +61,14 @@ const deleted = await deletePage('home');
    - Space ID: Settings → General Settings
    - Management Token: Settings → API keys → Content management tokens
 
-3. **Set Environment Variables (recommended unified blob):**
-  - Preferred: set the full pixelated config as a single environment variable. You can supply either:
-    - `PIXELATED_CONFIG_JSON` — a single-line JSON string, or
-    - `PIXELATED_CONFIG_B64` — the base64-encoded JSON string.
+3. **Set Configuration (recommended):**
+  - The application reads its configuration from `src/app/config/pixelated.config.json`.
+  - For security, sensitive values are encrypted. You must provide the decryption key via the environment variable:
+    - `PIXELATED_CONFIG_KEY` — the key used to decrypt the configuration file.
 
-  Example (base64):
+  Example:
   ```bash
-  PIXELATED_CONFIG_B64=<base64-encoded-json-here>
+  PIXELATED_CONFIG_KEY=your-secret-decryption-key
   ```
 
 ### Usage:
@@ -159,7 +159,8 @@ export async function POST(request: Request) {
     );
   }
 
-  // Server-side: prefer reading the unified `PIXELATED_CONFIG_JSON` / `PIXELATED_CONFIG_B64`.
+  // Server-side: reads configuration from `src/app/config/pixelated.config.json` 
+  // and uses `PIXELATED_CONFIG_KEY` for decryption.
   // Example:
   // import { getFullPixelatedConfig } from '@pixelated-tech/components/server';
   // const cfg = getFullPixelatedConfig();
