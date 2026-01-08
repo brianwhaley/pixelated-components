@@ -1,4 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import React from 'react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, fireEvent } from '@testing-library/react';
+import { FormTagInput } from '../components/sitebuilder/form/formcomponents';
+import { FormValidationProvider } from '../components/sitebuilder/form/formvalidator';
 
 describe('Form Components Tests', () => {
 	describe('Form Label Component', () => {
@@ -450,6 +454,160 @@ describe('Form Components Tests', () => {
 			
 			expect(parent.validate).toBeTruthy();
 			expect(typeof parent.setIsValid).toBe('function');
+		});
+	});
+
+	describe('Form Tag Input Component', () => {
+		it('should render tag input with label', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput id="tags" label="Tags" />
+				</FormValidationProvider>
+			);
+			const label = container.querySelector('label');
+			expect(label).toBeTruthy();
+			expect(label?.textContent).toBe('Tags');
+		});
+
+		it('should display initial tags', () => {
+			const initialTags = ['react', 'typescript', 'javascript'];
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput id="tags" value={initialTags} />
+				</FormValidationProvider>
+			);
+			
+			const tagChips = container.querySelectorAll('.tag-chip');
+			expect(tagChips).toHaveLength(3);
+			expect(tagChips[0].textContent).toContain('react');
+			expect(tagChips[1].textContent).toContain('typescript');
+			expect(tagChips[2].textContent).toContain('javascript');
+		});
+
+		it('should add tag on Enter key press', () => {
+			const mockOnChange = vi.fn();
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput id="tags" onChange={mockOnChange} />
+				</FormValidationProvider>
+			);
+			
+			const input = container.querySelector('.tag-input') as HTMLInputElement;
+			fireEvent.change(input, { target: { value: 'new-tag' } });
+			fireEvent.keyDown(input, { key: 'Enter' });
+			
+			expect(mockOnChange).toHaveBeenCalledWith(['new-tag']);
+			expect(input.value).toBe('');
+		});
+
+		it('should add tag on comma key press', () => {
+			const mockOnChange = vi.fn();
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput id="tags" onChange={mockOnChange} />
+				</FormValidationProvider>
+			);
+			
+			const input = container.querySelector('.tag-input') as HTMLInputElement;
+			fireEvent.change(input, { target: { value: 'comma-tag' } });
+			fireEvent.keyDown(input, { key: ',' });
+			
+			expect(mockOnChange).toHaveBeenCalledWith(['comma-tag']);
+		});
+
+		it('should not add empty or duplicate tags', () => {
+			const mockOnChange = vi.fn();
+			const initialTags = ['existing'];
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput id="tags" value={initialTags} onChange={mockOnChange} />
+				</FormValidationProvider>
+			);
+			
+			const input = container.querySelector('.tag-input') as HTMLInputElement;
+			
+			// Try to add empty tag
+			fireEvent.change(input, { target: { value: '   ' } });
+			fireEvent.keyDown(input, { key: 'Enter' });
+			expect(mockOnChange).not.toHaveBeenCalled();
+			
+			// Try to add duplicate tag
+			fireEvent.change(input, { target: { value: 'existing' } });
+			fireEvent.keyDown(input, { key: 'Enter' });
+			expect(mockOnChange).not.toHaveBeenCalled();
+		});
+
+		it('should remove tag on remove button click', () => {
+			const mockOnChange = vi.fn();
+			const initialTags = ['tag1', 'tag2', 'tag3'];
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput id="tags" value={initialTags} onChange={mockOnChange} />
+				</FormValidationProvider>
+			);
+			
+			const removeButtons = container.querySelectorAll('.tag-remove');
+			fireEvent.click(removeButtons[1]); // Remove 'tag2'
+			
+			expect(mockOnChange).toHaveBeenCalledWith(['tag1', 'tag3']);
+		});
+
+		it('should remove last tag on backspace when input is empty', () => {
+			const mockOnChange = vi.fn();
+			const initialTags = ['tag1', 'tag2'];
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput id="tags" value={initialTags} onChange={mockOnChange} />
+				</FormValidationProvider>
+			);
+			
+			const input = container.querySelector('.tag-input') as HTMLInputElement;
+			fireEvent.keyDown(input, { key: 'Backspace' });
+			
+			expect(mockOnChange).toHaveBeenCalledWith(['tag1']);
+		});
+
+		it('should trim whitespace from tags', () => {
+			const mockOnChange = vi.fn();
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput id="tags" onChange={mockOnChange} />
+				</FormValidationProvider>
+			);
+			
+			const input = container.querySelector('.tag-input') as HTMLInputElement;
+			fireEvent.change(input, { target: { value: '  spaced tag  ' } });
+			fireEvent.keyDown(input, { key: 'Enter' });
+			
+			expect(mockOnChange).toHaveBeenCalledWith(['spaced tag']);
+		});
+
+		it('should support placeholder text', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput id="tags" placeholder="Add keywords..." />
+				</FormValidationProvider>
+			);
+			
+			const input = container.querySelector('.tag-input') as HTMLInputElement;
+			expect(input.placeholder).toBe('Add keywords...');
+		});
+
+		it('should handle disabled state', () => {
+			const initialTags = ['tag1', 'tag2'];
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput id="tags" value={initialTags} disabled="disabled" />
+				</FormValidationProvider>
+			);
+			
+			const input = container.querySelector('.tag-input') as HTMLInputElement;
+			const removeButtons = container.querySelectorAll('.tag-remove');
+			
+			expect(input.disabled).toBe(true);
+			expect(removeButtons).toHaveLength(2);
+			expect(removeButtons[0]).toBeDisabled();
+			expect(removeButtons[1]).toBeDisabled();
 		});
 	});
 

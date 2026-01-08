@@ -359,6 +359,18 @@
 			}
 		},
 		{
+			"component" : "FormTagInput",
+			"props" : {
+				"id" : "tags",
+				"name" : "tags",
+				"defaultValue" : ["react", "javascript"],
+				"display" : "horizontal",
+				"label" : "Tags : ",
+				"placeholder" : "Add tags...",
+				"tooltip" : "Add tags by typing and pressing Enter or comma"
+			}
+		},
+		{
 			"component" : "FormButton",
 			"props" : {
 				"type" : "submit",

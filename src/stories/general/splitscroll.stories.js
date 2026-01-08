@@ -12,7 +12,7 @@ const mockConfig = {
 };
 
 export default {
-	title: 'SplitScroll',
+	title: 'General',
 	component: SplitScroll,
 	decorators: [
 		(Story) => (
@@ -25,7 +25,7 @@ export default {
 	],
 };
 
-export const BasicSplitScroll = {
+export const SplitScroll_Basic = {
 	render: () => (
 		<SplitScroll>
 			<SplitScroll.Section
@@ -133,7 +133,7 @@ export const BasicSplitScroll = {
 	)
 };
 
-export const ProductShowcase = {
+export const SplitScroll_ProductShowcase = {
 	render: () => (
 		<SplitScroll>
 			<SplitScroll.Section
@@ -226,7 +226,7 @@ export const ProductShowcase = {
 	)
 };
 
-export const MinimalSplitScroll = {
+export const SplitScroll_Minimal = {
 	render: () => (
 		<SplitScroll>
 			<SplitScroll.Section

@@ -608,6 +608,158 @@ export function FormDataList(props: FormDataListType) {
 
 
 
+FormTagInput.propTypes = {
+	id: PropTypes.string.isRequired,
+	name: PropTypes.string,
+	defaultValue: PropTypes.arrayOf(PropTypes.string),
+	value: PropTypes.arrayOf(PropTypes.string),
+	placeholder: PropTypes.string,
+	autoComplete: PropTypes.string,
+	// flag attributes
+	disabled: PropTypes.string,
+	readOnly: PropTypes.string,
+	required: PropTypes.string,
+	// ----- for calculations
+	display: PropTypes.string,
+	label: PropTypes.string,
+	tooltip: PropTypes.string,
+	className: PropTypes.string,
+	validate: PropTypes.string,
+	onChange: PropTypes.func,
+};
+export type FormTagInputType = InferProps<typeof FormTagInput.propTypes>;
+export function FormTagInput(props: FormTagInputType) {
+	const [inputValue, setInputValue] = useState('');
+	const [internalTags, setInternalTags] = useState<string[]>(
+		Array.isArray(props.defaultValue) ? props.defaultValue.filter((tag): tag is string => tag != null) : []
+	);
+	const { formValidate, handleBlur } = useFormComponent(props);
+	const { validateField } = useFormValidation();
+
+	// Determine if component is controlled or uncontrolled
+	const isControlled = props.value !== undefined;
+	
+	// Get current tags array - use props.value if controlled, otherwise internal state
+	const currentTags = isControlled 
+		? (Array.isArray(props.value) ? props.value.filter((tag): tag is string => tag != null) : [])
+		: internalTags;
+
+	// Handle adding a new tag
+	const addTag = (tag: string) => {
+		const trimmedTag = tag.trim();
+		if (trimmedTag && !currentTags.includes(trimmedTag)) {
+			const newTags = [...currentTags, trimmedTag];
+			
+			// Always call onChange if provided (for external updates)
+			if (props.onChange) {
+				props.onChange(newTags);
+			}
+			
+			if (!isControlled) {
+				// Uncontrolled mode: update internal state
+				setInternalTags(newTags);
+			}
+			
+			// Trigger form validation
+			if (props.id) {
+				validateField(props.id, true, []);
+			}
+		}
+		setInputValue('');
+	};
+
+	// Handle removing a tag
+	const removeTag = (tagToRemove: string) => {
+		const newTags = currentTags.filter(tag => tag !== tagToRemove);
+		
+		// Always call onChange if provided (for external updates)
+		if (props.onChange) {
+			props.onChange(newTags);
+		}
+		
+		if (!isControlled) {
+			// Uncontrolled mode: update internal state
+			setInternalTags(newTags);
+		}
+		
+		// Trigger form validation
+		if (props.id) {
+			validateField(props.id, true, []);
+		}
+	};
+
+	// Handle input key events
+	const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+		if (event.key === 'Enter' || event.key === ',') {
+			event.preventDefault();
+			addTag(inputValue);
+		} else if (event.key === 'Backspace' && inputValue === '' && currentTags.length > 0) {
+			// Remove last tag on backspace when input is empty
+			const lastTag = currentTags[currentTags.length - 1];
+			if (lastTag) {
+				removeTag(lastTag);
+			}
+		}
+	};
+
+	// Handle input change
+	const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setInputValue(event.target.value);
+	};
+
+	return (
+		<div className={`form-tag-input ${props.className || ''}`}>
+			<FormLabel key={"label-" + props.id} id={props.id} label={props.label} />
+			{props.tooltip ? <FormTooltip id={props.id} text={[props.tooltip]} /> : ""}
+			{props.display === "vertical" ? formValidate : ""}
+
+			{/* Tag display area */}
+			<div className="tag-container">
+				{currentTags.map((tag, index) => (
+					<span key={index} className="tag-chip">
+						{tag}
+						<button
+							type="button"
+							className="tag-remove"
+							onClick={() => removeTag(tag as string)}
+							aria-label={`Remove ${tag}`}
+							disabled={props.disabled === 'disabled'}
+						>
+							×
+						</button>
+					</span>
+				))}
+
+				{/* Input field for adding new tags */}
+				<input
+					type="text"
+					id={props.id}
+					name={props.name || undefined}
+					value={inputValue}
+					onChange={handleInputChange}
+					onKeyDown={handleKeyDown}
+					placeholder={props.placeholder || "Add tag..."}
+					autoComplete={props.autoComplete || undefined}
+					disabled={props.disabled === 'disabled'}
+					readOnly={props.readOnly === 'readOnly'}
+					required={props.required === 'required'}
+					className="tag-input"
+					aria-label="Add new tag"
+				/>
+			</div>
+
+			{props.display !== "vertical" ? formValidate : ""}
+		</div>
+	);
+}
+
+
+
+
+
+
+
+
 FormFieldset.propTypes = {
 };
 export type FormFieldsetType = InferProps<typeof FormFieldset.propTypes>;

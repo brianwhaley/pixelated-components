@@ -11,7 +11,7 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **ON HOLD** Yelp Recommendations integration (Cost Prohibitive)
 - [ ] Instagram Image Integration for Carousels
 - [ ] Hero Banner: headline, subtext, CTA, background image/video, overlay.
-- [ ] **FormTagInput**: A specialized input for managing lists of items (tags/chips) with Enter/Comma to add and click-to-remove functionality. Ideal for keywords and areaServed fields.
+- [x] **FormTagInput**: A specialized input for managing lists of items (tags/chips) with Enter/Comma to add and click-to-remove functionality. Ideal for keywords and areaServed fields.
 
 ### CI / CD Improvements
 - [ ] Add CI workflow to run tests and lints on pull requests.
