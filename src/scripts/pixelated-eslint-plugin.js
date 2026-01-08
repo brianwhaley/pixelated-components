@@ -1,6 +1,45 @@
-import { isClientComponent } from '../components/utilities/functions.ts';
+import fs from 'fs';
+import path from 'path';
 
-export default {
+/**
+ * Pixelated ESLint Plugin
+ * Enforces workspace standards for SEO, performance, and project structure.
+ */
+
+/* ===== CLIENT COMPONENT DETECTION (Copied from functions.ts for standalone usage) ===== */
+const CLIENT_ONLY_PATTERNS = [
+	/\baddEventListener\b/,
+	/\bcreateContext\b/,
+	/\bdocument\./,
+	/\blocalStorage\b/,
+	/\bnavigator\./,
+	/\bonBlur\b/,
+	/\bonChange\b/,
+	/\bonClick\b/,
+	/\bonFocus\b/,
+	/\bonInput\b/,
+	/\bonKey\b/,
+	/\bonMouse\b/,
+	/\bonSubmit\b/,
+	/\bremoveEventListener\b/,
+	/\bsessionStorage\b/,
+	/\buseCallback\b/,
+	/\buseContext\b/,
+	/\buseEffect\b/,
+	/\buseLayoutEffect\b/,
+	/\buseMemo\b/,
+	/\buseReducer\b/,
+	/\buseRef\b/,
+	/\buseState\b/,
+	/\bwindow\./,
+	/["']use client["']/  // Client directive
+];
+
+function isClientComponent(fileContent) {
+	return CLIENT_ONLY_PATTERNS.some(pattern => pattern.test(fileContent));
+}
+
+const propTypesInferPropsRule = {
 	meta: {
 		type: 'problem',
 		docs: {
@@ -203,3 +242,199 @@ export default {
 		};
 	},
 };
+
+const requiredSchemasRule = {
+	meta: {
+		type: 'suggestion',
+		docs: {
+			description: 'Ensure required SEO schemas are present in layout.tsx',
+			category: 'SEO',
+			recommended: true,
+		},
+		messages: {
+			missingSchema: 'Required SEO Schema "{{schemaName}}" is missing from layout.tsx.',
+		},
+	},
+	create(context) {
+		if (!context.getFilename().endsWith('layout.tsx')) return {};
+
+		const requiredSchemas = ['WebsiteSchema', 'LocalBusinessSchema', 'ServicesSchema'];
+		const foundSchemas = new Set();
+
+		return {
+			JSXIdentifier(node) {
+				if (requiredSchemas.includes(node.name)) {
+					foundSchemas.add(node.name);
+				}
+			},
+			'Program:exit'() {
+				requiredSchemas.forEach(schema => {
+					if (!foundSchemas.has(schema)) {
+						context.report({
+							loc: { line: 1, column: 0 },
+							messageId: 'missingSchema',
+							data: { schemaName: schema },
+						});
+					}
+				});
+			},
+		};
+	},
+};
+
+const requiredFilesRule = {
+	meta: {
+		type: 'suggestion',
+		docs: {
+			description: 'Ensure critical project files are present',
+			category: 'Project Structure',
+			recommended: true,
+		},
+		messages: {
+			missingFile: 'Missing recommended project file: "{{fileName}}".',
+		},
+	},
+	create(context) {
+		// Only run this check once per project execution, ideally on layout.tsx
+		if (!context.getFilename().endsWith('layout.tsx')) return {};
+
+		const projectRoot = context.cwd;
+		const requiredFiles = [
+			{ name: 'sitemap', pattern: /sitemap\.(ts|js|xml|tsx)$/ },
+			{ name: 'manifest', pattern: /manifest\.(json|ts|tsx)$/ },
+			{ name: 'not-found', pattern: /not-found\.tsx$/ },
+			{ name: 'robots', pattern: /robots\.(ts|tsx)$/ },
+			{ name: 'proxy.ts', pattern: /^proxy\.ts$/ },
+			{ name: 'amplify.yml', pattern: /^amplify\.yml$/ },
+		];
+
+		return {
+			'Program:exit'() {
+				try {
+					const files = fs.readdirSync(projectRoot);
+					
+					// Check common subdirectories
+					let appFiles = [];
+					let srcFiles = [];
+					const appPath = path.join(projectRoot, 'src/app');
+					const srcPath = path.join(projectRoot, 'src');
+					
+					if (fs.existsSync(appPath)) {
+						appFiles = fs.readdirSync(appPath);
+					}
+					if (fs.existsSync(srcPath)) {
+						srcFiles = fs.readdirSync(srcPath);
+					}
+
+					const allFiles = [...files, ...appFiles, ...srcFiles];
+
+					requiredFiles.forEach(req => {
+						const found = allFiles.some(f => req.pattern.test(f));
+						if (!found) {
+							context.report({
+								loc: { line: 1, column: 0 },
+								messageId: 'missingFile',
+								data: { fileName: req.name },
+							});
+						}
+					});
+				} catch (e) {
+					// Ignore errors
+				}
+			},
+		};
+	},
+};
+
+const noRawImgRule = {
+	meta: {
+		type: 'suggestion',
+		docs: {
+			description: 'Prevent usage of raw <img> tags in favor of SmartImage',
+			category: 'Performance',
+			recommended: true,
+		},
+		messages: {
+			useSmartImage: 'Use <SmartImage /> instead of raw <img> for better performance and CDN support.',
+		},
+	},
+	create(context) {
+		return {
+			JSXOpeningElement(node) {
+				if (node.name.name === 'img') {
+					context.report({
+						node,
+						messageId: 'useSmartImage',
+					});
+				}
+			},
+		};
+	},
+};
+
+const requiredFaqRule = {
+	meta: {
+		type: 'suggestion',
+		docs: {
+			description: 'Ensure FAQ page and FAQSchema are present',
+			category: 'SEO',
+			recommended: true,
+		},
+		messages: {
+			missingFaqPage: 'FAQ page is missing. FAQ pages are strongly recommended for every site (src/app/faq/page.tsx).',
+			missingFaqSchema: 'FAQSchema is missing from the FAQ page.',
+		},
+	},
+	create(context) {
+		// Only check this when linting layout.tsx
+		if (!context.getFilename().endsWith('layout.tsx')) return {};
+
+		const projectRoot = context.cwd;
+		const faqPath = path.join(projectRoot, 'src/app/faq/page.tsx');
+
+		return {
+			'Program:exit'() {
+				if (!fs.existsSync(faqPath)) {
+					context.report({
+						loc: { line: 1, column: 0 },
+						messageId: 'missingFaqPage',
+					});
+				} else {
+					try {
+						const content = fs.readFileSync(faqPath, 'utf8');
+						if (!content.includes('FAQSchema')) {
+							context.report({
+								loc: { line: 1, column: 0 },
+								messageId: 'missingFaqSchema',
+							});
+						}
+					} catch (e) {
+						// Ignore read errors
+					}
+				}
+			},
+		};
+	},
+};
+
+export default {
+	rules: {
+		'prop-types-inferprops': propTypesInferPropsRule,
+		'required-schemas': requiredSchemasRule,
+		'required-files': requiredFilesRule,
+		'no-raw-img': noRawImgRule,
+		'required-faq': requiredFaqRule,
+	},
+	configs: {
+		recommended: {
+			rules: {
+				'pixelated/prop-types-inferprops': 'error',
+				'pixelated/required-schemas': 'warn',
+				'pixelated/required-files': 'warn',
+				'pixelated/no-raw-img': 'warn',
+				'pixelated/required-faq': 'warn',
+			},
+		},
+	},
+};
+

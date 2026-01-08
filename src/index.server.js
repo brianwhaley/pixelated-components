@@ -21,6 +21,7 @@ export * from './components/general/gravatar.functions';
 export * from './components/general/instagram.functions';
 export * from './components/general/manifest';
 export * from './components/general/metadata.functions';
+export * from './components/general/proxy-handler';
 export * from './components/general/resume';
 export * from './components/general/schema-blogposting';
 export * from './components/general/schema-blogposting.functions';

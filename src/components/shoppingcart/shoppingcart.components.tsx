@@ -236,7 +236,12 @@ export function ShoppingCartItem(props: ShoppingCartItemType) {
 		<div className="pixCartItem row-12col">
 			<div className="pixCartItemPhoto grid-s1-e4">
 				{ thisItem.itemURL && thisItem.itemImageURL
-					? <a href={thisItem.itemURL} target={thisItemTarget} rel="noopener noreferrer"><img src={thisItem.itemImageURL} alt={thisItem.itemTitle} /></a>
+					? <a href={thisItem.itemURL} target={thisItemTarget} rel="noopener noreferrer">
+						<SmartImage src={thisItem.itemImageURL} alt={thisItem.itemTitle} 
+							cloudinaryEnv={config?.cloudinary?.product_env}
+							cloudinaryDomain={config?.cloudinary?.baseUrl}
+							cloudinaryTransforms={config?.cloudinary?.transforms} />
+					</a>
 					: thisItem.itemImageURL 
 						? (
 							/* <img src={thisItem.itemImageURL} title={thisItem.itemTitle} alt={thisItem.itemTitle} /> */

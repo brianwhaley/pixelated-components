@@ -3,6 +3,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
+import { SmartImage } from './smartimage';
 import './menu-expando.css';
 
 MenuExpando.propTypes = {
@@ -206,7 +207,7 @@ export function MenuExpandoButton(props: MenuExpandoButtonType) {
 			role="button"
 			aria-label="Toggle mobile menu"
 		>
-			<img src="/images/icons/mobile-menu2.png" title="Mobile Menu" alt="Mobile Menu"/>
+			<SmartImage src="/images/icons/mobile-menu2.png" title="Mobile Menu" alt="Mobile Menu"/>
 		</div>
 	);
 }

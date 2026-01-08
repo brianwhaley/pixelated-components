@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
+import { SmartImage } from './smartimage';
 import { getGoogleReviewsByPlaceId, GoogleReview, GooglePlaceSummary } from './google.reviews.functions';
 import './google.reviews.css';
 
@@ -80,7 +81,7 @@ export function GoogleReviewsCard(props: GoogleReviewsCardType) {
 							<div className="review-header">
 								{r.profile_photo_url && (
 									<div className="profile-photo-container">
-										<img
+										<SmartImage
 											src={r.profile_photo_url}
 											alt={r.author_name}
 											className="profile-photo"

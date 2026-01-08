@@ -84,7 +84,7 @@ describe('GoogleReviewsCard', () => {
 		// Check for profile photo
 		const images = screen.getAllByRole('img');
 		expect(images).toHaveLength(1);
-		expect(images[0]).toHaveAttribute('src', 'https://example.com/photo.jpg');
+		expect(images[0]).toHaveAttribute('src', expect.stringContaining('https%3A%2F%2Fexample.com%2Fphoto.jpg'));
 		expect(images[0]).toHaveAttribute('alt', 'John Doe');
 	});
 

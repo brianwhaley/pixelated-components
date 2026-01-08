@@ -1,12 +1,12 @@
 import globals from "globals";
-import js from '@eslint/js';
+import eslint from '@eslint/js';
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import reactPlugin from 'eslint-plugin-react';
 // import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
 import a11yPlugin from 'eslint-plugin-jsx-a11y';
-import propTypesInferProps from './src/scripts/proptypes-inferprops.js';
+import pixelatedPlugin from './src/scripts/pixelated-eslint-plugin.js';
 
 export default [
 	{
@@ -27,14 +27,10 @@ export default [
 			react: reactPlugin,
 			import: importPlugin,
 			'jsx-a11y': a11yPlugin,
-			'pixelated': {
-				rules: {
-					'prop-types-inferprops': propTypesInferProps,
-				},
-			},
+			'pixelated': pixelatedPlugin,
 		},
 		rules: {
-			...js.configs.recommended.rules,
+			...eslint.configs.recommended.rules,
 			...tsPlugin.configs.recommended.rules,
 			...reactPlugin.configs.recommended.rules,
 			...a11yPlugin.configs.recommended.rules,
@@ -45,8 +41,7 @@ export default [
 			// Disable rules that conflict with propTypes + InferProps pattern
 			'@typescript-eslint/no-unused-vars': 'off', // Allow unused props in function signatures and exported types
 			'react/prop-types': 'off', // We use our own propTypes system
-			'pixelated/prop-types-inferprops': 'error',
-
+			...pixelatedPlugin.configs.recommended.rules,
 		},
 		settings: {
 			react: {

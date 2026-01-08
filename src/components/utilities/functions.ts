@@ -229,6 +229,7 @@ export const SERVER_ONLY_PATTERNS = [
 	/\bfs\.readFileSync\b/,
 	/\bfs\.existsSync\b/,
 	/\bimport.*googleapis\b|\brequire.*googleapis\b/,  // Actual import of googleapis
+	/\bimport.*next\/server\b|\brequire.*next\/server\b/,  // Actual import of next/server
 	/\bimport.*path\b|\brequire.*path\b/,  // Actual import of path module
 	/\bprocess\.cwd\(\)/,
 	/\brequire\.resolve\b/,

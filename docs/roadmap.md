@@ -11,18 +11,20 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **ON HOLD** Yelp Recommendations integration (Cost Prohibitive)
 - [ ] Instagram Image Integration for Carousels
 - [ ] Hero Banner: headline, subtext, CTA, background image/video, overlay.
-- [x] **FormTagInput**: A specialized input for managing lists of items (tags/chips) with Enter/Comma to add and click-to-remove functionality. Ideal for keywords and areaServed fields.
 
 ### CI / CD Improvements
 - [ ] Add CI workflow to run tests and lints on pull requests.
+- [ ] **Transition to a Turborepo Monorepo**: Move all sites and components into a unified workspace with `pnpm` and `Turborepo` for instant builds and shared task orchestration.
 
 ### Component Improvements
 - [ ] Implement minimal `createContentfulImageURLs` with single `/images` sitemap entry.
+- [ ] **pixelated/require-section-ids**: ESLint rule to enforce `id` attributes on top-level `<section>` elements for jump-link support and SEO hierarchy.
 - [ ] Review Contentful helper functions for per-page mapping capability.
 - [ ] Implement `createContentfulImageURLs` per-page mapping with `contentType` & `pageField` config.
 - [ ] Align typography to `--font-sizeN` clamp variables.
 - [ ] Provide Cloudinary transforms presets for image components.
 - [ ] find a better solution than to generate image via build script in amplify for json for sitemap creation
+- [ ] **SmartImage Migration**: Replace all standard `<img>` tags with `SmartImage` across all components for optimized loading and CDN support.
 - [ ] **SocialCards Component**: Fix state initialization to track prop changes properly.
 - [ ] **Modal Component**: Clarify content source pattern (accepts both `modalContent` and `children`).
 - [ ] **Carousel Component**: Fix active card state reset when `props.cards` changes.
@@ -35,6 +37,12 @@ This document outlines planned improvements and refactoring initiatives for the 
 
 ### Platform Enhancements
 - [ ] **Project Scaffolding CLI**: Interactive CLI tool that generates complete Next.js projects with pixelated-components pre-configured, including routes.json, layout.tsx, package.json, and basic page structure
+- [ ] **Technical Site Assets**: Implement standard `src/app/loading.tsx` (Skeleton loaders), `src/app/global-error.tsx` (Branded error boundaries), `public/humans.txt`, and `public/.well-known/security.txt` in the starter template.
+- [ ] **Proxy Security Headers**: Enhance `src/proxy.ts` to include standard security headers (CSP, HSTS, X-Frame-Options, etc.) across all projects.
+- [ ] **Static Search Index**: Build-time script to generate `search-index.json` from `routes.json` for serverless, instant client-side search.
+- [ ] **Pixelated Health API**: Implement `/api/pixelated-health` to provide JSON reports of SEO/Structure health for the `pixelated-admin` dashboard.
+- [ ] **AI-Driven Image & Meta Pipeline**: Integrate AI Vision APIs into `generate-site-images.js` to automatically generate alt text, SEO descriptions, and image captions.
+- [ ] **Config Encryption**: Implement local encryption/decryption (AES) for `pixelated.config.json` to securely store sensitive business information in repositories.
 - [ ] **Template Marketplace**: Pre-built industry-specific templates (restaurant, law firm, contractor, etc.) that users can clone and customize
 - [ ] **Configuration Wizard**: Step-by-step setup wizard that collects business info, generates site configuration, and creates initial content structure
 - [ ] **Content Migration Tools**: Automated importers for WordPress, Squarespace, Wix, and other platforms to migrate content to pixelated sites

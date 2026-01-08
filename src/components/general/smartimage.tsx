@@ -204,6 +204,7 @@ export function SmartImage(props: SmartImageType) {
 
 	/* ===== IMG VARIANT ===== */
 	return (
+		/* eslint-disable-next-line pixelated/no-raw-img */
 		<img 
 			{...newProps as any} 
 			ref={imgRef}

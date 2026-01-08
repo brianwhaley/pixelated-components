@@ -46,6 +46,29 @@ npm run release
 # npm login
 # npm publish --access public --otp=000000
 
+## Proxy Handler (Middleware)
+Standardize security headers and request metadata across all Pixelated projects.
+
+```typescript
+// src/proxy.ts
+import { handlePixelatedProxy, STANDARD_PROXY_MATCHER } from "@pixelated-tech/components/server";
+import type { NextRequest } from "next/server";
+
+export function proxy(req: NextRequest) {
+	return handlePixelatedProxy(req);
+}
+
+export const config = {
+	matcher: STANDARD_PROXY_MATCHER,
+};
+```
+
+Features:
+- **Security Headers**: HSTS, CSP, X-Frame-Options (DENY), X-Content-Type-Options (nosniff).
+- **Metadata**: Sets `x-path`, `x-origin`, and `x-url` request headers.
+- **Service Support**: Pre-authorized CSP for HubSpot, Gravatar, Flickr, Cloudinary, eBay, and Google Analytics.
+
+
 
 
 https://www.dhiwise.com/post/how-to-structure-and-organize-react-css-modules

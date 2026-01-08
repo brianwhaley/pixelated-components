@@ -146,7 +146,7 @@ describe('MenuExpandoButton Component', () => {
 		const { container } = render(<MenuExpandoButton />);
 		const img = container.querySelector('img');
 		expect(img).toBeInTheDocument();
-		expect(img).toHaveAttribute('src', '/images/icons/mobile-menu2.png');
+		expect(img).toHaveAttribute('src', expect.stringContaining('%2Fimages%2Ficons%2Fmobile-menu2.png'));
 		expect(img).toHaveAttribute('alt', 'Mobile Menu');
 	});
 
