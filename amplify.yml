@@ -17,9 +17,12 @@ frontend:
         - npm run build
         - npm run generate-site-images
   artifacts:
-    baseDirectory: .next
+    baseDirectory: .
     files:
-      - '**/*'
+      - '.next/**/*'
+      - 'src/app/config/pixelated.config.json'
+      - 'package.json'
+      - 'node_modules/**/*'
   cache:
     paths:
       - .next/cache/**/*
