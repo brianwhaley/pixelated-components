@@ -1,0 +1,51 @@
+{
+  "fields": [
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "name",
+        "name": "name",
+        "label": "Service Name",
+        "required": true,
+        "placeholder": "e.g. Web Development",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormTextarea",
+      "props": {
+        "id": "description",
+        "name": "description",
+        "label": "Description",
+        "required": true,
+        "placeholder": "Detailed description of the service...",
+        "rows": "3"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "url",
+        "id": "url",
+        "name": "url",
+        "label": "Service URL",
+        "required": false,
+        "placeholder": "https://pixelated.tech/services/web-dev",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "areaServed",
+        "name": "areaServed",
+        "label": "Area Served",
+        "required": false,
+        "placeholder": "New Jersey, South Carolina",
+        "size": "40"
+      }
+    }
+  ]
+}

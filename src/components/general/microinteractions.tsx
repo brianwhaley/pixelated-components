@@ -1,9 +1,17 @@
-
-// import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes, { InferProps } from "prop-types";
+import { observeIntersection, isElementPartiallyInViewport } from './intersection-observer';
 import './microinteractions.css';
 
 /* ========== MICRO ANIMATIONS ========== */
+
+/**
+ * MicroInteractions handles global site animations and interactions.
+ * It is typically called once in a top-level component or effect.
+ * 
+ * @param props - Configuration props for enabling/disabling interactions
+ * @returns A cleanup function if scrollfadeElements is used
+ */
 MicroInteractions.propTypes = {
 	buttonring: PropTypes.bool,
 	cartpulse: PropTypes.bool,
@@ -17,10 +25,10 @@ MicroInteractions.propTypes = {
 };
 export type MicroInteractionsType = InferProps<typeof MicroInteractions.propTypes>;
 export function MicroInteractions(props: MicroInteractionsType) {
-	// const debug = true ;
 	const body = document.body;
+	
 	for (const propName in props) {
-		if (Object.prototype.hasOwnProperty.call(props, propName)) {
+		if (Object.prototype.hasOwnProperty.call(props, propName) && propName !== 'scrollfadeElements') {
 			if ((props as any)[propName] === true) {
 				body.classList.add(propName);
 			} else if ((props as any)[propName] === false) {
@@ -28,69 +36,53 @@ export function MicroInteractions(props: MicroInteractionsType) {
 			}
 		}
 	}
-	if (props.scrollfadeElements) ScrollFade(props.scrollfadeElements as string);
+
+	if (props.scrollfadeElements) {
+		return ScrollFade(props.scrollfadeElements as string);
+	}
 }
 
-
- 
-function isElementInViewport(el: Element) {
-	const rect = el.getBoundingClientRect();
-	return (
-		rect.top >= 0 &&
-		rect.left >= 0 &&
-		rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-		rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-	);
-}
-
-
-function isElementPartiallyInViewport(el: Element) {
-	const rect = el.getBoundingClientRect();
-	return (
-		rect.top < (window.innerHeight || document.documentElement.clientHeight) &&
-		rect.left < (window.innerWidth || document.documentElement.clientWidth) &&
-		rect.bottom > 0 &&
-		rect.right > 0
-	);
-}
-
-
+/**
+ * Applies a fade-in animation to elements as they enter the viewport
+ * @param elements - CSS selector for elements to animate
+ * @returns Cleanup function for the intersection observer
+ */
 function ScrollFade(elements: string) {
-	const options = {
-		root: null, // Observes intersection with the viewport
-		rootMargin: "0px 0px -100px 0px", // Shrinks the top of the root by 200px
-		threshold: 0 // Triggers when any part of the element intersects the adjusted root
-	};
-	const observer = new IntersectionObserver((entries) => {
-		entries.forEach((entry) => {
-			if (entry.isIntersecting) {
-			// if (entry.intersectionRatio > 0.5) {
-			// Add the animation class when the element enters the viewport
-				entry.target.classList.add('scrollfade');
-				entry.target.classList.remove('hidden');
-				// Optionally, stop observing once animated if you only want it to animate once
-				observer.unobserve(entry.target);
-			} else {
-				// Optionally, remove the animation class if you want it to re-animate on re-entry
-				// entry.target.classList.remove('hidden');
-				// entry.target.classList.remove('scrollfade');
-			}
-		});
-	}, options);
-	// Select the elements you want to observe and initially hide them
 	const elementsToAnimate = document.querySelectorAll(elements);
+	
+	// Initial state setup
 	elementsToAnimate.forEach((element) => {
-		if( isElementPartiallyInViewport(element) ) {
-			if (element.classList.contains('hidden')) {
-				element.classList.remove('hidden');
-			}
-			if (element.classList.contains('scrollfade')) {
-				element.classList.remove('scrollfade');
-			}
+		if (isElementPartiallyInViewport(element)) {
+			// If already in viewport, make sure it's visible without animation
+			element.classList.remove('hidden');
+			element.classList.remove('scrollfade');
 		} else {
 			// Apply initial hidden state to elements NOT on the screen
-			element.classList.add('hidden'); // Apply initial hidden state
-			observer.observe(element); // Start observing each element
+			element.classList.add('hidden');
 		}
 	});
+
+	// Setup observer for elements not yet visible
+	const cleanup = observeIntersection(
+		elements,
+		(entry, observer) => {
+			if (entry.isIntersecting) {
+				const element = entry.target;
+				
+				// Only animate if it was hidden
+				if (element.classList.contains('hidden')) {
+					element.classList.add('scrollfade');
+					element.classList.remove('hidden');
+					// Stop observing after animation triggers
+					observer.unobserve(element);
+				}
+			}
+		},
+		{
+			rootMargin: "0px 0px -100px 0px",
+			threshold: 0
+		}
+	);
+
+	return cleanup;
 }

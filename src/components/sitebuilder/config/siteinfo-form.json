@@ -192,6 +192,17 @@
       "component": "FormInput",
       "props": {
         "type": "text",
+        "id": "openingHours",
+        "name": "openingHours",
+        "label": "Opening Hours",
+        "placeholder": "Mo-Fr 09:00-17:00",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
         "id": "priceRange",
         "name": "priceRange",
         "label": "Price Range",
@@ -207,6 +218,63 @@
         "name": "keywords",
         "label": "Keywords",
         "placeholder": "web development, design, services",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormSelect",
+      "props": {
+        "id": "publisherType",
+        "name": "publisherType",
+        "label": "Publisher Type",
+        "options": [
+          { "value": "Organization", "label": "Organization" },
+          { "value": "LocalBusiness", "label": "Local Business" },
+          { "value": "Person", "label": "Person" }
+        ]
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "number",
+        "id": "copyrightYear",
+        "name": "copyrightYear",
+        "label": "Copyright Year",
+        "placeholder": "2024",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "potentialAction.@type",
+        "name": "potentialAction.@type",
+        "label": "Search Action Type",
+        "placeholder": "SearchAction",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "potentialAction.target",
+        "name": "potentialAction.target",
+        "label": "Search Target URL",
+        "placeholder": "https://example.com/search?q={search_term_string}",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "potentialAction.query-input",
+        "name": "potentialAction.query-input",
+        "label": "Query Input",
+        "placeholder": "required name=search_term_string",
         "size": "40"
       }
     }

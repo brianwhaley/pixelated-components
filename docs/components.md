@@ -19,6 +19,7 @@ For a complete working example of Pixelated Components in action, check out the 
 - [Callout](#callout)
 - [CSS](#css)
 - [Loading](#loading)
+- [SplitScroll](#splitscroll)
 - [MicroInteractions](#microinteractions)
 - [Modal](#modal)
 - [Semantic](#semantic)
@@ -26,6 +27,7 @@ For a complete working example of Pixelated Components in action, check out the 
 - [SmartImage](#smartimage)
 - [Tab](#tab)
 - [Table](#table)
+- [Intersection Observer Utility](#intersection-observer-utility)
 
 ### CMS Integration
 - [Calendly](#calendly)
@@ -205,6 +207,7 @@ import { Callout } from '@pixelated-tech/components';
 | `buttonText` | `string` | - | Custom button text |
 | `subtitle` | `string` | - | Subtitle text |
 | `aboveFold` | `boolean` | - | Image optimization hint |
+| `children` | `ReactNode` | - | Custom child content rendered below main content |
 
 #### Variants
 - **`default`**: Simple layout with optional border
@@ -242,6 +245,145 @@ import { Loading } from '@pixelated-tech/components';
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | Component size |
 | `message` | `string` | - | Loading message text |
 | `color` | `string` | - | Custom color (CSS color value) |
+
+---
+
+### SplitScroll
+
+Split-page scrolling layout component with sticky layered images, perfect for product showcases, portfolios, or storytelling layouts inspired by luxury brand websites.
+
+```tsx
+import { SplitScroll } from '@pixelated-tech/components';
+
+<SplitScroll>
+  <SplitScroll.Section
+    img="/images/product-1.jpg"
+    imgAlt="Premium Feature"
+    title="Exceptional Quality"
+    subtitle="Crafted with Precision"
+  >
+    <p>Our flagship product combines innovative design with sustainable materials...</p>
+  </SplitScroll.Section>
+  
+  <SplitScroll.Section
+    img="/images/product-2.jpg"
+    imgAlt="Advanced Technology"
+    title="Cutting-Edge Innovation"
+    subtitle="Engineering Excellence"
+  >
+    <h3>Technical Specifications</h3>
+    <ul>
+      <li>High-performance components</li>
+      <li>Energy-efficient design</li>
+      <li>Industry-leading warranty</li>
+    </ul>
+  </SplitScroll.Section>
+  
+  <SplitScroll.Section
+    img="/images/product-3.jpg"
+    imgAlt="Customer Experience"
+    title="Designed for You"
+  >
+    <blockquote>
+      "This product transformed our workflow completely."
+      <footer>— Satisfied Customer</footer>
+    </blockquote>
+  </SplitScroll.Section>
+</SplitScroll>
+```
+
+#### Props
+
+**SplitScroll Container:**
+No props - acts as a wrapper for SplitScroll.Section components.
+
+**SplitScroll.Section:**
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `img` | `string` | - | Image URL for section background |
+| `imgAlt` | `string` | - | Image alt text for accessibility |
+| `imgShape` | `'square' \| 'bevel' \| 'squircle' \| 'round'` | - | Image border radius style |
+| `title` | `string` | - | Section title |
+| `subtitle` | `string` | - | Section subtitle |
+| `children` | `ReactNode` | - | Rich content for section body |
+| `url` | `string` | - | Optional link URL |
+| `buttonText` | `string` | - | Custom button text |
+
+#### Features
+- **Sticky Layered Images**: Left-side images stick during scroll with increasing z-index for layered parallax effect
+- **Rich Content**: Accepts any React children - text, headings, lists, images, custom components
+- **Active Section Tracking**: Uses IntersectionObserver to highlight active sections
+- **Responsive**: Stacks vertically on mobile devices
+- **Accessible**: Proper ARIA attributes and semantic HTML
+- **Performance**: Optimized with lazy loading and efficient re-renders
+
+#### Use Cases
+- Product showcases with detailed features
+- Portfolio presentations with project descriptions
+- Brand storytelling with visual narratives
+- Service offerings with benefits breakdown
+- Case studies with client testimonials
+
+#### Styling
+The component includes built-in CSS for sticky positioning and layering. Customize appearance through:
+- **CSS Custom Properties**: Override default styles
+- **Component Props**: Control image shapes and layout
+- **Theme Integration**: Works with Pixelated theme system
+
+#### Accessibility
+- Semantic HTML structure
+- ARIA attributes for screen readers
+- Keyboard navigation support
+- Reduced motion respect for animations
+
+---
+
+### Intersection Observer Utility
+
+A shared utility for viewport detection and scroll-based interactions.
+
+#### Usage
+
+##### `useIntersectionObserver` Hook
+```tsx
+import { useIntersectionObserver } from '@pixelated-tech/components';
+
+const MyComponent = () => {
+  const ref = useIntersectionObserver((entry) => {
+    if (entry.isIntersecting) {
+      console.log('Element is in view!');
+    }
+  }, { threshold: 0.5 });
+
+  return <div ref={ref}>Observe me!</div>;
+};
+```
+
+##### `observeIntersection` Helper
+```tsx
+import { observeIntersection } from '@pixelated-tech/components';
+
+useEffect(() => {
+  const cleanup = observeIntersection('.fade-in', (entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  }, { threshold: 0.1 });
+  
+  return cleanup;
+}, []);
+```
+
+#### API
+
+| Method/Hook | Description |
+|-------------|-------------|
+| `useIntersectionObserver(callback, options?)` | Hook for observing a single React element. |
+| `observeIntersection(selector, callback, options?)` | Utility for observing multiple DOM elements by selector. |
+| `isElementInViewport(element)` | Helper for one-time check if element is fully in view. |
+| `isElementPartiallyInViewport(element)` | Helper for one-time check if element is partially in view. |
+
+---
 
 ### Modal
 

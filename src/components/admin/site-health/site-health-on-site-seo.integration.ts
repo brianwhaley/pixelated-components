@@ -1008,6 +1008,18 @@ async function analyzeSinglePage(url: string): Promise<PageAnalysis> {
 			// Continue with analysis using available data, but mark header-dependent metrics as unavailable
 		}
 
+		// Check Content-Type header - only analyze HTML pages
+		const contentType = response?.headers()['content-type'] || '';
+		if (!contentType.startsWith('text/html')) {
+			return {
+				url,
+				title: '',
+				statusCode: response ? response.status() : 200,
+				audits: [],
+				crawledAt: new Date().toISOString()
+			};
+		}
+
 		// Wait for H1 elements to be rendered (if any) with a short timeout
 		try {
 			await page.waitForSelector('h1', { timeout: 1000 }); // Reduced from 2000 to 1000
@@ -1374,6 +1386,11 @@ export async function performOnSiteSEOAnalysis(baseUrl: string): Promise<OnSiteS
 			try {
 				const pageAnalysis = await analyzeSinglePage(pageUrl);
 				
+				// Skip pages that aren't HTML (no audits)
+				if (pageAnalysis.audits.length === 0) {
+					continue;
+				}
+
 				// Extract and remove schema audits from page-level audits to avoid duplication
 				const schemaIds = Object.keys(schemaResults);
 				pageAnalysis.audits = pageAnalysis.audits.filter(audit => {

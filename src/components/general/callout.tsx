@@ -49,7 +49,8 @@ Callout.propTypes = {
 	imgClick: PropTypes.func,
 	title: PropTypes.string,
 	subtitle: PropTypes.string,
-	content: PropTypes.string,
+	content: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+	children: PropTypes.node,
 	buttonText: PropTypes.string,
 	// SmartImage props
 	aboveFold: PropTypes.bool,
@@ -67,7 +68,7 @@ export function Callout({
 	url, img, imgAlt, 
 	imgShape = 'square', 
 	imgClick, 
-	title, subtitle, content, buttonText,
+	title, subtitle, content, children, buttonText,
 	aboveFold,
 	/* cloudinaryEnv,
 	cloudinaryDomain,
@@ -80,7 +81,7 @@ export function Callout({
 	const body = <div className="callout-body" >
 		{ (title) ? <CalloutHeader title={title} url={url} target={target} /> : null }
 		{ (subtitle) ? <div className="callout-subtitle"><h3>{subtitle}</h3></div> : null }
-		{ content ? <div className="callout-content"><>{content}</></div> : null }
+		{ children ? <div className="callout-content">{children}</div> : content ? <div className="callout-content"><>{content}</></div> : null }
 		{ url && buttonText 
 			? <CalloutButton title={buttonText} url={url} target={target} />
 			: url && title 

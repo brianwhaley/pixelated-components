@@ -15,32 +15,66 @@ export interface ServiceItem {
 	areaServed?: string | string[];
 }
 
-ServicesSchema.propTypes = {
+const servicesSchemaPropTypes = {
+	siteInfo: PropTypes.object,
 	provider: PropTypes.shape({
 		name: PropTypes.string.isRequired,
 		url: PropTypes.string.isRequired,
 		logo: PropTypes.string,
 		telephone: PropTypes.string,
 		email: PropTypes.string,
-	}).isRequired,
+	}),
 	services: PropTypes.arrayOf(PropTypes.shape({
 		name: PropTypes.string.isRequired,
 		description: PropTypes.string.isRequired,
 		url: PropTypes.string,
 		image: PropTypes.string,
 		areaServed: PropTypes.oneOfType([PropTypes.string, PropTypes.arrayOf(PropTypes.string)]),
-	})).isRequired,
+	})),
 };
-export type ServicesSchemaType = InferProps<typeof ServicesSchema.propTypes>;
-export function ServicesSchema(props: ServicesSchemaType) {
-	const { provider, services } = props;
+
+export interface ServicesSchemaProps {
+	siteInfo?: {
+		name?: string;
+		url?: string;
+		image?: string;
+		telephone?: string;
+		email?: string;
+		services?: ServiceItem[];
+		[key: string]: any;
+	};
+	provider?: {
+		name: string;
+		url: string;
+		logo?: string;
+		telephone?: string;
+		email?: string;
+	};
+	services?: ServiceItem[];
+}
+
+export function ServicesSchema(props: ServicesSchemaProps) {
+	const siteInfo = props.siteInfo;
+	const services = (siteInfo?.services || props.services || []) as ServiceItem[];
+	const provider = props.provider || {
+		name: siteInfo?.name || '',
+		url: siteInfo?.url || '',
+		logo: siteInfo?.image,
+		telephone: siteInfo?.telephone,
+		email: siteInfo?.email
+	};
+
+	if (!services.length || !provider.name) {
+		return null;
+	}
+
 	const serviceObjects = services.map((service) => ({
 		'@type': 'Service',
-		name: service!.name,
-		description: service!.description,
-		...(service!.url && { url: service!.url }),
-		...(service!.image && { image: service!.image }),
-		...(service!.areaServed && { areaServed: service!.areaServed }),
+		name: service.name,
+		description: service.description,
+		...(service.url && { url: service.url }),
+		...(service.image && { image: service.image }),
+		...(service.areaServed && { areaServed: service.areaServed }),
 		provider: {
 			'@type': 'LocalBusiness',
 			name: provider.name,
@@ -66,5 +100,7 @@ export function ServicesSchema(props: ServicesSchemaType) {
 		</>
 	);
 }
+
+ServicesSchema.propTypes = servicesSchemaPropTypes;
 
 export default ServicesSchema;

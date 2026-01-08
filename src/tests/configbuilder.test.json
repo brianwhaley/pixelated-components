@@ -37,6 +37,44 @@
     "default_locale": "en",
     "display": "standalone"
   },
+  "siteInfoFull": {
+    "name": "Pixelated Technologies",
+    "author": "Pixelated",
+    "description": "Custom web development and digital design agency",
+    "url": "https://pixelated.tech",
+    "email": "info@pixelated.tech",
+    "telephone": "+1-973-710-8008",
+    "image": "https://pixelated.tech/logo.png",
+    "image_height": "512",
+    "image_width": "512",
+    "favicon": "/favicon.ico",
+    "favicon_sizes": "64x64 32x32",
+    "favicon_type": "image/x-icon",
+    "theme_color": "#000000",
+    "background_color": "#ffffff",
+    "keywords": "pixelated, web development",
+    "default_locale": "en",
+    "display": "standalone",
+    "priceRange": "$$",
+    "publisherType": "LocalBusiness",
+    "copyrightYear": 2026,
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://pixelated.tech/search?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    },
+    "address": {
+      "streetAddress": "10 Jade Circle",
+      "addressLocality": "Denville",
+      "addressRegion": "NJ",
+      "postalCode": "07834",
+      "addressCountry": "United States"
+    },
+    "sameAs": [
+      "https://facebook.com/pixelated",
+      "https://instagram.com/_pixelatedtech_"
+    ]
+  },
   "siteInfoWithAddress": {
     "name": "Test",
     "author": "Test",

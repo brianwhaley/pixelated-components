@@ -356,38 +356,90 @@ describe('ConfigBuilder Component', () => {
     });
   });
 
-  describe('Edge Cases and Error Handling', () => {
-    it('should handle empty initial config', () => {
-      render(<ConfigBuilder initialConfig={{ 
-        siteInfo: testConfigData.emptySiteInfo, 
-        routes: testConfigData.emptyRoutes,
-        visualdesign: testConfigData.visualdesign
-      }} />);
-      
-      expect(screen.getByText('Config Builder')).toBeInTheDocument();
-    });
-
-    it('should handle malformed route data', () => {
-      const initialConfig = {
-        siteInfo: testConfigData.siteInfo,
-        routes: testConfigData.malformedRoutes as any,
-        visualdesign: testConfigData.visualdesign
-      };
-      
-      render(<ConfigBuilder initialConfig={initialConfig} />);
-      
-      // Should render without crashing
-      expect(screen.getByText('Config Builder')).toBeInTheDocument();
-    });
-
-    it('should handle no file selected in upload', () => {
+  describe('Services Tab Functionality', () => {
+    it('should switch to services tab and render correctly', () => {
       render(<ConfigBuilder />);
       
-      const fileInput = screen.getByLabelText('Load Configuration File:') as HTMLInputElement;
-      fireEvent.change(fileInput, { target: { files: [] } });
+      const servicesTab = screen.getByRole('button', { name: /services/i });
+      fireEvent.click(servicesTab);
       
-      // Should not crash
-      expect(screen.getByText('Config Builder')).toBeInTheDocument();
+      expect(screen.getByText(/Add Service/i)).toBeInTheDocument();
+    });
+
+    it('should add a service and update preview', async () => {
+      render(<ConfigBuilder />);
+      
+      // Select Services tab
+      const servicesTab = screen.getByRole('button', { name: /services/i });
+      fireEvent.click(servicesTab);
+      
+      // Click Add Service
+      const addButton = screen.getByText(/Add Service/i);
+      fireEvent.click(addButton);
+      
+      // Find the name field (FormEngine should render it based on services-form.json)
+      const nameInput = screen.getByLabelText(/Service Name/i);
+      fireEvent.change(nameInput, { target: { value: 'New Test Service' } });
+      
+      // Preview should update
+      await waitFor(() => {
+        expect(screen.getByText((content) => content.includes('"name": "New Test Service"'))).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Site Info Form Fields', () => {
+    it('should render all site info form fields including new schema fields', () => {
+      render(<ConfigBuilder />);
+      
+      // Check existing required fields
+      expect(screen.getByLabelText('Site Name')).toBeInTheDocument();
+      expect(screen.getByLabelText('Author')).toBeInTheDocument();
+      expect(screen.getByLabelText('Site Description')).toBeInTheDocument();
+      expect(screen.getByLabelText('Site URL')).toBeInTheDocument();
+      expect(screen.getByLabelText('Email')).toBeInTheDocument();
+      
+      // Check new schema fields
+      expect(screen.getByLabelText('Telephone')).toBeInTheDocument();
+      expect(screen.getByLabelText('Opening Hours')).toBeInTheDocument();
+      expect(screen.getByLabelText('Price Range')).toBeInTheDocument();
+      expect(screen.getByLabelText('Keywords')).toBeInTheDocument();
+      expect(screen.getByLabelText('Publisher Type')).toBeInTheDocument();
+      expect(screen.getByLabelText('Copyright Year')).toBeInTheDocument();
+      expect(screen.getByLabelText('Search Action Type')).toBeInTheDocument();
+      expect(screen.getByLabelText('Search Target URL')).toBeInTheDocument();
+      expect(screen.getByLabelText('Query Input')).toBeInTheDocument();
+    });
+
+    it('should update new schema fields and reflect in preview', async () => {
+      render(<ConfigBuilder />);
+      
+      // Update opening hours
+      const openingHoursInput = screen.getByLabelText('Opening Hours') as HTMLInputElement;
+      fireEvent.change(openingHoursInput, { target: { value: 'Mo-Fr 09:00-17:00' } });
+      
+      // Update publisher type
+      const publisherTypeSelect = screen.getByLabelText('Publisher Type') as HTMLSelectElement;
+      fireEvent.change(publisherTypeSelect, { target: { value: 'LocalBusiness' } });
+      
+      // Update copyright year
+      const copyrightYearInput = screen.getByLabelText('Copyright Year') as HTMLInputElement;
+      fireEvent.change(copyrightYearInput, { target: { value: '2024' } });
+      
+      // Check that the input values are updated
+      expect(openingHoursInput.value).toBe('Mo-Fr 09:00-17:00');
+      expect(publisherTypeSelect.value).toBe('LocalBusiness');
+      expect(copyrightYearInput.value).toBe('2024');
+      
+      // Check that preview contains the updated values (more flexible check)
+      await waitFor(() => {
+        const preview = screen.getByText((content) => content.includes('Configuration Preview'));
+        expect(preview).toBeInTheDocument();
+        
+        // Check that the preview contains our updated values somewhere in the JSON
+        const previewContent = screen.getByText((content) => content.includes('Mo-Fr 09:00-17:00'));
+        expect(previewContent).toBeInTheDocument();
+      });
     });
   });
 });

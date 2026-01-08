@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.7.3",
+	"version": "3.7.4",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -138,7 +138,7 @@
 		"eslint-plugin-react": "^7.37.4",
 		"eslint-plugin-storybook": "^10.1.11",
 		"file-loader": "^6.2.0",
-		"happy-dom": "^20.0.11",
+		"happy-dom": "^20.1.0",
 		"jsdom": "^27.4.0",
 		"less-loader": "^12.3.0",
 		"mini-css-extract-plugin": "^2.9.4",
@@ -169,9 +169,9 @@
 		"react-dom": "^19.2.0"
 	},
 	"optionalDependencies": {
-		"@aws-sdk/client-cloudwatch": "^3.964.0",
-		"@aws-sdk/client-route-53": "^3.964.0",
-		"googleapis": "^169.0.0",
+		"@aws-sdk/client-cloudwatch": "^3.965.0",
+		"@aws-sdk/client-route-53": "^3.965.0",
+		"googleapis": "^170.0.0",
 		"md5": "^2.3.0",
 		"puppeteer": "^24.34.0",
 		"react-redux": "*",

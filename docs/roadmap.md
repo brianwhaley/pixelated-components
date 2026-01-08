@@ -10,11 +10,8 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **ON HOLD** eBay Feedback Integration - requires user OAuth login
 - [ ] **ON HOLD** Yelp Recommendations integration (Cost Prohibitive)
 - [ ] Instagram Image Integration for Carousels
-- [ ] Shopify Integration
-- [ ] Quickbooks Integration
-- [ ] Buffer Integration (or Sendible, Sprout Social, Hootsuite)
-- [ ] Zapier Integration
 - [ ] Hero Banner: headline, subtext, CTA, background image/video, overlay.
+- [ ] **FormTagInput**: A specialized input for managing lists of items (tags/chips) with Enter/Comma to add and click-to-remove functionality. Ideal for keywords and areaServed fields.
 
 ### CI / CD Improvements
 - [ ] Add CI workflow to run tests and lints on pull requests.
@@ -34,6 +31,7 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **GoogleReviews Component**: Add API key to config provider instead of hardcoding.
 - [ ] **Instagram Component**: Add accessToken and userId to config provider for centralized API credentials.
 - [ ] **Critters Integration**: Explore adding critters CSS inlining tool for improved page load performance and critical CSS optimization.
+- [ ] **SplitScroll Enhancement**: Improve scrolling behavior and image transitions to match [safariportal lookbook style](https://itineraries.safariportal.app/Mary-Ann-Sarao/1589988388230923612?type=lookbook) (smoother layering and focal point transitions).
 
 ### Platform Enhancements
 - [ ] **Project Scaffolding CLI**: Interactive CLI tool that generates complete Next.js projects with pixelated-components pre-configured, including routes.json, layout.tsx, package.json, and basic page structure
@@ -44,7 +42,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **GDPR Compliance Toolkit**: Automated cookie consent, data mapping, and privacy policy generation
 - [ ] **API Gateway**: Unified API management for connecting to CRM, email marketing, payment processors, and other business tools
 - [ ] **Webhook Automation**: Event-driven automation for form submissions, new content, user registrations, and business workflows
-- [ ] **Third-Party Sync Engine**: Bidirectional sync with tools like HubSpot, Mailchimp, QuickBooks, and project management systems
 - [ ] **Documentation Auto-Generator**: Automatically generated API docs, component usage guides, and deployment instructions
 
 ## Admin Feature Enhancements

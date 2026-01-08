@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react';
-import { ServicesSchema, type ServicesSchemaType } from '@/components/general/schema-services';
+import { ServicesSchema, type ServicesSchemaProps } from '@/components/general/schema-services';
 
 describe('ServicesSchema', () => {
-	const defaultProps: ServicesSchemaType = {
+	const defaultProps: ServicesSchemaProps = {
 		provider: {
 			name: 'Test Agency',
 			url: 'https://testagency.com'
@@ -56,15 +56,15 @@ describe('ServicesSchema', () => {
 		const firstService = JSON.parse(scriptTags[0].textContent || '{}');
 
 		expect(firstService.provider['@type']).toBe('LocalBusiness');
-		expect(firstService.provider.name).toBe(defaultProps.provider.name);
-		expect(firstService.provider.url).toBe(defaultProps.provider.url);
+		expect(firstService.provider.name).toBe(defaultProps.provider?.name);
+		expect(firstService.provider.url).toBe(defaultProps.provider?.url);
 	});
 
 	it('should include provider logo when provided', () => {
-		const props: ServicesSchemaType = {
+		const props: ServicesSchemaProps = {
 			...defaultProps,
 			provider: {
-				...defaultProps.provider,
+				...(defaultProps.provider as any),
 				logo: 'https://testagency.com/logo.png'
 			}
 		};
@@ -72,14 +72,14 @@ describe('ServicesSchema', () => {
 		const scriptTags = container.querySelectorAll('script[type="application/ld+json"]');
 		const firstService = JSON.parse(scriptTags[0].textContent || '{}');
 
-		expect(firstService.provider.logo).toBe(props.provider.logo);
+		expect(firstService.provider.logo).toBe(props.provider?.logo);
 	});
 
 	it('should include provider telephone when provided', () => {
-		const props: ServicesSchemaType = {
+		const props: ServicesSchemaProps = {
 			...defaultProps,
 			provider: {
-				...defaultProps.provider,
+				...(defaultProps.provider as any),
 				telephone: '+1-555-0123'
 			}
 		};
@@ -91,10 +91,10 @@ describe('ServicesSchema', () => {
 	});
 
 	it('should include provider email when provided', () => {
-		const props: ServicesSchemaType = {
+		const props: ServicesSchemaProps = {
 			...defaultProps,
 			provider: {
-				...defaultProps.provider,
+				...(defaultProps.provider as any),
 				email: 'hello@testagency.com'
 			}
 		};
@@ -106,7 +106,7 @@ describe('ServicesSchema', () => {
 	});
 
 	it('should include service URL when provided', () => {
-		const props: ServicesSchemaType = {
+		const props: ServicesSchemaProps = {
 			...defaultProps,
 			services: [
 				{
@@ -124,7 +124,7 @@ describe('ServicesSchema', () => {
 	});
 
 	it('should include service image when provided', () => {
-		const props: ServicesSchemaType = {
+		const props: ServicesSchemaProps = {
 			...defaultProps,
 			services: [
 				{
@@ -141,8 +141,60 @@ describe('ServicesSchema', () => {
 		expect(service.image).toBe('https://testagency.com/images/web-dev.jpg');
 	});
 
+	it('should support siteInfo prop as a primary source of data', () => {
+		const siteInfo = {
+			name: 'SiteInfo Business',
+			url: 'https://siteinfo.com',
+			image: 'https://siteinfo.com/logo.png',
+			telephone: '+1-234-5678',
+			email: 'info@siteinfo.com',
+			services: [
+				{
+					name: 'SiteInfo Service',
+					description: 'Service from SiteInfo object',
+					areaServed: ['Region A', 'Region B']
+				}
+			]
+		};
+
+		const { container } = render(<ServicesSchema siteInfo={siteInfo} />);
+		const scriptTag = container.querySelector('script[type="application/ld+json"]');
+		const schemaData = JSON.parse(scriptTag!.textContent || '{}');
+
+		expect(schemaData.name).toBe(siteInfo.services[0].name);
+		expect(schemaData.description).toBe(siteInfo.services[0].description);
+		expect(schemaData.areaServed).toEqual(siteInfo.services[0].areaServed);
+		
+		expect(schemaData.provider.name).toBe(siteInfo.name);
+		expect(schemaData.provider.url).toBe(siteInfo.url);
+		expect(schemaData.provider.logo).toBe(siteInfo.image);
+		expect(schemaData.provider.telephone).toBe(siteInfo.telephone);
+		expect(schemaData.provider.email).toBe(siteInfo.email);
+	});
+
+	it('should handle multiple services from siteInfo', () => {
+		const siteInfo = {
+			name: 'Multi-Service Business',
+			url: 'https://multi.com',
+			services: [
+				{ name: 'S1', description: 'D1' },
+				{ name: 'S2', description: 'D2' }
+			]
+		};
+
+		const { container } = render(<ServicesSchema siteInfo={siteInfo} />);
+		const scriptTags = container.querySelectorAll('script[type="application/ld+json"]');
+		expect(scriptTags.length).toBe(2);
+		
+		const s1 = JSON.parse(scriptTags[0].textContent || '{}');
+		const s2 = JSON.parse(scriptTags[1].textContent || '{}');
+		
+		expect(s1.name).toBe('S1');
+		expect(s2.name).toBe('S2');
+	});
+
 	it('should include service areaServed as string', () => {
-		const props: ServicesSchemaType = {
+		const props: ServicesSchemaProps = {
 			...defaultProps,
 			services: [
 				{
@@ -160,7 +212,7 @@ describe('ServicesSchema', () => {
 	});
 
 	it('should include service areaServed as array', () => {
-		const props: ServicesSchemaType = {
+		const props: ServicesSchemaProps = {
 			...defaultProps,
 			services: [
 				{
@@ -179,7 +231,7 @@ describe('ServicesSchema', () => {
 	});
 
 	it('should handle multiple services', () => {
-		const props: ServicesSchemaType = {
+		const props: ServicesSchemaProps = {
 			...defaultProps,
 			services: [
 				{ name: 'Service 1', description: 'Description 1' },

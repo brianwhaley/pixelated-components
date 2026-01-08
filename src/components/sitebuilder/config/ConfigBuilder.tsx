@@ -12,6 +12,7 @@ import * as FC from '../form/formcomponents';
 import siteInfoForm from './siteinfo-form.json';
 import visualDesignForm from './visualdesignform.json';
 import routesForm from './routes-form.json';
+import servicesForm from './services-form.json';
 import defaultConfigData from '../../../data/routes.json';
 import './ConfigBuilder.css';
 
@@ -52,6 +53,21 @@ const SiteInfoPropTypes = {
 	priceRange: PropTypes.string,
 	sameAs: PropTypes.arrayOf(PropTypes.string.isRequired),
 	keywords: PropTypes.string,
+	openingHours: PropTypes.string,
+	publisherType: PropTypes.string,
+	copyrightYear: PropTypes.number,
+	potentialAction: PropTypes.shape({
+		'@type': PropTypes.string,
+		target: PropTypes.string.isRequired,
+		'query-input': PropTypes.string,
+		queryInput: PropTypes.string,
+	}),
+	services: PropTypes.arrayOf(PropTypes.shape({
+		name: PropTypes.string.isRequired,
+		description: PropTypes.string.isRequired,
+		url: PropTypes.string,
+		areaServed: PropTypes.arrayOf(PropTypes.string.isRequired),
+	})),
 };
 export type SiteInfoType = InferProps<typeof SiteInfoPropTypes>;
 
@@ -104,7 +120,10 @@ export type ConfigBuilderType = InferProps<typeof ConfigBuilder.propTypes>;
 export function ConfigBuilder(props: ConfigBuilderType) {
 	const { initialConfig, onSave } = props;
 	const defaultConfig: SiteConfigType = {
-		siteInfo: defaultConfigData.siteInfo as SiteInfoType,
+		siteInfo: {
+			...defaultConfigData.siteInfo as SiteInfoType,
+			services: (defaultConfigData.siteInfo as any).services || []
+		},
 		routes: [], // Start with empty routes, the JSON structure is different
 		visualdesign: defaultConfigData.visualdesign as VisualDesignType
 	};
@@ -178,9 +197,23 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 								? route.keywords.split(',').map((k: string) => k.trim()).filter((k: string) => k.length > 0)
 								: [])
 					}));
+
+					// Ensure services keywords/arrays are valid
+					const normalizedServices = (parsedConfig.siteInfo.services || []).map((service: any) => ({
+						...service,
+						areaServed: Array.isArray(service.areaServed)
+							? service.areaServed
+							: (typeof service.areaServed === 'string'
+								? service.areaServed.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0)
+								: [])
+					}));
 					
 					setConfig({
 						...parsedConfig,
+						siteInfo: {
+							...parsedConfig.siteInfo,
+							services: normalizedServices
+						},
 						routes: normalizedRoutes
 					});
 					setSocialLinks(parsedConfig.siteInfo.sameAs || ['']);
@@ -219,13 +252,27 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 	}, [initialConfig]);
 
 	// Prepare form data for FormEngine with current values
+	const getNestedValue = (obj: any, path: string) => {
+		return path.split('.').reduce((current, key) => current?.[key], obj);
+	};
+
+	const setNestedValue = (obj: any, path: string, value: any) => {
+		const keys = path.split('.');
+		const lastKey = keys.pop()!;
+		const target = keys.reduce((current, key) => {
+			if (!current[key]) current[key] = {};
+			return current[key];
+		}, obj);
+		target[lastKey] = value;
+	};
+
 	const formData = {
 		fields: siteInfoForm.fields.map(field => ({
 			...field,
 			props: {
 				...field.props,
-				value: config.siteInfo[field.props.name as keyof SiteInfoType] || '',
-				defaultValue: config.siteInfo[field.props.name as keyof SiteInfoType] || (field.props as any).defaultValue || '',
+				value: getNestedValue(config.siteInfo, field.props.name) || '',
+				defaultValue: getNestedValue(config.siteInfo, field.props.name) || (field.props as any).defaultValue || '',
 				onChange: (value: any) => {
 					// Handle both direct values and event objects
 					let actualValue = value;
@@ -235,13 +282,14 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 						actualValue = target.type === 'checkbox' ? (target.checked ? target.value : '') : target.value;
 					}
 					
-					setConfig((prev: any) => ({
-						...prev,
-						siteInfo: {
-							...prev.siteInfo,
-							[field.props.name]: actualValue
-						}
-					}));
+					setConfig((prev: any) => {
+						const newSiteInfo = { ...prev.siteInfo };
+						setNestedValue(newSiteInfo, field.props.name, actualValue);
+						return {
+							...prev,
+							siteInfo: newSiteInfo
+						};
+					});
 				}
 			}
 		}))
@@ -286,7 +334,7 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 		
 		// Extract form data
 		for (const [key, value] of formData.entries()) {
-			siteInfoData[key] = value;
+			setNestedValue(siteInfoData, key, value);
 		}
 
 		// Update config with form data
@@ -333,16 +381,10 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 	};
 
 	const updateRoute = (index: number, field: keyof RouteType, value: any) => {
-		// Special handling for keywords field - convert comma-separated string to array
-		let processedValue = value;
-		if (field === 'keywords' && typeof value === 'string') {
-			processedValue = value.split(',').map((k: string) => k.trim()).filter((k: string) => k.length > 0);
-		}
-		
 		setConfig(prev => ({
 			...prev,
 			routes: prev.routes.map((route, i) =>
-				i === index ? { ...route, [field]: processedValue } : route
+				i === index ? { ...route, [field]: value } : route
 			)
 		}));
 	};
@@ -354,12 +396,70 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 		}));
 	};
 
+	const addService = () => {
+		setConfig(prev => ({
+			...prev,
+			siteInfo: {
+				...prev.siteInfo,
+				services: [...(prev.siteInfo.services || []), { name: '', description: '', url: '', areaServed: '' }]
+			}
+		} as any));
+	};
+
+	const updateService = (index: number, field: string, value: any) => {
+		setConfig(prev => ({
+			...prev,
+			siteInfo: {
+				...prev.siteInfo,
+				services: (prev.siteInfo.services || []).map((service, i) =>
+					i === index ? { ...service, [field]: value } : service
+				)
+			}
+		} as any));
+	};
+
+	const removeService = (index: number) => {
+		setConfig(prev => ({
+			...prev,
+			siteInfo: {
+				...prev.siteInfo,
+				services: (prev.siteInfo.services || []).filter((_, i) => i !== index)
+			}
+		} as any));
+	};
+
+	// Helper to convert comma-separated strings back to arrays for output
+	const getProcessedConfig = (rawConfig: any) => {
+		// Use a simple spread/map to avoid full deep clone where unnecessary, 
+		// but enough to safely modify for output
+		const processed = {
+			...rawConfig,
+			siteInfo: {
+				...rawConfig.siteInfo,
+				services: (rawConfig.siteInfo.services || []).map((service: any) => ({
+					...service,
+					areaServed: typeof service.areaServed === 'string'
+						? service.areaServed.split(',').map((s: string) => s.trim()).filter((s: string) => s.length > 0)
+						: service.areaServed
+				}))
+			},
+			routes: (rawConfig.routes || []).map((route: any) => ({
+				...route,
+				keywords: typeof route.keywords === 'string'
+					? route.keywords.split(',').map((k: string) => k.trim()).filter((k: string) => k.length > 0)
+					: route.keywords
+			}))
+		};
+
+		return processed;
+	};
+
 	const handleSave = () => {
 		if (!isFormValid) {
 			alert('Please fill in all required fields correctly before saving.');
 			return;
 		}
-		onSave?.(config);
+		onSave?.(getProcessedConfig(config));
 	};
 
 	const handleAiRecommendations = async (routeIndex: number) => {
@@ -550,12 +650,13 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 														),
 														onChange: (e: any) => {
 															let value: any;
-															if (field.props.type === 'checkbox') {
-																value = e.target.checked;
-															} else if (field.props.name === 'keywords') {
-																value = e.target.value.split(',').map((s: string) => s.trim()).filter((s: string) => s);
+															// Handle both direct values and event objects
+															const actualValue = (e && typeof e === 'object' && e.target) ? (e.target.type === 'checkbox' ? e.target.checked : e.target.value) : e;
+															
+															if (field.props.name === 'keywords' && typeof actualValue === 'string') {
+																value = actualValue.split(',').map((s: string) => s.trim()).filter((s: string) => s);
 															} else {
-																value = e.target.value;
+																value = actualValue;
 															}
 															updateRoute(index, field.props.name, value);
 														}
@@ -587,8 +688,57 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 								</div>
 							</FormValidationProvider>
 						)
-					}
-					,
+					},
+					{
+						id: 'services',
+						label: 'Services',
+						content: (
+							<FormValidationProvider>
+								<div className="routes-section">
+									<div className="routes-list">
+										{(config.siteInfo.services || []).map((service, index) => (
+											<div key={index} className="route-item">
+												{servicesForm.fields.map((field: any) => {
+													const Component = (FC as any)[field.component];
+													if (!Component) return null;
+													
+													let fieldValue = (service as any)[field.props.name];
+													if (field.props.name === 'areaServed' && Array.isArray(fieldValue)) {
+														fieldValue = fieldValue.join(', ');
+													}
+													
+													const fieldProps = {
+														...field.props,
+														id: `${field.props.id}-${index}`,
+														...(field.component === 'FormTextarea' 
+															? { defaultValue: fieldValue || '' }
+															: { value: fieldValue || '' }
+														),
+														onChange: (e: any) => {
+															// Handle both direct values and event objects
+															const actualValue = (e && typeof e === 'object' && e.target) ? e.target.value : e;
+															updateService(index, field.props.name, actualValue);
+														}
+													};
+													
+													return <Component key={fieldProps.id} {...fieldProps} />;
+												})}
+												<div className="route-buttons">
+													<button 
+														onClick={() => removeService(index)}
+														className="route-button remove"
+													>
+														Remove
+													</button>
+												</div>
+											</div>
+										))}
+									</div>
+									<button onClick={addService}>Add Service</button>
+								</div>
+							</FormValidationProvider>
+						)
+					},
 					{
 						id: 'visualdesign',
 						label: 'Visual Design',
@@ -622,7 +772,7 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 					title: 'Configuration Preview',
 					content: <pre>{(() => {
 						try {
-							return JSON.stringify(config, null, 2);
+							return JSON.stringify(getProcessedConfig(config), null, 2);
 						} catch (e) {
 							// Simple fallback that doesn't try to analyze the object deeply
 							const errorMessage = e instanceof Error ? e.message : String(e);

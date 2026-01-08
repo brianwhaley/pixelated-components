@@ -421,7 +421,7 @@ describe('MicroInteractions ScrollFade Functionality', () => {
 
     MicroInteractions({ scrollfadeElements: '.non-existent' });
 
-    expect(global.IntersectionObserver).toHaveBeenCalled();
+    expect(global.IntersectionObserver).not.toHaveBeenCalled();
     expect(observeMock).not.toHaveBeenCalled();
 
     // Cleanup

@@ -107,6 +107,14 @@ export interface SiteInfo {
 	priceRange?: string;
 	sameAs?: string[];
 	keywords?: string;
+	publisherType?: string;
+	copyrightYear?: number;
+	potentialAction?: {
+		"@type"?: string;
+		target: string;
+		"query-input"?: string;
+		queryInput?: string;
+	};
 	// PWA Manifest properties
 	author?: string;
 	theme_color?: string;
@@ -128,6 +136,5 @@ export interface PixelatedConfig {
 	hubspot?: HubspotConfig;
 	paypal?: PaypalConfig;
 	proxy?: ProxyConfig;
-	siteInfo?: SiteInfo;
 	wordpress?: WordpressConfig;
 }
