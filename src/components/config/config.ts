@@ -62,6 +62,8 @@ export function getClientOnlyPixelatedConfig(full?: PixelatedConfig): PixelatedC
 	const src = full ?? getFullPixelatedConfig();
 
 	function isSecretKey(key: string) {
+		// Explicitly allow common public-facing keys
+		if (/api_key|apikey|public_key/i.test(key)) return false;
 		return /token|secret|key|password|management|access/i.test(key);
 	}
 
