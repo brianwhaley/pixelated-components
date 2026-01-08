@@ -2,31 +2,31 @@
 
 import React, { useState, useEffect } from "react";
 import { Carousel } from "@pixelated-tech/components";
-import { GetFlickrData, GenerateFlickrCards } from '@pixelated-tech/components';
+import { GetFlickrData, GenerateFlickrCards, usePixelatedConfig } from '@pixelated-tech/components';
 import type { CarouselCardType } from "@pixelated-tech/components";
-import { getFullPixelatedConfig } from '@pixelated-tech/components/server';
 import './hero.css';
 
 export default function Hero() {
 
-	const config = getFullPixelatedConfig();
+	const config = usePixelatedConfig();
 	const [flickrCards, setFlickrCards] = useState<CarouselCardType[]>([]);
 
 	useEffect(() => {
+		if (!config) return;
 		async function getFlickrCards() {
 			const myPromise = GetFlickrData({
 				flickr : {
 					baseURL: 'https://api.flickr.com/services/rest/?',
 					urlProps: {
 						method: 'flickr.photos.search',
-						api_key: config.flickr?.urlProps.api_key ?? "",
-						user_id: config.flickr?.urlProps.user_id ?? "",
+						api_key: config?.flickr?.urlProps.api_key ?? "",
+						user_id: config?.flickr?.urlProps.user_id ?? "",
 						tags: 'pixelatedviewsgallery',
 						extras: 'date_taken,description,owner_name',
 						sort: 'date-taken-desc',
-						per_page: config.flickr?.urlProps.per_page ?? 500,
-						format: config.flickr?.urlProps.format ?? "json",
-						photoSize: config.flickr?.urlProps.photoSize ?? "Large",
+						per_page: config?.flickr?.urlProps.per_page ?? 500,
+						format: config?.flickr?.urlProps.format ?? "json",
+						photoSize: config?.flickr?.urlProps.photoSize ?? "Large",
 						nojsoncallback: 'true',
 					}
 				} 
@@ -49,7 +49,7 @@ export default function Hero() {
 			}
 		}
 		getFlickrCards();
-	}, []); // Empty dependency array to run only once
+	}, [config]); // Run when config is available
 
 
 	return (
