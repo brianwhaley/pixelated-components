@@ -5,7 +5,8 @@ import React, { useState } from "react";
 import { ResumeName, ResumeContact, ResumeQualifications, ResumeSkills, 
 	ResumeSummary, ResumeEvents, ResumeProjects, ResumeReferences, 
 	PageSection,
-	PageGridItem} from "@pixelated-tech/components";
+	PageGridItem,
+	SmartImage} from "@pixelated-tech/components";
 import { Modal, handleModalOpen } from "@pixelated-tech/components";
 import ResumeData from "@/app/data/resume.json";
 // import ReferencesData from '@/app/data/references.json';
@@ -31,7 +32,7 @@ export default function Resume() {
 	}
 	const handleImageClick = (event: Event, url: string) => {
 		event.preventDefault();
-		const myContent: React.JSX.Element = <img src={url} alt="Modal Image" />;
+		const myContent: React.JSX.Element = <SmartImage src={url} alt="Modal Image" />;
 		setModalContent(myContent);
 		handleModalOpen(event as MouseEvent);
 	};
@@ -102,7 +103,7 @@ export default function Resume() {
 				</PageGridItem>
 			</PageSection>
 
-			<Modal modalContent={modalContent} />
+			<Modal modalContent={modalContent ?? <></>} />
 		</>
   	);
 }

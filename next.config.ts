@@ -10,11 +10,9 @@ const nextConfig: NextConfig = {
 	typescript: {
 		ignoreBuildErrors: true,
 	},
-
 	env: {
-		// Unified pixelated config: prefer supplying the full JSON or base64 blob
+		PIXELATED_CONFIG_KEY: process.env.PIXELATED_CONFIG_KEY,
 	},
-
 	images: {
 		remotePatterns: [
 			{
