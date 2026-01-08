@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { getRouteByKey } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
-import { LocalBusinessSchema } from "@pixelated-tech/components/server";
+import { WebsiteSchema, LocalBusinessSchema, ServicesSchema } from "@pixelated-tech/components/server";
 import { PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
 import { VisualDesignStyles } from "@pixelated-tech/components/server";
 import LayoutClient from "./elements/layout-client";
@@ -25,6 +25,8 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 	const pathname = path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
 	const metadata = getRouteByKey(myRoutes.routes, "path", pathname);
 
+	const siteInfo = myRoutes.siteInfo;
+
 	return (
 		<html lang="en">
 			<LayoutClient />
@@ -35,9 +37,11 @@ export default async function RootLayout({children}: Readonly<{children: React.R
 					keywords: metadata?.keywords ?? "",
 					origin: origin ?? "",
 					url: url ?? "",
-					siteInfo: myRoutes.siteInfo
+					siteInfo: siteInfo
 				}) }
-				<LocalBusinessSchema siteInfo={myRoutes.siteInfo} />
+				<WebsiteSchema siteInfo={siteInfo} />
+				<LocalBusinessSchema siteInfo={siteInfo} />
+				<ServicesSchema siteInfo={siteInfo} />
 				<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
 				<meta name="google-site-verification" content="t2yy9wL1bXPiPQjBqDee2BTgpiGQjwVldlfa4X5CQkU" />
 				<meta name="google-site-verification" content="l7D0Y_JsgtACBKNCeFAXPe-UWqo13fPTUCWhkmHStZ4" />
