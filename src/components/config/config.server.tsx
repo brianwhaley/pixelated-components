@@ -1,3 +1,5 @@
+"use server";
+
 import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { getClientOnlyPixelatedConfig } from './config';

@@ -103,7 +103,14 @@ if [ "$current_branch" != "dev" ]; then
 fi
 
 echo "📦 Step 1: Updating dependencies..."
-npm outdated | awk 'NR>1 {print $1"@"$4}' | xargs npm install --force --save 2>/dev/null || true
+UPDATES=$(npm outdated | awk 'NR>1 {print $1"@"$4}' || true)
+if [ -n "$UPDATES" ]; then
+    echo "Updating the following packages: $UPDATES"
+    echo "$UPDATES" | xargs npm install --force --save 2>/dev/null || true
+    echo "✅ Successfully updated: $UPDATES"
+else
+    echo "✅ No dependency updates needed."
+fi
 npm audit fix --force 2>/dev/null || true
 
 echo "🔍 Step 2: Running lint..."
@@ -124,6 +131,10 @@ if [ "$version_type" != "none" ]; then
 fi
 
 echo "💾 Step 5: Committing changes..."
+if npm run | grep -q "config:encrypt"; then
+    echo "🔒 Encrypting configuration..."
+    npm run config:encrypt
+fi
 commit_message=$(prompt_commit_message)
 git add . -v
 if git diff --cached --quiet; then
@@ -169,6 +180,11 @@ if ! git tag -l | grep -q "v$new_version"; then
     git push $REMOTE_NAME "v$new_version"
 else
     echo "ℹ️  Tag v$new_version already exists"
+fi
+
+if npm run | grep -q "config:decrypt"; then
+    echo "🔓 Decrypting configuration for local development..."
+    npm run config:decrypt
 fi
 
 echo "🔐 Step 9: Publishing to npm..."

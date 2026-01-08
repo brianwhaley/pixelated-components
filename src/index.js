@@ -1,8 +1,6 @@
 // sorted alphabetically and grouped by folder for easier reading
 
-export * from './components/config/config';
 export * from './components/config/config.client';
-export * from './components/config/config.server';
 export * from './components/config/config.types';
 
 export * from './components/general/404';

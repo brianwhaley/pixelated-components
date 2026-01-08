@@ -1,17 +1,51 @@
 import type { PixelatedConfig } from './config.types';
+import { decrypt, isEncrypted } from './crypto';
+import fs from 'fs';
+import path from 'path';
 
 const debug = false;
 /**
- * Read the full master config blob from environment.
+ * Read the full master config blob from environment or local file.
  * This function is intended for server-side use only.
  */
 export function getFullPixelatedConfig(): PixelatedConfig {
-	const raw = process.env.PIXELATED_CONFIG_JSON || (process.env.PIXELATED_CONFIG_B64 && Buffer.from(process.env.PIXELATED_CONFIG_B64, 'base64').toString('utf8'));
+	let raw = process.env.PIXELATED_CONFIG_JSON || (process.env.PIXELATED_CONFIG_B64 && Buffer.from(process.env.PIXELATED_CONFIG_B64, 'base64').toString('utf8'));
+	let source = process.env.PIXELATED_CONFIG_JSON ? 'PIXELATED_CONFIG_JSON' : (process.env.PIXELATED_CONFIG_B64 ? 'PIXELATED_CONFIG_B64' : 'none');
+
+	// If not in environment, try reading from the conventional file location
 	if (!raw) {
-		console.error('PIXELATED_CONFIG not found: neither PIXELATED_CONFIG_JSON nor PIXELATED_CONFIG_B64 is set in the environment.');
+		const configPath = path.join(process.cwd(), 'src/app/config/pixelated.config.json');
+		if (fs.existsSync(configPath)) {
+			try {
+				raw = fs.readFileSync(configPath, 'utf8');
+				source = 'src/app/config/pixelated.config.json';
+			} catch (err) {
+				console.error(`Failed to read config file at ${configPath}`, err);
+			}
+		}
+	}
+
+	if (!raw) {
+		console.error('PIXELATED_CONFIG not found: neither environment variables nor src/app/config/pixelated.config.json are available.');
 		return {} as PixelatedConfig;
 	}
-	const source = process.env.PIXELATED_CONFIG_JSON ? 'PIXELATED_CONFIG_JSON' : 'PIXELATED_CONFIG_B64';
+
+	// Handle decryption if the content is encrypted
+	if (isEncrypted(raw)) {
+		const key = process.env.PIXELATED_CONFIG_KEY;
+		if (!key) {
+			console.error('PIXELATED_CONFIG is encrypted but PIXELATED_CONFIG_KEY is not set in the environment.');
+			return {} as PixelatedConfig;
+		}
+		try {
+			raw = decrypt(raw, key);
+			if (debug) console.log(`PIXELATED_CONFIG decrypted using key from environment.`);
+		} catch (err) {
+			console.error('Failed to decrypt PIXELATED_CONFIG', err);
+			return {} as PixelatedConfig;
+		}
+	}
+
 	try {
 		const parsed = JSON.parse(raw);
 		if (debug) console.log(`PIXELATED_CONFIG loaded from ${source}; raw length=${raw.length}`);
