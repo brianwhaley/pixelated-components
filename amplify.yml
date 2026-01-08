@@ -9,7 +9,6 @@ frontend:
         - rm -rf .next
         - rm -rf out
         - npm install --force
-        - npm run generate-site-images
         - echo "Dependencies installed"
     build:
       commands:

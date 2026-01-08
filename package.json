@@ -1,6 +1,6 @@
 {
   "name": "informationfocus",
-  "version": "2.2.35",
+  "version": "2.2.36",
   "private": true,
   "author": {
     "name": "Pixelated Technologies",
@@ -12,17 +12,21 @@
     "start": "npm run clean && next build && next start",
     "lint": "eslint --fix",
     "clean": "rm -rf .next && rm -rf out",
-    "generate-site-images": "node scripts/generate-site-images.js"
+    "generate-site-images": "node ./node_modules/@pixelated-tech/components/dist/scripts/generate-site-images.js",
+    "config:vault": "npx tsx ./node_modules/@pixelated-tech/components/dist/scripts/config-vault.ts",
+    "config:encrypt": "npm run config:vault -- encrypt src/app/config/pixelated.config.json",
+    "config:decrypt": "npm run config:vault -- decrypt src/app/config/pixelated.config.json",
+    "release": "./node_modules/@pixelated-tech/components/dist/scripts/release.sh"
   },
   "dependencies": {
-    "@pixelated-tech/components": "^3.5.7",
+    "@pixelated-tech/components": "^3.7.10",
     "html-entities": "^2.6.0",
     "md5": "^2.3.0",
     "next": "^16.1.1",
     "prop-types": "^15.8.1",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "sass": "^1.97.1"
+    "sass": "^1.97.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",

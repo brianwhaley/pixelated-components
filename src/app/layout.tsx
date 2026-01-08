@@ -1,8 +1,8 @@
 
 import { headers } from "next/headers";
-import { getRouteByKey } from "@pixelated-tech/components/server";
+import { getRouteByKey, SiteInfo } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
-import { LocalBusinessSchema } from "@pixelated-tech/components/server";
+import { WebsiteSchema, LocalBusinessSchema, ServicesSchema } from "@pixelated-tech/components/server";
 import { VisualDesignStyles } from "@pixelated-tech/components/server";
 import LayoutClient from "@/app/elements/layoutclient";
 import Header from "@/app/elements/header";
@@ -22,6 +22,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 	const pathname = path.endsWith("/") && path !== "/" ? path.slice(0, -1) : path;
 	const metadata = getRouteByKey(myRoutes.routes, "path", pathname);
 
+	const siteInfo = myRoutes.siteInfo;
+
 	return (
 		<>
 			<LayoutClient />
@@ -33,9 +35,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 						keywords: metadata?.keywords ?? "",
 						origin: origin ?? "",
 						url: url ?? "",
-						siteInfo: myRoutes.siteInfo
+						siteInfo: siteInfo
 					}) }
-					<LocalBusinessSchema siteInfo={myRoutes.siteInfo} />
+					<WebsiteSchema siteInfo={siteInfo as SiteInfo} />
+					<LocalBusinessSchema siteInfo={siteInfo} />
+					<ServicesSchema siteInfo={siteInfo} />
 					<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
 				</head>
 				<body>
