@@ -5,26 +5,37 @@ import path from 'path';
 
 const debug = false;
 /**
- * Read the full master config blob from environment or local file.
+ * Read the full master config blob from local file.
  * This function is intended for server-side use only.
  */
 export function getFullPixelatedConfig(): PixelatedConfig {
 	let raw = '';
 	let source = 'none';
 
-	// Try reading from the conventional file location
-	const configPath = path.join(process.cwd(), 'src/app/config/pixelated.config.json');
-	if (fs.existsSync(configPath)) {
-		try {
-			raw = fs.readFileSync(configPath, 'utf8');
-			source = 'src/app/config/pixelated.config.json';
-		} catch (err) {
-			console.error(`Failed to read config file at ${configPath}`, err);
+	// Focus strictly on the config file. 
+	// Search multiple locations to handle different production/standalone environments.
+	const filename = 'pixelated.config.json';
+	const paths = [
+		path.join(process.cwd(), 'src/app/config', filename),
+		path.join(process.cwd(), 'app/config', filename),
+		path.join(process.cwd(), filename),
+		path.join(process.cwd(), '.next/server', filename), // Sometimes moved here in build
+	];
+
+	for (const configPath of paths) {
+		if (fs.existsSync(configPath)) {
+			try {
+				raw = fs.readFileSync(configPath, 'utf8');
+				source = configPath;
+				break;
+			} catch (err) {
+				console.error(`Failed to read config file at ${configPath}`, err);
+			}
 		}
 	}
 
 	if (!raw) {
-		console.error('PIXELATED_CONFIG not found: src/app/config/pixelated.config.json is not available.');
+		console.error('PIXELATED_CONFIG not found. Ensure src/app/config/pixelated.config.json is available.');
 		return {} as PixelatedConfig;
 	}
 
@@ -37,7 +48,7 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 		}
 		try {
 			raw = decrypt(raw, key);
-			if (debug) console.log(`PIXELATED_CONFIG decrypted using key from environment.`);
+			if (debug) console.log(`PIXELATED_CONFIG decrypted using key.`);
 		} catch (err) {
 			console.error('Failed to decrypt PIXELATED_CONFIG', err);
 			return {} as PixelatedConfig;
@@ -46,10 +57,10 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 
 	try {
 		const parsed = JSON.parse(raw);
-		if (debug) console.log(`PIXELATED_CONFIG loaded from ${source}; raw length=${raw.length}`);
+		if (debug) console.log(`PIXELATED_CONFIG loaded from ${source}`);
 		return parsed as PixelatedConfig;
 	} catch (err) {
-		console.error('Failed to parse PIXELATED_CONFIG JSON; source=', source, 'rawLength=', raw.length, err);
+		console.error('Failed to parse PIXELATED_CONFIG JSON; source=', source, err);
 		return {} as PixelatedConfig;
 	}
 }
@@ -85,4 +96,3 @@ export function getClientOnlyPixelatedConfig(full?: PixelatedConfig): PixelatedC
 		return {} as PixelatedConfig;
 	}
 }
-
