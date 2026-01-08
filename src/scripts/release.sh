@@ -36,6 +36,7 @@ prompt_remote_selection() {
 # Select remote
 REMOTE_NAME=$(prompt_remote_selection)
 
+echo ""
 echo "🚀 Starting Release Process for $PROJECT_NAME"
 echo "================================================="
 echo ""
@@ -103,7 +104,9 @@ if [ "$current_branch" != "dev" ]; then
     exit 1
 fi
 
+echo ""
 echo "📦 Step 1: Updating dependencies..."
+echo "================================================="
 UPDATES=$(npm outdated | awk 'NR>1 {print $1"@"$4}' || true)
 if [ -n "$UPDATES" ]; then
     echo "Updating the following packages: $UPDATES"
@@ -117,19 +120,16 @@ npm audit fix --force 2>/dev/null || true
 echo ""
 echo "🔍 Step 2: Running lint..."
 echo "================================================="
-echo ""
 npm run lint
 
 echo ""
 echo "🔨 Step 3: Building project..."
 echo "================================================="
-echo ""
 npm run build
 
 echo ""
 echo "🏷️  Step 4: Version bump..."
 echo "================================================="
-echo ""
 prompt_version_type
 if [ "$version_type" != "none" ]; then
     if [ "$version_type" = "patch" ] || [ "$version_type" = "minor" ] || [ "$version_type" = "major" ]; then
@@ -143,8 +143,7 @@ fi
 echo ""
 echo "💾 Step 5: Committing changes..."
 echo "================================================="
-echo ""
-if npm run | grep -q "config:encrypt"; then
+if npm run | grep -q "config:encrypt" && [ -f "./src/app/config/pixelated.config.json" ]; then
     echo "🔒 Encrypting configuration..."
     npm run config:encrypt
 fi
@@ -159,7 +158,6 @@ fi
 echo ""
 echo "📤 Step 6: Pushing dev branch..."
 echo "================================================="
-echo ""
 # Try to push, if it fails due to remote changes, fetch and rebase
 if ! git push $REMOTE_NAME dev; then
     echo "⚠️  Push failed, fetching remote changes and rebasing..."
@@ -179,7 +177,6 @@ fi
 echo ""
 echo "🔄 Step 7: Updating main branch..."
 echo "================================================="
-echo ""
 # Force main to match dev exactly
 git push $REMOTE_NAME dev:main --force
 
@@ -195,7 +192,6 @@ fi
 echo ""
 echo "🏷️  Step 8: Creating and pushing git tag..."
 echo "================================================="
-echo ""
 new_version=$(get_current_version)
 if ! git tag -l | grep -q "v$new_version"; then
     git tag "v$new_version"
@@ -204,7 +200,7 @@ else
     echo "ℹ️  Tag v$new_version already exists"
 fi
 
-if npm run | grep -q "config:decrypt"; then
+if npm run | grep -q "config:decrypt" && [ -f "./src/app/config/pixelated.config.json" ]; then
     echo "🔓 Decrypting configuration for local development..."
     npm run config:decrypt
 fi
@@ -212,7 +208,6 @@ fi
 echo ""
 echo "🔐 Step 9: Publishing to npm..."
 echo "================================================="
-echo ""
 should_publish=$(prompt_publish)
 if [ "$should_publish" = "yes" ]; then
     npm login

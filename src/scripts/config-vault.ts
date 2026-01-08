@@ -11,7 +11,19 @@ import { encrypt, decrypt, isEncrypted } from '../components/config/crypto';
  */
 
 const [,, command, targetPath, argKey] = process.argv;
-const key = argKey || process.env.PIXELATED_CONFIG_KEY;
+let key = argKey || process.env.PIXELATED_CONFIG_KEY;
+
+// If key is still missing, try to load it from .env.local
+if (!key) {
+	const envPath = path.join(process.cwd(), '.env.local');
+	if (fs.existsSync(envPath)) {
+		const envContent = fs.readFileSync(envPath, 'utf8');
+		const match = envContent.match(/^PIXELATED_CONFIG_KEY=(.*)$/m);
+		if (match && match[1]) {
+			key = match[1].trim();
+		}
+	}
+}
 
 if (!command || !targetPath || !key) {
 	console.log('Usage:');
