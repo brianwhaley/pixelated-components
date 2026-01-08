@@ -143,7 +143,7 @@ fi
 echo ""
 echo "💾 Step 5: Committing changes..."
 echo "================================================="
-if npm run | grep -q "config:encrypt" && [ -f "./src/app/config/pixelated.config.json" ]; then
+if grep -q "\"config:encrypt\":" package.json && [ -f "./src/app/config/pixelated.config.json" ]; then
     echo "🔒 Encrypting configuration..."
     npm run config:encrypt
 fi
@@ -200,7 +200,7 @@ else
     echo "ℹ️  Tag v$new_version already exists"
 fi
 
-if npm run | grep -q "config:decrypt" && [ -f "./src/app/config/pixelated.config.json" ]; then
+if grep -q "\"config:decrypt\":" package.json && [ -f "./src/app/config/pixelated.config.json" ]; then
     echo "🔓 Decrypting configuration for local development..."
     npm run config:decrypt
 fi
