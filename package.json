@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.8.0",
+	"version": "3.8.1",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -86,10 +86,10 @@
 		"test:run": "vitest run",
 		"lint": "eslint --fix",
 		"release": "./src/scripts/release.sh",
-		"vault": "tsx src/scripts/config-vault.ts",
+		"vault": "npx tsx src/scripts/config-vault.ts",
 		"config:vault": "npm run vault --",
-		"config:encrypt": "npm run config:vault -- encrypt src/app/config/pixelated.config.json",
-		"config:decrypt": "npm run config:vault -- decrypt src/app/config/pixelated.config.json"
+		"config:encrypt": "npm run config:vault -- encrypt src/config/pixelated.config.json",
+		"config:decrypt": "npm run config:vault -- decrypt src/config/pixelated.config.json"
 	},
 	"scripts-old": {
 		"buildBabel": "npm run buildClean && NODE_ENV=production babel src --out-dir dist --copy-files",

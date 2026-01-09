@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../test/test-utils';
 import { Tiles } from '@/components/general/tiles';
 import type { CarouselCardType } from '@/components/general/carousel';
 
@@ -17,16 +17,6 @@ vi.mock('@/components/general/smartimage', () => ({
 // Mock Loading component
 vi.mock('@/components/general/loading', () => ({
   Loading: () => React.createElement('div', { 'data-testid': 'loading-spinner' }, 'Loading')
-}));
-
-// Mock usePixelatedConfig hook
-vi.mock('@/components/config/config.client', () => ({
-  usePixelatedConfig: () => ({
-    cloudinary: {
-      product_env: 'test',
-      baseUrl: 'https://example.com'
-    }
-  })
 }));
 
 describe('Tiles Component', () => {

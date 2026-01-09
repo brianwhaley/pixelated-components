@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { render, screen, waitFor } from '../test/test-utils';
 import { GoogleReviewsCard } from '@/components/general/google.reviews.components';
 import { getGoogleReviewsByPlaceId } from '@/components/general/google.reviews.functions';
 

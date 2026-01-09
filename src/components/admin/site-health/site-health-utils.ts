@@ -28,7 +28,26 @@ export function formatScore(score: number | null): string {
 /**
  * Formats audit item details for display
  */
-export function formatAuditItem(item: Record<string, unknown>, auditTitle?: string): string {
+export function formatAuditItem(item: Record<string, unknown> | number, auditTitle?: string): string {
+	// Handle raw timing data that might be passed directly
+	if (typeof item === 'number') {
+		let context = '';
+		if (auditTitle) {
+			if (auditTitle.toLowerCase().includes('server') || auditTitle.toLowerCase().includes('backend')) {
+				context = ' server response';
+			} else if (auditTitle.toLowerCase().includes('network') || auditTitle.toLowerCase().includes('request')) {
+				context = ' network request';
+			} else if (auditTitle.toLowerCase().includes('render') || auditTitle.toLowerCase().includes('blocking')) {
+				context = ' render blocking';
+			} else if (auditTitle.toLowerCase().includes('javascript') || auditTitle.toLowerCase().includes('js')) {
+				context = ' JavaScript';
+			} else if (auditTitle.toLowerCase().includes('image') || auditTitle.toLowerCase().includes('media')) {
+				context = ' media resource';
+			}
+		}
+		return `${(item as number).toFixed(2)}ms${context}`;
+	}
+
 	// Handle URLs
 	if (item.url && typeof item.url === 'string') {
 		return item.url;
@@ -50,12 +69,12 @@ export function formatAuditItem(item: Record<string, unknown>, auditTitle?: stri
 	}
 
 	// Handle nodes with selectors
-	if (item.node && typeof item.node === 'object' && 'selector' in item.node) {
+	if (item.node && typeof item.node === 'object' && 'selector' in (item.node as any)) {
 		return `Element: ${(item.node as { selector: string }).selector}`;
 	}
 
 	// Handle nodes with snippets
-	if (item.node && typeof item.node === 'object' && 'snippet' in item.node) {
+	if (item.node && typeof item.node === 'object' && 'snippet' in (item.node as any)) {
 		const snippet = (item.node as { snippet: string }).snippet;
 		return `Element: ${snippet.length > 50 ? snippet.substring(0, 50) + '...' : snippet}`;
 	}
@@ -71,14 +90,14 @@ export function formatAuditItem(item: Record<string, unknown>, auditTitle?: stri
 	}
 
 	// Handle numeric values with units
-	if (item.value && typeof item.value === 'object' && 'type' in item.value && (item.value as { type: string }).type === 'numeric') {
+	if (item.value && typeof item.value === 'object' && 'type' in (item.value as any) && (item.value as { type: string }).type === 'numeric') {
 		const value = item.value as unknown as { value: number; granularity?: number };
-		return `${value.value}${item.unit || ''}`;
+		return `${value.value}${(item as any).unit || ''}`;
 	}
 
 	// Handle statistics
 	if (item.statistic && typeof item.statistic === 'string' && item.value) {
-		if (typeof item.value === 'object' && 'type' in item.value && (item.value as { type: string }).type === 'numeric') {
+		if (typeof item.value === 'object' && 'type' in (item.value as any) && (item.value as { type: string }).type === 'numeric') {
 			const value = item.value as unknown as { value: number };
 			return `${item.statistic}: ${value.value}`;
 		}
@@ -105,7 +124,7 @@ export function formatAuditItem(item: Record<string, unknown>, auditTitle?: stri
 	}
 
 	if (item.value && typeof item.value === 'number') {
-		const unit = item.unit || 'ms';
+		const unit = (item as any).unit || 'ms';
 		let context = '';
 		if (auditTitle && unit === 'ms') {
 			if (auditTitle.toLowerCase().includes('server')) {
@@ -178,7 +197,7 @@ export function formatAuditItem(item: Record<string, unknown>, auditTitle?: stri
 	}
 
 	if (item.value && typeof item.value === 'number') {
-		const unit = item.unit || 'ms';
+		const unit = (item as any).unit || 'ms';
 		return `${item.value.toFixed(2)}${unit}`;
 	}
 

@@ -13,7 +13,7 @@ LinkedInAuthRecommendations.propTypes = {};
 export type LinkedInAuthRecommendationsType = InferProps<typeof LinkedInAuthRecommendations.propTypes>;
 export function LinkedInAuthRecommendations(props: LinkedInAuthRecommendationsType) {
 
-	const debug = true ;
+	const debug = false;
 
 	const [accessToken, setAccessToken] = useState(null);
 	const [recommendations, setRecommendations] = useState([]);

@@ -53,6 +53,7 @@ This document outlines planned improvements and refactoring initiatives for the 
 ## Admin Feature Enhancements
 
 ### High Priority Refactoring (Development Speed Focus)
+- [ ] **Unified Caching Layer**: Migrate `RouteCache` and `shoppingcart` localStorage implementations to the new `CacheManager` for consistent TTL, memory/session/local storage support, and SSR safety.
 - [ ] **API Client Abstraction**: Create centralized `ApiClient` class with consistent error handling, caching, and retry logic to eliminate repeated fetch/error patterns across components.
 - [ ] **SEO Integration Modularization**: Split 1, 193-line monolithic file into focused modules: `page-analyzer.ts`, `site-crawler.ts`, `header-analyzer.ts`, and `metric-scorers.ts`.
 - [ ] **Component Memoization**: Add `React.memo` and `useMemo` to reduce unnecessary re-renders by 30-50% in large components.
@@ -73,9 +74,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 
 ### API Integration Standardization (High Priority)
 - [ ] **CMS API Client**: Create standardized CMS API clients (`ContentfulClient.ts`, `WordPressClient.ts`) with base `ApiClient.ts` for consistent error handling.
-
-### Testing Infrastructure (Medium Priority)
-- [ ] **Testing Utilities**: Create comprehensive testing utilities including `renderWithProviders.tsx`, mock utilities for config and API, and component test helpers.
 
 ## Contributing to Roadmap
 

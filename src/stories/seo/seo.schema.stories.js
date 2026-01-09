@@ -1,23 +1,10 @@
 import React from 'react';
 import { LocalBusinessSchema } from '@/components/general/schema-localbusiness';
 import { WebsiteSchema } from '@/components/general/schema-website';
-import { PixelatedClientConfigProvider } from '@/components/config/config.client';
-import routesData from '@/data/routes.json';
-
-const mockConfig = {
-	siteInfo: routesData.siteInfo
-};
 
 export default {
 	title: 'SEO',
 	component: LocalBusinessSchema,
-	decorators: [
-		(Story) => (
-			<PixelatedClientConfigProvider config={mockConfig}>
-				<Story />
-			</PixelatedClientConfigProvider>
-		),
-	],
 };
 
 export const Schema_LocalBusiness_From_Config = {

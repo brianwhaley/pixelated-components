@@ -1,66 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Carousel } from '@/components/general/carousel';
 import { GetFlickrData, GenerateFlickrCards } from '@/components/general/flickr';
-import { PixelatedClientConfigProvider } from '@/components/config/config.client';
+import { usePixelatedConfig } from '@/components/config/config.client';
 import '@/css/pixelated.global.css';
 import './carousel-hero.stories.css';
-
-const mockConfig = {
-	cloudinary: {
-		product_env: 'dlbon7tpq',
-		baseUrl: 'https://res.cloudinary.com',
-		transforms: 'f_auto,c_limit,q_auto,dpr_auto',
-	},
-};
 
 export default {
 	title: 'Carousel',
 	component: Carousel,
-	decorators: [
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(Story) => (
-			<PixelatedClientConfigProvider config={mockConfig}>
-				<Story />
-			</PixelatedClientConfigProvider>
-		),
-	],
 };
 
-/* ========== FLICKR HANDLER ========== */
-async function getFlickrCards() {
-	const myPromise = GetFlickrData({
-		flickr : {
-			baseURL: 'https://api.flickr.com/services/rest/?',
-			urlProps: {
-				method: 'flickr.photos.search',
-				api_key: '882cab5548d53c9e6b5fb24d59cc321d',
-				user_id: '15473210@N04',
-				tags: 'pixelatedviewsgallery',
-				extras: 'date_taken,description,owner_name',
-				sort: 'date-taken-desc',
-				per_page: 500,
-				format: 'json',
-				photoSize: 'Large',
-				nojsoncallback: 'true' /*,
-				startPos: 0 */
-			}
-		} 
-	});
-	const myFlickrImages = await myPromise;
-	const myFlickrCards = GenerateFlickrCards({flickrImages: myFlickrImages, photoSize: 'Medium'});
-	// console.log('Flickr Cards:', myFlickrCards);
-	// REMOVE LINKS
-	const myScrubbedFlickrCards = myFlickrCards.map(obj => {
-		delete obj.link;
-		delete obj.bodyText;
-		return obj;
-	});
-	return myScrubbedFlickrCards;
-}
+const FlickrHeroCarousel = (args) => {
+	const config = usePixelatedConfig();
+	const [cards, setCards] = useState([]);
+
+	useEffect(() => {
+		async function getFlickrCards() {
+			const myPromise = GetFlickrData({
+				flickr: config?.flickr
+			});
+			const myFlickrImages = await myPromise;
+			const myFlickrCards = GenerateFlickrCards({flickrImages: myFlickrImages, photoSize: 'Medium'});
+			// REMOVE LINKS
+			const myScrubbedFlickrCards = myFlickrCards.map(obj => {
+				const newObj = { ...obj };
+				delete newObj.link;
+				delete newObj.bodyText;
+				return newObj;
+			});
+			setCards(myScrubbedFlickrCards);
+		}
+		getFlickrCards();
+	}, [config]);
+
+	return <Carousel {...args} cards={cards} />;
+};
 
 export const CarouselHero = {
+	render: (args) => <FlickrHeroCarousel {...args} />,
 	args: {
-		cards: await getFlickrCards() ,
 		draggable: false,
 		imgFit: "cover",
 	}

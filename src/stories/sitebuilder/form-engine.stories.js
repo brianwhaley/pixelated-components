@@ -1,16 +1,7 @@
 import React from 'react';
 import { FormEngine } from '@/components/sitebuilder/form/formengine';
-import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 import data from '@/data/form.json';
 import '@/css/pixelated.global.css';
-
-const mockConfig = {
-	cloudinary: {
-		product_env: 'dlbon7tpq',
-		baseUrl: 'https://res.cloudinary.com',
-		transforms: 'f_auto,c_limit,q_auto,dpr_auto',
-	},
-};
 
 function onSubmit(){
 	alert("Hooray!  Submitted!");
@@ -19,14 +10,6 @@ function onSubmit(){
 export default {
 	title: 'SiteBuilder/Form',
 	component: FormEngine,
-	decorators: [
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(Story) => (
-			<PixelatedClientConfigProvider config={mockConfig}>
-				<Story />
-			</PixelatedClientConfigProvider>
-		),
-	],
 };
 
 export const Form_Engine = {

@@ -242,6 +242,13 @@ External service integrations:
 - **Yelp** - Business reviews and ratings
 
 
+### Utilities
+Shared technical utilities and helpers:
+- **CacheManager** - Unified caching layer with Memory, Session, and LocalStorage support with TTL and SSR fallbacks.
+- **Cloudinary** - Image processing and URL generation helpers.
+- **Date/Time** - Formatting and manipulation utilities.
+
+
 ### Site Health & Monitoring
 Comprehensive site health monitoring and analytics:
 - **SiteHealthOverview** - Dashboard overview of site health metrics

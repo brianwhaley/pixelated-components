@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '../test/test-utils';
 import { FormEngine } from '../components/sitebuilder/form/formengine';
 import { FormBuilder, FormBuild } from '../components/sitebuilder/form/formbuilder';
 import { FormExtractor } from '../components/sitebuilder/form/formextractor';

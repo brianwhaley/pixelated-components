@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../test/test-utils';
 import userEvent from '@testing-library/user-event';
 import { PageEngine } from "../components/sitebuilder/page/components/PageEngine";
-import { PixelatedClientConfigProvider } from '../components/config/config.client';
 
 describe('PageEngine', () => {
 	const mockOnEditComponent = vi.fn();
@@ -46,12 +45,10 @@ describe('PageEngine', () => {
 
 	it('should render components without edit UI when editMode is false', () => {
 		render(
-			<PixelatedClientConfigProvider config={{ cloudinary: { product_env: 'test' } }}>
-				<PageEngine
-					pageData={mockPageData}
-					editMode={false}
-				/>
-			</PixelatedClientConfigProvider>
+			<PageEngine
+				pageData={mockPageData}
+				editMode={false}
+			/>
 		);
 
 		// Should render the components but no edit buttons
@@ -71,12 +68,11 @@ describe('PageEngine', () => {
 		};
 
 		render(
-			<PixelatedClientConfigProvider config={{ cloudinary: { product_env: 'test' } }}>
-				<PageEngine
-					pageData={invalidPageData}
-					editMode={false}
-				/>
-			</PixelatedClientConfigProvider>
+			<PageEngine
+				pageData={invalidPageData}
+				editMode={false}
+			/>,
+			{ config: { cloudinary: { product_env: 'test' } } }
 		);
 
 		expect(screen.getByText('Unknown component: InvalidComponent')).toBeInTheDocument();
@@ -84,12 +80,11 @@ describe('PageEngine', () => {
 
 	it('should handle empty pageData gracefully', () => {
 		render(
-			<PixelatedClientConfigProvider config={{}}>
-				<PageEngine
-					pageData={{ components: [] }}
-					editMode={false}
-				/>
-			</PixelatedClientConfigProvider>
+			<PageEngine
+				pageData={{ components: [] }}
+				editMode={false}
+			/>,
+			{ config: {} }
 		);
 
 		// Should render nothing but not crash

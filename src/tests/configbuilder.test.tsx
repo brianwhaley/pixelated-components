@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '../test/test-utils';
 import { ConfigBuilder } from '../components/sitebuilder/config/ConfigBuilder';
 import defaultConfigData from '../data/routes.json';
 import testConfigData from './configbuilder.test.json';

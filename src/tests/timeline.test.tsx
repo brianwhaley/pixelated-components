@@ -1,8 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../test/test-utils';
 import { Timeline } from '@/components/general/timeline';
-import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 // Mock SmartImage
 vi.mock('@/components/general/smartimage', () => ({
@@ -27,11 +26,7 @@ const mockConfig = {
 };
 
 const renderWithConfig = (component: React.ReactElement, config = mockConfig) => {
-  return render(
-    <PixelatedClientConfigProvider config={config}>
-      {component}
-    </PixelatedClientConfigProvider>
-  );
+  return render(component, { config });
 };
 
 const mockTimelineData = [

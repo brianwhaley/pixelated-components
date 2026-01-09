@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../test/test-utils';
 import {
   Resume,
   ResumeName,
@@ -13,7 +13,6 @@ import {
   ResumeReference,
   ResumeProjects,
 } from '../components/general/resume';
-import { PixelatedClientConfigProvider } from '../components/config/config.client';
 
 // Mock SmartImage
 vi.mock('../components/cms/smartimage', () => ({
@@ -29,22 +28,6 @@ vi.mock('../components/cms/smartimage', () => ({
     });
   },
 }));
-
-const mockConfig = {
-  cloudinary: {
-    product_env: 'test-env',
-    baseUrl: 'https://test.cloudinary.com',
-    transforms: 'test-transforms',
-  },
-};
-
-const renderWithConfig = (component: React.ReactElement, config = mockConfig) => {
-  return render(
-    <PixelatedClientConfigProvider config={config}>
-      {component}
-    </PixelatedClientConfigProvider>
-  );
-};
 
 // Sample resume data
 const sampleResumeData = {
@@ -193,32 +176,32 @@ const sampleResumeData = {
 describe('Resume Components', () => {
   describe('Resume Main Component', () => {
     it('should render resume section', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('section.p-resume')).toBeInTheDocument();
     });
 
     it('should have resume section with correct id', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('#resume-section')).toBeInTheDocument();
     });
 
     it('should have section container', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('.section-container')).toBeInTheDocument();
     });
 
     it('should have row-12col grid', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('.row-12col')).toBeInTheDocument();
     });
 
     it('should render name section', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('.p-name')).toBeInTheDocument();
     });
 
     it('should have left divider with contact, education, skills', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       const divider = container.querySelector('.divider');
       expect(divider?.querySelector('.p-contact')).toBeInTheDocument();
       expect(divider?.querySelector('.p-education')).toBeInTheDocument();
@@ -226,14 +209,14 @@ describe('Resume Components', () => {
     });
 
     it('should have right section with experience and other sections', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       const rightSection = container.querySelector('.grid-s4-e13');
       expect(rightSection?.querySelector('.p-summary')).toBeInTheDocument();
       expect(rightSection?.querySelector('.p-experience')).toBeInTheDocument();
     });
 
     it('should render all major sections', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('.p-summary')).toBeInTheDocument();
       expect(container.querySelector('.p-qualifications')).toBeInTheDocument();
       expect(container.querySelector('.p-experience')).toBeInTheDocument();
@@ -338,7 +321,7 @@ describe('Resume Components', () => {
 
   describe('ResumeEvents Component', () => {
     it('should render events section with title', () => {
-      renderWithConfig(
+      render(
         <ResumeEvents 
           title="Work History" 
           data={sampleResumeData.items[0].properties.experience}
@@ -350,7 +333,7 @@ describe('Resume Components', () => {
     });
 
     it('should render as non-collapsible when collapsible is false', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <ResumeEvents 
           title="Work History" 
           data={sampleResumeData.items[0].properties.experience}
@@ -363,7 +346,7 @@ describe('Resume Components', () => {
     });
 
     it('should render as collapsible details element when collapsible is true', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <ResumeEvents 
           title="Volunteer Work" 
           data={sampleResumeData.items[0].properties.volunteer}
@@ -376,7 +359,7 @@ describe('Resume Components', () => {
     });
 
     it('should render job title', () => {
-      renderWithConfig(
+      render(
         <ResumeEvents 
           title="Work History" 
           data={sampleResumeData.items[0].properties.experience}
@@ -388,7 +371,7 @@ describe('Resume Components', () => {
     });
 
     it('should render organization name', () => {
-      renderWithConfig(
+      render(
         <ResumeEvents 
           title="Work History" 
           data={sampleResumeData.items[0].properties.experience}
@@ -401,7 +384,7 @@ describe('Resume Components', () => {
     });
 
     it('should render location', () => {
-      renderWithConfig(
+      render(
         <ResumeEvents 
           title="Work History" 
           data={sampleResumeData.items[0].properties.experience}
@@ -413,7 +396,7 @@ describe('Resume Components', () => {
     });
 
     it('should render dates with proper formatting', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <ResumeEvents 
           title="Work History" 
           data={sampleResumeData.items[0].properties.experience}
@@ -427,7 +410,7 @@ describe('Resume Components', () => {
     });
 
     it('should have semantic event classes', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <ResumeEvents 
           title="Work History" 
           data={sampleResumeData.items[0].properties.experience}
@@ -671,7 +654,7 @@ describe('Resume Components', () => {
 
   describe('ResumeProjects Component', () => {
     it('should render projects section', () => {
-      renderWithConfig(
+      render(
         <ResumeProjects 
           title="Projects"
           data={sampleResumeData.items[0].properties.experience}
@@ -682,7 +665,7 @@ describe('Resume Components', () => {
     });
 
     it('should render organization name as heading', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <ResumeProjects 
           title="Projects"
           data={sampleResumeData.items[0].properties.experience}
@@ -700,7 +683,7 @@ describe('Resume Components', () => {
     });
 
     it('should render project name', () => {
-      renderWithConfig(
+      render(
         <ResumeProjects 
           title="Projects"
           data={sampleResumeData.items[0].properties.experience}
@@ -711,7 +694,7 @@ describe('Resume Components', () => {
     });
 
     it('should have p-project class', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <ResumeProjects 
           title="Projects"
           data={sampleResumeData.items[0].properties.experience}
@@ -724,23 +707,23 @@ describe('Resume Components', () => {
 
   describe('Resume - Semantic HTML', () => {
     it('should use h-resume microformat', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('.p-resume')).toBeInTheDocument();
     });
 
     it('should use proper heading hierarchy', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('h1')).toBeInTheDocument(); // Name
       expect(container.querySelectorAll('h2').length).toBeGreaterThan(0); // Sections
     });
 
     it('should use proper semantic classes throughout', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('[class*="p-"]')).toBeInTheDocument(); // Properties
     });
 
     it('should use proper list structures', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelectorAll('ul').length).toBeGreaterThan(0);
     });
   });
@@ -762,33 +745,33 @@ describe('Resume Components', () => {
           }
         }]
       };
-      const { container } = renderWithConfig(<Resume data={dataWithoutProjects} />);
+      const { container } = render(<Resume data={dataWithoutProjects} />);
       expect(container.querySelector('.p-resume')).toBeInTheDocument();
     });
 
     it('should handle null data prop gracefully', () => {
-      const { container } = renderWithConfig(<Resume data={null as any} />);
+      const { container } = render(<Resume data={null as any} />);
       expect(container.querySelector('.p-resume')).toBeInTheDocument();
       // Should render empty sections without crashing
       expect(container.querySelector('.p-name')).toBeInTheDocument();
     });
 
     it('should handle undefined data prop gracefully', () => {
-      const { container } = renderWithConfig(<Resume data={undefined as any} />);
+      const { container } = render(<Resume data={undefined as any} />);
       expect(container.querySelector('.p-resume')).toBeInTheDocument();
       expect(container.querySelector('.p-name')).toBeInTheDocument();
     });
 
     it('should handle missing items array', () => {
       const dataWithoutItems = { items: null };
-      const { container } = renderWithConfig(<Resume data={dataWithoutItems as any} />);
+      const { container } = render(<Resume data={dataWithoutItems as any} />);
       expect(container.querySelector('.p-resume')).toBeInTheDocument();
       expect(container.querySelector('.p-name')).toBeInTheDocument();
     });
 
     it('should handle empty items array', () => {
       const dataWithEmptyItems = { items: [] };
-      const { container } = renderWithConfig(<Resume data={dataWithEmptyItems as any} />);
+      const { container } = render(<Resume data={dataWithEmptyItems as any} />);
       expect(container.querySelector('.p-resume')).toBeInTheDocument();
       expect(container.querySelector('.p-name')).toBeInTheDocument();
     });
@@ -799,7 +782,7 @@ describe('Resume Components', () => {
           properties: null
         }]
       };
-      const { container } = renderWithConfig(<Resume data={dataWithoutProperties as any} />);
+      const { container } = render(<Resume data={dataWithoutProperties as any} />);
       expect(container.querySelector('.p-resume')).toBeInTheDocument();
       expect(container.querySelector('.p-name')).toBeInTheDocument();
     });
@@ -812,7 +795,7 @@ describe('Resume Components', () => {
           }
         }]
       };
-      const { container } = renderWithConfig(<Resume data={dataWithMissingProps as any} />);
+      const { container } = render(<Resume data={dataWithMissingProps as any} />);
       expect(container.querySelector('.p-resume')).toBeInTheDocument();
       // Should render all sections even with missing data
       expect(container.querySelector('.p-name')).toBeInTheDocument();
@@ -859,7 +842,7 @@ describe('Resume Components', () => {
 
   describe('Resume - Integration', () => {
     it('should render complete resume with all sections', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('#resume-section')).toBeInTheDocument();
       expect(container.querySelector('.p-name')).toBeInTheDocument();
       expect(container.querySelector('.p-contact')).toBeInTheDocument();
@@ -869,7 +852,7 @@ describe('Resume Components', () => {
     });
 
     it('should structure resume with proper grid layout', () => {
-      const { container } = renderWithConfig(<Resume data={sampleResumeData} />);
+      const { container } = render(<Resume data={sampleResumeData} />);
       expect(container.querySelector('.grid-s1-e13')).toBeInTheDocument(); // Name
       expect(container.querySelector('.grid-s1-e4')).toBeInTheDocument();  // Left
       expect(container.querySelector('.grid-s4-e13')).toBeInTheDocument(); // Right

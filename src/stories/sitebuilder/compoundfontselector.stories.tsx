@@ -6,50 +6,18 @@ export default {
 	parameters: {
 		layout: 'padded',
 	},
-};
-
-export const Default = {
-	args: {
-		id: 'font-selector',
-		name: 'font-selector',
-		label: 'Font Stack',
-		value: '',
+	argTypes: {
+		label: { control: 'text' },
+		required: { control: 'boolean' },
+		value: { control: 'text' },
 	},
-};
-
-export const WithInitialValue = {
 	args: {
 		id: 'font-selector',
 		name: 'font-selector',
 		label: 'Font Stack',
+		required: false,
 		value: '"Montserrat", Arial, sans-serif',
 	},
 };
 
-export const Required = {
-	args: {
-		id: 'font-selector',
-		name: 'font-selector',
-		label: 'Font Stack',
-		required: true,
-		value: '',
-	},
-};
-
-export const HeaderFont = {
-	args: {
-		id: 'header-font',
-		name: 'header-font',
-		label: 'Header Font Stack',
-		value: '"Montserrat", Verdana, sans-serif',
-	},
-};
-
-export const BodyFont = {
-	args: {
-		id: 'body-font',
-		name: 'body-font',
-		label: 'Body Font Stack',
-		value: '"Roboto", Helvetica, sans-serif',
-	},
-};
+export const Playground = {};

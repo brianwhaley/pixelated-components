@@ -47,9 +47,6 @@ node_modules/
 .vscode/
 .idea/
 
-# Pixelated Configuration (Secrets)
-pixelated.config.json
-
 # OS
 .DS_Store
 Thumbs.db

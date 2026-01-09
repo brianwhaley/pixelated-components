@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../test/test-utils';
 import { 
   Callout,
   CalloutHeader,
@@ -10,7 +10,6 @@ import {
   layouts,
   directions
 } from '../components/general/callout';
-import { PixelatedClientConfigProvider } from '../components/config/config.client';
 
 // Mock the SmartImage component before importing Callout
 vi.mock('../cms/smartimage', () => ({
@@ -26,28 +25,10 @@ vi.mock('../cms/smartimage', () => ({
   },
 }));
 
-// Mock config with defaults
-const mockConfig = {
-  cloudinary: {
-    product_env: 'test-env',
-    baseUrl: 'https://test.cloudinary.com',
-    transforms: 'test-transforms',
-  },
-};
-
-// Helper to render with config provider
-const renderWithConfig = (component: React.ReactElement, config = mockConfig) => {
-  return render(
-    <PixelatedClientConfigProvider config={config}>
-      {component}
-    </PixelatedClientConfigProvider>
-  );
-};
-
 describe('Callout Component', () => {
   describe('Rendering - Basic Structure', () => {
     it('should render callout container with default class', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Test Callout" />
       );
       const callout = container.querySelector('.callout');
@@ -55,7 +36,7 @@ describe('Callout Component', () => {
     });
 
     it('should render callout with variant class', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Test" variant="boxed" />
       );
       const callout = container.querySelector('.callout');
@@ -64,7 +45,7 @@ describe('Callout Component', () => {
     });
 
     it('should render with friendly ID based on title', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="My Test Title" />
       );
       const callout = container.querySelector('.callout');
@@ -72,7 +53,7 @@ describe('Callout Component', () => {
     });
 
     it('should not have ID when title is missing', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout />
       );
       const callout = container.querySelector('.callout');
@@ -80,7 +61,7 @@ describe('Callout Component', () => {
     });
 
     it('should render with horizontal layout by default', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Test" />
       );
       const callout = container.querySelector('.callout');
@@ -88,7 +69,7 @@ describe('Callout Component', () => {
     });
 
     it('should render with left direction by default', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Test" />
       );
       const callout = container.querySelector('.callout');
@@ -99,7 +80,7 @@ describe('Callout Component', () => {
   describe('Rendering - Variants', () => {
     variants.forEach(variant => {
       it(`should render with variant: ${variant}`, () => {
-        const { container } = renderWithConfig(
+        const { container } = render(
           <Callout title="Test" variant={variant} />
         );
         const callout = container.querySelector('.callout');
@@ -108,7 +89,7 @@ describe('Callout Component', () => {
     });
 
     it('should apply boxShape class when variant is boxed', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Test" variant="boxed" boxShape="round" />
       );
       const callout = container.querySelector('.callout');
@@ -116,7 +97,7 @@ describe('Callout Component', () => {
     });
 
     it('should apply boxShape class when variant is boxed grid', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Test" variant="boxed grid" boxShape="bevel" />
       );
       const callout = container.querySelector('.callout');
@@ -124,7 +105,7 @@ describe('Callout Component', () => {
     });
 
     it('should apply grid columns class', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Test" 
           variant="grid" 
@@ -136,7 +117,7 @@ describe('Callout Component', () => {
     });
 
     it('should not apply boxShape to split variant', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Test" 
           variant="split" 
@@ -151,7 +132,7 @@ describe('Callout Component', () => {
   describe('Rendering - Layouts and Directions', () => {
     layouts.forEach(layout => {
       it(`should render with layout: ${layout}`, () => {
-        const { container } = renderWithConfig(
+        const { container } = render(
           <Callout title="Test" layout={layout} />
         );
         const callout = container.querySelector('.callout');
@@ -161,7 +142,7 @@ describe('Callout Component', () => {
 
     directions.forEach(direction => {
       it(`should render with direction: ${direction}`, () => {
-        const { container } = renderWithConfig(
+        const { container } = render(
           <Callout title="Test" direction={direction} />
         );
         const callout = container.querySelector('.callout');
@@ -170,7 +151,7 @@ describe('Callout Component', () => {
     });
 
     it('should not apply direction to vertical layout', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Test" layout="vertical" direction="right" />
       );
       const callout = container.querySelector('.callout');
@@ -178,7 +159,7 @@ describe('Callout Component', () => {
     });
 
     it('should not apply layout to split variant', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Test" variant="split" layout="vertical" />
       );
       const callout = container.querySelector('.callout');
@@ -188,40 +169,40 @@ describe('Callout Component', () => {
 
   describe('Rendering - Content Elements', () => {
     it('should render title', () => {
-      renderWithConfig(<Callout title="Test Title" />);
+      render(<Callout title="Test Title" />);
       expect(screen.getByText('Test Title')).toBeInTheDocument();
     });
 
     it('should not render title when missing', () => {
-      const { container } = renderWithConfig(<Callout />);
+      const { container } = render(<Callout />);
       const headers = container.querySelectorAll('.callout-header');
       expect(headers.length).toBe(0);
     });
 
     it('should render subtitle', () => {
-      renderWithConfig(<Callout title="Title" subtitle="Test Subtitle" />);
+      render(<Callout title="Title" subtitle="Test Subtitle" />);
       expect(screen.getByText('Test Subtitle')).toBeInTheDocument();
     });
 
     it('should not render subtitle when missing', () => {
-      const { container } = renderWithConfig(<Callout title="Title" />);
+      const { container } = render(<Callout title="Title" />);
       const subtitles = container.querySelectorAll('.callout-subtitle');
       expect(subtitles.length).toBe(0);
     });
 
     it('should render content', () => {
-      renderWithConfig(<Callout title="Title" content="Test Content" />);
+      render(<Callout title="Title" content="Test Content" />);
       expect(screen.getByText('Test Content')).toBeInTheDocument();
     });
 
     it('should not render content when missing', () => {
-      const { container } = renderWithConfig(<Callout title="Title" />);
+      const { container } = render(<Callout title="Title" />);
       const contents = container.querySelectorAll('.callout-content');
       expect(contents.length).toBe(0);
     });
 
     it('should render image when img is provided', () => {
-      const { container } = renderWithConfig(<Callout title="Title" img="/test.jpg" imgAlt="Test" />);
+      const { container } = render(<Callout title="Title" img="/test.jpg" imgAlt="Test" />);
       const imageDiv = container.querySelector('.callout-image');
       expect(imageDiv).toBeInTheDocument();
       // SmartImage is mocked, so we check if the container exists
@@ -229,7 +210,7 @@ describe('Callout Component', () => {
     });
 
     it('should not render image when img is missing', () => {
-      renderWithConfig(<Callout title="Title" />);
+      render(<Callout title="Title" />);
       const images = screen.queryAllByTestId('smart-image');
       expect(images.length).toBe(0);
     });
@@ -237,7 +218,7 @@ describe('Callout Component', () => {
 
   describe('Rendering - Element Order', () => {
     it('should render image before body with left direction', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           img="/test.jpg" 
@@ -256,7 +237,7 @@ describe('Callout Component', () => {
     });
 
     it('should render body before image with right direction', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           img="/test.jpg" 
@@ -277,31 +258,31 @@ describe('Callout Component', () => {
 
   describe('CalloutHeader Component', () => {
     it('should render header with title', () => {
-      renderWithConfig(<CalloutHeader title="Test Title" />);
+      render(<CalloutHeader title="Test Title" />);
       expect(screen.getByText('Test Title')).toBeInTheDocument();
     });
 
     it('should render h2 element', () => {
-      const { container } = renderWithConfig(<CalloutHeader title="Test" />);
+      const { container } = render(<CalloutHeader title="Test" />);
       const h2 = container.querySelector('h2');
       expect(h2).toBeInTheDocument();
       expect(h2).toHaveClass('callout-title');
     });
 
     it('should render as link when URL is provided', () => {
-      renderWithConfig(<CalloutHeader title="Test" url="/test" />);
+      render(<CalloutHeader title="Test" url="/test" />);
       const link = screen.getByRole('link');
       expect(link).toHaveAttribute('href', '/test');
     });
 
     it('should render without link when URL is missing', () => {
-      const { container } = renderWithConfig(<CalloutHeader title="Test" />);
+      const { container } = render(<CalloutHeader title="Test" />);
       const links = container.querySelectorAll('a');
       expect(links.length).toBe(0);
     });
 
     it('should apply target="_blank" when provided', () => {
-      renderWithConfig(<CalloutHeader title="Test" url="https://example.com" target="_blank" />);
+      render(<CalloutHeader title="Test" url="https://example.com" target="_blank" />);
       const link = screen.getByRole('link');
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
@@ -310,21 +291,21 @@ describe('Callout Component', () => {
 
   describe('CalloutButton Component', () => {
     it('should render button with link when URL is provided', () => {
-      renderWithConfig(<CalloutButton title="Click Me" url="/test" />);
+      render(<CalloutButton title="Click Me" url="/test" />);
       const button = screen.getByRole('button');
       expect(button).toBeInTheDocument();
       expect(button).toHaveTextContent('Click Me');
     });
 
     it('should apply target="_blank" when provided', () => {
-      renderWithConfig(<CalloutButton title="Click Me" url="/test" target="_blank" />);
+      render(<CalloutButton title="Click Me" url="/test" target="_blank" />);
       const button = screen.getByRole('button');
       expect(button).toBeInTheDocument();
       expect(button).toHaveTextContent('Click Me');
     });
 
     it('should have callout-button class', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <CalloutButton title="Click Me" url="/test" />
       );
       const button = container.querySelector('.callout-button');
@@ -334,7 +315,7 @@ describe('Callout Component', () => {
 
   describe('Callout - Button Rendering Logic', () => {
     it('should render button with buttonText when provided', () => {
-      renderWithConfig(
+      render(
         <Callout 
           title="Title" 
           url="/test" 
@@ -345,7 +326,7 @@ describe('Callout Component', () => {
     });
 
     it('should render button with title when buttonText is missing', () => {
-      renderWithConfig(
+      render(
         <Callout 
           title="My Title" 
           url="/test"
@@ -358,7 +339,7 @@ describe('Callout Component', () => {
     });
 
     it('should not render button when URL is missing', () => {
-      renderWithConfig(
+      render(
         <Callout 
           title="Title" 
           buttonText="Click"
@@ -369,7 +350,7 @@ describe('Callout Component', () => {
     });
 
     it('should not render button when both URL and buttonText are missing', () => {
-      renderWithConfig(
+      render(
         <Callout 
           title="Title"
         />
@@ -381,7 +362,7 @@ describe('Callout Component', () => {
 
   describe('Callout - URL Handling', () => {
     it('should set target="_blank" for external URLs starting with http', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           url="https://example.com"
@@ -394,7 +375,7 @@ describe('Callout Component', () => {
     });
 
     it('should set target for internal URLs', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           url="/internal-page"
@@ -407,7 +388,7 @@ describe('Callout Component', () => {
 
   describe('Callout - Image Handling', () => {
     it('should apply imgShape class to image container', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           img="/test.jpg" 
@@ -420,7 +401,7 @@ describe('Callout Component', () => {
     });
 
     it('should use imgAlt as alt text', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           img="/test.jpg" 
@@ -432,7 +413,7 @@ describe('Callout Component', () => {
     });
 
     it('should use title as alt text when imgAlt is missing', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="My Title" 
           img="/test.jpg"
@@ -443,7 +424,7 @@ describe('Callout Component', () => {
     });
 
     it('should use empty string as alt text when both are missing', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           img="/test.jpg"
         />
@@ -453,7 +434,7 @@ describe('Callout Component', () => {
     });
 
     it('should use title as title attribute', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="My Title" 
           img="/test.jpg" 
@@ -465,7 +446,7 @@ describe('Callout Component', () => {
     });
 
     it('should use imgAlt as title attribute when title is missing', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           img="/test.jpg" 
           imgAlt="Alternative text"
@@ -478,7 +459,7 @@ describe('Callout Component', () => {
 
   describe('Callout - Image Click Handler', () => {
     it('should wrap image in anchor when URL is provided without imgClick', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           img="/test.jpg" 
@@ -493,7 +474,7 @@ describe('Callout Component', () => {
 
     it('should apply onClick handler to image when imgClick is provided', () => {
       const mockClick = vi.fn();
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           img="/test.jpg" 
@@ -507,7 +488,7 @@ describe('Callout Component', () => {
     });
 
     it('should not wrap image in anchor when imgClick is provided', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           img="/test.jpg" 
@@ -522,7 +503,7 @@ describe('Callout Component', () => {
     });
 
     it('should render plain image when no URL or imgClick', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           img="/test.jpg" 
@@ -539,7 +520,7 @@ describe('Callout Component', () => {
 
   describe('Callout - Grid Columns', () => {
     it('should apply default grid columns 1-2', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           variant="grid"
@@ -550,7 +531,7 @@ describe('Callout Component', () => {
     });
 
     it('should apply custom grid columns', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           variant="grid"
@@ -562,7 +543,7 @@ describe('Callout Component', () => {
     });
 
     it('should apply grid columns to boxed grid variant', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           variant="boxed grid"
@@ -574,7 +555,7 @@ describe('Callout Component', () => {
     });
 
     it('should not apply grid columns to non-grid variants', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           variant="default"
@@ -588,7 +569,7 @@ describe('Callout Component', () => {
 
   describe('Callout - HTML Structure', () => {
     it('should have callout-body div', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Title" content="Content" />
       );
       const body = container.querySelector('.callout-body');
@@ -596,7 +577,7 @@ describe('Callout Component', () => {
     });
 
     it('should have callout-image div when image is provided', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           img="/test.jpg" 
@@ -608,7 +589,7 @@ describe('Callout Component', () => {
     });
 
     it('should have callout-header div when title is provided', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Title" />
       );
       const header = container.querySelector('.callout-header');
@@ -616,7 +597,7 @@ describe('Callout Component', () => {
     });
 
     it('should have callout-subtitle div when subtitle is provided', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Title" subtitle="Subtitle" />
       );
       const subtitle = container.querySelector('.callout-subtitle');
@@ -624,7 +605,7 @@ describe('Callout Component', () => {
     });
 
     it('should have callout-content div when content is provided', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Title" content="Content" />
       );
       const content = container.querySelector('.callout-content');
@@ -632,7 +613,7 @@ describe('Callout Component', () => {
     });
 
     it('should have callout-button div when button is rendered', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Title" url="/test" buttonText="Button" />
       );
       const button = container.querySelector('.callout-button');
@@ -642,30 +623,30 @@ describe('Callout Component', () => {
 
   describe('Callout - Edge Cases', () => {
     it('should handle empty title', () => {
-      const { container } = renderWithConfig(<Callout title="" />);
+      const { container } = render(<Callout title="" />);
       const callout = container.querySelector('.callout');
       expect(callout).toBeInTheDocument();
     });
 
     it('should handle very long title', () => {
       const longTitle = 'A'.repeat(200);
-      renderWithConfig(<Callout title={longTitle} />);
+      render(<Callout title={longTitle} />);
       expect(screen.getByText(longTitle)).toBeInTheDocument();
     });
 
     it('should handle special characters in title', () => {
-      renderWithConfig(<Callout title="Title & Description™" />);
+      render(<Callout title="Title & Description™" />);
       expect(screen.getByText('Title & Description™')).toBeInTheDocument();
     });
 
     it('should handle HTML-like content safely', () => {
-      renderWithConfig(<Callout title="Title" content="<script>alert('xss')</script>" />);
+      render(<Callout title="Title" content="<script>alert('xss')</script>" />);
       expect(screen.getByText("<script>alert('xss')</script>")).toBeInTheDocument();
     });
 
     it('should handle all shapes', () => {
       shapes.forEach(shape => {
-        const { container } = renderWithConfig(
+        const { container } = render(
           <Callout title="Title" variant="boxed" boxShape={shape} />
         );
         const callout = container.querySelector('.callout');
@@ -674,7 +655,7 @@ describe('Callout Component', () => {
     });
 
     it('should combine multiple classes correctly', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           variant="boxed" 
@@ -695,7 +676,7 @@ describe('Callout Component', () => {
 
   describe('Callout - Accessibility', () => {
     it('should have semantic heading structure', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Title" subtitle="Subtitle" />
       );
       const h2 = container.querySelector('h2');
@@ -705,7 +686,7 @@ describe('Callout Component', () => {
     });
 
     it('should have proper link structure with external link attributes', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           url="https://example.com"
@@ -720,7 +701,7 @@ describe('Callout Component', () => {
     });
 
     it('should have proper image alt text', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Title" 
           img="/test.jpg" 
@@ -735,7 +716,7 @@ describe('Callout Component', () => {
   describe('Callout - Integration Scenarios', () => {
     it('should render full callout with all content', () => {
       const mockClick = vi.fn();
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout 
           title="Complete Callout"
           subtitle="With all features"
@@ -767,7 +748,7 @@ describe('Callout Component', () => {
     });
 
     it('should render minimal callout with just title', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <Callout title="Simple" />
       );
       const callout = container.querySelector('.callout');

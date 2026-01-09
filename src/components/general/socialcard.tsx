@@ -38,7 +38,7 @@ SocialCards.propTypes = {
 };
 export type SocialCardsType = InferProps<typeof SocialCards.propTypes>;
 export function SocialCards(props: SocialCardsType) {
-	const debug = false ;
+	const debug = false;
 	const [ state, setState ] = useState({
 		loading: true,
 		targetID: '#social',

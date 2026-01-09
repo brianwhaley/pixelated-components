@@ -11,7 +11,5 @@ export const Google_Analytics_Config = {
 };
 
 export const Google_Analytics_Props = {
-	args: {
-		id: "G-1J1W90VBE1",
-	},
+	args: {},
 };

@@ -1,6 +1,6 @@
 /// <reference types="vitest/globals" />
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '../test/test-utils';
 import React, { useState, useEffect } from 'react';
 import { SiteHealthCloudwatch } from '../components/admin/site-health/site-health-cloudwatch';
 

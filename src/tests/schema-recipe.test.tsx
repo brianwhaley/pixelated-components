@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
+import { render } from '../test/test-utils';
 import { RecipeSchema, type RecipeSchemaType } from '@/components/general/schema-recipe';
 
 describe('RecipeSchema', () => {

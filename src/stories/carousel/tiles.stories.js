@@ -1,28 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Tiles } from "@/components/general/tiles";
 import { FlickrWrapper } from "@/components/general/flickr";
-import { PixelatedClientConfigProvider } from '@/components/config/config.client';
+import { usePixelatedConfig } from '@/components/config/config.client';
 import '@/css/pixelated.global.css';
-
-const mockConfig = {
-	cloudinary: {
-		product_env: 'dlbon7tpq',
-		baseUrl: 'https://res.cloudinary.com',
-		transforms: 'f_auto,c_limit,q_auto,dpr_auto',
-	},
-};
 
 export default {
 	title: 'Carousel',
 	component: Tiles,
-	decorators: [
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(Story) => (
-			<PixelatedClientConfigProvider config={mockConfig}>
-				<Story />
-			</PixelatedClientConfigProvider>
-		),
-	],
 };
 
 const sampleTiles = [
@@ -48,21 +32,25 @@ const sampleTiles = [
 
 const FlickrTiles = () => {
 	const [ flickrCards, setFlickrCards ] = useState([]);
-	const props = { 
-		method: "flickr.photosets.getPhotos", 
-		api_key: '882cab5548d53c9e6b5fb24d59cc321d',
-		user_id: '15473210@N04',
-		tags: "", // "pixelatedviewsgallery"
-		photoset_id: "72157712416706518",
-		photoSize: "Large", 
-		callback: setFlickrCards 
-	};
+	const config = usePixelatedConfig();
+
 	useEffect(() => {
 		async function fetchGallery() {
+			if (!config?.flickr) return;
+			const props = { 
+				method: "flickr.photosets.getPhotos", 
+				api_key: config.flickr.urlProps.api_key,
+				user_id: config.flickr.urlProps.user_id,
+				tags: "", // "pixelatedviewsgallery"
+				photoset_id: "72157712416706518", // Specific set
+				photoSize: "Large", 
+				callback: setFlickrCards 
+			};
 			await FlickrWrapper(props);
 		}
 		fetchGallery();
-	}, [flickrCards]); 
+	}, [config]); 
+
 	return (
 		<>
 			<section id="customflickrtiles-section">

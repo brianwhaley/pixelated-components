@@ -24,8 +24,10 @@ const pixelatedConfig: PixelatedConfig = {
 	ebay: {
 		proxyURL: 'https://proxy.provier.com/proxy?url=',
 		appId: 'your-ebay-client-id',
+		appDevId: 'your-ebay-client-dev-id',
 		appCertId: 'your-ebay-client-secret',
 		sbxAppId: 'your-ebay-sandbox-client-id',
+		sbxAppDevId: 'your-ebay-sandbox-client-dev-id',
 		sbxAppCertId: 'your-ebay-sandbox-client-secret',
 		globalId: 'EBAY_US',
 		environment: 'production',

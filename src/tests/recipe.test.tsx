@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from '../test/test-utils';
 import {
   RecipeBook,
   RecipeCategory,
@@ -9,7 +9,6 @@ import {
   BackToTop,
   mapSchemaRecipeToDisplay,
 } from '@/components/general/recipe';
-import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 // Mock the SmartImage component
 vi.mock('@/components/general/smartimage', () => ({
@@ -25,23 +24,6 @@ vi.mock('@/components/general/smartimage', () => ({
     });
   },
 }));
-
-// Mock config
-const mockConfig = {
-  cloudinary: {
-    product_env: 'test-env',
-    baseUrl: 'https://test.cloudinary.com',
-    transforms: 'test-transforms',
-  },
-};
-
-const renderWithConfig = (component: React.ReactElement, config = mockConfig) => {
-  return render(
-    <PixelatedClientConfigProvider config={config}>
-      {component}
-    </PixelatedClientConfigProvider>
-  );
-};
 
 // Sample recipe data for tests
 const sampleRecipeData = {
@@ -114,7 +96,7 @@ const sampleRecipeData = {
 describe('Recipe Components', () => {
   describe('RecipeCategory Component', () => {
     it('should render category heading', () => {
-      renderWithConfig(
+      render(
         <RecipeCategory 
           id="c1" 
           className="h-recipe-category" 
@@ -126,7 +108,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render as h2 element', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeCategory 
           id="c1" 
           className="h-recipe-category" 
@@ -140,7 +122,7 @@ describe('Recipe Components', () => {
     });
 
     it('should have correct ID attribute', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeCategory 
           id="c1" 
           className="h-recipe-category" 
@@ -153,7 +135,7 @@ describe('Recipe Components', () => {
     });
 
     it('should apply className prop', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeCategory 
           id="c1" 
           className="h-recipe-category" 
@@ -166,7 +148,7 @@ describe('Recipe Components', () => {
     });
 
     it('should hide when showOnly does not match', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeCategory 
           id="c1" 
           className="h-recipe-category" 
@@ -179,7 +161,7 @@ describe('Recipe Components', () => {
     });
 
     it('should show when showOnly matches', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeCategory 
           id="c1" 
           className="h-recipe-category" 
@@ -192,7 +174,7 @@ describe('Recipe Components', () => {
     });
 
     it('should show when showOnly is empty', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeCategory 
           id="c1" 
           className="h-recipe-category" 
@@ -209,7 +191,7 @@ describe('Recipe Components', () => {
     const testRecipe = mapSchemaRecipeToDisplay(sampleRecipeData.items[0]);
 
     it('should render recipe article element', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -222,7 +204,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render recipe name as h3 heading', () => {
-      renderWithConfig(
+      render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -233,7 +215,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render recipe summary', () => {
-      renderWithConfig(
+      render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -244,7 +226,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render author information', () => {
-      renderWithConfig(
+      render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -255,7 +237,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render published date', () => {
-      renderWithConfig(
+      render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -266,7 +248,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render duration', () => {
-      renderWithConfig(
+      render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -277,7 +259,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render yield', () => {
-      renderWithConfig(
+      render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -288,7 +270,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render ingredients list', () => {
-      renderWithConfig(
+      render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -302,7 +284,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render ingredients with p-ingredient class', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -314,7 +296,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render instructions list', () => {
-      renderWithConfig(
+      render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -328,7 +310,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render instructions with p-instruction class', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -340,7 +322,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render photo image with u-photo class', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -359,7 +341,7 @@ describe('Recipe Components', () => {
         ...testRecipe,
         photo: ''
       };
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={recipeNoPhoto} 
           id="c1-r1" 
@@ -371,7 +353,7 @@ describe('Recipe Components', () => {
     });
 
     it('should hide when showOnly does not match', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -383,7 +365,7 @@ describe('Recipe Components', () => {
     });
 
     it('should show when showOnly matches', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -395,7 +377,7 @@ describe('Recipe Components', () => {
     });
 
     it('should have recipe name link with hash', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -407,7 +389,7 @@ describe('Recipe Components', () => {
     });
 
     it('should have correct semantic classes', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={testRecipe} 
           id="c1-r1" 
@@ -427,7 +409,7 @@ describe('Recipe Components', () => {
 
   describe('RecipePickList Component', () => {
     it('should render select form element', () => {
-      renderWithConfig(
+      render(
         <RecipePickList 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -439,7 +421,7 @@ describe('Recipe Components', () => {
     });
 
     it('should have id attribute', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipePickList 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -451,7 +433,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render default option', () => {
-      renderWithConfig(
+      render(
         <RecipePickList 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -462,7 +444,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render category options', () => {
-      renderWithConfig(
+      render(
         <RecipePickList 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -474,7 +456,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render recipe options under categories', () => {
-      renderWithConfig(
+      render(
         <RecipePickList 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -487,7 +469,7 @@ describe('Recipe Components', () => {
 
     it('should call handler when selection changes', () => {
       const handleChange = vi.fn();
-      renderWithConfig(
+      render(
         <RecipePickList 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -501,7 +483,7 @@ describe('Recipe Components', () => {
 
     it('should call handler with empty string when default option selected', () => {
       const handleChange = vi.fn();
-      renderWithConfig(
+      render(
         <RecipePickList 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -516,19 +498,19 @@ describe('Recipe Components', () => {
 
   describe('BackToTop Component', () => {
     it('should render back to top link', () => {
-      renderWithConfig(<BackToTop />);
+      render(<BackToTop />);
       const link = screen.getByRole('link');
       expect(link).toBeInTheDocument();
       expect(link).toHaveAttribute('href', '#top');
     });
 
     it('should render back to top text', () => {
-      renderWithConfig(<BackToTop />);
+      render(<BackToTop />);
       expect(screen.getByText('Back To Top')).toBeInTheDocument();
     });
 
     it('should render icon image', () => {
-      const { container } = renderWithConfig(<BackToTop />);
+      const { container } = render(<BackToTop />);
       const image = container.querySelector('img');
       expect(image).toBeInTheDocument();
       expect(image).toHaveAttribute('alt', 'Back To Top');
@@ -539,20 +521,20 @@ describe('Recipe Components', () => {
     });
 
     it('should have two divs inside link', () => {
-      const { container } = renderWithConfig(<BackToTop />);
+      const { container } = render(<BackToTop />);
       const link = container.querySelector('a');
       const divs = link?.querySelectorAll('div');
       expect(divs?.length).toBe(2);
     });
 
     it('should have backToTop class', () => {
-      const { container } = renderWithConfig(<BackToTop />);
+      const { container } = render(<BackToTop />);
       const backToTop = container.querySelector('.backToTop');
       expect(backToTop).toBeInTheDocument();
     });
 
     it('should prevent default on click', () => {
-      renderWithConfig(<BackToTop />);
+      render(<BackToTop />);
       const link = screen.getByRole('link');
       const event = new MouseEvent('click', { bubbles: true });
       const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
@@ -563,7 +545,7 @@ describe('Recipe Components', () => {
 
   describe('RecipeBook Component', () => {
     it('should render recipes container', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBook 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -574,7 +556,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render RecipePickList', () => {
-      renderWithConfig(
+      render(
         <RecipeBook 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -585,7 +567,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render BackToTop', () => {
-      renderWithConfig(
+      render(
         <RecipeBook 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -595,7 +577,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render recipe categories', () => {
-      renderWithConfig(
+      render(
         <RecipeBook 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -606,7 +588,7 @@ describe('Recipe Components', () => {
     });
 
     it('should render all recipes', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBook 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -617,7 +599,7 @@ describe('Recipe Components', () => {
     });
 
     it('should handle recipe selection changes', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBook 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -636,7 +618,7 @@ describe('Recipe Components', () => {
     });
 
     it('should reset selection when default option chosen', () => {
-      renderWithConfig(
+      render(
         <RecipeBook 
           recipeData={sampleRecipeData} 
           recipeCategories={['Desserts', 'Main Courses']}
@@ -654,7 +636,7 @@ describe('Recipe Components', () => {
   describe('Recipe - Edge Cases', () => {
     it('should handle empty recipe data', () => {
       const emptyRecipeData = { items: [] };
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBook 
           recipeData={emptyRecipeData} 
           recipeCategories={['Desserts']}
@@ -669,7 +651,7 @@ describe('Recipe Components', () => {
         ...sampleRecipeData.items[0],
         recipeIngredient: []
       });
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={recipeNoIngredients} 
           id="c1-r1" 
@@ -685,7 +667,7 @@ describe('Recipe Components', () => {
         ...sampleRecipeData.items[0],
         recipeInstructions: []
       });
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={recipeNoInstructions} 
           id="c1-r1" 
@@ -701,7 +683,7 @@ describe('Recipe Components', () => {
         ...sampleRecipeData.items[0],
         name: 'Crème Brûlée & Cookies'
       });
-      renderWithConfig(
+      render(
         <RecipeBookItem 
           recipeData={specialRecipe} 
           id="c1-r1" 
@@ -717,7 +699,7 @@ describe('Recipe Components', () => {
         ...sampleRecipeData.items[0],
         recipeIngredient: longIngredients
       });
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={recipeWithManyIngredients} 
           id="c1-r1" 
@@ -733,7 +715,7 @@ describe('Recipe Components', () => {
         ...sampleRecipeData.items[0],
         recipeCategory: 'Desserts'
       };
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBook 
           recipeData={{ items: [multiCategoryRecipe] }} 
           recipeCategories={['Desserts', 'Vegetarian', 'Quick']}
@@ -747,7 +729,7 @@ describe('Recipe Components', () => {
     const convertedRecipe = mapSchemaRecipeToDisplay(sampleRecipeData.items[0]);
 
     it('should have proper h-recipe microformat class', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={convertedRecipe} 
           id="c1-r1" 
@@ -758,7 +740,7 @@ describe('Recipe Components', () => {
     });
 
     it('should use semantic ingredient classes (p-ingredient)', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={convertedRecipe} 
           id="c1-r1" 
@@ -772,7 +754,7 @@ describe('Recipe Components', () => {
     });
 
     it('should use semantic instruction classes (p-instruction)', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={convertedRecipe} 
           id="c1-r1" 
@@ -786,7 +768,7 @@ describe('Recipe Components', () => {
     });
 
     it('should use ordered list for instructions', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={convertedRecipe} 
           id="c1-r1" 
@@ -799,7 +781,7 @@ describe('Recipe Components', () => {
     });
 
     it('should use unordered list for ingredients', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <RecipeBookItem 
           recipeData={convertedRecipe} 
           id="c1-r1" 

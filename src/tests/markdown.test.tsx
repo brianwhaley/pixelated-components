@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../test/test-utils';
 import { Markdown } from '../components/general/markdown';
 
 // Mock SmartImage component
@@ -10,17 +10,6 @@ vi.mock('../components/cms/smartimage', () => ({
     alt: props.alt,
     title: props.title,
     'data-testid': 'smart-image'
-  })
-}));
-
-// Mock usePixelatedConfig hook
-vi.mock('../components/config/config.client', () => ({
-  usePixelatedConfig: () => ({
-    cloudinary: {
-      product_env: 'test',
-      baseUrl: 'https://example.com',
-      transforms: []
-    }
   })
 }));
 

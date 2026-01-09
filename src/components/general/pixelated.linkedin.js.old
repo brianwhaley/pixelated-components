@@ -23,7 +23,7 @@ LinkedIn.propTypes = {};
 export type LinkedInType = InferProps<typeof LinkedIn.propTypes>;
 export function LinkedIn(props: LinkedInType) {
 
-	const debug = true ;
+	const debug = false;
 	
 	const [accessToken, setAccessToken] = useState();
 	const [recommendations, setRecommendations] = useState();

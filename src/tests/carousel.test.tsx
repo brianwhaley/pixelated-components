@@ -1,18 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '../test/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Carousel, CarouselCardType } from '../components/general/carousel';
-
-// Mock the config hook
-vi.mock('../components/config/config.client', () => ({
-	usePixelatedConfig: () => ({
-		cloudinary: {
-			product_env: 'test',
-			baseUrl: 'https://res.cloudinary.com/test',
-			transforms: {},
-		},
-	}),
-}));
 
 // Mock SmartImage component
 vi.mock('../components/cms/smartimage', () => ({

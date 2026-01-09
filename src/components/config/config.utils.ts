@@ -13,26 +13,37 @@ export function getClientOnlyPixelatedConfig(src: PixelatedConfig): PixelatedCon
 		// 2. Check Service-Specific Secret List
 		if (serviceName && (SECRET_CONFIG_KEYS.services as any)[serviceName]) {
 			const serviceSecrets = (SECRET_CONFIG_KEYS.services as any)[serviceName];
-			if (serviceSecrets.includes(key)) return true;
+			if (serviceSecrets.includes(key)) {
+				// console.log(`Config Stripper: Removing secret key "${key}" from service "${serviceName}"`);
+				return true;
+			}
 		}
 
 		return false;
 	}
 
 	function strip(obj: any, serviceName?: string): any {
-		if (!obj || typeof obj !== 'object' || obj === null) return obj;
+		// Base case for non-objects
+		if (obj === null || typeof obj !== 'object') return obj;
 		
+		// Avoid circular references
 		if (visited.has(obj)) return '[Circular]';
 		visited.add(obj);
 
-		if (Array.isArray(obj)) return obj.map((item: any) => strip(item, serviceName));
+		// Handle Arrays
+		if (Array.isArray(obj)) {
+			return obj.map((item: any) => strip(item, serviceName));
+		}
 		
 		const out: any = {};
 		for (const k of Object.keys(obj)) {
-			// If we are at the top level, the key 'k' IS the service name (ebay, cloudinary, etc.)
+			// At the top level (serviceName is undefined), k is the service name
 			const currentService = serviceName || k;
 			
-			if (isSecretKey(k, serviceName)) continue;
+			// Check if this key should be stripped
+			if (isSecretKey(k, serviceName)) {
+				continue;
+			}
 			
 			out[k] = strip(obj[k], currentService);
 		}

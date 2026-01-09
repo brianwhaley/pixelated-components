@@ -27,6 +27,7 @@ For a complete working example of Pixelated Components in action, check out the 
 - [SmartImage](#smartimage)
 - [Tab](#tab)
 - [Table](#table)
+- [CacheManager](#cachemanager)
 - [Intersection Observer Utility](#intersection-observer-utility)
 
 ### CMS Integration
@@ -382,6 +383,36 @@ useEffect(() => {
 | `observeIntersection(selector, callback, options?)` | Utility for observing multiple DOM elements by selector. |
 | `isElementInViewport(element)` | Helper for one-time check if element is fully in view. |
 | `isElementPartiallyInViewport(element)` | Helper for one-time check if element is partially in view. |
+
+---
+
+### CacheManager
+
+The `CacheManager` utility provides a standardized way to handle caching across the library with support for multiple storage engines and TTL.
+
+#### Usage Example
+```typescript
+import { CacheManager } from "@pixelated-tech/components";
+
+// Initialize a session-based cache with 1 hour TTL
+const myCache = new CacheManager({
+    mode: 'session',
+    prefix: 'myapp_',
+    ttl: 60 * 60 * 1000
+});
+
+// Set data
+myCache.set('myKey', { some: 'data' });
+
+// Get data
+const data = myCache.get('myKey');
+```
+
+#### Features:
+- ✅ **Multiple Engines** - Supports `memory`, `session`, and `local` storage.
+- ✅ **TTL Support** - Built-in expiration logic for cached items.
+- ✅ **SSR Safe** - Automatically falls back to memory storage when running on the server (Node.js).
+- ✅ **Prefixing** - Enforces key prefixing to avoid collisions in shared storage.
 
 ---
 

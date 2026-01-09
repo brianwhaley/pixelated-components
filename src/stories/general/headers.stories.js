@@ -1,10 +1,9 @@
-
 import { PageTitleHeader, PageSectionHeader } from "@/components/general/semantic";
 import '@/css/pixelated.global.css';
 
 export default {
 	title: 'General',
-	component: PageTitleHeader
+	component: PageTitleHeader,
 };
 
 export const Page_Header = {

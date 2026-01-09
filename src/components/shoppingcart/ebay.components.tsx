@@ -15,8 +15,6 @@ import "./ebay.css";
 const debug = false;
 
 
-
-
 /* ========== EBAY ITEMS PAGE ========== */
 
 EbayItems.propTypes = {
@@ -54,6 +52,7 @@ export function EbayItems(props: EbayItemsType) {
 	type fetchItemsType = InferProps<typeof fetchItems.propTypes>;
 	async function fetchItems(props?: fetchItemsType) {
 		try {
+			if (debug) console.log("Fetching ebay API Items Data");
 			const myApiProps = { ...apiProps };
 			if(props) {
 				const params = new URLSearchParams(myApiProps.qsSearchURL);
@@ -64,9 +63,9 @@ export function EbayItems(props: EbayItemsType) {
 				myApiProps.qsSearchURL = "?" + decodeURIComponent(params.toString());
 			}
 			const response: any = await getEbayItems({ apiProps: myApiProps });
-			if (debug) console.log("eBay API Get Items Data", response);
-			setItems(response?.itemSummaries || []);
-			setAspects(response?.refinement?.aspectDistributions || []);
+			if (debug) console.log("eBay API Search Items Data:", response);
+			setItems(response?.itemSummaries);
+			setAspects(response?.refinement?.aspectDistributions);
 		} catch (error) {
 			console.error("Error fetching eBay items:", error);
 		}
@@ -79,10 +78,10 @@ export function EbayItems(props: EbayItemsType) {
 		ToggleLoading(false);
 	}, []);
 
-	if (items.length > 0 ) {
+	if (items && items.length > 0 ) {
 		return (
 			<>
-				<Loading />
+				{ /* <Loading /> */}
 				<div className="ebayItemsHeader">
 					<EbayItemHeader title={`${items.length} Store Items`} />
 				</div>
@@ -98,7 +97,7 @@ export function EbayItems(props: EbayItemsType) {
 		return (
 			<div className="section-container">
 				<div id="ebayItems" className="ebayItems">
-					<Loading />
+					{ /* <Loading /> */}
 				</div>
 			</div>
 		);

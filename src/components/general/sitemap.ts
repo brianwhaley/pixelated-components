@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 import { getAllRoutes } from "./metadata.functions";
 import { getWordPressItems, getWordPressItemImages } from "../general/wordpress.functions";
 import { getContentfulFieldValues, getContentfulAssetURLs } from "../general/contentful.delivery";
-import { getEbayAppToken, getEbayItemsSearch } from "../shoppingcart/ebay.functions";
+import { getEbayAppToken, getEbayItemsSearch, defaultEbayProps } from "../shoppingcart/ebay.functions";
 import { getFullPixelatedConfig } from '../config/config';
 
 
@@ -360,26 +360,22 @@ export async function createContentfulImageURLs(props: createContentfulImageURLs
 
 
 
-
-const defaultEbayProps = {
-	proxyURL: "https://proxy.pixelated.tech/prod/proxy?url=",
-	baseTokenURL: 'https://api.ebay.com/identity/v1/oauth2/token',
-	tokenScope: 'https://api.ebay.com/oauth/api_scope',
-	baseSearchURL : 'https://api.ebay.com/buy/browse/v1/item_summary/search',
-	qsSearchURL: '?q=sunglasses&fieldgroups=full&category_ids=79720&aspect_filter=categoryId:79720&filter=sellers:{pixelatedtech}&sort=newlyListed&limit=200',
-	baseItemURL: 'https://api.ebay.com/buy/browse/v1/item',
-	qsItemURL: '/v1|295959752403|0?fieldgroups=PRODUCT,ADDITIONAL_SELLER_DETAILS',
-	appId: 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe', // clientId
-	appCertId: 'PRD-fb4458deef01-0d54-496a-b572-a04b', // clientSecret
-	sbxAppId: 'BrianWha-Pixelate-SBX-ad482b6ae-8cb8fead', // Sandbox
-	sbxAppCertId: '',
-	globalId: 'EBAY-US',
-};
 export async function createEbayItemURLs(origin: string) {
 	const sitemap: SitemapEntry[] = [];
-	await getEbayAppToken({apiProps: defaultEbayProps})
+
+	// Load configuration
+	const config = getFullPixelatedConfig();
+	const globalProxy = config.global?.proxyUrl;
+
+	const ebayProps = { 
+		...defaultEbayProps, 
+		...(globalProxy ? { proxyURL: globalProxy } : {}),
+		...config.ebay 
+	};
+
+	await getEbayAppToken({ apiProps: ebayProps })
 		.then(async (response: any) => {
-			await getEbayItemsSearch({ apiProps: defaultEbayProps, token: response })
+			await getEbayItemsSearch({ apiProps: ebayProps, token: response })
 				.then( (items: any) => {
 					for (const item of items.itemSummaries) {
 						sitemap.push({

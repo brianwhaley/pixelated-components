@@ -22,8 +22,10 @@ export interface ContentfulConfig {
 export interface EbayConfig {
 	proxyURL?: string,
 	appId: string;
+	appDevId?: string;
 	appCertId: string;
 	sbxAppId: string;
+	sbxAppDevId?: string;
 	sbxAppCertId: string;
 	globalId: string;
 	environment?: string;
@@ -154,9 +156,7 @@ export const SECRET_CONFIG_KEYS = {
 			'preview_access_token'
 		],
 		ebay: [
-			'appCertId',
-			'sbxAppId', 
-			'sbxAppCertId'
+			'sbxAppId'
 		],
 		paypal: [
 			'sandboxPayPalApiKey',

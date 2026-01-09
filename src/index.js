@@ -7,6 +7,7 @@ export * from './components/config/config.utils';
 export * from './components/general/404';
 export * from './components/general/accordion';
 export * from './components/general/buzzwordbingo';
+export * from './components/general/cache-manager';
 export * from './components/general/calendly';
 export * from './components/general/callout';
 export * from './components/general/carousel';

@@ -4,16 +4,16 @@ This document provides comprehensive information about the testing setup, covera
 
 ## Overview
 
-**Current Status**: ✅ 2,393 tests passing across 79 test files
+**Current Status**: ✅ 2,447 tests passing across 84 test files
 
 | Metric | Value |
 |--------|-------|
-| Test Files | 79 |
-| Total Tests | 2,393 |
-| Coverage (Statements) | 77.13% |
-| Coverage (Lines) | 79.73% |
-| Coverage (Functions) | 77.98% |
-| Coverage (Branches) | 67.55% |
+| Test Files | 84 |
+| Total Tests | 2,447 |
+| Coverage (Statements) | 73.66% |
+| Coverage (Lines) | 75.75% |
+| Coverage (Functions) | 75.60% |
+| Coverage (Branches) | 63.12% |
 | Test Framework | Vitest 4.x |
 | Testing Library | @testing-library/react + jsdom |
 
@@ -36,8 +36,9 @@ npm run test:run         # Single run (for CI)
 - **site-health-indicators.ts**: 100% statements
 - **tiles.tsx**: 100% statements
 - **google.reviews.functions.ts**: 100% statements
-- **accordion.tsx**: 100% statements
-- **modal.tsx**: 100% statements
+- **accordion.tsx**: 75% statements
+- **cache-manager.ts**: 92.98% statements
+- **modal.tsx**: 74% statements
 - **tab.tsx**: 100% statements
 - **ComponentPropertiesForm.tsx**: 100% statements
 - **ComponentSelector.tsx**: 100% statements
@@ -47,15 +48,15 @@ npm run test:run         # Single run (for CI)
 - **schema-localbusiness.tsx**: 100% statements
 - **schema-recipe.tsx**: 100% statements
 - **schema-services.tsx**: 100% statements
-- **faq-accordion.tsx**: 100% statements
-- **schema-website.tsx**: 100% statements
+- **faq-accordion.tsx**: 89.65% statements
+- **schema-website.tsx**: 84.61% statements
 - **schema-blogposting.tsx**: 100% statements
 - **buzzwordbingo.tsx**: 100% statements
 - **markdown.tsx**: 100% statements
 - **timeline.tsx**: 100% statements
 - **config.client.tsx**: 100% statements
-- **sidepanel.tsx**: 97.5% statements
-- **config.ts**: 96.55% statements
+- **sidepanel.tsx**: 97.61% statements
+- **config.ts**: 56.75% statements
 - **google.reviews.components.tsx**: 95.83% statements
 - **schema-blogposting.tsx**: 95.24% statements
 - **recipe.tsx**: 94.59% statements

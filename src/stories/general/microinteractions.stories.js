@@ -1,30 +1,13 @@
 import React, { useEffect } from 'react';
 import { Callout } from "@/components/general/callout";
-import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 const cloudinaryAPI = "https://res.cloudinary.com/pixelated-tech/image/fetch/w_600,h_600,c_fill,q_auto,f_auto/";
 import { MicroInteractions } from "@/components/general/microinteractions";
 import "@/css/pixelated.grid.scss";
 import "@/css/pixelated.global.css";
 
-const mockConfig = {
-	cloudinary: {
-		product_env: 'dlbon7tpq',
-		baseUrl: 'https://res.cloudinary.com',
-		transforms: 'f_auto,c_limit,q_auto,dpr_auto',
-	},
-};
-
 export default {
 	title: 'General',
 	component: MicroInteractions,
-	decorators: [
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(Story) => (
-			<PixelatedClientConfigProvider config={mockConfig}>
-				<Story />
-			</PixelatedClientConfigProvider>
-		),
-	],
 };
 
 const PageMicroInteractions = () => {

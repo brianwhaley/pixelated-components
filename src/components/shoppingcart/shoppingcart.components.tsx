@@ -28,10 +28,12 @@ const debug = false;
 /* ================================================ */
 
 ShoppingCart.propTypes = {
-	payPalClientID: PropTypes.string.isRequired,
+	payPalClientID: PropTypes.string,
 };
 export type ShoppingCartType = InferProps<typeof ShoppingCart.propTypes>;
 export function ShoppingCart( props: ShoppingCartType ) {
+	const config = usePixelatedConfig();
+	const payPalClientID = props.payPalClientID || config?.paypal?.payPalApiKey || config?.paypal?.sandboxPayPalApiKey;
 
 	const [ shoppingCart, setShoppingCart ] = useState<CartItemType[]>();
 	const [ shippingData, setShippingData ] = useState<AddressType[]>();
@@ -178,9 +180,11 @@ export function ShoppingCart( props: ShoppingCartType ) {
 				<FormButton className="pixCartButton" type="button" id="backToCart" text="<= Back To Cart"
 					onClick={() => SetProgressStep("ShippingInfo")} />
 				<br />
-				<PayPal payPalClientID={props.payPalClientID} 
-					checkoutData={getCheckoutData()} 
-					onApprove={handleOnApprove} />
+				{payPalClientID && (
+					<PayPal payPalClientID={payPalClientID} 
+						checkoutData={getCheckoutData()} 
+						onApprove={handleOnApprove} />
+				)}
 			</div>
 		);
 	} else if ( progressStep === "ShippingInfo" ) {

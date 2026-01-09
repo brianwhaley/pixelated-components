@@ -1,15 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { GravatarCard, type GravatarCardType } from '@/components/general/gravatar.components';
 import { getGravatarProfile, type GravatarProfile } from '@/components/general/gravatar.functions';
-import { PixelatedClientConfigProvider } from '@/components/config/config.client';
-
-const mockConfig = {
-	cloudinary: {
-		product_env: 'dlbon7tpq',
-		baseUrl: 'https://res.cloudinary.com',
-		transforms: 'f_auto,c_limit,q_auto,dpr_auto',
-	},
-};
 
 // Wrapper to handle async data fetching for the story
 const GravatarStoryWrapper = (args: GravatarCardType & { email?: string }) => {
@@ -38,13 +29,6 @@ const GravatarStoryWrapper = (args: GravatarCardType & { email?: string }) => {
 export default {
 	title: 'CMS',
 	component: GravatarCard,
-	decorators: [
-		(Story: any) => (
-			<PixelatedClientConfigProvider config={mockConfig}>
-				<Story />
-			</PixelatedClientConfigProvider>
-		),
-	],
 	argTypes: {
 		layout: {
 			control: 'radio',

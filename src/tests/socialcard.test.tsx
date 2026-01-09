@@ -1,12 +1,11 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '../test/test-utils';
 import {
   SocialCards,
   SocialCard,
   SocialCardsLoading,
 } from '@/components/general/socialcard';
-import { PixelatedClientConfigProvider } from '@/components/config/config.client';
 
 // Mock SmartImage
 vi.mock('@/components/general/smartimage', () => ({
@@ -25,22 +24,6 @@ vi.mock('@/components/general/smartimage', () => ({
 
 // Mock fetch for RSS feeds
 global.fetch = vi.fn();
-
-const mockConfig = {
-  cloudinary: {
-    product_env: 'test-env',
-    baseUrl: 'https://test.cloudinary.com',
-    transforms: 'test-transforms',
-  },
-};
-
-const renderWithConfig = (component: React.ReactElement, config = mockConfig) => {
-  return render(
-    <PixelatedClientConfigProvider config={config}>
-      {component}
-    </PixelatedClientConfigProvider>
-  );
-};
 
 const mockRSSFeed = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0">
@@ -99,7 +82,7 @@ describe('SocialCard Components', () => {
     };
 
     it('should render masonry item container', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -110,7 +93,7 @@ describe('SocialCard Components', () => {
     });
 
     it('should render card container', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -121,7 +104,7 @@ describe('SocialCard Components', () => {
     });
 
     it('should render card title section', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -132,7 +115,7 @@ describe('SocialCard Components', () => {
     });
 
     it('should render card title link', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -144,7 +127,7 @@ describe('SocialCard Components', () => {
     });
 
     it('should open link in new tab', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -157,7 +140,7 @@ describe('SocialCard Components', () => {
     });
 
     it('should render card icon image', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -171,7 +154,7 @@ describe('SocialCard Components', () => {
     });
 
     it('should render card title text', () => {
-      renderWithConfig(
+      render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -182,7 +165,7 @@ describe('SocialCard Components', () => {
     });
 
     it('should render card body with description', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -195,7 +178,7 @@ describe('SocialCard Components', () => {
     });
 
     it('should render card date', () => {
-      renderWithConfig(
+      render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -206,7 +189,7 @@ describe('SocialCard Components', () => {
     });
 
     it('should have card date section', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -221,7 +204,7 @@ describe('SocialCard Components', () => {
         ...mockCardData,
         description: '<p>Safe content</p><script>alert("xss")</script>'
       };
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={cardWithHtmlContent} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -237,7 +220,7 @@ describe('SocialCard Components', () => {
         ...mockCardData,
         description: 'Plain text description'
       };
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={cardWithPlainText} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -253,7 +236,7 @@ describe('SocialCard Components', () => {
         ...mockCardData,
         link: 'https://github.com/project/issue'
       };
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={githubCard} 
           iconSrc="/images/logos/github-logo.png" 
@@ -269,7 +252,7 @@ describe('SocialCard Components', () => {
         ...mockCardData,
         link: 'https://custom-domain.com/unique/path'
       };
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={customCard} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -281,7 +264,7 @@ describe('SocialCard Components', () => {
     });
 
     it('should render with all required props', () => {
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={mockCardData} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -318,7 +301,7 @@ describe('SocialCard Components', () => {
     it('should initialize with default source options', () => {
       // SocialCards merges provided sources with defaults
       const minimalSources = {};
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCards sources={minimalSources} />
       );
       // Component should render (loading state initially)
@@ -358,7 +341,7 @@ describe('SocialCard Components', () => {
         }
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCards sources={multipleSources} />
       );
       expect(container).toBeInTheDocument();
@@ -374,7 +357,7 @@ describe('SocialCard Components', () => {
         }
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCards sources={sources} />
       );
       expect(container).toBeInTheDocument();
@@ -391,7 +374,7 @@ describe('SocialCard Components', () => {
         guid: 'guid-no-desc'
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={cardNoDescription} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -413,7 +396,7 @@ describe('SocialCard Components', () => {
         }
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={cardLongTitle} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -432,7 +415,7 @@ describe('SocialCard Components', () => {
         guid: 'guid-special'
       };
 
-      renderWithConfig(
+      render(
         <SocialCard 
           card={specialCard} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -451,7 +434,7 @@ describe('SocialCard Components', () => {
         guid: 'guid-null-date'
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={cardNullDate as any} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -472,7 +455,7 @@ describe('SocialCard Components', () => {
         guid: 'github-guid'
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={githubCard} 
           iconSrc="/images/logos/github-logo.png" 
@@ -492,7 +475,7 @@ describe('SocialCard Components', () => {
         guid: 'twitter-guid'
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={twitterCard} 
           iconSrc="/images/logos/twitter-logo.png" 
@@ -512,7 +495,7 @@ describe('SocialCard Components', () => {
         guid: 'youtube-guid'
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={youtubeCard} 
           iconSrc="/images/logos/youtube-logo.png" 
@@ -534,7 +517,7 @@ describe('SocialCard Components', () => {
         guid: 'html-guid'
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={htmlCard} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -555,7 +538,7 @@ describe('SocialCard Components', () => {
         guid: 'safe-guid'
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={safeCard} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -577,7 +560,7 @@ describe('SocialCard Components', () => {
         guid: 'dead-href-guid'
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={deadHrefCard} 
           iconSrc="/images/logos/blog-logo.png" 
@@ -598,7 +581,7 @@ describe('SocialCard Components', () => {
         guid: 'valid-url-guid'
       };
 
-      const { container } = renderWithConfig(
+      const { container } = render(
         <SocialCard 
           card={validUrlCard} 
           iconSrc="/images/logos/blog-logo.png" 

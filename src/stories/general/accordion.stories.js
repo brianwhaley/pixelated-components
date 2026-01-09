@@ -25,28 +25,6 @@ export const AccordionDefault = () => (
   <Accordion items={mockItems} />
 );
 
-export const AccordionWithHTMLContent = () => (
-  <Accordion items={[
-    {
-      title: 'Rich Content Example',
-      content: (
-        <div>
-          <p>This accordion item contains <strong>HTML content</strong>.</p>
-          <ul>
-            <li>List item 1</li>
-            <li>List item 2</li>
-          </ul>
-        </div>
-      )
-    }
-  ]} />
-);
-
-export const AccordionSingleItem = () => (
-  <Accordion items={[
-    {
-      title: 'Single FAQ',
-      content: 'This is a single accordion item for testing.'
-    }
-  ]} />
-);
+export const AccordionPlayground = {
+  render: (args) => <Accordion {...args} />
+};

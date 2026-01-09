@@ -22,10 +22,3 @@ const Template = (args: any) => <GoogleReviewsCard {...args} />;
 
 export const Default: any = Template.bind({});
 Default.storyName = 'Standard Reviews (Config Driven)';
-
-export const ManualOverride: any = Template.bind({});
-ManualOverride.args = {
-	apiKey: 'AIzaSyBJVi0O9Ir9imRgINLZbojTifatX-Z4aUs',
-	proxyBase: 'https://proxy.pixelated.tech/prod/proxy?url=',
-};
-ManualOverride.storyName = 'Manual Props Override';

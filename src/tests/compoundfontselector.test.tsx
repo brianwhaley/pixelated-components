@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '../test/test-utils';
 import { CompoundFontSelector } from '../components/sitebuilder/config/CompoundFontSelector';
 
 // Mock the FontSelector component to avoid complex dependencies

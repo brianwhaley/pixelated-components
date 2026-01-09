@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render } from '@testing-library/react';
+import { render } from '../test/test-utils';
 import { GoogleSearch } from '@/components/general/googlesearch';
 import type { GoogleSearchType } from '@/components/general/googlesearch';
 

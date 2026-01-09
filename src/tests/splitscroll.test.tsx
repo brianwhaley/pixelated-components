@@ -1,8 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../test/test-utils';
 import { SplitScroll } from '../components/general/splitscroll';
-import { PixelatedClientConfigProvider } from '../components/config/config.client';
 
 // Mock the SmartImage component
 vi.mock('../components/general/smartimage', () => ({
@@ -35,11 +34,7 @@ const mockConfig = {
 };
 
 const renderWithConfig = (component: React.ReactElement) => {
-	return render(
-		<PixelatedClientConfigProvider config={mockConfig}>
-			{component}
-		</PixelatedClientConfigProvider>
-	);
+	return render(component, { config: mockConfig });
 };
 
 describe('SplitScroll Component', () => {

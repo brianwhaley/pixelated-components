@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { render } from '@testing-library/react';
+import { render } from '../test/test-utils';
 import type { SiteInfo } from '@/components/config/config.types';
 import { LocalBusinessSchema, type LocalBusinessSchemaType } from '@/components/general/schema-localbusiness';
 import configData from '@/tests/configbuilder.test.json';
