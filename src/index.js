@@ -2,6 +2,7 @@
 
 export * from './components/config/config.client';
 export * from './components/config/config.types';
+export * from './components/config/config.utils';
 
 export * from './components/general/404';
 export * from './components/general/accordion';

@@ -33,7 +33,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
     it('should provide config to child components through context', () => {
       const config = {
         cloudinary: { product_env: 'production', secure: true },
-        featureFlags: { newUI: true, betaFeatures: false }
+        global: { proxyUrl: "test" },
       };
 
       render(
@@ -63,7 +63,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
 
     it('should handle partial config', () => {
       const config = {
-        featureFlags: { feature1: true }
+        global: { proxyUrl: "test" },
       };
 
       render(
@@ -124,7 +124,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
 
     it('should render without error when provider is present', () => {
       // This test verifies that when the provider is present, no error is thrown
-      const config = { featureFlags: { test: true } };
+      const config = { global: { proxyUrl: "test" } };
 
       render(
         <PixelatedClientConfigProvider config={config}>
@@ -137,7 +137,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
 
     it('should allow accessing config in deeply nested components', () => {
       const config = {
-        featureFlags: { deepTest: true }
+        global: { proxyUrl: "test" },
       };
 
       function DeepComponent() {
@@ -163,7 +163,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
   describe('Config updates', () => {
     it('should update config when provider receives new config', () => {
       const { rerender } = render(
-        <PixelatedClientConfigProvider config={{ featureFlags: { test: false } }}>
+        <PixelatedClientConfigProvider config={{ global: { proxyUrl: "test" } }}>
           <TestComponent />
         </PixelatedClientConfigProvider>
       );
@@ -171,7 +171,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
       expect(screen.getByTestId('config-check')).toHaveTextContent('has-config');
 
       rerender(
-        <PixelatedClientConfigProvider config={{ featureFlags: { test: true } }}>
+        <PixelatedClientConfigProvider config={{ global: { proxyUrl: "test" } }}>
           <TestComponent />
         </PixelatedClientConfigProvider>
       );
@@ -182,7 +182,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
     it('should handle partial config updates', () => {
       const initialConfig = {
         cloudinary: { product_env: 'dev' },
-        featureFlags: { flag1: true }
+        global: { proxyUrl: "test" },
       };
 
       const { rerender } = render(
@@ -195,7 +195,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
 
       const updatedConfig = {
         cloudinary: { product_env: 'staging' },
-        featureFlags: { flag1: false }
+        global: { proxyUrl: "test" },
       };
 
       rerender(
@@ -211,11 +211,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
   describe('Edge cases', () => {
     it('should handle feature flags with various values', () => {
       const config = {
-        featureFlags: {
-          'feature-with-dashes': true,
-          'feature_with_underscores': false,
-          'featureWithCaps': true
-        }
+        global: { proxyUrl: "test" },
       };
 
       render(
@@ -229,9 +225,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
 
     it('should handle many feature flags', () => {
       const config = {
-        featureFlags: Object.fromEntries(
-          Array(50).fill(null).map((_, i) => [`feature${i}`, i % 2 === 0])
-        )
+        global: { proxyUrl: "test" },
       };
 
       render(
@@ -261,7 +255,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
 
     it('should handle empty feature flags object', () => {
       const config = {
-        featureFlags: {}
+        global: { proxyUrl: "test" },
       };
 
       render(
@@ -277,7 +271,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
   describe('Performance and memory', () => {
     it('should not cause memory leaks with multiple provider/consumer pairs', () => {
       const configs = Array(10).fill(null).map((_, i) => ({
-        featureFlags: { [`feature${i}`]: true }
+        global: { proxyUrl: "test" },
       }));
 
       const { unmount } = render(
@@ -298,7 +292,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
     it('should efficiently update multiple consumers', () => {
       const { rerender } = render(
         <div>
-          <PixelatedClientConfigProvider config={{ featureFlags: { test: false } }}>
+          <PixelatedClientConfigProvider config={{ global: { proxyUrl: "test" } }}>
             <TestComponent />
             <TestComponent />
           </PixelatedClientConfigProvider>
@@ -309,7 +303,7 @@ describe('PixelatedClientConfigProvider & usePixelatedConfig', () => {
 
       rerender(
         <div>
-          <PixelatedClientConfigProvider config={{ featureFlags: { test: true } }}>
+          <PixelatedClientConfigProvider config={{ global: { proxyUrl: "test" } }}>
             <TestComponent />
             <TestComponent />
           </PixelatedClientConfigProvider>
@@ -338,56 +332,57 @@ describe('Config Utility Functions', () => {
   describe('getClientOnlyPixelatedConfig', () => {
     it('should strip secret keys from config', () => {
       const fullConfig = {
-        cloudinary: { product_env: 'test' },
-        apiKey: 'secret-key',
-        token: 'secret-token',
-        password: 'secret-password',
-        management: { key: 'secret' },
-        access_token: 'secret-access',
-        normalKey: 'normal-value'
-      };
-
-      const clientConfig = getClientOnlyPixelatedConfig(fullConfig as any);
-      
-      expect(clientConfig).toEqual({
-        cloudinary: { product_env: 'test' }
-      });
-    });
-
-    it('should handle nested objects with secrets', () => {
-      const fullConfig = {
-        level1: {
-          level2: {
-            secretKey: 'secret',
-            normalKey: 'normal'
-          },
-          normalKey: 'normal'
+        cloudinary: { 
+          product_env: 'test',
+          api_key: 'secret-key',
+          api_secret: 'secret-secret'
+        },
+        PIXELATED_CONFIG_KEY: 'master-key',
+        paypal: {
+          payPalSecret: 'secret-paypal'
         }
       };
 
       const clientConfig = getClientOnlyPixelatedConfig(fullConfig as any);
       
       expect(clientConfig).toEqual({
-        level1: {
-          level2: {},
+        cloudinary: { product_env: 'test' },
+        paypal: {}
+      });
+    });
+
+    it('should handle nested objects with secrets', () => {
+      const fullConfig = {
+        cloudinary: {
+          subLevel: {
+            api_key: 'secret'
+          }
+        }
+      };
+
+      const clientConfig = getClientOnlyPixelatedConfig(fullConfig as any);
+      
+      expect(clientConfig).toEqual({
+        cloudinary: {
+          subLevel: {},
         }
       });
     });
 
     it('should handle arrays correctly', () => {
       const fullConfig = {
-        items: [
-          { secret: 'secret1', normal: 'normal1' },
-          { secret: 'secret2', normal: 'normal2' }
+        cloudinary: [
+          { api_key: 'secret1', product_env: 'env1' },
+          { api_key: 'secret2', product_env: 'env2' }
         ]
       };
 
       const clientConfig = getClientOnlyPixelatedConfig(fullConfig as any);
       
       expect(clientConfig).toEqual({
-        items: [
-          { normal: 'normal1' },
-          { normal: 'normal2' }
+        cloudinary: [
+          { product_env: 'env1' },
+          { product_env: 'env2' }
         ]
       });
     });
@@ -404,35 +399,38 @@ describe('Config Utility Functions', () => {
       expect(clientConfig).toEqual({});
 
       const clientConfig2 = getClientOnlyPixelatedConfig(undefined);
-      expect(clientConfig2).toEqual({});
+      // Since we now have a real config file in src/config/, undefined will load it.
+      // We just ensure it returns an object.
+      expect(clientConfig2).toBeDefined();
+      expect(typeof clientConfig2).toBe('object');
     });
 
-    it('should handle complex secret key patterns', () => {
+    it('should ignore heuristic patterns and only use explicit keys', () => {
       const fullConfig = {
-        'api_key': 'secret1',
-        'API_KEY': 'secret2',
-        'ApiKey': 'secret3',
-        'accessToken': 'secret4',
-        'ACCESS_TOKEN': 'secret5',
-        'password_field': 'secret6',
-        'management_url': 'secret7',
+        'API_KEY': 'not-secret-because-not-exposed', // explicitly not in whitelist/blacklist
+        'password': 'not-secret-because-not-exposed', 
+        'access_token': 'not-secret-because-not-exposed',
+        'PIXELATED_CONFIG_KEY': 'this-is-secret',
         normal: 'normal'
       };
 
       const clientConfig = getClientOnlyPixelatedConfig(fullConfig as any);
       
       expect(clientConfig).toEqual({
+        'API_KEY': 'not-secret-because-not-exposed',
+        'password': 'not-secret-because-not-exposed',
+        'access_token': 'not-secret-because-not-exposed',
         normal: 'normal'
       });
     });
 
     it('should handle errors during stripping', () => {
-      // Create a circular reference that will cause JSON operations to fail
+      // Create a circular reference that will cause recursion
       const circular: any = { self: null };
       circular.self = circular;
 
       const clientConfig = getClientOnlyPixelatedConfig(circular);
-      expect(clientConfig).toEqual({});
+      expect(clientConfig).toEqual({ self: '[Circular]' });
     });
   });
 });

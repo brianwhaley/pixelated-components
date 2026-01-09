@@ -4,6 +4,9 @@
 import type { PixelatedConfig } from './config.types';
 
 const pixelatedConfig: PixelatedConfig = {
+	global: {
+		proxyUrl: 'https://proxy.pixelated.tech/prod/proxy?url=',
+	},
 	cloudinary: {
 		product_env: 'your-cloud-name',
 		baseUrl: 'https://res.cloudinary.com',
@@ -32,9 +35,6 @@ const pixelatedConfig: PixelatedConfig = {
 		qsSearchURL: '?q=sunglasses&fieldgroups=full&category_ids=79720&aspect_filter=categoryId:79720&filter=sellers:{pixelatedtech}&sort=newlyListed&limit=200',
 		baseItemURL: 'https://api.ebay.com/buy/browse/v1/item',
 		qsItemURL: '/v1|295959752403|0?fieldgroups=PRODUCT,ADDITIONAL_SELLER_DETAILS',
-	},
-	featureFlags: {
-		enableNewGrid: true,
 	},
 	flickr: {
 		baseURL: 'https://api.flickr.com/services/rest/?',
@@ -69,9 +69,6 @@ const pixelatedConfig: PixelatedConfig = {
 		sandboxPayPalSecret: "your-sandbox-paypal-client-secret",
 		payPalApiKey: "your-paypal-client-id",
 		payPalSecret: "your-paypal-client-secret"
-	},
-	proxy: {
-		proxyURL: 'https://proxy.pixelated.tech/prod/proxy?url='
 	},
 	wordpress: {
 		baseURL: 'https://public-api.wordpress.com/rest/v1/sites/',

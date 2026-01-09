@@ -10,6 +10,7 @@ export * from './components/admin/sites/sites.integration';
 export * from './components/config/config';
 export * from './components/config/config.server';
 export * from './components/config/config.types';
+export * from './components/config/config.utils';
 export * from './components/config/crypto';
 
 // SEO

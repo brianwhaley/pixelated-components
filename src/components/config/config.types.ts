@@ -58,6 +58,10 @@ export interface GoogleAnalyticsConfig {
 	adId?: string; // e.g. AW-XXXXXXXXX
 }
 
+export interface GoogleMapsConfig {
+	apiKey: string;
+}
+
 export interface GoogleSearchConsoleConfig {
 	id: string;
 }
@@ -70,15 +74,20 @@ export interface HubspotConfig {
 	endpoint?: string; // optional API endpoint for server use
 }
 
+export interface InstagramConfig {
+	accessToken?: string;
+	userId?: string;
+}
+
+export interface GlobalConfig {
+	proxyUrl?: string; // e.g. 'https://proxy.pixelated.tech/prod/proxy?url='
+}
+
 export interface PaypalConfig {
 	sandboxPayPalApiKey: string;
 	sandboxPayPalSecret: string;
 	payPalApiKey: string;
 	payPalSecret: string;
-}
-
-export interface ProxyConfig {
-	proxyURL: string; // e.g. 'https://proxy.pixelated.tech/prod/proxy?url='
 }
 
 export interface WordpressConfig {
@@ -125,16 +134,53 @@ export interface SiteInfo {
 	favicon_type?: string;
 }
 
+/**
+ * Metadata defining which configuration keys are secrets and must be stripped
+ * before being sent to the client (browser).
+ */
+export const SECRET_CONFIG_KEYS = {
+	// Keys found at the root of the configuration object
+	global: [
+		'PIXELATED_CONFIG_KEY'
+	],
+	// Keys found within specific service configuration blocks
+	services: {
+		cloudinary: [
+			'api_key', 
+			'api_secret'
+		],
+		contentful: [
+			'management_access_token', 
+			'preview_access_token'
+		],
+		ebay: [
+			'appCertId',
+			'sbxAppId', 
+			'sbxAppCertId'
+		],
+		paypal: [
+			'sandboxPayPalApiKey',
+			'sandboxPayPalSecret',
+			'payPalApiKey',
+			'payPalSecret'
+		],
+		instagram: [
+			'accessToken'
+		]
+	}
+};
+
 export interface PixelatedConfig {
+	global?: GlobalConfig;
 	cloudinary?: CloudinaryConfig;
 	contentful?: ContentfulConfig;
 	ebay?: EbayConfig;
-	featureFlags?: Record<string, boolean>;
 	flickr?: FlickrConfig;
 	googleAnalytics?: GoogleAnalyticsConfig;
+	googleMaps?: GoogleMapsConfig;
 	googleSearchConsole?: GoogleSearchConsoleConfig;
 	hubspot?: HubspotConfig;
+	instagram?: InstagramConfig;
 	paypal?: PaypalConfig;
-	proxy?: ProxyConfig;
 	wordpress?: WordpressConfig;
 }

@@ -2,6 +2,7 @@
 
 ### When to Answer vs. When to Code
 **Answer questions directly** - Do not write code unless specifically asked to implement something. Users ask questions to get information, not code implementations.
+"If a message contains a question, the agent MUST provide a text-only answer and wait for user confirmation before calling any editing tools or terminal commands."
 
 **Common Question Patterns:**
 - "How does X work?" → Explain the concept, don't rewrite the code

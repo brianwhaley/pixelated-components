@@ -1,5 +1,6 @@
-import type { PixelatedConfig } from './config.types';
+import { type PixelatedConfig, SECRET_CONFIG_KEYS } from './config.types';
 import { decrypt, isEncrypted } from './crypto';
+import { getClientOnlyPixelatedConfig as stripSecrets } from './config.utils';
 import fs from 'fs';
 import path from 'path';
 
@@ -17,7 +18,7 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 	const filename = 'pixelated.config.json';
 	const paths = [
 		path.join(process.cwd(), 'src/app/config', filename),
-		path.join(process.cwd(), 'app/config', filename),
+		path.join(process.cwd(), 'src/config', filename),
 		path.join(process.cwd(), filename),
 		path.join(process.cwd(), '.next/server', filename), // Sometimes moved here in build
 	];
@@ -35,7 +36,7 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 	}
 
 	if (!raw) {
-		console.error('PIXELATED_CONFIG not found. Ensure src/app/config/pixelated.config.json is available.');
+		console.error('pixelated.config.json not found. Searched in src/app/config/, src/config/, and root.');
 		return {} as PixelatedConfig;
 	}
 
@@ -70,29 +71,7 @@ export function getFullPixelatedConfig(): PixelatedConfig {
  * This will walk the object and drop any fields that match a secret pattern.
  */
 export function getClientOnlyPixelatedConfig(full?: PixelatedConfig): PixelatedConfig {
-	const src = full ?? getFullPixelatedConfig();
-
-	function isSecretKey(key: string) {
-		// Explicitly allow common public-facing keys
-		if (/api_key|apikey|public_key/i.test(key)) return false;
-		return /token|secret|key|password|management|access/i.test(key);
-	}
-
-	function strip(obj: any): any {
-		if (!obj || typeof obj !== 'object') return obj;
-		if (Array.isArray(obj)) return obj.map(strip);
-		const out: any = {};
-		for (const k of Object.keys(obj)) {
-			if (isSecretKey(k)) continue;
-			out[k] = strip(obj[k]);
-		}
-		return out;
-	}
-
-	try {
-		return strip(src) as PixelatedConfig;
-	} catch (err) {
-		console.error('Failed to strip secrets from config', err);
-		return {} as PixelatedConfig;
-	}
+	const src = (full === undefined) ? getFullPixelatedConfig() : full;
+	if (src === null || typeof src !== 'object') return (src || {}) as PixelatedConfig;
+	return stripSecrets(src);
 }

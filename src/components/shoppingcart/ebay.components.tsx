@@ -65,8 +65,8 @@ export function EbayItems(props: EbayItemsType) {
 			}
 			const response: any = await getEbayItems({ apiProps: myApiProps });
 			if (debug) console.log("eBay API Get Items Data", response);
-			setItems(response.itemSummaries);
-			setAspects(response.refinement.aspectDistributions);
+			setItems(response?.itemSummaries || []);
+			setAspects(response?.refinement?.aspectDistributions || []);
 		} catch (error) {
 			console.error("Error fetching eBay items:", error);
 		}
@@ -116,13 +116,16 @@ EbayListFilter.propTypes = {
 export type EbayListFilterType = InferProps<typeof EbayListFilter.propTypes>;
 export function EbayListFilter(props: EbayListFilterType) {
 
+	if (!props.aspects || !Array.isArray(props.aspects)) {
+		return null;
+	}
+
 	const aspectNames = props.aspects.map(( aspect: any ) => (
 		aspect.localizedAspectName 
 	)).sort();
 
 	let aspectNamesValues: any = {};
-	for (let key in props.aspects) {
-		const aspect = props.aspects[key];
+	for (const aspect of props.aspects) {
 		const thisAspectName: string = aspect.localizedAspectName;
 		const aspectNameValues = aspect.aspectValueDistributions.map(( aspectValue: any ) => {
 			return ( aspectValue.localizedAspectValue );

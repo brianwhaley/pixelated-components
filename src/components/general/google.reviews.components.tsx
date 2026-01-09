@@ -4,9 +4,10 @@ import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { SmartImage } from './smartimage';
 import { getGoogleReviewsByPlaceId, GoogleReview, GooglePlaceSummary } from './google.reviews.functions';
+import { usePixelatedConfig } from '../config/config.client';
 import './google.reviews.css';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBtknq7LHzN0xb0lIN3K0CXXf0swVp6ReA';
+const GOOGLE_MAPS_API_KEY = 'AIzaSyBJVi0O9Ir9imRgINLZbojTifatX-Z4aUs';
 
 GoogleReviewsCard.propTypes = {
 	placeId: PropTypes.string.isRequired,
@@ -17,10 +18,14 @@ GoogleReviewsCard.propTypes = {
 };
 export type GoogleReviewsCardType = InferProps<typeof GoogleReviewsCard.propTypes>;
 export function GoogleReviewsCard(props: GoogleReviewsCardType) {
+	const config = usePixelatedConfig();
 	const [place, setPlace] = useState<GooglePlaceSummary | undefined>();
 	const [reviews, setReviews] = useState<GoogleReview[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+
+	const apiKey = props.apiKey || config?.googleMaps?.apiKey || GOOGLE_MAPS_API_KEY;
+	const proxyBase = props.proxyBase || config?.global?.proxyUrl || undefined;
 
 	useEffect(() => {
 		(async () => {
@@ -29,8 +34,8 @@ export function GoogleReviewsCard(props: GoogleReviewsCardType) {
 					placeId: props.placeId,
 					language: props.language ?? undefined,
 					maxReviews: props.maxReviews ?? undefined,
-					proxyBase: props.proxyBase ?? undefined,
-					apiKey: props.apiKey || GOOGLE_MAPS_API_KEY,
+					proxyBase: proxyBase,
+					apiKey: apiKey,
 				});
 				setPlace(result.place);
 				setReviews(result.reviews);

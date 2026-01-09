@@ -124,7 +124,7 @@ export function SmartImage(props: SmartImageType) {
 	newProps.height = parseNumber(props.height ?? 500);
 	newProps.quality = parseNumber(props.quality ?? 75);
 
-	const filename = (newProps.src).split('/').pop()?.split('?')[0] || '';
+	const filename = (String(newProps.src || '')).split('/').pop()?.split('?')[0] || '';
 	const imageName = filename.replace(/\.[^.]+$/, '');
 	newProps.id = newProps.id || newProps.name || sanitizeString(newProps.title) || sanitizeString(newProps.alt) || sanitizeString(imageName);
 	newProps.name = newProps.name || newProps.id || sanitizeString(newProps.title) || sanitizeString(newProps.alt) || sanitizeString(imageName);

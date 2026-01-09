@@ -94,7 +94,7 @@ describe('PixelatedServerConfigProvider', () => {
     it('should accept and use provided config', async () => {
       const config = {
         cloudinary: { product_env: 'production' },
-        featureFlags: { test: true }
+        global: { proxyUrl: "test" },
       };
 
       const children = <div>Content</div>;
@@ -130,7 +130,7 @@ describe('PixelatedServerConfigProvider', () => {
 
     it('should handle partial config', async () => {
       const config = {
-        featureFlags: { feature1: true }
+        global: { proxyUrl: "test" },
       };
 
       const children = <div>Content</div>;
@@ -165,7 +165,7 @@ describe('PixelatedServerConfigProvider', () => {
     it('should pass config to client provider', async () => {
       const config = {
         cloudinary: { product_env: 'production' },
-        featureFlags: { test: true }
+        global: { proxyUrl: "test" },
       };
 
       const children = <div>Content</div>;

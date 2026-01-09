@@ -82,6 +82,9 @@ getContentfulEntriesByType.propTypes = {
 export type getContentfulEntriesByTypeType = InferProps<typeof getContentfulEntriesByType.propTypes>;
 export async function getContentfulEntriesByType(props: getContentfulEntriesByTypeType) {
 	const allEntries: any = await getContentfulEntries({ apiProps: props.apiProps });
+	if (!allEntries || !allEntries.items) {
+		return { items: [] };
+	}
 	const typeEntries = [];
 	for (const item of allEntries.items) {
 		if ( item.sys.contentType.sys.id == props.contentType ) {
