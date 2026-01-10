@@ -15,11 +15,9 @@ const nextConfig: NextConfig = {
 	typescript: {
 		ignoreBuildErrors: true,
 	},
-	// Environment variables removed for secrets.
-	// All runtime configuration (Google creds, NextAuth secrets) should be provided via `src/app/config/pixelated.config.json` and accessed with `getFullPixelatedConfig()`.
-	// If you need to expose non-secret values to the client, use a server helper that returns `getClientOnlyPixelatedConfig()`.
-	env: {},
-
+	env: {
+		PIXELATED_CONFIG_KEY: process.env.PIXELATED_CONFIG_KEY,
+	},
 	images: {
 		remotePatterns: [
 			{
