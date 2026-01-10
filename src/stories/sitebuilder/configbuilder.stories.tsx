@@ -17,7 +17,7 @@ const downloadJsonFile = (data: any, filename: string) => {
 };
 
 export default {
-	title: 'SiteBuilder/Config',
+	title: 'Admin/SiteBuilder/Config',
 	component: ConfigBuilder
 };
 

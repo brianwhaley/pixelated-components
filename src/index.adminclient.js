@@ -7,6 +7,7 @@ export * from './components/admin/site-health/site-health-axe-core';
 export * from './components/admin/site-health/site-health-cloudwatch';
 export * from './components/admin/site-health/site-health-cloudwatch.integration';
 export * from './components/admin/site-health/site-health-core-web-vitals.integration';
+export * from './components/admin/site-health/site-health-axe-core.integration';
 export * from './components/admin/site-health/site-health-dependency-vulnerabilities';
 export * from './components/admin/site-health/site-health-github';
 export * from './components/admin/site-health/site-health-google-analytics';

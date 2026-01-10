@@ -1,7 +1,7 @@
-import { CompoundFontSelector } from '../../components/sitebuilder/config/CompoundFontSelector';
+import { CompoundFontSelector } from '@/components/sitebuilder/config/CompoundFontSelector';
 
 export default {
-	title: 'SiteBuilder/Config/CompoundFontSelector',
+	title: 'Admin/SiteBuilder/Config',
 	component: CompoundFontSelector,
 	parameters: {
 		layout: 'padded',
@@ -20,4 +20,4 @@ export default {
 	},
 };
 
-export const Playground = {};
+export const CompoundFontSelectorPlayground = {};

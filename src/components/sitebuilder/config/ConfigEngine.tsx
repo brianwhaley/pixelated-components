@@ -1,9 +1,13 @@
 import React from 'react';
 import { generateGoogleFontsUrl } from './google-fonts';
 import { ALL_WEBSAFE_FONTS } from './fonts';
+import { assertVisualDesign } from '../../config/config.validators';
+import type { VisualDesignType } from './ConfigBuilder';
 
-export function VisualDesignStyles({ visualdesign }: { visualdesign?: Record<string, any> }) {
-	const tokens = visualdesign || {};
+export function VisualDesignStyles({ visualdesign }: { visualdesign: VisualDesignType }) {
+	// Validate visualdesign early so invalid routes.json fails fast
+	assertVisualDesign(visualdesign);
+	const tokens: Record<string, any> = visualdesign as any;
 
 	const resolveValue = (v: any) => (v && typeof v === 'object' && 'value' in v) ? v.value : v;
 
@@ -51,8 +55,8 @@ export function VisualDesignStyles({ visualdesign }: { visualdesign?: Record<str
 		if (key.endsWith('-primary')) {
 			const baseKey = key.replace('-primary', '');
 			const primary = value;
-			const fallback = resolveValue(tokens[`${baseKey}-fallback`]);
-			const generic = resolveValue(tokens[`${baseKey}-generic`]);
+			const fallback = resolveValue((tokens as any)[`${baseKey}-fallback`]);
+			const generic = resolveValue((tokens as any)[`${baseKey}-generic`]);
 
 			// Build font stack: "Primary Font", Fallback, generic
 			const fontStack = [primary, fallback, generic].filter(Boolean).map(f => `"${f}"`).join(', ');
@@ -118,8 +122,8 @@ export function VisualDesignStyles({ visualdesign }: { visualdesign?: Record<str
 /**
  * Component to handle Google Fonts imports - should be used in the document head
  */
-export function GoogleFontsImports({ visualdesign }: { visualdesign?: Record<string, any> }) {
-	const tokens = visualdesign || {};
+export function GoogleFontsImports({ visualdesign }: { visualdesign: VisualDesignType }) {
+	const tokens: Record<string, any> = visualdesign as any;
 
 	const fonts: string[] = [];
 

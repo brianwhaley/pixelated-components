@@ -3,6 +3,8 @@ import PropTypes, { InferProps } from "prop-types";
 // import { usePixelatedConfig } from '../config/config.client';
 import type { SiteInfo } from '../config/config.types';
 
+
+
 /**
  * LocalBusiness Schema Component
  * Generates JSON-LD structured data for SEO
@@ -30,12 +32,10 @@ LocalBusinessSchema.propTypes = {
 	sameAs: PropTypes.arrayOf(PropTypes.string), // Social media profiles
 	siteInfo: PropTypes.object // Required siteinfo from parent component
 };
-
 export type LocalBusinessSchemaType = InferProps<typeof LocalBusinessSchema.propTypes>;
-
 export function LocalBusinessSchema (props: LocalBusinessSchemaType) {
 	// const config = usePixelatedConfig();
-	const siteInfo = (props.siteInfo as SiteInfo);
+	const siteInfo = props.siteInfo as SiteInfo | undefined;
 
 	// Use props if provided, otherwise fall back to siteInfo
 	const name = props.name || siteInfo?.name;

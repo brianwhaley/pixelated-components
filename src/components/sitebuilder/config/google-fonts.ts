@@ -3,6 +3,8 @@
  * Fetches and caches Google Fonts data for use in visual design forms
  */
 
+import { getFullPixelatedConfig } from '../../config/config';
+
 export interface GoogleFont {
   family: string;
   variants: string[];
@@ -51,7 +53,7 @@ const FALLBACK_GOOGLE_FONTS: GoogleFont[] = [
 
 /**
  * Fetch Google Fonts list from API
- * Note: Requires GOOGLE_FONTS_API_KEY environment variable
+ * Reads API key from `pixelated.config.json` under `google.api_key` (server-side)
  */
 export async function fetchGoogleFonts(): Promise<GoogleFont[]> {
 	// Check cache first
@@ -59,9 +61,10 @@ export async function fetchGoogleFonts(): Promise<GoogleFont[]> {
 		return fontsCache;
 	}
 
-	const apiKey = process.env.GOOGLE_FONTS_API_KEY;
+	const cfg = getFullPixelatedConfig();
+	const apiKey = cfg?.google?.api_key;
 	if (!apiKey) {
-		console.warn('GOOGLE_FONTS_API_KEY not set, returning empty fonts list');
+		console.warn('google.api_key not set in pixelated.config.json; returning empty fonts list');
 		return [];
 	}
 

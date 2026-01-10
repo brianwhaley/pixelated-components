@@ -3,7 +3,7 @@ import { PageEngine } from '@/components/sitebuilder/page/components/PageEngine'
 import '@/css/pixelated.global.css';
 
 export default {
-	title: 'SiteBuilder/Page',
+	title: 'Admin/SiteBuilder/Page',
 	component: PageEngine,
 	parameters: {
 		layout: 'fullscreen',

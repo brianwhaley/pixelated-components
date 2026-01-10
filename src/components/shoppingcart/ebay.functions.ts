@@ -22,38 +22,74 @@ https://developer.ebay.com/my/auth?env=production&index=0
 */
 
 
-// category : 0 : {categoryId: '79720', categoryName: 'Sunglasses'}
-// category : 0 : {categoryId: '179241', categoryName: 'Accessories'}
-// categoryId : "79720"
-export const ebaySunglassCategory = '79720'; // Ebay Sunglasses Category
+/**
+ * Merges provided props with server-side config if available.
+ * This ensures functions work out-of-the-box on the server without manual prop passing.
+ */
+function getMergedEbayConfig(providedApiProps: any): EbayApiType {
+	let apiProps = { 
+		proxyURL: '',
+		baseTokenURL: '',
+		baseSearchURL: '',
+		qsSearchURL: '',
+		baseItemURL: '',
+		qsItemURL: '',
+		baseAnalyticsURL: '',
+		...providedApiProps 
+	};
+
+	if (typeof window === 'undefined') {
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-require-imports
+			const { getFullPixelatedConfig } = require('../config/config');
+			const config = getFullPixelatedConfig();
+			if (config) {
+				apiProps = { 
+					proxyURL: config.global?.proxyUrl || '',
+					...apiProps,
+					...(config.ebay || {}),
+					...providedApiProps 
+				};
+			}
+		} catch (e) {
+			// Fail-silent, use what we have
+		}
+	}
+	return apiProps as EbayApiType;
+}
 
 
 export type EbayApiType = {
-    proxyURL?: string,
-    baseTokenURL?: string,
+    proxyURL: string,
+    baseTokenURL: string,
     tokenScope: string, // changes per api call
-    baseSearchURL?: string,
-    qsSearchURL?: string,
-    baseItemURL?: string,
-    qsItemURL?: string,
-    baseAnalyticsURL?: string,
+    baseSearchURL: string,
+    qsSearchURL: string,
+    baseItemURL: string,
+    qsItemURL: string,
+    baseAnalyticsURL: string,
     appId: string, // clientId
     appCertId: string, // clientSecret
     globalId: string,
+    itemCategory?: string,
 }
 
 
 getShoppingCartItem.propTypes = {
 	thisItem: PropTypes.any.isRequired,
 	cloudinaryProductEnv: PropTypes.string,
+	apiProps: PropTypes.any,
 };
 export type getShoppingCartItemType = InferProps<typeof getShoppingCartItem.propTypes>;
 export function getShoppingCartItem(props: getShoppingCartItemType) {
 	let qty = 0;
 	const thisItem = props.thisItem;
-	if (thisItem.categoryId && thisItem.categoryId == ebaySunglassCategory) {
+	const apiProps = props.apiProps as EbayApiType;
+	const itemCategory = apiProps?.itemCategory;
+
+	if (thisItem.categoryId && thisItem.categoryId == itemCategory) {
 		qty = 1;
-	} else if (thisItem.categories[0].categoryId && thisItem.categories[0].categoryId == ebaySunglassCategory) {
+	} else if (thisItem.categories?.[0]?.categoryId && thisItem.categories[0].categoryId == itemCategory) {
 		qty = 1;
 	} else {
 		qty = 10;
@@ -82,25 +118,6 @@ getItem tokenScope: 'https://api.ebay.com/oauth/api_scope',
 */
 
 
-export const defaultEbayProps = {
-	proxyURL: "https://proxy.pixelated.tech/prod/proxy?url=",
-	baseTokenURL: 'https://api.ebay.com/identity/v1/oauth2/token',
-	tokenScope: 'https://api.ebay.com/oauth/api_scope',
-	baseSearchURL : 'https://api.ebay.com/buy/browse/v1/item_summary/search',
-	qsSearchURL: '?q=sunglasses&fieldgroups=full&category_ids=79720&aspect_filter=categoryId:79720&filter=sellers:{pixelatedtech}&sort=newlyListed&limit=200',
-	baseItemURL: 'https://api.ebay.com/buy/browse/v1/item',
-	qsItemURL: '/v1|295959752403|0?fieldgroups=PRODUCT,ADDITIONAL_SELLER_DETAILS',
-	baseAnalyticsURL: 'https://api.ebay.com/developer/analytics/v1_beta',
-	appId: '', // clientId
-	appDevId: '',
-	appCertId: '', // clientSecret
-	sbxAppId: '', // Sandbox
-	sbxAppDevId: '',
-	sbxAppCertId: '',
-	globalId: 'EBAY-US',
-};
-
-
 /* ========== GET TOKEN ========== */
 
 
@@ -109,34 +126,7 @@ getEbayAppToken.propTypes = {
 };
 export type getEbayAppTokenType = InferProps<typeof getEbayAppToken.propTypes>;
 export function getEbayAppToken(props: getEbayAppTokenType){
-	let apiProps = { ...defaultEbayProps, ...props.apiProps };
-
-	// Fallback to server-side config (Server-side context only)
-	if (typeof window === 'undefined') {
-		try {
-			// We use a dynamic require here to prevent client-side bundlers 
-			// from attempting to include server-side modules like 'fs' or 'path'
-			const { getFullPixelatedConfig } = require('../config/config');
-			const config = getFullPixelatedConfig();
-			
-			// Priority: 
-			// 1. props.apiProps (most specific override)
-			// 2. config.ebay (user's config file)
-			// 3. config.global.proxyUrl (user's global proxy)
-			// 4. defaultEbayProps (hardcoded fallbacks)
-			if (config) {
-				const globalProxy = config.global?.proxyUrl;
-				apiProps = { 
-					...defaultEbayProps, 
-					...(globalProxy ? { proxyURL: globalProxy } : {}),
-					...(config.ebay || {}),
-					...props.apiProps 
-				};
-			}
-		} catch (e) {
-			// Silicon-silent fail if config cannot be loaded
-		}
-	}
+	const apiProps = getMergedEbayConfig(props.apiProps);
 
 	const fetchToken = async () => {
 		if (debug) console.log("Fetching Token");
@@ -177,7 +167,7 @@ getEbayBrowseSearch.propTypes = {
 };
 export type getEbayBrowseSearchType = InferProps<typeof getEbayBrowseSearch.propTypes>;
 export function getEbayBrowseSearch(props: getEbayBrowseSearchType){
-	const apiProps = { ...defaultEbayProps, ...props.apiProps };
+	const apiProps = getMergedEbayConfig(props.apiProps);
 	const fetchData = async (token: string) => {
 		const fullURL = apiProps.baseSearchURL + apiProps.qsSearchURL;
 		const cacheKey = `search_${fullURL}`;
@@ -228,7 +218,7 @@ getEbayBrowseItem.propTypes = {
 };
 export type getEbayBrowseItemType = InferProps<typeof getEbayBrowseItem.propTypes>;
 export function getEbayBrowseItem(props: getEbayBrowseItemType){
-	const apiProps: EbayApiType = { ...defaultEbayProps, ...props.apiProps };
+	const apiProps = getMergedEbayConfig(props.apiProps);
 	const fetchData = async (token: string) => {
 		const fullURL = (apiProps.baseItemURL ?? '') + (apiProps.qsItemURL ?? '');
 		const cacheKey = `item_${fullURL}`;
@@ -273,13 +263,13 @@ export function getEbayBrowseItem(props: getEbayBrowseItemType){
 /* ========== RATE LIMITS ========== */
 
 
-getEbayAllRateLimits.propTypes = {
+getEbayRateLimits.propTypes = {
 	apiProps: PropTypes.object.isRequired,
 	token: PropTypes.string.isRequired,
 };
-export type getEbayAllRateLimitsType = InferProps<typeof getEbayAllRateLimits.propTypes>;
-export function getEbayAllRateLimits(props: getEbayAllRateLimitsType){
-	const apiProps = { ...defaultEbayProps, ...props.apiProps };
+export type getEbayRateLimitsType = InferProps<typeof getEbayRateLimits.propTypes>;
+export function getEbayRateLimits(props: getEbayRateLimitsType){
+	const apiProps = getMergedEbayConfig(props.apiProps);
 	
 	const fetchAllLimits = async (token: string) => {
 		if (debug) console.log("Fetching all eBay API Rate Limits");
@@ -331,7 +321,7 @@ getEbayItems.propTypes = {
 };
 export type getEbayItemsType = InferProps<typeof getEbayItems.propTypes>;
 export async function getEbayItems(props: getEbayItemsType) {
-	const apiProps: EbayApiType = { ...defaultEbayProps, ...props.apiProps };
+	const apiProps = getMergedEbayConfig(props.apiProps);
 	try {
 		const response = await getEbayAppToken({apiProps: apiProps});
 		if (debug) console.log("eBay App Token Response:", response);
@@ -352,7 +342,7 @@ getEbayItem.propTypes = {
 };
 export type getEbayItemType = InferProps<typeof getEbayItem.propTypes>;
 export async function getEbayItem(props: getEbayItemType) {
-	const apiProps: EbayApiType = { ...defaultEbayProps, ...props.apiProps };
+	const apiProps = getMergedEbayConfig(props.apiProps);
 	try {
 		const response = await getEbayAppToken({apiProps: apiProps});
 		if (debug) console.log("eBay App Token Response:", response);
@@ -372,7 +362,7 @@ export async function getEbayItem(props: getEbayItemType) {
 /* ========== ITEM SEARCH ========== */
 
 export function getEbayItemsSearch(props: any){
-	const apiProps = { ...defaultEbayProps, ...props.apiProps };
+	const apiProps = getMergedEbayConfig(props.apiProps);
 	const fetchData = async (token: string) => {
 		const fullURL = apiProps.baseSearchURL + apiProps.qsSearchURL;
 		const cacheKey = `search_${fullURL}`;

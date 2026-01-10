@@ -2,7 +2,7 @@ import { FormBuilder } from '@/components/sitebuilder/form/formbuilder';
 import '@/css/pixelated.global.css';
 
 export default {
-	title: 'SiteBuilder/Form',
+	title: 'Admin/SiteBuilder/Form',
 	component: FormBuilder
 };
 

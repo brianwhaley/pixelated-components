@@ -21,10 +21,6 @@ const mockItems = [
   }
 ];
 
-export const AccordionDefault = () => (
-  <Accordion items={mockItems} />
-);
-
-export const AccordionPlayground = {
-  render: (args) => <Accordion {...args} />
+export const AccordionPlayground  = {
+  render: (args) => <Accordion {...args} items={mockItems} />
 };

@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 import { getAllRoutes } from "./metadata.functions";
 import { getWordPressItems, getWordPressItemImages } from "../general/wordpress.functions";
 import { getContentfulFieldValues, getContentfulAssetURLs } from "../general/contentful.delivery";
-import { getEbayAppToken, getEbayItemsSearch, defaultEbayProps } from "../shoppingcart/ebay.functions";
+import { getEbayAppToken, getEbayItemsSearch } from "../shoppingcart/ebay.functions";
 import { getFullPixelatedConfig } from '../config/config';
 
 
@@ -368,7 +368,6 @@ export async function createEbayItemURLs(origin: string) {
 	const globalProxy = config.global?.proxyUrl;
 
 	const ebayProps = { 
-		...defaultEbayProps, 
 		...(globalProxy ? { proxyURL: globalProxy } : {}),
 		...config.ebay 
 	};

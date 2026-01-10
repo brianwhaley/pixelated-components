@@ -2,7 +2,7 @@ import React from 'react';
 import { PageSection, PageGridItem, PageFlexItem } from '@/components/general/semantic';
 
 export default {
-	title: 'Page Layout',
+	title: 'General',
 	component: PageSection,
 	parameters: {
 		docs: {
@@ -68,8 +68,8 @@ const DemoItem = ({ children, style }) => (
 	</div>
 );
 
-export const GridLayout = {
-	name: 'Grid Layout (3 Columns)',
+export const LayoutGrid = {
+	name: 'Layout - Grid (3 Columns)',
 	args: {
 		layoutType: 'grid',
 		columns: 3,
@@ -88,8 +88,8 @@ export const GridLayout = {
 	),
 };
 
-export const GridWithSpans = {
-	name: 'Grid with Column Spans',
+export const LayoutGridWithSpans = {
+	name: 'Layout - Grid with Column Spans',
 	args: {
 		layoutType: 'grid',
 		columns: 4,
@@ -117,8 +117,8 @@ export const GridWithSpans = {
 	),
 };
 
-export const FlexLayout = {
-	name: 'Flex Layout (Space Between)',
+export const LayoutFlex = {
+	name: 'Layout - Flex (Space Between)',
 	args: {
 		layoutType: 'flex',
 		direction: 'row',
@@ -135,8 +135,8 @@ export const FlexLayout = {
 	),
 };
 
-export const FlexWithItems = {
-	name: 'Flex Items with Custom Sizing',
+export const LayoutFlexWithItems = {
+	name: 'Layout - Flex Items with Custom Sizing',
 	args: {
 		layoutType: 'flex',
 		direction: 'row',
@@ -158,8 +158,8 @@ export const FlexWithItems = {
 	),
 };
 
-export const ResponsiveGrid = {
-	name: 'Responsive Grid (Desktop 3, Tablet 2, Mobile 1)',
+export const LayoutResponsiveGrid = {
+	name: 'Layout - Responsive Grid (Desktop 3, Tablet 2, Mobile 1)',
 	args: {
 		layoutType: 'grid',
 		columns: 3,
@@ -191,8 +191,8 @@ export const ResponsiveGrid = {
 	},
 };
 
-export const CenteredContent = {
-	name: 'Centered Content',
+export const LayoutCenteredContent = {
+	name: 'Layout - Centered Content',
 	args: {
 		layoutType: 'flex',
 		alignItems: 'center',
@@ -228,8 +228,8 @@ export const CenteredContent = {
 	),
 };
 
-export const TwoColumnLayout = {
-	name: 'Two Column Layout (60/40 Split)',
+export const LayoutTwoColumn = {
+	name: 'Layout - Two Column (60/40 Split)',
 	args: {
 		layoutType: 'flex',
 		direction: 'row',
@@ -258,8 +258,8 @@ export const TwoColumnLayout = {
 	),
 };
 
-export const NestedLayouts = {
-	name: 'Nested Layouts',
+export const LayoutNested = {
+	name: 'Layout - Nested',
 	args: {
 		layoutType: 'grid',
 		columns: 2,
@@ -306,8 +306,8 @@ export const NestedLayouts = {
 	},
 };
 
-export const MasonryGrid = {
-	name: 'Masonry-style Grid (Dense Auto Flow)',
+export const LayoutMasonryGrid = {
+	name: 'Layout - Masonry-style Grid (Dense Auto Flow)',
 	args: {
 		layoutType: 'grid',
 		columns: 4,

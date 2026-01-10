@@ -8,7 +8,7 @@ function onSubmit(){
 }
 
 export default {
-	title: 'SiteBuilder/Form',
+	title: 'Admin/SiteBuilder/Form',
 	component: FormEngine,
 };
 

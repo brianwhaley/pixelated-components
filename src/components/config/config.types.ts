@@ -32,9 +32,11 @@ export interface EbayConfig {
 	tokenScope?: string;
 	baseTokenURL?: string,
 	baseSearchURL?: string,
+	baseAnalyticsURL?: string,
 	qsSearchURL?: string,
 	baseItemURL?: string,
 	qsItemURL?: string,
+	itemCategory?: string,
 }
 
 export interface FlickrConfig {
@@ -53,6 +55,18 @@ export interface FlickrConfig {
 		callback?: string; // function name for JSONP
 		nojsoncallback?: string; // 'true' if no callback function, else omit or set to 'false'
 	}
+}
+
+export interface GlobalConfig {
+	proxyUrl?: string; // e.g. 'https://proxy.pixelated.tech/prod/proxy?url='
+	pagesDir?: string; // override pages directory used by page builder
+}
+
+export interface Google {
+	client_id: string;
+	client_secret: string;
+	api_key: string;
+	refresh_token: string;
 }
 
 export interface GoogleAnalyticsConfig {
@@ -81,8 +95,9 @@ export interface InstagramConfig {
 	userId?: string;
 }
 
-export interface GlobalConfig {
-	proxyUrl?: string; // e.g. 'https://proxy.pixelated.tech/prod/proxy?url='
+export interface NextAuth {
+	secret: string;
+	url: string;
 }
 
 export interface PaypalConfig {
@@ -97,22 +112,26 @@ export interface WordpressConfig {
 	site: string; // WordPress site identifier (e.g., 'pixelatedviews.wordpress.com')
 }
 
+export type DisplayMode = 'standalone' | 'fullscreen' | 'minimal-ui' | 'browser';
+
 export interface SiteInfo {
+	// Core site fields are required for downstream schemas (Website, LocalBusiness).
+	// Keep secondary fields optional for backward compatibility.
 	name: string;
 	description: string;
 	url: string;
 	email?: string;
 	image?: string;
-	image_height?: string;
-	image_width?: string;
+	image_height?: string | number;
+	image_width?: string | number;
 	favicon?: string;
 	telephone?: string;
 	address?: {
-		streetAddress: string;
-		addressLocality: string;
-		addressRegion: string;
-		postalCode: string;
-		addressCountry: string;
+		streetAddress?: string;
+		addressLocality?: string;
+		addressRegion?: string;
+		postalCode?: string;
+		addressCountry?: string;
 	};
 	openingHours?: string;
 	priceRange?: string;
@@ -122,7 +141,7 @@ export interface SiteInfo {
 	copyrightYear?: number;
 	potentialAction?: {
 		"@type"?: string;
-		target: string;
+		target?: string;
 		"query-input"?: string;
 		queryInput?: string;
 	};
@@ -131,7 +150,7 @@ export interface SiteInfo {
 	theme_color?: string;
 	background_color?: string;
 	default_locale?: string;
-	display?: "standalone" | "fullscreen" | "minimal-ui" | "browser";
+	display?: DisplayMode;
 	favicon_sizes?: string;
 	favicon_type?: string;
 }
@@ -176,11 +195,14 @@ export interface PixelatedConfig {
 	contentful?: ContentfulConfig;
 	ebay?: EbayConfig;
 	flickr?: FlickrConfig;
+	globlalConfig?: GlobalConfig;
+	google?: Google;
 	googleAnalytics?: GoogleAnalyticsConfig;
 	googleMaps?: GoogleMapsConfig;
 	googleSearchConsole?: GoogleSearchConsoleConfig;
 	hubspot?: HubspotConfig;
 	instagram?: InstagramConfig;
+	nextAuth?: NextAuth;
 	paypal?: PaypalConfig;
 	wordpress?: WordpressConfig;
 }

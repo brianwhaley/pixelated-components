@@ -1,24 +1,30 @@
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { 
 	getEbayAppToken, 
 	getEbayBrowseSearch, 
 	getEbayBrowseItem, 
-	getEbayAllRateLimits,
+	getEbayRateLimits,
 	getShoppingCartItem,
 	getEbayItems,
 	getEbayItem,
 	getEbayItemsSearch
 } from '../components/shoppingcart/ebay.functions';
 
-import { getFullPixelatedConfig } from '../components/config/config';
+import * as configModule from '../components/config/config';
+import { mockConfig } from '../test/config.mock';
 
 describe('ebay.functions logic', () => {
-	const config = getFullPixelatedConfig();
-	const apiProps = config.ebay;
+	const apiProps = mockConfig.ebay;
+	let getFullConfigSpy: any;
 
 	beforeEach(() => {
 		vi.resetAllMocks();
 		vi.stubGlobal('fetch', vi.fn());
+		getFullConfigSpy = vi.spyOn(configModule, 'getFullPixelatedConfig').mockReturnValue(mockConfig as any);
+	});
+
+	afterEach(() => {
+		getFullConfigSpy?.mockRestore();
 	});
 
 	describe('getEbayAppToken', () => {
@@ -77,7 +83,7 @@ describe('ebay.functions logic', () => {
 		});
 	});
 
-	describe('getEbayAllRateLimits', () => {
+	describe('getEbayRateLimits', () => {
 		it('should fetch and combine rate limits', async () => {
 			vi.mocked(global.fetch)
 				.mockResolvedValueOnce({
@@ -89,7 +95,7 @@ describe('ebay.functions logic', () => {
 					json: () => Promise.resolve({ rate_limit: 'user-data' })
 				} as Response);
 
-			const res = await getEbayAllRateLimits({ token: 'tok', apiProps: apiProps as any });
+			const res = await getEbayRateLimits({ token: 'tok', apiProps: apiProps as any });
 			expect(res?.rate_limit).toEqual({ rate_limit: 'global-data' });
 			expect(res?.user_rate_limit).toEqual({ rate_limit: 'user-data' });
 		});

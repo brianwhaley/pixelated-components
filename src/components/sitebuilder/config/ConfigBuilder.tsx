@@ -101,7 +101,7 @@ const VisualDesignPropTypes = {
 	'font-min-screen': PropTypes.shape(VisualDesignVariable).isRequired,
 	'font-max-screen': PropTypes.shape(VisualDesignVariable).isRequired,
 };
-type VisualDesignType = InferProps<typeof VisualDesignPropTypes>;
+export type VisualDesignType = InferProps<typeof VisualDesignPropTypes>;
 
 const SiteConfigPropTypes = {
 	siteInfo: PropTypes.shape(SiteInfoPropTypes).isRequired,

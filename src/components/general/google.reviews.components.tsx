@@ -7,7 +7,6 @@ import { getGoogleReviewsByPlaceId, GoogleReview, GooglePlaceSummary } from './g
 import { usePixelatedConfig } from '../config/config.client';
 import './google.reviews.css';
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyBJVi0O9Ir9imRgINLZbojTifatX-Z4aUs';
 
 GoogleReviewsCard.propTypes = {
 	placeId: PropTypes.string.isRequired,
@@ -24,7 +23,7 @@ export function GoogleReviewsCard(props: GoogleReviewsCardType) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 
-	const apiKey = props.apiKey || config?.googleMaps?.apiKey || GOOGLE_MAPS_API_KEY;
+	const apiKey = props.apiKey || config?.googleMaps?.apiKey || '';
 	const proxyBase = props.proxyBase || config?.global?.proxyUrl || undefined;
 
 	useEffect(() => {

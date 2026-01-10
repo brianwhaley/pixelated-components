@@ -84,6 +84,8 @@ export type Metadata = {
 };
 
 export const getMetadata = (routes: any, key: string = "name", value: string = "Home" ) => {
+	// Validate the routes blob early to fail fast if invalid
+	assertRoutes(routes);
 	const foundObject = getRouteByKey(routes, key, value);
 	if (foundObject) {
 		const metadata: Metadata = {
@@ -126,6 +128,9 @@ export function getAccordionMenuData(myRoutes: Route) {
 	return menuItems;
 }
 
+import { assertSiteInfo, assertRoutes } from '../config/config.validators';
+import type { SiteInfo } from '../config/config.types';
+
 export type GenerateMetaTagsProps = {
 	title: string;
 	description: string;
@@ -138,19 +143,25 @@ export type GenerateMetaTagsProps = {
 	image_height?: string;
 	image_width?: string;
 	favicon?: string;
-	siteInfo?: {
-		name?: string;
-		email?: string;
-		image?: string;
-		image_height?: string;
-		image_width?: string;
-		favicon?: string;
-	};
+	siteInfo?: SiteInfo;
 };
 
 export function generateMetaTags(props: GenerateMetaTagsProps) {
+
 	const { title, description, keywords, origin, url, site_name: prop_site_name, email: prop_email, image: prop_image, image_height: prop_image_height, image_width: prop_image_width, favicon: prop_favicon, siteInfo } = props;
-	
+
+	const safeOrigin = typeof origin === 'string' && origin.length > 0 ? origin : '';
+	const safeUrl = typeof url === 'string' && url.length > 0 ? url : '';
+	let newOrigin: string | undefined;
+	try {
+		newOrigin = safeOrigin ? new URL(safeOrigin).hostname : undefined;
+	} catch {
+		newOrigin = undefined;
+	}
+
+	// Validate siteInfo strictly so downstream sites must provide the contract
+	assertSiteInfo(siteInfo);
+
 	// Use props if provided, otherwise fall back to siteInfo
 	const site_name = prop_site_name || siteInfo?.name;
 	const email = prop_email || siteInfo?.email;
@@ -186,8 +197,8 @@ export function generateMetaTags(props: GenerateMetaTagsProps) {
 			<meta property="og:description" content={description} />
 			<meta property='og:email' content={email} />
 			<meta property="og:image" content={image} />
-			<meta property="og:image:height" content={image_height} />
-			<meta property="og:image:width" content={image_width} />
+			<meta property="og:image:height" content={image_height != null ? String(image_height) : undefined} />
+			<meta property="og:image:width" content={image_width != null ? String(image_width) : undefined} />
 			<meta property="og:locale" content="en_US" />
 			<meta property="og:site_name" content={site_name} />
 			<meta property="og:title" content={title} />
@@ -199,18 +210,18 @@ export function generateMetaTags(props: GenerateMetaTagsProps) {
 			<meta itemProp="description" content={description} />
 			<meta itemProp="thumbnailUrl" content={image} />
 
-			<meta property="twitter:domain" content={new URL(origin).hostname} />
+			<meta property="twitter:domain" content={newOrigin} />
 			<meta property="twitter:url" content={url} />
 			<meta name="twitter:card" content="summary_large_image" />
 			<meta name="twitter:creator" content={site_name} />
 			<meta name="twitter:description" content={description} />
 			<meta name="twitter:image" content={image} />
-			<meta name="twitter:image:height" content={image_height} />
-			<meta name="twitter:image:width" content={image_width} />
+			<meta name="twitter:image:height" content={image_height != null ? String(image_height) : undefined} />
+			<meta name="twitter:image:width" content={image_width != null ? String(image_width) : undefined} />
 			<meta name="twitter:title" content={title} />
 
 			{/* <link rel="alternate" href={url} hrefLang="en-us" /> */}
-			<link rel="author" href={origin} />
+			<link rel="author" href={newOrigin} />
 			<link rel="canonical" href={url} />
 			<link rel="icon" type="image/x-icon" href={favicon} />
 			<link rel="shortcut icon" type="image/x-icon" href={favicon} />

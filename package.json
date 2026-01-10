@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.8.1",
+	"version": "3.9.0",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -118,7 +118,7 @@
 		"@testing-library/react": "^16.3.1",
 		"@testing-library/user-event": "^14.6.1",
 		"@types/md5": "^2.3.6",
-		"@types/node": "^25.0.3",
+		"@types/node": "^25.0.5",
 		"@types/prop-types": "^15.7.15",
 		"@types/react": "^19.2.7",
 		"@types/react-dom": "^19.2.3",
@@ -173,8 +173,8 @@
 		"react-dom": "^19.2.0"
 	},
 	"optionalDependencies": {
-		"@aws-sdk/client-cloudwatch": "^3.965.0",
-		"@aws-sdk/client-route-53": "^3.965.0",
+		"@aws-sdk/client-cloudwatch": "^3.966.0",
+		"@aws-sdk/client-route-53": "^3.966.0",
 		"googleapis": "^170.0.0",
 		"md5": "^2.3.0",
 		"puppeteer": "^24.34.0",

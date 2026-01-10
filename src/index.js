@@ -3,6 +3,7 @@
 export * from './components/config/config.client';
 export * from './components/config/config.types';
 export * from './components/config/config.utils';
+export * from './components/config/config.validators';
 
 export * from './components/general/404';
 export * from './components/general/accordion';
@@ -41,6 +42,7 @@ export * from './components/general/menu-simple';
 export * from './components/general/metadata.components';
 export * from './components/general/metadata.functions';
 export * from './components/general/microinteractions';
+export * from './components/general/proxy-csp-listener';
 export * from './components/general/modal';
 export * from './components/general/nerdjoke';
 export * from './components/general/recipe';

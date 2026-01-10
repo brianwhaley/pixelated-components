@@ -11,6 +11,7 @@ export * from './components/config/config';
 export * from './components/config/config.server';
 export * from './components/config/config.types';
 export * from './components/config/config.utils';
+export * from './components/config/config.validators';
 export * from './components/config/crypto';
 
 // SEO

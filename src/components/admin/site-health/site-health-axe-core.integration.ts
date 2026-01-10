@@ -1,6 +1,10 @@
 "use server";
 
 import puppeteer from 'puppeteer';
+import fs from 'fs';
+import path from 'path';
+
+const debug = false;
 
 /**
  * Axe-Core Accessibility Analysis Integration Services
@@ -64,13 +68,15 @@ export interface AxeCoreData {
   };
   timestamp: string;
   status: 'success' | 'error';
+  warnings?: string[];
   error?: string;
+  injectionSource?: string;
 }
 
 export async function performAxeCoreAnalysis(url: string): Promise<AxeCoreData> {
 	try {
 		// Run axe-core analysis
-		const axeResult = await runAxeCoreAnalysis(url);
+		const { result: axeResult, injectionSource } = await runAxeCoreAnalysis(url) as { result: AxeResult, injectionSource?: string };
 
 		// Calculate summary
 		const summary = {
@@ -91,6 +97,7 @@ export async function performAxeCoreAnalysis(url: string): Promise<AxeCoreData> 
 			summary,
 			timestamp: new Date().toISOString(),
 			status: 'success',
+			injectionSource: injectionSource,
 		};
 	} catch (error) {
 		console.error('Axe-core analysis failed:', error);
@@ -130,7 +137,7 @@ export async function performAxeCoreAnalysis(url: string): Promise<AxeCoreData> 
 	}
 }
 
-async function runAxeCoreAnalysis(url: string): Promise<AxeResult> {
+async function runAxeCoreAnalysis(url: string): Promise<{ result: AxeResult; injectionSource?: string }> {
 	let browser;
 	try {
 		// Launch browser with options for better compatibility
@@ -153,6 +160,38 @@ async function runAxeCoreAnalysis(url: string): Promise<AxeResult> {
 		// Set viewport for consistent results
 		await page.setViewport({ width: 1280, height: 720 });
 
+		// Capture console messages from the page for debugging
+		if (debug) { 
+			page.on('console', msg => {
+				try {
+					console.info('PAGE CONSOLE:', msg.text());
+				} catch (e) {
+					console.warn('PAGE CONSOLE (error reading):', e);
+				}
+			});
+			// Capture failed requests (esp. script loads) and successful script responses
+			page.on('requestfailed', req => {
+				try {
+					if (req.resourceType && req.resourceType() === 'script') {
+						console.warn('PAGE REQUEST FAILED:', req.url(), req.failure()?.errorText);
+					}
+				} catch (e) {
+					// ignore
+				}
+			});
+			page.on('response', resp => {
+				try {
+					if (resp.request && resp.request().resourceType() === 'script') {
+						console.info('PAGE SCRIPT RESPONSE:', resp.url(), resp.status());
+					}
+				} catch (e) {
+					// ignore
+				}
+			});
+		}
+		
+
+		
 		// Set user agent to avoid bot detection
 		await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36');
 
@@ -165,32 +204,106 @@ async function runAxeCoreAnalysis(url: string): Promise<AxeResult> {
 		// Wait a bit for dynamic content to load
 		await new Promise(resolve => setTimeout(resolve, 2000));
 
-		// Inject axe-core by adding the script tag
-		await page.addScriptTag({
-			url: 'https://cdn.jsdelivr.net/npm/axe-core@4.8.2/axe.min.js'
-		});
+		// Try to inject axe-core via CDN first; if that fails (network restrictions), fall back to several local strategies
+		let injectionSource = 'none';
+		try {
+			await page.addScriptTag({ url: 'https://cdn.jsdelivr.net/npm/axe-core/axe.min.js' });
+			// Wait a bit for axe to load
+			await new Promise(resolve => setTimeout(resolve, 1000));
+			injectionSource = 'cdn';
+		} catch (err) {
+			let injected = false;
 
-		// Wait a bit for axe to load
-		await new Promise(resolve => setTimeout(resolve, 1000));
-
-		// Run axe-core analysis
-		const result = await page.evaluate(async () => {
-			// Check if axe is available
-			if (typeof (window as any).axe === 'undefined') {
-				throw new Error('axe-core not loaded');
+			// Try common local node_modules locations relative to process.cwd() and __dirname
+			const possiblePaths = [
+				path.join(process.cwd(), 'node_modules', 'axe-core', 'axe.min.js'),
+				path.join(process.cwd(), '..', 'node_modules', 'axe-core', 'axe.min.js'),
+				path.join(__dirname, '..', '..', 'node_modules', 'axe-core', 'axe.min.js')
+			];
+			for (const p of possiblePaths) {
+				try {
+					if (fs.existsSync(p)) {
+						const fileSrc = fs.readFileSync(p, 'utf8');
+						await page.addScriptTag({ content: fileSrc });
+						injected = true;
+						injectionSource = 'local-inline';
+						break;
+					}
+				} catch (e) {
+					// ignore local file read errors
+				}
 			}
 
-			// Run axe with all rules enabled
-			const axeResults = await (window as any).axe.run(document, {
-				rules: {}, // Run all rules
-				runOnly: undefined, // Don't restrict to specific rule sets
-				reporter: 'v2'
+			// Last resort: require.resolve
+			if (!injected) {
+				try {
+					const axePath = require.resolve('axe-core/axe.min.js');
+					const axeSrc = fs.readFileSync(axePath, 'utf8');
+					await page.addScriptTag({ content: axeSrc });
+					injected = true;
+					injectionSource = 'require-resolve';
+				} catch (e) {
+					// ignore
+				}
+			}
+
+			if (!injected) {
+				throw new Error('Could not load axe-core via CDN or local inline injection');
+			}
+		}
+
+		// Run axe-core analysis (poll across frames for availability after injection)
+		// Wait up to 10s total for window.axe to appear (check every 200ms across frames)
+		const timeoutMs = 10000;
+		const intervalMs = 200;
+		const start = Date.now();
+		let axeResults: any = null;
+		let frameWithAxe: any = null;
+
+		while (!frameWithAxe && Date.now() - start < timeoutMs) {
+			const frames = page.frames();
+			for (const f of frames) {
+				try {
+					const hasAxe = await f.evaluate(() => typeof (window as any).axe !== 'undefined').catch(() => false);
+					if (hasAxe) {
+						frameWithAxe = f;
+						break;
+					}
+				} catch (e) {
+					// ignore frame evaluation errors
+				}
+			}
+			if (!frameWithAxe) await new Promise(resolve => setTimeout(resolve, intervalMs));
+		}
+
+		if (!frameWithAxe) {
+			// Collect some debug info to help identify why axe didn't attach
+			try {
+				const scripts = await page.evaluate(() => Array.from(document.querySelectorAll('script')).map(s => ((s as HTMLScriptElement).src || ((s as HTMLScriptElement).innerText || '').slice(0, 200))));
+				const csp = await page.evaluate(() => document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.getAttribute('content') || null);
+				const pageDiag = await page.evaluate(() => ({ hasAxe: typeof (window as any).axe !== 'undefined', axeKeys: Object.keys(window).filter(k => /axe/i.test(k)), windowHasAxeRun: typeof (window as any).axe?.run === 'function' }));
+			} catch (e) {
+				// ignore diagnostic errors
+			}
+			// Diagnostic: no axe found in any frame
+			throw new Error('axe-core not loaded');
+		}
+
+		// Run axe in the frame that has it
+		try {
+			axeResults = await frameWithAxe.evaluate(async () => {
+				return await (window as any).axe.run(document, {
+					rules: {},
+					runOnly: undefined,
+					reporter: 'v2'
+				});
 			});
+		} catch (e) {
+			if (debug) console.error('Axe run failed:', e);
+			throw e;
+		}
 
-			return axeResults;
-		});
-
-		return result;
+		return { result: axeResults, injectionSource };
 
 	} finally {
 		if (browser) {

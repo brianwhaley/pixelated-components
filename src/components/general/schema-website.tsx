@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from "prop-types";
 import type { SiteInfo } from '../config/config.types';
 
+// Accept partial SiteInfo to accommodate config JSON shape without forcing callers to cast
 export interface WebsiteSchemaProps {
 	siteInfo?: SiteInfo;
 	name?: string;

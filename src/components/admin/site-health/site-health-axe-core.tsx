@@ -15,6 +15,43 @@ export function SiteHealthAxeCore({ siteName }: SiteHealthAxeCoreType) {
 		return getImpactIndicator(impact).color;
 	};
 
+	// Ensure axe-core is available on the admin page so self-analysis and debugging are possible
+	React.useEffect(() => {
+		if (typeof window === 'undefined') return;
+		if ((window as any).axe) return; // already loaded
+
+		const cdnSrc = 'https://cdn.jsdelivr.net/npm/axe-core/axe.min.js';
+		const apiFallback = '/api/axe-core';
+
+		function injectScript(src: string) {
+			const script = document.createElement('script');
+			script.src = src;
+			script.async = false; // preserve execution order
+			script.onload = () => console.info('axe-core loaded from', src);
+			script.onerror = async () => {
+				console.warn('Failed to load axe-core from', src);
+				if (src !== apiFallback) {
+					// Try fallback to local API that serves the bundle
+					injectScript(apiFallback);
+				}
+			};
+			document.head.appendChild(script);
+		}
+
+		// Try CDN first, then API fallback
+		try {
+			injectScript(cdnSrc);
+		} catch (e) {
+			console.warn('Could not inject axe-core script:', e);
+			injectScript(apiFallback);
+		}
+
+		return () => {
+			// no cleanup: scripts persist on the page
+		};
+	}, []);
+
+
 	const getImpactIcon = (impact: string) => {
 		return getImpactIndicator(impact).icon;
 	};

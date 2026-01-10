@@ -68,6 +68,7 @@ export function SiteHealthTemplate<T>(
 			url.searchParams.set('cache', 'false');
 		}
 
+
 		const response = await fetch(url.toString(), {
 			method,
 			headers: {
@@ -106,8 +107,9 @@ export function SiteHealthTemplate<T>(
 			// Check for cache control from URL query parameters
 			const urlParams = new URLSearchParams(window.location.search);
 			const cacheParam = urlParams.get('cache');
-			const useCache = typedProps.enableCacheControl ?? true ? (cacheParam !== 'false') : true;
-
+			// Correctly compute useCache: if enableCacheControl is enabled (default true), honor cacheParam; if disabled, caching is off
+			const enableCacheControl = (typeof typedProps.enableCacheControl === 'boolean') ? typedProps.enableCacheControl : true;
+			const useCache = enableCacheControl ? (String(cacheParam).toLowerCase() !== 'false') : false;
 			const result = await fetchFromEndpoint(useCache);
 
 			setData(result);

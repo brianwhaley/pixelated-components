@@ -2,8 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 
 // Mock ebay functions
 vi.mock('../components/shoppingcart/ebay.functions', () => ({
-	defaultEbayProps: { appid: 'test-app-id' },
-	ebaySunglassCategory: 'sunglasses',
 	getEbayItems: vi.fn(),
 	getEbayItem: vi.fn(),
 	getShoppingCartItem: vi.fn(),

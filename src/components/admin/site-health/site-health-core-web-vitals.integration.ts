@@ -1,6 +1,7 @@
 "use server";
 
 import { CoreWebVitalsData, PSIScores, PSICategory, PSIAudit } from './site-health-types';
+import { getFullPixelatedConfig } from '../../config/config';
 
 /**
  * Core Web Vitals Analysis Integration Services
@@ -115,10 +116,11 @@ export async function performCoreWebVitalsAnalysis(
 	}
 }
 
-async function fetchPSIData(url: string): Promise<any> {
-	const apiKey = process.env.GOOGLE_API_KEY;
+export async function fetchPSIData(url: string): Promise<any> {
+	// Require the API key from the unified pixelated.config.json. No environment fallback.
+	const apiKey = getFullPixelatedConfig()?.google?.api_key;
 	if (!apiKey) {
-		throw new Error('GOOGLE_API_KEY environment variable is not set');
+		throw new Error('Google API key is not set; set google.api_key in pixelated.config.json');
 	}
 
 	const psiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&key=${apiKey}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo`;

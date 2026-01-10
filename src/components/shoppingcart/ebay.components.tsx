@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { Carousel } from '../general/carousel';
 import { SmartImage } from "../general/smartimage";
-import { defaultEbayProps, ebaySunglassCategory, getEbayItems, getEbayItem, getShoppingCartItem } from "./ebay.functions";
+import { getEbayItems, getEbayItem, getShoppingCartItem, getEbayRateLimits, getEbayAppToken } from "./ebay.functions";
 import { addToShoppingCart } from "./shoppingcart.functions";
 import { AddToCartButton, /* GoToCartButton */ ViewItemDetails } from "./shoppingcart.components";
 import { getCloudinaryRemoteFetchURL as getImg} from "../general/cloudinary";
@@ -24,9 +24,10 @@ EbayItems.propTypes = {
 export type EbayItemsType = InferProps<typeof EbayItems.propTypes>;
 export function EbayItems(props: EbayItemsType) {
 	// https://developer.ebay.com/devzone/finding/HowTo/GettingStarted_JS_NV_JSON/GettingStarted_JS_NV_JSON.html
+	const config = usePixelatedConfig();
 	const [ items, setItems ] = useState<any[]>([]);
 	const [ aspects, setAspects ] = useState<any[]>([]);
-	const [ apiProps ] = useState({ ...defaultEbayProps , ...props.apiProps});
+	const apiProps = { ...(config?.ebay || {}), ...props.apiProps };
 
 	paintItems.propTypes = {
 		items: PropTypes.array.isRequired,
@@ -39,6 +40,7 @@ export function EbayItems(props: EbayItemsType) {
 		for (let key in props.items) {
 			const item = props.items[key];
 			const newItem = <EbayListItem item={item} key={item.legacyItemId} 
+				apiProps={apiProps}
 				cloudinaryProductEnv={props.cloudinaryProductEnv} />;
 			newItems.push(newItem);
 		}
@@ -191,17 +193,19 @@ export function EbayListFilter(props: EbayListFilterType) {
 EbayListItem.propTypes = {
 	item: PropTypes.any.isRequired,
 	cloudinaryProductEnv: PropTypes.string,
+	apiProps: PropTypes.any,
 };
 export type EbayListItemType = InferProps<typeof EbayListItem.propTypes>;
 export function EbayListItem(props: EbayListItemType) {
 	const thisItem = props.item;
+	const apiProps = props.apiProps;
 	// const itemURL = thisItem.itemWebUrl;
 	const itemURL = "./store/" + thisItem.legacyItemId;
 	const itemURLTarget = "_self"; /* "_blank" */
 	const itemImage = (props.cloudinaryProductEnv) 
 		? getImg({url: thisItem.thumbnailImages[0].imageUrl, product_env: props.cloudinaryProductEnv}) 
 		: thisItem.thumbnailImages[0].imageUrl;
-	const shoppingCartItem = getShoppingCartItem({ thisItem: thisItem, cloudinaryProductEnv: props.cloudinaryProductEnv });
+	const shoppingCartItem = getShoppingCartItem({ thisItem: thisItem, cloudinaryProductEnv: props.cloudinaryProductEnv, apiProps: apiProps });
 	// CHANGE EBAY URL TO LOCAL EBAY ITEM DETAIL URL
 	shoppingCartItem.itemURL = itemURL;
 	const config = usePixelatedConfig();
@@ -227,7 +231,7 @@ export function EbayListItem(props: EbayListItemType) {
 				</div>
 				<div className="ebayItemDetails grid12">
 					<div><b>Item ID: </b>{thisItem.legacyItemId}</div>
-					<div><b>Quantity: </b>{thisItem.categories[0].categoryId == ebaySunglassCategory ? 1 : 10}</div>
+					<div><b>Quantity: </b>{thisItem.categories[0].categoryId == apiProps.itemCategory ? 1 : 10}</div>
 					<div><b>Condition: </b>{thisItem.condition}</div>
 					<div><b>Seller: </b>{thisItem.seller.username} ({thisItem.seller.feedbackScore})<br />{thisItem.seller.feedbackPercentage}% positive</div>
 					<div><b>Buying Options: </b>{thisItem.buyingOptions[0]}</div>
@@ -281,8 +285,9 @@ EbayItemDetail.propTypes = {
 };
 export type EbayItemDetailType = InferProps<typeof EbayItemDetail.propTypes>;
 export function EbayItemDetail(props: EbayItemDetailType)  {
+	const config = usePixelatedConfig();
 	const [ item, setItem ] = useState({});
-	const [ apiProps ] = useState({ ...defaultEbayProps, ...props.apiProps });
+	const apiProps = { ...(config?.ebay || {}), ...props.apiProps };
 	useEffect(() => {
 		if (debug) console.log("Running useEffect");
 		async function fetchItem() {
@@ -306,7 +311,7 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 		));
 		const itemURL = undefined;
 		const itemURLTarget = "_self"; /* "_blank" */
-		const shoppingCartItem = getShoppingCartItem({thisItem: thisItem, cloudinaryProductEnv: props.cloudinaryProductEnv });
+		const shoppingCartItem = getShoppingCartItem({thisItem: thisItem, cloudinaryProductEnv: props.cloudinaryProductEnv, apiProps: apiProps });
 		shoppingCartItem.itemURL = itemURL;
 		return (
 			<>
@@ -332,7 +337,7 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 						<br />
 						<div className="ebayItemDetails grid12">
 							<div><b>Item ID: </b>{thisItem.legacyItemId}</div>
-							<div><b>Quantity: </b>{thisItem.categoryId == ebaySunglassCategory ? 1 : 10}</div>
+							<div><b>Quantity: </b>{thisItem.categoryId == apiProps.itemCategory ? 1 : 10}</div>
 							<div><b>Category: </b>{thisItem.categoryPath}</div>
 							<div><b>Condition: </b>{thisItem.condition}</div>
 							<div><b>Seller: </b>{thisItem.seller.username} ({thisItem.seller.feedbackScore})<br />{thisItem.seller.feedbackPercentage}% positive</div>
@@ -366,4 +371,174 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 			</>
 		);
 	}
+}
+
+
+/* ========== EBAY RATE LIMITS VISUALIZER ========== */
+
+EbayRateLimitsVisualizer.propTypes = {
+	token: PropTypes.string,
+	apiProps: PropTypes.object,
+};
+export type EbayRateLimitsVisualizerType = InferProps<typeof EbayRateLimitsVisualizer.propTypes>;
+export function EbayRateLimitsVisualizer(props: EbayRateLimitsVisualizerType) {
+	const config = usePixelatedConfig();
+	const apiProps = { 
+		...(config?.ebay || {}), 
+		...props.apiProps 
+	};
+
+	const [token, setToken] = useState(props.token || '');
+	const [data, setData] = useState<any>(null);
+	const [loading, setLoading] = useState(false);
+	const [fetchingToken, setFetchingToken] = useState(false);
+	const [error, setError] = useState<string | null>(null);
+
+	const fetchToken = async () => {
+		setFetchingToken(true);
+		setError(null);
+		try {
+			const newToken = await getEbayAppToken({ apiProps });
+			if (newToken) {
+				setToken(newToken);
+				return newToken;
+			} else {
+				setError('Failed to fetch eBay token. Check your appId and appCertId.');
+			}
+		} catch (e: any) {
+			setError('Token fetch error: ' + e.message);
+		} finally {
+			setFetchingToken(false);
+		}
+	};
+
+	// Auto-fetch token on mount if credentials are available
+	useEffect(() => {
+		if (!token && apiProps.appId && apiProps.appCertId) {
+			fetchToken();
+		}
+	}, []);
+
+	const fetchData = async () => {
+		setLoading(true);
+		setError(null);
+		try {
+			const result = await getEbayRateLimits({ 
+				token: token, 
+				apiProps: apiProps
+			});
+			setData(result);
+		} catch (e: any) {
+			setError(e.message || 'Failed to fetch data');
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const showMockData = () => {
+		setData({
+			rate_limit: {
+				apiContext: "Buy",
+				apiName: "Browse",
+				apiVersion: "v1",
+				resources: [
+					{
+						resourceName: "item_summary",
+						methods: [
+							{
+								methodName: "search",
+								quotaTotal: 5000,
+								quotaRemaining: 4950,
+								quotaResets: "2026-01-10T00:00:00.000Z"
+							}
+						]
+					}
+				]
+			},
+			user_rate_limit: {
+				userContext: "Individual",
+				resources: [
+					{
+						resourceName: "item",
+						methods: [
+							{
+								methodName: "get",
+								quotaTotal: 1000,
+								quotaRemaining: 990,
+								quotaResets: "2026-01-10T00:00:00.000Z"
+							}
+						]
+					}
+				]
+			}
+		});
+	};
+
+	// Check for API-level errors in the returned data
+	const hasTokenError = data?.rate_limit?.errors?.[0]?.message === "Invalid access token" || 
+						 data?.user_rate_limit?.errors?.[0]?.message === "Invalid access token";
+
+	return (
+		<div style={{ padding: '20px', fontFamily: 'sans-serif', border: '1px solid #ddd', borderRadius: '8px' }}>
+			<h3>Ebay Rate Limits Data Visualizer</h3>
+			
+			<div style={{ marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+				<div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+					<label htmlFor="ebay-token"><b>Token:</b></label>
+					<input 
+						id="ebay-token"
+						type="text" 
+						value={token} 
+						onChange={(e) => setToken(e.target.value)} 
+						placeholder="Paste eBay token here"
+						style={{ flexGrow: 1, padding: '5px', fontFamily: 'monospace' }}
+					/>
+					<button onClick={fetchToken} disabled={fetchingToken || !apiProps.appId}>
+						{fetchingToken ? 'Fetching Token...' : 'Auto-Fetch Token'}
+					</button>
+				</div>
+				
+				<div style={{ display: 'flex', gap: '10px' }}>
+					<button 
+						onClick={fetchData} 
+						disabled={loading || !token} 
+						style={{ padding: '8px 16px', cursor: 'pointer', background: '#0070f3', color: 'white', border: 'none', borderRadius: '4px' }}
+					>
+						{loading ? 'Fetching Limits...' : 'Fetch Rate Limits'}
+					</button>
+					<button onClick={showMockData} style={{ padding: '8px 16px', cursor: 'pointer', border: '1px solid #ccc', borderRadius: '4px', background: 'white' }}>
+						Load Sample Structure
+					</button>
+				</div>
+			</div>
+
+			{error && (
+				<div style={{ color: '#d00', background: '#fff5f5', padding: '10px', borderRadius: '4px', marginBottom: '10px', border: '1px solid #feb2b2' }}>
+					<b>Error:</b> {error}
+				</div>
+			)}
+
+			{hasTokenError && (
+				<div style={{ color: '#c53030', background: '#fff5f5', padding: '10px', borderRadius: '4px', marginBottom: '10px', border: '1px solid #feb2b2' }}>
+					🚨 <b>Authentication Error:</b> Your eBay access token is invalid or expired. Use &quot;Auto-Fetch Token&quot; if credentials are set, or paste a new one.
+				</div>
+			)}
+
+			{data ? (
+				<div style={{ marginTop: '20px' }}>
+					<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+						<h4>Response Data:</h4>
+						<button onClick={() => setData(null)} style={{ padding: '4px 8px', fontSize: '12px' }}>Clear</button>
+					</div>
+					<pre style={{ background: '#f8f9fa', padding: '15px', borderRadius: '5px', overflow: 'auto', border: '1px solid #e9ecef', fontSize: '13px' }}>
+						{JSON.stringify(data, null, 2)}
+					</pre>
+				</div>
+			) : (
+				<div style={{ color: '#666', fontStyle: 'italic', marginTop: '20px' }}>
+					No rate limit data loaded yet.
+				</div>
+			)}
+		</div>
+	);
 }
