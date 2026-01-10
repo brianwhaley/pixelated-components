@@ -47,5 +47,5 @@ export default function Nav() {
 				)}
 			</div>
 		</SidePanel>
-  );
+	);
 }

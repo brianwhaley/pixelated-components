@@ -7,19 +7,18 @@ const nextConfig: NextConfig = {
 	experimental: {
     	optimizeCss: false,
   	},
+	outputFileTracingIncludes: {
+		'/**': ['./src/app/config/pixelated.config.json'],
+	},
 	transpilePackages: ['@pixelated-tech/components'],
 	trailingSlash: false,
 	typescript: {
 		ignoreBuildErrors: true,
 	},
-	env: {
-		NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-		NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-		GOOGLE_API_KEY: process.env.GOOGLE_API_KEY,
-		GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-		GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-		GOOGLE_REFRESH_TOKEN: process.env.GOOGLE_REFRESH_TOKEN,
-	},
+	// Environment variables removed for secrets.
+	// All runtime configuration (Google creds, NextAuth secrets) should be provided via `src/app/config/pixelated.config.json` and accessed with `getFullPixelatedConfig()`.
+	// If you need to expose non-secret values to the client, use a server helper that returns `getClientOnlyPixelatedConfig()`.
+	env: {},
 
 	images: {
 		remotePatterns: [

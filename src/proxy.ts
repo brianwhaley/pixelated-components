@@ -1,3 +1,4 @@
+import { handlePixelatedProxy } from "@pixelated-tech/components/server";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
@@ -7,20 +8,20 @@ const RATE_LIMIT = 10; // requests per window
 const WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 
 function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const userLimit = rateLimitMap.get(ip);
+	const now = Date.now();
+	const userLimit = rateLimitMap.get(ip);
 
-  if (!userLimit || now > userLimit.resetTime) {
-    rateLimitMap.set(ip, { count: 1, resetTime: now + WINDOW_MS });
-    return false;
-  }
+	if (!userLimit || now > userLimit.resetTime) {
+		rateLimitMap.set(ip, { count: 1, resetTime: now + WINDOW_MS });
+		return false;
+	}
 
-  if (userLimit.count >= RATE_LIMIT) {
-    return true;
-  }
+	if (userLimit.count >= RATE_LIMIT) {
+		return true;
+	}
 
-  userLimit.count++;
-  return false;
+	userLimit.count++;
+	return false;
 }
 
 export function proxy(req: NextRequest) {
@@ -36,7 +37,7 @@ export function proxy(req: NextRequest) {
 
 	// Rate limiting for auth endpoints
 	if (req.nextUrl.pathname === '/api/auth/signin/google' || req.nextUrl.pathname === '/login') {
-		const ip = req.ip || req.headers.get('x-forwarded-for') || 'unknown';
+		const ip = req.headers.get('x-real-ip') || req.headers.get('x-forwarded-for') || 'unknown';
 
 		if (isRateLimited(ip)) {
 			return new NextResponse('Too many requests', {
@@ -48,19 +49,7 @@ export function proxy(req: NextRequest) {
 		}
 	}
 
-	// Additional security headers
-	const response = NextResponse.next({
-		request: {
-			headers,
-		},
-	});
-
-	// Add HSTS in production
-	if (process.env.NODE_ENV === 'production') {
-		response.headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-	}
-
-	return response;
+	return handlePixelatedProxy(req);
 }
 
 // Limit proxy to page routes (avoid _next static, api, etc.)

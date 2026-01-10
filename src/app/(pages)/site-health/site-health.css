@@ -55,6 +55,16 @@
   transition: all 0.2s ease;
 }
 
+.site-health-select-wrapper {
+  margin-top: 1.5rem;
+}
+
+.site-health-status-msg {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
 .site-health-input:focus,
 .site-health-select:focus {
   outline: none;

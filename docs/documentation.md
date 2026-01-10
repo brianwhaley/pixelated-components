@@ -5,18 +5,22 @@
 - [Environment Variables](#environment-variables)
 - [Coding Conventions](coding-conventions.md)
 
-## Environment Variables
+## Configuration (Pixelated unified config)
 
-To configure OAuth, NextAuth, and AI features, set the following environment variables in your deployment platform (e.g., AWS Amplify):
+Secrets and service credentials (Google OAuth, NextAuth secrets, service account keys) should now be stored in `src/app/config/pixelated.config.json` and accessed server-side via `getFullPixelatedConfig()`.
 
-- `GOOGLE_CLIENT_ID`: Your Google OAuth client ID
-- `GOOGLE_CLIENT_SECRET`: Your Google OAuth client secret
-- `APPLE_ID`: Your Apple OAuth client ID
-- `APPLE_SECRET`: Your Apple OAuth client secret
-- `NEXT_PUBLIC_GEMINI_API_KEY`: Your Google Gemini API key (required for AI SEO recommendations)
-- `NEXTAUTH_SECRET`: A random string (generate with: `openssl rand -base64 32`)
-- `NEXTAUTH_URL`: Your Amplify app URL (e.g., `https://dev.xxxxx.amplifyapp.com`)
+For example, add the Google credentials under the `google` top-level key and NextAuth secrets under `nextAuth` in `pixelated.config.json`:
 
+- `google.client_id`
+- `google.client_secret`
+- `google.api_key`
+- `google.refresh_token` (use `scripts/generate-google-tokens.js` to obtain and add to `pixelated.config.json`)
+- `nextAuth.secret`
+- `nextAuth.url`
+
+If you need to keep `pixelated.config.json` encrypted, provide the decryption key (`PIXELATED_CONFIG_KEY`) through your deployment secrets store (do not commit it to the repository).
+
+If you need to expose non-secret values to the client (e.g., a public Google Maps API key), return them via `getClientOnlyPixelatedConfig()` or a small server helper; avoid baking secrets into the client build.
 ### Generating NEXTAUTH_SECRET
 
 Run this command to generate a secure random string:

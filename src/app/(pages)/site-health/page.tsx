@@ -1,155 +1,183 @@
 'use client';
 
+const debug = false;
+
 import { useState, useEffect } from 'react';
-import { PageSection, PageGridItem } from "@pixelated-tech/components";
+import { PageSection } from "@pixelated-tech/components";
 import { SiteHealthGit, SiteHealthUptime, SiteHealthSecurity, SiteHealthOverview, SiteHealthPerformance, SiteHealthAccessibility, SiteHealthAxeCore, SiteHealthDependencyVulnerabilities, SiteHealthSEO, SiteHealthGoogleAnalytics, SiteHealthGoogleSearchConsole, SiteHealthOnSiteSEO, SiteHealthCloudwatch } from "@pixelated-tech/components/adminclient";
 import './site-health.css';
 
 export default function SiteHealthPage() {
-  const [selectedSite, setSelectedSite] = useState<string>('');
-  const [sites, setSites] = useState<Array<{name: string, url?: string}>>([]);
-  const [loading, setLoading] = useState(true);
+	const [selectedSite, setSelectedSite] = useState<string>('');
+	const [sites, setSites] = useState<Array<{name: string, url?: string}>>([]);
+	const [loading, setLoading] = useState(true);
 
-  // Date state
-  const today = new Date();
-  const oneMonthAgo = new Date(today);
-  oneMonthAgo.setMonth(today.getMonth() - 1);
+	// Date state
+	const today = new Date();
+	const oneMonthAgo = new Date(today);
+	oneMonthAgo.setMonth(today.getMonth() - 1);
 
-  const [startDate, setStartDate] = useState<string>(oneMonthAgo.toISOString().split('T')[0]);
-  const [endDate, setEndDate] = useState<string>(today.toISOString().split('T')[0]);
+	const [startDate, setStartDate] = useState<string>(oneMonthAgo.toISOString().split('T')[0]);
+	const [endDate, setEndDate] = useState<string>(today.toISOString().split('T')[0]);
 
-  useEffect(() => {
-    async function loadSites() {
-      try {
-        const response = await fetch(`${window.location.origin}/api/sites`);
-        if (response.ok) {
-          const sitesData = await response.json();
-          setSites([...sitesData]);
-        }
-      } catch (error) {
-        console.error('Failed to load sites:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
+	useEffect(() => {
+		async function loadSites() {
+			try {
+				const response = await fetch(`${window.location.origin}/api/sites`);
+				if (response.ok) {
+					const sitesData = await response.json();
+					setSites([...sitesData]);
+				}
+			} catch (error) {
+				if (debug) console.error('Failed to load sites:', error);
+			} finally {
+				setLoading(false);
+			}
+		}
 
-    loadSites();
-  }, []);
+		loadSites();
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 p-8">
-        <div className="max-w-7xl mx-auto">
-          <PageSection maxWidth="1024px" columns={1}>
-            <h1 className="text-3xl font-bold mb-8">Site Health</h1>
-            <div className="text-center">Loading sites...</div>
-          </PageSection>
-        </div>
-      </div>
-    );
-  }
+		// Ensure axe-core is available on the client page for debugging and on-page analysis
+		if (typeof window !== 'undefined' && !(window as any).axe) {
+			const cdn = 'https://cdn.jsdelivr.net/npm/axe-core/axe.min.js';
+			const localApi = '/api/axe-core';
 
-  return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <PageSection maxWidth="1024px" columns={1}>
-          <h1 className="text-3xl font-bold mb-8">Site Health</h1>
+			function inject(src: string, onErrorFallback?: string) {
+				const s = document.createElement('script');
+				s.src = src;
+				s.async = false;
+				s.onload = () => { if (debug) console.info('Loaded axe from', src); };
+				s.onerror = () => {
+					if (debug) console.warn('Failed to load axe from', src);
+					if (onErrorFallback) inject(onErrorFallback);
+				};
+				document.head.appendChild(s);
+			}
 
-          {/* Date Range Selection */}
-          <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="start-date" className="block text-sm font-medium text-gray-700 mb-2">
-                Start Date
-              </label>
-              <input
-                type="date"
-                id="start-date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="end-date" className="block text-sm font-medium text-gray-700 mb-2">
-                End Date
-              </label>
-              <input
-                type="date"
-                id="end-date"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-          </div>
+			try {
+				inject(cdn, localApi);
+			} catch (e) {
+				if (debug) console.warn('Error injecting axe-core:', e);
+			}
+		}
+	}, []);
 
-          {/* Site Selection Dropdown */}
-          <div className="mb-8">
-            <label htmlFor="site-select" className="block text-sm font-medium text-gray-700 mb-2">
-              Select Site
-            </label>
-            <select
-              id="site-select"
-              value={selectedSite}
-              onChange={(e) => setSelectedSite(e.target.value)}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">Select a site...</option>
-              {sites.map((site) => {
-                return (
-                  <option key={site.name} value={site.name}>
-                    {site.name.replace('-', ' ')}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
+	if (loading) {
+		return (
+			<div className="site-health-page">
+				<div className="site-health-container">
+					<PageSection maxWidth="1024px" columns={1}>
+						<h1 className="site-health-title">Site Health</h1>
+						<div className="site-health-status-msg">Loading sites...</div>
+					</PageSection>
+				</div>
+			</div>
+		);
+	}
 
-        </PageSection>
+	return (
+		<div className="site-health-page">
+			<div className="site-health-container">
+				{/* Header Section */}
+				<PageSection maxWidth="1024px" columns={1}>
+					<h1 className="site-health-title">Site Health</h1>
 
-        {/* Health Cards Grid */}
-        <PageSection maxWidth="1024px" columns={2}>
-          {/* Health Status Card */}
-          <SiteHealthUptime siteName={selectedSite} />
+					<div className="site-health-header">
+						{/* Date Range Selection */}
+						<div className="site-health-date-range">
+							<div>
+								<label htmlFor="start-date" className="site-health-label">
+                  Start Date
+								</label>
+								<input
+									type="date"
+									id="start-date"
+									value={startDate}
+									onChange={(e) => setStartDate(e.target.value)}
+									className="site-health-input"
+								/>
+							</div>
+							<div>
+								<label htmlFor="end-date" className="site-health-label">
+                  End Date
+								</label>
+								<input
+									type="date"
+									id="end-date"
+									value={endDate}
+									onChange={(e) => setEndDate(e.target.value)}
+									className="site-health-input"
+								/>
+							</div>
+						</div>
 
-          {/* Dependency Vulnerability Card */}
-          <SiteHealthDependencyVulnerabilities siteName={selectedSite} />
+						{/* Site Selection Dropdown */}
+						<div className="site-health-select-wrapper">
+							<label htmlFor="site-select" className="site-health-label">
+                Select Site
+							</label>
+							<select
+								id="site-select"
+								value={selectedSite}
+								onChange={(e) => setSelectedSite(e.target.value)}
+								className="site-health-select"
+							>
+								<option value="">Select a site...</option>
+								{sites.map((site) => {
+									return (
+										<option key={site.name} value={site.name}>
+											{site.name.replace('-', ' ')}
+										</option>
+									);
+								})}
+							</select>
+						</div>
+					</div>
 
-          {/* Site Overview Card */}
-          <SiteHealthOverview siteName={selectedSite} />
+				</PageSection>
 
-          {/* Performance Card */}
-          <SiteHealthPerformance siteName={selectedSite} />
+				{/* Health Cards Grid */}
+				<PageSection maxWidth="1024px" columns={2}>
+					{/* Health Status Card */}
+					<SiteHealthUptime siteName={selectedSite} />
 
-          {/* Accessibility Card */}
-          <SiteHealthAccessibility siteName={selectedSite} />
+					{/* Dependency Vulnerability Card */}
+					<SiteHealthDependencyVulnerabilities siteName={selectedSite} />
 
-          {/* Axe-Core Accessibility Card */}
-          <SiteHealthAxeCore siteName={selectedSite} />
+					{/* Site Overview Card */}
+					<SiteHealthOverview siteName={selectedSite} />
 
-          {/* Security Card */}
-          <SiteHealthSecurity siteName={selectedSite} />
+					{/* Performance Card */}
+					<SiteHealthPerformance siteName={selectedSite} />
 
-          {/* SEO Card */}
-          <SiteHealthSEO siteName={selectedSite} />
+					{/* Accessibility Card */}
+					<SiteHealthAccessibility siteName={selectedSite} />
 
-          {/* On-Site SEO Card */}
-          <SiteHealthOnSiteSEO siteName={selectedSite} />
+					{/* Axe-Core Accessibility Card */}
+					<SiteHealthAxeCore siteName={selectedSite} />
 
-          {/* Git Push Notes Card */}
-          <SiteHealthGit key={`git-${selectedSite}-${startDate}-${endDate}`} siteName={selectedSite} startDate={startDate} endDate={endDate} />
+					{/* Security Card */}
+					<SiteHealthSecurity siteName={selectedSite} />
 
-          {/* Google Analytics Card */}
-          <SiteHealthGoogleAnalytics key={`ga-${selectedSite}-${startDate}-${endDate}`} siteName={selectedSite} startDate={startDate} endDate={endDate} />
+					{/* SEO Card */}
+					<SiteHealthSEO siteName={selectedSite} />
 
-          {/* Google Search Console Card */}
-          <SiteHealthGoogleSearchConsole key={`gsc-${selectedSite}-${startDate}-${endDate}`} siteName={selectedSite} startDate={startDate} endDate={endDate} />
+					{/* On-Site SEO Card */}
+					<SiteHealthOnSiteSEO siteName={selectedSite} />
 
-          {/* Route53 Uptime Card */}
-          <SiteHealthCloudwatch key={`cloudwatch-${selectedSite}-${startDate}-${endDate}`} siteName={selectedSite} startDate={startDate} endDate={endDate} />
-        </PageSection>
-      </div>
-    </div>
-  );
+					{/* Git Push Notes Card */}
+					<SiteHealthGit key={`git-${selectedSite}-${startDate}-${endDate}`} siteName={selectedSite} startDate={startDate} endDate={endDate} />
+
+					{/* Google Analytics Card */}
+					<SiteHealthGoogleAnalytics key={`ga-${selectedSite}-${startDate}-${endDate}`} siteName={selectedSite} startDate={startDate} endDate={endDate} />
+
+					{/* Google Search Console Card */}
+					<SiteHealthGoogleSearchConsole key={`gsc-${selectedSite}-${startDate}-${endDate}`} siteName={selectedSite} startDate={startDate} endDate={endDate} />
+
+					{/* Route53 Uptime Card */}
+					<SiteHealthCloudwatch key={`cloudwatch-${selectedSite}-${startDate}-${endDate}`} siteName={selectedSite} startDate={startDate} endDate={endDate} />
+				</PageSection>
+			</div>
+		</div>
+	);
 }

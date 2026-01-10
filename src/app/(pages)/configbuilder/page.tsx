@@ -1,6 +1,7 @@
 'use client';
 
 import { ConfigBuilder, PageSection } from '@pixelated-tech/components';
+import '../builder-pages.css';
 
 // Function to download JSON file
 const downloadJsonFile = (data: any, filename: string) => {
@@ -19,16 +20,18 @@ const downloadJsonFile = (data: any, filename: string) => {
 };
 
 export default function ConfigBuilderPage() {
-  const handleSave = (config: any) => {
-    downloadJsonFile(config, 'routes.json');
-  };
+	const handleSave = (config: any) => {
+		downloadJsonFile(config, 'routes.json');
+	};
 
-  return (
-    <PageSection maxWidth="1024px" columns={1}>
-      <div>
-        <h1>Config Builder</h1>
-        <ConfigBuilder onSave={handleSave} />
-      </div>
-    </PageSection>
-  );
+	return (
+		<PageSection maxWidth="1024px" columns={1}>
+			<div className="builder-page-header">
+				<h1>Config Builder</h1>
+			</div>
+			<div className="builder-page-container">
+				<ConfigBuilder onSave={handleSave} />
+			</div>
+		</PageSection>
+	);
 }

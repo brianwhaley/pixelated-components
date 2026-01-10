@@ -1,0 +1,101 @@
+.deploy-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+}
+
+.deploy-page-container {
+  max-width: 42rem;
+  width: 100%;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.deploy-page-title {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #111827;
+}
+
+.deploy-form-card {
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.deploy-results-container {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background-color: #f3f4f6;
+  border-radius: 0.5rem;
+}
+
+.deploy-results-title {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #111827;
+}
+
+.deploy-site-item {
+  margin-bottom: 1rem;
+}
+
+.deploy-site-name {
+  font-weight: 500;
+  color: #111827;
+}
+
+.deploy-step-section {
+  margin-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.deploy-step-title {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.deploy-step-title-capitalize {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+  color: #374151;
+  text-transform: capitalize;
+}
+
+.deploy-output-pre {
+  color: #000000;
+  background-color: #ffffff;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #e5e7eb;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  margin-top: 0.25rem;
+}
+
+.deploy-error-text {
+  color: #dc2626;
+  margin-left: 1rem;
+}
+
+.deploy-info-text {
+  color: #2563eb;
+  margin-left: 1rem;
+}
+
+.deploy-global-error {
+  color: #dc2626;
+}

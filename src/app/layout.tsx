@@ -1,11 +1,13 @@
 
 import Nav from "./components/Nav";
 import { Providers } from "./components/providers";
+import LayoutClient from "./components/layout-client";
 import { headers } from "next/headers";
 import { getRouteByKey } from "@pixelated-tech/components/server";
 import { generateMetaTags } from "@pixelated-tech/components/server";
-import { LocalBusinessSchema } from "@pixelated-tech/components/server";
-import { VisualDesignStyles } from "@pixelated-tech/components/server";
+import type { SiteInfo } from "@pixelated-tech/components/server";
+import { WebsiteSchema, LocalBusinessSchema, ServicesSchema } from "@pixelated-tech/components/server";
+import { VisualDesignStyles, PixelatedServerConfigProvider } from "@pixelated-tech/components/server";
 import myRoutes from "@/app/data/routes.json";
 import "@pixelated-tech/components/css/pixelated.global.css";
 import "@pixelated-tech/components/css/pixelated.grid.scss";
@@ -15,7 +17,7 @@ import { authOptions } from "./lib/auth";
 import { getServerSession } from "next-auth";
 
 export default async function RootLayout({
-  children,
+	children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -64,26 +66,34 @@ export default async function RootLayout({
 		}
 	}
 
-  return (
-    <html lang="en">
-      <head>
-		{ generateMetaTags({
-			title: metadata?.title ?? "",
-			description: metadata?.description ?? "",
-			keywords: metadata?.keywords ?? "",
-			origin: origin ?? "",
-			url: url ?? "",
-			siteInfo: myRoutes.siteInfo
-		}) }
-		<LocalBusinessSchema siteInfo={myRoutes.siteInfo} />
-        <VisualDesignStyles visualdesign={myRoutes.visualdesign} />
-      </head>
-      <body>
-        <Providers>
-          <Nav />
-          {children}
-        </Providers>
-      </body>
-    </html>
-  );
+	// Coerce siteInfo to the components package SiteInfo type
+	const siteInfo = myRoutes.siteInfo as SiteInfo;
+
+	return (
+		<html lang="en">
+			<head>
+				{ generateMetaTags({
+					title: metadata?.title ?? "",
+					description: metadata?.description ?? "",
+					keywords: metadata?.keywords ?? "",
+					origin: origin ?? "",
+					url: url ?? "",
+					siteInfo: siteInfo
+				}) }
+				<WebsiteSchema siteInfo={siteInfo} />
+				<LocalBusinessSchema siteInfo={siteInfo} />
+				<ServicesSchema siteInfo={siteInfo} />
+				<VisualDesignStyles visualdesign={myRoutes.visualdesign} />
+			</head>
+			<body>
+				<PixelatedServerConfigProvider>
+					<Providers>
+						<LayoutClient />
+						<Nav />
+						{children}
+					</Providers>
+				</PixelatedServerConfigProvider>
+			</body>
+		</html>
+	);
 }
