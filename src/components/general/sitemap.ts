@@ -374,7 +374,13 @@ export async function createEbayItemURLs(origin: string) {
 	};
 
 	const cacheTTL = getEbayCacheTTL(config.ebay?.cacheTTL);
-	const items = await fetchCachedEbayItems(ebayProps, cacheTTL);
+	let items;
+	try {
+		items = await fetchCachedEbayItems(ebayProps, cacheTTL);
+	} catch (error) {
+		if (typeof console !== 'undefined') console.warn('createEbayItemURLs skipped; unable to fetch items', error);
+		return sitemap;
+	}
 	if (!items || !items.length) {
 		return sitemap;
 	}

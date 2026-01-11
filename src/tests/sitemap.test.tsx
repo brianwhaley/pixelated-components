@@ -487,8 +487,26 @@ describe('Sitemap Helper Functions', () => {
 			mockGetEbayAppToken.mockRejectedValue(new Error('API Error'));
 
 			const origin = 'https://example.com';
-			// The function doesn't catch promise rejections, so it will throw
-			await expect(createEbayItemURLs(origin)).rejects.toThrow('API Error');
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			const result = await createEbayItemURLs(origin);
+			expect(result).toEqual([]);
+			expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('createEbayItemURLs skipped; unable to fetch items'), expect.any(Error));
+		});
+
+		it('treats browse search failures as empty sitemaps', async () => {
+			const mockToken = 'test-token';
+			const mockGetEbayAppToken = vi.mocked(ebayModule.getEbayAppToken);
+			const mockGetEbayItemsSearch = vi.mocked(ebayModule.getEbayItemsSearch);
+
+			mockGetEbayAppToken.mockResolvedValue(mockToken);
+			mockGetEbayItemsSearch.mockRejectedValue(new Error('search failed'));
+
+			const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+			const origin = 'https://example.com';
+			const result = await createEbayItemURLs(origin);
+
+			expect(result).toEqual([]);
+			expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('createEbayItemURLs skipped; unable to fetch items'), expect.any(Error));
 		});
 	});
 
