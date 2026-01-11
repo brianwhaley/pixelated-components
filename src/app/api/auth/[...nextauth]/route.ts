@@ -50,7 +50,6 @@ function normalizeUrl(value?: string): string | undefined {
 	if (!value) return undefined;
 	return value.replace(/\/$/, '');
 }
-
 function canonicalCallback(req: Request): string | undefined {
 	const base = normalizeUrl(process.env.NEXTAUTH_URL);
 	if (base) return `${base}/api/auth/callback/google`;
