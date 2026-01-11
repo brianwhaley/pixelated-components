@@ -37,6 +37,7 @@ export interface EbayConfig {
 	baseItemURL?: string,
 	qsItemURL?: string,
 	itemCategory?: string,
+	cacheTTL?: number;
 }
 
 export interface FlickrConfig {
@@ -97,7 +98,10 @@ export interface InstagramConfig {
 
 export interface NextAuth {
 	secret: string;
-	url: string;
+	/** Optional explicit URLs for different environments. Use `local_url`, `dev_url`, and/or `prod_url`. */
+	local_url?: string; // local developer machine
+	dev_url?: string;   // preview/staging environments
+	prod_url?: string;  // production
 }
 
 export interface PaypalConfig {

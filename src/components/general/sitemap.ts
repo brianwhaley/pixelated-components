@@ -5,6 +5,7 @@ import { getWordPressItems, getWordPressItemImages } from "../general/wordpress.
 import { getContentfulFieldValues, getContentfulAssetURLs } from "../general/contentful.delivery";
 import { getEbayAppToken, getEbayItemsSearch } from "../shoppingcart/ebay.functions";
 import { getFullPixelatedConfig } from '../config/config';
+import { CacheManager } from '../general/cache-manager';
 
 
 export type SitemapEntry = MetadataRoute.Sitemap[number];
@@ -372,21 +373,54 @@ export async function createEbayItemURLs(origin: string) {
 		...config.ebay 
 	};
 
-	await getEbayAppToken({ apiProps: ebayProps })
-		.then(async (response: any) => {
-			await getEbayItemsSearch({ apiProps: ebayProps, token: response })
-				.then( (items: any) => {
-					for (const item of items.itemSummaries) {
-						sitemap.push({
-							url: `${origin}/store/${item.legacyItemId}` ,
-							lastModified: item.itemCreationDate ? new Date(item.itemCreationDate) : new Date(),
-							changeFrequency: "hourly",
-							priority: 1.0,
-						});
-					}
-				});
+	const cacheTTL = getEbayCacheTTL(config.ebay?.cacheTTL);
+	const items = await fetchCachedEbayItems(ebayProps, cacheTTL);
+	if (!items || !items.length) {
+		return sitemap;
+	}
+	for (const item of items) {
+		sitemap.push({
+			url: `${origin}/store/${item.legacyItemId}` ,
+			lastModified: item.itemCreationDate ? new Date(item.itemCreationDate) : new Date(),
+			changeFrequency: "hourly",
+			priority: 1.0,
 		});
+	}
 	return sitemap;
+}
+
+const SITEMAP_TTL = 24 * 60 * 60 * 1000; // one day
+const EBAY_SITE_SITEMAP_KEY = 'ebay_sitemap_items';
+const ebaySitemapCache = new CacheManager({ mode: 'memory', prefix: 'ebaySitemap_', ttl: SITEMAP_TTL });
+
+function getEbayCacheTTL(configTTL?: number) {
+	if (typeof configTTL === 'number' && configTTL > 0) {
+		return configTTL;
+	}
+	return SITEMAP_TTL;
+}
+
+async function fetchCachedEbayItems(apiProps: any, cacheTTL: number) {
+	const cached = ebaySitemapCache.get<any[]>(EBAY_SITE_SITEMAP_KEY);
+	if (cached) {
+		return cached;
+	}
+	try {
+		const token = await getEbayAppToken({ apiProps });
+		const data = await getEbayItemsSearch({ apiProps, token });
+		const items = data?.itemSummaries ?? [];
+		if (items.length) {
+			ebaySitemapCache.set(EBAY_SITE_SITEMAP_KEY, items, cacheTTL);
+		}
+		return items;
+	} catch (error) {
+		console.error('Error fetching eBay items for sitemap:', error);
+		throw error;
+	}
+}
+
+export function clearEbaySitemapCache() {
+	ebaySitemapCache.clear();
 }
 
 

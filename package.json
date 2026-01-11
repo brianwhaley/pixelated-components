@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.9.1",
+	"version": "3.9.2",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -118,9 +118,9 @@
 		"@testing-library/react": "^16.3.1",
 		"@testing-library/user-event": "^14.6.1",
 		"@types/md5": "^2.3.6",
-		"@types/node": "^25.0.5",
+		"@types/node": "^25.0.6",
 		"@types/prop-types": "^15.7.15",
-		"@types/react": "^19.2.7",
+		"@types/react": "^19.2.8",
 		"@types/react-dom": "^19.2.3",
 		"@typescript-eslint/eslint-plugin": "^8.52.0",
 		"@typescript-eslint/parser": "^8.52.0",

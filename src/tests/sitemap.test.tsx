@@ -7,6 +7,7 @@ import {
 	createContentfulImageURLs,
 	createEbayItemURLs,
 	generateSitemap,
+	clearEbaySitemapCache,
 	type SitemapEntry
 } from '@/components/general/sitemap';
 
@@ -32,6 +33,7 @@ describe('Sitemap Helper Functions', () => {
 		console.error = vi.fn();
 		console.log = vi.fn();
 		console.warn = vi.fn();
+			clearEbaySitemapCache();
 	});
 
 	afterEach(() => {
