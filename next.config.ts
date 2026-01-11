@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
 	},
 	env: {
 		PIXELATED_CONFIG_KEY: process.env.PIXELATED_CONFIG_KEY,
+		NEXTAUTH_URL: process.env.NEXTAUTH_URL,
 	},
 	images: {
 		remotePatterns: [
