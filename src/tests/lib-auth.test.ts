@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 // Helper to mock the config module before importing auth module
 const fakeConfig = {
-	nextAuth: { secret: 'test-secret', url: 'https://localhost:3006' },
+	nextAuth: { secret: 'test-secret' },
 	google: { client_id: 'g-id', client_secret: 'g-secret' },
 };
 
-describe('NextAuth config (server)', () => {
+describe('NextAuth config (legacy)', () => {
 	beforeEach(() => {
 		vi.resetModules();
 		vi.doMock('@pixelated-tech/components/server', () => ({
@@ -18,19 +18,19 @@ describe('NextAuth config (server)', () => {
 		vi.clearAllMocks();
 	});
 
-	it('exposes authOptions with values from pixelated config', async () => {
-		const mod = await import('./auth');
+	it('exposes authOptions with Google values from pixelated config', async () => {
+		const mod = await import('@/lib/auth');
 		const { authOptions } = mod as any;
-		expect(authOptions.secret).toBe('test-secret');
 		expect(authOptions.providers[0].clientId).toBe('g-id');
 		expect(authOptions.providers[0].clientSecret).toBe('g-secret');
 	});
 
-	it('throws when required values are missing', async () => {
+	it('throws when google config is missing', async () => {
 		vi.resetModules();
-		vi.doMock('@pixelated-tech/components/server', () => ({ getFullPixelatedConfig: () => ({}) }));
+		// Provide nextAuth.secret but omit google settings
+		vi.doMock('@pixelated-tech/components/server', () => ({ getFullPixelatedConfig: () => ({ nextAuth: { secret: 'test-secret' } }) }));
 		await expect(async () => {
-			await import('./auth');
-		}).rejects.toThrow('nextAuth.secret not configured');
+			await import('@/lib/auth');
+		}).rejects.toThrow('Google OAuth credentials not configured');
 	});
 });

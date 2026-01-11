@@ -13,7 +13,7 @@ import "@pixelated-tech/components/css/pixelated.global.css";
 import "@pixelated-tech/components/css/pixelated.grid.scss";
 import "./globals.css";
 import { redirect } from "next/navigation";
-import { authOptions } from "./lib/auth";
+import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 
 export default async function RootLayout({

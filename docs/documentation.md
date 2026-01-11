@@ -16,7 +16,6 @@ For example, add the Google credentials under the `google` top-level key and Nex
 - `google.api_key`
 - `google.refresh_token` (use `scripts/generate-google-tokens.js` to obtain and add to `pixelated.config.json`)
 - `nextAuth.secret`
-- `nextAuth.url`
 
 If you need to keep `pixelated.config.json` encrypted, provide the decryption key (`PIXELATED_CONFIG_KEY`) through your deployment secrets store (do not commit it to the repository).
 

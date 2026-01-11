@@ -1,5 +1,5 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { GET } from './axe-core/route';
+import { GET } from '@/app/api/site-health/axe-core/route';
 import * as integrationModule from '@pixelated-tech/components/adminserver';
 
 // Note: Using a simple object for the NextRequest (only url is read in the handler).
