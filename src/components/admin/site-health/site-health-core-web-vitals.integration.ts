@@ -1,7 +1,10 @@
 "use server";
 
+const debug = true;
+
 import { CoreWebVitalsData, PSIScores, PSICategory, PSIAudit } from './site-health-types';
 import { getFullPixelatedConfig } from '../../config/config';
+
 
 /**
  * Core Web Vitals Analysis Integration Services
@@ -128,15 +131,19 @@ export async function fetchPSIData(url: string): Promise<any> {
 	const fetchWithRetry = async (url: string, maxRetries = 2): Promise<Response> => {
 		for (let attempt = 0; attempt <= maxRetries; attempt++) {
 			try {
+				if (debug) console.info(`PSI request attempt=${attempt} url=${url}`);
 				const controller = new AbortController();
 				const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
 
+				const start = Date.now();
 				const response = await fetch(url, {
 					signal: controller.signal,
 					headers: {
 						'User-Agent': 'Mozilla/5.0 (compatible; SiteHealthMonitor/1.0)'
 					}
 				});
+				const elapsed = Date.now() - start;
+				if (debug) console.info(`PSI response: url=${url} status=${response.status} elapsed_ms=${elapsed}`);
 				clearTimeout(timeoutId);
 				return response;
 			} catch (error) {
@@ -144,9 +151,11 @@ export async function fetchPSIData(url: string): Promise<any> {
 					const errorMessage = error instanceof Error && error.name === 'AbortError'
 						? 'PSI API request timed out after 60 seconds'
 						: `PSI API request failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
+					if (debug) console.error('PSI request error (final):', { url, error });
 					throw new Error(errorMessage);
 				}
 				// Wait before retry (exponential backoff) - retry on both network errors and timeouts
+				if (debug) console.info(`PSI retrying after failure, attempt=${attempt} url=${url}`);
 				await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
 			}
 		}

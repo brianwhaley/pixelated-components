@@ -1,5 +1,13 @@
 // Types for Pixelated integration configuration
 
+export interface AWSConfig {
+	/** Programmatic credentials for AWS (if not using instance/IAM role). Prefer using instance roles */
+	access_key_id?: string;
+	secret_access_key?: string;
+	session_token?: string;
+	region?: string;
+}
+
 export interface CloudinaryConfig {
 	product_env: string;
 	baseUrl?: string; // optional custom CDN base, e.g. https://res.cloudinary.com
@@ -56,6 +64,15 @@ export interface FlickrConfig {
 		callback?: string; // function name for JSONP
 		nojsoncallback?: string; // 'true' if no callback function, else omit or set to 'false'
 	}
+}
+
+export interface GitHubConfig {
+	/** Personal Access Token or App token used to call GitHub REST API (use a fine-grained token with readonly repo access) */
+	token?: string;
+	/** Optional custom API base URL (enterprise installations). Defaults to https://api.github.com */
+	apiBaseUrl?: string;
+	/** Optional default organization/owner to use when a repo name is specified without owner */
+	defaultOwner?: string;
 }
 
 export interface GlobalConfig {
@@ -170,6 +187,11 @@ export const SECRET_CONFIG_KEYS = {
 	],
 	// Keys found within specific service configuration blocks
 	services: {
+		aws: [
+			'access_key_id',
+			'secret_access_key',
+			'session_token'
+		],
 		cloudinary: [
 			'api_key', 
 			'api_secret'
@@ -181,24 +203,29 @@ export const SECRET_CONFIG_KEYS = {
 		ebay: [
 			'sbxAppId'
 		],
+		github: [
+			'token'
+		],
+		instagram: [
+			'accessToken'
+		],
 		paypal: [
 			'sandboxPayPalApiKey',
 			'sandboxPayPalSecret',
 			'payPalApiKey',
 			'payPalSecret'
-		],
-		instagram: [
-			'accessToken'
 		]
 	}
 };
 
 export interface PixelatedConfig {
 	global?: GlobalConfig;
+	aws?: AWSConfig;
 	cloudinary?: CloudinaryConfig;
 	contentful?: ContentfulConfig;
 	ebay?: EbayConfig;
 	flickr?: FlickrConfig;
+	github?: GitHubConfig;
 	globlalConfig?: GlobalConfig;
 	google?: Google;
 	googleAnalytics?: GoogleAnalyticsConfig;

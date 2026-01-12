@@ -7,6 +7,7 @@
 
 import { CloudWatchClient, GetMetricDataCommand } from '@aws-sdk/client-cloudwatch';
 import { RouteCache } from './site-health-cache';
+import { getFullPixelatedConfig } from '../../config/config';
 
 export interface CloudwatchHealthCheckConfig {
   healthCheckId: string;
@@ -48,8 +49,16 @@ export async function getCloudwatchHealthCheckData(
 		}
 
 		// Use CloudWatch to get historical health check data
+		// Prefer credentials from unified config (pixelated.config.json) when present (avoids env vars)
+		const fullCfg = getFullPixelatedConfig();
+		const awsCfg = fullCfg?.aws;
 		const cloudWatchClient = new CloudWatchClient({
-			region: config.region || 'us-east-1'
+			region: config.region || awsCfg?.region || 'us-east-1',
+			credentials: (awsCfg?.access_key_id && awsCfg?.secret_access_key) ? {
+				accessKeyId: awsCfg.access_key_id,
+				secretAccessKey: awsCfg.secret_access_key!,
+				sessionToken: awsCfg.session_token
+			} : undefined
 		});
 
 		// Set up date range

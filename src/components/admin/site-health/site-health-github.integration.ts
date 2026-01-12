@@ -1,14 +1,6 @@
-/**
- * Git Health Integration Services
- * Server-side utilities for analyzing git repository health
- */
+"use server";
 
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import fs from 'fs';
-import path from 'path';
-
-const execAsync = promisify(exec);
+import { getFullPixelatedConfig } from '../../config/config';
 
 export interface GitCommit {
   hash: string;
@@ -27,74 +19,113 @@ export interface GitHealthResult {
 
 export interface SiteConfig {
   name: string;
-  localPath: string;
+  /** Optional: repo name or owner/repo */
+  remote?: string;
+  /** Optional explicit repo owner */
+  owner?: string;
 }
 
 /**
- * Analyze git repository health for a site
+ * Analyze git repository health for a site using the GitHub REST API.
+ * Expects a GitHub token to be present in the master config under `github.token`.
  */
 export async function analyzeGitHealth(siteConfig: SiteConfig, startDate?: string, endDate?: string): Promise<GitHealthResult> {
 	try {
-		const { localPath } = siteConfig;
+		const cfg = getFullPixelatedConfig();
+		const token = cfg?.github?.token;
+		const defaultOwner = cfg?.github?.defaultOwner;
 
-		// Check if the local path exists and is a git repository
-		if (!fs.existsSync(localPath)) {
-			throw new Error('Site directory not found');
+		if (!token) {
+			throw new Error('GitHub token not configured in pixelated.config.json under "github.token"');
 		}
 
-		const gitDir = path.join(localPath, '.git');
-		if (!fs.existsSync(gitDir)) {
-			throw new Error('Not a git repository');
+		// Determine owner and repo
+		let owner: string | undefined;
+		let repo: string | undefined;
+
+		if (siteConfig.remote && siteConfig.remote.includes('/')) {
+			[owner, repo] = siteConfig.remote.split('/', 2);
+		} else {
+			repo = siteConfig.remote || siteConfig.name;
+			owner = siteConfig.owner || defaultOwner;
 		}
 
-		// Build git log command with date range
-		let sinceOption = '--since="30 days ago"';
-		if (startDate && endDate) {
-			sinceOption = `--since="${startDate}" --before="${endDate}"`;
-		} else if (startDate) {
-			sinceOption = `--since="${startDate}"`;
-		} else if (endDate) {
-			sinceOption = `--before="${endDate}"`;
+		if (!owner || !repo) {
+			throw new Error('Repository owner or name not provided. Set site.remote to "owner/repo" or configure github.defaultOwner in pixelated.config.json');
 		}
 
-		// Get git log
-		const gitCommand = `git log --oneline ${sinceOption} --pretty=format:"%H|%ad|%s|%an" --date=iso`;
-		const { stdout: logOutput } = await execAsync(gitCommand, { cwd: localPath });
+		// Build query params
+		let since: string | undefined;
+		let until: string | undefined;
+		if (startDate) since = new Date(startDate).toISOString();
+		if (endDate) {
+			// include full end day by adding one day and using until
+			const d = new Date(endDate);
+			d.setDate(d.getDate() + 1);
+			until = d.toISOString();
+		}
 
-		const commits: GitCommit[] = logOutput
-			.trim()
-			.split('\n')
-			.filter(line => line.trim())
-			.map(line => {
-				const [hash, date, ...messageParts] = line.split('|');
-				const message = messageParts.slice(0, -1).join('|');
-				const author = messageParts[messageParts.length - 1];
+		// Default to last 30 days if not specified
+		if (!since && !until) {
+			const end = new Date();
+			const start = new Date(end.getTime() - (30 * 24 * 60 * 60 * 1000));
+			since = start.toISOString();
+			until = end.toISOString();
+		}
 
-				return {
-					hash,
-					date,
-					message,
-					author
-				};
-			})
-			.filter(commit => !/^\d+\.\d+\.\d+$/.test(commit.message.trim())) // Filter out version-only commits
-			.slice(0, (startDate && endDate) ? 100 : 20); // Limit to more commits when date range is specified
+		const headers: Record<string, string> = {
+			'Accept': 'application/vnd.github+json',
+			'Authorization': `token ${token}`
+		};
 
-		// Try to associate commits with versions
-		for (const commit of commits) {
-			try {
-				const { stdout: tagOutput } = await execAsync(
-					`git describe --tags --contains ${commit.hash} 2>/dev/null || echo ""`,
-					{ cwd: localPath }
-				);
+		const params = new URLSearchParams();
+		if (since) params.set('since', since);
+		if (until) params.set('until', until);
+		params.set('per_page', '100');
 
-				if (tagOutput.trim()) {
-					commit.version = tagOutput.trim();
+		const commitsUrl = `https://api.github.com/repos/${owner}/${repo}/commits?${params.toString()}`;
+		const commitsRes = await fetch(commitsUrl, { headers });
+
+		if (!commitsRes.ok) {
+			const text = await commitsRes.text().catch(() => '');
+			throw new Error(`GitHub API returned ${commitsRes.status}: ${commitsRes.statusText} ${text}`);
+		}
+
+		const commitsJson = await commitsRes.json();
+
+		// Fetch tags to try to match commit -> tag (best-effort, only exact matches)
+		const tagsUrl = `https://api.github.com/repos/${owner}/${repo}/tags?per_page=100`;
+		const tagsRes = await fetch(tagsUrl, { headers });
+		let tagMap = new Map<string, string>();
+		if (tagsRes.ok) {
+			const tags = await tagsRes.json().catch(() => []);
+			for (const t of tags || []) {
+				if (t && t.commit && t.commit.sha && t.name) {
+					tagMap.set(t.commit.sha, t.name);
 				}
-			} catch {
-				// Ignore errors for commits not associated with tags
 			}
 		}
+
+		const commits: GitCommit[] = (Array.isArray(commitsJson) ? commitsJson : [])
+			.map((c: any) => {
+				const sha = c.sha;
+				const commitObj = c.commit || {};
+				const author = (commitObj.author && commitObj.author.name) || (c.author && c.author.login) || 'unknown';
+				const date = (commitObj.author && commitObj.author.date) || new Date().toISOString();
+				const message = commitObj.message || '';
+
+				return {
+					hash: sha,
+					date,
+					message,
+					author,
+					version: tagMap.get(sha) // may be undefined
+				} as GitCommit;
+			})
+			.filter(Boolean)
+		// Filter out trivial version-only commits if necessary
+			.filter(commit => !/^\d+\.\d+\.\d+$/.test(commit.message.trim()))
+			.slice(0, (startDate && endDate) ? 100 : 20);
 
 		return {
 			commits,
@@ -107,7 +138,7 @@ export async function analyzeGitHealth(siteConfig: SiteConfig, startDate?: strin
 			commits: [],
 			timestamp: new Date().toISOString(),
 			status: 'error',
-			error: error instanceof Error ? error.message : 'Failed to analyze git health'
+			error: error instanceof Error ? error.message : String(error)
 		};
 	}
 }
