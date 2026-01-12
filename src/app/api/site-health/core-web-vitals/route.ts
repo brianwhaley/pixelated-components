@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { performCoreWebVitalsAnalysis, CoreWebVitalsData } from '@pixelated-tech/components/adminserver';
 
-const debug = false;
+const debug = true;
 
 interface Site {
   name: string;
@@ -33,17 +33,24 @@ export async function GET(request: NextRequest) {
 		// Filter sites if a specific site was requested - only sites with URLs are processed
 		const sitesToProcess = sites.filter(site => site.name === requestedSiteName && site.url);
 
+		if (debug) console.info(`Core Web Vitals API called for siteName=${requestedSiteName} useCache=${useCache} totalSitesConfigured=${sites.length} sitesToProcess=${sitesToProcess.length}`);
+
 		const results: CoreWebVitalsData[] = [];
 
 		// Process sites sequentially to avoid overwhelming the API
 		for (const site of sitesToProcess) {
 			try {
+				const start = Date.now();
+				if (debug) console.info(`Processing site ${site.name} url=${site.url}`);
+
 				// Use the URL from the site configuration
 				const url = site.url!;
 
 				// Perform Core Web Vitals analysis using the integration
 				const result = await performCoreWebVitalsAnalysis(url, site.name, useCache);
 				results.push(result);
+
+				if (debug) console.info(`Processed site ${site.name} status=${result.status} elapsed_ms=${Date.now()-start}`);
 
 			} catch (error) {
 				if (debug) console.error(`Error processing site ${site.name}:`, error);
