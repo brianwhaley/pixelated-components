@@ -1,5 +1,5 @@
 
-import { getContentfulDiscountCodes } from "../general/contentful.delivery";
+import { getContentfulDiscountCodes } from "../integrations/contentful.delivery";
 
 const debug = false;
 /* ========== LOCALSTORAGE KEYS ========== */

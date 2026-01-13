@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getWordPressItems, photonToOriginalUrl } from '../components/general/wordpress.functions';
+import { getWordPressItems, photonToOriginalUrl } from '../components/integrations/wordpress.functions';
 
 // Mock fetch globally
 global.fetch = vi.fn();

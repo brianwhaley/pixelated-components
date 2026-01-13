@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { getInstagramTiles } from '../general/instagram.functions';
+import { getInstagramTiles } from './instagram.functions';
 import { usePixelatedConfig } from "../config/config.client";
-import { Tiles } from './tiles';
-import type { CarouselCardType } from './carousel';
+import { Tiles } from '../general/tiles';
+import type { CarouselCardType } from '../general/carousel';
 
 InstagramTiles.propTypes = {
 	accessToken: PropTypes.string,

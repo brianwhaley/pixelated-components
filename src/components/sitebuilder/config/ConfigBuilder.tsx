@@ -5,7 +5,7 @@ import PropTypes, { InferProps } from 'prop-types';
 import { Modal } from '../../general/modal';
 import { Tab } from '../../general/tab';
 import { Accordion } from '../../general/accordion';
-import { createGeminiApiService, GeminiRecommendationResponse } from '../../utilities/gemini-api.client';
+import { createGeminiApiService, GeminiRecommendationResponse } from '../../integrations/gemini-api.client';
 import { FormEngine } from '../form/formengine';
 import { FormValidationProvider } from '../form/formvalidator';
 import * as FC from '../form/formcomponents';

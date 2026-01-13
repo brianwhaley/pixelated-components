@@ -1,6 +1,6 @@
 import PropTypes, { InferProps } from "prop-types";
 import type { ShoppingCartType } from "./shoppingcart.functions";
-import { getCloudinaryRemoteFetchURL as getImg} from "../general/cloudinary";
+import { getCloudinaryRemoteFetchURL as getImg} from "../integrations/cloudinary";
 import { CacheManager } from "../general/cache-manager";
 
 const debug = false;

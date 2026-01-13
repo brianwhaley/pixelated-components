@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { GravatarCard, type GravatarCardType } from '@/components/general/gravatar.components';
-import { getGravatarProfile, type GravatarProfile } from '@/components/general/gravatar.functions';
+import { GravatarCard, type GravatarCardType } from '@/components/integrations/gravatar.components';
+import { getGravatarProfile, type GravatarProfile } from '@/components/integrations/gravatar.functions';
 
 // Wrapper to handle async data fetching for the story
 const GravatarStoryWrapper = (args: GravatarCardType & { email?: string }) => {

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render } from '../test/test-utils';
-import { GoogleSearch } from '@/components/general/googlesearch';
-import type { GoogleSearchType } from '@/components/general/googlesearch';
+import { GoogleSearch } from '@/components/integrations/googlesearch';
+import type { GoogleSearchType } from '@/components/integrations/googlesearch';
 
 describe('GoogleSearch Component', () => {
 	beforeEach(() => {

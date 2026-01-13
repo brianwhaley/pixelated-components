@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { generateKey } from '../../../utilities/functions';
+import { generateKey } from '../../../general/utilities';
 import { componentMap, layoutComponents } from '../lib/componentMap';
 import './pagebuilder.scss';
 

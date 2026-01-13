@@ -7,7 +7,7 @@ import { SmartImage } from "../general/smartimage";
 import { getEbayItems, getEbayItem, getShoppingCartItem, getEbayRateLimits, getEbayAppToken } from "./ebay.functions";
 import { addToShoppingCart } from "./shoppingcart.functions";
 import { AddToCartButton, /* GoToCartButton */ ViewItemDetails } from "./shoppingcart.components";
-import { getCloudinaryRemoteFetchURL as getImg} from "../general/cloudinary";
+import { getCloudinaryRemoteFetchURL as getImg} from "../integrations/cloudinary";
 import { Loading , ToggleLoading } from "../general/loading";
 import { usePixelatedConfig } from "../config/config.client";
 import "../../css/pixelated.grid.scss";

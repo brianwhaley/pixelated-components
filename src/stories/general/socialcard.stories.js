@@ -1,5 +1,5 @@
 import React from 'react';
-import { SocialCards } from '@/components/general/socialcard';
+import { SocialCards } from '@/components/integrations/socialcard';
 import '@/css/pixelated.global.css';
 
 const mySources = {

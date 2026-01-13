@@ -1,5 +1,5 @@
 import React from 'react';
-import { BlogPostList } from '@/components/general/wordpress.components';
+import { BlogPostList } from '@/components/integrations/wordpress.components';
 
 export default {
 	title: 'General',

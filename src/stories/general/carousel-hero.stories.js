@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Carousel } from '@/components/general/carousel';
-import { GetFlickrData, GenerateFlickrCards } from '@/components/general/flickr';
+import { GetFlickrData, GenerateFlickrCards } from '@/components/integrations/flickr';
 import { usePixelatedConfig } from '@/components/config/config.client';
 import '@/css/pixelated.global.css';
 import './carousel-hero.stories.css';

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import * as contentfulModule from '../components/general/contentful.delivery';
+import * as contentfulModule from '../components/integrations/contentful.delivery';
 
 // Mock fetch globally
 global.fetch = vi.fn();

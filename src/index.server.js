@@ -3,10 +3,8 @@
 // Note: Client components (with JSX, CSS imports, browser APIs) are NOT exported here.
 // Import those from the main package entry point: @pixelated-tech/components
 
-// Admin
 export * from './components/admin/sites/sites.integration';
 
-// Config
 export * from './components/config/config';
 export * from './components/config/config.server';
 export * from './components/config/config.types';
@@ -14,14 +12,6 @@ export * from './components/config/config.utils';
 export * from './components/config/config.validators';
 export * from './components/config/crypto';
 
-// SEO
-export * from './components/general/contentful.delivery';
-export * from './components/general/contentful.management';
-export * from './components/general/flickr';
-export * from './components/general/googlemap';
-export * from './components/general/google.reviews.functions';
-export * from './components/general/gravatar.functions';
-export * from './components/general/instagram.functions';
 export * from './components/general/manifest';
 export * from './components/general/metadata.functions';
 export * from './components/general/proxy-handler';
@@ -34,21 +24,27 @@ export * from './components/general/schema-recipe';
 export * from './components/general/schema-services';
 export * from './components/general/schema-website';
 export * from './components/general/sitemap';
-export * from './components/general/wordpress.functions';
+export * from './components/general/utilities';
 
-// Shopping Cart
+export * from './components/integrations/contentful.delivery';
+export * from './components/integrations/contentful.management';
+export * from './components/integrations/flickr';
+export * from './components/integrations/gemini-api.server';
+export * from './components/integrations/googlemap';
+export * from './components/integrations/google.reviews.functions';
+export * from './components/integrations/gravatar.functions';
+export * from './components/integrations/instagram.functions';
+export * from './components/integrations/wordpress.functions';
+
 export * from './components/shoppingcart/ebay.functions';
 
-// Sitebuilder - Config
 export * from './components/sitebuilder/config/ConfigEngine';
 export * from './components/sitebuilder/config/fonts';
 export * from './components/sitebuilder/config/google-fonts';
 
-// Sitebuilder - Form
 export * from './components/sitebuilder/form/formtypes';
 export * from './components/sitebuilder/form/formutils';
 
-// Sitebuilder - Page
 export * from './components/sitebuilder/page/lib/componentGeneration';
 export * from './components/sitebuilder/page/lib/componentMap';
 export * from './components/sitebuilder/page/lib/componentMetadata';
@@ -57,7 +53,3 @@ export * from './components/sitebuilder/page/lib/pageStorageLocal'; // used for 
 export * from './components/sitebuilder/page/lib/pageStorageTypes';
 export * from './components/sitebuilder/page/lib/propTypeIntrospection';
 export * from './components/sitebuilder/page/lib/types';
-
-// Utilities
-export * from './components/utilities/functions';
-export * from './components/utilities/gemini-api.server';

@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes, { InferProps } from "prop-types";
-import { Carousel } from './carousel';
-import type { CarouselCardType } from "./carousel";
+import { Carousel } from '../general/carousel';
+import type { CarouselCardType } from "../general/carousel";
 import { getContentfulEntriesByType, getContentfulEntryByEntryID } from "./contentful.delivery";
 import { usePixelatedConfig } from '../config/config.client';
 import { addToShoppingCart  } from "../shoppingcart/shoppingcart.functions";

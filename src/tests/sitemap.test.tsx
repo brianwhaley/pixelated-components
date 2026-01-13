@@ -12,14 +12,14 @@ import {
 } from '@/components/general/sitemap';
 
 // Mock external dependencies
-vi.mock('@/components/general/wordpress.functions');
-vi.mock('@/components/general/contentful.delivery');
+vi.mock('@/components/integrations/wordpress.functions');
+vi.mock('@/components/integrations/contentful.delivery');
 vi.mock('@/components/shoppingcart/ebay.functions');
 vi.mock('@/components/config/config');
 vi.mock('@/components/general/metadata.functions');
 // Import mocked modules
-import * as wordpressModule from '@/components/general/wordpress.functions';
-import * as contentfulModule from '@/components/general/contentful.delivery';
+import * as wordpressModule from '@/components/integrations/wordpress.functions';
+import * as contentfulModule from '@/components/integrations/contentful.delivery';
 import * as ebayModule from '@/components/shoppingcart/ebay.functions';
 import * as configModule from '@/components/config/config';
 import * as metadataModule from '@/components/general/metadata.functions';

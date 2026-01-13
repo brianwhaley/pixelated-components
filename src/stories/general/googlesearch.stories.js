@@ -1,4 +1,4 @@
-import { GoogleSearch } from '@/components/general/googlesearch';
+import { GoogleSearch } from '@/components/integrations/googlesearch';
 import '@/css/pixelated.global.css';
 
 export default {

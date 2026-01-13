@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { usePixelatedConfig } from "../config/config.client";
-import { SmartImage } from './smartimage';
-import {PageGridItem } from './semantic';
+import { SmartImage } from '../general/smartimage';
+import {PageGridItem } from '../general/semantic';
 import type { BlogPostType } from './wordpress.functions';
 import { getWordPressItems } from './wordpress.functions';
-import { Loading, ToggleLoading } from './loading';
+import { Loading, ToggleLoading } from '../general/loading';
 
 import "./wordpress.css";
 

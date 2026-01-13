@@ -35,12 +35,6 @@ export function mergeDeep (a: any, b: any) {
 	return extended;
 }
 
-export function pushNewValueToStateArray (that: any, oldState: any, newValue: any) {
-	const myNewArray = that.state[oldState];
-	myNewArray.push(newValue);
-	that.setState({ [oldState]: myNewArray });
-}
-
 export function randomBetween (min: number, max: number) {
 	/* ===== RANDOM NUM BETWEEN MIN AND MAX ===== */
 	if (min < 0) {
@@ -234,7 +228,7 @@ export const SERVER_ONLY_PATTERNS = [
 	/\bimport.*path\b|\brequire.*path\b/,  // Actual import of path module
 	/\bprocess\.cwd\(\)/,
 	/\brequire\.resolve\b/,
-	/\butil\b/,
-	/\bNextRequest\b/,
-	/\bNextResponse\b/
+	/\butil\b/
+//	/\bNextRequest\b/,
+//	/\bNextResponse\b/
 ];

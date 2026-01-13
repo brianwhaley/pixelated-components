@@ -5,7 +5,7 @@ import {
   SocialCards,
   SocialCard,
   SocialCardsLoading,
-} from '@/components/general/socialcard';
+} from '@/components/integrations/socialcard';
 
 // Mock SmartImage
 vi.mock('@/components/general/smartimage', () => ({

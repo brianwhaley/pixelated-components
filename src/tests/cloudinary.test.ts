@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import * as cloudinaryModule from '../components/general/cloudinary';
+import * as cloudinaryModule from '../components/integrations/cloudinary';
 
 describe('cloudinary utilities', () => {
 	beforeEach(() => {

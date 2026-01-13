@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleReviewsCard } from '@/components/general/google.reviews.components';
+import { GoogleReviewsCard } from '@/components/integrations/google.reviews.components';
 
 export default {
 	title: 'General',

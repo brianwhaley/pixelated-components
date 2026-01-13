@@ -1,8 +1,8 @@
 import PropTypes, { InferProps } from "prop-types";
 import type { MetadataRoute } from 'next';
 import { getAllRoutes } from "./metadata.functions";
-import { getWordPressItems, getWordPressItemImages } from "../general/wordpress.functions";
-import { getContentfulFieldValues, getContentfulAssetURLs } from "../general/contentful.delivery";
+import { getWordPressItems, getWordPressItemImages } from "../integrations/wordpress.functions";
+import { getContentfulFieldValues, getContentfulAssetURLs } from "../integrations/contentful.delivery";
 import { getEbayAppToken, getEbayItemsSearch } from "../shoppingcart/ebay.functions";
 import { getFullPixelatedConfig } from '../config/config';
 import { CacheManager } from '../general/cache-manager';

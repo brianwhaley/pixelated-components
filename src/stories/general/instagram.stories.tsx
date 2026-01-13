@@ -1,5 +1,5 @@
 import React from 'react';
-import { InstagramTiles } from '@/components/general/instagram.components';
+import { InstagramTiles } from '@/components/integrations/instagram.components';
 
 export default {
 	title: 'General',

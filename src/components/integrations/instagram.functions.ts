@@ -2,7 +2,7 @@
 // Requires: Instagram Business/Creator account, Facebook Page, OAuth access token
 // Returns: Array compatible with Tiles/Carousel components
 
-import type { CarouselCardType } from './carousel';
+import type { CarouselCardType } from '../general/carousel';
 
 export type InstagramMedia = {
 	id: string;

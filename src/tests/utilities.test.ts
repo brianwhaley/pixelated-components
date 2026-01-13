@@ -2,13 +2,12 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import {
   html2dom,
   mergeDeep,
-  pushNewValueToStateArray,
   randomBetween,
   generateKey,
   generateUUID,
   capitalize,
   attributeMap
-} from '../components/utilities/functions';
+} from '../components/general/utilities';
 
 describe('Utility Functions', () => {
   describe('html2dom', () => {
@@ -217,104 +216,6 @@ describe('Utility Functions', () => {
       const result = mergeDeep(obj1, obj2);
 
       expect(result).toEqual({ a: 1, b: 2, c: 30, d: 40, e: 5, f: 6 });
-    });
-  });
-
-  describe('pushNewValueToStateArray', () => {
-    it('should push value to state array', () => {
-      const mockComponent = {
-        state: { items: [1, 2] },
-        setState: vi.fn()
-      };
-
-      pushNewValueToStateArray(mockComponent, 'items', 3);
-
-      expect(mockComponent.setState).toHaveBeenCalled();
-    });
-
-    it('should call setState with updated array', () => {
-      const mockComponent = {
-        state: { items: [1, 2] },
-        setState: vi.fn()
-      };
-
-      pushNewValueToStateArray(mockComponent, 'items', 3);
-
-      const stateUpdate = mockComponent.setState.mock.calls[0][0];
-      expect(stateUpdate.items).toContain(3);
-    });
-
-    it('should handle empty array', () => {
-      const mockComponent = {
-        state: { items: [] },
-        setState: vi.fn()
-      };
-
-      pushNewValueToStateArray(mockComponent, 'items', 1);
-
-      const stateUpdate = mockComponent.setState.mock.calls[0][0];
-      expect(stateUpdate.items).toEqual([1]);
-    });
-
-    it('should handle object values', () => {
-      const mockComponent = {
-        state: { items: [] },
-        setState: vi.fn()
-      };
-
-      const obj = { id: 1, name: 'test' };
-      pushNewValueToStateArray(mockComponent, 'items', obj);
-
-      const stateUpdate = mockComponent.setState.mock.calls[0][0];
-      expect(stateUpdate.items[0]).toEqual(obj);
-    });
-
-    it('should preserve existing array elements', () => {
-      const mockComponent = {
-        state: { items: [1, 2, 3] },
-        setState: vi.fn()
-      };
-
-      pushNewValueToStateArray(mockComponent, 'items', 4);
-
-      const stateUpdate = mockComponent.setState.mock.calls[0][0];
-      expect(stateUpdate.items).toEqual([1, 2, 3, 4]);
-    });
-
-    it('should handle different state property names', () => {
-      const mockComponent = {
-        state: { users: ['Alice'], posts: ['Post1'] },
-        setState: vi.fn()
-      };
-
-      pushNewValueToStateArray(mockComponent, 'users', 'Bob');
-
-      const stateUpdate = mockComponent.setState.mock.calls[0][0];
-      expect(stateUpdate.users).toContain('Bob');
-    });
-
-    it('should handle null values', () => {
-      const mockComponent = {
-        state: { items: [1] },
-        setState: vi.fn()
-      };
-
-      pushNewValueToStateArray(mockComponent, 'items', null);
-
-      const stateUpdate = mockComponent.setState.mock.calls[0][0];
-      expect(stateUpdate.items).toContain(null);
-    });
-
-    it('should handle string values', () => {
-      const mockComponent = {
-        state: { items: ['a', 'b'] },
-        setState: vi.fn()
-      };
-
-      pushNewValueToStateArray(mockComponent, 'items', 'c');
-
-      const stateUpdate = mockComponent.setState.mock.calls[0][0];
-      expect(stateUpdate.items).toEqual(['a', 'b', 'c']);
     });
   });
 

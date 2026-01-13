@@ -1,14 +1,14 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, fireEvent } from '../test/test-utils';
+import { render, screen, fireEvent } from '@/test/test-utils';
 import { SmartImage } from '@/components/general/smartimage';
 
 // Mock the buildCloudinaryUrl function
-vi.mock('@/components/general/cloudinary', () => ({
+vi.mock('@/components/integrations/cloudinary', () => ({
 buildCloudinaryUrl: vi.fn(),
 }));
 
-import { buildCloudinaryUrl } from '@/components/general/cloudinary';
+import { buildCloudinaryUrl } from '@/components/integrations/cloudinary';
 
 const mockBuildCloudinaryUrl = vi.mocked(buildCloudinaryUrl);
 

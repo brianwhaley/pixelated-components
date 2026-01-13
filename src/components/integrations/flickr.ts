@@ -1,7 +1,7 @@
 
 import PropTypes, { InferProps } from 'prop-types';
-import { mergeDeep } from '../utilities/functions';
-import type { CarouselCardType } from './carousel';
+import { mergeDeep } from '../general/utilities';
+import type { CarouselCardType } from '../general/carousel';
 
 type FlickrApiType = {
     baseURL: string;

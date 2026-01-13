@@ -1,5 +1,5 @@
 // Shared utility functions for form components
-import { generateKey, capitalize, attributeMap } from '../../utilities/functions';
+import { generateKey, capitalize, attributeMap } from '../../general/utilities';
 
 export const debug = false;
 

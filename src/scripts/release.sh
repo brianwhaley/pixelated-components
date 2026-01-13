@@ -17,10 +17,8 @@ prompt_remote_selection() {
         echo "$i) $remote" >&2
         ((i++))
     done
-    
     local choice
     read -p "Select remote to use (1-${#remotes[@]}): " choice >&2
-    
     case $choice in
         [1-9]|[1-9][0-9])
             if [ "$choice" -le "${#remotes[@]}" ]; then
@@ -190,18 +188,99 @@ if git show-ref --verify --quiet refs/heads/main; then
 fi
 
 echo ""
-echo "🏷️  Step 8: Creating and pushing git tag..."
+echo "🏷️  Step 8.0: Creating and pushing git tag and release..."
 echo "================================================="
 new_version=$(get_current_version)
-if ! git tag -l | grep -q "v$new_version"; then
-    git tag "v$new_version"
-    git push $REMOTE_NAME "v$new_version"
+release_tag="v${new_version}"
+# Use commit message as tag/release message when available, otherwise default
+tag_message="${commit_message:-"Release $release_tag"}"
+if ! git tag -l | grep -q "$release_tag"; then
+    echo "🔖 Creating annotated tag $release_tag"
+    git tag -a "$release_tag" -m "$tag_message"
+    git push $REMOTE_NAME "$release_tag"
 else
-    echo "ℹ️  Tag v$new_version already exists"
+    echo "ℹ️  Tag $release_tag already exists"
+fi
+
+# Create a published GitHub release for this tag (prefer gh CLI, fallback to API)
+# Attempt to source GITHUB token from pixelated config (without printing it)
+# Looks in a few common locations; will decrypt if needed and possible
+echo ""
+echo "🔑 Step 8.1: Locating GitHub token in config..."
+echo "================================================="
+GITHUB_TOKEN_SOURCE=""
+config_paths=("src/app/config/pixelated.config.json" "src/config/pixelated.config.json" "pixelated.config.json")
+for cfg in "${config_paths[@]}"; do
+    if [ -f "$cfg" ]; then
+        token=$(node -e "try{const fs=require('fs');const p=process.argv[1];const d=JSON.parse(fs.readFileSync(p,'utf8'));const v=d.GITHUB_TOKEN||(d.github&&d.github.token)||d.github_token||(d.tokens&&d.tokens.github&&d.tokens.github.token); if(v) console.log(v)}catch(e){}" "$cfg" 2>/dev/null || true)
+        if [ -n "$token" ]; then
+            export GITHUB_TOKEN="$token"
+            GITHUB_TOKEN_SOURCE="$cfg"
+            echo "✅ GITHUB token loaded from $cfg"
+            break
+        fi
+    fi
+done
+
+# If not found and we have config:decrypt available and a key, try to decrypt temporarily
+if [ -z "$GITHUB_TOKEN" ] && grep -q "\"config:decrypt\":" package.json 2>/dev/null; then
+    if [ -z "$PIXELATED_CONFIG_KEY" ]; then
+        echo "⚠️ PIXELATED_CONFIG_KEY not set; cannot decrypt config to find token"
+    else
+        echo "🔓 Decrypting config to locate GitHub token..."
+        if npm run config:decrypt; then
+            for cfg in "${config_paths[@]}"; do
+                if [ -f "$cfg" ]; then
+                    token=$(node -e "try{const fs=require('fs');const p=process.argv[1];const d=JSON.parse(fs.readFileSync(p,'utf8'));const v=d.GITHUB_TOKEN||(d.github&&d.github.token)||d.github_token||(d.tokens&&d.tokens.github&&d.tokens.github.token); if(v) console.log(v)}catch(e){}" "$cfg" 2>/dev/null || true)
+                    if [ -n "$token" ]; then
+                        export GITHUB_TOKEN="$token"
+                        GITHUB_TOKEN_SOURCE="$cfg"
+                        echo "✅ GITHUB token loaded from $cfg after decrypt"
+                        break
+                    fi
+                fi
+            done
+        else
+            echo "❌ config:decrypt failed; cannot load GitHub token"
+        fi
+    fi
+fi
+
+# Proceed to create release
+echo ""
+echo "📣 Step 8.2: Creating GitHub release..."
+echo "================================================="
+REMOTE_URL=$(git remote get-url $REMOTE_NAME 2>/dev/null || true)
+
+# Use GitHub API only (no gh CLI). Ensure GITHUB_TOKEN is present
+if [ -z "$GITHUB_TOKEN" ]; then
+    echo "⚠️  GITHUB_TOKEN not set; skipping GitHub release creation via API"
+else
+    # Derive owner/repo from remote URL
+    repo_path=$(echo "$REMOTE_URL" | sed -E 's#(git@github.com:|https://github.com/)(.+?)(\.git)?$#\2#')
+    if [ -z "$repo_path" ]; then
+        echo "⚠️  Unable to determine repo path from remote URL; skipping API-based release creation"
+    else
+        # Check if release exists
+        if curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path/releases/tags/$release_tag" | grep -q '"tag_name"'; then
+            echo "ℹ️  Release for $release_tag already exists on GitHub (API)."
+        else
+            echo "🔔 Creating release via GitHub API for $release_tag"
+            payload=$(printf '{"tag_name":"%s","name":"%s","body":"%s","draft":false,"prerelease":false}' "$release_tag" "$release_tag" "${tag_message//\"/\\\"}")
+            resp=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$payload" "https://api.github.com/repos/$repo_path/releases")
+            if echo "$resp" | grep -q '"id"'; then
+                echo "✅ Created GitHub release $release_tag"
+            else
+                echo "❌ Failed to create GitHub release: $resp"
+            fi
+        fi
+    fi
 fi
 
 if grep -q "\"config:decrypt\":" package.json; then
-    echo "🔓 Decrypting configuration for local development..."
+	echo ""
+    echo "🔓 Step 8.3: Decrypting configuration for local development..."
+	echo "================================================="
     npm run config:decrypt
 fi
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleAnalytics } from '@/components/general/googleanalytics';
+import { GoogleAnalytics } from '@/components/integrations/googleanalytics';
 
 export default {
 	title: 'General',

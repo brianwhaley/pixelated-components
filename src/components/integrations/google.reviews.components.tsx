@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { SmartImage } from './smartimage';
+import { SmartImage } from '../general/smartimage';
 import { getGoogleReviewsByPlaceId, GoogleReview, GooglePlaceSummary } from './google.reviews.functions';
 import { usePixelatedConfig } from '../config/config.client';
 import './google.reviews.css';
