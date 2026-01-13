@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.9.8",
+	"version": "3.9.9",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -59,14 +59,7 @@
 		"path": false
 	},
 	"scripts": {
-		"build": "npm run validate-exports && npm run buildClean && npm run tsc && npm run rsync && npm run tscClean ",
-		"build-webpack": "webpack --config webpack.config.cjs && tsc --emitDeclarationOnly --outDir dist/types",
-		"buildClean": "rm -rf dist",
-		"tsc": "npx tsc --project tsconfig.json",
-		"tscClean": "rm -rf dist/{images,stories,tests}",
-		"rsync": "(cd src && tar -cf - $(find . -name \"*.css\" -o -name \"*.scss\" -o -name \"*.json\") scripts/) | tar -C dist -xf -",
-		"rsync1": "find src -type f \\( -name \"*.css\" -o -name \"*.scss\" -o -name \"*.json\" \\) -exec sh -c 'mkdir -p dist/$(dirname \"${1#src/}\") && cp \"$1\" dist/\"${1#src/}\"' _ {} \\; ; find src/scripts -type f -exec sh -c 'mkdir -p dist/$(dirname \"${1#src/}\") && cp \"$1\" dist/\"${1#src/}\"' _ {} \\;",
-		"rsync2": "rsync -a --include='*.css' --include='*.scss' --include='*.json' --include='scripts/**' --include='*/' --exclude='*' src/ dist",
+		"build": "bash src/scripts/build.sh",
 		"validate-exports": "npx tsx src/scripts/validate-exports.js",
 		"copy2brianwhaley": "rm -rf ../brianwhaley/node_modules/@pixelated-tech/components/dist && cp -r dist ../brianwhaley/node_modules/@pixelated-tech/components/",
 		"copy2informationfocus": "rm -rf ../informationfocus/node_modules/@pixelated-tech/components/dist && cp -r dist ../informationfocus/node_modules/@pixelated-tech/components/",
@@ -90,6 +83,16 @@
 		"config:vault": "npm run vault --",
 		"config:encrypt": "npm run config:vault -- encrypt src/config/pixelated.config.json",
 		"config:decrypt": "npm run config:vault -- decrypt src/config/pixelated.config.json"
+	},
+	"scripts-20260113": {
+		"build": "npm run validate-exports && npm run buildClean && npm run tsc && npm run rsync && npm run tscClean ",
+		"build-webpack": "webpack --config webpack.config.cjs && tsc --emitDeclarationOnly --outDir dist/types",
+		"buildClean": "rm -rf dist",
+		"tsc": "npx tsc --project tsconfig.json",
+		"tscClean": "rm -rf dist/{images,stories,tests}",
+		"rsync": "(cd src && tar -cf - $(find . -name \"*.css\" -o -name \"*.scss\" -o -name \"*.json\") scripts/) | tar -C dist -xf -",
+		"rsync1": "find src -type f \\( -name \"*.css\" -o -name \"*.scss\" -o -name \"*.json\" \\) -exec sh -c 'mkdir -p dist/$(dirname \"${1#src/}\") && cp \"$1\" dist/\"${1#src/}\"' _ {} \\; ; find src/scripts -type f -exec sh -c 'mkdir -p dist/$(dirname \"${1#src/}\") && cp \"$1\" dist/\"${1#src/}\"' _ {} \\;",
+		"rsync2": "rsync -a --include='*.css' --include='*.scss' --include='*.json' --include='scripts/**' --include='*/' --exclude='*' src/ dist"
 	},
 	"scripts-old": {
 		"buildBabel": "npm run buildClean && NODE_ENV=production babel src --out-dir dist --copy-files",
@@ -118,7 +121,7 @@
 		"@testing-library/react": "^16.3.1",
 		"@testing-library/user-event": "^14.6.1",
 		"@types/md5": "^2.3.6",
-		"@types/node": "^25.0.7",
+		"@types/node": "^25.0.8",
 		"@types/prop-types": "^15.7.15",
 		"@types/react": "^19.2.8",
 		"@types/react-dom": "^19.2.3",
@@ -137,7 +140,7 @@
 		"eslint-config-standard": "^17.0.0",
 		"eslint-plugin-import": "^2.32.0",
 		"eslint-plugin-jsx-a11y": "^6.10.2",
-		"eslint-plugin-n": "^17.23.1",
+		"eslint-plugin-n": "^17.23.2",
 		"eslint-plugin-promise": "^7.2.1",
 		"eslint-plugin-react": "^7.37.4",
 		"eslint-plugin-storybook": "^10.1.11",

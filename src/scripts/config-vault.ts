@@ -8,6 +8,10 @@ import { encrypt, decrypt, isEncrypted } from '../components/config/crypto';
  * Usage: 
  *   npx tsx src/scripts/config-vault.js encrypt <filePath> <key>
  *   npx tsx src/scripts/config-vault.js decrypt <filePath> <key>
+ *
+ * Behavior changes:
+ *  - `encrypt` writes to `<file>.enc` (does not overwrite the plain file)
+ *  - `decrypt` writes atomically to the plain filename (when given a `.enc` file it writes to the base name)
  */
 
 const [,, command, targetPath, argKey] = process.argv;
@@ -27,8 +31,8 @@ if (!key) {
 
 if (!command || !targetPath || !key) {
 	console.log('Usage:');
-	console.log('  encrypt <filePath> [key] - Encrypts the file in place');
-	console.log('  decrypt <filePath> [key] - Decrypts the file in place');
+	console.log('  encrypt <filePath> [key] - Encrypts the file and writes `<filePath>.enc`');
+	console.log('  decrypt <filePath> [key] - Decrypts the file and writes the plaintext file (atomic write)');
 	console.log('\nNote: Key can be passed as argument or via PIXELATED_CONFIG_KEY env var.');
 	process.exit(1);
 }
@@ -40,25 +44,36 @@ if (!fs.existsSync(fullPath)) {
 	process.exit(1);
 }
 
-const content = fs.readFileSync(fullPath, 'utf8');
+const atomicWrite = (destPath: string, data: string) => {
+	const dir = path.dirname(destPath);
+	const base = path.basename(destPath);
+	const tmp = path.join(dir, `.${base}.tmp`);
+	fs.writeFileSync(tmp, data, 'utf8');
+	fs.renameSync(tmp, destPath);
+};
 
 try {
 	if (command === 'encrypt') {
+		const content = fs.readFileSync(fullPath, 'utf8');
 		if (isEncrypted(content)) {
-			console.log('File is already encrypted.');
+			console.log('File is already encrypted. No action taken.');
 			process.exit(0);
 		}
 		const encrypted = encrypt(content, key);
-		fs.writeFileSync(fullPath, encrypted, 'utf8');
-		console.log(`Successfully encrypted ${targetPath}`);
+		const encPath = fullPath.endsWith('.enc') ? fullPath : `${fullPath}.enc`;
+		atomicWrite(encPath, encrypted);
+		console.log(`Successfully encrypted ${targetPath} -> ${path.basename(encPath)}`);
 	} else if (command === 'decrypt') {
+		const content = fs.readFileSync(fullPath, 'utf8');
 		if (!isEncrypted(content)) {
-			console.log('File is not encrypted.');
+			console.log('File is not encrypted. No action taken.');
 			process.exit(0);
 		}
 		const decrypted = decrypt(content, key);
-		fs.writeFileSync(fullPath, decrypted, 'utf8');
-		console.log(`Successfully decrypted ${targetPath}`);
+		// Destination: if input ends with .enc, strip it; otherwise overwrite the provided path
+		const destPath = fullPath.endsWith('.enc') ? fullPath.slice(0, -4) : fullPath;
+		atomicWrite(destPath, decrypted);
+		console.log(`Successfully decrypted ${path.basename(fullPath)} -> ${path.basename(destPath)}`);
 	} else {
 		console.error(`Unknown command: ${command}`);
 		process.exit(1);

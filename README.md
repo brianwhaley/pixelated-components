@@ -138,6 +138,8 @@ The release script will:
 
 **Important**: Always run releases from the `dev` branch. The script ensures both `dev` and `main` branches stay synchronized.
 
+**Config policy**: To avoid shipping secrets, keep `pixelated.config.json` encrypted on disk as `pixelated.config.json.enc` and never commit the plaintext `pixelated.config.json`. The release script will remove any plaintext `pixelated.config.json` from `dist` post-build and will fail if the `.enc` file is not present.
+
 **Universal Usage**: This script is designed to work with any Pixelated project and automatically detects project settings.
 
 ### Reference Implementation

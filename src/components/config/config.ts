@@ -21,6 +21,9 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 		path.join(process.cwd(), 'src/config', filename),
 		path.join(process.cwd(), filename),
 		path.join(process.cwd(), '.next/server', filename), // Sometimes moved here in build
+		path.join(process.cwd(), 'dist', 'config', filename), // Support dist when project outputs a dist/config
+		// If this library is installed as a package, check its dist/config as a fallback
+		path.join(process.cwd(), 'node_modules', '@pixelated-tech', 'components', 'dist', 'config', filename),
 	];
 
 	for (const configPath of paths) {

@@ -30,7 +30,7 @@ export function SiteHealthAxeCore({ siteName }: SiteHealthAxeCoreType) {
 			const script = document.createElement('script');
 			script.src = src;
 			script.async = false; // preserve execution order
-			script.onload = () => console.info('axe-core loaded from', src);
+			script.onload = () => { if (debug) console.info('axe-core loaded from', src); };
 			script.onerror = async () => {
 				console.warn('Failed to load axe-core from', src);
 				if (src !== apiFallback) {
