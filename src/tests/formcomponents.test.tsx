@@ -442,7 +442,7 @@ describe('Form Components Tests', () => {
 		});
 
 		it('should support setIsValid callback', () => {
-			const callback = (isValid: boolean) => console.log(isValid);
+			const callback = (isValid: boolean) => {};
 			expect(typeof callback).toBe('function');
 		});
 

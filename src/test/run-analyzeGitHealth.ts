@@ -27,7 +27,7 @@ async function runWithSite(siteName: string, startDate?: string, endDate?: strin
 
 	// Use real fetch for this run
 	const res = await analyzeGitHealth(site, startDate, endDate);
-	console.log('Result:', JSON.stringify(res, null, 2));
+	// console.log('Result:', JSON.stringify(res, null, 2));
 }
 
 async function runStubbed() {
@@ -39,7 +39,7 @@ async function runStubbed() {
 	};
 
 	const res = await analyzeGitHealth({ name: 'foo', remote: 'owner/repo' });
-	console.log('Result (stubbed):', JSON.stringify(res, null, 2));
+	// console.log('Result (stubbed):', JSON.stringify(res, null, 2));
 }
 
 (async () => {

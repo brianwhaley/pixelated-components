@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as configModule from '../components/config/config';
 import { analyzeGitHealth } from '../components/admin/site-health/site-health-github.integration';
 
-console.info('[TEST IMPORT] github.integration.test imported');
 
 const mockToken = 'test-token-123';
 
@@ -38,7 +37,6 @@ describe('analyzeGitHealth (GitHub)', () => {
 		};
 
 		const res = await analyzeGitHealth({ name: 'foo', remote: 'owner/repo' }, undefined, undefined, localFetch);
-		console.log('DEBUG RES (fetches commits):', res);
 		expect(res.status).toBe('success');
 		expect(res.commits.length).toBe(1);
 		expect(res.commits[0].hash).toBe('abcd');
@@ -66,7 +64,6 @@ describe('analyzeGitHealth (GitHub)', () => {
 		};
 
 		const res = await analyzeGitHealth({ name: 'foo', remote: 'owner/repo' }, undefined, undefined, localFetch);
-		console.log('DEBUG RES (version extraction):', res);
 		expect(res.status).toBe('success');
 		expect(res.commits.length).toBe(1);
 		expect(res.commits[0].hash).toBe('zzzz');
@@ -98,7 +95,6 @@ describe('analyzeGitHealth (GitHub)', () => {
 		};
 
 		const res = await analyzeGitHealth({ name: 'foo', repo: 'repo-name' }, undefined, undefined, localFetch);
-		console.log('DEBUG RES (prefers repo):', res);
 		expect(res.status).toBe('success');
 		expect(res.commits.length).toBe(1);
 		expect(res.commits[0].hash).toBe('r1');
@@ -125,7 +121,6 @@ describe('analyzeGitHealth (GitHub)', () => {
 		};
 
 		const res = await analyzeGitHealth({ name: 'foo', localPath: '/Users/alice/project/my-repo' }, undefined, undefined, localFetch);
-		console.log('DEBUG RES (localPath):', res);
 		expect(res.status).toBe('success');
 		expect(res.commits.length).toBe(1);
 		expect(res.commits[0].hash).toBe('l1');

@@ -2,6 +2,10 @@
 
 import { RouteType, SiteInfoType } from '../sitebuilder/config/ConfigBuilder';
 
+// Debug logging: set to true to inspect raw Gemini API responses locally
+const debug = false;
+
+
 export interface GeminiRecommendationRequest {
   route: RouteType;
   siteInfo: SiteInfoType;
@@ -20,7 +24,7 @@ export interface GeminiRecommendationResponse {
  */
 function parseGeminiResponse(data: any): GeminiRecommendationResponse {
 	try {
-		console.log('Gemini API raw response:', JSON.stringify(data, null, 2));
+		if (debug) console.log('Gemini API raw response:', JSON.stringify(data, null, 2));
     
 		// Check if we have candidates
 		if (!data.candidates || !Array.isArray(data.candidates) || data.candidates.length === 0) {
@@ -39,7 +43,7 @@ function parseGeminiResponse(data: any): GeminiRecommendationResponse {
 		}
 
 		const text = candidate.content.parts[0].text;
-		console.log('Gemini API response text:', text);
+		if (debug) console.log('Gemini API response text:', text);
     
 		if (!text) {
 			throw new Error('No text content in Gemini API response');
@@ -53,11 +57,11 @@ function parseGeminiResponse(data: any): GeminiRecommendationResponse {
 			jsonText = jsonText.replace(/^```\s*/, '').replace(/\s*```$/, '');
 		}
     
-		console.log('Cleaned JSON text:', jsonText);
+		if (debug) console.log('Cleaned JSON text:', jsonText);
 
 		// The text should be JSON, try to parse it
 		const parsedResponse = JSON.parse(jsonText);
-		console.log('Parsed JSON response:', parsedResponse);
+		if (debug) console.log('Parsed JSON response:', parsedResponse);
     
 		// Validate the expected structure
 		if (typeof parsedResponse !== 'object' || parsedResponse === null) {

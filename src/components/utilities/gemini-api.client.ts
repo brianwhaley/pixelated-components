@@ -2,6 +2,10 @@
 
 import { RouteType, SiteInfoType } from '../sitebuilder/config/ConfigBuilder';
 
+// Debug logging: set to true to inspect AI model responses locally
+const debug = false;
+
+
 export interface GeminiRecommendationRequest {
   route: RouteType;
   siteInfo: SiteInfoType;
@@ -90,8 +94,8 @@ export class GeminiApiService {
 			}
 
 			const data = await response.json();
-			console.log('Available models:', data);
-			return data;
+			if (debug) console.log('Available models:', data);
+			return data; 
 		} catch (error) {
 			console.error('Error listing models:', error);
 			return null;

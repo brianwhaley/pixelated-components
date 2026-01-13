@@ -234,5 +234,7 @@ export const SERVER_ONLY_PATTERNS = [
 	/\bimport.*path\b|\brequire.*path\b/,  // Actual import of path module
 	/\bprocess\.cwd\(\)/,
 	/\brequire\.resolve\b/,
-	/\butil\b/
+	/\butil\b/,
+	/\bNextRequest\b/,
+	/\bNextResponse\b/
 ];

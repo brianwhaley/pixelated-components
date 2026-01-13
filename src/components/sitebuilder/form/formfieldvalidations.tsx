@@ -79,7 +79,7 @@ export function isValidUrl (field: { value: string | URL; }) {
 	try {
 		return Boolean(new URL(field.value));
 	} catch (e) {
-		console.log(e);
+		console.log("Error isValidUrl: ", e);
 		return false;
 	}
 }

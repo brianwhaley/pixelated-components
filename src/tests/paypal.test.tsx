@@ -242,7 +242,7 @@ describe('PayPal Integration Tests', () => {
 
 		it('should handle onError callback', () => {
 			const onError = (error: any) => {
-				console.error('PayPal error:', error);
+				// console.error('PayPal error:', error);
 			};
 
 			expect(typeof onError).toBe('function');

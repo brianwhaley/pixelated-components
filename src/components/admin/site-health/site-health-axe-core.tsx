@@ -6,6 +6,9 @@ import { SiteHealthTemplate } from './site-health-template';
 import type { AxeCoreResponse, AxeViolation, AxeNode } from './site-health-types';
 import { getImpactIndicator, getIncompleteIndicator, getPassingIndicator } from './site-health-indicators';
 
+// Debug logging: set to `true` temporarily when investigating issues locally. Keep `false` in production.
+const debug = false; 
+
 SiteHealthAxeCore.propTypes = {
 	siteName: PropTypes.string.isRequired,
 };

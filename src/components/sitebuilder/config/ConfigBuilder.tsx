@@ -16,6 +16,10 @@ import servicesForm from './services-form.json';
 import defaultConfigData from '../../../data/routes.json';
 import './ConfigBuilder.css';
 
+// Debug logging: set to true to surface verbose AI/debug actions locally
+const debug = false;
+
+
 const RoutePropTypes = {
 	name: PropTypes.string,
 	path: PropTypes.string.isRequired,
@@ -463,7 +467,7 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 	};
 
 	const handleAiRecommendations = async (routeIndex: number) => {
-		console.log('handleAiRecommendations called with routeIndex:', routeIndex);
+		if (debug) console.log('handleAiRecommendations called with routeIndex:', routeIndex);
 		setCurrentRouteIndex(routeIndex);
 		setAiLoading(true);
 		setAiModalOpen(true);
@@ -667,7 +671,7 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 												<div className="route-buttons">
 													<button 
 														onClick={() => {
-															console.log('AI Recommend button clicked for route:', index);
+															if (debug) console.log('AI Recommend button clicked for route:', index);
 															handleAiRecommendations(index);
 														}}
 														className="route-button ai-recommend"

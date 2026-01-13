@@ -7,8 +7,8 @@ global.fetch = vi.fn();
 describe('Contentful Delivery API', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		console.error = vi.fn();
-		console.log = vi.fn();
+		// console.error = vi.fn();
+		// console.log = vi.fn();
 	});
 
 	afterEach(() => {
