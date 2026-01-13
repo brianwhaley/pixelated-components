@@ -309,7 +309,22 @@ else
         echo "⚠️  Unable to determine repo path from remote URL; skipping API-based release creation"
     else
         # Check if release exists
-        if curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path/releases/tags/$release_tag" | grep -q '"tag_name"'; then
+        # Diagnostic: show remote and derived repo path (non-secret)
+    echo "Remote URL: $REMOTE_URL"
+    echo "Derived repo_path: $repo_path"
+
+    # Quick access check to see if token and repo path are valid
+    access_resp=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path")
+    if echo "$access_resp" | grep -q '"full_name"'; then
+        echo "✅ Repo accessible via API: $(echo "$access_resp" | sed -n 's/.*"full_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')"
+    else
+        echo "❌ Repo not accessible via API. GitHub API response: $access_resp"
+        echo "Make sure GITHUB_TOKEN has 'repo' scope and the repo path is correct; aborting release creation."
+        # Do not attempt to create a release if the repo isn't accessible
+        exit 1
+    fi
+
+    if curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path/releases/tags/$release_tag" | grep -q '"tag_name"'; then
             echo "ℹ️  Release for $release_tag already exists on GitHub (API)."
         else
             echo "🔔 Creating release via GitHub API for $release_tag"
