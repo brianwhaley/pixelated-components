@@ -304,7 +304,7 @@ if [ -z "$GITHUB_TOKEN" ]; then
     echo "⚠️  GITHUB_TOKEN not set; skipping GitHub release creation via API"
 else
     # Derive owner/repo from remote URL
-    repo_path=$(echo "$REMOTE_URL" | sed -E 's#(git@github.com:|https://github.com/)(.+?)(\.git)?$#\2#')
+    repo_path=$(echo "$REMOTE_URL" | sed -E 's#(git@github.com:|https://github.com/)(.+)(\.git)?$#\2#')
     if [ -z "$repo_path" ]; then
         echo "⚠️  Unable to determine repo path from remote URL; skipping API-based release creation"
     else
