@@ -9,8 +9,23 @@ frontend:
         - rm -rf .next
         - rm -rf out
         - npm install --force
-        - npx puppeteer browsers install chrome
+        - PUPPETEER_CACHE_DIR=./.puppeteer-cache npx puppeteer browsers install chrome
         - 'if [ -n "$PIXELATED_CONFIG_KEY" ]; then npm run config:decrypt --silent || { echo "pixelated.config.json decrypt failed"; exit 1; }; else echo "PIXELATED_CONFIG_KEY not set; skipping config decrypt"; fi'
+        - |
+          # Create a deterministic symlink to the installed Chrome binary and patch the decrypted config with the path
+          BIN=$(find ./.puppeteer-cache -type f -name chrome -print -quit || true)
+          if [ -n "$BIN" ]; then
+            mkdir -p ./puppeteer-binary
+            ln -sf "$BIN" ./puppeteer-binary/chrome
+            chmod +x ./puppeteer-binary/chrome || true
+            if [ -f src/app/config/pixelated.config.json ]; then
+              node -e "const fs=require('fs');const pPath='src/app/config/pixelated.config.json';const p=JSON.parse(fs.readFileSync(pPath,'utf8')||'{}');p.puppeteer=p.puppeteer||{};p.puppeteer.executable_path='./puppeteer-binary/chrome';fs.writeFileSync(pPath,JSON.stringify(p,null,2));console.log('Patched pixelated.config.json with puppeteer.executable_path');"
+            else
+              echo 'pixelated.config.json not found after decrypt; skipping puppeteer patch'
+            fi
+          else
+            echo 'Could not find puppeteer chrome binary in cache; skipping symlink and config patch'
+          fi
         - echo "Dependencies installed"
     build:
       commands:

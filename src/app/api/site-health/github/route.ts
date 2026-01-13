@@ -3,6 +3,9 @@ import { analyzeGitHealth } from '@pixelated-tech/components/adminserver';
 import fs from 'fs';
 import path from 'path';
 
+// Temporary debug flag for manual local debugging
+const debug = true;
+
 interface Site {
   name: string;
   localPath: string;
@@ -29,7 +32,9 @@ export async function GET(request: NextRequest) {
 			return NextResponse.json({ success: false, error: 'Site not found' }, { status: 404 });
 		}
 
+		if (debug) console.info('GitHub API request', { siteName, startDate, endDate });
 		const result = await analyzeGitHealth(site, startDate, endDate);
+		if (debug) console.info('GitHub API result counts:', { commits: result.commits.length });
 
 		return NextResponse.json({
 			success: true,

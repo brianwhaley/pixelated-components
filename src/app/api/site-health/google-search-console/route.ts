@@ -45,6 +45,15 @@ export async function GET(request: NextRequest) {
 		const result = await getSearchConsoleData(config, siteName, startDate || undefined, endDate || undefined);
 
 		if (!result.success) {
+			// Map known permission issues to 403 so callers can surface actionable guidance
+			if ((result as any).code === 403 || (result as any).error === 'insufficient_permission') {
+				return NextResponse.json({
+					success: false,
+					error: 'insufficient_permission',
+					details: (result as any).details || 'User does not have sufficient permission for the site. See: https://support.google.com/webmasters/answer/2451999'
+				}, { status: 403 });
+			}
+
 			return NextResponse.json({ success: false, error: result.error }, { status: 500 });
 		}
 

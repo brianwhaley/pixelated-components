@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { performAxeCoreAnalysis, AxeCoreData } from '@pixelated-tech/components/adminserver';
+import { AxeCoreData } from '@pixelated-tech/components/adminserver';
+import * as integrationModule from '@pixelated-tech/components/adminserver';
+import { getRuntimeEnvFromHeaders } from '@pixelated-tech/components/server';
 
 const debug = false;
 
@@ -48,26 +50,27 @@ export async function GET(request: NextRequest) {
 		const requestedSiteName = searchParams.get('siteName');
 		const cacheParam = searchParams.get('cache');
 		const purgeParam = searchParams.get('purge');
+		const purgeOnlyParam = searchParams.get('purgeOnly');
 		const useCache = String(cacheParam).toLowerCase() !== 'false'; // Default to true, only false when explicitly set (case-insensitive)
 		const doPurge = String(purgeParam).toLowerCase() === 'true';
-
+		const purgeOnly = String(purgeOnlyParam).toLowerCase() === 'true';
+		console.info('Axe-core request params:', { requestedSiteName, cacheParam, purgeParam, useCache, doPurge });
 		if (!requestedSiteName) {
 			return NextResponse.json({ success: false, error: 'siteName required' }, { status: 400 });
 		}
 
 		// Filter sites if a specific site was requested - only sites with URLs are processed
 		const sitesToProcess = sites.filter(site => site.name === requestedSiteName && site.url);
-
+		console.info('Axe-core route requestedSiteName=', requestedSiteName, 'sitesToProcess.length=', sitesToProcess.length);
 		const results: AxeCoreData[] = [];
 		let respondedFromCache = false; // diagnostic flag
 		const purgedKeys: string[] = [];
 
 		// Process sites sequentially to avoid overwhelming the system
 		for (const site of sitesToProcess) {
-			try {
-				// Use the URL from the site configuration
-				const url = site.url!;
-
+			let runtime_env: 'auto' | 'local' | 'prod' = 'auto';
+			try {			const url = site.url!;
+				console.info('Axe-core processing site:', site.name, 'url:', url);
 				// Check cache first if caching is enabled
 				const cacheKey = `${site.name}:${url}`;
 				if (doPurge) {
@@ -77,11 +80,16 @@ export async function GET(request: NextRequest) {
 					if (existed) {
 						purgedKeys.push(cacheKey);
 					}
+					// If caller requested purge-only, skip running the analysis this cycle
+					if (purgeOnly) {
+						continue;
+					}
 				}
 				if (!useCache) {
 					// Cache disabled by client
 				} else {
 					const cached = axeCache.get(cacheKey);
+					console.info('Axe-core cache check:', { cacheKey, cachedExists: Boolean(cached) });
 					if (cached) {
 						const ttl = cached.data.status === 'success' ? CACHE_TTL_SUCCESS : CACHE_TTL_ERROR;
 						if ((Date.now() - cached.timestamp) < ttl) {
@@ -95,8 +103,30 @@ export async function GET(request: NextRequest) {
 					}
 				}
 
+				// Run axe-core analysis (determine runtime_env before invoking so it's available to catch blocks)
+
+				try {
+					const fallbackOrigin = request.url ? new URL(request.url).origin : undefined;
+					runtime_env = getRuntimeEnvFromHeaders(request.headers as any, fallbackOrigin);
+					if (debug) console.info(`Axe-core route detected runtime_env=${runtime_env}`);
+				} catch {
+				// Fallback: derive from request.url when the central helper isn't available (e.g., mocked in tests)
+					try {
+						const fb = request.url ? new URL(request.url).origin : undefined;
+						if (fb && (fb.includes('localhost') || fb.includes('127.0.0.1'))) {
+							runtime_env = 'local';
+						} else if (fb) {
+							runtime_env = 'prod';
+						} else {
+							runtime_env = 'auto';
+						}
+					} catch {
+						runtime_env = 'auto';
+					}
+				}
+
 				// Run axe-core analysis
-				const result = await performAxeCoreAnalysis(url);
+				const result = await integrationModule.performAxeCoreAnalysis(url, runtime_env);
 				result.site = site.name;
 
 				// Cache the result if caching is enabled
@@ -104,12 +134,11 @@ export async function GET(request: NextRequest) {
 					axeCache.set(cacheKey, { data: result, timestamp: Date.now() });
 				}
 				results.push(result);
-
 			} catch (error) {
 				if (debug) console.error(`Axe-core analysis failed for ${site.name}:`, error);
 
 				// Attempt to produce an error result object for consistency
-				const errorResult = await performAxeCoreAnalysis(site.url!);
+				const errorResult = await integrationModule.performAxeCoreAnalysis(site.url!, runtime_env);
 				errorResult.site = site.name;
 
 				// Cache error result with shorter TTL if caching is enabled

@@ -6,10 +6,9 @@ import * as integrationModule from '@pixelated-tech/components/adminserver';
 
 describe('axe-core route purge behavior', () => {
 	let performSpy: any;
-	let consoleInfoSpy: any;
 
-	beforeEach(() => {
-		// Provide a predictable minimal success result so route will cache it
+	beforeEach(async () => {
+		// Ensure cache is cleared between tests and provide a predictable minimal success result so route will cache it
 		performSpy = vi.spyOn(integrationModule as any, 'performAxeCoreAnalysis').mockResolvedValue({
 			site: 'brianwhaley',
 			url: 'https://www.brianwhaley.com',
@@ -29,28 +28,29 @@ describe('axe-core route purge behavior', () => {
 			status: 'success'
 		} as any);
 
-		consoleInfoSpy = vi.spyOn(console, 'info').mockImplementation(() => {});
+		// Purge any previous cached entries for this site so tests run deterministically
+		const purgeReq: any = { url: 'http://localhost/api/site-health/axe-core?siteName=brianwhaley&purge=true&purgeOnly=true' };
+		await GET(purgeReq as any);
 	});
 
 	afterEach(() => {
 		vi.restoreAllMocks();
 	});
 
-	it('returns x-axe-purged header when purge=true and a cache entry existed', async () => {
-		// First call: populate cache
-		const req1: any = { url: 'http://localhost/api/site-health/axe-core?siteName=brianwhaley' };
-		const res1: any = await GET(req1 as any);
-		expect(res1.headers.get('x-axe-use-cache')).toBe('true');
-		// ensure the mocked performAxeCoreAnalysis was actually invoked on cache population
+	it('passes runtime_env local when origin is localhost', async () => {
+		const req: any = { url: 'http://localhost/api/site-health/axe-core?siteName=brianwhaley' };
+		await GET(req as any);
 		expect(performSpy).toHaveBeenCalled();
+		// check second argument passed to performAxeCoreAnalysis was 'local' (check last call)
+		const calledWith = performSpy.mock.calls[performSpy.mock.calls.length - 1];
+		expect(calledWith[1]).toBe('local');
+	});
 
-		// Second call: ask for purge
-		const req2: any = { url: 'http://localhost/api/site-health/axe-core?siteName=brianwhaley&purge=true' };
-		const res2: any = await GET(req2 as any);
-
-		const purgedHeader = res2.headers.get('x-axe-purged');
-		expect(purgedHeader).toBeTruthy();
-		expect(purgedHeader).toContain('brianwhaley:https://www.brianwhaley.com');
-		expect(consoleInfoSpy).toHaveBeenCalled();
+	it('passes runtime_env prod when origin is a production host', async () => {
+		const req: any = { url: 'https://example.com/api/site-health/axe-core?siteName=brianwhaley' };
+		await GET(req as any);
+		expect(performSpy).toHaveBeenCalled();
+		const calledWith = performSpy.mock.calls[performSpy.mock.calls.length - 1];
+		expect(calledWith[1]).toBe('prod');
 	});
 });

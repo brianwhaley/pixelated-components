@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { performCoreWebVitalsAnalysis, CoreWebVitalsData } from '@pixelated-tech/components/adminserver';
 
-const debug = true;
+const debug = false;
 
 interface Site {
   name: string;

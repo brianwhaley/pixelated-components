@@ -47,9 +47,11 @@ export async function GET(request: NextRequest) {
 			return NextResponse.json(noConfigResponseData);
 		}
 
-		const result = await analyzeSecurityHealth(site.localPath);
+		// Pass site name and repo to analyzer to allow fallback resolution (external volumes)
+		const result = await analyzeSecurityHealth(site.localPath, site.name, site.repo);
 
 		if (result.status === 'error') {
+			console.error('Security scan error for', site.name, result.error);
 			return NextResponse.json({
 				success: false,
 				error: result.error,

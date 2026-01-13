@@ -1,0 +1,18 @@
+⚠ Self-signed certificates are currently an experimental feature, use with caution.
+  Using already generated self signed certificate
+▲ Next.js 16.1.1 (Turbopack)
+- Local:         https://localhost:3006
+- Network:       https://192.168.42.211:3006
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 951ms
+ GET /site-health 200 in 2.1s (compile: 1864ms, proxy.ts: 67ms, render: 197ms)
+ GET /manifest.webmanifest 200 in 450ms (compile: 403ms, proxy.ts: 3ms, render: 44ms)
+ GET /api/sites 200 in 474ms (compile: 471ms, render: 3ms)
+ GET /api/auth/session 200 in 822ms (compile: 811ms, render: 10ms)
+Persisting failed: Unable to write SST file 00000027.sst
+
+Caused by:
+    No such file or directory (os error 2)
+[?25h

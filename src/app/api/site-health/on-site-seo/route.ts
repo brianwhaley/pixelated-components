@@ -48,9 +48,12 @@ export async function GET(request: NextRequest) {
 		}
 
 		// Perform on-site SEO analysis using the integration
+		console.debug(`[on-site-seo] Starting analysis for site ${site.url}`);
 		const result = await performOnSiteSEOAnalysis(site.url);
+		console.debug('[on-site-seo] Analysis result:', result);
 
 		if (result.status === 'error') {
+			console.warn(`[on-site-seo] Analysis error for ${requestedSiteName}:`, result.error);
 			return NextResponse.json({
 				success: false,
 				error: result.error,
