@@ -54,6 +54,21 @@ export function getOriginFromHeaders(headersLike?: { get: (k: string) => string 
 	}
 }
 
+export type RuntimeEnv = 'auto' | 'local' | 'prod';
+
+/**
+ * Infer a runtime environment from headers/origin.
+ * - 'local' when origin indicates localhost/127.0.0.1
+ * - 'prod' for any other host
+ * - 'auto' when no origin could be determined
+ */
+export function getRuntimeEnvFromHeaders(headersLike?: { get: (k: string) => string | null } | undefined, fallbackOrigin?: string): RuntimeEnv {
+	const origin = getOriginFromHeaders(headersLike, fallbackOrigin ?? '');
+	if (!origin) return 'auto';
+	if (origin.includes('localhost') || origin.includes('127.0.0.1')) return 'local';
+	return 'prod';
+}
+
 /**
  * Next-specific async helper: getOriginFromNextHeaders
  * - Convenience wrapper that dynamically imports `next/headers` and calls our `getOriginFromHeaders` function

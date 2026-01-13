@@ -252,9 +252,11 @@ export interface SearchConsoleChartDataPoint {
 }
 
 export interface SearchConsoleResponse {
-	success: boolean;
-	data?: SearchConsoleChartDataPoint[];
-	error?: string;
+  success: boolean;
+  data?: SearchConsoleChartDataPoint[];
+  error?: string;
+  code?: number;
+  details?: string;
 }
 
 // Cache for search console data (1 hour)
@@ -368,9 +370,20 @@ export async function getSearchConsoleData(
 		return { success: true, data: chartData };
 	} catch (error) {
 		console.error('Google Search Console error:', error);
+		const errMessage = (error as any)?.message || String(error);
+		// Detect common permission message from Search Console (service account / property access)
+		if (errMessage.includes('User does not have sufficient permission') || (error as any)?.code === 403 || (error as any)?.statusCode === 403) {
+			return {
+				success: false,
+				error: 'insufficient_permission',
+				code: 403,
+				details: errMessage
+			};
+		}
+
 		return {
 			success: false,
-			error: (error as Error).message
+			error: errMessage
 		};
 	}
 }

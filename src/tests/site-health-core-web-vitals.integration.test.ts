@@ -1,7 +1,7 @@
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import * as configModule from '../../config/config';
-import { fetchPSIData } from './site-health-core-web-vitals.integration';
-import { mockConfig } from '../../../test/config.mock';
+import * as configModule from '../components/config/config';
+import { fetchPSIData } from '../components/admin/site-health/site-health-core-web-vitals.integration';
+import { mockConfig } from '../test/config.mock';
 
 // Use the test harness mock config derived from src/config/pixelated.config.json
 

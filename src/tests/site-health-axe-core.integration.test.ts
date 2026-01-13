@@ -68,6 +68,11 @@ describe('performAxeCoreAnalysis (CDN blocked -> local-inline fallback)', () => 
 				readFileSync: () => '/* fake axe content */'
 			}
 		}));
+
+		// Mock config to supply a deterministic puppeteer executable path
+		// Import the real config module and spy on getFullPixelatedConfig so we avoid relative path mismatches
+		const configModule = await import('../components/config/config');
+		vi.spyOn(configModule, 'getFullPixelatedConfig').mockReturnValue({ puppeteer: { executable_path: './puppeteer-binary/chrome' } } as any);
 	});
 
 	afterEach(() => {
@@ -77,12 +82,48 @@ describe('performAxeCoreAnalysis (CDN blocked -> local-inline fallback)', () => 
 	});
 
 	it('falls back to local inline injection when CDN is blocked and reports injectionSource "local-inline"', async () => {
-		const { performAxeCoreAnalysis } = await import('./site-health-axe-core.integration');
+		const { performAxeCoreAnalysis } = await import('../components/admin/site-health/site-health-axe-core.integration');
 		const url = 'http://example.local';
 		const res = await performAxeCoreAnalysis(url);
 
 		expect(res).toBeDefined();
 		expect(res.status).toBe('success');
 		expect(res.injectionSource).toBe('local-inline');
+	});
+
+	it('uses executable_path from config when present (prod runtime)', async () => {
+		// Spy on puppeteer.launch to capture received options
+		const launchSpy = vi.fn().mockImplementation(() => Promise.resolve({ newPage: () => Promise.resolve({ setViewport: () => Promise.resolve() }), close: () => Promise.resolve() } as any));
+		vi.doMock('puppeteer', async () => ({
+			default: { launch: launchSpy },
+			launch: launchSpy
+		}));
+
+		const { performAxeCoreAnalysis } = await import('../components/admin/site-health/site-health-axe-core.integration');
+		await performAxeCoreAnalysis('http://example.local', 'prod');
+
+		expect(launchSpy).toHaveBeenCalled();
+		const calledWith = launchSpy.mock.calls[0][0];
+		expect(calledWith.executablePath).toBe('./puppeteer-binary/chrome');
+		expect(calledWith.args).toContain('--no-sandbox');
+		expect(calledWith.args).toContain('--disable-dev-shm-usage');
+	});
+
+	it('does not use config executable_path when runtime_env is local', async () => {
+		// Spy on puppeteer.launch to capture received options
+		const launchSpy = vi.fn().mockImplementation(() => Promise.resolve({ newPage: () => Promise.resolve({ setViewport: () => Promise.resolve() }), close: () => Promise.resolve() } as any));
+		vi.doMock('puppeteer', async () => ({
+			default: { launch: launchSpy },
+			launch: launchSpy
+		}));
+
+		const { performAxeCoreAnalysis } = await import('../components/admin/site-health/site-health-axe-core.integration');
+		await performAxeCoreAnalysis('http://example.local', 'local');
+
+		expect(launchSpy).toHaveBeenCalled();
+		const calledWithLocal = launchSpy.mock.calls[0][0];
+		expect(calledWithLocal.executablePath).toBeUndefined();
+		expect(calledWithLocal.args).not.toContain('--no-sandbox');
+		expect(calledWithLocal.args).toContain('--disable-accelerated-2d-canvas');
 	});
 });

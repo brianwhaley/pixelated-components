@@ -1295,47 +1295,80 @@ async function performSiteWideAudits(baseUrl: string): Promise<OnSiteSEOAudit[]>
 
 /**
  * Fetch and parse sitemap.xml to get all site URLs
+ *
+ * Enhanced behavior:
+ * - Try common sitemap locations (/sitemap.xml, /sitemap_index.xml)
+ * - Parse /robots.txt for Sitemap: directives
+ * - Log attempted locations and continue on non-OK responses instead of throwing
  */
 async function getUrlsFromSitemap(baseUrl: string): Promise<string[]> {
+	const triedUrls: string[] = [];
+	const urls: string[] = [];
 	try {
-		const sitemapUrl = `${baseUrl}/sitemap.xml`;
-		const response = await fetch(sitemapUrl);
+		const candidates: string[] = [`${baseUrl}/sitemap.xml`, `${baseUrl}/sitemap_index.xml`];
 
-		if (!response.ok) {
-			throw new Error(`Failed to fetch sitemap: ${response.status}`);
+		// Attempt to parse robots.txt for sitemap directives
+		try {
+			const robotsResp = await fetch(`${baseUrl}/robots.txt`);
+			if (robotsResp.ok) {
+				const robotsText = await robotsResp.text();
+				const sitemapRegex = /^sitemap:\s*(.+)$/gim;
+				let m;
+				while ((m = sitemapRegex.exec(robotsText)) !== null) {
+					const sitemapUrl = m[1].trim();
+					if (sitemapUrl) candidates.push(sitemapUrl);
+				}
+			}
+		} catch (e) {
+			// Non-fatal: ignore robots parsing errors
+			console.debug('robots.txt unavailable or parse failed:', e);
 		}
 
-		const xmlText = await response.text();
 		const baseUrlObj = new URL(baseUrl);
-
-		// Simple XML parsing to extract URLs
 		const urlRegex = /<loc>([^<]+)<\/loc>/g;
-		const urls: string[] = [];
-		let match;
 
-		while ((match = urlRegex.exec(xmlText)) !== null) {
-			const url = match[1].trim();
-			// Only include URLs from the same domain and that look like valid page URLs
+		for (const sitemapUrl of candidates) {
+			triedUrls.push(sitemapUrl);
 			try {
-				const urlObj = new URL(url);
-				if (urlObj.hostname === baseUrlObj.hostname) {
-					const pathname = urlObj.pathname.toLowerCase();
-					
-					// Exclude common non-page directories and files
-					const isExcluded = EXCLUDED_URL_PATTERNS.some(pattern => pathname.includes(pattern)) ||
-						pathname.match(EXCLUDED_FILE_EXTENSIONS) ||
-						EXCLUDED_DIRECTORY_NAMES.some(dir => pathname.endsWith(`/${dir}`));
-					
-					if (!isExcluded) {
-						urls.push(url);
+				const response = await fetch(sitemapUrl);
+				if (!response.ok) {
+					console.warn(`Sitemap URL ${sitemapUrl} returned status ${response.status}`);
+					continue;
+				}
+
+				const xmlText = await response.text();
+				let match;
+
+				while ((match = urlRegex.exec(xmlText)) !== null) {
+					const url = match[1].trim();
+					try {
+						const urlObj = new URL(url);
+						if (urlObj.hostname === baseUrlObj.hostname) {
+							const pathname = urlObj.pathname.toLowerCase();
+							const isExcluded = EXCLUDED_URL_PATTERNS.some(pattern => pathname.includes(pattern)) ||
+								pathname.match(EXCLUDED_FILE_EXTENSIONS) ||
+								EXCLUDED_DIRECTORY_NAMES.some(dir => pathname.endsWith(`/${dir}`));
+
+							if (!isExcluded) {
+								urls.push(url);
+							}
+						}
+					} catch {
+						// Invalid URL, skip
 					}
 				}
-			} catch {
-				// Invalid URL, skip
+			} catch (error) {
+				console.warn(`Failed to fetch sitemap at ${sitemapUrl}:`, error);
+				continue;
 			}
+			if (urls.length > 0) break; // stop after finding the first valid sitemap
 		}
 
-		return urls.slice(0, 20); // Limit to 20 pages to prevent excessive analysis
+		if (urls.length === 0) {
+			console.warn('No sitemap URLs found at tried locations:', triedUrls);
+		}
+
+		return urls.slice(0, 20);
 	} catch (error) {
 		console.warn('Failed to fetch sitemap:', error);
 		return [];

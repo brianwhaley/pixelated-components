@@ -43,15 +43,8 @@ export function SiteHealthGit({ siteName, startDate, endDate }: SiteHealthGitTyp
 
 				// Prepare table data
 				const tableData = (data.commits || []).map((commit: any) => ({
-					Date: new Date(commit.date).toLocaleDateString(),
-					Message: <span title={commit.message}>{commit.message}</span>,
-					Version: commit.version ? (
-						<span className="health-version-tag">
-							{commit.version.split('~')[0]}
-						</span>
-					) : (
-						<span className="health-text-muted">-</span>
-					)
+					Date: new Date(commit.date).toLocaleString(),
+					Message: <span title={commit.message}>{commit.message}</span>
 				}));
 
 				return (

@@ -1,13 +1,20 @@
 "use server";
 
 import { getFullPixelatedConfig } from '../../config/config';
+import path from 'path';
+// Version extraction: we derive a version from commit messages (e.g., v1.2.3) instead of fetching tags and fuzzy-matching.
+
+// Debug logging is off by default. Set to true/false here (do not use env vars).
+const debug = false;
+
+// Version extraction removed: we no longer infer versions from commit messages.
+
 
 export interface GitCommit {
   hash: string;
   date: string;
   message: string;
   author: string;
-  version?: string;
 }
 
 export interface GitHealthResult {
@@ -19,17 +26,21 @@ export interface GitHealthResult {
 
 export interface SiteConfig {
   name: string;
-  /** Optional: repo name or owner/repo */
+  /** Optional: explicit repository identifier (e.g., "owner/repo" or just "repo") */
+  repo?: string;
+  /** Optional: remote name (legacy) */
   remote?: string;
   /** Optional explicit repo owner */
   owner?: string;
-}
+  /** Optional local path used to derive repo name if needed */
+  localPath?: string;
+} 
 
 /**
  * Analyze git repository health for a site using the GitHub REST API.
  * Expects a GitHub token to be present in the master config under `github.token`.
  */
-export async function analyzeGitHealth(siteConfig: SiteConfig, startDate?: string, endDate?: string): Promise<GitHealthResult> {
+export async function analyzeGitHealth(siteConfig: SiteConfig, startDate?: string, endDate?: string, httpFetch?: (input: RequestInfo, init?: RequestInit) => Promise<any>): Promise<GitHealthResult> {
 	try {
 		const cfg = getFullPixelatedConfig();
 		const token = cfg?.github?.token;
@@ -43,15 +54,23 @@ export async function analyzeGitHealth(siteConfig: SiteConfig, startDate?: strin
 		let owner: string | undefined;
 		let repo: string | undefined;
 
-		if (siteConfig.remote && siteConfig.remote.includes('/')) {
+		// Priority: explicit `repo` field (supports "owner/repo" or just "repo"), then remote (if owner/repo),
+		// then remote/name fallback, then derive from localPath basename.
+		if (siteConfig.repo) {
+			if (siteConfig.repo.includes('/')) {
+				[owner, repo] = siteConfig.repo.split('/', 2);
+			} else {
+				repo = siteConfig.repo;
+				owner = siteConfig.owner || defaultOwner;
+			}
+		} else if (siteConfig.remote && siteConfig.remote.includes('/')) {
 			[owner, repo] = siteConfig.remote.split('/', 2);
 		} else {
-			repo = siteConfig.remote || siteConfig.name;
+			repo = siteConfig.remote || (siteConfig.localPath ? path.basename(siteConfig.localPath) : siteConfig.name);
 			owner = siteConfig.owner || defaultOwner;
-		}
-
-		if (!owner || !repo) {
-			throw new Error('Repository owner or name not provided. Set site.remote to "owner/repo" or configure github.defaultOwner in pixelated.config.json');
+			if (!repo || !owner) {
+				throw new Error('Repository owner or name not provided. Set site.remote to "owner/repo" or configure github.defaultOwner in pixelated.config.json');
+			}
 		}
 
 		// Build query params
@@ -81,10 +100,10 @@ export async function analyzeGitHealth(siteConfig: SiteConfig, startDate?: strin
 		const params = new URLSearchParams();
 		if (since) params.set('since', since);
 		if (until) params.set('until', until);
-		params.set('per_page', '100');
 
 		const commitsUrl = `https://api.github.com/repos/${owner}/${repo}/commits?${params.toString()}`;
-		const commitsRes = await fetch(commitsUrl, { headers });
+		const fetcher = httpFetch || (globalThis as any).fetch;
+		const commitsRes = await fetcher(commitsUrl, { headers });
 
 		if (!commitsRes.ok) {
 			const text = await commitsRes.text().catch(() => '');
@@ -93,18 +112,14 @@ export async function analyzeGitHealth(siteConfig: SiteConfig, startDate?: strin
 
 		const commitsJson = await commitsRes.json();
 
-		// Fetch tags to try to match commit -> tag (best-effort, only exact matches)
-		const tagsUrl = `https://api.github.com/repos/${owner}/${repo}/tags?per_page=100`;
-		const tagsRes = await fetch(tagsUrl, { headers });
-		let tagMap = new Map<string, string>();
-		if (tagsRes.ok) {
-			const tags = await tagsRes.json().catch(() => []);
-			for (const t of tags || []) {
-				if (t && t.commit && t.commit.sha && t.name) {
-					tagMap.set(t.commit.sha, t.name);
-				}
-			}
+		if (debug) {
+			const totalCommits = Array.isArray(commitsJson) ? commitsJson.length : 0;
+			console.info(`Commits fetched: ${totalCommits}`);
 		}
+
+
+
+
 
 		const commits: GitCommit[] = (Array.isArray(commitsJson) ? commitsJson : [])
 			.map((c: any) => {
@@ -119,13 +134,9 @@ export async function analyzeGitHealth(siteConfig: SiteConfig, startDate?: strin
 					date,
 					message,
 					author,
-					version: tagMap.get(sha) // may be undefined
 				} as GitCommit;
 			})
-			.filter(Boolean)
-		// Filter out trivial version-only commits if necessary
-			.filter(commit => !/^\d+\.\d+\.\d+$/.test(commit.message.trim()))
-			.slice(0, (startDate && endDate) ? 100 : 20);
+			.filter(Boolean);
 
 		return {
 			commits,
@@ -138,7 +149,7 @@ export async function analyzeGitHealth(siteConfig: SiteConfig, startDate?: strin
 			commits: [],
 			timestamp: new Date().toISOString(),
 			status: 'error',
-			error: error instanceof Error ? error.message : String(error)
+			error: error instanceof Error ? `${error.message}${error.stack ? '\n' + error.stack : ''}` : String(error)
 		};
 	}
 }

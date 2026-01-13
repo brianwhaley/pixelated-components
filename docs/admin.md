@@ -77,6 +77,31 @@ import {
 #### Available Health Checks
 
 - **Axe Core Accessibility**: Automated accessibility testing
+
+##### Axe-core (Puppeteer) runtime notes 🔧
+
+- **Modes**:
+  - **local** — for local development. Uses lighter Puppeteer launch args and prefers the `PUPPETEER_EXECUTABLE_PATH` environment variable so you can point at your local Chrome/Chromium.
+  - **prod** — for production (Amplify, CI). Uses conservative sandbox-friendly args and prefers the build-time path provided in `pixelated.config.json` under `puppeteer.executable_path`.
+
+- **Recommended Amplify preBuild steps** (example):
+
+```bash
+# install Chrome into a project-local cache
+PUPPETEER_CACHE_DIR=./.puppeteer-cache npx puppeteer browsers install chrome
+
+# create a deterministic symlink that will be available at runtime
+mkdir -p ./puppeteer-binary
+ln -s /root/.cache/puppeteer/chrome/linux-<version>/chrome-linux64/chrome ./puppeteer-binary/chrome
+
+# patch the decrypted pixelated.config.json to point to the executable path
+node -e "const f=require('fs');const p='./src/app/config/pixelated.config.json';const j=JSON.parse(f.readFileSync(p));j.puppeteer=j.puppeteer||{};j.puppeteer.executable_path='./puppeteer-binary/chrome';f.writeFileSync(p,JSON.stringify(j,null,2));"
+```
+
+- **Notes**:
+  - The code will pick the executable path from `config.puppeteer.executable_path` in **prod** and fall back to `PUPPETEER_EXECUTABLE_PATH` when needed.
+  - Enabling `debug` in the Axe route/integration will log diagnostic info to help troubleshoot launch failures.
+
 - **Core Web Vitals**: Performance metrics (LCP, FID, CLS)
 - **Google Analytics**: Traffic and engagement data
 - **Google Search Console**: Search performance and indexing

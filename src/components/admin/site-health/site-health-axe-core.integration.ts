@@ -73,10 +73,11 @@ export interface AxeCoreData {
   injectionSource?: string;
 }
 
-export async function performAxeCoreAnalysis(url: string): Promise<AxeCoreData> {
+export async function performAxeCoreAnalysis(url: string, runtime_env: 'auto' | 'local' | 'prod' = 'auto'): Promise<AxeCoreData> {
 	try {
+		if (debug) console.info('Axe-core performAxeCoreAnalysis called with runtime_env:', runtime_env);
 		// Run axe-core analysis
-		const { result: axeResult, injectionSource } = await runAxeCoreAnalysis(url) as { result: AxeResult, injectionSource?: string };
+		const { result: axeResult, injectionSource } = await runAxeCoreAnalysis(url, runtime_env) as { result: AxeResult, injectionSource?: string };
 
 		// Calculate summary
 		const summary = {
@@ -137,23 +138,77 @@ export async function performAxeCoreAnalysis(url: string): Promise<AxeCoreData> 
 	}
 }
 
-async function runAxeCoreAnalysis(url: string): Promise<{ result: AxeResult; injectionSource?: string }> {
+import { getFullPixelatedConfig } from '../../config/config';
+
+/**
+ * runAxeCoreAnalysis(url, runtime_env)
+ *
+ * Puppeteer runtime modes:
+ * - 'local': intended for local development. Uses lighter launch args and prefers
+ *   the `PUPPETEER_EXECUTABLE_PATH` environment variable so developers can use
+ *   their local Chrome/Chromium installation.
+ * - 'prod': intended for production (e.g., Amplify). Uses conservative sandboxing
+ *   args and prefers the build-time configured executable path at
+ *   `cfg.puppeteer.executable_path`.
+ *
+ * Recommended Amplify preBuild steps (examples):
+ * - PUPPETEER_CACHE_DIR=./.puppeteer-cache npx puppeteer browsers install chrome
+ * - mkdir -p ./puppeteer-binary && ln -s <installed_chrome_path> ./puppeteer-binary/chrome
+ * - Patch decrypted `pixelated.config.json` with `puppeteer.executable_path: './puppeteer-binary/chrome'`
+ *
+ * The function selects executable path and args based on `runtime_env` and will
+ * log additional diagnostics when `debug` is enabled.
+ */
+async function runAxeCoreAnalysis(url: string, runtime_env: 'auto' | 'local' | 'prod' = 'auto'): Promise<{ result: AxeResult; injectionSource?: string }> {
 	let browser;
 	try {
-		// Launch browser with options for better compatibility
-		browser = await puppeteer.launch({
+		// Build launch options for Puppeteer and prefer configured executable path when available
+		const cfg = getFullPixelatedConfig();
+		let execPath: string | undefined;
+		if (runtime_env === 'local') {
+			// In local mode, prefer environment overrides but do not force config-provided executable
+			execPath = process.env.PUPPETEER_EXECUTABLE_PATH;
+		} else if (runtime_env === 'prod') {
+			// In production, prefer the build-time configured executable path, fall back to env
+			execPath = cfg?.puppeteer?.executable_path || process.env.PUPPETEER_EXECUTABLE_PATH;
+		} else {
+			// auto: prefer config if present, otherwise env
+			execPath = cfg?.puppeteer?.executable_path || process.env.PUPPETEER_EXECUTABLE_PATH;
+		}
+		// Build launch options for Puppeteer. Use conservative/sandboxed args in prod, but keep local runs lighter to avoid sandbox permission issues during local dev
+		const prodArgs = [
+			'--no-sandbox',
+			'--disable-setuid-sandbox',
+			'--disable-dev-shm-usage',
+			'--disable-accelerated-2d-canvas',
+			'--no-first-run',
+			'--no-zygote',
+			'--single-process', // <- this one doesn't work in Windows
+			'--disable-gpu'
+		];
+		const localArgs = [
+			'--disable-accelerated-2d-canvas',
+			'--disable-gpu'
+		];
+		const launchOpts: any = {
 			headless: true,
-			args: [
-				'--no-sandbox',
-				'--disable-setuid-sandbox',
-				'--disable-dev-shm-usage',
-				'--disable-accelerated-2d-canvas',
-				'--no-first-run',
-				'--no-zygote',
-				'--single-process', // <- this one doesn't work in Windows
-				'--disable-gpu'
-			]
-		});
+			args: runtime_env === 'local' ? localArgs : prodArgs
+		};
+		if (execPath && fs.existsSync(execPath)) {
+			launchOpts.executablePath = execPath;
+			if (debug) console.info('Using Puppeteer executablePath from config/env:', execPath);
+		} else {
+			if (debug) console.info('No Puppeteer executablePath found for runtime_env:', runtime_env, 'resolved execPath:', execPath);
+		}
+		try {
+			browser = await puppeteer.launch(launchOpts);
+		} catch (err) {
+			// Provide a clearer error message for missing Chrome/Chromium binaries
+			const original = err instanceof Error ? err.message : String(err);
+			const hint = `Could not launch Chrome/Chromium. Ensure Puppeteer browsers are installed (run 'npx puppeteer browsers install chrome') and that the browser binary is accessible. You can also set PUPPETEER_EXECUTABLE_PATH to the installed browser binary or adjust PUPPETEER_CACHE_DIR to point to a writable cache directory. Original error: ${original}`;
+			if (debug) console.error('Puppeteer launch failed:', err);
+			throw new Error(hint);
+		}
 
 		const page = await browser.newPage();
 

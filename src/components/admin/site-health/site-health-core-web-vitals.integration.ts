@@ -1,6 +1,6 @@
 "use server";
 
-const debug = true;
+const debug = false;
 
 import { CoreWebVitalsData, PSIScores, PSICategory, PSIAudit } from './site-health-types';
 import { getFullPixelatedConfig } from '../../config/config';

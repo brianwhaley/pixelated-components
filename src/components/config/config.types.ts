@@ -218,6 +218,11 @@ export const SECRET_CONFIG_KEYS = {
 	}
 };
 
+export interface PuppeteerConfig {
+	executable_path?: string;
+	cache_dir?: string;
+}
+
 export interface PixelatedConfig {
 	global?: GlobalConfig;
 	aws?: AWSConfig;
@@ -236,4 +241,5 @@ export interface PixelatedConfig {
 	nextAuth?: NextAuth;
 	paypal?: PaypalConfig;
 	wordpress?: WordpressConfig;
+	puppeteer?: PuppeteerConfig;
 }

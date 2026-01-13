@@ -407,5 +407,18 @@ describe('Google API Integration', () => {
       expect(result.success).toBe(false);
       expect(result.error).toContain('credentials not configured');
     });
+
+    it('should map permission errors to code 403 with insufficient_permission', async () => {
+      // Reset the mock responses and simulate the API throwing a permission error
+      mockSearchConsole.searchanalytics.query.mockReset();
+      mockSearchConsole.searchanalytics.query.mockRejectedValueOnce(new Error('User does not have sufficient permission for site "https://example.com"'));
+
+      const result = await getSearchConsoleData(validConfig, 'test-site');
+
+      expect(result.success).toBe(false);
+      expect((result as any).code).toBe(403);
+      expect(result.error).toBe('insufficient_permission');
+      expect((result as any).details).toContain('User does not have sufficient permission');
+    });
   });
 });

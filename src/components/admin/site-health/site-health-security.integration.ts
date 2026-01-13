@@ -69,17 +69,45 @@ interface NpmAuditResult {
   metadata: NpmAuditMetadata;
 }
 
-export async function analyzeSecurityHealth(localPath: string): Promise<SecurityScanResult> {
+export async function analyzeSecurityHealth(localPath: string, siteName?: string, repoName?: string): Promise<SecurityScanResult> {
 	try {
-		// Check if the local path exists and has package.json
-		if (!fs.existsSync(localPath)) {
+		// Helper: try to resolve a usable existing path for a site
+		function findExistingLocalPath(candidatePath?: string, siteName?: string, repoName?: string): string | null {
+			// direct candidate
+			if (candidatePath && fs.existsSync(candidatePath)) return candidatePath;
+
+			// check obvious workspace parent (one level up from current package)
+			const workspaceParent = path.resolve(process.cwd(), '..');
+			const candidates: string[] = [];
+			if (siteName) candidates.push(path.join(workspaceParent, siteName));
+			if (repoName) candidates.push(path.join(workspaceParent, repoName));
+
+			// also check common external volume used on this machine
+			const externalBase = path.join('/Volumes', 'btw_x10_pro', 'Git');
+			if (siteName) candidates.push(path.join(externalBase, siteName));
+			if (repoName) candidates.push(path.join(externalBase, repoName));
+
+			for (const c of candidates) {
+				if (fs.existsSync(c)) {
+					console.info(`Security scan: using fallback path for site '${siteName}': ${c}`);
+					return c;
+				}
+			}
+
+			return null;
+		}
+
+		const resolvedPath = findExistingLocalPath(localPath, siteName, repoName) || null;
+
+		// Check if the resolved path exists and has package.json
+		if (!resolvedPath) {
 			return {
 				status: 'error',
 				error: 'Site directory not found'
 			};
 		}
 
-		const packageJsonPath = path.join(localPath, 'package.json');
+		const packageJsonPath = path.join(resolvedPath, 'package.json');
 		if (!fs.existsSync(packageJsonPath)) {
 			return {
 				status: 'success',
@@ -160,7 +188,7 @@ async function runNpmAudit(localPath: string): Promise<NpmAuditResult> {
 	try {
 		const { stdout } = await execAsync('npm audit --json', {
 			cwd: localPath,
-			timeout: 30000 // 30 second timeout
+			timeout: 120000 // 2 minute timeout (audits can take longer)
 		});
 
 		return JSON.parse(stdout);
