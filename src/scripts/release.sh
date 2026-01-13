@@ -303,13 +303,18 @@ REMOTE_URL=$(git remote get-url $REMOTE_NAME 2>/dev/null || true)
 if [ -z "$GITHUB_TOKEN" ]; then
     echo "⚠️  GITHUB_TOKEN not set; skipping GitHub release creation via API"
 else
-    # Derive owner/repo from remote URL
-    repo_path=$(echo "$REMOTE_URL" | sed -E 's#(git@github.com:|https://github.com/)(.+)(\.git)?$#\2#')
+    # Derive owner/repo from remote URL using shell-only parsing (robust across platforms)
+    repo_path="${REMOTE_URL#git@github.com:}"
+    repo_path="${repo_path#https://github.com/}"
+    repo_path="${repo_path%.git}"
+    repo_path="${repo_path%%/}"
     if [ -z "$repo_path" ]; then
         echo "⚠️  Unable to determine repo path from remote URL; skipping API-based release creation"
     else
         # Check if release exists
         # Diagnostic: show remote and derived repo path (non-secret)
+        echo "Remote URL: $REMOTE_URL"
+        echo "Derived repo_path: $repo_path"
     echo "Remote URL: $REMOTE_URL"
     echo "Derived repo_path: $repo_path"
 
