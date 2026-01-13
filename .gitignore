@@ -42,6 +42,9 @@ node_modules/
 
 # dotenv environment variables file
 .env*
+# Local plaintext config - ensure encrypted .enc is used; ignore plaintext config
+/src/config/pixelated.config.json
+/src/app/config/pixelated.config.json
 
 # IDE
 .vscode/
