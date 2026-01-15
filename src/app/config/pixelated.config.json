@@ -1,8 +1,0 @@
-{
-	"cloudinary": {
-		"product_env": "dlbon7tpq",
-		"baseUrl": "https://res.cloudinary.com",
-		"secure": true,
-		"transforms": "f_auto,c_limit,q_auto,dpr_auto"
-	}
-}
