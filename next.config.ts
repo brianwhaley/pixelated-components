@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     	optimizeCss: true,
   	},
 	outputFileTracingIncludes: {
-		'/**': ['./src/app/config/pixelated.config.json'],
+		'/**': ['./src/app/config/pixelated.config.json.enc'],
 	},
 	transpilePackages: ['@pixelated-tech/components'],
 	trailingSlash: false,
@@ -26,7 +26,6 @@ const nextConfig: NextConfig = {
 			},
 		],
 	},
-
 	async redirects() {
 		return [
 			{ source: '/customsgallery.html', destination: '/customsgallery', permanent: true, },
@@ -49,7 +48,6 @@ const nextConfig: NextConfig = {
 			{ source: '/workportfolio.html', destination: '/workportfolio', permanent: true, },
 		];
 	},
-
 	turbopack: {
 		root: __dirname,
 	},

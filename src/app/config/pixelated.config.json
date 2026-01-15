@@ -1,1 +1,30 @@
-pxl:v1:4e869aeeaa04c4f39b8f95a8:3ab2c41dd9d4aa1ea7ae4211634a77a0:04b3692a0252ca819953dc18fb4cd68e19cda51f521a15072541fb6909983e98381056ec5698fb2e8c23f87af28ba38c52d850f66e8bb59353a075a9e0d305da6c1dcbcaea2caada28c8042990c00210566f059203725206c5ab7153659bf10c3430d3623938630e091cc169729f64a90adf129dfb3f9bbdf5b72fd260fe2c5cdece6cd8fac89ffa50ecb115b4d469bce5db67987b2a903dad8449f3f67fc4df19e6bd7b5931cf5627f40038478964b6e06706227f98f2ee6d1e4df477ccf5490f167d9ba90431728e7b5bac14f899c02dbeff79eb68276b555cc6fd5d1a827cc22159aaa2d3c402e2479134877a02db84cb0fab31f932040872923847c4ef35d44fb5a4be558db83936c84e1186b41107e9fd6266de9358a1a49b6cff6a9a387e2511c7dacd4775dd8ca253fa1fc54df6064dfe1ce2e5b54eea89a744485543affb0e23a4ffe8e755dcfb8d54fea4af2faba3513f39189b3398579e97c19869fff59e26e77c56ebc15602f74cd38a60c70a5e647b416b3b227b631118e96fa9fbf7560cbd23f33546e7ad2d9d5e1f6e24ea58157993975663a8612aa47fff9ee92a7e99113c2413d7634da535ab57b45904937369a990024335138e679eeb43d5bdba9c252912d0dec4ea7505aca6d376fe3d189a9b50607516f782e80309470a2823d7c80b5afc9753549f697582f86cfe9957cc8010c80e15e6d00eb13ad2ec9ca70674a8c4202aca5efd45e05ece1157e42c1effceda69f7f741e9bce9aa5123453ece731962ab643bd198c1469b71a881acb5e6f96a1af47fcd4fc4429d84b622f1f4b1542f690e1c02f2ea9f267eb469952ac1abd034122e75b4eb041141113131dc1ed39d8c93d7ab62222d03dc38af80458de57139a5d7b5c150358549b3b89b889e477ea0635ef4144c5646bb59d6489154edb99083d9d7de7d2a322c09c2de9eef8342ab6055b23cf8b18d5ef018932f28b2a010260af8bc806da40760a8f82d9746b9a15f26385afa74
+{
+	"cloudinary": {
+		"product_env": "dlbon7tpq",
+		"baseUrl": "https://res.cloudinary.com",
+		"secure": true,
+		"transforms": "f_auto,c_limit,q_auto,dpr_auto"
+	},
+	"flickr": {
+		"baseURL": "https://api.flickr.com/services/rest/?",
+		"urlProps": {
+			"method": "flickr.photosets.getPhotos",
+			"api_key": "882cab5548d53c9e6b5fb24d59cc321d",
+			"user_id": "15473210@N04",
+			"tags": "",
+			"photoset_id": "72177720326903710",
+			"extras": "date_taken,description,owner_name",
+			"sort": "date-taken-desc",
+			"per_page": 500,
+			"format": "json",
+			"photoSize": "Large",
+			"callback" : "getFlickrCards"
+		}
+	},
+	"googleAnalytics": {
+		"id": "G-K5QDEDTRB4"
+	},
+	"googleSearchConsole": {
+		"id": "56d5332a6e6df4229"
+	}
+}
