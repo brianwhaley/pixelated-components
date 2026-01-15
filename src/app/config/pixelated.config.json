@@ -1,1 +1,8 @@
-pxl:v1:93e745008a010b8c8c495f37:6476d3855881e053eb9fdfef4f7287bd:a349863ecf0564c581644ae96b84a6ac6a998de9aca0dffdce492a822e5c9dca02ce7cc1e7a55917942737a06ba4bd1dddc9294b363a3f35ac36fa04ff5f601295d72e4430043bf11878cd3a54679b97152946b007c038be1256fcb7175a0b1132e553d0783ac6b81aa13bcc261834ad1a46dd3fce6db52c219f119fa3c0d63309c4afb4952022ab6b5799cf32959b59c9f8aa8c8bff5640f5e0c4ab24c99f884d40ffc6
+{
+	"cloudinary": {
+		"product_env": "dlbon7tpq",
+		"baseUrl": "https://res.cloudinary.com",
+		"secure": true,
+		"transforms": "f_auto,c_limit,q_auto,dpr_auto"
+	}
+}

@@ -11,7 +11,7 @@ export default function Header() {
 					src="/images/informationfocus.png" 
 					className="logo" alt="InformationFocus"
 					aboveFold={true} />
-				</a>
+			</a>
 			</div>
 			<div className="title">
 				<a href="/">

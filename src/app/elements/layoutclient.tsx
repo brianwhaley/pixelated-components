@@ -8,25 +8,25 @@ import { preloadImages } from "@pixelated-tech/components";
 
 export default function LayoutClient() {
 
-    useEffect(() => {
-            MicroInteractions({ 
-                buttonring: true,
-                formglow: true,
-                imgscale: true,
-                simplemenubutton: true,
-                scrollfadeElements: '.callout , .calloutSmall , .carousel-container',
-            });
-        }, []);
+	useEffect(() => {
+		MicroInteractions({ 
+			buttonring: true,
+			formglow: true,
+			imgscale: true,
+			simplemenubutton: true,
+			scrollfadeElements: '.callout , .calloutSmall , .carousel-container',
+		});
+	}, []);
     
-        useEffect(() => {
-            document.addEventListener('DOMContentLoaded', deferAllCSS);
-            preloadImages();
-            deferAllCSS();
-            loadAllImagesFromCloudinary({ 
-                origin: window.location.origin,
-                product_env: "dlbon7tpq"
-            });
-        }, []);
+	useEffect(() => {
+		document.addEventListener('DOMContentLoaded', deferAllCSS);
+		preloadImages();
+		deferAllCSS();
+		loadAllImagesFromCloudinary({ 
+			origin: window.location.origin,
+			product_env: "dlbon7tpq"
+		});
+	}, []);
 
-        return ( <></> );
+	return ( <></> );
 }
