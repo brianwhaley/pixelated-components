@@ -46,10 +46,6 @@ export function FourOhFour (props: FourOhFourType) {
 							cloudinaryDomain={config?.cloudinary?.baseUrl ?? undefined}
 							cloudinaryTransforms={config?.cloudinary?.transforms ?? undefined}
 						/>
-						{ /* <img src={cloudinaryURL} 
-							title={"Page Not Found - " + images[randomIndex].description} 
-							alt={"Page Not Found - " + images[randomIndex].description} 
-						/> */ }
 					</div>
 				</div>
 			</>

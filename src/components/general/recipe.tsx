@@ -258,7 +258,6 @@ export function RecipeBookItem (props: RecipeBookItemType) {
 	const instructions = recipe.instructions.map((instruction: string, iKey: number) =>
 		<li key={iKey} className="p-instruction">{instruction}</li>
 	);
-	/* ? <img className='u-photo' src={recipe.photo} title={recipe.name} alt={recipe.name} /> */
 	const recipeImage = (recipe.photo.length > 0 
 		? <SmartImage className='u-photo' src={recipe.photo} title={recipe.name} alt={recipe.name}
 			cloudinaryEnv={config?.cloudinary?.product_env ?? undefined}
@@ -365,7 +364,6 @@ export function BackToTop() {
 		<div className="backToTop">
 			<a href="#top" onClick={scrollToTop}>
 				<div>
-					{ /* <img src="/images/icons/up.jpg" title="Back To Top" alt="Back To Top" /> */ }
 					<SmartImage src="/images/icons/up.jpg" title="Back To Top" alt="Back To Top"
 						cloudinaryEnv={config?.cloudinary?.product_env ?? undefined}
 						cloudinaryDomain={config?.cloudinary?.baseUrl ?? undefined}

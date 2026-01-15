@@ -169,7 +169,6 @@ export function ContentfulListItem(props: ContentfulListItemType) {
 		cloudinaryEnv={config?.cloudinary?.product_env ?? undefined}
 		cloudinaryDomain={config?.cloudinary?.baseUrl ?? undefined}
 		cloudinaryTransforms={config?.cloudinary?.transforms ?? undefined} />;
-	// <img src={itemImage} title={thisItem.fields.title} alt={thisItem.fields.title} />
 	
 	return (
 		<div className="contentful-item row-12col">

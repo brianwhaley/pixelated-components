@@ -132,7 +132,6 @@ export function BlogPostSummary(props: BlogPostSummaryType) {
 					<div>Categories: 
 						{ myCategoryImages.map(([categoryImg, index]) => (
 							<span className="p-category" key={categoryImg + "-" + index}>
-								{ /* <img src={`/images/icons/${categoryImg}.png`} title={String(categoryImg)} alt={String(categoryImg)} /> */ }
 								<SmartImage src={`/images/icons/${categoryImg}.png`} title={String(categoryImg)} alt={String(categoryImg)} 
 									cloudinaryEnv={config?.cloudinary?.product_env ?? undefined}
 									cloudinaryDomain={config?.cloudinary?.baseUrl ?? undefined}
@@ -168,7 +167,6 @@ export function BlogPostCategories(props: BlogPostCategoriesType) {
 			{ myCategoryImages.map((categoryImg, index) => 
 				categoryImg ? (
 					<span className="p-category" key={categoryImg + "-" + index}>
-						{ /* <img src={`/images/icons/${categoryImg}.png`} title={String(categoryImg)} alt={String(categoryImg)} /> */ }
 						<SmartImage className="u-photo" src={`/images/icons/${categoryImg}.png`} title={String(categoryImg)} alt={String(categoryImg)}
 							cloudinaryEnv={config?.cloudinary?.product_env ?? undefined}
 							cloudinaryDomain={config?.cloudinary?.baseUrl ?? undefined}

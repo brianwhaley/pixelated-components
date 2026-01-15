@@ -233,7 +233,6 @@ export function MenuAccordionButton(props: MenuAccordionButtonType) {
 			suppressHydrationWarning
 		>
 			<span className="hamburger text-outline">{hamburgerIcon}</span>
-			{ /* <img src="/images/icons/mobile-menu2.png" title="Mobile Menu" alt="Mobile Menu"/> */ }
 		</button>
 	);
 }

@@ -248,7 +248,6 @@ export function ShoppingCartItem(props: ShoppingCartItemType) {
 					</a>
 					: thisItem.itemImageURL 
 						? (
-							/* <img src={thisItem.itemImageURL} title={thisItem.itemTitle} alt={thisItem.itemTitle} /> */
 							<SmartImage src={thisItem.itemImageURL} title={thisItem.itemTitle} alt={thisItem.itemTitle} 
 								cloudinaryEnv={config?.cloudinary?.product_env}
 								cloudinaryDomain={config?.cloudinary?.baseUrl}
@@ -386,7 +385,6 @@ export function CartButton(props: CartButtonType) {
 		<div className="pixCart">
 			<button className="pixCartButton" type="button" id="pixCartButton" 
 				onClick={()=>window.location.href=props.href} >
-				{ /* <img src="/images/icons/cart-icon.png" title="View Shopping Cart" alt="View Shopping Cart" /> */ }
 				<SmartImage src="/images/icons/cart-icon.png" title="View Shopping Cart" alt="View Shopping Cart" 
 					cloudinaryEnv={config?.cloudinary?.product_env}
 					cloudinaryDomain={config?.cloudinary?.baseUrl}

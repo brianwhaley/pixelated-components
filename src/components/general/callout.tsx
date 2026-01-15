@@ -105,7 +105,6 @@ export function Callout({
 						cloudinaryTransforms={config?.cloudinary?.transforms ?? undefined}
 						suppressHydrationWarning 
 					/>
-					{/* <img src={img} title={title ?? imgAlt ?? undefined} alt={imgAlt ?? title ?? undefined} /> */}
 				</a>
 				: (url && imgClick)
 					? <SmartImage 
@@ -119,7 +118,6 @@ export function Callout({
 						cloudinaryTransforms={config?.cloudinary?.transforms ?? undefined}
 						suppressHydrationWarning 
 					/>
-					/* <img src={img} title={title ?? imgAlt ?? undefined} alt={imgAlt ?? title ?? undefined} onClick={(event) => imgClick(event, url)} /> */
 					: <SmartImage 
 						src={img} 
 						title={title ?? imgAlt ?? undefined} 
@@ -130,7 +128,6 @@ export function Callout({
 						cloudinaryTransforms={config?.cloudinary?.transforms ?? undefined}
 						suppressHydrationWarning 
 					/>
-					/* <img src={img} title={title ?? imgAlt ?? undefined} alt={imgAlt ?? title ?? undefined} /> */
 			} 
 		</div> : null ;
 

@@ -213,7 +213,6 @@ export function EbayListItem(props: EbayListItemType) {
 		cloudinaryEnv={props.cloudinaryProductEnv ?? undefined}
 		cloudinaryDomain={config?.cloudinary?.baseUrl ?? undefined}
 		cloudinaryTransforms={config?.cloudinary?.transforms ?? undefined} />;
-	// <img src={itemImage} title={thisItem.title} alt={thisItem.title} />
 	return (
 		<div className="ebayItem row-12col">
 			<div className="ebayItemPhoto grid-s1-e5">

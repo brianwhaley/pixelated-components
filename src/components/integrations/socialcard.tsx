@@ -165,18 +165,6 @@ export function SocialCards(props: SocialCardsType) {
 						let myNewCard: any = {};
 						const item = items[prop];
 						myNewCard = item;
-						/* ===== FIX FOR DESCRIPTION ===== */
-						/* if (item.description) {
-							if (item.description.length > 500) {
-								const doc = html2dom(item.description)
-								const itemDescription = doc.innerHTML
-								myNewCard.description = itemDescription
-							}
-						} else {
-							const myImgBase = item.thumbnail
-							const myImgTag = '<img src="' + myImgBase + '" alt="' + item.title + '" title="' + item.title + '">'
-							myNewCard.description = '<p>' + myImgTag + item.title + '</p>'
-						} */
 						/* ===== FIX FOR SOURCE ===== */
 						if (!(item.source)) {
 							myNewCard.source = new URL(myURL).hostname;
@@ -276,7 +264,6 @@ export function SocialCard(props: SocialCardType) {
 			<div className="card">
 				<div className="cardTitle">
 					<a href={props.card.link} target="_blank" rel="noopener noreferrer">
-						{ /* <img className="cardIcon" src={props.iconSrc} title={props.iconSrcAlt} alt={props.iconSrcAlt} /> */ }
 						<SmartImage className="cardIcon" src={props.iconSrc} title={props.iconSrcAlt} alt={props.iconSrcAlt} 
 							cloudinaryEnv={config?.cloudinary?.product_env}
 							cloudinaryDomain={config?.cloudinary?.baseUrl}

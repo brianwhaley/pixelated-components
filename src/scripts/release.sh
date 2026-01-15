@@ -36,7 +36,7 @@ fi
 
 # Select remote
 echo ""
-echo "🔑 Step $((STEP_COUNT++)): Locating GitHub token in config..."
+echo "🔑 Step $((STEP_COUNT++)): Choose the git Remote to release:"
 echo "================================================="
 # Function to prompt for remote selection
 prompt_remote_selection() {
@@ -120,6 +120,12 @@ if [ -n "$UPDATES" ]; then
 else
     echo "✅ No dependency updates needed."
 fi
+
+
+
+echo ""
+echo "📦 Step $((STEP_COUNT++)): Updating Audit Fixes..."
+echo "================================================="
 npm audit fix --force 2>/dev/null || true
 
 
@@ -149,6 +155,8 @@ echo ""
 echo "🔨 Step $((STEP_COUNT++)): Building project..."
 echo "================================================="
 npm run build
+
+
 
 # Post-build: if a dist folder exists, ensure it does NOT contain plaintext config and that the .enc file is present
 echo ""
@@ -315,8 +323,6 @@ else
         # Diagnostic: show remote and derived repo path (non-secret)
         echo "Remote URL: $REMOTE_URL"
         echo "Derived repo_path: $repo_path"
-    echo "Remote URL: $REMOTE_URL"
-    echo "Derived repo_path: $repo_path"
 
     # Quick access check to see if token and repo path are valid
     access_resp=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path")

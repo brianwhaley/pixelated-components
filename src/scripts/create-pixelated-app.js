@@ -1,0 +1,471 @@
+#!/usr/bin/env node
+/**
+ * create-pixelated-app.js
+ *
+ * Simple CLI to scaffold a new site from `pixelated-template`.
+ * - copies the template to a destination folder
+ * - clears out the .git history in the copy
+ * - optionally initializes a fresh git repo and adds a remote
+ *
+ * TODOs (placeholders for later work):
+ *  - Create/patch pixelated.config.json and optionally run config:encrypt
+ *  - Run `npm ci` / `npm run lint` / `npm test` and optionally build
+ *  - Optionally create GitHub repo using API (with token from secure vault)
+ * 
+ * 
+1) Recommended approach (short) ✅
+Build a small Node-based CLI (easier cross-platform than a Bash script) called e.g. scripts/new-site.js or an npm create script.
+Make it interactive with sensible CLI flags (--name, --domain, --repo, --git, --encrypt, --no-install) and a non-interactive mode for CI.
+
+2) High-level workflow the script should perform 🔁
+Validate inputs (target path, site slug, repo name).
+Copy pixelated-template → ./<new-site-name> (preserve file modes).
+Replace placeholders in files (template tokens like {{SITE_NAME}}, {{PACKAGE_NAME}}, {{DOMAIN}}).
+Patch template-specific files (see list below).
+Remove template git metadata (rm -rf .git) and reset any CI state.
+Create/patch pixelated.config.json with site-specific values (ask for secrets). Optionally run npm run config:encrypt to write .enc.
+Run validation: npm ci (optional), npm run lint, npm test, npm run build.
+Init git, make initial commit, optionally create remote GitHub repo (if token available) and push.
+Print summary and next steps (e.g., configure hosting / DNS / deploy keys).
+
+3) Files / fields to update in the template 🔧
+package.json — name, description, repository, author, homepage, version, scripts (if you want to change default scripts).
+README.md — project title and quick-start instructions.
+next.config.ts / amplify.yml — site-specific env entries and build steps.
+pixelated.config.json — update global/aws/contentful/google fields for this site (prefer *.enc workflow).
+src/app/(pages)/… and any site metadata files (site slug, default pagesDir).
+public/ assets and site-images.json — update site logos/URLs.
+certificates/ if using TLS — template may include placeholder paths.
+FEATURE_CHECKLIST.md — optionally update default checklist for new site.
+.gitignore — ensure pixelated.config.json is ignored if plaintext during setup.
+
+4) Template hardening (recommended changes in pixelated-template) ⚠️
+Add placeholder tokens for the things above (e.g., {{PACKAGE_NAME}}, {{SITE_DOMAIN}}) rather than literal values.
+Add a template.json or template.meta that lists files & placeholders to auto-replace.
+Ensure the template does not include real secrets. Provide pixelated.config.json.example with placeholders and an example .env.local.example.
+Add a scripts/prepare-template.sh or test job that ensures no plaintext sensitive values remain.
+Document the creation process in TEMPLATE_README.md for maintainers.
+
+5) Security & operational notes 🔐
+Do not commit plaintext pixelated.config.json. If the CLI accepts secret values, optionally run npm run config:encrypt immediately and only commit the .enc if needed (prefer not to commit it; store in site secrets store).
+Add an option to write the encrypted file directly into dist/config when building a deployment bundle.
+Provide an audit step: scan resulting repo for secret patterns before final commit/push.
+
+6) Helpful CLI implementation details (tools & libs) 🛠️
+Use Node + these packages: fs-extra (copy), replace-in-file or simple .replace() for template tokens, inquirer (prompt), execa (run commands), simple-git (git ops), node-fetch or @octokit/rest (optional GitHub repo creation).
+Use safe file writes and atomic renames for config operations.
+Provide a --dry-run and --preview mode so users can verify changes before creating repo or pushing.
+
+7) Validation & post-creation steps ✅
+npm run lint && npm test && npm run build — fail fast and show errors for the new site.
+Optional: run npm run config:decrypt locally (with provided key) to confirm decryption works in your deploy workflow (BUT DO NOT store the key in the repo).
+
+8) Example minimal CLI flow (pseudo)
+Prompt: site name, package name, repo URL (optional), domain, author, contentful tokens, aws keys (optional), encrypt?
+Copy template → replace tokens → create pixelated.config.json from pixelated.config.json.example → encrypt if requested → init git → run install/build → push to remote.
+
+*/
+
+import fs from 'fs/promises';
+import path from 'path';
+import { exec as execCb } from 'child_process';
+import { promisify } from 'util';
+import readline from 'readline/promises';
+import { stdin as input, stdout as output } from 'process';
+import { fileURLToPath } from 'url';
+import { loadManifest, findTemplateForSlug, pruneTemplateDirs, printAvailableTemplates } from './create-pixelated-app-template-mapper.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const exec = promisify(execCb);
+
+async function exists(p) {
+	try {
+		await fs.access(p);
+		return true;
+	} catch (e) {
+		return false;
+	}
+}
+
+async function countFiles(src) {
+	let total = 0;
+	async function walk(p) {
+		const stat = await fs.lstat(p);
+		if (stat.isDirectory()) {
+			const items = await fs.readdir(p, { withFileTypes: true });
+			for (const item of items) {
+				await walk(path.join(p, item.name));
+			}
+		} else {
+			total++;
+		}
+	}
+	await walk(src);
+	return total;
+}
+
+function startSpinner(messageFn) {
+	if (!process.stdout.isTTY) return { stop: () => {} };
+	const frames = ['-', '\\', '|', '/'];
+	let i = 0;
+	const interval = setInterval(() => {
+		const msg = messageFn ? messageFn() : '';
+		process.stdout.write(`\r${frames[i % frames.length]} ${msg}`);
+		i++;
+	}, 100);
+	return {
+		stop: () => {
+			clearInterval(interval);
+			process.stdout.write('\r');
+			process.stdout.write('\n');
+		}
+	};
+}
+
+async function copyRecursive(src, dest, onFileCopied) {
+	// Recursive copy that reports per-file progress via onFileCopied.
+	await fs.mkdir(dest, { recursive: true });
+	const items = await fs.readdir(src, { withFileTypes: true });
+	for (const item of items) {
+		const s = path.join(src, item.name);
+		const d = path.join(dest, item.name);
+		const stat = await fs.lstat(s);
+		if (stat.isDirectory()) {
+			await copyRecursive(s, d, onFileCopied);
+		} else if (stat.isSymbolicLink()) {
+			try {
+				const link = await fs.readlink(s);
+				await fs.symlink(link, d);
+				if (onFileCopied) onFileCopied(d);
+			} catch (e) {
+				// ignore symlink failures
+				if (onFileCopied) onFileCopied(d);
+			}
+		} else {
+			// Regular file
+			await fs.copyFile(s, d);
+			if (onFileCopied) onFileCopied(d);
+		}
+	}
+}
+
+// Replace placeholders like {{SITE_NAME}}, {{SITE_URL}}, {{EMAIL_ADDRESS}} across the created site
+// This supports both literal tags and simple regex patterns (for cases where the bundler
+// transformed template tokens into JS expressions like {SITE_NAME}). Each replacement
+// entry may have { tag, value, isRegex } where isRegex indicates `tag` is a regex string.
+async function replacePlaceholders(rootDir, replacements) {
+	const ignoreDirs = new Set(['.git', 'node_modules', 'dist', 'coverage']);
+	let filesChanged = 0;
+	async function walk(p) {
+		const items = await fs.readdir(p, { withFileTypes: true });
+		for (const item of items) {
+			const entry = path.join(p, item.name);
+			if (item.isDirectory()) {
+				// Allow running against .next when explicitly targeting it, but skip when walking a template
+				if (item.name === '.next' && rootDir !== '.next') continue;
+				if (ignoreDirs.has(item.name)) continue;
+				await walk(entry);
+			} else {
+				try {
+					let content = await fs.readFile(entry, 'utf8');
+					let newContent = content;
+					for (const { tag, value, isRegex } of replacements) {
+						let re;
+						if (isRegex) {
+							re = new RegExp(tag, 'g');
+						} else {
+							re = new RegExp(tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g');
+						}
+						newContent = newContent.replace(re, value);
+					}
+					if (newContent !== content) {
+						await fs.writeFile(entry, newContent, 'utf8');
+						filesChanged++;
+					}
+				} catch (e) {
+					// Could be binary or unreadable - skip
+				}
+			}
+		}
+	}
+	await walk(rootDir);
+	return filesChanged;
+}
+
+// Token map used by the CLI: literal marker (e.g., "__SITE_NAME__") -> replacement value (populate during interactive prompts)
+export const TOKEN_MAP = { 
+	"__SITE_NAME__": '', 
+	"__SITE_URL__": '', 
+	"__EMAIL_ADDRESS__": '' 
+};
+
+// Helper: add a route entry to the routes.json structure for a newly created page
+export function addRouteEntry(routesJson, pageSlug, displayName, rootDisplayName) {
+	if (!routesJson || !Array.isArray(routesJson.routes)) return false;
+	const candidatePath = `/${pageSlug}`;
+	if (routesJson.routes.some(r => r.path === candidatePath)) return false;
+	const name = displayName.split(/\s+/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+	routesJson.routes.push({
+		"name": name,
+		"path": candidatePath,
+		"title": `${rootDisplayName} - ${displayName}`,
+		"description": "",
+		"keywords": ""
+	});
+	return true;
+}
+
+// Copy a template page into the target directory, resolving to the expected location inside the workspace template.
+// Returns an object { used: 'template'|'fallback', src: <sourcePath> }
+export async function copyTemplateForPage(templatePathArg, templateSrc, templatePagesHome, targetDir) {
+	const folderName = path.basename(templateSrc);
+	const srcTemplatePath = path.join(templatePathArg, 'src', 'app', '(pages)', folderName);
+	if (await exists(srcTemplatePath)) {
+		await copyRecursive(srcTemplatePath, targetDir);
+		return { used: 'template', src: srcTemplatePath };
+	} else {
+		await copyRecursive(templatePagesHome, targetDir);
+		return { used: 'fallback', src: templatePagesHome };
+	}
+}
+
+
+async function main() {
+	const rl = readline.createInterface({ input, output });
+	try {
+		console.log('\n📦 Pixelated site creator — scaffold a new site from pixelated-template\n');
+
+		const defaultName = 'my-site';
+		const siteName = (await rl.question(`Root directory name (kebab-case) [${defaultName}]: `)) || defaultName;
+
+		// Display name used in route titles: convert kebab to Title Case
+		const rootDisplayName = siteName.split(/[-_]+/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+
+		// Additional site metadata for placeholder substitution
+		const siteUrl = (await rl.question('Site URL (e.g. https://example.com) [leave blank to skip]: ')).trim();
+		const emailAddress = (await rl.question('Contact email address [leave blank to skip]: ')).trim();
+
+		const workspaceRoot = path.resolve(__dirname, '..', '..', '..');
+		const templatePath = path.resolve(workspaceRoot, 'pixelated-template');
+		if (!(await exists(templatePath))) {
+			console.error(`\n❌ Template not found at ${templatePath}. Please ensure this tool is run inside the workspace that contains pixelated-template.`);
+			process.exit(1);
+		}
+
+		// Load manifest (if present)
+		const manifest = await loadManifest(__dirname);
+		// Note: available templates will be printed later just before prompting for pages
+		
+
+		// Destination is implicitly the top-level Git folder + site name to avoid prompting for it
+		const destPath = path.resolve(workspaceRoot, siteName);
+		console.log(`\nThe new site will be created at: ${destPath}`);
+		const proceed = (await rl.question('Proceed? (Y/n): ')) || 'y';
+		if (proceed.toLowerCase() !== 'y' && proceed.toLowerCase() !== 'yes') {
+			console.log('Aborting.');
+			process.exit(0);
+		} 
+
+		if (await exists(destPath)) {
+			const shouldOverwrite = (await rl.question(`Destination ${destPath} already exists. Overwrite? (y/N): `)).toLowerCase();
+			if (shouldOverwrite !== 'y' && shouldOverwrite !== 'yes') {
+				console.log('Aborting. Choose another destination.');
+				process.exit(0);
+			}
+			console.log(`Removing existing directory ${destPath}...`);
+			await fs.rm(destPath, { recursive: true, force: true });
+		}
+
+		console.log(`\nCopying template from ${templatePath} -> ${destPath} ...`);
+		const totalFiles = await countFiles(templatePath);
+		let filesCopied = 0;
+		let lastFile = '';
+		const spinner = startSpinner(() => `Copying... ${filesCopied}/${totalFiles} ${lastFile ? '- ' + path.basename(lastFile) : ''}`);
+		await copyRecursive(templatePath, destPath, (f) => { if (f) { filesCopied++; lastFile = f; } });
+		// If fs.cp was used, per-file callbacks won't have been called; ensure we report the full total
+		if (filesCopied < totalFiles) filesCopied = totalFiles;
+		spinner.stop();
+		console.log(`✅ Template files copied (${filesCopied} files).`);
+
+		// Remove git history
+		const gitDir = path.join(destPath, '.git');
+		if (await exists(gitDir)) {
+			console.log('Removing .git directory from new site...');
+			await fs.rm(gitDir, { recursive: true, force: true });
+		}
+
+		// Pages prompt: show available templates and ask which pages to create (comma-separated)
+		if (manifest && Array.isArray(manifest.templates) && manifest.templates.length) {
+			printAvailableTemplates(manifest);
+		}
+		const pagesInput = (await rl.question('Pages to create (comma-separated, e.g. about,contact) [leave blank to skip]: ')).trim();
+		let pagesToCreate = [];
+		let existingPages = [];
+		if (pagesInput) {
+			const raw = pagesInput.split(',').map(s => s.trim()).filter(Boolean);
+			// sanitize and normalize
+			const seen = new Set();
+			for (const r of raw) {
+				const lower = r.toLowerCase();
+				if (lower === 'home' || lower === 'index') {
+					existingPages.push('home');
+					continue;
+				}
+				let slug = r.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+				if (!slug) continue;
+				if (seen.has(slug)) continue;
+				seen.add(slug);
+				const matchedTemplate = findTemplateForSlug(manifest, slug);
+				pagesToCreate.push({ slug, displayName: r.trim(), template: matchedTemplate });
+			}
+
+			console.log('\nSummary of pages:');
+			if (existingPages.length) console.log(` - Existing (skipped): ${existingPages.join(', ')}`);
+			if (pagesToCreate.length) {
+				console.log(' - To be created:');
+				for (const p of pagesToCreate) {
+					if (p.template) {
+						console.log(`   - ${p.slug} (mapped to template: ${p.template.name})`);
+					} else {
+						console.log(`   - ${p.slug} (no template match)`);
+					}
+				}
+			}
+			const proceedPages = (await rl.question('Proceed to create these pages? (Y/n): ')) || 'y';
+			if (proceedPages.toLowerCase() === 'y' || proceedPages.toLowerCase() === 'yes') {
+				// perform creation
+				const templatePagesHome = path.join(templatePath, 'src', 'app', '(pages)', '(home)');
+				const siteRoutesFile = path.join(destPath, 'src', 'app', 'data', 'routes.json');
+				let routesJson = null;
+				try {
+					routesJson = JSON.parse(await fs.readFile(siteRoutesFile, 'utf8'));
+					// Ensure siteInfo exists and set its name to the root display name
+					routesJson.siteInfo = routesJson.siteInfo || {};
+					routesJson.siteInfo.name = rootDisplayName;
+				} catch (e) {
+					console.warn('⚠️  Could not read routes.json, routes will not be updated.');
+				}
+
+				for (const p of pagesToCreate) {
+					const targetDir = path.join(destPath, 'src', 'app', '(pages)', p.slug);
+					console.log(`Creating page ${p.slug} -> ${targetDir}`);
+					let copyResult = null;
+					if (p.template && p.template.src) {
+						copyResult = await copyTemplateForPage(templatePath, p.template.src, templatePagesHome, targetDir);
+						if (copyResult.used === 'template') {
+							console.log(` - Copied template ${p.template.name} from ${copyResult.src}`);
+						} else {
+							console.warn(`⚠️  Template source ${path.join(templatePath, 'src', 'app', '(pages)', path.basename(p.template.src))} not found; using default page template instead.`);
+						}
+					} else {
+						await copyRecursive(templatePagesHome, targetDir);
+					}
+					// rename component in page.tsx
+					const pageFile = path.join(targetDir, 'page.tsx');
+					try {
+						let content = await fs.readFile(pageFile, 'utf8');
+						const compName = p.displayName.replace(/[^a-zA-Z0-9]+/g,' ').split(/\s+/).map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join('') + 'Page';
+						content = content.replace(/export default function\s+\w+\s*\(/, `export default function ${compName}(`);
+						await fs.writeFile(pageFile, content, 'utf8');
+						console.log(` - Updated component name to ${compName} in ${path.relative(destPath, pageFile)}`);
+					} catch (e) {
+						console.warn(`⚠️  Failed to update component name for ${p.slug}:`, e?.message || e);
+					}
+
+					// update routes.json
+					if (routesJson && Array.isArray(routesJson.routes)) {
+						// Skip if route path already exists
+						const candidatePath = `/${p.slug}`;
+						if (!routesJson.routes.some(r => r.path === candidatePath)) {
+							routesJson.routes.push({
+								"name": p.displayName.split(/\s+/).map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join(' '),
+								"path": candidatePath,
+								"title": `${rootDisplayName} - ${p.displayName}`,
+								"description": "",
+								"keywords": ""
+							});
+						} else {
+							console.log(` - Route ${candidatePath} already exists; skipping route add.`);
+						}
+					}
+				}
+
+				if (manifest) {
+					const removed = await pruneTemplateDirs(manifest, destPath, pagesToCreate.map(p=>p.slug));
+					for (const r of removed) {
+						console.log(`Removed unused template page ${r} from new site...`);
+					}
+				}
+
+				if (routesJson) {
+					try {
+						await fs.writeFile(siteRoutesFile, JSON.stringify(routesJson, null, '\t'), 'utf8');
+						console.log('✅ routes.json updated.');
+					} catch (e) {
+						console.warn('⚠️  Failed to write routes.json:', e?.message || e);
+					}
+				}
+			} else {
+				console.log('Skipping page creation.');
+			}
+		}
+		// Automatically replace double-underscore template placeholders (e.g., __SITE_NAME__) with provided values
+		const replacements = {};
+		if (rootDisplayName) replacements.SITE_NAME = rootDisplayName;
+		if (siteUrl) replacements.SITE_URL = siteUrl;
+		if (emailAddress) replacements.EMAIL_ADDRESS = emailAddress;
+		if (Object.keys(replacements).length) {
+			const replArray = [];
+			for (const [t, valRaw] of Object.entries(replacements)) {
+				const val = String(valRaw);
+				// populate TOKEN_MAP so other code can inspect token->value mapping (keyed by literal marker)
+				const marker = `__${t}__`;
+				TOKEN_MAP[marker] = val;
+				// First, replace expression occurrences like {__TOKEN__} with a quoted string expression to avoid bare identifiers
+				replArray.push({ tag: `\\{${marker}\\}`, value: `{${JSON.stringify(val)}}`, isRegex: true });
+				// Then, replace literal marker occurrences (e.g., __TOKEN__) with the plain value
+				replArray.push({ tag: marker, value: val });
+			}
+			try {
+				const changed = await replacePlaceholders(destPath, replArray);
+				console.log(`✅ Replaced template placeholders in ${changed} files under ${destPath}`);
+			} catch (e) {
+				console.warn('⚠️ Failed to replace placeholders in site copy:', e?.message || e);
+			}
+		}
+		// Prompt about git initialization
+		const initGitAnswer = (await rl.question('Initialize a fresh git repository here? (Y/n): ')) || 'y';
+		if (initGitAnswer.toLowerCase() === 'y' || initGitAnswer.toLowerCase() === 'yes') {
+			try {
+				await exec('git init -b main', { cwd: destPath });
+				await exec('git add .', { cwd: destPath });
+				await exec('git commit -m "chore: initial commit from pixelated-template"', { cwd: destPath });
+				console.log('✅ Git initialized and initial commit created.');
+			} catch (e) {
+				console.warn('⚠️  Git init or commit failed. You can initialize manually later.', e?.stderr || e?.message || e);
+			}
+		}
+
+
+
+		console.log('\n🎉 Done. Summary:');
+		console.log(` - Site copied to: ${destPath}`);
+		console.log('\nNote: A git remote was not set by this script. You can add one later with `git remote add origin <url>` if desired.');
+		console.log('\nNext recommended steps (manual or to be automated in future):');
+		console.log(' - Update pixelated.config.json for this site and encrypt it with your config tool');
+		console.log(' - Run `npm run lint`, `npm test`, and `npm run build` inside the new site and fix any issues');
+		console.log(' - Create GitHub repo (if not already created), push main branch, and set up CI/deploy secrets');
+	} catch (err) {
+		console.error('Unexpected error:', err);
+		process.exit(1);
+	} finally {
+		rl.close();
+	}
+}
+
+if (typeof process !== 'undefined' && new URL(import.meta.url).pathname === process.argv[1]) {
+	// CLI entry point: run the interactive main flow
+	main();
+}

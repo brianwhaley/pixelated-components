@@ -35,13 +35,17 @@ export default [
 			...reactPlugin.configs.recommended.rules,
 			...a11yPlugin.configs.recommended.rules,
 			"indent": ["error", "tab"],
-			"semi": ["error", "always"],
-			// '@typescript-eslint/explicit-function-return-type': 'off',
-			'@typescript-eslint/no-explicit-any': 'off',
-			// Disable rules that conflict with propTypes + InferProps pattern
-			'@typescript-eslint/no-unused-vars': 'off', // Allow unused props in function signatures and exported types
-			'react/prop-types': 'off', // We use our own propTypes system
-			...pixelatedPlugin.configs.recommended.rules,
+				"no-tabs": "off",
+				"semi": ["error", "always"],
+				"@next/next/no-img-element": "off",
+				"@next/next/no-html-link-for-pages": "off",
+				// '@typescript-eslint/explicit-function-return-type': 'off',
+				'@typescript-eslint/no-explicit-any': 'off',
+				// Disable rules that conflict with propTypes + InferProps pattern
+				'@typescript-eslint/no-unused-vars': 'off', // Allow unused props in function signatures and exported types
+				'react/prop-types': 'off', // We use our own propTypes system
+				...pixelatedPlugin.configs.recommended.rules,
+				"pixelated/prop-types-inferprops": "warn",
 		},
 		settings: {
 			react: {

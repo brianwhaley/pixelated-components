@@ -174,7 +174,6 @@ export function ResumeEvents(props: ResumeEventsType) {
 			{ (myLocation.region[0]) ? <span className="p-region">, {myLocation.region[0]} </span> : null }
 			{ (myLocation.url[0]) 
 				? <a href={myLocation.url[0]} target="_blank" rel="noreferrer">
-						{ /* <img src="/images/icons/link.png" title={myLocation.url[0]} alt={myLocation.url[0]} className='u-url-icon' /> */ }
 						<SmartImage src="/images/icons/link.png" title={myLocation.url[0]} alt={myLocation.url[0]} className='u-url-icon' 
 							cloudinaryEnv={config?.cloudinary?.product_env}
 							cloudinaryDomain={config?.cloudinary?.baseUrl}
@@ -356,7 +355,6 @@ export function ResumeProjects(props: ResumeProjectsType) {
 					: <span className="p-name">{project.properties.name[0]}</span> }
 				{' '} { (project.properties.photo[0]) 
 					? <a href={project.properties.photo[0]} target="_blank" className="u-photo" rel="noreferrer">
-						{ /* <img src='/images/icons/img.png' title={project.properties.name[0]} alt={project.properties.name[0]} className='u-photo-icon' /> */ }
 						<SmartImage src='/images/icons/img.png' title={project.properties.name[0]} alt={project.properties.name[0]} className='u-photo-icon' 
 							cloudinaryEnv={config?.cloudinary?.product_env}
 							cloudinaryDomain={config?.cloudinary?.baseUrl}
