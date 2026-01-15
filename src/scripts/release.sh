@@ -62,6 +62,20 @@ prompt_remote_selection() {
 }
 REMOTE_NAME=$(prompt_remote_selection)
 
+# Confirm current directory matches the selected remote's repository name
+remote_url=$(git remote get-url "$REMOTE_NAME" 2>/dev/null || true)
+remote_repo=$(basename -s .git "${remote_url##*/}")
+local_repo=$(basename "$(git rev-parse --show-toplevel)")
+if [ -n "$remote_repo" ] && [ "$remote_repo" != "$local_repo" ]; then
+    echo "\n⚠️  Warning: Selected remote '$REMOTE_NAME' points to repository '$remote_repo' but you are currently in folder '$local_repo'."
+    read -p "Proceed anyway? (y/N): " proceed
+    proceed=${proceed:-n}
+    if [[ ! "$proceed" =~ ^[Yy] ]]; then
+        echo "Aborting. Please run this script from the correct repository folder." >&2
+        exit 1
+    fi
+fi
+
 
 
 
