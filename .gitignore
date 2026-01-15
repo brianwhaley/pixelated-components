@@ -15,6 +15,6 @@ next-env.d.ts
 npm-debug.log*
 .pnpm-debug.log*
 # Local plaintext config - ensure encrypted .enc is used; ignore plaintext config
-/src/pixelated.config.json.enc
+/src/pixelated.config.json
 /src/config/pixelated.config.json
 /src/app/config/pixelated.config.json
