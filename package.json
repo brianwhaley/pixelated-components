@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.9.14",
+	"version": "3.9.15",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -82,7 +82,7 @@
 		"vault": "npx tsx src/scripts/config-vault.ts",
 		"config:vault": "npm run vault --",
 		"config:encrypt": "npm run config:vault -- encrypt src/config/pixelated.config.json",
-		"config:decrypt": "npm run config:vault -- decrypt src/config/pixelated.config.json",
+		"config:decrypt": "npm run config:vault -- decrypt src/config/pixelated.config.json.enc",
 		"create-pixelated-app": "node src/scripts/create-pixelated-app.js"
 	},
 	"scripts-20260113": {
