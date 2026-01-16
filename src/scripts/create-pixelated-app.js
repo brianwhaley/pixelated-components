@@ -79,6 +79,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const exec = promisify(execCb);
+// Exportable exec wrapper so tests can stub it.
+export let _exec = exec;
 
 async function exists(p) {
 	try {
@@ -231,6 +233,73 @@ export async function copyTemplateForPage(templatePathArg, templateSrc, template
 	}
 }
 
+
+export async function createAndPushRemote(destPath, siteName, defaultOwner) {
+	// Initialize a local git repo and make the initial commit
+	await _exec('git init -b main', { cwd: destPath });
+	await _exec('git add .', { cwd: destPath });
+	await _exec('git commit -m "chore: initial commit from pixelated-template"', { cwd: destPath });
+	console.log('✅ Git initialized and initial commit created.');
+
+	// Create & push remote using the project's existing provider (getFullPixelatedConfig) via a small tsx inline call
+	const componentsRoot = path.resolve(__dirname, '..', '..');
+	const inlineCmd = `npx tsx -e "process.chdir(${JSON.stringify(destPath)}); import('./src/components/config/config').then(m => { const cfg = m.getFullPixelatedConfig(); console.log(JSON.stringify(cfg?.github || null)); }).catch(e => { console.error('ERR_IMPORT', e?.message || e); process.exit(2); })"`;
+	let execOut = null;
+	try {
+		execOut = await _exec(inlineCmd, { cwd: componentsRoot, timeout: 60_000 });
+	} catch (e) {
+		console.error('❌ Failed to run config provider to obtain GitHub token. Ensure PIXELATED_CONFIG_KEY is available (e.g., in .env.local) and the site includes an encrypted pixelated.config.json.enc');
+		throw e;
+	}
+	const outStr = (execOut && execOut.stdout) ? String(execOut.stdout).trim() : '';
+	if (!outStr) {
+		console.error('❌ No output from config provider; cannot locate github token');
+		throw new Error('Missing provider output');
+	}
+	let githubInfo = null;
+	try { githubInfo = JSON.parse(outStr); } catch (e) { console.error('❌ Invalid JSON from config provider:', outStr); throw e; }
+	const token = githubInfo?.token;
+	const cfgOwner = githubInfo?.defaultOwner;
+	if (!token) {
+		console.error('❌ github.token not found in decrypted config; cannot create remote repo.');
+		throw new Error('Missing github.token');
+	}
+
+	const repoName = siteName;
+	const ownerForMessage = cfgOwner || defaultOwner;
+	console.log(`Creating GitHub repo: ${ownerForMessage}/${repoName} ...`);
+	let resp;
+	try {
+		resp = await fetch('https://api.github.com/user/repos', {
+			method: 'POST',
+			headers: {
+				'Authorization': `token ${token}`,
+				'Content-Type': 'application/json',
+				'User-Agent': 'create-pixelated-app'
+			},
+			body: JSON.stringify({ name: repoName, private: false })
+		});
+	} catch (e) {
+		console.error('❌ Failed to call GitHub API', e?.message || e);
+		throw e;
+	}
+	const body = await (async () => { try { return await resp.json(); } catch (e) { return null; } })();
+	if (!resp.ok) {
+		console.error(`❌ Failed to create GitHub repo: ${resp.status} ${resp.statusText} ${body?.message || ''}`);
+		throw new Error('GitHub repo creation failed');
+	}
+	const cloneUrl = body.clone_url;
+	if (!cloneUrl) {
+		console.error('❌ GitHub returned unexpected response (no clone_url)');
+		throw new Error('Invalid GitHub response');
+	}
+
+	// Add remote and push
+	await _exec(`git remote add origin ${cloneUrl}`, { cwd: destPath });
+	await _exec('git branch --show-current || git branch -M main', { cwd: destPath });
+	await _exec('git push -u origin main', { cwd: destPath });
+	console.log(`✅ Remote created and initial commit pushed: ${cloneUrl}`);
+}
 
 async function main() {
 	const rl = readline.createInterface({ input, output });
@@ -450,70 +519,7 @@ async function main() {
 		const createRemoteAnswer = (await rl.question(`Create a new GitHub repository in '${defaultOwner}' and push the initial commit? (Y/n): `)) || 'y';
 		if (createRemoteAnswer.toLowerCase() === 'y' || createRemoteAnswer.toLowerCase() === 'yes') {
 			try {
-				// Initialize a local git repo and make the initial commit
-				await exec('git init -b main', { cwd: destPath });
-				await exec('git add .', { cwd: destPath });
-				await exec('git commit -m "chore: initial commit from pixelated-template"', { cwd: destPath });
-				console.log('✅ Git initialized and initial commit created.');
-
-				// Create & push remote using the project's existing provider (getFullPixelatedConfig) via a small tsx inline call
-				const componentsRoot = path.resolve(__dirname, '..', '..');
-				const inlineCmd = `npx tsx -e "process.chdir(${JSON.stringify(destPath)}); import('./src/components/config/config').then(m => { const cfg = m.getFullPixelatedConfig(); console.log(JSON.stringify(cfg?.github || null)); }).catch(e => { console.error('ERR_IMPORT', e?.message || e); process.exit(2); })"`;
-				let execOut = null;
-				try {
-					execOut = await exec(inlineCmd, { cwd: componentsRoot, timeout: 60_000 });
-				} catch (e) {
-					console.error('❌ Failed to run config provider to obtain GitHub token. Ensure PIXELATED_CONFIG_KEY is available (e.g., in .env.local) and the site includes an encrypted pixelated.config.json.enc');
-					throw e;
-				}
-				const outStr = (execOut && execOut.stdout) ? String(execOut.stdout).trim() : '';
-				if (!outStr) {
-					console.error('❌ No output from config provider; cannot locate github token');
-					throw new Error('Missing provider output');
-				}
-				let githubInfo = null;
-				try { githubInfo = JSON.parse(outStr); } catch (e) { console.error('❌ Invalid JSON from config provider:', outStr); throw e; }
-				const token = githubInfo?.token;
-				const cfgOwner = githubInfo?.defaultOwner;
-				if (!token) {
-					console.error('❌ github.token not found in decrypted config; cannot create remote repo.');
-					throw new Error('Missing github.token');
-				}
-
-				const repoName = siteName;
-				const ownerForMessage = cfgOwner || defaultOwner;
-				console.log(`Creating GitHub repo: ${ownerForMessage}/${repoName} ...`);
-				let resp;
-				try {
-					resp = await fetch('https://api.github.com/user/repos', {
-						method: 'POST',
-						headers: {
-							'Authorization': `token ${token}`,
-							'Content-Type': 'application/json',
-							'User-Agent': 'create-pixelated-app'
-						},
-						body: JSON.stringify({ name: repoName, private: false })
-					});
-				} catch (e) {
-					console.error('❌ Failed to call GitHub API', e?.message || e);
-					throw e;
-				}
-				const body = await (async () => { try { return await resp.json(); } catch (e) { return null; } })();
-				if (!resp.ok) {
-					console.error(`❌ Failed to create GitHub repo: ${resp.status} ${resp.statusText} ${body?.message || ''}`);
-					throw new Error('GitHub repo creation failed');
-				}
-				const cloneUrl = body.clone_url;
-				if (!cloneUrl) {
-					console.error('❌ GitHub returned unexpected response (no clone_url)');
-					throw new Error('Invalid GitHub response');
-				}
-
-				// Add remote and push
-				await exec(`git remote add origin ${cloneUrl}`, { cwd: destPath });
-				await exec('git branch --show-current || git branch -M main', { cwd: destPath });
-				await exec('git push -u origin main', { cwd: destPath });
-				console.log(`✅ Remote created and initial commit pushed: ${cloneUrl}`);
+				await createAndPushRemote(destPath, siteName, defaultOwner);
 			} catch (e) {
 				console.warn('⚠️  Repo creation or git push failed. Your local repository is still available at:', destPath);
 				console.warn(e?.stderr || e?.message || e);
