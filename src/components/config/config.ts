@@ -46,6 +46,10 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 	// Handle decryption if the content is encrypted
 	if (isEncrypted(raw)) {
 		const key = process.env.PIXELATED_CONFIG_KEY;
+		// Diagnostic logging: show which path contained the encrypted config and whether a key is available.
+		const keyPresent = Boolean(key);
+		const keyInfo = keyPresent ? `${key.length} chars` : 'missing';
+		console.warn(`PIXELATED_CONFIG found encrypted at ${source}. PIXELATED_CONFIG_KEY presence: ${keyInfo}${process.env.PIXELATED_CONFIG_DEBUG ? ' (debug mode on)' : ''}`);
 		if (!key) {
 			console.error('PIXELATED_CONFIG is encrypted but PIXELATED_CONFIG_KEY is not set in the environment.');
 			return {} as PixelatedConfig;
@@ -53,8 +57,10 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 		try {
 			raw = decrypt(raw, key);
 			if (debug) console.log(`PIXELATED_CONFIG decrypted using key.`);
+			if (process.env.PIXELATED_CONFIG_DEBUG) console.warn('PIXELATED_CONFIG: decryption succeeded');
 		} catch (err) {
-			console.error('Failed to decrypt PIXELATED_CONFIG', err);
+			console.error('Failed to decrypt PIXELATED_CONFIG at', source, err?.message || err);
+			if (process.env.PIXELATED_CONFIG_DEBUG) console.error('PIXELATED_CONFIG: decryption failed (debug mode on)');
 			return {} as PixelatedConfig;
 		}
 	}
