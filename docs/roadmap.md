@@ -11,10 +11,8 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **ON HOLD** Yelp Recommendations integration (Cost Prohibitive)
 - [ ] Instagram Image Integration for Carousels
 - [ ] Hero Banner: headline, subtext, CTA, background image/video, overlay.
-
-### CI / CD Improvements
-- [ ] Add CI workflow to run tests and lints on pull requests.
-- [ ] **Transition to a Turborepo Monorepo**: Move all sites and components into a unified workspace with `pnpm` and `Turborepo` for instant builds and shared task orchestration.
+- [ ] Map Based Project Component
+- [ ] New Callout Variant based on https://onthespothome.com/services
 
 ### Component Improvements
 - [ ] Implement minimal `createContentfulImageURLs` with single `/images` sitemap entry.
@@ -49,6 +47,14 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **API Gateway**: Unified API management for connecting to CRM, email marketing, payment processors, and other business tools
 - [ ] **Webhook Automation**: Event-driven automation for form submissions, new content, user registrations, and business workflows
 - [ ] **Documentation Auto-Generator**: Automatically generated API docs, component usage guides, and deployment instructions
+- [ ] **Standardized Component Interface**: Create consistent component interfaces with `BaseComponentProps` and `InteractiveComponentProps` extending patterns.
+- [ ] **Unified Configuration System**: Create centralized configuration with `ConfigContext.tsx`, `ConfigProvider.tsx`, `useConfig.ts` hook, and service-specific config modules.
+- [ ] **Type-Safe Configuration**: Implement strict TypeScript interfaces with runtime validation for configuration objects.
+- [ ] **CMS API Client**: Create standardized CMS API clients (`ContentfulClient.ts`, `WordPressClient.ts`) with base `ApiClient.ts` for consistent error handling.
+
+### CI / CD Improvements
+- [ ] Add CI workflow to run tests and lints on pull requests.
+- [ ] **Transition to a Turborepo Monorepo**: Move all sites and components into a unified workspace with `pnpm` and `Turborepo` for instant builds and shared task orchestration.
 
 ## Admin Feature Enhancements
 
@@ -62,18 +68,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ IP ] **Standardized Component Architecture**: Establish consistent patterns for component props interfaces, error/loading state management, event handling, and styling approaches.
 - [ IP ] **Shared Type Definitions**: Create centralized type definitions in `src/types/` directory to eliminate duplicated interfaces across components.
 - [ ] **Bundle Optimization**: Implement dynamic imports and tree shaking optimizations to reduce large bundle sizes and enable code splitting.
-
-## Component Library Enhancements
-
-### UI Component Architecture Standardization (High Priority)
-- [ ] **Standardized Component Interface**: Create consistent component interfaces with `BaseComponentProps` and `InteractiveComponentProps` extending patterns.
-
-### Configuration & State Management (Medium Priority)
-- [ ] **Unified Configuration System**: Create centralized configuration with `ConfigContext.tsx`, `ConfigProvider.tsx`, `useConfig.ts` hook, and service-specific config modules.
-- [ ] **Type-Safe Configuration**: Implement strict TypeScript interfaces with runtime validation for configuration objects.
-
-### API Integration Standardization (High Priority)
-- [ ] **CMS API Client**: Create standardized CMS API clients (`ContentfulClient.ts`, `WordPressClient.ts`) with base `ApiClient.ts` for consistent error handling.
 
 ## Contributing to Roadmap
 
