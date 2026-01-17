@@ -26,6 +26,7 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 		path.join(process.cwd(), 'node_modules', '@pixelated-tech', 'components', 'dist', 'config', filename),
 	];
 
+	// First, look for plaintext config files
 	for (const configPath of paths) {
 		if (fs.existsSync(configPath)) {
 			try {
@@ -38,6 +39,23 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 		}
 	}
 
+	// If not found, look for encrypted variants in the same locations (e.g., pixelated.config.json.enc)
+	const doIt = false;
+	if (!raw && doIt) {
+		for (const configPath of paths) {
+			const encPath = `${configPath}.enc`;
+			if (fs.existsSync(encPath)) {
+				try {
+					raw = fs.readFileSync(encPath, 'utf8');
+					source = encPath;
+					break;
+				} catch (err) {
+					console.error(`Failed to read encrypted config file at ${encPath}`, err);
+				}
+			}
+		}
+	}
+
 	if (!raw) {
 		console.error('pixelated.config.json not found. Searched in src/app/config/, src/config/, and root.');
 		return {} as PixelatedConfig;
@@ -45,11 +63,23 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 
 	// Handle decryption if the content is encrypted
 	if (isEncrypted(raw)) {
-		const key = process.env.PIXELATED_CONFIG_KEY;
-		// Diagnostic logging: show which path contained the encrypted config and whether a key is available.
-		const keyPresent = Boolean(key);
-		const keyInfo = keyPresent ? `${key.length} chars` : 'missing';
-		console.warn(`PIXELATED_CONFIG found encrypted at ${source}. PIXELATED_CONFIG_KEY presence: ${keyInfo}${process.env.PIXELATED_CONFIG_DEBUG ? ' (debug mode on)' : ''}`);
+		// Allow key to come from env or a local .env.local fallback (useful for local/CI debugging)
+		let key = process.env.PIXELATED_CONFIG_KEY;
+		if (!key) {
+			const envPath = path.join(process.cwd(), '.env.local');
+			if (fs.existsSync(envPath)) {
+				try {
+					const envContent = fs.readFileSync(envPath, 'utf8');
+					const match = envContent.match(/^PIXELATED_CONFIG_KEY=(.*)$/m);
+					if (match && match[1]) {
+						key = match[1].trim();
+					}
+				} catch (e) {
+					// ignore
+				}
+			}
+		}
+
 		if (!key) {
 			console.error('PIXELATED_CONFIG is encrypted but PIXELATED_CONFIG_KEY is not set in the environment.');
 			return {} as PixelatedConfig;
@@ -57,10 +87,8 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 		try {
 			raw = decrypt(raw, key);
 			if (debug) console.log(`PIXELATED_CONFIG decrypted using key.`);
-			if (process.env.PIXELATED_CONFIG_DEBUG) console.warn('PIXELATED_CONFIG: decryption succeeded');
 		} catch (err) {
-			console.error('Failed to decrypt PIXELATED_CONFIG at', source, err?.message || err);
-			if (process.env.PIXELATED_CONFIG_DEBUG) console.error('PIXELATED_CONFIG: decryption failed (debug mode on)');
+			console.error('Failed to decrypt PIXELATED_CONFIG', err);
 			return {} as PixelatedConfig;
 		}
 	}

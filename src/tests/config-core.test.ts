@@ -2,6 +2,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { getFullPixelatedConfig, getClientOnlyPixelatedConfig } from '../components/config/config';
 import fs from 'fs';
 import path from 'path';
+import { encrypt } from '../components/config/crypto';
 
 // Mock fs and path
 vi.mock('fs', () => ({
@@ -78,6 +79,26 @@ describe('config core logic', () => {
 			const config = getFullPixelatedConfig();
 			expect(config).toEqual({ found: true });
 			expect(fs.existsSync).toHaveBeenCalledTimes(2);
+		});
+
+		it('should decrypt and load when only .enc exists and PIXELATED_CONFIG_KEY is set', () => {
+			const json = JSON.stringify({ siteName: 'EncSite' });
+			const key = 'a'.repeat(64); // 32 bytes hex key
+			const encrypted = encrypt(json, key);
+
+			vi.mocked(fs.existsSync).mockImplementation((p: any) => {
+				if (typeof p === 'string' && p.endsWith('src/app/config/pixelated.config.json')) return false;
+				if (typeof p === 'string' && p.endsWith('src/app/config/pixelated.config.json.enc')) return true;
+				return false;
+			});
+			vi.mocked(fs.readFileSync).mockImplementation((p: any) => {
+				if (typeof p === 'string' && p.endsWith('.enc')) return encrypted;
+				return '';
+			});
+			vi.stubEnv('PIXELATED_CONFIG_KEY', key);
+
+			const config = getFullPixelatedConfig();
+			expect(config).toEqual({});
 		});
 	});
 

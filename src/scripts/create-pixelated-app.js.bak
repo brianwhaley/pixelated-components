@@ -340,250 +340,251 @@ export async function createAndPushRemote(destPath, siteName, defaultOwner) {
 	await _exec('git push -u origin main', { cwd: destPath });
 	console.log(`✅ Remote created and initial commit pushed: ${cloneUrl}`);
 }
-async function main() {
-	const rl = readline.createInterface({ input, output });
-	try {
-		console.log('\n📦 Pixelated site creator — scaffold a new site from pixelated-template\n');
+	async function main() {
+		const rl = readline.createInterface({ input, output });
+		try {
+			console.log('\n📦 Pixelated site creator — scaffold a new site from pixelated-template\n');
 
-		const defaultName = 'my-site';
-		const siteName = (await rl.question(`Root directory name (kebab-case) [${defaultName}]: `)) || defaultName;
+			const defaultName = 'my-site';
+			const siteName = (await rl.question(`Root directory name (kebab-case) [${defaultName}]: `)) || defaultName;
 
-		// Display name used in route titles: convert kebab to Title Case
-		const rootDisplayName = siteName.split(/[-_]+/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+			// Display name used in route titles: convert kebab to Title Case
+			const rootDisplayName = siteName.split(/[-_]+/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
 
-		// Additional site metadata for placeholder substitution
-		const siteUrl = (await rl.question('Site URL (e.g. https://example.com) [leave blank to skip]: ')).trim();
-		const emailAddress = (await rl.question('Contact email address [leave blank to skip]: ')).trim();
+			// Additional site metadata for placeholder substitution
+			const siteUrl = (await rl.question('Site URL (e.g. https://example.com) [leave blank to skip]: ')).trim();
+			const emailAddress = (await rl.question('Contact email address [leave blank to skip]: ')).trim();
 
-		const workspaceRoot = path.resolve(__dirname, '..', '..', '..');
-		const templatePath = path.resolve(workspaceRoot, 'pixelated-template');
-		if (!(await exists(templatePath))) {
-			console.error(`\n❌ Template not found at ${templatePath}. Please ensure this tool is run inside the workspace that contains pixelated-template.`);
-			process.exit(1);
-		}
+			const workspaceRoot = path.resolve(__dirname, '..', '..', '..');
+			const templatePath = path.resolve(workspaceRoot, 'pixelated-template');
+			if (!(await exists(templatePath))) {
+				console.error(`\n❌ Template not found at ${templatePath}. Please ensure this tool is run inside the workspace that contains pixelated-template.`);
+				process.exit(1);
+			}
 
-		// Load manifest (if present)
-		const manifest = await loadManifest(__dirname);
-		// Note: available templates will be printed later just before prompting for pages
+			// Load manifest (if present)
+			const manifest = await loadManifest(__dirname);
+			// Note: available templates will be printed later just before prompting for pages
 		
 
-		// Destination is implicitly the top-level Git folder + site name to avoid prompting for it
-		const destPath = path.resolve(workspaceRoot, siteName);
-		console.log(`\nThe new site will be created at: ${destPath}`);
-		const proceed = (await rl.question('Proceed? (Y/n): ')) || 'y';
-		if (proceed.toLowerCase() !== 'y' && proceed.toLowerCase() !== 'yes') {
-			console.log('Aborting.');
-			process.exit(0);
-		} 
-
-		if (await exists(destPath)) {
-			const shouldOverwrite = (await rl.question(`Destination ${destPath} already exists. Overwrite? (y/N): `)).toLowerCase();
-			if (shouldOverwrite !== 'y' && shouldOverwrite !== 'yes') {
-				console.log('Aborting. Choose another destination.');
+			// Destination is implicitly the top-level Git folder + site name to avoid prompting for it
+			const destPath = path.resolve(workspaceRoot, siteName);
+			console.log(`\nThe new site will be created at: ${destPath}`);
+			const proceed = (await rl.question('Proceed? (Y/n): ')) || 'y';
+			if (proceed.toLowerCase() !== 'y' && proceed.toLowerCase() !== 'yes') {
+				console.log('Aborting.');
 				process.exit(0);
-			}
-			console.log(`Removing existing directory ${destPath}...`);
-			await fs.rm(destPath, { recursive: true, force: true });
-		}
+			} 
 
-		console.log(`\nCopying template from ${templatePath} -> ${destPath} ...`);
-		const totalFiles = await countFiles(templatePath);
-		let filesCopied = 0;
-		let lastFile = '';
-		const spinner = startSpinner(() => `Copying... ${filesCopied}/${totalFiles} ${lastFile ? '- ' + path.basename(lastFile) : ''}`);
-		await copyRecursive(templatePath, destPath, (f) => { if (f) { filesCopied++; lastFile = f; } });
-		// If fs.cp was used, per-file callbacks won't have been called; ensure we report the full total
-		if (filesCopied < totalFiles) filesCopied = totalFiles;
-		spinner.stop();
-		console.log(`✅ Template files copied (${filesCopied} files).`);
-
-		// Remove git history
-		const gitDir = path.join(destPath, '.git');
-		if (await exists(gitDir)) {
-			console.log('Removing .git directory from new site...');
-			await fs.rm(gitDir, { recursive: true, force: true });
-		}
-
-		// Pages prompt: show available templates and ask which pages to create (comma-separated)
-		if (manifest && Array.isArray(manifest.templates) && manifest.templates.length) {
-			printAvailableTemplates(manifest);
-		}
-		const pagesInput = (await rl.question('Pages to create (comma-separated, e.g. about,contact) [leave blank to skip]: ')).trim();
-		let pagesToCreate = [];
-		let existingPages = [];
-		if (pagesInput) {
-			const raw = pagesInput.split(',').map(s => s.trim()).filter(Boolean);
-			// sanitize and normalize
-			const seen = new Set();
-			for (const r of raw) {
-				const lower = r.toLowerCase();
-				if (lower === 'home' || lower === 'index') {
-					existingPages.push('home');
-					continue;
+			if (await exists(destPath)) {
+				const shouldOverwrite = (await rl.question(`Destination ${destPath} already exists. Overwrite? (y/N): `)).toLowerCase();
+				if (shouldOverwrite !== 'y' && shouldOverwrite !== 'yes') {
+					console.log('Aborting. Choose another destination.');
+					process.exit(0);
 				}
-				let slug = r.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-				if (!slug) continue;
-				if (seen.has(slug)) continue;
-				seen.add(slug);
-				const matchedTemplate = findTemplateForSlug(manifest, slug);
-				pagesToCreate.push({ slug, displayName: r.trim(), template: matchedTemplate });
+				console.log(`Removing existing directory ${destPath}...`);
+				await fs.rm(destPath, { recursive: true, force: true });
 			}
 
-			console.log('\nSummary of pages:');
-			if (existingPages.length) console.log(` - Existing (skipped): ${existingPages.join(', ')}`);
-			if (pagesToCreate.length) {
-				console.log(' - To be created:');
-				for (const p of pagesToCreate) {
-					if (p.template) {
-						console.log(`   - ${p.slug} (mapped to template: ${p.template.name})`);
-					} else {
-						console.log(`   - ${p.slug} (no template match)`);
+			console.log(`\nCopying template from ${templatePath} -> ${destPath} ...`);
+			const totalFiles = await countFiles(templatePath);
+			let filesCopied = 0;
+			let lastFile = '';
+			const spinner = startSpinner(() => `Copying... ${filesCopied}/${totalFiles} ${lastFile ? '- ' + path.basename(lastFile) : ''}`);
+			await copyRecursive(templatePath, destPath, (f) => { if (f) { filesCopied++; lastFile = f; } });
+			// If fs.cp was used, per-file callbacks won't have been called; ensure we report the full total
+			if (filesCopied < totalFiles) filesCopied = totalFiles;
+			spinner.stop();
+			console.log(`✅ Template files copied (${filesCopied} files).`);
+
+			// Remove git history
+			const gitDir = path.join(destPath, '.git');
+			if (await exists(gitDir)) {
+				console.log('Removing .git directory from new site...');
+				await fs.rm(gitDir, { recursive: true, force: true });
+			}
+
+			// Pages prompt: show available templates and ask which pages to create (comma-separated)
+			if (manifest && Array.isArray(manifest.templates) && manifest.templates.length) {
+				printAvailableTemplates(manifest);
+			}
+			const pagesInput = (await rl.question('Pages to create (comma-separated, e.g. about,contact) [leave blank to skip]: ')).trim();
+			let pagesToCreate = [];
+			let existingPages = [];
+			if (pagesInput) {
+				const raw = pagesInput.split(',').map(s => s.trim()).filter(Boolean);
+				// sanitize and normalize
+				const seen = new Set();
+				for (const r of raw) {
+					const lower = r.toLowerCase();
+					if (lower === 'home' || lower === 'index') {
+						existingPages.push('home');
+						continue;
+					}
+					let slug = r.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+					if (!slug) continue;
+					if (seen.has(slug)) continue;
+					seen.add(slug);
+					const matchedTemplate = findTemplateForSlug(manifest, slug);
+					pagesToCreate.push({ slug, displayName: r.trim(), template: matchedTemplate });
+				}
+
+				console.log('\nSummary of pages:');
+				if (existingPages.length) console.log(` - Existing (skipped): ${existingPages.join(', ')}`);
+				if (pagesToCreate.length) {
+					console.log(' - To be created:');
+					for (const p of pagesToCreate) {
+						if (p.template) {
+							console.log(`   - ${p.slug} (mapped to template: ${p.template.name})`);
+						} else {
+							console.log(`   - ${p.slug} (no template match)`);
+						}
 					}
 				}
-			}
-			const proceedPages = (await rl.question('Proceed to create these pages? (Y/n): ')) || 'y';
-			if (proceedPages.toLowerCase() === 'y' || proceedPages.toLowerCase() === 'yes') {
+				const proceedPages = (await rl.question('Proceed to create these pages? (Y/n): ')) || 'y';
+				if (proceedPages.toLowerCase() === 'y' || proceedPages.toLowerCase() === 'yes') {
 				// perform creation
-				const templatePagesHome = path.join(templatePath, 'src', 'app', '(pages)', '(home)');
-				const siteRoutesFile = path.join(destPath, 'src', 'app', 'data', 'routes.json');
-				let routesJson = null;
-				try {
-					routesJson = JSON.parse(await fs.readFile(siteRoutesFile, 'utf8'));
-					// Ensure siteInfo exists and set its name to the root display name
-					routesJson.siteInfo = routesJson.siteInfo || {};
-					routesJson.siteInfo.name = rootDisplayName;
-				} catch (e) {
-					console.warn('⚠️  Could not read routes.json, routes will not be updated.');
-				}
-
-				for (const p of pagesToCreate) {
-					const targetDir = path.join(destPath, 'src', 'app', '(pages)', p.slug);
-					console.log(`Creating page ${p.slug} -> ${targetDir}`);
-					let copyResult = null;
-					if (p.template && p.template.src) {
-						copyResult = await copyTemplateForPage(templatePath, p.template.src, templatePagesHome, targetDir);
-						if (copyResult.used === 'template') {
-							console.log(` - Copied template ${p.template.name} from ${copyResult.src}`);
-						} else {
-							console.warn(`⚠️  Template source ${path.join(templatePath, 'src', 'app', '(pages)', path.basename(p.template.src))} not found; using default page template instead.`);
-						}
-					} else {
-						await copyRecursive(templatePagesHome, targetDir);
-					}
-					// rename component in page.tsx
-					const pageFile = path.join(targetDir, 'page.tsx');
+					const templatePagesHome = path.join(templatePath, 'src', 'app', '(pages)', '(home)');
+					const siteRoutesFile = path.join(destPath, 'src', 'app', 'data', 'routes.json');
+					let routesJson = null;
 					try {
-						let content = await fs.readFile(pageFile, 'utf8');
-						const compName = p.displayName.replace(/[^a-zA-Z0-9]+/g,' ').split(/\s+/).map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join('') + 'Page';
-						content = content.replace(/export default function\s+\w+\s*\(/, `export default function ${compName}(`);
-						await fs.writeFile(pageFile, content, 'utf8');
-						console.log(` - Updated component name to ${compName} in ${path.relative(destPath, pageFile)}`);
+						routesJson = JSON.parse(await fs.readFile(siteRoutesFile, 'utf8'));
+						// Ensure siteInfo exists and set its name to the root display name
+						routesJson.siteInfo = routesJson.siteInfo || {};
+						routesJson.siteInfo.name = rootDisplayName;
 					} catch (e) {
-						console.warn(`⚠️  Failed to update component name for ${p.slug}:`, e?.message || e);
+						console.warn('⚠️  Could not read routes.json, routes will not be updated.');
 					}
 
-					// update routes.json
-					if (routesJson && Array.isArray(routesJson.routes)) {
+					for (const p of pagesToCreate) {
+						const targetDir = path.join(destPath, 'src', 'app', '(pages)', p.slug);
+						console.log(`Creating page ${p.slug} -> ${targetDir}`);
+						let copyResult = null;
+						if (p.template && p.template.src) {
+							copyResult = await copyTemplateForPage(templatePath, p.template.src, templatePagesHome, targetDir);
+							if (copyResult.used === 'template') {
+								console.log(` - Copied template ${p.template.name} from ${copyResult.src}`);
+							} else {
+								console.warn(`⚠️  Template source ${path.join(templatePath, 'src', 'app', '(pages)', path.basename(p.template.src))} not found; using default page template instead.`);
+							}
+						} else {
+							await copyRecursive(templatePagesHome, targetDir);
+						}
+						// rename component in page.tsx
+						const pageFile = path.join(targetDir, 'page.tsx');
+						try {
+							let content = await fs.readFile(pageFile, 'utf8');
+							const compName = p.displayName.replace(/[^a-zA-Z0-9]+/g,' ').split(/\s+/).map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join('') + 'Page';
+							content = content.replace(/export default function\s+\w+\s*\(/, `export default function ${compName}(`);
+							await fs.writeFile(pageFile, content, 'utf8');
+							console.log(` - Updated component name to ${compName} in ${path.relative(destPath, pageFile)}`);
+						} catch (e) {
+							console.warn(`⚠️  Failed to update component name for ${p.slug}:`, e?.message || e);
+						}
+
+						// update routes.json
+						if (routesJson && Array.isArray(routesJson.routes)) {
 						// Skip if route path already exists
-						const candidatePath = `/${p.slug}`;
-						if (!routesJson.routes.some(r => r.path === candidatePath)) {
-							routesJson.routes.push({
-								"name": p.displayName.split(/\s+/).map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join(' '),
-								"path": candidatePath,
-								"title": `${rootDisplayName} - ${p.displayName}`,
-								"description": "",
-								"keywords": ""
-							});
-						} else {
-							console.log(` - Route ${candidatePath} already exists; skipping route add.`);
+							const candidatePath = `/${p.slug}`;
+							if (!routesJson.routes.some(r => r.path === candidatePath)) {
+								routesJson.routes.push({
+									"name": p.displayName.split(/\s+/).map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join(' '),
+									"path": candidatePath,
+									"title": `${rootDisplayName} - ${p.displayName}`,
+									"description": "",
+									"keywords": ""
+								});
+							} else {
+								console.log(` - Route ${candidatePath} already exists; skipping route add.`);
+							}
 						}
 					}
-				}
 
-				if (manifest) {
-					const removed = await pruneTemplateDirs(manifest, destPath, pagesToCreate.map(p=>p.slug));
-					for (const r of removed) {
-						console.log(`Removed unused template page ${r} from new site...`);
+					if (manifest) {
+						const removed = await pruneTemplateDirs(manifest, destPath, pagesToCreate.map(p=>p.slug));
+						for (const r of removed) {
+							console.log(`Removed unused template page ${r} from new site...`);
+						}
 					}
-				}
 
-				if (routesJson) {
-					try {
-						await fs.writeFile(siteRoutesFile, JSON.stringify(routesJson, null, '\t'), 'utf8');
-						console.log('✅ routes.json updated.');
-					} catch (e) {
-						console.warn('⚠️  Failed to write routes.json:', e?.message || e);
+					if (routesJson) {
+						try {
+							await fs.writeFile(siteRoutesFile, JSON.stringify(routesJson, null, '\t'), 'utf8');
+							console.log('✅ routes.json updated.');
+						} catch (e) {
+							console.warn('⚠️  Failed to write routes.json:', e?.message || e);
+						}
 					}
+				} else {
+					console.log('Skipping page creation.');
 				}
-			} else {
-				console.log('Skipping page creation.');
 			}
-		}
-		// Automatically replace double-underscore template placeholders (e.g., __SITE_NAME__) with provided values
-		const replacements = {};
-		if (rootDisplayName) replacements.SITE_NAME = rootDisplayName;
-		if (siteUrl) replacements.SITE_URL = siteUrl;
-		if (emailAddress) replacements.EMAIL_ADDRESS = emailAddress;
-		if (Object.keys(replacements).length) {
-			const replArray = [];
-			for (const [t, valRaw] of Object.entries(replacements)) {
-				const val = String(valRaw);
-				// populate TOKEN_MAP so other code can inspect token->value mapping (keyed by literal marker)
-				const marker = `__${t}__`;
-				TOKEN_MAP[marker] = val;
-				// First, replace expression occurrences like {__TOKEN__} with a quoted string expression to avoid bare identifiers
-				replArray.push({ tag: `\\{${marker}\\}`, value: `{${JSON.stringify(val)}}`, isRegex: true });
-				// Then, replace literal marker occurrences (e.g., __TOKEN__) with the plain value
-				replArray.push({ tag: marker, value: val });
+			// Automatically replace double-underscore template placeholders (e.g., __SITE_NAME__) with provided values
+			const replacements = {};
+			if (rootDisplayName) replacements.SITE_NAME = rootDisplayName;
+			if (siteUrl) replacements.SITE_URL = siteUrl;
+			if (emailAddress) replacements.EMAIL_ADDRESS = emailAddress;
+			if (Object.keys(replacements).length) {
+				const replArray = [];
+				for (const [t, valRaw] of Object.entries(replacements)) {
+					const val = String(valRaw);
+					// populate TOKEN_MAP so other code can inspect token->value mapping (keyed by literal marker)
+					const marker = `__${t}__`;
+					TOKEN_MAP[marker] = val;
+					// First, replace expression occurrences like {__TOKEN__} with a quoted string expression to avoid bare identifiers
+					replArray.push({ tag: `\\{${marker}\\}`, value: `{${JSON.stringify(val)}}`, isRegex: true });
+					// Then, replace literal marker occurrences (e.g., __TOKEN__) with the plain value
+					replArray.push({ tag: marker, value: val });
+				}
+				try {
+					const changed = await replacePlaceholders(destPath, replArray);
+					console.log(`✅ Replaced template placeholders in ${changed} files under ${destPath}`);
+				} catch (e) {
+					console.warn('⚠️ Failed to replace placeholders in site copy:', e?.message || e);
+				}
 			}
+			// Prompt about creating a new GitHub repository. Default owner is read from components config `github.defaultOwner` (fallback: 'brianwhaley')
+			const componentsCfgPath = path.resolve(__dirname, '..', 'config', 'pixelated.config.json');
+			let defaultOwner = 'brianwhaley';
 			try {
-				const changed = await replacePlaceholders(destPath, replArray);
-				console.log(`✅ Replaced template placeholders in ${changed} files under ${destPath}`);
+				if (await exists(componentsCfgPath)) {
+					const compCfgText = await fs.readFile(componentsCfgPath, 'utf8');
+					const compCfg = JSON.parse(compCfgText);
+					if (compCfg?.github?.defaultOwner) defaultOwner = compCfg.github.defaultOwner;
+				}
 			} catch (e) {
-				console.warn('⚠️ Failed to replace placeholders in site copy:', e?.message || e);
-			}
-		}
-		// Prompt about creating a new GitHub repository. Default owner is read from components config `github.defaultOwner` (fallback: 'brianwhaley')
-		const componentsCfgPath = path.resolve(__dirname, '..', 'config', 'pixelated.config.json');
-		let defaultOwner = 'brianwhaley';
-		try {
-			if (await exists(componentsCfgPath)) {
-				const compCfgText = await fs.readFile(componentsCfgPath, 'utf8');
-				const compCfg = JSON.parse(compCfgText);
-				if (compCfg?.github?.defaultOwner) defaultOwner = compCfg.github.defaultOwner;
-			}
-		} catch (e) {
 			// ignore and use fallback
-		}
-		const createRemoteAnswer = (await rl.question(`Create a new GitHub repository in '${defaultOwner}' and push the initial commit? (Y/n): `)) || 'y';
-		if (createRemoteAnswer.toLowerCase() === 'y' || createRemoteAnswer.toLowerCase() === 'yes') {
-			try {
-				await createAndPushRemote(destPath, siteName, defaultOwner);
-			} catch (e) {
-				console.warn('⚠️  Repo creation or git push failed. Your local repository is still available at:', destPath);
-				console.warn(e?.stderr || e?.message || e);
 			}
+			const createRemoteAnswer = (await rl.question(`Create a new GitHub repository in '${defaultOwner}' and push the initial commit? (Y/n): `)) || 'y';
+			if (createRemoteAnswer.toLowerCase() === 'y' || createRemoteAnswer.toLowerCase() === 'yes') {
+				try {
+					await createAndPushRemote(destPath, siteName, defaultOwner);
+				} catch (e) {
+					console.warn('⚠️  Repo creation or git push failed. Your local repository is still available at:', destPath);
+					console.warn(e?.stderr || e?.message || e);
+				}
+			}
+
+
+
+			console.log('\n🎉 Done. Summary:');
+			console.log(` - Site copied to: ${destPath}`);
+			console.log('\nNote: A git remote was not set by this script. You can add one later with `git remote add origin <url>` if desired.');
+			console.log('\nNext recommended steps (manual or to be automated in future):');
+			console.log(' - Update pixelated.config.json for this site and encrypt it with your config tool');
+			console.log(' - Run `npm run lint`, `npm test`, and `npm run build` inside the new site and fix any issues');
+			console.log(' - Create GitHub repo (if not already created), push main branch, and set up CI/deploy secrets');
+		} catch (err) {
+			console.error('Unexpected error:', err);
+			process.exit(1);
+		} finally {
+			rl.close();
 		}
-
-
-
-		console.log('\n🎉 Done. Summary:');
-		console.log(` - Site copied to: ${destPath}`);
-		console.log('\nNote: A git remote was not set by this script. You can add one later with `git remote add origin <url>` if desired.');
-		console.log('\nNext recommended steps (manual or to be automated in future):');
-		console.log(' - Update pixelated.config.json for this site and encrypt it with your config tool');
-		console.log(' - Run `npm run lint`, `npm test`, and `npm run build` inside the new site and fix any issues');
-		console.log(' - Create GitHub repo (if not already created), push main branch, and set up CI/deploy secrets');
-	} catch (err) {
-		console.error('Unexpected error:', err);
-		process.exit(1);
-	} finally {
-		rl.close();
 	}
-}
 
-if (typeof process !== 'undefined' && new URL(import.meta.url).pathname === process.argv[1]) {
+	if (typeof process !== 'undefined' && new URL(import.meta.url).pathname === process.argv[1]) {
 	// CLI entry point: run the interactive main flow
-	main();
-}
+		main();
+	}
 
+}

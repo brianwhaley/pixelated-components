@@ -6,15 +6,16 @@ This document lists the localhost ports used by various projects in the Pixelate
 
 | Project | Port | URL |
 |---------|------|-----|
-| brianwhaley | 3000 | http://localhost:3000 |
-| informationfocus | 3001 | http://localhost:3001 |
-| leadscraper | 3002 | http://localhost:3002 |
-| oaktreelandscaping | 3007 | http://localhost:3007 |
-| palmetto-epoxy | 3003 | http://localhost:3003 |
-| pixelated | 3004 | http://localhost:3004 |
-| pixelated-admin | 3006 | http://localhost:3006 |
-| pixelated-template | 3008 | http://localhost:3008 |
-| pixelvivid | 3005 | http://localhost:3005 |
+| brianwhaley | 3000 | https://localhost:3000 |
+| informationfocus | 3001 | https://localhost:3001 |
+| leadscraper | 3002 | https://localhost:3002 |
+| palmetto-epoxy | 3003 | https://localhost:3003 |
+| pixelated | 3004 | https://localhost:3004 |
+| pixelvivid | 3005 | https://localhost:3005 |
+| pixelated-admin | 3006 | https://localhost:3006 |
+| oaktreelandscaping | 3007 | https://localhost:3007 |
+| pixelated-template | 3008 | https://localhost:3008 |
+| jz-home-improvement | 3009 | https://localhost:3009 |
 
 ## Component Library
 
