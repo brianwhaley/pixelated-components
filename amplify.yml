@@ -12,10 +12,14 @@ frontend:
         - echo "Dependencies installed"
     build:
       commands:
-        - echo "Building Next.js app..."
+        - echo "Building Next.js app"
         - node -v
         - npm run build
         - npm run generate-site-images
+    postBuild:
+      commands:
+        - echo "Calling Config Vault postbuild"
+        - npm run config:vault -- postbuild || (echo "Config postbuild decrypt failed" && exit 1) 
   artifacts:
     baseDirectory: .next
     files:
