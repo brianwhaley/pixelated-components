@@ -142,6 +142,8 @@ export function logAllChange() {
 // Call the function to activate the listeners once the script is loaded
 // logChangeToAllElements();
 
+
+
 /* ===== CLIENT COMPONENT DETECTION ===== */
 /**
  * Regex patterns that identify client-only code requiring browser execution
@@ -174,15 +176,6 @@ export const CLIENT_ONLY_PATTERNS = [
 	/\bwindow\./,
 	/["']use client["']/  // Client directive
 ];
-
-/**
- * Determines if a component file contains client-only code that requires browser execution
- * @param fileContent - The source code content of the file
- * @returns true if the file contains client-only patterns
- */
-export function isClientComponent(fileContent: string): boolean {
-	return CLIENT_ONLY_PATTERNS.some(pattern => pattern.test(fileContent));
-}
 
 /* ===== COMPONENT FILE DETECTION ===== */
 /**
@@ -232,3 +225,4 @@ export const SERVER_ONLY_PATTERNS = [
 //	/\bNextRequest\b/,
 //	/\bNextResponse\b/
 ];
+

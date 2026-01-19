@@ -9,14 +9,17 @@ frontend:
         - rm -rf .next
         - rm -rf out
         - npm install --force
-        - if [ -n "$PIXELATED_CONFIG_KEY" ]; then npm run config:decrypt || (echo "pixelated.config.json decrypt failed" && exit 1); else echo "PIXELATED_CONFIG_KEY not set; skipping config decrypt"; fi
         - echo "Dependencies installed"
     build:
       commands:
-        - echo "Building Next.js app..."
+        - echo "Building Next.js app"
         - node -v
         - npm run build --legacy-peer-deps
         - npm run buildStorybook --legacy-peer-deps
+    postBuild:
+      commands:
+        - echo "Calling Config Vault postbuild"
+        - npm run config:vault -- postbuild || (echo "Config postbuild decrypt failed" && exit 1) 
   artifacts:
     baseDirectory: storybook-static
     files:

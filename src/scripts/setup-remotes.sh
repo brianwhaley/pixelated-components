@@ -13,6 +13,7 @@ echo "Base directory: $BASE_DIR"
 REPOS=(
     "brianwhaley"
     "informationfocus"
+	"leadscraper"
     "oaktreelandscaping"
     "palmetto-epoxy"
     "pixelated"
@@ -43,16 +44,40 @@ for repo in "${REPOS[@]}"; do
         echo "Configuring remotes for: $repo"
         cd "$repo_path"
 
-        # Add remotes for all repositories
-        for target_repo in "${REPOS[@]}"; do
-            echo "  - Setting up $target_repo remote"
-            remote_url="https://github.com/$GITHUB_USER/$target_repo.git"
-            # Remove remote if it exists, then add fresh
-            git remote remove "$target_repo" 2>/dev/null || true
-            git remote add "$target_repo" "$remote_url"
-        done
-        
-        echo "  ✓ All remotes configured for $repo"
+        if [ "$repo" = "pixelated-components" ]; then
+            # Pixelated-components should have remotes for ALL repos
+            for target_repo in "${REPOS[@]}"; do
+                remote_url="https://github.com/$GITHUB_USER/$target_repo.git"
+                if git remote | grep -q "^$target_repo$"; then
+                    git remote set-url "$target_repo" "$remote_url" 2>/dev/null || true
+                else
+                    git remote add "$target_repo" "$remote_url" 2>/dev/null || true
+                fi
+            done
+            echo "  ✓ pixelated-components configured with all remotes"
+        else
+            # Non-components repos should have only their own remote named after the repo
+            desired_remote="$repo"
+            desired_url="https://github.com/$GITHUB_USER/$repo.git"
+
+            # Ensure desired remote exists and points to the correct URL
+            if git remote | grep -q "^$desired_remote$"; then
+                git remote set-url "$desired_remote" "$desired_url" 2>/dev/null || true
+            else
+                git remote add "$desired_remote" "$desired_url" 2>/dev/null || true
+            fi
+
+            # Remove direct-name remotes that are other pixelated repos (avoid touching unrelated remotes)
+            for other in "${REPOS[@]}"; do
+                if [ "$other" != "$repo" ] && git remote | grep -q "^$other$"; then
+                    echo "  - Removing stray remote $other from $repo"
+                    git remote remove "$other" 2>/dev/null || true
+                fi
+            done
+
+            echo "  ✓ $repo configured with its own remote only"
+        fi
+
     else
         echo "⚠️  Skipping $repo (not a Git repository or doesn't exist)"
     fi

@@ -8,14 +8,8 @@
  * - optionally initializes a fresh git repo and adds a remote
  *
  * TODOs (placeholders for later work):
- *  - Create/patch pixelated.config.json and optionally run config:encrypt
  *  - Run `npm ci` / `npm run lint` / `npm test` and optionally build
- *  - Optionally create GitHub repo using API (with token from secure vault)
  * 
- * 
-1) Recommended approach (short) ✅
-Build a small Node-based CLI (easier cross-platform than a Bash script) called e.g. scripts/new-site.js or an npm create script.
-Make it interactive with sensible CLI flags (--name, --domain, --repo, --git, --encrypt, --no-install) and a non-interactive mode for CI.
 
 2) High-level workflow the script should perform 🔁
 Validate inputs (target path, site slug, repo name).
@@ -39,30 +33,12 @@ certificates/ if using TLS — template may include placeholder paths.
 FEATURE_CHECKLIST.md — optionally update default checklist for new site.
 .gitignore — ensure pixelated.config.json is ignored if plaintext during setup.
 
-4) Template hardening (recommended changes in pixelated-template) ⚠️
-Add placeholder tokens for the things above (e.g., {{PACKAGE_NAME}}, {{SITE_DOMAIN}}) rather than literal values.
-Add a template.json or template.meta that lists files & placeholders to auto-replace.
-Ensure the template does not include real secrets. Provide pixelated.config.json.example with placeholders and an example .env.local.example.
-Add a scripts/prepare-template.sh or test job that ensures no plaintext sensitive values remain.
-Document the creation process in TEMPLATE_README.md for maintainers.
-
-5) Security & operational notes 🔐
-Do not commit plaintext pixelated.config.json. If the CLI accepts secret values, optionally run npm run config:encrypt immediately and only commit the .enc if needed (prefer not to commit it; store in site secrets store).
-Add an option to write the encrypted file directly into dist/config when building a deployment bundle.
-Provide an audit step: scan resulting repo for secret patterns before final commit/push.
-
 6) Helpful CLI implementation details (tools & libs) 🛠️
-Use Node + these packages: fs-extra (copy), replace-in-file or simple .replace() for template tokens, inquirer (prompt), execa (run commands), simple-git (git ops), node-fetch or @octokit/rest (optional GitHub repo creation).
-Use safe file writes and atomic renames for config operations.
 Provide a --dry-run and --preview mode so users can verify changes before creating repo or pushing.
 
 7) Validation & post-creation steps ✅
 npm run lint && npm test && npm run build — fail fast and show errors for the new site.
 Optional: run npm run config:decrypt locally (with provided key) to confirm decryption works in your deploy workflow (BUT DO NOT store the key in the repo).
-
-8) Example minimal CLI flow (pseudo)
-Prompt: site name, package name, repo URL (optional), domain, author, contentful tokens, aws keys (optional), encrypt?
-Copy template → replace tokens → create pixelated.config.json from pixelated.config.json.example → encrypt if requested → init git → run install/build → push to remote.
 
 */
 
@@ -74,9 +50,12 @@ import readline from 'readline/promises';
 import { stdin as input, stdout as output } from 'process';
 import { fileURLToPath } from 'url';
 import { loadManifest, findTemplateForSlug, pruneTemplateDirs, printAvailableTemplates } from './create-pixelated-app-template-mapper.js';
+import { AmplifyClient, CreateAppCommand, CreateBranchCommand, UpdateAppCommand, UpdateBranchCommand } from '@aws-sdk/client-amplify';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+let stepNumber = 1;
 
 const exec = promisify(execCb);
 // Exportable exec wrapper so tests can stub it.
@@ -334,27 +313,194 @@ export async function createAndPushRemote(destPath, siteName, defaultOwner) {
 		throw new Error('Invalid GitHub response');
 	}
 
-	// Add remote and push
-	await _exec(`git remote add origin ${cloneUrl}`, { cwd: destPath });
+	// Add remote and push using repo-name as remote
+	const remoteName = repoName;
+	await _exec(`git remote add ${remoteName} ${cloneUrl}`, { cwd: destPath });
 	await _exec('git branch --show-current || git branch -M main', { cwd: destPath });
-	await _exec('git push -u origin main', { cwd: destPath });
-	console.log(`✅ Remote created and initial commit pushed: ${cloneUrl}`);
+	try {
+		// If we have a github token available in the decrypted config, use it for an authenticated push (avoids relying on local credential helper)
+		if (token) {
+			await _exec(`git -c credential.helper= -c http.extraheader="Authorization: token ${token}" push -u ${remoteName} main`, { cwd: destPath });
+			await _exec('git branch -f dev main', { cwd: destPath });
+			await _exec(`git -c credential.helper= -c http.extraheader="Authorization: token ${token}" push -u ${remoteName} dev`, { cwd: destPath });
+		} else {
+			await _exec(`git push -u ${remoteName} main`, { cwd: destPath });
+			await _exec('git branch -f dev main', { cwd: destPath });
+			await _exec(`git push -u ${remoteName} dev`, { cwd: destPath });
+		}
+		console.log(`✅ Remote '${remoteName}' created and pushed (main, dev): ${cloneUrl}`);
+		// Return useful values for downstream steps (e.g., Amplify app creation)
+		return { cloneUrl, remoteName, token };
+	} catch (e) {
+		console.warn('⚠️  Failed to push branches automatically. The repo was created on GitHub, but you may need to push manually or configure your git credentials. Error:', e?.message || e);
+		// Still return partial info so caller can decide next steps
+		return { cloneUrl, remoteName, token };
+	}
 }
+
+// Create an AWS Amplify app and connect repository branches (best-effort via AWS CLI).
+// This uses the local AWS CLI configuration (credentials/profile) and optionally a GitHub
+// personal access token to allow Amplify to connect to the repo automatically.
+export async function createAmplifyApp(rl, siteName, cloneUrl, sitePath) {
+	// Use AWS region from components config if available; skip interactive region prompt
+	const componentsCfgPath = path.resolve(__dirname, '..', 'config', 'pixelated.config.json');
+	let regionToUse = 'us-east-2';
+	let creds = null;
+	try {
+		if (await exists(componentsCfgPath)) {
+			const cfgText = await fs.readFile(componentsCfgPath, 'utf8');
+			const cfg = JSON.parse(cfgText);
+			if (cfg?.aws?.region) {
+				regionToUse = cfg.aws.region;
+				console.log(`✅ Using AWS region from components config: ${regionToUse}`);
+			}
+			if (cfg?.aws?.access_key_id && cfg?.aws?.secret_access_key) {
+				creds = { accessKeyId: cfg.aws.access_key_id, secretAccessKey: cfg.aws.secret_access_key };
+				console.log('✅ Found AWS credentials in components config; they will be used for Amplify SDK operations.');
+			}
+		}
+	} catch (e) {
+		// ignore and continue without config values
+	}
+
+	// Prompt only for GitHub PAT (do not prompt for region)
+	const githubToken = (await rl.question('GitHub personal access token (PAT) to connect repo [leave blank to skip]: ')) || '';
+
+	console.log('Creating Amplify app (this may take a few seconds)...');
+	// Use AWS SDK Amplify client
+	const client = new AmplifyClient({ region: regionToUse, credentials: creds || undefined });
+	let createResp;
+	try {
+		createResp = await client.send(new CreateAppCommand({ name: siteName, platform: 'WEB_DYNAMIC', repository: cloneUrl || undefined, accessToken: githubToken || undefined }));
+	} catch (e) {
+		throw new Error('Failed to create Amplify app via SDK: ' + (e?.message || e));
+	}
+
+	const appId = createResp?.app?.appId || createResp?.appId || createResp?.id;
+	if (!appId) {
+		console.log('Amplify create app response:', createResp);
+		throw new Error('Unable to determine Amplify appId from SDK response');
+	}
+	console.log(`✅ Created Amplify app: ${appId}`);
+	console.log(`🔗 Open in console: https://${regionToUse}.console.aws.amazon.com/amplify/home?region=${regionToUse}#/d/${appId}`);
+
+	// Optionally: read site config (if sitePath provided) and set environment variables for the app & branches
+	let envVars = {};
+	if (sitePath) {
+		// Primary: look for a local .env.local and prefer variables defined there
+		const envLocalPath = path.join(sitePath, '.env.local');
+		if (await exists(envLocalPath)) {
+			try {
+				const envText = await fs.readFile(envLocalPath, 'utf8');
+				for (const line of envText.split(/\r?\n/)) {
+					const m = line.match(/^\s*([A-Za-z0-9_]+)\s*=\s*(.*)$/);
+					if (!m) continue;
+					const k = m[1];
+					let v = m[2] || '';
+					// remove optional quotes
+					v = v.replace(/^"|"$/g, '');
+					if (k === 'PIXELATED_CONFIG_KEY' || k.startsWith('PIXELATED_CONFIG')) {
+						envVars[k] = v;
+					}
+				}
+				console.log(`✅ Loaded environment values from ${envLocalPath} and will set matching Amplify environment variables.`);
+			} catch (e) {
+				console.warn('⚠️ Failed to read .env.local for env var population:', e?.message || e);
+			}
+		}
+
+		// Secondary: if no PIXELATED_CONFIG_* vars were found in .env.local, look for pixelated.config.json
+		if (!envVars.PIXELATED_CONFIG_JSON && !envVars.PIXELATED_CONFIG_B64) {
+			const candidates = [
+				path.join(sitePath, 'src', 'app', 'config', 'pixelated.config.json'),
+				path.join(sitePath, 'src', 'config', 'pixelated.config.json'),
+				path.join(sitePath, 'src', 'pixelated.config.json'),
+				path.join(sitePath, 'pixelated.config.json')
+			];
+			for (const c of candidates) {
+				if (await exists(c)) {
+					try {
+						const raw = await fs.readFile(c, 'utf8');
+						envVars.PIXELATED_CONFIG_JSON = raw;
+						envVars.PIXELATED_CONFIG_B64 = Buffer.from(raw, 'utf8').toString('base64');
+						console.log(`✅ Loaded site pixelated.config.json from ${c} and will set PIXELATED_CONFIG_* environment variables in Amplify.`);
+						break;
+					} catch (e) {
+						console.warn('⚠️ Failed to read site config for env var population:', e?.message || e);
+					}
+				}
+			}
+		}
+	}
+
+	// Attempt to resolve the ARN for the 'amplify-role' role (best-effort)
+	let iamRoleArn = null;
+	try {
+		const { IAMClient, GetRoleCommand } = await import('@aws-sdk/client-iam');
+		const iam = new IAMClient({ region: regionToUse, credentials: creds || undefined });
+		try {
+			const roleResp = await iam.send(new GetRoleCommand({ RoleName: 'amplify-role' }));
+			iamRoleArn = roleResp?.Role?.Arn;
+			if (iamRoleArn) console.log(`✅ Found amplify-role ARN: ${iamRoleArn}`);
+		} catch (e) {
+			// ignore; role may not exist or insufficient perms
+			console.warn('⚠️ Could not resolve amplify-role ARN; skipping automatic service-role assignment.');
+		}
+	} catch (e) {
+		// ignore if IAM client not available
+	}
+
+	// If we have envVars or iamRoleArn, update the app and branches accordingly
+	if (Object.keys(envVars).length || iamRoleArn) {
+		try {
+			const updateParams = {};
+			if (Object.keys(envVars).length) updateParams.environmentVariables = envVars;
+			if (iamRoleArn) updateParams.iamServiceRoleArn = iamRoleArn;
+			await client.send(new UpdateAppCommand({ appId, ...updateParams }));
+			console.log('✅ Amplify app updated with environment variables and IAM service role (if available).');
+
+			for (const branch of ['dev','main']) {
+				try {
+					await client.send(new UpdateBranchCommand({ appId, branchName: branch, environmentVariables: envVars }));
+					console.log(`✅ Updated branch '${branch}' with environment variables.`);
+				} catch (e) {
+					console.warn(`⚠️ Failed to update branch ${branch} env vars:`, e?.message || e);
+				}
+			}
+		} catch (e) {
+			console.warn('⚠️ Failed to update Amplify app/branches with env vars or service role:', e?.message || e);
+		}
+	}
+
+	console.log('ℹ️  Amplify app creation attempt finished. Verify the app in the AWS Console to ensure webhooks and branch connections are correct.');
+}
+
 async function main() {
 	const rl = readline.createInterface({ input, output });
 	try {
 		console.log('\n📦 Pixelated site creator — scaffold a new site from pixelated-template\n');
+		console.log('================================================================================\n');
 
+
+		// Prompt for basic site info
+		console.log(`\nStep ${stepNumber++}: Site Information`);
+		console.log('================================================================================\n');
 		const defaultName = 'my-site';
 		const siteName = (await rl.question(`Root directory name (kebab-case) [${defaultName}]: `)) || defaultName;
-
 		// Display name used in route titles: convert kebab to Title Case
 		const rootDisplayName = siteName.split(/[-_]+/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
 
+
 		// Additional site metadata for placeholder substitution
+		console.log(`\nStep ${stepNumber++}: Site Metadata`);
+		console.log('================================================================================\n');
 		const siteUrl = (await rl.question('Site URL (e.g. https://example.com) [leave blank to skip]: ')).trim();
 		const emailAddress = (await rl.question('Contact email address [leave blank to skip]: ')).trim();
 
+
+		// Create a copy of pixelated-template inside the current workspace
+		console.log(`\nStep ${stepNumber++}: Template Copy`);
+		console.log('================================================================================\n');
 		const workspaceRoot = path.resolve(__dirname, '..', '..', '..');
 		const templatePath = path.resolve(workspaceRoot, 'pixelated-template');
 		if (!(await exists(templatePath))) {
@@ -366,7 +512,6 @@ async function main() {
 		const manifest = await loadManifest(__dirname);
 		// Note: available templates will be printed later just before prompting for pages
 		
-
 		// Destination is implicitly the top-level Git folder + site name to avoid prompting for it
 		const destPath = path.resolve(workspaceRoot, siteName);
 		console.log(`\nThe new site will be created at: ${destPath}`);
@@ -404,7 +549,10 @@ async function main() {
 			await fs.rm(gitDir, { recursive: true, force: true });
 		}
 
+
 		// Pages prompt: show available templates and ask which pages to create (comma-separated)
+		console.log(`\nStep ${stepNumber++}: Page Creation`);
+		console.log('================================================================================\n');
 		if (manifest && Array.isArray(manifest.templates) && manifest.templates.length) {
 			printAvailableTemplates(manifest);
 		}
@@ -519,7 +667,11 @@ async function main() {
 				console.log('Skipping page creation.');
 			}
 		}
+
+
 		// Automatically replace double-underscore template placeholders (e.g., __SITE_NAME__) with provided values
+		console.log(`\nStep ${stepNumber++}: Placeholder Tokens Replacement`);
+		console.log('================================================================================\n');
 		const replacements = {};
 		if (rootDisplayName) replacements.SITE_NAME = rootDisplayName;
 		if (siteUrl) replacements.SITE_URL = siteUrl;
@@ -543,7 +695,12 @@ async function main() {
 				console.warn('⚠️ Failed to replace placeholders in site copy:', e?.message || e);
 			}
 		}
+
+
+
 		// Prompt about creating a new GitHub repository. Default owner is read from components config `github.defaultOwner` (fallback: 'brianwhaley')
+		console.log(`\nStep ${stepNumber++}: GitHub Repository Creation`);
+		console.log('================================================================================\n');
 		const componentsCfgPath = path.resolve(__dirname, '..', 'config', 'pixelated.config.json');
 		let defaultOwner = 'brianwhaley';
 		try {
@@ -556,20 +713,45 @@ async function main() {
 			// ignore and use fallback
 		}
 		const createRemoteAnswer = (await rl.question(`Create a new GitHub repository in '${defaultOwner}' and push the initial commit? (Y/n): `)) || 'y';
+		let remoteInfo = null;
 		if (createRemoteAnswer.toLowerCase() === 'y' || createRemoteAnswer.toLowerCase() === 'yes') {
 			try {
-				await createAndPushRemote(destPath, siteName, defaultOwner);
+				remoteInfo = await createAndPushRemote(destPath, siteName, defaultOwner);
 			} catch (e) {
 				console.warn('⚠️  Repo creation or git push failed. Your local repository is still available at:', destPath);
 				console.warn(e?.stderr || e?.message || e);
 			}
 		}
+		// Optionally create an AWS Amplify app and connect branches (main, dev)
+		console.log(`\nStep ${stepNumber++}: AWS Amplify App Creation`);
+		console.log('================================================================================\n');	// Inform user what region will be used (config-backed)
+		try {
+			const cfgPath = path.resolve(__dirname, '..', 'config', 'pixelated.config.json');
+			if (await exists(cfgPath)) {
+				const cfgText = await fs.readFile(cfgPath, 'utf8');
+				const cfg = JSON.parse(cfgText);
+				if (cfg?.aws?.region) {
+					console.log(`ℹ️  Note: Amplify will use AWS region from config: ${cfg.aws.region}`);
+				}
+			}
+		} catch (e) {
+		// ignore errors reading config; nothing to do
+		}		const createAmplifyAnswer = (await rl.question(`Create an AWS Amplify app for this repository and connect 'main' and 'dev' branches? (y/N): `)) || 'n';
+		if (createAmplifyAnswer.toLowerCase() === 'y' || createAmplifyAnswer.toLowerCase() === 'yes') {
+			try {
+				await createAmplifyApp(rl, siteName, remoteInfo?.cloneUrl);
+			} catch (e) {
+				console.warn('⚠️  Amplify app creation failed or was incomplete. You can create an app manually via the AWS Console or AWS CLI.');
+				console.warn(e?.stderr || e?.message || e);
+			}
+		}
 
-
-
-		console.log('\n🎉 Done. Summary:');
+		console.log('================================================================================\n');
+		console.log('🎉 Done.');
+		console.log('================================================================================\n');
+		console.log('Summary:');
 		console.log(` - Site copied to: ${destPath}`);
-		console.log('\nNote: A git remote was not set by this script. You can add one later with `git remote add origin <url>` if desired.');
+		console.log('\nNote: A git remote was not set by this script. You can add one later with `git remote add <repo-name> <url>` (use the repository name as the remote) if desired.');
 		console.log('\nNext recommended steps (manual or to be automated in future):');
 		console.log(' - Update pixelated.config.json for this site and encrypt it with your config tool');
 		console.log(' - Run `npm run lint`, `npm test`, and `npm run build` inside the new site and fix any issues');

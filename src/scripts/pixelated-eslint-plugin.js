@@ -6,8 +6,9 @@ import path from 'path';
  * Enforces workspace standards for SEO, performance, and project structure.
  */
 
-/* ===== CLIENT COMPONENT DETECTION (Copied from functions.ts for standalone usage) ===== */
-const CLIENT_ONLY_PATTERNS = [
+
+// DUPLICATE FROM components/general/utilities.ts --- KEEP IN SYNC ---
+export const CLIENT_ONLY_PATTERNS = [
 	/\baddEventListener\b/,
 	/\bcreateContext\b/,
 	/\bdocument\./,
@@ -35,9 +36,10 @@ const CLIENT_ONLY_PATTERNS = [
 	/["']use client["']/  // Client directive
 ];
 
-function isClientComponent(fileContent) {
+export function isClientComponent(fileContent) {
 	return CLIENT_ONLY_PATTERNS.some(pattern => pattern.test(fileContent));
 }
+
 
 const propTypesInferPropsRule = {
 	meta: {
@@ -372,6 +374,51 @@ const noRawImgRule = {
 	},
 };
 
+/* ===== RULE: require-section-ids ===== */
+const requireSectionIdsRule = {
+	meta: {
+		type: 'suggestion',
+		docs: {
+			description: 'Require `id` attributes on every <section> and <PageSection> for jump links and SEO',
+			category: 'Accessibility',
+			recommended: false,
+		},
+		messages: {
+			missingId: '`section` and `PageSection` elements must have an `id` attribute for jump-link support and SEO hierarchy.',
+		},
+		schema: [],
+	},
+	create(context) {
+		/*
+			 * Helper: get a string name for a JSX element. Supports
+			 * `JSXIdentifier` and `JSXMemberExpression` (e.g. `UI.PageSection`).
+			 */
+		function getJSXElementName(node) {
+			if (!node) return null;
+			if (node.type === 'JSXIdentifier') return node.name;
+			if (node.type === 'JSXMemberExpression') return node.property?.name || null;
+			return null;
+		}
+
+		return {
+			JSXOpeningElement(node) {
+				try {
+					const name = getJSXElementName(node.name); if (!name || !['section','PageSection'].includes(name)) return;
+
+					const hasId = (node.attributes || []).some(attr => (
+						attr.type === 'JSXAttribute' && attr.name && attr.name.name === 'id' && attr.value != null
+					));
+					if (!hasId) {
+						context.report({ node, messageId: 'missingId' });
+					}
+				} catch (e) {
+					// defensive: don't crash lint
+				}
+			},
+		};
+	},
+};
+
 const requiredFaqRule = {
 	meta: {
 		type: 'suggestion',
@@ -423,6 +470,7 @@ export default {
 		'required-schemas': requiredSchemasRule,
 		'required-files': requiredFilesRule,
 		'no-raw-img': noRawImgRule,
+		'require-section-ids': requireSectionIdsRule,
 		'required-faq': requiredFaqRule,
 	},
 	configs: {
@@ -432,6 +480,7 @@ export default {
 				'pixelated/required-schemas': 'warn',
 				'pixelated/required-files': 'warn',
 				'pixelated/no-raw-img': 'warn',
+				'pixelated/require-section-ids': 'warn',
 				'pixelated/required-faq': 'warn',
 			},
 		},

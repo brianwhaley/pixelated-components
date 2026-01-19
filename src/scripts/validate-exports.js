@@ -1,6 +1,6 @@
 import fs from 'fs';
 import glob from 'glob';
-import { CLIENT_ONLY_PATTERNS, TS_FILE_IGNORE_PATTERNS, TSX_FILE_IGNORE_PATTERNS, SERVER_ONLY_PATTERNS } from '../components/general/utilities.js';
+import { CLIENT_ONLY_PATTERNS, TS_FILE_IGNORE_PATTERNS, TSX_FILE_IGNORE_PATTERNS, SERVER_ONLY_PATTERNS } from '../components/general/utilities';
 
 console.log('🔍 Validating exports...\n');
 

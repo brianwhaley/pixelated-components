@@ -16,13 +16,11 @@ This document outlines planned improvements and refactoring initiatives for the 
 
 ### Component Improvements
 - [ ] Implement minimal `createContentfulImageURLs` with single `/images` sitemap entry.
-- [ ] **pixelated/require-section-ids**: ESLint rule to enforce `id` attributes on top-level `<section>` elements for jump-link support and SEO hierarchy.
 - [ ] Review Contentful helper functions for per-page mapping capability.
 - [ ] Implement `createContentfulImageURLs` per-page mapping with `contentType` & `pageField` config.
 - [ ] Align typography to `--font-sizeN` clamp variables.
 - [ ] Provide Cloudinary transforms presets for image components.
 - [ ] find a better solution than to generate image via build script in amplify for json for sitemap creation
-- [ ] **SmartImage Migration**: Replace all standard `<img>` tags with `SmartImage` across all components for optimized loading and CDN support.
 - [ ] **SocialCards Component**: Fix state initialization to track prop changes properly.
 - [ ] **Modal Component**: Clarify content source pattern (accepts both `modalContent` and `children`).
 - [ ] **Carousel Component**: Fix active card state reset when `props.cards` changes.

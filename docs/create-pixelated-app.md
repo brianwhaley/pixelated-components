@@ -26,3 +26,10 @@ This document describes the new behavior of the `create-pixelated-app` CLI when 
 
 - No repository secrets are set by the CLI.
 - The created repository is public by default (set `private: false` in the API call).
+
+## AWS Amplify support
+
+- After creating and pushing the repo, the CLI will prompt: `Create an AWS Amplify app for this repository and connect 'main' and 'dev' branches? (y/N)`.
+- This is a best-effort flow that invokes the local `aws` CLI. Ensure `aws` is installed and configured (credentials and region).
+- You may optionally provide a GitHub Personal Access Token (PAT) when prompted so Amplify can automatically connect the repository. If you do not provide a PAT, you may need to finish the connection in the AWS Console.
+- The CLI attempts to create the Amplify app and `dev`/`main` branches and will try to configure them for `Next.js - SSR` and enable automatic builds, but you should verify settings in the AWS Console afterwards.

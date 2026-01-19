@@ -13,6 +13,7 @@ import "./tiles.css";
 Tiles.propTypes = {
 	cards: PropTypes.array.isRequired,
 	rowCount: PropTypes.number,
+	imgClick: PropTypes.func,
 };
 export type TilesType = InferProps<typeof Tiles.propTypes>;
 export function Tiles(props: TilesType) {
@@ -30,6 +31,7 @@ export function Tiles(props: TilesType) {
 								image={card.image}
 								imageAlt={card.imageAlt}
 								bodyText={card.bodyText}
+								imgClick={props.imgClick}
 							/>
 						</div>
 					))}
@@ -53,12 +55,15 @@ Tile.propTypes = {
 	image: PropTypes.string.isRequired,
 	imageAlt: PropTypes.string,
 	bodyText: PropTypes.string,
+	imgClick: PropTypes.func,
 };
 export type TileType = InferProps<typeof Tile.propTypes>;
 function Tile( props: TileType ) {
 	const config = usePixelatedConfig();
-	const tileBody = <div className="tile-image">
+	const imgClick = props.imgClick;
+	const tileBody = <div className={"tile-image" + (imgClick ? " clickable" : "")}>
 		<SmartImage src={props.image} title={props?.imageAlt ?? undefined} alt={props?.imageAlt ?? ""}
+			onClick={imgClick ? (event) => imgClick(event, props.image) : undefined}
 			cloudinaryEnv={config?.cloudinary?.product_env ?? undefined} />
 		<div className="tile-image-overlay">
 			<div className="tile-image-overlay-text">

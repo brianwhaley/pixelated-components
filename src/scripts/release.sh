@@ -38,20 +38,58 @@ fi
 echo ""
 echo "🔑 Step $((STEP_COUNT++)): Choose the git Remote to release:"
 echo "================================================="
-# Function to prompt for remote selection
+# Helper: derive a sensible default remote (remote whose repo name matches local folder)
+derive_default_remote() {
+    local remotes=($(git remote))
+    local local_repo
+    local_repo=$(basename "$(git rev-parse --show-toplevel)")
+    for remote in "${remotes[@]}"; do
+        url=$(git remote get-url "$remote" 2>/dev/null || true)
+        repo=$(basename -s .git "${url##*/}")
+        if [ -n "$repo" ] && [ "$repo" = "$local_repo" ]; then
+            echo "$remote"
+            return
+        fi
+    done
+    # Fallback to first remote if no match
+    echo "${remotes[0]}"
+}
+
+# Function to prompt for remote selection, showing a default derived from local repo name
 prompt_remote_selection() {
     echo "Available git remotes:" >&2
     local remotes=($(git remote))
+    local count=${#remotes[@]}
     local i=1
+
     for remote in "${remotes[@]}"; do
         echo "$i) $remote" >&2
         ((i++))
     done
+
+    local default_remote
+    default_remote=$(derive_default_remote)
+    # find index of default_remote for user prompt
+    local default_index=1
+    for idx in "${!remotes[@]}"; do
+        if [ "${remotes[$idx]}" = "$default_remote" ]; then
+            default_index=$((idx+1))
+            break
+        fi
+    done
+
+    local prompt="Select remote to use (1-$count) [default $default_index - $default_remote]: "
     local choice
-    read -p "Select remote to use (1-${#remotes[@]}): " choice >&2
+    read -p "$prompt" choice >&2
+
+    if [ -z "$choice" ]; then
+        echo "$default_remote"
+        return
+    fi
+
     case $choice in
         [1-9]|[1-9][0-9])
-            if [ "$choice" -le "${#remotes[@]}" ]; then
+            if [ "$choice" -le "$count" ]; then
                 echo "${remotes[$((choice-1))]}"
             else
                 echo "${remotes[0]}"  # Default to first if invalid
@@ -213,7 +251,13 @@ prompt_version_type() {
     echo "3) major (1.x.x)" >&2
     echo "4) custom version" >&2
     echo "5) no version bump" >&2
-    read -p "Enter choice (1-5): " choice >&2
+    read -p "Enter choice (1-5) [default 1]: " choice >&2
+
+    # Default to 1 (patch) when user presses Enter
+    if [ -z "$choice" ]; then
+        choice=1
+    fi
+
     case $choice in
         1) version_type="patch" ;;
         2) version_type="minor" ;;
@@ -223,7 +267,7 @@ prompt_version_type() {
             version_type="$custom_version"
             ;;
         5) version_type="none" ;;
-        *) version_type="patch" ;; # default
+        *) version_type="patch" ;; # fallback default
     esac
 }
 prompt_version_type
