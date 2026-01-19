@@ -428,8 +428,8 @@ const requiredFaqRule = {
 			recommended: true,
 		},
 		messages: {
-			missingFaqPage: 'FAQ page is missing. FAQ pages are strongly recommended for every site (src/app/faq/page.tsx).',
-			missingFaqSchema: 'FAQSchema is missing from the FAQ page.',
+			missingFaqPage: 'FAQ page is missing. FAQ pages are strongly recommended (examples: src/app/faqs/page.tsx, src/app/(pages)/faqs/page.tsx, src/pages/faqs/index.tsx).',
+			missingFaqSchema: 'FAQSchema (SchemaFAQ / JSON-LD @type:FAQPage) is missing from the FAQ page.',
 		},
 	},
 	create(context) {
@@ -437,27 +437,76 @@ const requiredFaqRule = {
 		if (!context.getFilename().endsWith('layout.tsx')) return {};
 
 		const projectRoot = context.cwd;
-		const faqPath = path.join(projectRoot, 'src/app/faq/page.tsx');
+
+		function findFaqPath(root) {
+			// Walk `src/` and match any path segment or filename named `faq` or `faqs`.
+			// Return the first matching `page.*` / `index.*` or a direct faq(s).(ts|tsx|js|jsx) file.
+			// Returns `null` when no candidate is found.
+			const srcRoot = path.join(root, 'src');
+			if (!fs.existsSync(srcRoot)) return null;
+
+			const stack = [srcRoot];
+			const filePattern = /(^|\/)faqs?\.(t|j)sx?$/i; // matches .../faq.tsx, .../faqs.js, etc.
+			while (stack.length) {
+				const cur = stack.pop();
+				try {
+					const entries = fs.readdirSync(cur, { withFileTypes: true });
+					for (const e of entries) {
+						const full = path.join(cur, e.name);
+						const rel = path.relative(root, full).replace(/\\/g, '/');
+
+						if (e.isDirectory()) {
+							// directory named faq/faqs -> prefer page/index inside it
+							if (/^faqs?$/i.test(e.name)) {
+								const candidates = [
+									path.join(full, 'page.tsx'),
+									path.join(full, 'page.ts'),
+									path.join(full, 'index.tsx'),
+									path.join(full, 'index.ts'),
+								];
+								for (const c of candidates) if (fs.existsSync(c)) return c;
+							}
+							// continue walking
+							stack.push(full);
+							continue;
+						}
+
+						// direct file matches like src/pages/faqs.tsx
+						if (filePattern.test(rel)) return full;
+					}
+				} catch (err) {
+					/* ignore unreadable dirs */
+				}
+			}
+
+			return null;
+		}
+
+		const faqPath = findFaqPath(projectRoot);
 
 		return {
 			'Program:exit'() {
-				if (!fs.existsSync(faqPath)) {
+				// If finder returned nothing or the candidate does not exist -> missing page
+				if (!faqPath || !fs.existsSync(faqPath)) {
 					context.report({
 						loc: { line: 1, column: 0 },
 						messageId: 'missingFaqPage',
 					});
-				} else {
-					try {
-						const content = fs.readFileSync(faqPath, 'utf8');
-						if (!content.includes('FAQSchema')) {
-							context.report({
-								loc: { line: 1, column: 0 },
-								messageId: 'missingFaqSchema',
-							});
-						}
-					} catch (e) {
-						// Ignore read errors
+					return;
+				}
+
+				// Accept component-based SchemaFAQ, `FAQSchema` identifier, or JSON-LD @type:FAQPage
+				try {
+					const content = fs.readFileSync(faqPath, 'utf8');
+					const hasSchema = /FAQSchema|SchemaFAQ|"@type"\s*:\s*"FAQPage"/i.test(content);
+					if (!hasSchema) {
+						context.report({
+							loc: { line: 1, column: 0 },
+							messageId: 'missingFaqSchema',
+						});
 					}
+				} catch (e) {
+					// Ignore read errors
 				}
 			},
 		};

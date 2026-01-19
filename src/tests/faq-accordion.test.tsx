@@ -225,7 +225,10 @@ describe('FAQAccordion Component', () => {
 
 			render(<FAQAccordion faqsData={faqWithUnknownCategory} />);
 
-			expect(screen.getByText('❓ Unknown Category')).toBeInTheDocument();
+		// component must render the question title even when category is unknown
+		expect(screen.getByText('Unknown Category')).toBeInTheDocument();
+		// it is acceptable for the category/icon to be blank — do not require the fallback emoji
+		expect(screen.queryByText('❓ Unknown Category')).toBeNull();
 		});
 	});
 

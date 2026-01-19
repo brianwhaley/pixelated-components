@@ -17,8 +17,8 @@
 .accordion-title {
 	cursor: pointer;
 	padding: 1rem;
-	font-size: 1rem;
-	font-weight: 600;
+	/* font-size: 1rem;
+	font-weight: 600; */
 	color: #1a202c;
 	background: none;
 	border: none;
@@ -62,8 +62,8 @@ details[open] .accordion-title::before {
 
 .accordion-title h3 {
 	margin: 0;
-	font-size: inherit;
-	font-weight: inherit;
+	/* font-size: inherit;
+	font-weight: inherit; */
 	color: inherit;
 	flex: 1;
 }

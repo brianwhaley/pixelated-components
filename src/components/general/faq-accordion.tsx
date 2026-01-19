@@ -3,7 +3,7 @@ import PropTypes, { InferProps } from 'prop-types';
 import { Accordion, AccordionItem } from '../general/accordion';
 import './faq-accordion.css';
 
-type CategoryKey = 'Getting Started' | 'Process & Timeline' | 'Technical Details' | 'Content & Management' | 'Support & Maintenance' | 'Ownership & Legal' | 'Services';
+type CategoryKey = 'Getting Started' | 'Process & Timeline' | 'Technical Details' | 'Content & Management' | 'Support & Maintenance' | 'Ownership & Legal' | 'Services' | '';
 
 const categoryIcons: Record<CategoryKey, string> = {
 	'Getting Started': '🚀',
@@ -12,7 +12,8 @@ const categoryIcons: Record<CategoryKey, string> = {
 	'Content & Management': '📝',
 	'Support & Maintenance': '🛠️',
 	'Ownership & Legal': '📋',
-	'Services': '💼'
+	'Services': '💼',
+	'': ''
 };
 
 FAQAccordion.propTypes = {
@@ -74,7 +75,8 @@ export function FAQAccordion({ faqsData }: FAQAccordionType) {
 			<div dangerouslySetInnerHTML={{ __html: faq.acceptedAnswer.text }} />
 		);
 		return {
-			title: `${categoryIcons[faq.category as CategoryKey] || '❓'} ${faq.name}`,
+			/* title: `${categoryIcons[faq.category as CategoryKey] || '❓'} ${faq.name}`, */
+			title: `${categoryIcons[faq.category as CategoryKey] || ''} ${faq.name}`,
 			content,
 			open: expandedStates[index] || undefined
 		};
