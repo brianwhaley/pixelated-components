@@ -188,16 +188,6 @@
           "scoreLogic": "present",
           "displayTemplate": "{{count}} robots meta tag(s) found"
         },
-        "hreflang-tags": {
-          "id": "hreflang-tags",
-          "title": "Hreflang Tags",
-          "description": "Checks for hreflang link tags for international SEO",
-          "scoreDisplayMode": "binary",
-          "pattern": "<link[^>]*rel=[\"']alternate[\"'][^>]*hreflang=[\"'][^\"']*[\"'][^>]*>",
-          "countLogic": "count",
-          "scoreLogic": "present",
-          "displayTemplate": "{{count}} hreflang link(s) found"
-        },
         "indexability-status": {
           "id": "indexability-status",
           "title": "Indexability Status",

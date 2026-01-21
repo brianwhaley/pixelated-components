@@ -10,8 +10,8 @@ import {
   setCachedData
 } from '../components/admin/site-health/google.api.utils';
 
-// Mock the RouteCache class
-class MockRouteCache {
+// Mock the CacheManager used by site-health
+class MockCacheManager {
   private cache = new Map();
 
   get(key: string) {
@@ -22,6 +22,7 @@ class MockRouteCache {
     this.cache.set(key, value);
   }
 
+  remove() {}
   clear() {
     this.cache.clear();
   }
@@ -107,10 +108,10 @@ describe('Google API Utils', () => {
   });
 
   describe('getCachedData and setCachedData', () => {
-    let mockCache: MockRouteCache;
+    let mockCache: MockCacheManager;
 
     beforeEach(() => {
-      mockCache = new MockRouteCache();
+      mockCache = new MockCacheManager();
     });
 
     afterEach(() => {

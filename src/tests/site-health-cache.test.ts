@@ -2,13 +2,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { CacheManager } from '../components/general/cache-manager';
 
-describe('RouteCache', () => {
-  let cache: RouteCache;
+describe('CacheManager (site-health compatibility)', () => {
+  let cache: any;
   const testData = { test: 'data', value: 123 };
   const testKey = 'test-key';
 
   beforeEach(() => {
-    cache = new RouteCache();
+    cache = new CacheManager({ prefix: 'test-sitehealth-' });
     vi.useFakeTimers();
   });
 
@@ -18,13 +18,13 @@ describe('RouteCache', () => {
 
   describe('constructor', () => {
     it('should create cache with default duration (1 hour)', () => {
-      const defaultCache = new RouteCache();
-      expect(defaultCache).toBeInstanceOf(RouteCache);
+      const defaultCache = new CacheManager({ prefix: 'test-sitehealth-default-' });
+      expect(defaultCache).toBeInstanceOf(CacheManager);
     });
 
     it('should create cache with custom duration', () => {
-      const customCache = new RouteCache(30 * 60 * 1000); // 30 minutes
-      expect(customCache).toBeInstanceOf(RouteCache);
+      const customCache = new CacheManager({ ttl: 30 * 60 * 1000, prefix: 'test-sitehealth-custom-' }); // 30 minutes
+      expect(customCache).toBeInstanceOf(CacheManager);
     });
   });
 
@@ -77,7 +77,7 @@ describe('RouteCache', () => {
     });
 
     it('should respect custom duration', () => {
-      const shortCache = new RouteCache(10 * 60 * 1000); // 10 minutes
+      const shortCache = new CacheManager({ ttl: 10 * 60 * 1000, prefix: 'test-sitehealth-short-' }); // 10 minutes
       shortCache.set(testKey, testData);
 
       // Advance time by 5 minutes (still valid)
@@ -110,8 +110,8 @@ describe('RouteCache', () => {
 
   describe('cache isolation', () => {
     it('should maintain separate cache instances', () => {
-      const cache1 = new RouteCache();
-      const cache2 = new RouteCache();
+      const cache1 = new CacheManager({ prefix: 'test-sitehealth-1-' });
+      const cache2 = new CacheManager({ prefix: 'test-sitehealth-2-' });
 
       cache1.set('shared', 'cache1-data');
       cache2.set('shared', 'cache2-data');

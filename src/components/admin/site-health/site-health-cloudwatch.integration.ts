@@ -6,10 +6,10 @@
 "use server";
 
 import { CloudWatchClient, GetMetricDataCommand } from '@aws-sdk/client-cloudwatch';
-import { CacheManager } from '@/components/general/cache-manager';
+import { CacheManager } from '../../general/cache-manager';
 import { getFullPixelatedConfig } from '../../config/config';
 
-const debug = true; // migration-time verbose logging
+const debug = false; // migration-time verbose logging
 
 export interface CloudwatchHealthCheckConfig {
   healthCheckId: string;
@@ -31,7 +31,7 @@ export interface CloudwatchHealthCheckResponse {
 }
 
 // Cache for health check data (15 minutes)
-const healthCheckCache = new RouteCache(15 * 60 * 1000);
+const healthCheckCache = new CacheManager({ prefix: 'sitehealth-cloudwatch-', ttl: 15 * 60 * 1000 });
 
 /**
  * Get health check data for a site using CloudWatch metrics
@@ -47,7 +47,11 @@ export async function getCloudwatchHealthCheckData(
 		const cacheKey = `cloudwatch-${siteName}-${config.healthCheckId}-${startDate || 'default'}-${endDate || 'default'}`;
 		const cached = healthCheckCache.get(cacheKey);
 		if (cached) {
-			return { success: true, data: cached };
+			if (Array.isArray(cached)) {
+				return { success: true, data: cached };
+			}
+			// defensive: cached value present but not an array — coerce to empty array
+			return { success: true, data: [] };
 		}
 
 		// Use CloudWatch to get historical health check data

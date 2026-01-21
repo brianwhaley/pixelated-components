@@ -46,11 +46,11 @@ vi.mock('googleapis', () => ({
 // - after TTL expiry the upstream should be called again
 
 describe('Site-Health RouteCache (consumer contract)', () => {
-	let cache: RouteCache;
+	let cache: any;
 
 	beforeEach(async () => {
 		// ensure a fresh cache instance per-test
-		cache = new RouteCache(100); // short TTL for tests
+		cache = new CacheManager({ ttl: 100, prefix: 'test-sitehealth-' }); // short TTL for tests
 		vi.restoreAllMocks();
 
 		// --- canonical googleapi mocks (reuse pattern from google.api.integration.test.ts) ---

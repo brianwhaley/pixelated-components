@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { CacheManager } from '@/components/general/cache-manager';
 
-describe('RouteCache — unit tests', () => {
+describe('CacheManager — site‑health compatibility (unit tests)', () => {
 	beforeEach(() => {
 		vi.useRealTimers();
 	});
@@ -12,12 +12,12 @@ describe('RouteCache — unit tests', () => {
 	});
 
 	it('returns null when key missing', () => {
-		const c = new RouteCache(1000);
+		const c = new CacheManager({ ttl: 1000, prefix: 'test-sitehealth-' });
 		expect(c.get('no-such-key')).toBeNull();
 	});
 
 	it('set then get returns the same value (synchronous semantics)', () => {
-		const c = new RouteCache(1000);
+		const c = new CacheManager({ ttl: 1000, prefix: 'test-sitehealth-' });
 		const payload = { a: 1 };
 		c.set('k1', payload);
 		expect(c.get('k1')).toBe(payload); // same reference
@@ -25,7 +25,7 @@ describe('RouteCache — unit tests', () => {
 
 	it('respects TTL (expires after duration)', () => {
 		vi.useFakeTimers({ now: Date.now() });
-		const c = new RouteCache(1000); // 1s TTL
+		const c = new CacheManager({ ttl: 1000, prefix: 'test-sitehealth-' }); // 1s TTL
 		c.set('k1', 'v1');
 		expect(c.get('k1')).toBe('v1');
 
@@ -39,7 +39,7 @@ describe('RouteCache — unit tests', () => {
 	});
 
 	it('clear removes entries', () => {
-		const c = new RouteCache(1000);
+		const c = new CacheManager({ ttl: 1000, prefix: 'test-sitehealth-' });
 		c.set('k1', 1);
 		c.set('k2', 2);
 		expect(c.get('k1')).toBe(1);
@@ -50,7 +50,7 @@ describe('RouteCache — unit tests', () => {
 
 	it('set overwrites existing entry and updates timestamp', () => {
 		vi.useFakeTimers({ now: Date.now() });
-		const c = new RouteCache(1000);
+		const c = new CacheManager({ ttl: 1000, prefix: 'test-sitehealth-' });
 		c.set('k', 'first');
 		vi.advanceTimersByTime(900);
 		c.set('k', 'second');

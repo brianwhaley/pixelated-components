@@ -22,7 +22,7 @@ vi.mock('../components/general/cache-manager', () => {
   };
 });
 
-vi.mock('../components/admin/site-health/google.api.utils', () => (
+vi.mock('../components/admin/site-health/google.api.utils', () => ({
   calculateDateRanges: vi.fn(),
   formatChartDate: vi.fn(),
   getCachedData: vi.fn(),

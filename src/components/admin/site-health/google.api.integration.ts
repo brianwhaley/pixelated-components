@@ -7,11 +7,11 @@
 "use server";
 
 import { google } from 'googleapis';
-import { CacheManager } from '@/components/general/cache-manager';
+import { CacheManager } from '../../general/cache-manager';
 import { calculateDateRanges, formatChartDate, getCachedData, setCachedData } from './google.api.utils';
 
 // Migration-time debug flag (owner requested): verbose cache traces during migration
-const debug = true; // keep as literal during migration for traceability
+const debug = false; // keep as literal during migration for traceability
 
 export interface GoogleAuthConfig {
   serviceAccountKey?: string;

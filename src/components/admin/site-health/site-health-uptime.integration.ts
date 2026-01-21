@@ -1,7 +1,7 @@
 import { Route53Client, GetHealthCheckStatusCommand } from '@aws-sdk/client-route-53';
 import { getFullPixelatedConfig } from '../../config/config';
 
-const debug = true;
+const debug = false;
 
 export interface UptimeCheckResult {
   status: 'success' | 'error';
