@@ -7,7 +7,7 @@ export * from './components/admin/site-health/google.api.integration';
 export * from './components/admin/site-health/google.api.utils';
 export * from './components/admin/site-health/seo-constants';
 export * from './components/admin/site-health/site-health-axe-core.integration';
-export * from './components/admin/site-health/site-health-cache';
+
 export * from './components/admin/site-health/site-health-cloudwatch.integration';
 export * from './components/admin/site-health/site-health-core-web-vitals.integration';
 export * from './components/admin/site-health/site-health-github.integration';

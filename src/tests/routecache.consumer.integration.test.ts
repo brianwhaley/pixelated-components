@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { RouteCache } from '@/components/admin/site-health/site-health-cache';
+import { CacheManager } from '@/components/general/cache-manager';
 import { google } from 'googleapis';
 
 // Hoisted mock for the `googleapis` package. Exposes a configurable query mock at

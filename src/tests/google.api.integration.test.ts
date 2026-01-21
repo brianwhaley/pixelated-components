@@ -6,21 +6,23 @@ const mockRouteCacheInstance = {
   set: vi.fn(),
 };
 
-vi.mock('../components/admin/site-health/site-health-cache', () => {
+vi.mock('../components/general/cache-manager', () => {
   const getMock = vi.fn();
   const setMock = vi.fn();
-  class MockRouteCache {
+  class MockCacheManager {
     get = getMock;
     set = setMock;
+    remove = vi.fn();
+    clear = vi.fn();
   }
   // Store references for test access
-  (globalThis as any).__mockRouteCache = { get: getMock, set: setMock };
+  (globalThis as any).__mockCacheManager = { get: getMock, set: setMock };
   return {
-    RouteCache: MockRouteCache,
+    CacheManager: MockCacheManager,
   };
 });
 
-vi.mock('../components/admin/site-health/google.api.utils', () => ({
+vi.mock('../components/admin/site-health/google.api.utils', () => (
   calculateDateRanges: vi.fn(),
   formatChartDate: vi.fn(),
   getCachedData: vi.fn(),
@@ -40,7 +42,7 @@ vi.mock('googleapis', () => ({
 }));
 
 import { google } from 'googleapis';
-import { RouteCache } from '../components/admin/site-health/site-health-cache';
+import { CacheManager } from '../components/general/cache-manager';
 import {
   calculateDateRanges,
   formatChartDate,

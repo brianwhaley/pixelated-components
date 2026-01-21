@@ -6,8 +6,10 @@
 "use server";
 
 import { CloudWatchClient, GetMetricDataCommand } from '@aws-sdk/client-cloudwatch';
-import { RouteCache } from './site-health-cache';
+import { CacheManager } from '@/components/general/cache-manager';
 import { getFullPixelatedConfig } from '../../config/config';
+
+const debug = true; // migration-time verbose logging
 
 export interface CloudwatchHealthCheckConfig {
   healthCheckId: string;
@@ -173,6 +175,7 @@ export async function getCloudwatchHealthCheckData(
 		}
 
 		// Cache the result
+		if (debug) console.debug('[site-health][cloudwatch] caching', cacheKey, 'rows=', filledData.length);
 		healthCheckCache.set(cacheKey, filledData);
 
 		return { success: true, data: filledData };
@@ -184,4 +187,4 @@ export async function getCloudwatchHealthCheckData(
 			error: error instanceof Error ? error.message : 'Failed to fetch health check data from CloudWatch'
 		};
 	}
-}
+} 

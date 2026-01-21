@@ -23,7 +23,7 @@ export * from './components/admin/site-health/site-health-mock-context';
 // Client-safe admin components (can run on both client and server)
 export * from './components/admin/site-health/google.api.utils';
 export * from './components/admin/site-health/seo-constants';
-export * from './components/admin/site-health/site-health-cache';
+
 export * from './components/admin/site-health/site-health-indicators';
 export * from './components/admin/site-health/site-health-on-site-seo.integration';
 export * from './components/admin/site-health/site-health-performance';

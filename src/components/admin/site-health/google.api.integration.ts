@@ -7,8 +7,11 @@
 "use server";
 
 import { google } from 'googleapis';
-import { RouteCache } from './site-health-cache';
+import { CacheManager } from '@/components/general/cache-manager';
 import { calculateDateRanges, formatChartDate, getCachedData, setCachedData } from './google.api.utils';
+
+// Migration-time debug flag (owner requested): verbose cache traces during migration
+const debug = true; // keep as literal during migration for traceability
 
 export interface GoogleAuthConfig {
   serviceAccountKey?: string;
@@ -124,7 +127,7 @@ export interface GoogleAnalyticsResponse {
 }
 
 // Cache for analytics data (1 hour)
-const analyticsCache = new RouteCache();
+const analyticsCache = new CacheManager({ prefix: 'sitehealth-analytics-', ttl: 60 * 60 * 1000 });
 
 /**
  * Get Google Analytics data for a site with current/previous period comparison
@@ -140,8 +143,10 @@ export async function getGoogleAnalyticsData(
 		const cacheKey = `analytics-${siteName}-${startDate || 'default'}-${endDate || 'default'}`;
 		const cached = getCachedData(analyticsCache, cacheKey);
 		if (cached) {
+			if (debug) console.debug('[site-health][analytics] cache HIT', cacheKey);
 			return { success: true, data: cached };
 		}
+		if (debug) console.debug('[site-health][analytics] cache MISS', cacheKey);
 
 		if (!config.ga4PropertyId || config.ga4PropertyId === 'GA4_PROPERTY_ID_HERE') {
 			return {
@@ -223,6 +228,7 @@ export async function getGoogleAnalyticsData(
 		}
 
 		// Cache the result
+		if (debug) console.debug('[site-health][analytics] caching', cacheKey, 'rows=', chartData.length);
 		setCachedData(analyticsCache, cacheKey, chartData);
 
 		return { success: true, data: chartData };
@@ -233,7 +239,7 @@ export async function getGoogleAnalyticsData(
 			error: (error as Error).message
 		};
 	}
-}
+} 
 
 export interface SearchConsoleConfig {
   siteUrl: string;
@@ -260,7 +266,7 @@ export interface SearchConsoleResponse {
 }
 
 // Cache for search console data (1 hour)
-const searchConsoleCache = new RouteCache();
+const searchConsoleCache = new CacheManager({ prefix: 'sitehealth-searchconsole-', ttl: 60 * 60 * 1000 });
 
 /**
  * Get Google Search Console data for a site with current/previous period comparison
@@ -365,6 +371,7 @@ export async function getSearchConsoleData(
 		}
 
 		// Cache the result
+		if (debug) console.debug('[site-health][searchconsole] caching', cacheKey, 'rows=', chartData.length);
 		setCachedData(searchConsoleCache, cacheKey, chartData);
 
 		return { success: true, data: chartData };
@@ -386,4 +393,4 @@ export async function getSearchConsoleData(
 			error: errMessage
 		};
 	}
-}
+} 
