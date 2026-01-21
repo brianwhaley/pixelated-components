@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { CacheManager } from '@/components/general/cache-manager';
 
-describe('RouteCache — unit tests', () => {
+describe('CacheManager — unit tests', () => {
 	beforeEach(() => {
 		vi.useRealTimers();
 	});

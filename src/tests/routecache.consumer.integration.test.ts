@@ -45,7 +45,7 @@ vi.mock('googleapis', () => ({
 // - immediate second call should be served from the cache (no upstream fetch)
 // - after TTL expiry the upstream should be called again
 
-describe('Site-Health RouteCache (consumer contract)', () => {
+describe('Site-Health CacheManager (consumer contract)', () => {
 	let cache: any;
 
 	beforeEach(async () => {

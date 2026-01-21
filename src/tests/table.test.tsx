@@ -282,6 +282,20 @@ describe('Table Component', () => {
       expect(container.querySelector('table')).toBeInTheDocument();
     });
 
+    it('renders arrays as comma-separated strings (defensive)', () => {
+      const data = [ { Name: 'Item', Tags: ['one', 'two', 'three'] } ];
+      render(<Table data={data as any} id="test-table" />);
+      expect(screen.getByText('one, two, three')).toBeInTheDocument();
+    });
+
+    it('stringifies object cells instead of throwing (defensive)', () => {
+      const data = [ { Name: 'Item', Meta: { a: 1, b: 'two' } } ];
+      const { container } = render(<Table data={data as any} id="test-table" />);
+      // should render JSON snippet for object cell
+      expect(container.textContent).toMatch(/"a":\s*1/);
+      expect(container.textContent).toMatch(/"b":\s*"two"/);
+    });
+
     it('should handle special characters in data', () => {
       const specialData = [
         { Name: 'Item & Test', Value: '<tag>content</tag>' },

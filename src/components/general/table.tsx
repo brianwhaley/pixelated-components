@@ -38,8 +38,22 @@ export function Table (props: TableType) {
 
 	function getCells (obj:{ [key: string]: any }) {
 		return Object.values(obj).map((value, i) => {
-			const myValue = (isImageURL(value)) ? <SmartImage src={value} title={value} alt={value} /> : value ;
-			return <td key={i}>{myValue}</td>;
+			// Defensive rendering: ensure React never receives raw non-primitive values
+			const myValue = (() => {
+				if (isImageURL(value)) return <SmartImage src={value} title={String(value)} alt={String(value)} />;
+				if (value === null || value === undefined) return '';
+				if (typeof value === 'object') {
+					if (Array.isArray(value)) return value.join(', ');
+					try {
+						// pretty-print objects for readability in table cells
+						return JSON.stringify(value, null, 2);
+					} catch (err) {
+						return String(value);
+					}
+				}
+				return value;
+			})();
+			return <td key={i} data-testid={`cell-${i}`}>{myValue}</td>;
 		});
 	}
 

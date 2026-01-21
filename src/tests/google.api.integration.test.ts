@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach, Mock } from 'vitest';
 
 // Mock the cache and utils
-const mockRouteCacheInstance = {
+const mockCacheManagerInstance = {
   get: vi.fn(),
   set: vi.fn(),
 };
@@ -66,7 +66,7 @@ describe('Google API Integration', () => {
   let mockOAuth2: any;
   let mockAnalyticsData: any;
   let mockSearchConsole: any;
-  let mockRouteCache: any;
+  let mockCacheManager: any;
 
   beforeEach(() => {
     // Reset all mocks
@@ -125,7 +125,7 @@ describe('Google API Integration', () => {
     // (google.analyticsdata as any).mockImplementation(() => mockAnalyticsData);
     // (google.searchconsole as any).mockImplementation(() => mockSearchConsole);
 
-    // RouteCache is already mocked at module level
+    // CacheManager is already mocked at module level
 
     // Mock utility functions
     (calculateDateRanges as Mock).mockReturnValue({
