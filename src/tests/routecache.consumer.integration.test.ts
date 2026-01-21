@@ -89,7 +89,8 @@ describe('Site-Health RouteCache (consumer contract)', () => {
 			previousStartStr: '2023-12-18',
 			previousEndStr: '2023-12-31',
 		});
-		vi.spyOn(utils as any, 'formatChartDate').mockImplementation((d: Date) => d.toISOString().split('T')[0]);
+		// align mock signature with TS expectations
+		vi.spyOn(utils as any, 'formatChartDate').mockImplementation((...args: any[]) => (args[0] as Date).toISOString().split('T')[0]);
 	});
 
 	afterEach(() => {
