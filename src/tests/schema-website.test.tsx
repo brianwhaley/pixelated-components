@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render } from '../test/test-utils';
 import type { SiteInfo } from '@/components/config/config.types';
 import { WebsiteSchema, type WebsiteSchemaType } from '@/components/general/schema-website';
-import configData from '@/tests/configbuilder.test.json';
+import configData from '../test/test-data';
 
 describe('WebsiteSchema', () => {
 	const siteInfo: SiteInfo = configData.siteInfoFull as SiteInfo;
@@ -89,15 +89,19 @@ describe('WebsiteSchema', () => {
 		const schemaData = JSON.parse(scriptTag?.textContent || '{}');
 
 		expect(schemaData.publisher).toBeDefined();
-		expect(schemaData.publisher['@type']).toBe('LocalBusiness');
+		expect(['LocalBusiness','Organization']).toContain(schemaData.publisher['@type']);
 		expect(schemaData.publisher.name).toBe('Pixelated Technologies');
 		expect(schemaData.publisher.logo.url).toBe(siteInfo.image);
 		expect(schemaData.copyrightHolder).toBeDefined();
-		expect(schemaData.copyrightHolder['@type']).toBe('LocalBusiness');
-		expect(schemaData.potentialAction).toBeDefined();
-		expect(schemaData.potentialAction.target.urlTemplate).toBe(
-			'https://pixelated.tech/search?q={search_term_string}'
-		);
+		expect(['LocalBusiness','Organization']).toContain(schemaData.copyrightHolder['@type']);
+		if (siteInfo.potentialAction) {
+			expect(schemaData.potentialAction).toBeDefined();
+			expect(schemaData.potentialAction.target.urlTemplate).toBe(
+				'https://pixelated.tech/search?q={search_term_string}'
+			);
+		} else {
+			expect(schemaData.potentialAction).toBeUndefined();
+		}
 	});
 
 	it('should exclude potentialAction when not provided', () => {

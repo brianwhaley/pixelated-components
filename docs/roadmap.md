@@ -30,7 +30,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **Instagram Component**: Add accessToken and userId to config provider for centralized API credentials.
 - [ ] **Critters Integration**: Explore adding critters CSS inlining tool for improved page load performance and critical CSS optimization.
 - [ ] **SplitScroll Enhancement**: Improve scrolling behavior and image transitions to match [safariportal lookbook style](https://itineraries.safariportal.app/Mary-Ann-Sarao/1589988388230923612?type=lookbook) (smoother layering and focal point transitions).
-- [ ] **test harness improvement**: just like pixelated.config.json, add a real routes.json file to give route, visualdesing, and siteinfo tests real data.
 
 ### Platform Enhancements
 - [ ] **Project Scaffolding CLI**: Interactive CLI tool that generates complete Next.js projects with pixelated-components pre-configured, including routes.json, layout.tsx, package.json, and basic page structure

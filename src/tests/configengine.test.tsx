@@ -4,31 +4,13 @@ import { render } from '../test/test-utils';
 import { VisualDesignStyles, GoogleFontsImports } from '../components/sitebuilder/config/ConfigEngine';
 
 // Helper to build valid VisualDesignType fixtures for tests
+import { visualdesign as harnessVisualDesign } from '../test/test-data';
 const makeToken = (value: string) => ({ value: String(value), type: 'string', group: 'test', label: 'test' });
-const defaultVisualDesign = {
+const defaultVisualDesign = harnessVisualDesign || {
   'primary-color': makeToken('#007bff'),
-  'secondary-color': makeToken('#6c757d'),
-  'accent1-color': makeToken('#ff5722'),
-  'accent2-color': makeToken('#00bcd4'),
-  'bg-color': makeToken('#ffffff'),
-  'text-color': makeToken('#333333'),
-  'header-font': makeToken('"Playfair Display", serif'),
-  'body-font': makeToken('"Lato", sans-serif'),
-  'font-size1-min': makeToken('2.00rem'),
-  'font-size1-max': makeToken('3.00rem'),
-  'font-size2-min': makeToken('1.35rem'),
-  'font-size2-max': makeToken('1.75rem'),
-  'font-size3-min': makeToken('1.17rem'),
-  'font-size3-max': makeToken('1.35rem'),
-  'font-size4-min': makeToken('1.00rem'),
-  'font-size4-max': makeToken('1.25rem'),
-  'font-size5-min': makeToken('0.83rem'),
-  'font-size5-max': makeToken('1.00rem'),
-  'font-size6-min': makeToken('0.67rem'),
-  'font-size6-max': makeToken('0.85rem'),
-  'font-min-screen': makeToken('375px'),
-  'font-max-screen': makeToken('1440px'),
-};
+  'font-size1-min': makeToken('2.00rem')
+}; // fallback to generated tokens for very specific unit tests
+
 const buildVisualDesign = (overrides: Record<string, any> = {}, extras: Record<string, any> = {}) => ({ ...defaultVisualDesign, ...Object.fromEntries(Object.entries(overrides).map(([k, v]) => [k, typeof v === 'string' ? makeToken(v) : v])), ...extras });
 
 // Mock the google-fonts module

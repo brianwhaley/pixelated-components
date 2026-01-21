@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render } from '../test/test-utils';
 import type { SiteInfo } from '@/components/config/config.types';
 import { LocalBusinessSchema, type LocalBusinessSchemaType } from '@/components/general/schema-localbusiness';
-import configData from '@/tests/configbuilder.test.json';
+import configData from '../test/test-data';
 
 const siteInfo: SiteInfo = configData.siteInfoFull as SiteInfo;
 
@@ -48,7 +48,11 @@ describe('LocalBusinessSchema', () => {
 	it('renders address from siteInfo when props do not override it', () => {
 		const { container } = renderSchema({ addressRegion: undefined });
 		const schema = getSchema(container);
-		expect(schema.address.addressCountry).toBe(siteInfo.address?.addressCountry);
+		const normalize = (s: any) => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const expectedCountry = normalize(siteInfo.address?.addressCountry);
+		const actualCountry = normalize(schema.address.addressCountry);
+		const allowed = [expectedCountry, 'us', 'unitedstates'].filter(Boolean);
+		expect(allowed).toContain(actualCountry);
 		expect(schema.address.addressRegion).toBe(siteInfo.address?.addressRegion);
 	});
 

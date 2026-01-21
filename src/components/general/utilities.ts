@@ -71,6 +71,15 @@ export function capitalize (str: string) {
 	return str[0].toUpperCase() + str.toLowerCase().slice(1);
 }
 
+
+/** Capitalize the first letter of each word in `input`. */
+export function capitalizeWords(input: string): string {
+	if (!input) return input;
+	return input.replace(/\p{L}[\p{L}'’-]*/gu, (word) =>
+		word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+	);
+}
+
 /*
 Array.prototype.contains = function(obj) {
   return this.indexOf(obj) > -1;

@@ -2,34 +2,8 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '../test/test-utils';
 import { BuzzwordBingo } from '../components/general/buzzwordbingo';
-
-const mockBuzzwords = [
-  'Synergy',
-  'Paradigm Shift',
-  'Leveraging',
-  'Disruptive',
-  'Blockchain',
-  'AI-Powered',
-  'Optimize',
-  'Circle Back',
-  'Vertical Integration',
-  'Deep Dive',
-  'Touch Base',
-  'Bandwidth',
-  'Low Hanging Fruit',
-  'Win-Win',
-  'Core Competency',
-  'Best Practice',
-  'Think Outside The Box',
-  'Strategic Vision',
-  'Pivot',
-  'MVP',
-  'Growth Hacking',
-  'Engagement Metrics',
-  'KPIs',
-  'Stakeholder Value',
-  'Agile Methodology'
-];
+import { buzzwords as canonicalBuzzwords } from '@/components/general/buzzwordbingo.words';
+const mockBuzzwords = canonicalBuzzwords.slice(0, 30);
 
 describe('BuzzwordBingo Component', () => {
   beforeEach(() => {

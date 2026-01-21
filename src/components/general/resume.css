@@ -35,6 +35,10 @@
 	}
 }
 
+.p-resume .p-skills div {
+	margin: 0 0 10px 0;
+}
+
 /* http://microformats.org/wiki/h-resume */
 
 .p-resume {

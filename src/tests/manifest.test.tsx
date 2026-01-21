@@ -1,59 +1,31 @@
 import { describe, it, expect } from 'vitest';
 import { generateManifest, type ManifestOptions } from '@/components/general/manifest';
 import type { SiteInfo } from '@/components/config/config.types';
-
-const mockSiteInfo: SiteInfo = {
-	name: "Test App",
-	description: "A test application",
-	url: "https://testapp.com",
-	email: "test@testapp.com",
-	telephone: "+1-555-0123",
-	image: "https://testapp.com/logo.png",
-	image_height: "512",
-	image_width: "512",
-	favicon: "/favicon.ico",
-	theme_color: "#007bff",
-	background_color: "#ffffff",
-	default_locale: "en",
-	author: "Test Author",
-	display: "standalone",
-	favicon_sizes: "64x64 32x32 24x24 16x16",
-	favicon_type: "image/x-icon",
-	address: {
-		streetAddress: "123 Test St",
-		addressLocality: "Test City",
-		addressRegion: "TC",
-		postalCode: "12345",
-		addressCountry: "US"
-	},
-	openingHours: "Mo-Fr 09:00-17:00",
-	priceRange: "$$",
-	sameAs: ["https://twitter.com/testapp"]
-};
+import { siteInfoFull as mockSiteInfo } from '../test/test-data';
 
 describe('Manifest Component', () => {
 	it('should generate a complete manifest from siteinfo', () => {
-		const options: ManifestOptions = { siteInfo: mockSiteInfo };
+		const options: ManifestOptions = { siteInfo: mockSiteInfo as unknown as SiteInfo };
 		const manifest = generateManifest(options);
 
-		expect(manifest.name).toBe("Test App");
-		expect(manifest.short_name).toBe("Test App");
-		expect(manifest.description).toBe("A test application");
-		expect(manifest.theme_color).toBe("#007bff");
-		expect(manifest.background_color).toBe("#ffffff");
-		expect(manifest.display).toBe("standalone");
+		expect(manifest.name).toBe(mockSiteInfo.name);
+		expect(manifest.short_name).toBe(mockSiteInfo.name);
+		expect(manifest.description).toBe(mockSiteInfo.description);
+		expect(manifest.theme_color).toBe(mockSiteInfo.theme_color);
+		expect(manifest.background_color).toBe(mockSiteInfo.background_color);
+		expect(manifest.display).toBe(mockSiteInfo.display || "standalone");
 		expect(manifest.start_url).toBe(".");
 		// Note: homepage_url, default_locale, and developer are not standard manifest properties
 		expect(manifest.icons).toEqual([{
-			src: "/favicon.ico",
-			sizes: "64x64 32x32 24x24 16x16",
-			type: "image/x-icon"
+			src: mockSiteInfo.favicon,
+			sizes: mockSiteInfo.favicon_sizes,
+			type: mockSiteInfo.favicon_type
 		}]);
 	});
 
 	it('should merge custom properties with generated manifest', () => {
 		const options: ManifestOptions = {
-			siteInfo: mockSiteInfo,
+			siteInfo: mockSiteInfo as unknown as SiteInfo,
 			customProperties: {
 				orientation: "portrait",
 				categories: ["business", "productivity"],
@@ -62,7 +34,7 @@ describe('Manifest Component', () => {
 		};
 		const manifest = generateManifest(options);
 
-		expect(manifest.name).toBe("Test App"); // Original property
+		expect(manifest.name).toBe(mockSiteInfo.name); // Original property
 		expect(manifest.orientation).toBe("portrait"); // Custom property
 		expect(manifest.categories).toEqual(["business", "productivity"]); // Custom property
 		expect(manifest.lang).toBe("en-US"); // Custom property
@@ -70,7 +42,7 @@ describe('Manifest Component', () => {
 
 	it('should allow overriding generated properties with custom properties', () => {
 		const options: ManifestOptions = {
-			siteInfo: mockSiteInfo,
+			siteInfo: mockSiteInfo as unknown as SiteInfo,
 			customProperties: {
 				name: "Custom App Name",
 				display: "fullscreen" as const
@@ -80,7 +52,7 @@ describe('Manifest Component', () => {
 
 		expect(manifest.name).toBe("Custom App Name"); // Overridden
 		expect(manifest.display).toBe("fullscreen"); // Overridden
-		expect(manifest.short_name).toBe("Test App"); // Not overridden (short_name uses original name)
+		expect(manifest.short_name).toBe(mockSiteInfo.name); // Not overridden (short_name uses original name)
 	});
 
 	it('should handle minimal siteinfo gracefully', () => {
