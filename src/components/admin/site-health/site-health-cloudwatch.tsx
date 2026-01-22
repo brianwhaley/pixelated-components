@@ -106,7 +106,7 @@ export function SiteHealthCloudwatch({ siteName, startDate, endDate }: SiteHealt
 											value?.toLocaleString() || '0',
 											name || 'Unknown'
 										]}
-										labelFormatter={(label: string) => `Date: ${label}`}
+										labelFormatter={(label: React.ReactNode) => `Date: ${String(label)}`}
 									/>
 									<Legend
 										wrapperStyle={{

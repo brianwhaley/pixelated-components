@@ -85,7 +85,7 @@ export function SiteHealthGoogleAnalytics({ siteName, startDate, endDate }: Site
 											value?.toLocaleString() || '0',
 											name || 'Unknown'
 										]}
-										labelFormatter={(label: string) => `Date: ${label}`}
+										labelFormatter={(label: React.ReactNode) => `Date: ${String(label)}`}
 									/>
 									<Legend
 										wrapperStyle={{
