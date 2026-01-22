@@ -125,7 +125,7 @@
 		"@testing-library/react": "^16.3.2",
 		"@testing-library/user-event": "^14.6.1",
 		"@types/md5": "^2.3.6",
-		"@types/node": "^25.0.9",
+		"@types/node": "^25.0.10",
 		"@types/prop-types": "^15.7.15",
 		"@types/react": "^19.2.9",
 		"@types/react-dom": "^19.2.3",
@@ -161,7 +161,7 @@
 		"react-redux": "^9.2.0",
 		"react-test-renderer": "^19.2.3",
 		"redux": "^5.0.1",
-		"sass": "^1.97.2",
+		"sass": "^1.97.3",
 		"sass-loader": "^16.0.6",
 		"storybook": "^10.2.0",
 		"style-loader": "^4.0.0",
@@ -186,7 +186,7 @@
 		"md5": "^2.3.0",
 		"puppeteer": "^24.35.0",
 		"react-redux": "*",
-		"recharts": "^3.6.0",
+		"recharts": "^3.7.0",
 		"redux": "*"
 	},
 	"type": "module"
