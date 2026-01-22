@@ -1,7 +1,12 @@
 
 import { getContentfulDiscountCodes } from "../integrations/contentful.delivery";
+import { CacheManager } from "../general/cache-manager";
 
+// Migration-time verbose tracing per user request — remove after verification
 const debug = false;
+
+// Use CacheManager but preserve existing localStorage keys by using empty prefix
+const cartCache = new CacheManager({ mode: 'local', prefix: '' });
 /* ========== LOCALSTORAGE KEYS ========== */
 export const shoppingCartKey = "pixelvividCart";
 export const shippingInfoKey = "pixelvividCartShipping";
@@ -162,13 +167,20 @@ export function formatAsHundredths(num: number) {
 
 
 export function getCart() {
-	const cart = localStorage.getItem(shoppingCartKey);
-	return cart ? JSON.parse(cart) : [];
+	if (debug) console.debug('ShoppingCart:getCart -> using CacheManager.get', shoppingCartKey);
+	// Use CacheManager as the single source-of-truth. Legacy raw-localStorage fallbacks
+	// were removed after migration completed — callers should use CacheManager APIs.
+	const cached = cartCache.get<ShoppingCartType[]>(shoppingCartKey);
+	if (cached) return cached;
+	// No cart found -> empty
+	return [];
 }
 
 
 export function setCart(shoppingCartJSON: ShoppingCartType[]) {
-	localStorage.setItem(shoppingCartKey, JSON.stringify(shoppingCartJSON));
+	if (debug) console.debug('ShoppingCart:setCart -> using CacheManager.set', shoppingCartKey, shoppingCartJSON);
+	cartCache.set<ShoppingCartType[]>(shoppingCartKey, shoppingCartJSON);
+	// preserve observable contract (storage event) for listeners
 	window.dispatchEvent(new Event('storage'));
 }
 
@@ -249,7 +261,8 @@ export function addToShoppingCart(thisItem: ShoppingCartType) {
 		cartItem.itemQuantity = 1;
 		cart.push(cartItem);
 	} 
-	localStorage.setItem(shoppingCartKey, JSON.stringify(cart));
+	if (debug) console.debug('ShoppingCart:persisting cart -> CacheManager.set', shoppingCartKey, cart);
+	cartCache.set<ShoppingCartType[]>(shoppingCartKey, cart);
 	window.dispatchEvent(new Event('storage'));
 }
 
@@ -259,14 +272,16 @@ export function removeFromShoppingCart(thisItem: ShoppingCartType) {
 	if(alreadyInCart(cart, thisItem.itemID)){
 		cart.splice(getIndexInCart(cart, thisItem.itemID), 1);
 	}
-	localStorage.setItem(shoppingCartKey, JSON.stringify(cart));
+	if (debug) console.debug('ShoppingCart:removeFromShoppingCart -> persisting cart via CacheManager', shoppingCartKey, cart);
+	cartCache.set<ShoppingCartType[]>(shoppingCartKey, cart);
 	window.dispatchEvent(new Event('storage'));
 }
 
 
 export function clearShoppingCart() { 
-	localStorage.removeItem( shoppingCartKey );
-	localStorage.removeItem( shippingInfoKey );
+	if (debug) console.debug('ShoppingCart:clearShoppingCart -> removing keys via CacheManager');
+	cartCache.remove(shoppingCartKey);
+	cartCache.remove(shippingInfoKey);
 	window.dispatchEvent(new Event('storage'));
 }
 
@@ -275,13 +290,17 @@ export function clearShoppingCart() {
 
 
 export function getShippingInfo(){
-	const ship = localStorage.getItem(shippingInfoKey);
-	return ship ? JSON.parse(ship) : [];
+	if (debug) console.debug('ShoppingCart:getShippingInfo -> using CacheManager.get', shippingInfoKey);
+	const cached = cartCache.get<any>(shippingInfoKey);
+	if (cached) return cached;
+	// Migration complete — don't read raw localStorage directly. Return empty when no data.
+	return [];
 }
 
 
 export function setShippingInfo(shippingFormData: any) { 
-	localStorage.setItem(shippingInfoKey, JSON.stringify(shippingFormData) );
+	if (debug) console.debug('ShoppingCart:setShippingInfo -> using CacheManager.set', shippingInfoKey, shippingFormData);
+	cartCache.set<any>(shippingInfoKey, shippingFormData);
 	window.dispatchEvent(new Event('storage'));
 }
 
@@ -340,15 +359,17 @@ export async function getRemoteDiscountCodes(){
 
 
 export function getLocalDiscountCodes(){
-	const discountCodes = localStorage.getItem(discountCodesKey);
-	return discountCodes ? JSON.parse(discountCodes) : [];
-
+	if (debug) console.debug('ShoppingCart:getLocalDiscountCodes -> using CacheManager.get', discountCodesKey);
+	const cached = cartCache.get<DiscountCodeType[]>(discountCodesKey);
+	if (cached) return cached;
+	// Do not read raw localStorage directly after migration — return empty when absent.
+	return [];
 }
 
 
 export function setDiscountCodes(discountCodesJSON: DiscountCodeType[]) {
-	if (debug) console.log("Set Discount Codes LocalStorage: ", discountCodesJSON);
-	localStorage.setItem(discountCodesKey, JSON.stringify(discountCodesJSON));
+	if (debug) console.debug("ShoppingCart:setDiscountCodes -> using CacheManager.set", discountCodesKey, discountCodesJSON);
+	cartCache.set<DiscountCodeType[]>(discountCodesKey, discountCodesJSON);
 	window.dispatchEvent(new Event('storage'));
 }
 

@@ -132,6 +132,12 @@ export function SmartImage(props: SmartImageType) {
 
 	newProps.src = String(newProps.src);
 
+	// Normalize protocol-relative URLs ("//domain/...") to absolute https:// URLs so Next.js Image can accept them.
+	// Keep other forms (relative paths, data URIs, http/https) unchanged.
+	if (/^\/\//.test(newProps.src)) {
+		newProps.src = `https:${newProps.src}`;
+	}
+
 	/* ===== CLOUDINARY VARIANT ===== */
 
 	if (variant === 'cloudinary' && newProps.cloudinaryEnv) {

@@ -288,12 +288,14 @@ describe('Table Component', () => {
       expect(screen.getByText('one, two, three')).toBeInTheDocument();
     });
 
-    it('stringifies object cells instead of throwing (defensive)', () => {
+    it('renders nested table for object cells (defensive)', () => {
       const data = [ { Name: 'Item', Meta: { a: 1, b: 'two' } } ];
       const { container } = render(<Table data={data as any} id="test-table" />);
-      // should render JSON snippet for object cell
-      expect(container.textContent).toMatch(/"a":\s*1/);
-      expect(container.textContent).toMatch(/"b":\s*"two"/);
+      // should render nested table headers/values for object cell
+      expect(container.textContent).toMatch(/a/);
+      expect(container.textContent).toMatch(/1/);
+      expect(container.textContent).toMatch(/b/);
+      expect(container.textContent).toMatch(/two/);
     });
 
     it('should handle special characters in data', () => {

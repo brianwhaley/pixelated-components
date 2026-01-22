@@ -11,6 +11,8 @@ import {
   getCart,
   addToShoppingCart,
   setShippingInfo,
+  clearShoppingCart,
+  getLocalDiscountCodes,
   type ShoppingCartType,
 } from '../components/shoppingcart/shoppingcart.functions';
 
@@ -19,6 +21,8 @@ import shippingToData from '../components/shoppingcart/shipping.to.json';
 
 describe('ShoppingCart — integration (component + localStorage)', () => {
   beforeEach(() => {
+    // clear both legacy storage and the CacheManager-backed entries
+    clearShoppingCart();
     localStorage.clear();
     // keep a spy so we can assert it was called, but do NOT replace implementation —
     // the component relies on the real dispatchEvent to trigger its storage handler
@@ -27,6 +31,7 @@ describe('ShoppingCart — integration (component + localStorage)', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    clearShoppingCart();
     localStorage.clear();
   });
 
@@ -37,7 +42,7 @@ describe('ShoppingCart — integration (component + localStorage)', () => {
       itemQuantity: 2,
       itemCost: 9.99,
     };
-    localStorage.setItem(shoppingCartKey, JSON.stringify([item]));
+    setCart([item]);
 
     render(<ShoppingCart />);
 
@@ -49,7 +54,7 @@ describe('ShoppingCart — integration (component + localStorage)', () => {
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(localStorage.getItem(shoppingCartKey)).toBe(JSON.stringify([]));
+      expect(getCart()).toEqual([]);
       expect(screen.queryByText(/Integration Item/)).not.toBeInTheDocument();
     });
 
@@ -74,7 +79,7 @@ describe('ShoppingCart — integration (component + localStorage)', () => {
   it('CheckoutItems renders table rows and formats values', () => {
     // pass `items` as a renderable array (strings/React nodes) — Table cannot render raw objects directly
     const checkoutProps = {
-      items: ['1 × X (\u0024 100)'],
+      items: [{ itemID: 'i1', itemTitle: 'X', itemQuantity: 1, itemCost: 100 }],
       shippingTo: { name: 'A', street1: 'S', city: 'C', state: 'NJ', zip: '07001' },
       subtotal_discount: 10,
       subtotal: 100,

@@ -63,6 +63,35 @@ describe('SmartImage Component', () => {
 			expect(img).toHaveAttribute('width', '800');
 			expect(img).toHaveAttribute('height', '600');
 		});
+
+		// URL-normalization edge-cases (regressions guarded by the recent fix)
+		describe('URL normalization', () => {
+			it('prepends https: to protocol-relative URLs for Next.js Image', () => {
+				const protoRel = '//images.ctfassets.net/soi9w77t7027/asset.jpg';
+				renderSmartImage(<SmartImage src={protoRel} alt="proto" variant="nextjs" />);
+				const el = screen.getByAltText('proto');
+				expect(el.getAttribute('src')).toContain(encodeURIComponent('https:' + protoRel));
+			});
+
+			it('preserves http:// URLs (do not auto-upgrade)', () => {
+				renderSmartImage(<SmartImage src="http://insecure.example/test.jpg" alt="http" variant="nextjs" />);
+				const el = screen.getByAltText('http');
+				expect(el.getAttribute('src')).toContain(encodeURIComponent('http://insecure.example/test.jpg'));
+			});
+
+			it('does not modify bare-relative paths (no leading slash)', () => {
+				renderSmartImage(<SmartImage src="images/foo.jpg" alt="bare" variant="img" />);
+				const el = screen.getByAltText('bare');
+				expect(el.getAttribute('src')).toBe('images/foo.jpg');
+			});
+
+			it('preserves data: URIs unchanged', () => {
+				const data = 'data:image/svg+xml;utf8,<svg/>';
+				renderSmartImage(<SmartImage src={data} alt="data" variant="img" />);
+				const el = screen.getByAltText('data');
+				expect(el.getAttribute('src')).toBe(data);
+			});
+		});
 	});
 
 	describe('Variants', () => {

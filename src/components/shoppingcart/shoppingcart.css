@@ -81,6 +81,11 @@
     text-align: right;
 }
 
+#pixCheckout tbody ul {
+	margin: 0;
+	padding: 0 0 0 20px;
+}
+
 
 /* ===== SHOPPING CART SHIPPING FIELDS ===== */
 

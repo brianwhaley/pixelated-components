@@ -3,6 +3,8 @@ import PropTypes, { InferProps } from 'prop-types';
 import { SmartImage } from './smartimage';
 import './table.css';
 
+const debug = false;
+
 function isImageURL(url: string) {
   	const isImage = /\.(jpeg|jpg|gif|png|webp|svg|bmp)$/i.test(url);
 	const isURL = () => { try { new URL(url); return true; } catch { return false; } };
@@ -37,18 +39,27 @@ export function Table (props: TableType) {
 	}
 
 	function getCells (obj:{ [key: string]: any }) {
-		return Object.values(obj).map((value, i) => {
-			// Defensive rendering: ensure React never receives raw non-primitive values
+		// Use entries so we have access to the column key when rendering nested tables
+		return Object.entries(obj).map(([key, value], i) => {
+			// Defensive rendering: handle React nodes, images, arrays, and objects gracefully
 			const myValue = (() => {
+				// If it's already a React element, render it directly
+				if (React.isValidElement(value)) return value;
 				if (isImageURL(value)) return <SmartImage src={value} title={String(value)} alt={String(value)} />;
 				if (value === null || value === undefined) return '';
+				if (Array.isArray(value)) return value.join(', ');
 				if (typeof value === 'object') {
-					if (Array.isArray(value)) return value.join(', ');
+					// Render nested table for object cells (no sortable or altRowColor props)
 					try {
-						// pretty-print objects for readability in table cells
+						// Convert the object to an array of name-value objects
+						const nameValueArray = Object.entries(value).map(([key, value]) => {
+							return { name: key, value: value };
+						});
+						// return <Table data={[nameValueArray]} id={key} />;
 						return JSON.stringify(value, null, 2);
 					} catch (err) {
-						return String(value);
+						// Fallback: stringify if something goes wrong
+						return JSON.stringify(value, null, 2);
 					}
 				}
 				return value;
