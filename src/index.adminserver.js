@@ -13,7 +13,6 @@ export * from './components/admin/site-health/site-health-core-web-vitals.integr
 export * from './components/admin/site-health/site-health-github.integration';
 export * from './components/admin/site-health/site-health-google-analytics.integration';
 
-// Re-export CacheManager for server/admin consumers (migration: RouteCache → CacheManager)
 export * from './components/general/cache-manager';
 export * from './components/admin/site-health/site-health-google-search-console.integration';
 export * from './components/admin/site-health/site-health-indicators';

@@ -313,11 +313,21 @@ CheckoutItems.propTypes = {
 export type CheckoutItemsType = InferProps<typeof CheckoutItems.propTypes>;
 export function CheckoutItems(props: CheckoutItemsType) {
 	const { items, shippingTo, subtotal_discount, subtotal, shippingCost, handlingFee, salesTax, total } = props;
+
+	const cartItems = (
+		<ul>
+			{items.map((item: any) => {
+				const itm = item as CartItemType;
+				return <li key={itm.itemID}>{itm.itemQuantity} X - {itm.itemTitle} ( {formatAsUSD(itm.itemCost)} )</li>;
+			})}
+		</ul>
+	);
 	const to = shippingTo;
 	const addr = <><div>{to.name}</div><div>{to.street1}</div><div>{to.city}, {to.state} {to.zip}</div></> ;
+
 	let checkoutTableData = [{
 		"Name": "Shopping Cart Items : ",
-		"Value": items,
+		"Value": cartItems,
 	}, {
 		"Name": "Subtotal Discount : ",
 		"Value": formatAsUSD(subtotal_discount),

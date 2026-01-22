@@ -659,6 +659,96 @@ describe('Form Component', () => {
       expect(radios.length).toBe(2);
     });
 
+    it('shipping-method radio rendered by FormEngine invokes parent onChange when clicked (regression)', () => {
+      const onChange = vi.fn();
+      const formData = {
+        fields: [
+          {
+            component: 'FormRadio',
+            props: {
+              id: 'shippingMethod',
+              name: 'shippingMethod',
+              label: 'Shipping Method',
+              display: 'vertical',
+              // provide a consumer onChange handler (how JSON-authoring can wire behavior)
+              onChange,
+              options: [
+                { value: 'USPS-GA', text: 'USPS Ground Advantage ( 2 - 5 days ) $9.99' },
+                { value: 'USPS-PM', text: 'USPS Priority Mail ( 2 - 3 days ) $14.99' }
+              ]
+            }
+          }
+        ]
+      };
+      const { container } = render(<FormEngine formData={formData as any} />);
+      const radio = container.querySelector('input[type="radio"][name="shippingMethod"][value="USPS-GA"]') as HTMLInputElement;
+      expect(radio).toBeInTheDocument();
+      fireEvent.click(radio);
+      // contract: clicking should notify the parent via onChange with the option value
+      expect(onChange).toHaveBeenCalledWith('USPS-GA');
+    });
+
+    it('renders uncontrolled radio when JSON provides checked but no updater (defaultChecked)', () => {
+      const formData = {
+        fields: [
+          {
+            component: 'FormRadio',
+            props: {
+              id: 'group1',
+              name: 'group1',
+              label: 'Group1',
+              display: 'vertical',
+              // JSON supplies a checked default but no onChange (consumer did not wire)
+              checked: 'opt1',
+              options: [
+                { value: 'opt1', text: 'Option 1' },
+                { value: 'opt2', text: 'Option 2' }
+              ]
+            }
+          }
+        ]
+      };
+      const { container } = render(<FormEngine formData={formData as any} />);
+      const r1 = container.querySelector('input[type="radio"][name="group1"][value="opt1"]') as HTMLInputElement;
+      const r2 = container.querySelector('input[type="radio"][name="group1"][value="opt2"]') as HTMLInputElement;
+      expect(r1).toBeInTheDocument();
+      expect(r2).toBeInTheDocument();
+      // initially checked via defaultChecked
+      expect(r1.checked).toBe(true);
+      // clicking the other option should toggle (uncontrolled behavior)
+      fireEvent.click(r2);
+      expect(r2.checked).toBe(true);
+    });
+
+    it('keeps controlled behavior when parent provides onChange (checked remains source-of-truth)', () => {
+      const onChange = vi.fn();
+      const formData = {
+        fields: [
+          {
+            component: 'FormRadio',
+            props: {
+              id: 'group2',
+              name: 'group2',
+              label: 'Group2',
+              display: 'vertical',
+              checked: 'a',
+              onChange: onChange,
+              options: [ { value: 'a', text: 'A' }, { value: 'b', text: 'B' } ]
+            }
+          }
+        ]
+      };
+      const { container } = render(<FormEngine formData={formData as any} />);
+      const a = container.querySelector('input[type="radio"][name="group2"][value="a"]') as HTMLInputElement;
+      const b = container.querySelector('input[type="radio"][name="group2"][value="b"]') as HTMLInputElement;
+      expect(a.checked).toBe(true);
+      fireEvent.click(b);
+      // parent onChange must be invoked for controlled pattern
+      expect(onChange).toHaveBeenCalledWith('b');
+      // since parent controls the value, the DOM remains consistent with the provided checked prop
+      expect(a.checked).toBe(true);
+    });
+
     it('should generate unique keys for fields', () => {
       const formData = {
         fields: [

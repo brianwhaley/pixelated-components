@@ -48,5 +48,10 @@ describe('handlePixelatedProxy', () => {
         expect(csp).toContain("https://*.hubspot.com"); // HubSpot
         expect(csp).toContain("https://*.gravatar.com"); // Gravatar
         expect(csp).toContain("https://proxy.pixelated.tech"); // Proxy
+        // PayPal (script + stylesheet) — allow the official PayPal hosts used by the SDK
+        expect(csp).toContain("https://www.paypal.com");
+        expect(csp).toContain("https://www.paypalobjects.com");
+        // Ensure PayPal is explicitly allowed in frame-src (fixes PayPal SDK framing + cardfields stylesheet)
+        expect(csp).toMatch(/frame-src[^;]*https:\/\/www\.paypal\.com/);
     });
 });

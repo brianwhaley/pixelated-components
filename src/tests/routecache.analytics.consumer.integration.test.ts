@@ -16,9 +16,9 @@ import * as googleIntegration from '../components/admin/site-health/google.api.i
 import * as googleUtils from '../components/admin/site-health/google.api.utils';
 
 // These are consumer-focused integration tests that exercise the observable cache
-// contract for Google Analytics consumers (uses RouteCache internally).
+// contract for Google Analytics consumers (uses CacheManager internally).
 
-describe('Site-Health RouteCache — Google Analytics (consumer contract)', () => {
+describe('Site-Health CacheManager — Google Analytics (consumer contract)', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
 

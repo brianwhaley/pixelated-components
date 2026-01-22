@@ -1,4 +1,7 @@
 import { describe, it, expect } from 'vitest';
+import React from 'react';
+import { render, screen } from '../test/test-utils';
+import { CheckoutItems } from '../components/shoppingcart/shoppingcart.components';
 
 describe('ShoppingCart Components Tests', () => {
 	describe('Cart Structure', () => {
@@ -229,6 +232,8 @@ describe('ShoppingCart Components Tests', () => {
 			
 			expect(step).toBe('ThankYou');
 		});
+
+
 	});
 
 	describe('Cart Item Count', () => {

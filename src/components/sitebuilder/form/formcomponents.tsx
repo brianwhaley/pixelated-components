@@ -447,24 +447,30 @@ FormRadioOption.propTypes = {
 export type FormRadioOptionType = InferProps<typeof FormRadioOption.propTypes>;
 function FormRadioOption(props: FormRadioOptionType) {
 	const inputProps = setupInputProps(props);
-	const isChecked = props.parent.checked === props.value;
-	 
+	// Determine whether parent supplied a controlled contract (value + updater)
+	const parentHasOnChange = Boolean(props.parent && typeof props.parent.onChange === 'function');
+	const isChecked = props.parent && props.parent.checked === props.value;
+
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		if (props.parent.onChange) {
+		if (props.parent && typeof props.parent.onChange === 'function') {
 			props.parent.onChange(props.value);
 		}
 	};
+
+	// If there is no parent onChange (no updater), render uncontrolled via defaultChecked
+	const controlProps = parentHasOnChange ? { checked: isChecked } : { defaultChecked: isChecked };
+
 	return (
-		<span className={ props.parent.display == "vertical" ? "displayVertical" : ""}>
-			<input type="radio" 
-				id={`${props.parent.name}-${props.value}`} 
-				name={props.parent.name} 
-				value={props.value} 
-				checked={isChecked}
+		<span className={ props.parent && props.parent.display == "vertical" ? "displayVertical" : ""}>
+			<input type="radio"
+				id={`${props.parent?.name}-${props.value}`}
+				name={props.parent?.name}
+				value={props.value}
+				{...controlProps}
 				onChange={handleChange}
-				required={!!props.parent.required} 
+				required={!!(props.parent && props.parent.required)}
 				{...inputProps} />
-			<label htmlFor={`${props.parent.name}-${props.value}`}>{props.text}</label>
+			<label htmlFor={`${props.parent?.name}-${props.value}`}>{props.text}</label>
 		</span>
 	);
 }

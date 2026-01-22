@@ -56,7 +56,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 ## Admin Feature Enhancements
 
 ### High Priority Refactoring (Development Speed Focus)
-- [ ] **Unified Caching Layer**: Migrate `RouteCache` and `shoppingcart` localStorage implementations to the new `CacheManager` for consistent TTL, memory/session/local storage support, and SSR safety.
 - [ ] **API Client Abstraction**: Create centralized `ApiClient` class with consistent error handling, caching, and retry logic to eliminate repeated fetch/error patterns across components.
 - [ ] **SEO Integration Modularization**: Split 1, 193-line monolithic file into focused modules: `page-analyzer.ts`, `site-crawler.ts`, `header-analyzer.ts`, and `metric-scorers.ts`.
 - [ ] **Component Memoization**: Add `React.memo` and `useMemo` to reduce unnecessary re-renders by 30-50% in large components.

@@ -83,7 +83,7 @@ export function EbayItems(props: EbayItemsType) {
 	if (items && items.length > 0 ) {
 		return (
 			<>
-				{ /* <Loading /> */}
+				<Loading />
 				<div className="ebayItemsHeader">
 					<EbayItemHeader title={`${items.length} Store Items`} />
 				</div>
@@ -99,7 +99,7 @@ export function EbayItems(props: EbayItemsType) {
 		return (
 			<div className="section-container">
 				<div id="ebayItems" className="ebayItems">
-					{ /* <Loading /> */}
+					<Loading />
 				</div>
 			</div>
 		);
