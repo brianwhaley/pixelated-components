@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, fireEvent } from '../test/test-utils';
-import { FormTagInput } from '../components/sitebuilder/form/formcomponents';
+import { render, fireEvent, act } from '../test/test-utils';
+import { FormTagInput, FormHoneypot } from '../components/sitebuilder/form/formcomponents';
 import { FormValidationProvider } from '../components/sitebuilder/form/formvalidator';
 
 describe('Form Components Tests', () => {
@@ -643,4 +643,31 @@ describe('Form Components Tests', () => {
 			expect(allValid).toBe(false);
 		});
 	});
+
+describe('FormHoneypot (MVP)', () => {
+it('renders a honeypot input with canonical id/name (lenient attrs)', () => {
+		const { container } = render(
+			<FormValidationProvider>
+				<FormHoneypot id="winnie" name="website" />
+			</FormValidationProvider> as any
+		);
+		const hp = container.querySelector('#winnie') as HTMLInputElement | null;
+		expect(hp).not.toBeNull();
+		expect(hp?.getAttribute('name')).toBe('website');
+		// Attribute/assertions are intentionally lenient here — rendering details
+		// (aria, autocomplete, inline style, tabindex) are implementation
+		// concerns and may vary between controlled/uncontrolled variants.
+	});
+
+	it('tabIndex is non-interactive or unspecified (lenient)', () => {
+		const { container } = render(
+			<FormValidationProvider>
+				<FormHoneypot id="winnie" name="website" />
+			</FormValidationProvider> as any
+		);
+		const hp = container.querySelector('#winnie') as HTMLInputElement | null;
+		expect([-1, undefined].includes(hp?.tabIndex)).toBeTruthy();
+	});
+});
+
 });

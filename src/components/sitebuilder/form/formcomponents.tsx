@@ -234,7 +234,10 @@ FormInput.propTypes = {
 	maxLength: PropTypes.string,
 	placeholder: PropTypes.string,
 	autoComplete: PropTypes.string,
+	tabIndex: PropTypes.number,
+	style: PropTypes.object,
 	"aria-label": PropTypes.string,
+	"aria-hidden": PropTypes.string,
 	min: PropTypes.string,
 	max: PropTypes.string,
 	step: PropTypes.string,
@@ -775,6 +778,46 @@ export function FormFieldset(props: FormFieldsetType) {
 	);
 }
 
+
+
+
+
+
+
+
+/*
+  FormHoneypot — MVP
+  - id: "winnie" (canonical)
+  - default name: "website"
+  - inline off-screen styling: { position: 'absolute', top: '-9999px' }
+  - aria-hidden + tabIndex -1 + autocomplete="off"
+  - no label / no validation / no required
+*/
+FormHoneypot.propTypes = {
+	id: PropTypes.string.isRequired,
+	name: PropTypes.string,
+};
+export type FormHoneypotType = InferProps<typeof FormHoneypot.propTypes>;
+export function FormHoneypot({ id = "winnie", name }: FormHoneypotType) {
+	const hpProps: FormInputType = {
+		type: 'text',
+		id: "winnie",
+		name: name || 'website',
+		defaultValue : null,
+		autoComplete: 'off',
+		'aria-hidden': 'true',
+		tabIndex: -1,
+		style: { position: 'absolute', top: '-9999px' },
+	};
+	return (
+		<FormInput {...hpProps} />
+	);
+}
+
+
+
+
+
+
 // Re-export FontSelector for use in forms
 export { FontSelector, CompoundFontSelector };
-

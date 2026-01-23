@@ -73,5 +73,12 @@ This roadmap is a living document. To contribute:
 2. Propose changes via pull request
 3. Discuss priorities in the project's discussions
 
-See the [main README](../README.md) for contribution guidelines.</content>
+See the [main README](../README.md) for contribution guidelines.
+
+### Forms — Honeypot (MVP) ✅
+- [x] Add `FormHoneypot` component (id=`winnie`, default name=`website`, inline off-screen styling, `aria-hidden`, `tabIndex=-1`, `autocomplete=off`) — MVP implemented.
+- [ ] Add unit & integration tests covering client render + server-side early-return (emailFormData/emailJSON) — in progress.
+- [ ] Future: configurable global honeypot name, timing/token checks, optional telemetry for spam signal analysis.
+
+</content>
 <parameter name="filePath">/Users/btwhaley/Git/pixelated-components/README.roadmap.md

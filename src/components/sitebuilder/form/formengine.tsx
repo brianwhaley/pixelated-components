@@ -38,6 +38,8 @@ function FormEngineInner(props: FormEngineProps) {
 		if (debug) console.log("Generating Form Props");
 		// Create a clean copy without non-serializable properties
 		const { formData, onSubmitHandler, ...formProps } = props;
+		// Safety: default to POST to avoid accidental GET navigation (prevents query leakage)
+		if (!formProps.method) formProps.method = 'post';
 		return formProps;
 	}
 
