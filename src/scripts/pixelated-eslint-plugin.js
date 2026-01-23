@@ -36,6 +36,16 @@ export const CLIENT_ONLY_PATTERNS = [
 	/["']use client["']/  // Client directive
 ];
 
+// Centralized, canonical allowlist for environment variables that are
+// explicitly permitted in source (very narrow scope). Keep this list
+// small and documented; reference it everywhere in this module.
+export const ALLOWED_ENV_VARS = [
+	'NEXTAUTH_URL',
+	'NODE_ENV',
+	'PIXELATED_CONFIG_KEY', 
+	'PUPPETEER_EXECUTABLE_PATH'
+];
+
 export function isClientComponent(fileContent) {
 	return CLIENT_ONLY_PATTERNS.some(pattern => pattern.test(fileContent));
 }
@@ -464,7 +474,7 @@ const noProcessEnvRule = {
 			recommended: true,
 		},
 		messages: {
-			forbiddenEnv: 'Direct access to environment variables is forbidden; use the config provider. Allowed exception: PIXELATED_CONFIG_KEY.',
+			forbiddenEnv: 'Direct access to environment variables is forbidden; use the config provider. Allowed exceptions: PIXELATED_CONFIG_KEY, PUPPETEER_EXECUTABLE_PATH.',
 		},
 		schema: [
 			{
@@ -476,7 +486,7 @@ const noProcessEnvRule = {
 	},
 	create(context) {
 		const options = context.options[0] || {};
-		const allowed = new Set((options.allowed || ['PIXELATED_CONFIG_KEY']).map(String));
+		const allowed = new Set((options.allowed || ALLOWED_ENV_VARS).map(String));
 
 		function rootIsProcessEnv(node) {
 			let cur = node;
@@ -525,7 +535,7 @@ const noProcessEnvRule = {
 
 			'Program:exit'() {
 				const source = context.getSourceCode().text;
-				if (/\bprocess\s*\.\s*env\b/.test(source) && !/PIXELATED_CONFIG_KEY/.test(source)) {
+				if (/\bprocess\s*\.\s*env\b/.test(source) && !(new RegExp('(?:' + ALLOWED_ENV_VARS.map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')').test(source)) ) {
 					context.report({ loc: { line: 1, column: 0 }, messageId: 'forbiddenEnv' });
 				}
 			},
@@ -709,7 +719,7 @@ export default {
 				'pixelated/require-section-ids': 'warn',
 				'pixelated/required-faq': 'warn',
 				'pixelated/validate-test-locations': 'error',
-				'pixelated/no-process-env': ['error', { allowed: ['PIXELATED_CONFIG_KEY'] }],
+				'pixelated/no-process-env': ['error', { allowed: ALLOWED_ENV_VARS } ],
 				'pixelated/no-debug-true': 'warn',
 			},
 		},

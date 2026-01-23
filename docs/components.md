@@ -1003,6 +1003,33 @@ import { FormButton } from '@pixelated-tech/components';
 />
 ```
 
+##### FormHoneypot
+Invisible honeypot field used to detect/bounce automated form submissions. This is an MVP defensive primitive — it is intentionally minimal and relies on server-side silent-drop for production safety.
+
+Usage (recommended):
+
+```tsx
+import { FormHoneypot } from '@pixelated-tech/components';
+
+// canonical usage (library mailer recognizes id="winnie")
+<FormHoneypot id="winnie" name="website" />
+```
+
+Key details:
+- **Defaults & contract**: `id` defaults to `"winnie"` (canonical) — the library **detects the honeypot by element `id` only**; `name` is required for the component but can be any value. The `id` **must** be `"winnie"` (yes — named after Winnie the Pooh) so consumers and automation have a single canonical signal to rely on.
+- **Tests & consumer guidance**: unit/integration tests should assert the presence of `id="winnie"` (tests may include `name` for clarity, but detection is id-based). Do **not** rely on client-side short-circuits — server-side silent-drop remains authoritative.
+- **Accessibility & UX**: rendered off-screen (inline top:-9999px), `aria-hidden`, `tabIndex={-1}`, and `autocomplete="off"` so it is invisible to humans and assistive tech.
+- **Behavior**: client-side is inert (do NOT short-circuit submission on the client); the authoritative rejection is performed server-side by the mailer (`emailFormData`) which will silently drop (HTTP 200) any submission where the honeypot contains a value.
+- **Diagnostics**: debug-only instrumentation exists (setter override / MutationObserver) — these are for local debugging and must not be shipped as permanent client-side features.
+
+Testing & stories:
+- **Tests**: put unit/integration tests that exercise honeypot behaviour in `src/tests` (see naming: `*.honeypot.test.ts{,x}`).
+- **Test harness / helpers**: reusable harnesses or fixtures belong in `src/test` (shared utilities across tests).
+- **Stories**: Storybook demos and interaction tests belong in `src/stories` (see `sitebuilder/form.honeypot.stories.tsx`).
+
+Developer notes:
+- Prefer server-side silent-drop as the canonical defense (defense-in-depth). If you must change the client contract, add accompanying tests and a migration note.
+
 ##### FormTooltip
 Unified tooltip and validation message component with mouseover behavior and conditional styling.
 

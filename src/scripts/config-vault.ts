@@ -83,8 +83,8 @@ if (command === 'encrypt' || command === 'decrypt') {
  * - Decrypt in-place and copy plaintext to .next/server/pixelated.config.json
  * - Validate JSON and emit a concise success message
  */
-function decryptPostBuild(): void {
-	const DEBUG = process.env.PIXELATED_CONFIG_DEBUG === '1';
+function decryptPostBuild(opts: { debug?: boolean } = {}): void {
+	const debug = opts.debug ?? false;
 	const candidates = [
 		path.join(process.cwd(), 'src/app/config/pixelated.config.json.enc'),
 		path.join(process.cwd(), 'src/config/pixelated.config.json.enc'),
@@ -100,7 +100,7 @@ function decryptPostBuild(): void {
 	}
 
 	if (!foundEnc) {
-		if (DEBUG) console.log('No encrypted config found; nothing to do.');
+		if (debug) console.log('No encrypted config found; nothing to do.');
 		process.exit(0);
 	}
 
@@ -144,7 +144,7 @@ function decryptPostBuild(): void {
 		// Validate JSON
 		JSON.parse(decrypted);
 		console.log('Config injected into .next/server/pixelated.config.json');
-		if (DEBUG) console.log(`Decrypted ${path.basename(foundEnc)} -> ${injectPath}`);
+		if (debug) console.log(`Decrypted ${path.basename(foundEnc)} -> ${injectPath}`);
 		process.exit(0);
 	} catch (err: any) {
 		console.error(`Post-build decrypt failed: ${err.message}`);
@@ -182,7 +182,9 @@ try {
 		atomicWrite(destPath, decrypted);
 		console.log(`Successfully decrypted ${path.basename(targetPath)} -> ${path.basename(destPath)}`);
 	} else if (command === 'postbuild' || command === 'post-build' || command === 'inject') {
-		decryptPostBuild();
+		// CLI-only debug opt-in: explicit flag (do NOT use env vars for debug)
+		const cliDebug = process.argv.includes('--debug') || process.argv.some(a => a.startsWith('--debug='));
+		decryptPostBuild({ debug: cliDebug });
 	} else {
 		console.error(`Unknown command: ${command}`);
 		process.exit(1);

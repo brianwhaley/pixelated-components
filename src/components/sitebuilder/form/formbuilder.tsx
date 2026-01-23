@@ -3,8 +3,9 @@
 import React, { useState, JSX } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import * as FC from './formcomponents';
-import { mapTypeToComponent, generateTypeField, debug } from './formutils';
+import { mapTypeToComponent, generateTypeField } from './formutils';
 import { FormEngine } from './formengine';
+const debug = false;
 
 /* =====  FORM BUILDER =====
 Display all the components for a Form Builder -

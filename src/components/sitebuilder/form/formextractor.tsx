@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import * as FC from './formcomponents';
 import * as FVF from './formfieldvalidations';
-import { capitalize, attributeMap, debug } from './formutils';
+import { capitalize, attributeMap } from './formutils';
 import { FormEngine } from './formengine';
+const debug = false;
 
 /*
 ===== FORM EXTRACT =====

@@ -158,4 +158,16 @@ describe('pixelated-eslint-plugin', () => {
 		expect(linter.verify('const debug = true;', cfg, { filename: 'src/tests/foo.test.ts' }).some(m => m.ruleId === 'pixelated/no-debug-true')).toBe(false);
 		expect(linter.verify('const debug = true;', cfg, { filename: 'src/stories/foo.stories.tsx' }).some(m => m.ruleId === 'pixelated/no-debug-true')).toBe(false);
 	});
+
+	it('regression: exported rules are present in recommended config', async () => {
+		const mod = await import('../scripts/pixelated-eslint-plugin.js');
+		const plugin = mod.default;
+		const expected = ['validate-test-locations', 'no-process-env', 'no-debug-true'];
+		expected.forEach(r => {
+			expect(plugin.rules[r]).toBeDefined();
+			expect(plugin.configs).toBeDefined();
+			expect(plugin.configs.recommended).toBeDefined();
+			expect(plugin.configs.recommended.rules[`pixelated/${r}`]).toBeDefined();
+		});
+	});
 });

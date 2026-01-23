@@ -127,13 +127,12 @@ const clientCfg = getClientOnlyPixelatedConfig(cfg);
 - Use a single, explicit debug flag per module when needed: `const debug = false` (set true only in local/dev runs).
 - Wrap debug-only behavior in `if (debug) { ... }` so it can be removed by minifiers/treeshaking in production.
 - Never ship persistent debug traces, sensitive dumps, or verbose stacks to production logs.
-- Prefer a dev-only logger API that is a no-op in production (e.g. `logger.debug(...)`) instead of ad-hoc `console.*` calls.
 - One-shot diagnostics (for reproducing rare races) must be clearly labeled, gated behind `debug` and removed or feature-flagged before release.
 
 Examples:
 ```ts
 // local-only diagnostic (must be false in prod)
-const debug = process.env.NODE_ENV !== 'production' && false;
+const debug = false;
 if (debug) {
   // debug-only instrumentation (stack-capture, MutationObserver, etc.)
 }

@@ -31,6 +31,11 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **Critters Integration**: Explore adding critters CSS inlining tool for improved page load performance and critical CSS optimization.
 - [ ] **SplitScroll Enhancement**: Improve scrolling behavior and image transitions to match [safariportal lookbook style](https://itineraries.safariportal.app/Mary-Ann-Sarao/1589988388230923612?type=lookbook) (smoother layering and focal point transitions).
 
+### Forms — Honeypot (MVP) ✅
+- [ ] **FormHoneypot**: Add unit & integration tests covering client render + server-side early-return (emailFormData/emailJSON) — in progress.
+- [ ] **FormHoneypot**: Future - configurable global honeypot name, timing/token checks, optional telemetry for spam signal analysis.
+
+
 ### Platform Enhancements
 - [ ] **Project Scaffolding CLI**: Interactive CLI tool that generates complete Next.js projects with pixelated-components pre-configured, including routes.json, layout.tsx, package.json, and basic page structure
 - [ ] **Technical Site Assets**: Implement standard `src/app/loading.tsx` (Skeleton loaders), `src/app/global-error.tsx` (Branded error boundaries), `public/humans.txt`, and `public/.well-known/security.txt` in the starter template.
@@ -74,11 +79,6 @@ This roadmap is a living document. To contribute:
 3. Discuss priorities in the project's discussions
 
 See the [main README](../README.md) for contribution guidelines.
-
-### Forms — Honeypot (MVP) ✅
-- [x] Add `FormHoneypot` component (id=`winnie`, default name=`website`, inline off-screen styling, `aria-hidden`, `tabIndex=-1`, `autocomplete=off`) — MVP implemented.
-- [ ] Add unit & integration tests covering client render + server-side early-return (emailFormData/emailJSON) — in progress.
-- [ ] Future: configurable global honeypot name, timing/token checks, optional telemetry for spam signal analysis.
 
 </content>
 <parameter name="filePath">/Users/btwhaley/Git/pixelated-components/README.roadmap.md
