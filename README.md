@@ -85,8 +85,8 @@ Pixelated Components is committed to creating inclusive web experiences. All com
 ## 📦 Installation & Setup
 
 ### Requirements
-- **React**: 18.0 or higher
-- **Next.js**: 13.0 or higher (recommended)
+- **React**: 19.0 or higher
+- **Next.js**: 16.0 or higher
 - **Node.js**: 18.0 or higher
 - **TypeScript**: 4.9 or higher (optional, but recommended)
 
@@ -105,10 +105,10 @@ pnpm add @pixelated-tech/components
 
 ### Peer Dependencies
 
-This library requires the following peer dependencies (install if not already present):
+This library requires the following peer dependencies (install if not already present). Versions in examples match the package's peerDependency policy:
 
 ```bash
-npm install react react-dom prop-types
+npm install react@^19 react-dom@^19 next@^16 prop-types
 ```
 
 ### TypeScript Support
@@ -162,86 +162,12 @@ npm run dev
 
 Visit `http://localhost:3006` to explore the admin interface and see components in action.
 
-### General Components
-Reusable UI components for common patterns:
-- **Accordion** - Expandable content sections using native `<details>` elements
-- **Callout** - Flexible content highlight blocks with image support
-- **CSS** - Dynamic CSS utilities and styling helpers
-- **Image** - Advanced image component with lazy loading and optimization
-- **Loading** - Progress indicators and loading states
-- **MicroInteractions** - Subtle animations and interaction effects
-- **Modal** - Dialog overlays and popups
-- **Semantic** - Semantic HTML structure components
-- **SidePanel** - Slide-out panel component for additional content
-- **Table** - Data display and table components
+### Component index
+The full component index and API reference live in `docs/components.md` (single source-of-truth). For interactive exploration, run Storybook: `npm run storybook`.
 
-### CMS Integration
-Headless CMS and content management components:
-- **WordPress** - Blog post integration and display with automatic Photon CDN URL processing
-- **Contentful** - Headless CMS components and utilities with delivery and management APIs
-- **PageBuilder** - Dynamic page construction from JSON
-- **PageEngine** - Advanced page rendering with Contentful integration
+- Quick link: [Component API reference](docs/components.md)
 
-### UI Components
-User interface and interaction components:
-- **Carousel** - Image and content sliders (Hero, Reviews, Portfolio)
-- **Forms** - Form builder, validation, and emailer components
-- **FormBuilder** - Advanced form construction and configuration
-- **FormComponents** - Individual form field components and utilities
-- **FormEngine** - Form rendering and processing engine
-- **Menu** - Navigation components (Simple, Accordion, Expando)
-- **Tab** - Tabbed interface component for organizing content
-- **Tiles** - Image grid and tile layouts
-- **FontSelector** - Font selection and Google Fonts integration
-- **CompoundFontSelector** - Advanced font selection with multiple font families
-
-### Development Tools
-Components for development, configuration, and site building:
-- **ComponentPropertiesForm** - Form for editing component properties
-- **ComponentSelector** - Component selection interface
-- **ComponentTree** - Visual component hierarchy display
-- **ConfigBuilder** - Interactive configuration builder for site settings, metadata, routes, and visual design tokens
-- **ConfigEngine** - Configuration processing and validation engine
-- **PageBuilderUI** - User interface for page building
-- **SaveLoadSection** - Save and load functionality for configurations
-
-### SEO & Schema
-Search engine optimization and structured data:
-- **404** - Custom 404 error page component
-- **FAQAccordion** - Interactive FAQ component with schema.org markup and search
-- **GoogleAnalytics** - Google Analytics integration
-- **GoogleMap** - Interactive Google Maps component
-- **GoogleSearch** - Google Custom Search integration
-- **JSON-LD** - Structured data schemas (LocalBusiness, Recipe, BlogPosting, etc.)
-- **Manifest** - Web app manifest generation
-- **MetaTags** - Dynamic meta tag injection
-- **SchemaBlogPosting** - Blog post structured data
-- **SchemaLocalBusiness** - Local business structured data
-- **SchemaRecipe** - Recipe structured data
-- **SchemaServices** - Services structured data
-- **SchemaWebsite** - Website structured data
-- **Sitemap** - XML sitemap generation
-- **Social Cards** - Open Graph and Twitter card generation
-- **BuzzwordBingo** - Interactive buzzword bingo game
-- **Markdown** - Markdown rendering component
-- **Recipe** - Recipe display component
-- **Resume** - Resume/CV display component
-- **Timeline** - Timeline visualization component
-
-### Third-Party Integrations
-External service integrations:
-- **Calendly** - Scheduling and appointment booking
-- **Cloudinary** - Image optimization and delivery
-- **GoogleReviews** - Google business reviews integration
-- **Gravatar** - User avatar integration
-- **HubSpot** - CRM and marketing automation
-- **Instagram** - Social media image integration
-- **Flickr** - Photo sharing integration
-- **PayPal** - Payment processing
-- **ShoppingCart** - E-commerce shopping cart functionality
-- **eBay** - Store listings and shopping cart
-- **NerdJokes** - Entertainment content integration
-- **Yelp** - Business reviews and ratings
+If you want to browse individual components interactively, run Storybook: `npm run storybook`.
 
 
 ### Utilities
@@ -267,28 +193,6 @@ Comprehensive site health monitoring and analytics:
 - **SiteHealthAxeCore** - Automated accessibility testing
 - **SiteHealthDependencyVulnerabilities** - Dependency security scanning
 
-
-## 🎨 Visual Design Configuration
-
-The ConfigBuilder now includes a **Visual Design** tab that allows users to configure visual design tokens such as colors, fonts, spacing, and other design system variables. These tokens are stored in the `routes.json` file under the `visualdesign` object and can be used throughout your application for consistent theming.
-
-### Features:
-- **Color Management**: Primary, secondary, accent colors with color picker inputs
-- **Typography**: Font family and base font size settings
-- **Spacing & Layout**: Border radius, box shadows, transitions
-- **Form-Based Editing**: User-friendly form interface powered by FormEngine
-- **JSON Storage**: Design tokens stored as flattened key-value pairs in routes.json
-
-### Usage:
-```tsx
-import { ConfigBuilder } from '@pixelated-tech/components';
-
-function MyConfigPage() {
-  return <ConfigBuilder />;
-}
-```
-
-The visual design tokens can be accessed in your components via the config context or directly from the routes.json file.
 
 
 ## � Quick Start
@@ -335,6 +239,13 @@ See our detailed [Roadmap](docs/roadmap.md) for planned improvements and refacto
 ## 🧪 Testing
 
 See our comprehensive [Testing Documentation](docs/testing.md) for test coverage, setup, and strategies.
+
+Quick conventions:
+- Unit & integration tests → `src/tests` (filename: `*.test.{ts,tsx}`)
+- Shared harnesses / fixtures → `src/test`
+- Storybook stories & `play()` tests → `src/stories` (run with `npm run storybook`)
+
+Following these locations keeps CI discovery and story-driven QA consistent across the monorepo.
 
 
 <!-- CONTRIBUTING -->

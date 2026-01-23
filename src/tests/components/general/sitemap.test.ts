@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getRuntimeEnvFromHeaders } from './sitemap';
+import { getRuntimeEnvFromHeaders } from '../../../components/general/sitemap';
 
 describe('getRuntimeEnvFromHeaders', () => {
 	it('returns "local" for localhost host header', () => {

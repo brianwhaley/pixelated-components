@@ -36,6 +36,16 @@ export const CLIENT_ONLY_PATTERNS = [
 	/["']use client["']/  // Client directive
 ];
 
+// Centralized, canonical allowlist for environment variables that are
+// explicitly permitted in source (very narrow scope). Keep this list
+// small and documented; reference it everywhere in this module.
+export const ALLOWED_ENV_VARS = [
+	'NEXTAUTH_URL',
+	'NODE_ENV',
+	'PIXELATED_CONFIG_KEY', 
+	'PUPPETEER_EXECUTABLE_PATH'
+];
+
 export function isClientComponent(fileContent) {
 	return CLIENT_ONLY_PATTERNS.some(pattern => pattern.test(fileContent));
 }
@@ -419,6 +429,180 @@ const requireSectionIdsRule = {
 	},
 };
 
+/* ===== RULE: validate-test-locations ===== */
+const validateTestLocationsRule = {
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Enforce canonical test file locations (only `src/tests` or `src/stories`)',
+			category: 'Project Structure',
+			recommended: true,
+		},
+		messages: {
+			badLocation: 'Test spec files must live under `src/tests/` or `src/stories/` — move or add a migration note.',
+		},
+		schema: [],
+	},
+	create(context) {
+		const filename = context.getFilename();
+		if (!filename || filename === '<input>' || filename === '<text>') return {};
+
+		// identify test-like filenames
+		const isTestish = /\.(test|spec)\.(t|j)sx?$|\.honeypot\.test\.|\.stories?\./i.test(filename);
+		if (!isTestish) return {};
+
+		const normalized = filename.replaceAll('\\', '/');
+		const allowedRoots = ['/src/tests/', '/src/stories/'];
+		const ok = allowedRoots.some(r => normalized.includes(r));
+		if (ok) return {};
+
+		return {
+			Program(node) {
+				context.report({ node, messageId: 'badLocation' });
+			},
+		};
+	},
+};
+
+/* ===== RULE: no-process-env ===== */
+const noProcessEnvRule = {
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Disallow runtime environment-variable reads in source; use `pixelated.config.json` instead. Exception: PIXELATED_CONFIG_KEY',
+			category: 'Security',
+			recommended: true,
+		},
+		messages: {
+			forbiddenEnv: 'Direct access to environment variables is forbidden; use the config provider. Allowed exceptions: PIXELATED_CONFIG_KEY, PUPPETEER_EXECUTABLE_PATH.',
+		},
+		schema: [
+			{
+				type: 'object',
+				properties: { allowed: { type: 'array', items: { type: 'string' } } },
+				additionalProperties: false,
+			},
+		],
+	},
+	create(context) {
+		const options = context.options[0] || {};
+		const allowed = new Set((options.allowed || ALLOWED_ENV_VARS).map(String));
+
+		function rootIsProcessEnv(node) {
+			let cur = node;
+			while (cur && cur.type === 'MemberExpression') {
+				if (cur.object && cur.object.type === 'Identifier' && cur.object.name === 'process') {
+					if (cur.property && ((cur.property.name === 'env') || (cur.property.value === 'env'))) return true;
+				}
+				cur = cur.object;
+			}
+			return false;
+		}
+
+		function reportIfForbidden(nameNode, node) {
+			const keyName = nameNode && (nameNode.name || nameNode.value);
+			if (!keyName) { context.report({ node, messageId: 'forbiddenEnv' }); return; }
+			if (!allowed.has(keyName)) context.report({ node, messageId: 'forbiddenEnv' });
+		}
+
+		return {
+			MemberExpression(node) {
+				// process.env.FOO or process['env'].FOO
+				if (node.object && node.object.type === 'MemberExpression') {
+					const obj = node.object;
+					if (obj.object && obj.object.type === 'Identifier' && obj.object.name === 'process' && (obj.property.name === 'env' || obj.property.value === 'env')) {
+						if (node.property.type === 'Identifier') reportIfForbidden(node.property, node);
+						else if (node.property.type === 'Literal') reportIfForbidden(node.property, node);
+						else context.report({ node, messageId: 'forbiddenEnv' });
+					}
+				}
+
+				// import.meta.env.X
+				if (node.object && node.object.type === 'MemberExpression' && node.object.object && node.object.object.type === 'MetaProperty') {
+					if (node.object.property && (node.object.property.name === 'env' || node.object.property.value === 'env')) {
+						if (node.property.type === 'Identifier') reportIfForbidden(node.property, node);
+						else context.report({ node, messageId: 'forbiddenEnv' });
+					}
+				}
+			},
+
+			VariableDeclarator(node) {
+				// const { X } = process.env
+				if (node.init && node.init.type === 'MemberExpression' && rootIsProcessEnv(node.init) && node.id.type === 'ObjectPattern') {
+					node.id.properties.forEach(p => { if (p.key) reportIfForbidden(p.key, p); else context.report({ node: p, messageId: 'forbiddenEnv' }); });
+				}
+			},
+
+			'Program:exit'() {
+				const source = context.getSourceCode().text;
+				if (/\bprocess\s*\.\s*env\b/.test(source) && !(new RegExp('(?:' + ALLOWED_ENV_VARS.map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')').test(source)) ) {
+					context.report({ loc: { line: 1, column: 0 }, messageId: 'forbiddenEnv' });
+				}
+			},
+		};
+	},
+};
+
+/* ===== RULE: no-debug-true ===== */
+const noDebugTrueRule = {
+	meta: {
+		type: 'suggestion',
+		docs: {
+			description: 'Warn when `debug` is set to `true` in source files — ensure debug is disabled before shipping.',
+			category: 'Best Practices',
+			recommended: true,
+		},
+		messages: {
+			debugOn: 'Found `debug = true` in source. Ensure debug is disabled or gated behind a dev-only flag before shipping.',
+		},
+		schema: [],
+	},
+	create(context) {
+		const filename = context.getFilename() || '';
+		// Allow debug=true in test/story files
+		if (filename.includes('/src/tests/') || filename.includes('/src/test/') || filename.includes('/src/stories/')) {
+			return {};
+		}
+
+		function isDebugName(n) {
+			return typeof n === 'string' && /^debug$/i.test(n);
+		}
+
+		return {
+			VariableDeclarator(node) {
+				// const debug = true
+				if (node.id && node.id.type === 'Identifier' && isDebugName(node.id.name) && node.init && node.init.type === 'Literal' && node.init.value === true) {
+					context.report({ node: node.id, messageId: 'debugOn' });
+				}
+
+				// const cfg = { debug: true }
+				if (node.init && node.init.type === 'ObjectExpression') {
+					node.init.properties.forEach(p => {
+						const key = p.key && (p.key.name || p.key.value);
+						if (isDebugName(key) && p.value && p.value.type === 'Literal' && p.value.value === true) {
+							context.report({ node: p, messageId: 'debugOn' });
+						}
+					});
+				}
+			},
+
+			AssignmentExpression(node) {
+				// debug = true  OR  obj.debug = true
+				if (node.left.type === 'Identifier' && isDebugName(node.left.name) && node.right.type === 'Literal' && node.right.value === true) {
+					context.report({ node: node.left, messageId: 'debugOn' });
+				}
+				if (node.left.type === 'MemberExpression') {
+					const prop = node.left.property;
+					const propName = prop && (prop.name || prop.value);
+					if (isDebugName(propName) && node.right.type === 'Literal' && node.right.value === true) {
+						context.report({ node: node.left, messageId: 'debugOn' });
+					}
+				}
+			},
+		};
+	},
+};
+
 const requiredFaqRule = {
 	meta: {
 		type: 'suggestion',
@@ -521,6 +705,9 @@ export default {
 		'no-raw-img': noRawImgRule,
 		'require-section-ids': requireSectionIdsRule,
 		'required-faq': requiredFaqRule,
+		'validate-test-locations': validateTestLocationsRule,
+		'no-process-env': noProcessEnvRule,
+		'no-debug-true': noDebugTrueRule,
 	},
 	configs: {
 		recommended: {
@@ -531,6 +718,9 @@ export default {
 				'pixelated/no-raw-img': 'warn',
 				'pixelated/require-section-ids': 'warn',
 				'pixelated/required-faq': 'warn',
+				'pixelated/validate-test-locations': 'error',
+				'pixelated/no-process-env': ['error', { allowed: ALLOWED_ENV_VARS } ],
+				'pixelated/no-debug-true': 'warn',
 			},
 		},
 	},

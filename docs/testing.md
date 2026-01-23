@@ -118,6 +118,48 @@ npm run test:run         # Single run (for CI)
 **Test Environment**: jsdom with @testing-library/react  
 **Test Pattern**: Data-focused validation + behavioral testing
 
+### Testing matrix & harness documentation (LOW → MEDIUM)
+Purpose: clarify where to put different types of tests and provide an example harness so contributors write fast, deterministic tests.
+
+- `src/tests` — Unit & integration tests. Colocate tests with the feature area when practical; name files `*.test.{ts,tsx}`. These are run by Vitest and must be deterministic and fast (<50ms typical).
+- `src/test` — Shared test harnesses, fixtures, fake servers, and reusable helpers (do **not** put individual test specs here). Expose small, focused helpers (e.g., `renderWithProviders`, `makeApiMock`, `stableTimers`) so tests remain readable and fast.
+- `src/stories` — Storybook stories and `play()` interaction tests. Use stories for visual regression, accessibility checks, and high-level interaction assertions.
+
+How to write fast, deterministic tests:
+- Avoid real network I/O; use `msw` or a lightweight fetch mock.
+- Prefer `user-event` for interaction; prefer `await screen.findBy*` only when waiting for async UI changes.
+- Use fixed times with `vi.useFakeTimers()` and `vi.setSystemTime()` for timer-based logic.
+- Keep DOM scope small — render minimal component trees.
+
+Recommended fixtures & patterns:
+- `src/test/example-harness.ts` (example below) — export small helpers for rendering with providers and creating canned API responses.
+- Use factory functions for test data (e.g., `makeUser()`, `makePost()`)
+
+Example harness (copy into `src/test/example-harness.ts`):
+```ts
+import { render } from '@testing-library/react';
+import { PixelatedClientConfigProvider } from '../components/config/config.client';
+
+export function renderWithProviders(ui, { config = {}, ...opts } = {}) {
+  return render(
+    <PixelatedClientConfigProvider value={config}>{ui}</PixelatedClientConfigProvider>,
+    opts
+  );
+}
+
+export function makeFetchMock(response) {
+  return vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(response) }));
+}
+```
+
+CI enforcement (recommended):
+- Add a small lint script that fails if test specs are present outside `src/tests` or `src/stories`, e.g.: `node scripts/validate-test-locations.js`.
+- Add the script to `test:run` and CI pre-submit checks so file placement is validated automatically.
+
+Acceptance criteria:
+- This doc plus an example harness (above) are present in the repo.  
+- CI should include (or be scheduled to include) a lightweight check that validates test file placement and detects slow tests (>500ms).
+
 ## Tools & Dependencies
 
 | Tool | Purpose |

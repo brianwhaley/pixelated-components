@@ -52,9 +52,9 @@ describe('config-vault postbuild integration', () => {
 		const tmp = mkdtmp();
 		// no encrypted file created
 		const scriptPath = path.resolve(__dirname, '..', 'scripts', 'config-vault.ts');
-		const res = spawnSync('npx', ['tsx', scriptPath, 'postbuild'], {
-			cwd: tmp,
-			env: { ...process.env, PIXELATED_CONFIG_DEBUG: '1' },
+const res = spawnSync('npx', ['tsx', scriptPath, 'postbuild', '--debug'], {
+		cwd: tmp,
+		env: process.env,
 			encoding: 'utf8',
 			timeout: 60_000,
 		});

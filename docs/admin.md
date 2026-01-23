@@ -150,3 +150,27 @@ if (!validation.valid) {
 - **GA4 Integration**: Google Analytics 4 property validation
 - **Search Console**: Google Search Console URL validation
 - **File System Operations**: Safe file operations with error handling
+
+## Visual Design
+
+The Admin UI includes a **Visual Design** tab (ConfigBuilder) for editing design tokens used across the theme (colors, fonts, spacing, radii, shadows, etc.). Tokens are persisted in `routes.json` under the `visualdesign` object and are available via the config context or direct lookup.
+
+Usage (example):
+
+```tsx
+import { ConfigBuilder } from '@pixelated-tech/components';
+
+function VisualDesignPage() {
+  return <ConfigBuilder activeTab="visualdesign" />;
+}
+```
+
+Best practices:
+- Keep tokens small and composable (color-primary, text-color, header-font).
+- Prefer semantic token names (avoid one-off color names tied to a single component).
+- Store only design intent in `visualdesign`; layout/content belongs elsewhere (routes/siteInfo).
+
+Implementation notes:
+- The Visual Design form is powered by `FormEngine` and validates token shapes at save time.
+- Google Fonts integration is available (cached) — see `config/google-fonts.js` for fallback behavior.
+- For production hardening, prefer server-side validation of `visualdesign` before applying to live sites.
