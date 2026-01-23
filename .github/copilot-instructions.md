@@ -19,10 +19,10 @@
 - "Build a solution for..."
 
 **Response Patterns:**
-- For questions about existing code: Reference specific files/lines, explain logic flows
-- For questions about architecture: Describe patterns, cite examples from codebase
-- For questions about processes: Walk through workflows, explain rationale
-- For questions about problems: Analyze issues, suggest approaches, but don't implement unless asked
+- For questions about existing code: Reference specific files/lines, explain logic flows.  Do not implement a solution until discussed and agreed upon before writing any code into the project files.   
+- For questions about architecture: Describe patterns, cite examples from codebase.  Do not implement a solution until discussed and agreed upon before writing any code into the project files.  
+- For questions about processes: Walk through workflows, explain rationale.  Do not implement a solution until discussed and agreed upon before writing any code into the project files.  
+- For questions about problems: Analyze issues, suggest approaches.  Do not implement a solution until discussed and agreed upon before writing any code into the project files.  
 
 ### Question-Answering Priority
 1. **Direct Answers First** - Provide the requested information immediately
@@ -74,15 +74,28 @@ A Next.js application for managing Pixelated CMS sites with AI-powered content o
 - **Site Builder**: Dynamic configuration and page building tools (ConfigBuilder, PageBuilderUI)
 - **SEO & Schema**: Structured data and search optimization components
 - **Third-Party Integrations**: Calendly, HubSpot, PayPal, eBay, etc.
+- **Tests**: Tests go in the centralized `src/tests/` directory, colocated with feature areas
+- **Stories**: Stories go in the centralized `src/stories/` directory, colocated with feature areas
 
 ### Configuration System
-Components rely on a centralized config system:
+Components rely on a centralized config system (canonical source: `pixelated.config.json`):
 - Server-side: `getFullPixelatedConfig()` reads from `src/app/config/pixelated.config.json` and uses `PIXELATED_CONFIG_KEY` for decryption.
-- Client-side: `getClientOnlyPixelatedConfig()` strips secrets (tokens, keys, passwords)
-- Config types defined in `config.types.ts` for integrations like Contentful, Cloudinary, HubSpot
+- Client-side: `getClientOnlyPixelatedConfig()` strips secrets (tokens, keys, passwords).
+- Config types are defined in `config.types.ts` for integrations like Contentful, Cloudinary, HubSpot.
+
+💡 **Canonical-config guidance:** prefer `pixelated.config.json` (encrypted in CI/production) for all runtime config. Environment variables are strongly discouraged and must be treated as an absolute last resort — the config provider exists so developers do not need to rely on env vars. `PIXELATED_CONFIG_KEY` is the **only** allowed environment variable for application configuration (used solely to decrypt `pixelated.config.json.enc` in local/CI debugging); all other uses of `process.env` must be migrated into `pixelated.config.json` with an accompanying PR and migration plan.
+
+> ⚠️ CI enforcement: PRs that introduce new `process.env` reads in `src/` will be blocked unless an approved migration plan is provided. Use `getClientOnlyPixelatedConfig()` / `useConfig()` in components instead.
+
+Examples:
+- Good: add `cms.contentful.spaceId` to `pixelated.config.json` and access it via `getClientOnlyPixelatedConfig()`.
+- Bad: read `process.env.CONTENTFUL_SPACE` directly in a component.
+
+> ⚠️ Rationale: centralizing configuration prevents drift, simplifies encrypted secret management (via `PIXELATED_CONFIG_KEY`), and makes behavior explicit for consumers and deploys.
 
 ### Component Patterns
 - Use `'use client'` directive for client-side components
+- Use 'use server' directive for explicit server-side only components
 - Combine PropTypes with `InferProps<typeof Component.propTypes>` for TypeScript types
 - Accessibility-first: Prefer native elements (`<details>` for accordions), include ARIA labels
 - CSS co-located with components or in separate `.css` files
@@ -118,10 +131,9 @@ npm run build-webpack  # Webpack-based build for complex scenarios
 Comprehensive testing setup with Vitest and strict coverage requirements:
 
 ```bash
-npm run test           # Watch mode with hot reload
-npm run test:ui        # Interactive dashboard at http://localhost:51204
+npm run test           # Single run for CI pipelines
+npm run test:watch        # Interactive dashboard at http://localhost:51204
 npm run test:coverage  # Generates coverage reports (text, json, html, lcov)
-npm run test:run       # Single run for CI pipelines
 ```
 
 **Testing Configuration (`vitest.config.ts`):**
@@ -135,6 +147,13 @@ npm run test:run       # Single run for CI pipelines
 - **Test Discovery**: `src/**/*.{test,spec}.{ts,tsx}`
 - **Exclusions**: Stories, node_modules, dist, coverage reports
 - **Setup File**: `src/tests/setup.ts` for global test configuration
+
+File layout conventions (important):
+- **Unit & integration tests:** `src/tests` — colocate tests next to feature areas and name them `*.test.tsx` or `*.honeypot.test.ts` for targeted cases.
+- **Shared test harness / fixtures:** `src/test` — reusable helpers, fake servers, and fixture builders used across multiple tests.
+- **Storybook stories & play() tests:** `src/stories` — interactive examples and component-level e2e assertions.
+
+These conventions are enforced by CI and help keep intent (unit vs harness vs story) clear.
 
 **Testing Library Stack:**
 - `@testing-library/react` for component testing

@@ -419,6 +419,120 @@ const requireSectionIdsRule = {
 	},
 };
 
+/* ===== RULE: validate-test-locations ===== */
+const validateTestLocationsRule = {
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Enforce canonical test file locations (only `src/tests` or `src/stories`)',
+			category: 'Project Structure',
+			recommended: true,
+		},
+		messages: {
+			badLocation: 'Test spec files must live under `src/tests/` or `src/stories/` — move or add a migration note.',
+		},
+		schema: [],
+	},
+	create(context) {
+		const filename = context.getFilename();
+		if (!filename || filename === '<input>' || filename === '<text>') return {};
+
+		// identify test-like filenames
+		const isTestish = /\.(test|spec)\.(t|j)sx?$|\.honeypot\.test\.|\.stories?\./i.test(filename);
+		if (!isTestish) return {};
+
+		const normalized = filename.replaceAll('\\', '/');
+		const allowedRoots = ['/src/tests/', '/src/stories/'];
+		const ok = allowedRoots.some(r => normalized.includes(r));
+		if (ok) return {};
+
+		return {
+			Program(node) {
+				context.report({ node, messageId: 'badLocation' });
+			},
+		};
+	},
+};
+
+/* ===== RULE: no-process-env ===== */
+const noProcessEnvRule = {
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Disallow runtime environment-variable reads in source; use `pixelated.config.json` instead. Exception: PIXELATED_CONFIG_KEY',
+			category: 'Security',
+			recommended: true,
+		},
+		messages: {
+			forbiddenEnv: 'Direct access to environment variables is forbidden; use the config provider. Allowed exception: PIXELATED_CONFIG_KEY.',
+		},
+		schema: [
+			{
+				type: 'object',
+				properties: { allowed: { type: 'array', items: { type: 'string' } } },
+				additionalProperties: false,
+			},
+		],
+	},
+	create(context) {
+		const options = context.options[0] || {};
+		const allowed = new Set((options.allowed || ['PIXELATED_CONFIG_KEY']).map(String));
+
+		function rootIsProcessEnv(node) {
+			let cur = node;
+			while (cur && cur.type === 'MemberExpression') {
+				if (cur.object && cur.object.type === 'Identifier' && cur.object.name === 'process') {
+					if (cur.property && ((cur.property.name === 'env') || (cur.property.value === 'env'))) return true;
+				}
+				cur = cur.object;
+			}
+			return false;
+		}
+
+		function reportIfForbidden(nameNode, node) {
+			const keyName = nameNode && (nameNode.name || nameNode.value);
+			if (!keyName) { context.report({ node, messageId: 'forbiddenEnv' }); return; }
+			if (!allowed.has(keyName)) context.report({ node, messageId: 'forbiddenEnv' });
+		}
+
+		return {
+			MemberExpression(node) {
+				// process.env.FOO or process['env'].FOO
+				if (node.object && node.object.type === 'MemberExpression') {
+					const obj = node.object;
+					if (obj.object && obj.object.type === 'Identifier' && obj.object.name === 'process' && (obj.property.name === 'env' || obj.property.value === 'env')) {
+						if (node.property.type === 'Identifier') reportIfForbidden(node.property, node);
+						else if (node.property.type === 'Literal') reportIfForbidden(node.property, node);
+						else context.report({ node, messageId: 'forbiddenEnv' });
+					}
+				}
+
+				// import.meta.env.X
+				if (node.object && node.object.type === 'MemberExpression' && node.object.object && node.object.object.type === 'MetaProperty') {
+					if (node.object.property && (node.object.property.name === 'env' || node.object.property.value === 'env')) {
+						if (node.property.type === 'Identifier') reportIfForbidden(node.property, node);
+						else context.report({ node, messageId: 'forbiddenEnv' });
+					}
+				}
+			},
+
+			VariableDeclarator(node) {
+				// const { X } = process.env
+				if (node.init && node.init.type === 'MemberExpression' && rootIsProcessEnv(node.init) && node.id.type === 'ObjectPattern') {
+					node.id.properties.forEach(p => { if (p.key) reportIfForbidden(p.key, p); else context.report({ node: p, messageId: 'forbiddenEnv' }); });
+				}
+			},
+
+			'Program:exit'() {
+				const source = context.getSourceCode().text;
+				if (/\bprocess\s*\.\s*env\b/.test(source) && !/PIXELATED_CONFIG_KEY/.test(source)) {
+					context.report({ loc: { line: 1, column: 0 }, messageId: 'forbiddenEnv' });
+				}
+			},
+		};
+	},
+};
+
 const requiredFaqRule = {
 	meta: {
 		type: 'suggestion',
