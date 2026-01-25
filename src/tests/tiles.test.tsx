@@ -293,6 +293,59 @@ describe('Tiles Component', () => {
     });
   });
 
+  describe('Caption variant (accessibility-focused)', () => {
+    it('applies caption class and data-caption prefers bodyText', () => {
+      const cards = [{ image: '/img.jpg', imageAlt: 'Alt text', bodyText: 'Body caption' }];
+      const { container } = render(<Tiles cards={cards as any} variant="caption" />);
+      const tile = container.querySelector('.tile');
+      expect(tile).toHaveClass('caption');
+      // overlay remains in-DOM for screen-readers
+      expect(tile!.querySelector('.tile-image-overlay-body')!.textContent).toBe('Body caption');
+    });
+
+    it('falls back to imageAlt when bodyText is empty', () => {
+      const cards = [{ image: '/img.jpg', imageAlt: 'Alt only', bodyText: '' }];
+      const { container } = render(<Tiles cards={cards as any} variant="caption" />);
+      const tile = container.querySelector('.tile');
+      expect(tile).toHaveClass('caption');
+      expect(tile!.querySelector('.tile-image-overlay-title')!.textContent).toBe('Alt only');
+    });
+
+    it('does not add caption when both imageAlt and bodyText are missing', () => {
+      const cards = [{ image: '/img.jpg', imageAlt: '', bodyText: '' }];
+      const { container } = render(<Tiles cards={cards as any} variant="caption" />);
+      const tile = container.querySelector('.tile');
+      expect(tile).toHaveClass('caption');
+      // no visible caption provided -> overlay title/body should be empty
+      expect(tile!.querySelector('.tile-image-overlay-title')!.textContent).toBe('');
+      expect(tile!.querySelector('.tile-image-overlay-body')!.textContent).toBe('');
+    });
+
+    it('ignores unknown variant values (no caption class added)', () => {
+      const cards = [{ image: '/img.jpg', imageAlt: 'Alt text', bodyText: 'Body caption' }];
+      const { container } = render(<Tiles cards={cards as any} variant={"not-a-variant" as any} />);
+      const tile = container.querySelector('.tile');
+      expect(tile).not.toHaveClass('caption');
+      // original accessible overlay still present
+      expect(tile!.querySelector('.tile-image-overlay-body')!.textContent).toBe('Body caption');
+    });
+
+    it('applies `overlay` variant as a modifier class', () => {
+      const cards = [{ image: '/img.jpg', imageAlt: 'Overlay alt', bodyText: 'Overlay body' }];
+      const { container } = render(<Tiles cards={cards as any} variant="overlay" />);
+      const tile = container.querySelector('.tile');
+      expect(tile).toHaveClass('overlay');
+      // overlay DOM remains available for a11y
+      expect(tile!.querySelector('.tile-image-overlay-body')!.textContent).toBe('Overlay body');
+    });
+
+    it('exports TilesVariants with expected values', async () => {
+      const mod = await import('@/components/general/tiles');
+      expect(Array.isArray(mod.TilesVariants)).toBe(true);
+      expect(mod.TilesVariants).toEqual(expect.arrayContaining(['caption', 'overlay']));
+    });
+  });
+
   describe('Edge Cases', () => {
     it('should handle very long text in body', () => {
       const longText = 'A'.repeat(500);

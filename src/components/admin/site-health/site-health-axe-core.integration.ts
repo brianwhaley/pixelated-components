@@ -4,6 +4,9 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 import path from 'path';
 
+import { getFullPixelatedConfig } from '../../config/config';
+import type { AxeCoreData } from './site-health-types';
+
 const debug = false;
 
 /**
@@ -52,26 +55,6 @@ interface AxeResult {
   url: string;
 }
 
-export interface AxeCoreData {
-  site: string;
-  url: string;
-  result: AxeResult;
-  summary: {
-    violations: number;
-    passes: number;
-    incomplete: number;
-    inapplicable: number;
-    critical: number;
-    serious: number;
-    moderate: number;
-    minor: number;
-  };
-  timestamp: string;
-  status: 'success' | 'error';
-  warnings?: string[];
-  error?: string;
-  injectionSource?: string;
-}
 
 export async function performAxeCoreAnalysis(url: string, runtime_env: 'auto' | 'local' | 'prod' = 'auto'): Promise<AxeCoreData> {
 	try {
@@ -138,7 +121,6 @@ export async function performAxeCoreAnalysis(url: string, runtime_env: 'auto' | 
 	}
 }
 
-import { getFullPixelatedConfig } from '../../config/config';
 
 /**
  * runAxeCoreAnalysis(url, runtime_env)

@@ -2,17 +2,9 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import fs from 'fs';
 import path from 'path';
+import type { Vulnerability } from './site-health-types';
 
 const execAsync = promisify(exec);
-
-export interface Vulnerability {
-  name: string;
-  severity: 'info' | 'low' | 'moderate' | 'high' | 'critical';
-  title: string;
-  url?: string;
-  range: string;
-  fixAvailable: boolean;
-}
 
 export interface SecurityScanResult {
   status: 'success' | 'error';

@@ -30,9 +30,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **Instagram Component**: Add accessToken and userId to config provider for centralized API credentials.
 - [ ] **Critters Integration**: Explore adding critters CSS inlining tool for improved page load performance and critical CSS optimization.
 - [ ] **SplitScroll Enhancement**: Improve scrolling behavior and image transitions to match [safariportal lookbook style](https://itineraries.safariportal.app/Mary-Ann-Sarao/1589988388230923612?type=lookbook) (smoother layering and focal point transitions).
-
-### Forms — Honeypot (MVP) ✅
-- [ ] **FormHoneypot**: Add unit & integration tests covering client render + server-side early-return (emailFormData/emailJSON) — in progress.
 - [ ] **FormHoneypot**: Future - configurable global honeypot name, timing/token checks, optional telemetry for spam signal analysis.
 
 
@@ -64,6 +61,11 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **API Client Abstraction**: Create centralized `ApiClient` class with consistent error handling, caching, and retry logic to eliminate repeated fetch/error patterns across components.
 - [ ] **SEO Integration Modularization**: Split 1, 193-line monolithic file into focused modules: `page-analyzer.ts`, `site-crawler.ts`, `header-analyzer.ts`, and `metric-scorers.ts`.
 - [ ] **Component Memoization**: Add `React.memo` and `useMemo` to reduce unnecessary re-renders by 30-50% in large components.
+- [ ] **Remove unused `formutils.generateFieldJSON`** (short-term)
+  - Owner: @pixelated-tech/ui
+  - Rationale: duplicate implementation; currently unused in-repo and exported unintentionally which caused bundler export collisions during Storybook builds.
+  - Plan: stop exporting (done), keep implementation as deprecated alias for one minor release, provide codemod + remove in next major.
+  - Acceptance: no downstream import failures; Storybook and package builds succeed.
 
 ### Medium Priority Improvements
 - [ IP ] **Standardized Component Architecture**: Establish consistent patterns for component props interfaces, error/loading state management, event handling, and styling approaches.

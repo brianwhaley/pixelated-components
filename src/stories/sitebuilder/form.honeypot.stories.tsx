@@ -14,6 +14,8 @@ export default {
 export const HoneypotReject = () => {
   const [status, setStatus] = useState<string>('idle');
   const [fetchCalled, setFetchCalled] = useState<boolean | null>(null);
+  const [result, setResult] = useState<string>('—');
+  const [showHoneypot, setShowHoneypot] = useState<boolean>(false);
 
   useEffect(() => {
     const orig = window.fetch;
@@ -39,16 +41,22 @@ export const HoneypotReject = () => {
     // ensure the honeypot starts empty (human view) — user can toggle in the story
     const hp = document.getElementById('winnie') as HTMLInputElement | null;
     if (hp) hp.value = '';
+    setResult('—');
   }, []);
 
   const submitHandler = async (e: Event) => {
     setStatus('submitting');
+    setFetchCalled(null);
     await emailFormData(e, () => {
       setStatus('callback-invoked');
     });
+    // determine visible result after emailer completes (client observable)
+    const fetchObserved = Boolean(fetchCalled);
+    setResult(fetchObserved ? 'ALLOWED (network)' : 'BLOCKED (honeypot)');
   };
 
   const simulateBot = async () => {
+    setResult('—');
     const hp = document.getElementById('winnie') as HTMLInputElement | null;
     if (hp) hp.value = 'bot-filled';
     const form = document.getElementById('storybook-contact-form') as HTMLFormElement | null;
@@ -56,6 +64,7 @@ export const HoneypotReject = () => {
   };
 
   const simulateHuman = async () => {
+    setResult('—');
     const hp = document.getElementById('winnie') as HTMLInputElement | null;
     if (hp) hp.value = '';
     const form = document.getElementById('storybook-contact-form') as HTMLFormElement | null;
@@ -80,10 +89,19 @@ export const HoneypotReject = () => {
           </div>
 
           <div style={{ marginTop: 16, fontSize: 13 }}>
-            <div><strong>Status:</strong> <span data-testid="status">{status}</span></div>
-            <div><strong>Network attempted:</strong> <span data-testid="fetchCalled">{String(fetchCalled)}</span></div>
+            <div style={{ display: 'flex', gap: 12 }}>
+              <div><strong>Status:</strong> <span data-testid="status">{status}</span></div>
+              <div><strong>Result:</strong> <span data-testid="result">{result}</span></div>
+              <div><strong>Network attempted:</strong> <span data-testid="fetchCalled">{String(fetchCalled)}</span></div>
+            </div>
+
+            <div style={{ marginTop: 8 }}>
+              <label style={{ fontSize: 13, color: '#6b7280' }}><input type="checkbox" checked={showHoneypot} onChange={(e) => setShowHoneypot(e.target.checked)} /> Show honeypot input (for demo)</label>
+              {showHoneypot && <div style={{ marginTop: 8 }}><em>Honeypot (visible for demo):</em> <input id="winnie-demo" defaultValue="" onChange={(ev) => { const hp = document.getElementById('winnie') as HTMLInputElement | null; if (hp) hp.value = (ev.target as HTMLInputElement).value; }} /></div>}
+            </div>
+
             <div style={{ marginTop: 8, color: '#6b7280' }}>
-              - Fill the honeypot (bot) and press <em>Simulate bot submit</em> — the emailer should silently drop the request (no network call).
+              - Use <em>Simulate human submit</em> to show an allowed submission (network call). Use <em>Simulate bot submit</em> to demonstrate the honeypot blocking (no network call). The story asserts both behaviours in its play function.
             </div>
           </div>
         </form>
@@ -96,21 +114,31 @@ HoneypotReject.storyName = 'Honeypot';
 
 HoneypotReject.play = async (context: { canvasElement: HTMLElement }) => {
   const { canvasElement } = context;
-  // click the story's "simulate bot" button and wait for the story to finish
-  const botBtn = canvasElement.querySelector('[data-testid="simulate-bot"]') as HTMLButtonElement | null;
-  botBtn?.click();
-  // wait until the status indicates the submit callback fired (or timeout)
-  const statusEl = canvasElement.querySelector('[data-testid="status"]');
-  const start = Date.now();
-  while ((statusEl?.textContent ?? '') !== 'callback-invoked' && Date.now() - start < 2000) {
-    // small tick
+
+  const clickAndWait = async (selector: string, expectedResult: string, expectedFetchCalled: string) => {
+    const btn = canvasElement.querySelector(selector) as HTMLButtonElement | null;
+    btn?.click();
+    const statusEl = canvasElement.querySelector('[data-testid="status"]');
+    const resultEl = canvasElement.querySelector('[data-testid="result"]');
+    const fetchEl = canvasElement.querySelector('[data-testid="fetchCalled"]');
+    const start = Date.now();
+    while ((statusEl?.textContent ?? '') !== 'callback-invoked' && Date.now() - start < 2000) {
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise((r) => setTimeout(r, 30));
+    }
+    // allow a short settle for the fetch flag
     // eslint-disable-next-line no-await-in-loop
     await new Promise((r) => setTimeout(r, 30));
-  }
-  const fetchText = (canvasElement.querySelector('[data-testid="fetchCalled"]')?.textContent || '').trim().toLowerCase();
-  if (fetchText === 'true') {
-    throw new Error('Expected no network call when honeypot is filled');
-  }
+
+    if ((resultEl?.textContent || '').trim() !== expectedResult) throw new Error(`Expected result "${expectedResult}" but got "${resultEl?.textContent}"`);
+    if ((fetchEl?.textContent || '').trim().toLowerCase() !== expectedFetchCalled) throw new Error(`Expected fetchCalled=${expectedFetchCalled} but got ${(fetchEl?.textContent || '').trim()}`);
+  };
+
+  // 1) Human should ALLOW (network call)
+  await clickAndWait('[data-testid="simulate-human"]', 'ALLOWED (network)', 'true');
+
+  // 2) Bot should be BLOCKED (no network)
+  await clickAndWait('[data-testid="simulate-bot"]', 'BLOCKED (honeypot)', 'false');
 };
 
 // Play: asserts honeypot causes emailer to silently drop the submission (no network call).

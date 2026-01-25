@@ -21,8 +21,19 @@ export function mapTypeToComponent(myType: string): string {
 
 /**
  * Generates field JSON for form building
+ *
+ * NOTE: This implementation is currently unused by other modules in-repo and
+ * is exported by the package barrel which previously caused a duplicate
+ * export collision with `componentGeneration.generateFieldJSON` during
+ * Storybook's webpack build. To avoid accidental breakage for external
+ * consumers we are making this implementation internal (non-exported)
+ * and marking it for removal in a future maintenance sweep.
+ *
+ * TODO (cleanup): remove this function and any remaining aliases once
+ * consumers have migrated — see `docs/roadmap.md` (Refactoring & Cleanup).
+ * @deprecated internal-only — slated for removal
  */
-export function generateFieldJSON(component: string, type: string): any {
+function generateFieldJSON(component: string, type: string): any {
 	const form: { [key: string]: any } = {};
 	form.fields = [];
 

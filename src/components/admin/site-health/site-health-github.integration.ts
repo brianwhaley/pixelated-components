@@ -2,20 +2,11 @@
 
 import { getFullPixelatedConfig } from '../../config/config';
 import path from 'path';
-// Version extraction: we derive a version from commit messages (e.g., v1.2.3) instead of fetching tags and fuzzy-matching.
+import type { GitCommit } from './site-health-types';
 
 // Debug logging is off by default. Set to true/false here (do not use env vars).
 const debug = false;
 
-// Version extraction removed: we no longer infer versions from commit messages.
-
-
-export interface GitCommit {
-  hash: string;
-  date: string;
-  message: string;
-  author: string;
-}
 
 export interface GitHealthResult {
   commits: GitCommit[];

@@ -9,11 +9,17 @@ import { usePixelatedConfig } from '../config/config.client';
 import "../../css/pixelated.grid.scss";
 import "./tiles.css";
 
-
+export const TilesVariants = [ 'caption', 'overlay' ] as const;
+export type TilesVariantType = typeof TilesVariants[number] | undefined;
 Tiles.propTypes = {
 	cards: PropTypes.array.isRequired,
 	rowCount: PropTypes.number,
 	imgClick: PropTypes.func,
+	/**
+	 * Optional visual variant. Allowed values are enumerated so consumers get
+	 * a discoverable, typed API.
+	 */
+	variant: PropTypes.oneOf(TilesVariants),
 };
 export type TilesType = InferProps<typeof Tiles.propTypes>;
 export function Tiles(props: TilesType) {
@@ -32,6 +38,7 @@ export function Tiles(props: TilesType) {
 								imageAlt={card.imageAlt}
 								bodyText={card.bodyText}
 								imgClick={props.imgClick}
+								variant={(props.variant ?? "overlay" )as TilesVariantType}
 							/>
 						</div>
 					))}
@@ -56,11 +63,14 @@ Tile.propTypes = {
 	imageAlt: PropTypes.string,
 	bodyText: PropTypes.string,
 	imgClick: PropTypes.func,
+	/** 'caption' - visual caption beneath image (prefers bodyText, falls back to imageAlt) */
+	variant: PropTypes.oneOf(TilesVariants),
 };
 export type TileType = InferProps<typeof Tile.propTypes>;
 function Tile( props: TileType ) {
 	const config = usePixelatedConfig();
 	const imgClick = props.imgClick;
+	const captionText = (props.bodyText && props.bodyText.length > 0) ? props.bodyText : (props.imageAlt ?? "");
 	const tileBody = <div className={"tile-image" + (imgClick ? " clickable" : "")}>
 		<SmartImage src={props.image} title={props?.imageAlt ?? undefined} alt={props?.imageAlt ?? ""}
 			onClick={imgClick ? (event) => imgClick(event, props.image) : undefined}
@@ -72,8 +82,9 @@ function Tile( props: TileType ) {
 			</div>
 		</div>
 	</div>;
+	const rootClass = `tile${ (props.variant) ? ' ' + props.variant : ''}`;
 	return (
-		<div className="tile" id={'tile-' + props.index}>
+		<div className={rootClass} id={'tile-' + props.index} >
 			{ props.link ?
 				<a href={props.link} className="tileLink">
 					{ tileBody }

@@ -141,6 +141,7 @@ if (debug) {
 Acceptance criteria:
 - All `if (debug)` blocks are eliminated or `debug` is `false` in production builds (checked by CI).
 - No persistent `console.log`/`console.debug` calls in production bundles (enforce via lint rule).
+- File naming: prefer `kebab-case` for source file names (lowercase, hyphen-separated). Examples: `my-component.tsx`, `form-utils.ts`. Exceptions: `index.*`, TypeScript declaration files (`*.d.ts`), test/spec (`*.test.tsx`, `*.spec.ts`), Storybook stories (`*.stories.tsx`), documentation (`docs/`) and intentionally generated files. This is enforced by `pixelated/file-name-kebab-case` (recommended `warn`).
 - One-shot diagnostics are documented and gated behind explicit opt-in.
 
 ## Versioning & releases — Semantic Versioning

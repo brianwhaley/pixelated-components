@@ -169,6 +169,8 @@ npm run lint  # Auto-fix enabled, runs on all source files
 ```
 
 **ESLint Configuration (`eslint.config.mjs`):**
+
+- New: `pixelated/file-name-kebab-case` — filenames should be kebab-case (exceptions: `index.*`, `*.d.ts`, test/spec, stories, and docs). Run `npm run lint` to see violations.
 - **Parser**: TypeScript parser with project-aware type checking
 - **Plugins**: 
   - `@typescript-eslint`: TypeScript-specific rules

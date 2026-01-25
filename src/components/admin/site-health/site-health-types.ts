@@ -164,6 +164,8 @@ export interface AxeCoreData {
   };
   timestamp: string;
   status: 'success' | 'error';
+  warnings?: string[];
+  injectionSource?: string;
   error?: string;
 }
 

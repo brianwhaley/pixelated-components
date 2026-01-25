@@ -159,10 +159,65 @@ describe('pixelated-eslint-plugin', () => {
 		expect(linter.verify('const debug = true;', cfg, { filename: 'src/stories/foo.stories.tsx' }).some(m => m.ruleId === 'pixelated/no-debug-true')).toBe(false);
 	});
 
+	it('enforces kebab-case for filenames (allow list & exemptions)', async () => {
+		const mod = await import('../scripts/pixelated-eslint-plugin.js');
+		const linter = new (await import('eslint')).Linter();
+		linter.definePlugin('pixelated', mod.default);
+		const cfg = { parserOptions: { ecmaVersion: 2022, sourceType: 'module' }, plugins: { pixelated: true }, rules: { 'pixelated/file-name-kebab-case': 'warn' } };
+
+		// valid kebab-case
+		expect(linter.verify('const x = 1;', cfg, { filename: 'src/components/my-component.tsx' }).length).toBe(0);
+		// allowed index and README
+		expect(linter.verify('export {}', cfg, { filename: 'src/components/index.tsx' }).length).toBe(0);
+		expect(linter.verify('export {}', cfg, { filename: 'README.md' }).length).toBe(0);
+		// test/story files are exempt
+		expect(linter.verify('test(\"x\",()=>{})', cfg, { filename: 'src/components/my-component.test.tsx' }).length).toBe(0);
+		expect(linter.verify('export const s = {}', cfg, { filename: 'src/stories/MyComponent.stories.tsx' }).length).toBe(0);
+		// violations
+		expect(linter.verify('const x = 1;', cfg, { filename: 'src/components/myComponent.tsx' }).some(m => m.ruleId === 'pixelated/file-name-kebab-case')).toBe(true);
+		expect(linter.verify('const x = 1;', cfg, { filename: 'src/components/MyComponent.tsx' }).some(m => m.ruleId === 'pixelated/file-name-kebab-case')).toBe(true);
+		expect(linter.verify('const x = 1;', cfg, { filename: 'src/components/my_component.tsx' }).some(m => m.ruleId === 'pixelated/file-name-kebab-case')).toBe(true);
+	});
+
+	it('detects duplicate exported identifiers when a barrel re-exports two modules that export the same name', async () => {
+		const mod = await import('../scripts/pixelated-eslint-plugin.js');
+		const linter = new (await import('eslint')).Linter();
+		linter.definePlugin('pixelated', mod.default);
+
+		// Create a temporary module directory under src for deterministic resolution
+		const tmpDir = new URL('../src/__tmp_barrel__', import.meta.url);
+		const fs = await import('fs');
+		if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
+		// a.js and b.js both export the same identifier 'dupeName'
+		fs.writeFileSync(new URL('a.js', tmpDir), 'export function dupeName() {}');
+		fs.writeFileSync(new URL('b.js', tmpDir), 'export const dupeName = 1;');
+
+		const barrelCode = "export * from './__tmp_barrel__/a';\nexport * from './__tmp_barrel__/b';";
+		const messages = linter.verify(barrelCode, {
+			parserOptions: { ecmaVersion: 2020, sourceType: 'module' },
+			plugins: { pixelated: true },
+			rules: { 'pixelated/no-duplicate-export-names': 'error' },
+		}, { filename: 'src/barrel.mock.js' });
+
+		// Clean up
+		fs.unlinkSync(new URL('a.js', tmpDir));
+		fs.unlinkSync(new URL('b.js', tmpDir));
+
+		expect(messages.some(m => m.ruleId === 'pixelated/no-duplicate-export-names' && /dupeName/.test(m.message))).toBe(true);
+
+		// index barrels are intentionally ignored by the rule (legacy/resolution permissive)
+		const messagesIndex = linter.verify(barrelCode, {
+			parserOptions: { ecmaVersion: 2020, sourceType: 'module' },
+			plugins: { pixelated: true },
+			rules: { 'pixelated/no-duplicate-export-names': 'error' },
+		}, { filename: 'src/index.mock.js' });
+		expect(messagesIndex.some(m => m.ruleId === 'pixelated/no-duplicate-export-names')).toBe(false);
+	});
+
 	it('regression: exported rules are present in recommended config', async () => {
 		const mod = await import('../scripts/pixelated-eslint-plugin.js');
 		const plugin = mod.default;
-		const expected = ['validate-test-locations', 'no-process-env', 'no-debug-true'];
+		const expected = ['validate-test-locations', 'no-process-env', 'no-debug-true', 'file-name-kebab-case'];
 		expected.forEach(r => {
 			expect(plugin.rules[r]).toBeDefined();
 			expect(plugin.configs).toBeDefined();

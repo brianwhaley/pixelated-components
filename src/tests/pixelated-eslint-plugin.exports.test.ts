@@ -4,7 +4,7 @@ it('exports new rules and exposes them in the recommended config (regression)', 
   const mod = await import('../scripts/pixelated-eslint-plugin.js');
   const plugin = mod.default;
 
-  const expected = ['validate-test-locations', 'no-process-env', 'no-debug-true'];
+  const expected = ['validate-test-locations', 'no-process-env', 'no-debug-true', 'file-name-kebab-case'];
   for (const r of expected) {
     expect(plugin.rules && (plugin.rules as any)[r], `rule ${r} is exported`).toBeDefined();
     expect(plugin.configs, 'configs present').toBeDefined();

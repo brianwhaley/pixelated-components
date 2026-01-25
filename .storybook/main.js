@@ -99,29 +99,28 @@ const config = {
         };
 
         config.plugins = config.plugins || [];
+        // Define only the specific env keys we need to avoid conflicting with other DefinePlugin usages
         config.plugins.push(
-                new webpack.DefinePlugin({
-                'process.env': JSON.stringify({
-                    NODE_ENV: process.env.NODE_ENV || 'development',
-                }),
-                'globalThis.__NEXT_IMAGE_OPTS': JSON.stringify({
-                    deviceSizes: [640, 768, 1024, 1280, 1536],
-                    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-                    loader: 'default',
-                    path: '',
-                    domains: ['blog.pixelated.tech','res.cloudinary.com'],
-                    unoptimized: true,
-                }),
-                'process.env.__NEXT_IMAGE_OPTS': JSON.stringify({
-                    deviceSizes: [640, 768, 1024, 1280, 1536],
-                    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-                    loader: 'default',
-                    path: '',
-                    domains: ['blog.pixelated.tech','res.cloudinary.com'],
-                    unoptimized: true,
-                }),
-            })
-        );
+				new webpack.DefinePlugin({
+				'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+				'globalThis.__NEXT_IMAGE_OPTS': JSON.stringify({
+					deviceSizes: [640, 768, 1024, 1280, 1536],
+					imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+					loader: 'default',
+					path: '',
+					domains: ['blog.pixelated.tech','res.cloudinary.com'],
+					unoptimized: true,
+				}),
+				'process.env.__NEXT_IMAGE_OPTS': JSON.stringify({
+					deviceSizes: [640, 768, 1024, 1280, 1536],
+					imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+					loader: 'default',
+					path: '',
+					domains: ['blog.pixelated.tech','res.cloudinary.com'],
+					unoptimized: true,
+				}),
+			})
+		);
 
         // Removed NormalModuleReplacementPlugin to avoid dist/ dependency
 

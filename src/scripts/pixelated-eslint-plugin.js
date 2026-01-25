@@ -697,6 +697,112 @@ const requiredFaqRule = {
 	},
 };
 
+/* ===== RULE: file-name-kebab-case ===== */
+const fileNameKebabCaseRule = (function fileNameKebabCaseRule(){
+	const KEBAB_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+	const rule = {
+		meta: {
+			type: 'suggestion',
+			docs: { description: 'enforce kebab-case file names (lowercase-with-hyphens)', category: 'Stylistic Issues', recommended: true },
+			fixable: null,
+			schema: [ { type: 'object', properties: { allow: { type: 'array', items: { type: 'string' } } }, additionalProperties: false } ],
+			messages: { notKebab: 'File name "{{name}}" is not kebab-case. Rename to "{{expected}}" (exceptions: index, tests/stories, .d.ts, docs).' },
+		},
+		create(context) {
+			const opts = (context.options && context.options[0]) || {};
+			const allow = Array.isArray(opts.allow) ? opts.allow : [];
+			return {
+				Program(node) {
+					try {
+						const filename = context.getFilename();
+						if (!filename || filename === '<input>') return;
+						const fn = filename.replace(/\\\\/g, '/').split('/').pop();
+						if (!fn) return;
+						if (/^README(\.|$)/i.test(fn)) return;
+						let core = fn.replace(/\.d\.ts$/i, '').replace(/\.[^.]+$/, '');
+						core = core.replace(/\.(test|spec|stories|honeypot\.test)$/i, '');
+						if (!core || core === 'index') return;
+						if (/\/(?:docs|src\/tests|src\/stories)\//.test(filename)) return;
+						if (allow.includes(fn)) return;
+						if (!KEBAB_RE.test(core)) {
+							const expected = core.replace(/([A-Z])/g, (m) => '-' + m.toLowerCase()).replace(/[_\s]+/g, '-').replace(/--+/g, '-').replace(/^[-]+|[-]+$/g, '');
+							const suggested = expected || core.toLowerCase();
+							context.report({ node, messageId: 'notKebab', data: { name: fn, expected: suggested } });
+						}
+					} catch (err) { /* defensive */ }
+				}
+			};
+		}
+	};
+	return rule;
+})();
+
+/* ===== RULE: no-duplicate-export-names ===== */
+const noDuplicateExportNamesRule = {
+	meta: {
+		type: 'problem',
+		docs: { description: 'Disallow duplicate exported identifiers from multiple source modules in a barrel file', category: 'Possible Errors', recommended: true },
+		schema: [],
+		messages: { duplicateExport: 'Duplicate export "{{name}}" found in multiple modules: {{modules}}' },
+	},
+	create(context) {
+		const filename = context.getFilename();
+		return {
+			Program() {
+				try {
+					const sourceCode = context.getSourceCode();
+					const exportAll = sourceCode.ast.body.filter(n => n.type === 'ExportAllDeclaration');
+					if (exportAll.length < 2) return; // nothing to compare
+
+					const nameMap = new Map();
+					for (const node of exportAll) {
+						if (!node.source || node.source.type !== 'Literal') continue;
+						const spec = String(node.source.value);
+						if (!spec.startsWith('.') && !spec.startsWith('/')) continue; // only local modules
+						let resolved;
+						try {
+							resolved = require.resolve(spec, { paths: [path.dirname(filename)] });
+						} catch (err) {
+							const alt = path.resolve(path.dirname(filename), spec);
+							if (fs.existsSync(alt + '.ts')) resolved = alt + '.ts';
+							else if (fs.existsSync(alt + '.tsx')) resolved = alt + '.tsx';
+							else if (fs.existsSync(alt + '.js')) resolved = alt + '.js';
+							else continue;
+						}
+						let content = '';
+						try { content = fs.readFileSync(resolved, 'utf8'); } catch (err) { continue; }
+
+						// best-effort: collect exported identifiers via regex (covers common TS/JS exports)
+						const exports = new Set();
+						const patterns = [ /export\s+function\s+([A-Za-z0-9_$]+)/g, /export\s+(?:const|let|var)\s+([A-Za-z0-9_$]+)/g, /export\s+class\s+([A-Za-z0-9_$]+)/g, /export\s+(?:type|interface|enum)\s+([A-Za-z0-9_$]+)/g, /export\s*\{([^}]+)\}/g ];
+						for (const re of patterns) {
+							let m;
+							while ((m = re.exec(content))) {
+								if (m[1]) {
+									m[1].split(',').map(s => s.trim().split(/\s+as\s+/)[0].trim()).filter(Boolean).forEach(n => exports.add(n));
+								}
+							}
+						}
+						for (const name of exports) {
+							if (!nameMap.has(name)) nameMap.set(name, []);
+							nameMap.get(name).push(spec);
+						}
+					}
+
+					// report duplicates collected across all export * sources
+					for (const [name, modules] of nameMap.entries()) {
+						if (modules.length > 1) {
+							context.report({ node: sourceCode.ast, messageId: 'duplicateExport', data: { name, modules: modules.join(', ') } });
+						}
+					}
+				} catch (err) {
+					// defensive: do not allow rule errors to crash ESLint
+				}
+			}
+		};
+	}
+};
+
 export default {
 	rules: {
 		'prop-types-inferprops': propTypesInferPropsRule,
@@ -708,6 +814,8 @@ export default {
 		'validate-test-locations': validateTestLocationsRule,
 		'no-process-env': noProcessEnvRule,
 		'no-debug-true': noDebugTrueRule,
+		'file-name-kebab-case': fileNameKebabCaseRule,
+		'no-duplicate-export-names': noDuplicateExportNamesRule,
 	},
 	configs: {
 		recommended: {
@@ -721,6 +829,8 @@ export default {
 				'pixelated/validate-test-locations': 'error',
 				'pixelated/no-process-env': ['error', { allowed: ALLOWED_ENV_VARS } ],
 				'pixelated/no-debug-true': 'warn',
+				'pixelated/file-name-kebab-case': 'off',
+				'pixelated/no-duplicate-export-names': 'warn',
 			},
 		},
 	},
