@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.11.6",
+	"version": "3.11.7",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -84,7 +84,8 @@
 		"config:vault": "npm run vault --",
 		"config:encrypt": "npm run config:vault -- encrypt src/config/pixelated.config.json",
 		"config:decrypt": "npm run config:vault -- decrypt src/config/pixelated.config.json.enc",
-		"create-pixelated-app": "node src/scripts/create-pixelated-app.js"
+		"create-pixelated-app": "node src/scripts/create-pixelated-app.js",
+		"zip-theme": "node src/scripts/zip-pixelated-theme.js ../pixelated-blog-wp-theme Pixelated.zip"
 	},
 	"scripts-20260113": {
 		"build": "npm run validate-exports && npm run buildClean && npm run tsc && npm run rsync && npm run tscClean ",
