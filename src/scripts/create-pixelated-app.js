@@ -558,7 +558,7 @@ async function main() {
 		}
 		const pagesInput = (await rl.question('Pages to create (comma-separated, e.g. about,contact) [leave blank to skip]: ')).trim();
 		let pagesToCreate = [];
-		let existingPages = [];
+		let existingPages = ['humans.txt', 'styleguide'];
 		if (pagesInput) {
 			const raw = pagesInput.split(',').map(s => s.trim()).filter(Boolean);
 			// sanitize and normalize

@@ -5,14 +5,14 @@ import PropTypes, { InferProps } from 'prop-types';
 import { SiteInfo } from '../config/config.types';
 import './global-error.css';
 
-GlobalError.propTypes = {
+GlobalErrorUI.propTypes = {
 	error: PropTypes.any,
 	reset: PropTypes.func,
 	siteInfo: PropTypes.object,
 	className: PropTypes.string,
 };
-export type GlobalErrorType = InferProps<typeof GlobalError.propTypes>;
-export function GlobalError({ error = null, reset, siteInfo, className = '' } : GlobalErrorType) {
+export type GlobalErrorUIType = InferProps<typeof GlobalErrorUI.propTypes>;
+export function GlobalErrorUI({ error = null, reset, siteInfo, className = '' } : GlobalErrorUIType) {
 	const [showDetails, setShowDetails] = useState(false);
 	const si = siteInfo as SiteInfo | undefined;
 	const contactHref: string | undefined =

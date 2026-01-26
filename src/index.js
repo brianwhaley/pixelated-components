@@ -44,6 +44,7 @@ export * from './components/general/semantic';
 export * from './components/general/sidepanel';
 export * from './components/general/sitemap';
 export * from './components/general/smartimage';
+export * from './components/general/styleguide';
 export * from './components/general/global-error';
 export * from './components/general/tab';
 export * from './components/general/table';

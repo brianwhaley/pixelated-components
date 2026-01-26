@@ -24,6 +24,7 @@ export * from './components/general/schema-recipe';
 export * from './components/general/schema-services';
 export * from './components/general/schema-website';
 export * from './components/general/sitemap';
+export * from './components/general/humanstxt';
 export * from './components/general/utilities';
 export * from './components/general/skeleton';
 

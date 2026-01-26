@@ -1,18 +1,6 @@
 {
   "templates": [
     {
-      "name": "FAQs",
-      "aliases": ["faq", "faqs", "qa", "q-and-a", "frequently-asked-question", "frequently-asked-questions"],
-      "src": "../../pixelated-template/src/app/(pages)/faqs",
-      "associated_files": ["src/app/data/faqs.json"]
-    },
-    {
-      "name": "Projects",
-      "aliases": ["gallery", "project", "projects", "portfolio", "work", "our-work", 
-	  	"our-projects", "our-project", "case-studies", "examples", "showcase", "samples"],
-      "src": "../../pixelated-template/src/app/(pages)/projects"
-    },
-    {
       "name": "About",
       "aliases": ["about", "about-us", "company", "our-company", "team", "our-team", "about-us-page"],
       "src": "../../pixelated-template/src/app/(pages)/about"
@@ -24,9 +12,31 @@
       "associated_files": ["src/app/data/contactform.json"]
     },
     {
+      "name": "FAQs",
+      "aliases": ["faq", "faqs", "qa", "q-and-a", "frequently-asked-question", "frequently-asked-questions"],
+      "src": "../../pixelated-template/src/app/(pages)/faqs",
+      "associated_files": ["src/app/data/faqs.json"]
+    },
+    {
+      "name": "Humans.txt",
+      "aliases": ["humans", "humans-txt", "humans.txt", "humansfile", "humansfile.txt", "humanstext"],
+      "src": "../../pixelated-template/src/app/(pages)/humans"
+    },
+    {
+      "name": "Projects",
+      "aliases": ["gallery", "project", "projects", "portfolio", "work", "our-work", 
+	  	"our-projects", "our-project", "case-studies", "examples", "showcase", "samples"],
+      "src": "../../pixelated-template/src/app/(pages)/projects"
+    },
+    {
       "name": "Services",
       "aliases": ["services", "service", "our-services", "services-page", "offerings", "solutions", "products"],
       "src": "../../pixelated-template/src/app/(pages)/services"
+    },
+    {
+      "name": "Style Guide",
+      "aliases": ["styleguide", "style-guide", "design-system", "ui-kit", "pattern-library"],
+      "src": "../../pixelated-template/src/app/(pages)/styleguide"
     }
   ]
 } 
