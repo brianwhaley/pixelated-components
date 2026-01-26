@@ -1,0 +1,97 @@
+/* Page-level loading / skeleton-loading styles
+   NOTE: this is the canonical stylesheet for the app-level loading UI and
+   should be consumed via the `SkeletonLoading` component in this package. */
+
+.loading-page {
+	min-height: 100vh;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	padding: clamp(0, 3vw, 3rem);
+	background: var(--bg, #fff);
+}
+
+.loading-container {
+	width: 100%;
+	max-width: 72rem;
+	display: block;
+	gap: 2rem;
+}
+
+.visually-hidden {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+.hero {
+	display: block;
+	gap: 1.5rem;
+	padding: 0;
+}
+
+.hero-row {
+	display: flex;
+	gap: 1rem;
+	align-items: center
+}
+
+.hero-avatar-wrap {
+	width: 6rem
+}
+
+.hero-meta {
+	display: block;
+	gap: .75rem
+}
+
+.cards-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1.5rem
+}
+
+@media(min-width:640px) {
+	.cards-grid {
+		grid-template-columns: repeat(2, 1fr)
+	}
+}
+
+@media(min-width:1024px) {
+	.cards-grid {
+		grid-template-columns: repeat(3, 1fr)
+	}
+}
+
+.card-skeleton {
+	padding: 1rem;
+	border-radius: .5rem;
+	border: 1px solid rgba(17, 24, 39, 0.06);
+	background: transparent
+}
+
+.card-row {
+	display: flex;
+	gap: 1rem;
+	align-items: flex-start
+}
+
+.card-body {
+	flex: 1 1 0%
+}
+
+.card-body-extra {
+	margin-top: .75rem
+}
+
+/* keep a11y focus rules here */
+:focus {
+	outline: 3px solid Highlight;
+	outline-offset: 2px
+}

@@ -67,7 +67,15 @@ npm run test:run         # Single run (for CI)
 - **menu-expando.tsx**: 90.12% statements
 - **site-health-cloudwatch.tsx**: 88% statements
 - **loading.tsx**: 85.71% statements
+- **skeleton.tsx**: 100% statements (new unit tests)
+- **skeleton-loading.tsx**: 100% statements (composite tests)
 - **SaveLoadSection.tsx**: 84.85% statements
+
+
+Guidelines:
+- Use DOM queries only (`getByTestId`, `querySelectorAll`)
+- Do not rely on visual-only assertions (pseudo-elements)
+- Keep plays deterministic and fast (<200ms)
 - **table.tsx**: 84.48% statements
 - **ConfigBuilder.tsx**: 83.52% statements
 - **cloudinary.ts**: 83.33% statements

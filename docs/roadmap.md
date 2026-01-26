@@ -34,8 +34,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 
 
 ### Platform Enhancements
-- [ ] **Project Scaffolding CLI**: Interactive CLI tool that generates complete Next.js projects with pixelated-components pre-configured, including routes.json, layout.tsx, package.json, and basic page structure
-- [ ] **Technical Site Assets**: Implement standard `src/app/loading.tsx` (Skeleton loaders), `src/app/global-error.tsx` (Branded error boundaries), `public/humans.txt`, and `public/.well-known/security.txt` in the starter template.
 - [ ] **Static Search Index**: Build-time script to generate `search-index.json` from `routes.json` for serverless, instant client-side search.
 - [ ] **AI-Driven Image & Meta Pipeline**: Integrate AI Vision APIs into `generate-site-images.js` to automatically generate alt text, SEO descriptions, and image captions.
 - [ ] **Template Marketplace**: Pre-built industry-specific templates (restaurant, law firm, contractor, etc.) that users can clone and customize

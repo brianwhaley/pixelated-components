@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.11.4",
+	"version": "3.11.5",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -149,7 +149,7 @@
 		"eslint-plugin-react": "^7.37.4",
 		"eslint-plugin-storybook": "^10.2.0",
 		"file-loader": "^6.2.0",
-		"happy-dom": "^20.3.7",
+		"happy-dom": "^20.3.9",
 		"jsdom": "^27.4.0",
 		"less-loader": "^12.3.0",
 		"mini-css-extract-plugin": "^2.10.0",

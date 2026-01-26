@@ -25,6 +25,7 @@ export * from './components/general/schema-services';
 export * from './components/general/schema-website';
 export * from './components/general/sitemap';
 export * from './components/general/utilities';
+export * from './components/general/skeleton';
 
 export * from './components/integrations/contentful.delivery';
 export * from './components/integrations/contentful.management';

@@ -249,6 +249,94 @@ import { Loading } from '@pixelated-tech/components';
 
 ---
 
+### Skeleton
+
+A low-level, accessible skeleton primitive for text, rectangular, and avatar placeholders. Use `Skeleton` anywhere a localized placeholder is needed (cards, lists, table rows, form fields).
+
+```tsx
+import { Skeleton } from '@pixelated-tech/components';
+
+// Text skeleton (3 lines)
+<Skeleton lines={3} />
+
+// Avatar skeleton
+<Skeleton variant="avatar" />
+
+// Rect skeleton (explicit height)
+<Skeleton variant="rect" height={160} />
+```
+
+#### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'text' \| 'rect' \| 'avatar'` | `'text'` | Visual primitive to render |
+| `lines` | `number` | `1` | Number of text lines (text variant) |
+| `width` | `string \| number` | `100% \| 60%` | Width (string or percent for text lines) |
+| `height` | `string \| number` | `160` (rect) | Height for rect/avatar variants |
+| `animated` | `boolean` | `true` | Show pulsing animation (respects prefers-reduced-motion) |
+
+#### CSS classes
+- `skeleton` — base primitive
+- `skeleton--animated` — animated variant
+- `skeleton--avatar` — avatar shape
+- `skeleton--rect` — rectangular block
+- `skeleton-text`, `skeleton-line` — text layout helpers
+
+#### Accessibility
+- Rendered elements are `aria-hidden="true"` by default (decorative).
+- Use an offscreen/live region on the page to announce loading state where appropriate.
+- Animation respects `prefers-reduced-motion`.
+
+#### Storybook & tests
+- Story: `General/Skeleton` (includes deterministic plays)
+- Unit tests: `src/tests/skeleton.test.tsx`
+
+---
+
+### SkeletonLoading
+
+Canonical page-level loading UI composed from `Skeleton` primitives (hero + card grid). Use `SkeletonLoading` at the app level to keep loading UX consistent across projects.
+
+```tsx
+import { SkeletonLoading } from '@pixelated-tech/components';
+
+// Default
+<SkeletonLoading />
+
+// Smaller hero + fewer cards
+<SkeletonLoading heroHeight={120} cardCount={3} />
+```
+
+#### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `heroHeight` | `number` | `220` | Height of the hero rectangle (px) |
+| `cardCount` | `number` | `6` | Number of card skeletons to render |
+| `className` | `string` | - | Additional CSS classes for layout tweaks |
+
+#### Why prefer `SkeletonLoading`?
+- Single source of truth for page loading UI and CSS
+- Deterministic Storybook `play()` for suspended routes (see `InfiniteHang` story)
+- Eliminates duplicated app-level markup and CSS across consumers
+
+#### Migration (app-level)
+Replace local `src/app/loading.tsx` implementation with the shared component:
+
+```diff
+- import './loading.css';
+- export default function Loading() { /* in-file Skeleton */ }
++ import { SkeletonLoading } from '@pixelated-tech/components';
++ export default function Loading() { return <SkeletonLoading />; }
+```
+
+#### Storybook & tests
+- Story: `General/SkeletonLoading` (`InfiniteHang` play)
+- Unit tests: `src/tests/skeleton-loading.test.tsx`
+
+---
+
 ### SplitScroll
 
 Split-page scrolling layout component with sticky layered images, perfect for product showcases, portfolios, or storytelling layouts inspired by luxury brand websites.

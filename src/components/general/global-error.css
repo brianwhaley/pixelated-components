@@ -1,0 +1,41 @@
+/* Canonical styles for the Global Error boundary — componentized and shipped with the library */
+:root {
+  --ge-bg: linear-gradient(180deg,#fff,#f7f7fb);
+  --ge-foreground: #111;
+  --ge-muted: #889;
+  --ge-panel: #0b0b0b;
+  --ge-panel-ink: #e6e6e6;
+  --ge-radius: 8px;
+  --ge-gap: 12px;
+  --ge-max: 720px;
+}
+
+.global-error {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  background: var(--ge-bg);
+  color: var(--ge-foreground);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.ge-inner {
+  max-width: var(--ge-max);
+  width: 100%;
+  text-align: center;
+}
+
+.ge-title { margin: 0; font-size: 1.75rem; }
+.ge-lead { color: #334; margin-top: 0.75rem; }
+
+.ge-actions { display: flex; gap: var(--ge-gap); justify-content: center; margin-top: 20px; flex-wrap: wrap; }
+.ge-btn { border-radius: var(--ge-radius); padding: 0.6rem 1rem; cursor: pointer; border: none; background: transparent; }
+.ge-btn--primary { background: var(--ge-foreground); color: #fff; }
+.ge-link { color: var(--ge-foreground); text-decoration: underline; align-self: center; }
+.ge-toggle { background: transparent; border: 1px solid #ddd; padding: 0.5rem 0.85rem; border-radius: var(--ge-radius); }
+
+.ge-details { text-align: left; margin-top: 20px; padding: 16px; background: var(--ge-panel); color: var(--ge-panel-ink); border-radius: var(--ge-radius); overflow: auto; white-space: pre-wrap; }
+.ge-note { margin-top: 18px; color: var(--ge-muted); }
+.ge-unavailable { color: #666; align-self: center; }
