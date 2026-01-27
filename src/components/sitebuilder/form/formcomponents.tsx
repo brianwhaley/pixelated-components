@@ -813,11 +813,3 @@ export function FormHoneypot({ id = "winnie", name }: FormHoneypotType) {
 		<FormInput {...hpProps} />
 	);
 }
-
-
-
-
-
-
-// Re-export FontSelector for use in forms
-export { FontSelector, CompoundFontSelector };

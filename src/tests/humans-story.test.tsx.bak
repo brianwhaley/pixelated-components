@@ -1,0 +1,15 @@
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { Example } from '@/stories/general/humans.stories';
+
+describe('Humans story', () => {
+  it('renders generated humans.txt from package + routes data', async () => {
+    render(<Example />);
+    // wait for loading to complete
+    await waitFor(() => expect(screen.queryByText(/Loading/)).toBeNull());
+    // The generator always includes "Site name:" line
+    expect(screen.getByText(/Site name:/i)).toBeInTheDocument();
+    // Ensure the configured site name from routes.json is present
+    expect(screen.getByText(/Pixelated Technologies/i)).toBeInTheDocument();
+  });
+});

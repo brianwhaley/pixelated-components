@@ -305,6 +305,20 @@ fi
 
 
 echo ""
+# Prompt for release mode (default: both = push dev and update main, tag, and publish)
+echo "🔀 Step $((STEP_COUNT++)): Choose release mode"
+echo "================================================="
+echo "1) Dev and Main (default - pushes dev, updates main, tags, creates release, and publishes)"
+echo "2) Dev only (push dev only; skip main update, tagging, GitHub release, and npm publish)"
+read -p "Enter choice (1-2) [default 1]: " release_choice
+if [ -z "$release_choice" ] || [ "$release_choice" = "1" ]; then
+    RELEASE_MODE="both"
+else
+    RELEASE_MODE="dev-only"
+fi
+echo "Selected release mode: $RELEASE_MODE"
+
+echo ""
 echo "📤 Step $((STEP_COUNT++)): Pushing dev branch..."
 echo "================================================="
 # Try to push, if it fails due to remote changes, fetch and rebase
@@ -326,116 +340,136 @@ fi
 
 
 echo ""
-echo "🔄 Step $((STEP_COUNT++)): Updating main branch..."
-echo "================================================="
-# Force main to match dev exactly
-git push $REMOTE_NAME dev:main --force
+if [ "$RELEASE_MODE" = "dev-only" ]; then
+    echo "🔕 Step $((STEP_COUNT++)): Skipping main update (RELEASE_MODE=dev-only)."
+    echo "================================================="
+else
+    echo ""
+    echo "🔄 Step $((STEP_COUNT++)): Updating main branch..."
+    echo "================================================="
+    # Force main to match dev exactly
+    git push $REMOTE_NAME dev:main --force
 
-# Also update main locally if it exists
-if git show-ref --verify --quiet refs/heads/main; then
-    git branch -D main 2>/dev/null || true
-    git checkout -b main
-    git reset --hard dev
-    git push $REMOTE_NAME main --force
-    git checkout dev
+    # Also update main locally if it exists
+    if git show-ref --verify --quiet refs/heads/main; then
+        git branch -D main 2>/dev/null || true
+        git checkout -b main
+        git reset --hard dev
+        git push $REMOTE_NAME main --force
+        git checkout dev
+    fi
 fi
 
 
 
 echo ""
-echo "🏷️  Step $((STEP_COUNT++)): Creating and pushing git tag and release..."
-echo "================================================="
-new_version=$(get_current_version)
-release_tag="v${new_version}"
-# Use commit message as tag/release message when available, otherwise default
-tag_message="${commit_message:-"Release $release_tag"}"
-if ! git tag -l | grep -q "$release_tag"; then
-    echo "🔖 Creating annotated tag $release_tag"
-    git tag -a "$release_tag" -m "$tag_message"
-    git push $REMOTE_NAME "$release_tag"
+if [ "$RELEASE_MODE" = "dev-only" ]; then
+    echo "🔕 Step $((STEP_COUNT++)): Skipping tag/release creation (RELEASE_MODE=dev-only)."
+    echo "================================================="
 else
-    echo "ℹ️  Tag $release_tag already exists"
+    echo ""
+    echo "🏷️  Step $((STEP_COUNT++)): Creating and pushing git tag and release..."
+    echo "================================================="
+    new_version=$(get_current_version)
+    release_tag="v${new_version}"
+    # Use commit message as tag/release message when available, otherwise default
+    tag_message="${commit_message:-"Release $release_tag"}"
+    if ! git tag -l | grep -q "$release_tag"; then
+        echo "🔖 Creating annotated tag $release_tag"
+        git tag -a "$release_tag" -m "$tag_message"
+        git push $REMOTE_NAME "$release_tag"
+    else
+        echo "ℹ️  Tag $release_tag already exists"
+    fi
 fi
 
 
 
 # Create a published GitHub release for this tag (prefer gh CLI, fallback to API)
-echo ""
-echo "📣 Step $((STEP_COUNT++)): Creating GitHub release..."
-echo "================================================="
-REMOTE_URL=$(git remote get-url $REMOTE_NAME 2>/dev/null || true)
-
-# Use GitHub API only (no gh CLI). Ensure GITHUB_TOKEN is present
-if [ -z "$GITHUB_TOKEN" ]; then
-    echo "⚠️  GITHUB_TOKEN not set; skipping GitHub release creation via API"
+if [ "$RELEASE_MODE" = "dev-only" ]; then
+    echo "🔕 Skipping GitHub release creation (RELEASE_MODE=dev-only)."
+    echo "================================================="
 else
-    # Derive owner/repo from remote URL using shell-only parsing (robust across platforms)
-    repo_path="${REMOTE_URL#git@github.com:}"
-    repo_path="${repo_path#https://github.com/}"
-    repo_path="${repo_path%.git}"
-    repo_path="${repo_path%%/}"
-    if [ -z "$repo_path" ]; then
-        echo "⚠️  Unable to determine repo path from remote URL; skipping API-based release creation"
-    else
-        # Check if release exists
-        # Diagnostic: show remote and derived repo path (non-secret)
-        echo "Remote URL: $REMOTE_URL"
-        echo "Derived repo_path: $repo_path"
+    echo ""
+    echo "📣 Step $((STEP_COUNT++)): Creating GitHub release..."
+    echo "================================================="
+	REMOTE_URL=$(git remote get-url $REMOTE_NAME 2>/dev/null || true)
 
-    # Quick access check to see if token and repo path are valid
-    access_resp=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path")
-    if echo "$access_resp" | grep -q '"full_name"'; then
-        echo "✅ Repo accessible via API: $(echo "$access_resp" | sed -n 's/.*"full_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')"
-    else
-        echo "❌ Repo not accessible via API. GitHub API response: $access_resp"
-        echo "Make sure GITHUB_TOKEN has 'repo' scope and the repo path is correct; aborting release creation."
-        # Do not attempt to create a release if the repo isn't accessible
-        exit 1
-    fi
+	# Use GitHub API only (no gh CLI). Ensure GITHUB_TOKEN is present
+	if [ -z "$GITHUB_TOKEN" ]; then
+		echo "⚠️  GITHUB_TOKEN not set; skipping GitHub release creation via API"
+	else
+		# Derive owner/repo from remote URL using shell-only parsing (robust across platforms)
+		repo_path="${REMOTE_URL#git@github.com:}"
+		repo_path="${repo_path#https://github.com/}"
+		repo_path="${repo_path%.git}"
+		repo_path="${repo_path%%/}"
+		if [ -z "$repo_path" ]; then
+			echo "⚠️  Unable to determine repo path from remote URL; skipping API-based release creation"
+		else
+			# Check if release exists
+			# Diagnostic: show remote and derived repo path (non-secret)
+			echo "Remote URL: $REMOTE_URL"
+			echo "Derived repo_path: $repo_path"
 
-    if curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path/releases/tags/$release_tag" | grep -q '"tag_name"'; then
-            echo "ℹ️  Release for $release_tag already exists on GitHub (API)."
-        else
-            echo "🔔 Creating release via GitHub API for $release_tag"
-            payload=$(printf '{"tag_name":"%s","name":"%s","body":"%s","draft":false,"prerelease":false}' "$release_tag" "$release_tag" "${tag_message//\"/\\\"}")
-            resp=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$payload" "https://api.github.com/repos/$repo_path/releases")
-            if echo "$resp" | grep -q '"id"'; then
-                echo "✅ Created GitHub release $release_tag"
-            else
-                echo "❌ Failed to create GitHub release: $resp"
-            fi
-        fi
-    fi
+		# Quick access check to see if token and repo path are valid
+		access_resp=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path")
+		if echo "$access_resp" | grep -q '"full_name"'; then
+			echo "✅ Repo accessible via API: $(echo "$access_resp" | sed -n 's/.*"full_name"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p')"
+		else
+			echo "❌ Repo not accessible via API. GitHub API response: $access_resp"
+			echo "Make sure GITHUB_TOKEN has 'repo' scope and the repo path is correct; aborting release creation."
+			# Do not attempt to create a release if the repo isn't accessible
+			exit 1
+		fi
+
+		if curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path/releases/tags/$release_tag" | grep -q '"tag_name"'; then
+				echo "ℹ️  Release for $release_tag already exists on GitHub (API)."
+			else
+				echo "🔔 Creating release via GitHub API for $release_tag"
+				payload=$(printf '{"tag_name":"%s","name":"%s","body":"%s","draft":false,"prerelease":false}' "$release_tag" "$release_tag" "${tag_message//\"/\\\"}")
+				resp=$(curl -s -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" -d "$payload" "https://api.github.com/repos/$repo_path/releases")
+				if echo "$resp" | grep -q '"id"'; then
+					echo "✅ Created GitHub release $release_tag"
+				else
+					echo "❌ Failed to create GitHub release: $resp"
+				fi
+			fi
+		fi
+	fi
 fi
-
-
 
 echo ""
 echo "🔐 Step $((STEP_COUNT++)): Publishing to npm..."
 echo "================================================="
-# Function to prompt for publishing
-prompt_publish() {
-    read -p "Do you want to publish to npm? (y/n): " should_publish
-    if [ "$should_publish" = "y" ] || [ "$should_publish" = "Y" ]; then
-        echo "yes"
-    else
-        echo "no"
-    fi
-}
-# Function to prompt for OTP
-prompt_otp() {
-    read -p "Enter npm OTP: " otp
-    echo "$otp"
-}
-should_publish=$(prompt_publish)
-if [ "$should_publish" = "yes" ]; then
-    npm login
-    otp=$(prompt_otp)
-    npm publish --loglevel warn --access public --otp=$otp
-    echo "✅ Successfully published to npm!"
-else
-    echo "ℹ️  Skipping npm publish"
+if [ "$RELEASE_MODE" = "dev-only" ]; then
+    echo "🔕 Skipping npm publish (RELEASE_MODE=dev-only)."
     echo "You can publish manually with: npm publish --access public"
+else
+    # Function to prompt for publishing
+    prompt_publish() {
+        read -p "Do you want to publish to npm? (y/n): " should_publish
+        if [ "$should_publish" = "y" ] || [ "$should_publish" = "Y" ]; then
+            echo "yes"
+        else
+            echo "no"
+        fi
+    }
+    # Function to prompt for OTP
+    prompt_otp() {
+        read -p "Enter npm OTP: " otp
+        echo "$otp"
+    }
+    should_publish=$(prompt_publish)
+    if [ "$should_publish" = "yes" ]; then
+        npm login
+        otp=$(prompt_otp)
+        npm publish --loglevel warn --access public --otp=$otp
+        echo "✅ Successfully published to npm!"
+    else
+        echo "ℹ️  Skipping npm publish"
+        echo "You can publish manually with: npm publish --access public"
+    fi
 fi
 
 
@@ -454,9 +488,15 @@ echo ""
 echo "================================================="
 echo "✅ Release complete!"
 echo "================================================="
-echo "📦 Version: $(get_current_version)"
-echo "📋 Branches updated: dev, main"
-echo "🏷️  Tag created: v$(get_current_version)"
+if [ "$RELEASE_MODE" = "dev-only" ]; then
+    echo "📦 Version: $(get_current_version)"
+    echo "📋 Branches updated: dev"
+    echo "🏷️  Tag created: (skipped)"
+else
+    echo "📦 Version: $(get_current_version)"
+    echo "📋 Branches updated: dev, main"
+    echo "🏷️  Tag created: v$(get_current_version)"
+fi
 
 if [ "$should_publish" = "yes" ]; then
     echo "🔗 https://www.npmjs.com/package/$PROJECT_NAME"

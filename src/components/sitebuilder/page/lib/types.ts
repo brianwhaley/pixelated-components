@@ -26,15 +26,6 @@ export interface PropTypeInfo {
 	elementType?: any;
 }
 
-export interface FormField {
-	component: string;
-	props: Record<string, any>;
-}
-
-export interface FormData {
-	fields: FormField[];
-}
-
 export type ComponentSelectorEditMode = {
 	component: string;
 	props: Record<string, any>;

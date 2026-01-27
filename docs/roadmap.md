@@ -10,7 +10,6 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **ON HOLD** eBay Feedback Integration - requires user OAuth login
 - [ ] **ON HOLD** Yelp Recommendations integration (Cost Prohibitive)
 - [ ] Instagram Image Integration for Carousels
-- [ ] Hero Banner: headline, subtext, CTA, background image/video, overlay.
 - [ ] Map Based Project Component
 - [ ] New Callout Variant based on https://onthespothome.com/services
 

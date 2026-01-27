@@ -1,0 +1,43 @@
+import React, { useEffect, useState } from 'react';
+import { generateHumansTxt } from '@/components/general/humanstxt';
+import routesJson from '@/data/routes.json';
+import pkg from '../../../package.json';
+
+const meta = { title: 'General/humans.txt' } as const;
+export default meta;
+
+export const Example: React.FC = () => {
+  const [body, setBody] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        // Provide pkg + routesJson explicitly so the generator is pure and doesn't rely on fs
+        const { body } = await generateHumansTxt({ pkg: { name: pkg.name, version: pkg.version }, routesJson });
+        if (mounted) setBody(body);
+      } catch (err: any) {
+        if (mounted) setError(String(err));
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (loading) return <div style={{ maxWidth: 800 }}>Loading…</div>;
+  if (error) return <div style={{ maxWidth: 800 }}>Error: {error}</div>;
+
+  return (
+    <div style={{ maxWidth: 800 }}>
+      <h3>Generated humans.txt (from package + routes data)</h3>
+      <pre style={{ whiteSpace: 'pre-wrap', background: '#111', color: '#cfc', padding: 16, borderRadius: 6 }}>{body}</pre>
+    </div>
+  );
+};
+
+export const Default = { render: () => <Example /> };

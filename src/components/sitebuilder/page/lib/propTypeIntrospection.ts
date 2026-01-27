@@ -1,5 +1,6 @@
 
-import type { PropTypeInfo, FormField } from './types';
+import type { PropTypeInfo } from './types';
+import type { FormFieldConfig } from '../../form/formtypes';
 import { componentMetadata } from './componentMetadata';
 
 /**
@@ -95,7 +96,7 @@ export function generateFormFieldFromPropType(
 	propType: any,
 	value?: any,
 	componentName?: string
-): FormField {
+): FormFieldConfig {
 	const propInfo = getPropTypeInfo(propType, componentName, propName);
 	const baseProps: any = {
 		label: propName + ':',

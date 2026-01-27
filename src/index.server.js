@@ -13,6 +13,7 @@ export * from './components/config/config.validators';
 export * from './components/config/crypto';
 
 export * from './components/general/manifest';
+export * from './components/general/hero';
 export * from './components/general/metadata.functions';
 export * from './components/general/proxy-handler';
 export * from './components/general/resume';

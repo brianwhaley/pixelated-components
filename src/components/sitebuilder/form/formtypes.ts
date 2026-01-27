@@ -42,35 +42,6 @@ export interface FormValidationContextType extends FormValidationState {
   resetValidation: () => void;
 }
 
-export interface FormEngineProps {
-  name?: string | null;
-  id?: string | null;
-  method?: string | null;
-  onSubmitHandler?: (event: React.FormEvent) => void;
-  formData: FormData;
-}
-
 export interface FormBuilderProps {
   setFormData?: (data: any) => void;
 }
-
-export interface FormExtractorProps {
-  url?: string;
-  htmlPaste?: string;
-}
-
-export interface FormExtractEngineProps {
-  url?: string;
-  htmlPaste?: string;
-  setFormData: (data: any) => void;
-}
-
-export interface FormExtractUIProps {
-  setParentState: (state: { url: string; htmlPaste: string }) => void;
-}
-
-// Re-export common types from existing files for backward compatibility
-export type FormEngineType = InferProps<any>;
-export type FormExtractorType = InferProps<any>;
-export type FormExtractEngineType = InferProps<any>;
-export type FormExtractUIType = InferProps<any>;

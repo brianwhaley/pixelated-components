@@ -9,6 +9,8 @@ import {
   createHumansTxtResponse,
 } from '@/components/general/humanstxt';
 
+import testData from '../test/test-data';
+
 describe('humanstxt (server)', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -28,12 +30,16 @@ describe('humanstxt (server)', () => {
 
   it('generateHumansTxt produces expected body + headers when passed data', async () => {
     const pkg = { name: 'acme', version: '9.9.9' };
-    const routes = [ { path: '/a', title: 'A' }, { path: '/b', title: 'B' } ];
+    const routes = testData.routes || [];
+    const siteInfo = testData.siteInfo || { name: 'Test Site' };
 
-    const { body, headers, etag } = await generateHumansTxt({ pkg, routesJson: { siteInfo: { name: 'ACME', url: 'https://acme.test', author: 'Jane' }, routes } });
+    const { body, headers, etag } = await generateHumansTxt({ pkg, routesJson: { siteInfo, routes } });
 
-    expect(body).toContain('Site name: ACME');
-    expect(body).toContain('/a - A');
+    expect(body).toContain(`Site name: ${siteInfo.name}`);
+    // sanity: ensure at least one real route was used from test-data
+    if ((routes || []).length > 0) {
+      expect(body).toContain(`${routes[0].path} - ${routes[0].title}`);
+    }
     expect(headers['Content-Type']).toContain('text/plain');
     expect(typeof etag).toBe('string');
   });

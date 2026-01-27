@@ -2,10 +2,19 @@
 
 import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import * as FC from './formcomponents';
 import { generateKey } from './formutils';
 import { FormValidationProvider, useFormValidation } from './formvalidator';
-import { FormEngineProps } from './formtypes';
+
+import * as FC from './formcomponents';
+import { CompoundFontSelector } from '../config/CompoundFontSelector';
+import { FontSelector } from '../config/FontSelector';
+
+// Merge a local components map to include config-level components without re-exporting them
+export const COMPONENTS: Record<string, React.ElementType> = {
+	...(FC as Record<string, React.ElementType>),
+	CompoundFontSelector,
+	FontSelector,
+};
 
 const debug = false;
 
@@ -29,8 +38,15 @@ export function FormEngine(props: FormEngineType) {
 	);
 }
 
-
-function FormEngineInner(props: FormEngineProps) {
+FormEngineInner.propTypes = {
+	name: PropTypes.string,
+	id: PropTypes.string,
+	method: PropTypes.string,
+	onSubmitHandler: PropTypes.func,
+	formData: PropTypes.object.isRequired
+};
+type FormEngineInnerType = InferProps<typeof FormEngineInner.propTypes>;
+function FormEngineInner(props: FormEngineInnerType) {
 	const { validateAllFields } = useFormValidation();
 
 	function generateFormProps(props: any) {
@@ -79,7 +95,7 @@ function FormEngineInner(props: FormEngineProps) {
 				});
 
 				const componentName: string = thisField.component;
-				const newElementType = (FC as Record<string, React.ElementType>)[componentName];
+				const newElementType = (COMPONENTS as Record<string, React.ElementType>)[componentName];
 				const newElement = React.createElement(newElementType, newProps);
 				newFields.push(newElement);
 			}
