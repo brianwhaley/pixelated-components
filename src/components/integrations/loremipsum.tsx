@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { usePixelatedConfig } from '@/components/config/config.client';
+import { usePixelatedConfig } from '../config/config.client';
 
 const debug = false; 
 

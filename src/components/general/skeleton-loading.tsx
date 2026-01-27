@@ -35,13 +35,13 @@ export function SkeletonLoading({ heroHeight = 220, cardCount = 6, className = '
 			<div className="loading-container">
 				<div className="visually-hidden" role="status" aria-live="polite">Loading…</div>
 
-				<section id="hero-loading" aria-hidden className="hero">
+				<section id="hero-loading" aria-hidden className="hero-loading">
 					<Skeleton variant="rect" height={heroHeight} />
 				</section>
 
-				<section id="cards-loading" className="cards-grid" aria-hidden>
+				<section id="cards-loading" className="cards-loading" aria-hidden>
 					{Array.from({ length: count }).map((_, i) => (
-						<article key={i} className="card-skeleton">
+						<article key={i} className="card-article">
 							<div className="card-row">
 								<Skeleton variant="avatar" />
 								<div className="card-body">

@@ -7,7 +7,7 @@ describe('SkeletonLoading (composite)', () => {
   it('renders the hero and card skeletons', () => {
     const { container } = render(<SkeletonLoading cardCount={3} heroHeight={120} />);
     expect(container.querySelector('#hero-loading')).toBeInTheDocument();
-    const cards = container.querySelectorAll('.card-skeleton');
+    const cards = container.querySelectorAll('#cards-loading .card-article');
     expect(cards.length).toBe(3);
     const lines = container.querySelectorAll('.skeleton-line');
     expect(lines.length).toBeGreaterThanOrEqual(1);

@@ -30,7 +30,7 @@
 	border: 0;
 }
 
-.hero {
+.hero-loading {
 	display: block;
 	gap: 1.5rem;
 	padding: 0;
@@ -51,25 +51,25 @@
 	gap: .75rem
 }
 
-.cards-grid {
+.cards-loading {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 1.5rem
 }
 
 @media(min-width:640px) {
-	.cards-grid {
+	.cards-loading {
 		grid-template-columns: repeat(2, 1fr)
 	}
 }
 
 @media(min-width:1024px) {
-	.cards-grid {
+	.cards-loading {
 		grid-template-columns: repeat(3, 1fr)
 	}
 }
 
-.card-skeleton {
+.card-article {
 	padding: 1rem;
 	border-radius: .5rem;
 	border: 1px solid rgba(17, 24, 39, 0.06);
