@@ -11,7 +11,13 @@ function getBingoWords(arr: Array<string>, x: number){
 	return myBingoWords;
 }
 
+/**
+ * BuzzwordBingo — renders a bingo-style card populated with provided buzzwords (defaults to an internal list).
+ *
+ * @param {array} [props.buzzwords] - Array of words (strings) used to populate the bingo card; uses default list when omitted.
+ */
 BuzzwordBingo.propTypes = {
+/** List of buzzwords used to populate the bingo card. */
 	buzzwords: PropTypes.array,
 };
 export type BuzzwordBingoType = InferProps<typeof BuzzwordBingo.propTypes>;
@@ -36,7 +42,13 @@ export function BuzzwordBingo(props: BuzzwordBingoType){
 
 
 
+/**
+ * BingoHeader — renders a single header cell for the bingo card (letters B I N G O).
+ *
+ * @param {string} [props.word] - Single character header label (e.g., 'B', 'I', 'N', 'G', 'O').
+ */
 BingoHeader.propTypes = {
+/** Header label character. */
 	word: PropTypes.string.isRequired,
 };
 export type BingoHeaderType = InferProps<typeof BingoHeader.propTypes>;
@@ -51,7 +63,13 @@ function BingoHeader({ word }: BingoHeaderType) {
 }
 
 
+/**
+ * BingoBox — renders an individual bingo cell (word or 'FREE SPACE').
+ *
+ * @param {string} [props.word] - Word displayed in this cell; 'FREE SPACE' is treated specially.
+ */
 BingoBox.propTypes = {
+	/** Word displayed in the bingo cell. */
 	word: PropTypes.string.isRequired,
 };
 export type BingoBoxType = InferProps<typeof BingoBox.propTypes>;

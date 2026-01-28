@@ -9,7 +9,15 @@ const debug = false;
 
 const TIME_LIMIT = 15;
 
-NerdJoke.propTypes = {};
+/**
+ * NerdJoke — fetches and displays short Q/A 'nerd' jokes on a timer with controls to pause/advance.
+ *
+ * Props are primarily internal to the fetching implementation; the component exposes control buttons to pause or fetch the next joke.
+ */
+/** NerdJoke.propTypes — No props (fetches/show jokes internally).
+ * @param {any} [props] - No props are accepted by NerdJoke.
+ */
+NerdJoke.propTypes = { /** no props */ };    
 export type NerdJokeType = InferProps<typeof NerdJoke.propTypes>;
 export function NerdJoke(props: NerdJokeType) {
 	const [joke, setJoke] = useState({ question: "", answer: "" });
@@ -150,7 +158,9 @@ export function NerdJoke(props: NerdJokeType) {
 
 
 JokeButton.propTypes = {
+/** Click handler invoked when the button is pressed (e.g., pause or fetch next). */
 	clickFunction: PropTypes.func.isRequired,
+	/** Label text to render inside the button. */
 	buttonText: PropTypes.string.isRequired,
 };
 export type JokeButtonType = InferProps<typeof JokeButton.propTypes>;

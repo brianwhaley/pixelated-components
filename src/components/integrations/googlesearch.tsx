@@ -22,7 +22,13 @@ https://nextjs.org/docs/messages/react-hydration-error
 */
 
 
+/**
+ * GoogleSearch — Embed a Google Programmable Search Engine (CSE) widget by id.
+ *
+ * @param {string} [props.id] - The CSE 'cx' id to initialize the Programmable Search Engine (required).
+ */
 GoogleSearch.propTypes = {
+/** CSE 'cx' id for the Google Programmable Search Engine */
 	id: PropTypes.string.isRequired,
 };
 export type GoogleSearchType = InferProps<typeof GoogleSearch.propTypes>;

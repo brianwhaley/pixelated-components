@@ -214,10 +214,56 @@ describe('pixelated-eslint-plugin', () => {
 		expect(messagesIndex.some(m => m.ruleId === 'pixelated/no-duplicate-export-names')).toBe(false);
 	});
 
+	it('warns when propTypes lack JSDoc or inline comments for client components', async () => {
+		const mod = await import('../scripts/pixelated-eslint-plugin.js');
+		const linter = new (await import('eslint')).Linter();
+		linter.definePlugin('pixelated', mod.default);
+		const code = `'use client';
+	export function C() { useEffect(()=>{}); }
+	C.propTypes = { a: PropTypes.string }`;
+		const messages = linter.verify(code, {
+			parserOptions: { ecmaVersion: 2022, sourceType: 'module', ecmaFeatures: { jsx: true } },
+			plugins: { pixelated: true },
+			rules: { 'pixelated/required-proptypes-jsdoc': 'warn' },
+		});
+		expect(messages.some(m => m.ruleId === 'pixelated/required-proptypes-jsdoc')).toBe(true);
+	});
+
+	it('does not warn when JSDoc above propTypes exists', async () => {
+		const mod = await import('../scripts/pixelated-eslint-plugin.js');
+		const linter = new (await import('eslint')).Linter();
+		linter.definePlugin('pixelated', mod.default);
+		const code = `'use client';
+	/**\n * Component C\n * @param {string} [props.a] - description\n */
+	export function C() { useEffect(()=>{}); }
+	C.propTypes = { a: PropTypes.string }`;
+		const messages = linter.verify(code, {
+			parserOptions: { ecmaVersion: 2022, sourceType: 'module', ecmaFeatures: { jsx: true } },
+			plugins: { pixelated: true },
+			rules: { 'pixelated/required-proptypes-jsdoc': 'warn' },
+		});
+		expect(messages.some(m => m.ruleId === 'pixelated/required-proptypes-jsdoc')).toBe(false);
+	});
+
+	it('does not warn when per-prop inline comments exist', async () => {
+		const mod = await import('../scripts/pixelated-eslint-plugin.js');
+		const linter = new (await import('eslint')).Linter();
+		linter.definePlugin('pixelated', mod.default);
+		const code = `'use client';
+	export function C() { useEffect(()=>{}); }
+	C.propTypes = { /* x */ a: PropTypes.string }`;
+		const messages = linter.verify(code, {
+			parserOptions: { ecmaVersion: 2022, sourceType: 'module', ecmaFeatures: { jsx: true } },
+			plugins: { pixelated: true },
+			rules: { 'pixelated/required-proptypes-jsdoc': 'warn' },
+		});
+		expect(messages.some(m => m.ruleId === 'pixelated/required-proptypes-jsdoc')).toBe(false);
+	});
+
 	it('regression: exported rules are present in recommended config', async () => {
 		const mod = await import('../scripts/pixelated-eslint-plugin.js');
 		const plugin = mod.default;
-		const expected = ['validate-test-locations', 'no-process-env', 'no-debug-true', 'file-name-kebab-case'];
+		const expected = ['validate-test-locations', 'no-process-env', 'no-debug-true', 'file-name-kebab-case', 'required-proptypes-jsdoc'];
 		expected.forEach(r => {
 			expect(plugin.rules[r]).toBeDefined();
 			expect(plugin.configs).toBeDefined();

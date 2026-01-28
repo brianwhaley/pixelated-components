@@ -10,7 +10,17 @@ export interface AccordionItem {
   open?: boolean | null;
 }
 
+/**
+ * Accordion — a simple details/summary-based accordion component.
+ *
+ * @param {arrayOf} [props.items] - Array of items each with `title`, `content`, and optional `open` state.
+ * @param {string} [props.title] - Title or header for an accordion item.
+ * @param {oneOfType} [props.content] - Content for an accordion item, either string or React node.
+ * @param {boolean} [props.open] - Initial open state of an item (when true the item is expanded).
+ * @param {function} [props.onToggle] - Optional callback called when an item is toggled (index, isOpen).
+ */
 Accordion.propTypes = {
+	/** Array of accordion items to render. */
 	items: PropTypes.arrayOf(
 		PropTypes.shape({
 			title: PropTypes.string.isRequired,
@@ -18,6 +28,7 @@ Accordion.propTypes = {
 			open: PropTypes.bool,
 		})
 	).isRequired,
+	/** Called when an item is toggled with (index, isOpen). */
 	onToggle: PropTypes.func,
 };
 export type AccordionType = InferProps<typeof Accordion.propTypes>;

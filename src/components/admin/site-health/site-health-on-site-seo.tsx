@@ -112,7 +112,13 @@ function restructureAuditsByType(pagesAnalyzed: PageAnalysis[]): OnSiteSEOAudit[
 	return restructuredAudits.sort((a, b) => (b.score || 0) - (a.score || 0));
 }
 
+/**
+ * SiteHealthOnSiteSEO — On-site SEO checks and recommendations for the specified site (meta tags, headings, etc.).
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch on-site SEO analysis.
+ */
 SiteHealthOnSiteSEO.propTypes = {
+/** Site identifier used to fetch on-site SEO data */
 	siteName: PropTypes.string.isRequired,
 };
 export type SiteHealthOnSiteSEOType = InferProps<typeof SiteHealthOnSiteSEO.propTypes>;

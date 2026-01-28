@@ -37,6 +37,7 @@ export * from './components/integrations/googlemap';
 export * from './components/integrations/google.reviews.functions';
 export * from './components/integrations/gravatar.functions';
 export * from './components/integrations/instagram.functions';
+export * from './components/integrations/lipsum';
 export * from './components/integrations/wordpress.functions';
 
 export * from './components/shoppingcart/ebay.functions';

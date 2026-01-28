@@ -116,8 +116,16 @@ type SiteConfigType = InferProps<typeof SiteConfigPropTypes>;
 
 type FullConfigType = SiteConfigType;
 
+/**
+ * ConfigBuilder — Interactive configuration editor for site-level settings (siteInfo, routes, visual design) with optional AI-assisted recommendations.
+ *
+ * @param {shape} [props.initialConfig] - Initial configuration object used to prepopulate the editor.
+ * @param {function} [props.onSave] - Callback invoked when the user saves the configuration (receives the full config object).
+ */
 ConfigBuilder.propTypes = {
+/** Initial site configuration to edit */
 	initialConfig: PropTypes.shape(SiteConfigPropTypes),
+	/** Save callback to persist config changes */
 	onSave: PropTypes.func,
 };
 export type ConfigBuilderType = InferProps<typeof ConfigBuilder.propTypes>;

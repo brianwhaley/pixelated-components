@@ -50,31 +50,77 @@ function generateSrcSet(
 
 type smartImageVariant = 'cloudinary' | 'nextjs' | 'img';
 
+/**
+ * SmartImage — unified image component that picks the best delivery variant (Cloudinary, Next.js Image, or plain <img>), generates srcset, and manages loading behavior.
+ *
+ * @param {string} [props.cloudinaryEnv] - Cloudinary environment key for constructing CDN URLs (product env).
+ * @param {string} [props.cloudinaryDomain] - Optional Cloudinary domain override.
+ * @param {string} [props.cloudinaryTransforms] - Optional transform presets for Cloudinary.
+ * @param {string} [props.src] - Source URL or path for the image (required).
+ * @param {string} [props.alt] - Alt text for the image (required for accessibility).
+ * @param {number|string} [props.width] - Preferred width in pixels or CSS value; used to build srcset when possible.
+ * @param {number|string} [props.height] - Preferred height in pixels or CSS value.
+ * @param {boolean} [props.aboveFold] - Hint that the image is above the fold and should be prioritized (eager loading / high fetch priority).
+ * @param {oneOf} [props.loading] - Loading strategy: 'lazy' or 'eager'.
+ * @param {boolean} [props.preload] - If true, suggests the image should be preloaded (best-effort).
+ * @param {oneOf} [props.decoding] - Decoding hint: 'async', 'auto' or 'sync'.
+ * @param {oneOf} [props.fetchPriority] - Fetch priority: 'high', 'low', or 'auto'.
+ * @param {string} [props.sizes] - Sizes attribute override for responsive images.
+ * @param {string} [props.srcSet] - Srcset override (if you want to supply your own). 
+ * @param {string} [props.className] - Additional CSS classes for the rendered element.
+ * @param {object} [props.style] - Inline style object for the image element.
+ * @param {string} [props.id] - DOM id to set on the image element.
+ * @param {string} [props.name] - Name used to derive a stable id when none is provided.
+ * @param {string} [props.title] - Optional title attribute for the image.
+ * @param {number} [props.quality] - Quality hint used by Cloudinary when generating URLs (0-100).
+ * @param {oneOf} [props.placeholder] - Placeholder behavior: 'blur' to use blur placeholder, 'empty' to use none.
+ * @param {oneOf} [props.variant] - Force variant: 'cloudinary' | 'nextjs' | 'img'.
+ */
 SmartImage.propTypes = {
+/** Cloudinary environment key (product environment) for URL generation. */
 	cloudinaryEnv: PropTypes.string,
+	/** Cloudinary domain override. */
 	cloudinaryDomain: PropTypes.string,
+	/** Optional Cloudinary transform presets. */
 	cloudinaryTransforms: PropTypes.string,
 	// shared props
+	/** Image source URL or path. */
 	src: PropTypes.string.isRequired,
+	/** Accessible alt text for the image. */
 	alt: PropTypes.string.isRequired,
-	// width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-	// height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+	/** Preferred width in pixels (used to build srcset when available). */
 	width: PropTypes.number,
+	/** Preferred height in pixels. */
 	height: PropTypes.number,
+	/** Hint that the image is above the fold and should be prioritized for loading. */
 	aboveFold: PropTypes.bool,
+	/** Loading hint: 'lazy' or 'eager'. */
 	loading: PropTypes.oneOf(['lazy', 'eager']),
+	/** When true suggests the image should be preloaded. */
 	preload: PropTypes.bool,
+	/** Decoding hint for the browser. */
 	decoding: PropTypes.oneOf(['async', 'auto', 'sync']),
+	/** Fetch priority hint for modern browsers. */
 	fetchPriority: PropTypes.oneOf(['high', 'low', 'auto']),
+	/** Sizes attribute override for responsive images. */
 	sizes: PropTypes.string,
+	/** Srcset override to pass explicit srcset values. */
 	srcSet: PropTypes.string,
+	/** Additional CSS class names for the image element. */
 	className: PropTypes.string,
+	/** Inline style object for the image element. */
 	style: PropTypes.object,
+	/** DOM id for the image. */
 	id: PropTypes.string,
+	/** Name used to derive a stable id or identification. */
 	name: PropTypes.string,
+	/** Optional title attribute for the image. */
 	title: PropTypes.string,
+	/** Quality hint (0-100) used for Cloudinary URL generation. */
 	quality: PropTypes.number,
+	/** Placeholder behavior for Next.js Image ('blur' for blurred placeholder). */
 	placeholder: PropTypes.oneOf(['blur', 'empty']),
+	/** Variant to force: 'cloudinary' | 'nextjs' | 'img'. */
 	variant: PropTypes.oneOf(['cloudinary', 'nextjs', 'img']),
 };
 export type SmartImageType = InferProps<typeof SmartImage.propTypes> & React.ImgHTMLAttributes<HTMLImageElement>;

@@ -33,7 +33,13 @@ function isGA() {
 }
 
 
+/**
+ * GoogleAnalytics — Inject Google Analytics gtag script and initialize with the given measurement id.
+ *
+ * @param {string} [props.id] - Google Analytics measurement ID (e.g., 'G-XXXX') or omitted to use provider config.
+ */
 GoogleAnalytics.propTypes = {
+/** Google Analytics measurement ID */
 	id: PropTypes.string,
 };
 export type GoogleAnalyticsType = InferProps<typeof GoogleAnalytics.propTypes>;
@@ -76,8 +82,16 @@ ${adId ? `window.gtag('config', '${adId}');` : ''}
 		<div className="ga" suppressHydrationWarning />
 	);
 }
+/**
+ * GoogleAnalyticsEvent — Trigger a one-off Google Analytics event using gtag.
+ *
+ * @param {string} [props.event_name] - Event name to send to GA (required).
+ * @param {object} [props.event_parameters] - Parameters associated with the event (required).
+ */
 GoogleAnalyticsEvent.propTypes = {
+/** Event name for gtag */
 	event_name: PropTypes.string.isRequired,
+	/** Event parameter object */
 	event_parameters: PropTypes.object.isRequired,
 };
 export type GoogleAnalyticsEventType = InferProps<typeof GoogleAnalyticsEvent.propTypes>;

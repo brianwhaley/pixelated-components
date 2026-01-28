@@ -11,10 +11,22 @@ function isImageURL(url: string) {
 	return isImage && isURL ;
 }
 
+/**
+ * Table — renders a simple data table with optional client-side column sorting.
+ *
+ * @param {array} [props.data] - Array of row objects (each object's keys become column headers).
+ * @param {string} [props.id] - DOM id for the table element (required for sortable headers to find the table).
+ * @param {boolean} [props.sortable] - Enable click-to-sort on column headers when true.
+ * @param {string} [props.altRowColor] - Optional alternate-row background color for zebra striping.
+ */
 Table.propTypes = {
+/** Array of row objects; object keys become table columns. */
 	data: PropTypes.array.isRequired,
+	/** DOM id used for sorting and header lookups. */
 	id: PropTypes.string.isRequired,
+	/** Enable clickable column headers for client-side sorting. */
 	sortable: PropTypes.bool,
+	/** CSS color value used for alternate rows when zebra striping is desired. */
 	altRowColor: PropTypes.string,
 };
 export type TableType = InferProps<typeof Table.propTypes>;

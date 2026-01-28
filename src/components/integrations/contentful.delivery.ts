@@ -15,7 +15,13 @@ export type ContentfulApiType = {
 };
 
 /* ========== CALL CONTENTFUL DELIVERY API ========== */
+/**
+ * callContentfulDeliveryAPI — Perform an HTTP GET against a fully-formed Contentful Delivery API URL and return parsed JSON.
+ *
+ * @param {string} [props.full_url] - Full request URL to the Contentful Delivery API (include access token / query params).
+ */
 callContentfulDeliveryAPI.propTypes = {
+/** Full request URL to the Contentful Delivery API */
 	full_url: PropTypes.string.isRequired,
 };
 export type callContentfulDeliveryAPIType = InferProps<typeof callContentfulDeliveryAPI.propTypes>;
@@ -43,12 +49,28 @@ export async function callContentfulDeliveryAPI(props: callContentfulDeliveryAPI
 
 
 /* ========== GET CONTENTFUL CARDS ========== */
+/**
+ * getContentfulEntries — Fetch entries from Contentful using the supplied API configuration.
+ *
+ * @param {shape} [props.apiProps] - Contentful API configuration object.
+ * @param {string} [props.proxyURL] - Optional proxy base URL to route requests through.
+ * @param {string} [props.base_url] - Contentful CDN base URL (e.g., https://cdn.contentful.com).
+ * @param {string} [props.space_id] - Contentful space ID.
+ * @param {string} [props.environment] - Contentful environment name (e.g., 'master').
+ * @param {string} [props.delivery_access_token] - Delivery API access token for read requests.
+ */
 getContentfulEntries.propTypes = {
+/** Contentful API configuration */
 	apiProps: PropTypes.shape({
+		/** Optional proxy base URL */
 		proxyURL: PropTypes.string,
+		/** Contentful CDN base URL */
 		base_url: PropTypes.string.isRequired,
+		/** Contentful space ID */
 		space_id: PropTypes.string.isRequired,
+		/** Contentful environment */
 		environment: PropTypes.string.isRequired,
+		/** Delivery API access token */
 		delivery_access_token: PropTypes.string.isRequired,
 	}).isRequired,
 };
@@ -69,7 +91,14 @@ https://www.contentful.com/developers/docs/references/content-delivery-api/#/ref
 
 
 /* ========== GET CONTENTFUL CARDS BY TYPE ========== */
+/**
+ * getContentfulEntriesByType — Filter entries by Contentful content type using provided API configuration.
+ *
+ * @param {shape} [props.apiProps] - Contentful API configuration object.
+ * @param {string} [props.contentType] - Target content type ID to filter entries by.
+ */
 getContentfulEntriesByType.propTypes = {
+/** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
 		base_url: PropTypes.string.isRequired,
@@ -77,6 +106,7 @@ getContentfulEntriesByType.propTypes = {
 		environment: PropTypes.string.isRequired,
 		delivery_access_token: PropTypes.string.isRequired,
 	}).isRequired,
+	/** Content type ID to filter by */
 	contentType: PropTypes.string.isRequired,
 };
 export type getContentfulEntriesByTypeType = InferProps<typeof getContentfulEntriesByType.propTypes>;
@@ -102,7 +132,14 @@ export async function getContentfulEntriesByType(props: getContentfulEntriesByTy
 
 
 /* ========== GET CONTENTFUL CARDS BY TYPE ========== */
+/**
+ * getContentfulContentType — Retrieve metadata for a Contentful content type.
+ *
+ * @param {shape} [props.apiProps] - Contentful API configuration object.
+ * @param {string} [props.contentType] - Contentful content type ID to retrieve.
+ */
 getContentfulContentType.propTypes = {
+/** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
 		base_url: PropTypes.string.isRequired,
@@ -110,6 +147,7 @@ getContentfulContentType.propTypes = {
 		environment: PropTypes.string.isRequired,
 		access_token: PropTypes.string.isRequired,
 	}).isRequired,
+	/** Content type ID to retrieve */
 	contentType: PropTypes.string.isRequired,
 };
 export type getContentfulContentTypeType = InferProps<typeof getContentfulContentType.propTypes>;
@@ -130,7 +168,14 @@ export async function getContentfulContentType(props: getContentfulContentTypeTy
 
 
 /* ========== GET CONTENTFUL ENTRY BY ENTRY ID ========== */
+/**
+ * getContentfulEntryByEntryID — Fetch a single Contentful entry by its entry ID.
+ *
+ * @param {shape} [props.apiProps] - Contentful API configuration object.
+ * @param {string} [props.entry_id] - Contentful entry ID to fetch.
+ */
 getContentfulEntryByEntryID.propTypes = {
+/** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
 		base_url: PropTypes.string.isRequired,
@@ -138,6 +183,7 @@ getContentfulEntryByEntryID.propTypes = {
 		environment: PropTypes.string.isRequired,
 		delivery_access_token: PropTypes.string.isRequired,
 	}).isRequired,
+	/** Target entry ID */
 	entry_id: PropTypes.string.isRequired,
 };
 export type getContentfulEntryByEntryIDType = InferProps<typeof getContentfulEntryByEntryID.propTypes>;
@@ -181,7 +227,15 @@ export async function getContentfulEntryByField(params: ContentfulCardParams) {
 
 
 /* ========== GET CONTENTFUL CARD TITLES ========== */
+/**
+ * getContentfulFieldValues — Return unique values for a field from entries of a given content type.
+ *
+ * @param {shape} [props.apiProps] - Contentful API configuration object.
+ * @param {string} [props.contentType] - Contentful content type ID to inspect.
+ * @param {string} [props.field] - Field name to extract values from.
+ */
 getContentfulFieldValues.propTypes = {
+/** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
 		base_url: PropTypes.string.isRequired,
@@ -189,7 +243,9 @@ getContentfulFieldValues.propTypes = {
 		environment: PropTypes.string.isRequired,
 		delivery_access_token: PropTypes.string.isRequired,
 	}).isRequired,
+	/** Content type ID to query */
 	contentType: PropTypes.string.isRequired,
+	/** Field name to extract values from */
 	field: PropTypes.string.isRequired,
 };
 export type getContentfulFieldValuesType = InferProps<typeof getContentfulFieldValues.propTypes>;
@@ -207,8 +263,16 @@ export async function getContentfulFieldValues(props: getContentfulFieldValuesTy
 
 
 /* ========== GET CONTENTFUL IMAGES FROM CARDS ========== */
+/**
+ * getContentfulImagesFromEntries — Resolve image asset URLs and alt text for entry image references.
+ *
+ * @param {any} [props.images] - Entry image references (items with sys.id that map to assets).
+ * @param {any} [props.assets] - Array of Contentful asset objects to resolve URLs from.
+ */
 getContentfulImagesFromEntries.propTypes = {
+/** Entry image references to resolve */
 	images: PropTypes.any.isRequired, 
+	/** Contentful asset objects containing file URLs and descriptions */
 	assets: PropTypes.any.isRequired,
 };
 export type getContentfulImagesFromEntriesType = InferProps<typeof getContentfulImagesFromEntries.propTypes>;
@@ -231,7 +295,13 @@ export async function getContentfulImagesFromEntries(props: getContentfulImagesF
 
 
 /* ========== GET CONTENTFUL ASSETS ========== */
+/**
+ * getContentfulAssets — Fetch asset records from Contentful for the configured space/environment.
+ *
+ * @param {shape} [props.apiProps] - Contentful API configuration object.
+ */
 getContentfulAssets.propTypes = {
+/** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
 		base_url: PropTypes.string.isRequired,
@@ -255,7 +325,13 @@ export async function getContentfulAssets(props: getContentfulAssetsType){
 
 
 /* ========== GET CONTENTFUL ASSET URLS ========== */
+/**
+ * getContentfulAssetURLs — Return resolved asset URLs and metadata using provided API configuration.
+ *
+ * @param {shape} [props.apiProps] - Contentful API configuration object.
+ */
 getContentfulAssetURLs.propTypes = {
+/** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
 		base_url: PropTypes.string.isRequired,
@@ -281,7 +357,14 @@ export async function getContentfulAssetURLs(props: getContentfulAssetURLsType) 
 
 
 /* ========== GET CONTENTFUL DISCOUNT CODES ========== */
+/**
+ * getContentfulDiscountCodes — Retrieve discount code entries from Contentful using the supplied API configuration.
+ *
+ * @param {shape} [props.apiProps] - Contentful API configuration object (base_url, space_id, environment, access tokens).
+ * @param {string} [props.contentType] - Contentful content type ID for discount codes (default: 'discountCodes').
+ */
 getContentfulDiscountCodes.propTypes = {
+/** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
 		base_url: PropTypes.string.isRequired,
@@ -289,6 +372,7 @@ getContentfulDiscountCodes.propTypes = {
 		environment: PropTypes.string.isRequired,
 		delivery_access_token: PropTypes.string.isRequired,
 	}).isRequired,
+	/** Contentful content type ID to fetch */
 	contentType: PropTypes.string.isRequired,
 };
 export type getContentfulDiscountCodesType = InferProps<typeof getContentfulDiscountCodes.propTypes>;

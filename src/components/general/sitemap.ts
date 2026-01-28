@@ -266,13 +266,29 @@ export async function createWordPressURLs(props: {site: string, includeImages?: 
 
 
 
+/**
+ * createContentfulURLs — Create sitemap entries for Contentful content by fetching a content type field.
+ *
+ * @param {shape} [props.apiProps] - Contentful API props: { base_url, space_id, environment, delivery_access_token }.
+ * @param {string} [props.base_url] - Contentful base API URL.
+ * @param {string} [props.space_id] - Contentful space id.
+ * @param {string} [props.environment] - Contentful environment (e.g., 'master').
+ * @param {string} [props.delivery_access_token] - Delivery API token (read-only) for Contentful.
+ * @param {string} [props.origin] - Origin to prefix generated URLs (e.g., 'https://example.com').
+ */
 createContentfulURLs.propTypes = {
+/** Contentful API properties */
 	apiProps: PropTypes.shape({
+		/** Contentful base URL */
 		base_url: PropTypes.string.isRequired,
+		/** Contentful space id */
 		space_id: PropTypes.string.isRequired,
+		/** Contentful environment */
 		environment: PropTypes.string.isRequired,
+		/** Delivery API token */
 		delivery_access_token: PropTypes.string.isRequired,
 	}).isRequired,
+	/** Origin used to build absolute URLs */
 	origin: PropTypes.string.isRequired,
 };
 export type createContentfulURLsType = InferProps<typeof createContentfulURLs.propTypes>;
@@ -303,13 +319,29 @@ export async function createContentfulURLs(props: createContentfulURLsType){
 
 
 
+/**
+ * createContentfulPageBuilderURLs — Generate page URLs for Contentful Page Builder pages.
+ *
+ * @param {shape} [props.apiProps] - Contentful API props (base_url, space_id, environment, delivery_access_token).
+ * @param {string} [props.base_url] - Contentful base API URL.
+ * @param {string} [props.space_id] - Contentful space id.
+ * @param {string} [props.environment] - Contentful environment.
+ * @param {string} [props.delivery_access_token] - Delivery API token for read-only access.
+ * @param {string} [props.origin] - Origin used to build absolute page URLs.
+ */
 createContentfulPageBuilderURLs.propTypes = {
+/** Contentful API properties */
 	apiProps: PropTypes.shape({
+		/** Contentful base URL */
 		base_url: PropTypes.string.isRequired,
+		/** Contentful space id */
 		space_id: PropTypes.string.isRequired,
+		/** Contentful environment */
 		environment: PropTypes.string.isRequired,
+		/** Delivery API token */
 		delivery_access_token: PropTypes.string.isRequired,
 	}).isRequired,
+	/** Origin used to build absolute URLs */
 	origin: PropTypes.string.isRequired,
 };
 export type createContentfulPageBuilderURLsType = InferProps<typeof createContentfulPageBuilderURLs.propTypes>;
@@ -335,14 +367,32 @@ export async function createContentfulPageBuilderURLs(props: createContentfulPag
 
 
 
+/**
+ * createContentfulImageURLs — Fetch Contentful assets and generate absolute image URLs for the sitemap.
+ *
+ * @param {shape} [props.apiProps] - Contentful API props (proxyURL optional, base_url, space_id, environment, access_token).
+ * @param {string} [props.proxyURL] - Optional proxy base URL to route image requests through.
+ * @param {string} [props.base_url] - Contentful base API URL.
+ * @param {string} [props.space_id] - Contentful space id.
+ * @param {string} [props.environment] - Contentful environment.
+ * @param {string} [props.access_token] - Access token to read assets from Contentful.
+ * @param {string} [props.origin] - Origin used to convert relative image paths to absolute URLs.
+ */
 createContentfulImageURLs.propTypes = {
+/** Contentful API properties */
 	apiProps: PropTypes.shape({
+		/** Optional proxy URL */
 		proxyURL: PropTypes.string,
+		/** Contentful base URL */
 		base_url: PropTypes.string.isRequired,
+		/** Contentful space id */
 		space_id: PropTypes.string.isRequired,
+		/** Contentful environment */
 		environment: PropTypes.string.isRequired,
+		/** Access token to read assets */
 		access_token: PropTypes.string.isRequired,
 	}).isRequired,
+	/** Origin used to convert relative URLs to absolute */
 	origin: PropTypes.string.isRequired,
 };
 export type createContentfulImageURLsType = InferProps<typeof createContentfulImageURLs.propTypes>;

@@ -227,6 +227,3 @@ export function convertNumericProps(props: any): void {
 		}
 	});
 }
-
-// Re-export utilities from main utilities file for convenience
-export { generateKey, capitalize, attributeMap };

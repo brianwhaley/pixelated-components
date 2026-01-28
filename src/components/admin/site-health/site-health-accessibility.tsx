@@ -7,7 +7,13 @@ import type { CoreWebVitalsResponse } from './site-health-types';
 import { getScoreIndicator } from './site-health-indicators';
 import { formatAuditItem, getAuditScoreIcon, getScoreColor, formatScore } from './site-health-utils';
 
+/**
+ * SiteHealthAccessibility — Accessibility report panel showing Lighthouse accessibility scores and audit details.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch accessibility metrics (e.g., 'example.com').
+ */
 SiteHealthAccessibility.propTypes = {
+/** Site identifier used to fetch accessibility data */
 	siteName: PropTypes.string.isRequired,
 };
 export type SiteHealthAccessibilityType = InferProps<typeof SiteHealthAccessibility.propTypes>;

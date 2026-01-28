@@ -13,9 +13,19 @@ interface GoogleSearchConsoleData {
   previousClicks: number;
 }
 
+/**
+ * SiteHealthGoogleSearchConsole — Visualize search performance (impressions/clicks) from Google Search Console.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch Search Console metrics.
+ * @param {string} [props.startDate] - Optional ISO start date for the analysis range.
+ * @param {string} [props.endDate] - Optional ISO end date for the analysis range.
+ */
 SiteHealthGoogleSearchConsole.propTypes = {
+/** Site identifier used to fetch Search Console metrics */
 	siteName: PropTypes.string.isRequired,
+	/** ISO start date for analysis (optional) */
 	startDate: PropTypes.string,
+	/** ISO end date for analysis (optional) */
 	endDate: PropTypes.string,
 };
 export type SiteHealthGoogleSearchConsoleType = InferProps<typeof SiteHealthGoogleSearchConsole.propTypes>;

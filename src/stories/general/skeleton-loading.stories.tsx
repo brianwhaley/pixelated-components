@@ -1,6 +1,6 @@
 import React from 'react';
 import { within } from '@testing-library/dom';
-import SkeletonLoading from '@/components/general/skeleton-loading';
+import { SkeletonLoading } from '@/components/general/skeleton-loading';
 
 export default { title: 'General/SkeletonLoading', component: SkeletonLoading };
 

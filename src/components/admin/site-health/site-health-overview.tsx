@@ -7,7 +7,13 @@ import type { CoreWebVitalsResponse } from './site-health-types';
 import { getScoreIndicator } from './site-health-indicators';
 import { formatScore, getScoreColor } from './site-health-utils';
 
+/**
+ * SiteHealthOverview — Aggregated site health dashboard combining multiple checks (uptime, performance, SEO).
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch consolidated site-health metrics.
+ */
 SiteHealthOverview.propTypes = {
+/** Site identifier used to build the overview */
 	siteName: PropTypes.string.isRequired,
 };
 export type SiteHealthOverviewType = InferProps<typeof SiteHealthOverview.propTypes>;

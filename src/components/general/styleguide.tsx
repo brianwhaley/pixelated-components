@@ -7,7 +7,13 @@ import { flattenRoutes } from "@pixelated-tech/components";
 import routesData from '../../data/routes.json';
 const routes = routesData.routes;
 
+/**
+ * StyleGuideUI — developer style guide and design tokens viewer (colors, fonts, IA routes).
+ *
+ * @param {array} [props.routes] - Route definitions used to display site information and navigation structure.
+ */
 StyleGuideUI.propTypes = {
+/** Array of route objects used to build example navigation and IA references. */
 	routes: PropTypes.array,
 };
 export type StyleGuideUIType = InferProps<typeof StyleGuideUI.propTypes>;

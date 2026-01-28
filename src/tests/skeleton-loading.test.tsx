@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '../test/test-utils';
-import SkeletonLoading from '../components/general/skeleton-loading';
+import { SkeletonLoading } from '../components/general/skeleton-loading';
 
 describe('SkeletonLoading (composite)', () => {
   it('renders the hero and card skeletons', () => {

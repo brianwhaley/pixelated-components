@@ -11,9 +11,19 @@ interface GoogleAnalyticsData {
   previousPageViews: number;
 }
 
+/**
+ * SiteHealthGoogleAnalytics — Shows Google Analytics metrics (page views, sessions) over a date range.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch analytics data.
+ * @param {string} [props.startDate] - Optional ISO start date for the metrics range.
+ * @param {string} [props.endDate] - Optional ISO end date for the metrics range.
+ */
 SiteHealthGoogleAnalytics.propTypes = {
+/** Site identifier used to fetch analytics metrics */
 	siteName: PropTypes.string.isRequired,
+	/** ISO start date for the metrics range (optional) */
 	startDate: PropTypes.string,
+	/** ISO end date for the metrics range (optional) */
 	endDate: PropTypes.string,
 };
 export type SiteHealthGoogleAnalyticsType = InferProps<typeof SiteHealthGoogleAnalytics.propTypes>;

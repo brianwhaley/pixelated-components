@@ -20,8 +20,16 @@ export const SiteHealthMockProvider = ({ mocks, children }: SiteHealthMockProvid
 	);
 };
 
+/**
+ * SiteHealthMockProvider — Provider that injects mock site-health data into child components for development and testing.
+ *
+ * @param {object} [props.mocks] - Map of mock data keyed by site identifier.
+ * @param {node} [props.children] - Child nodes that will receive the mock data via context.
+ */
 SiteHealthMockProvider.propTypes = {
+/** Map of mock site-health data */
 	mocks: PropTypes.object.isRequired,
+	/** Child nodes that consume mock data */
 	children: PropTypes.node.isRequired
 };
 

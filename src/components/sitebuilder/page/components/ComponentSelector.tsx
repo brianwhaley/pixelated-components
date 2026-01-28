@@ -11,9 +11,19 @@ import { generateFieldJSON } from '../lib/componentGeneration';
  * Phase 2: Auto-generate property form based on PropTypes
  */
 
+/**
+ * ComponentSelector — Select a component type (or edit an existing one) and generate an editable component schema.
+ *
+ * @param {function} [props.setEditableComponent] - Callback that receives a generated component JSON schema for editing.
+ * @param {string} [props.parentPath] - Optional path where a new child component should be inserted.
+ * @param {shape} [props.editMode] - Optional edit mode info { component, props } to pre-populate the selector for editing.
+ */
 ComponentSelector.propTypes = {
+/** Callback to set the editable component schema */
 	setEditableComponent: PropTypes.func.isRequired,
+	/** Optional parent path where children will be added */
 	parentPath: PropTypes.string,
+	/** Optional object used to pre-populate the selector when editing an existing component */
 	editMode: PropTypes.shape({
 		component: PropTypes.string,
 		props: PropTypes.object

@@ -3,12 +3,28 @@ import PropTypes, { InferProps } from 'prop-types';
 import { FontSelector } from './FontSelector';
 import './CompoundFontSelector.css';
 
+/**
+ * CompoundFontSelector — Combined font selector that exposes primary, fallback and generic font fields as one compound value.
+ *
+ * @param {string} [props.id] - Base id used for the internal font inputs.
+ * @param {string} [props.name] - Base name used for the internal font inputs.
+ * @param {string} [props.label] - Label displayed above the compound selector.
+ * @param {boolean} [props.required] - Whether selecting a primary font is required.
+ * @param {string} [props.value] - Current combined font value (comma-separated stack).
+ * @param {function} [props.onChange] - Callback invoked with the combined font stack when any part changes.
+ */
 CompoundFontSelector.propTypes = {
+/** Base id for internal inputs */
 	id: PropTypes.string.isRequired,
+	/** Base name for internal inputs */
 	name: PropTypes.string.isRequired,
+	/** Display label for the control */
 	label: PropTypes.string.isRequired,
+	/** Required flag for the primary font */
 	required: PropTypes.bool,
+	/** Combined font stack value */
 	value: PropTypes.string,
+	/** onChange callback receiving combined font string */
 	onChange: PropTypes.func,
 };
 export type CompoundFontSelectorType = InferProps<typeof CompoundFontSelector.propTypes>;
@@ -83,11 +99,27 @@ export function CompoundFontSelector(props: CompoundFontSelectorType) {
 	);
 }
 
+/**
+ * CompoundFontSelector — Combined font selector that exposes primary, fallback and generic font fields as one compound value.
+ *
+ * @param {string} [props.id] - Base id used for the internal font inputs.
+ * @param {string} [props.name] - Base name used for the internal font inputs.
+ * @param {string} [props.label] - Label displayed above the compound selector.
+ * @param {boolean} [props.required] - Whether selecting a primary font is required.
+ * @param {string} [props.value] - Current combined font value (comma-separated stack).
+ * @param {function} [props.onChange] - Callback invoked with the combined font stack when any part changes.
+ */
 CompoundFontSelector.propTypes = {
+/** Base id for internal inputs */
 	id: PropTypes.string.isRequired,
+	/** Base name for internal inputs */
 	name: PropTypes.string.isRequired,
+	/** Display label for the control */
 	label: PropTypes.string.isRequired,
+	/** Required flag for the primary font */
 	required: PropTypes.bool,
+	/** Combined font stack value */
 	value: PropTypes.string,
+	/** onChange callback receiving combined font string */
 	onChange: PropTypes.func,
 };

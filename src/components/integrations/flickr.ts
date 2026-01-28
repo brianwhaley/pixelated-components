@@ -67,8 +67,16 @@ function getFlickrSize (size: string) {
 
 
 
+/**
+ * GetFlickrData — Fetch image data from Flickr API using provided configuration.
+ *
+ * @param {object} [props.flickr] - Flickr-specific query overrides (method, tags, user_id, etc.).
+ * @param {object} [props.config] - Optional provider config to merge with defaults.
+ */
 GetFlickrData.propTypes = {
+/** Flickr-specific query overrides */
 	flickr: PropTypes.object,
+	/** Optional provider configuration for Flickr requests */
 	config: PropTypes.object,
 };
 export type GetFlickrDataType = InferProps<typeof GetFlickrData.propTypes>;
@@ -135,8 +143,16 @@ export function GetFlickrData( props: GetFlickrDataType ) {
 
 
 
+/**
+ * GenerateFlickrCards — Convert raw Flickr image objects into card-friendly data structures.
+ *
+ * @param {array} [props.flickrImages] - Array of Flickr image objects returned by the API.
+ * @param {string} [props.photoSize] - Desired photo size label (e.g., 'Medium', 'Large').
+ */
 GenerateFlickrCards.propTypes = {
+/** Flickr image array */
 	flickrImages: PropTypes.array.isRequired,
+	/** Desired photo size label */
 	photoSize: PropTypes.string.isRequired,
 };
 export type GenerateFlickrCardsType = InferProps<typeof GenerateFlickrCards.propTypes>;
@@ -160,13 +176,31 @@ export function GenerateFlickrCards(props: GenerateFlickrCardsType) {
 
 
 
+/**
+ * FlickrWrapper — Wrapper component that exposes Flickr query controls and renders fetched results.
+ *
+ * @param {string} [props.method] - Flickr API method to call (e.g., 'flickr.photos.search').
+ * @param {string} [props.api_key] - Flickr API key used for authentication.
+ * @param {string} [props.user_id] - Flickr user id to scope queries.
+ * @param {string} [props.tags] - Comma-separated tags to filter photos.
+ * @param {string} [props.photoset_id] - Photoset/album id to fetch specific album contents.
+ * @param {string} [props.photoSize] - Desired photo size label used by `getFlickrSize`.
+ * @param {function} [props.callback] - Optional callback function invoked after data fetch.
+ */
 FlickrWrapper.propTypes = {
+/** Flickr API method */
 	method: PropTypes.string,
+	/** Flickr API key */
 	api_key: PropTypes.string.isRequired,
+	/** Flickr user id */
 	user_id: PropTypes.string.isRequired,
+	/** Tag filter string */
 	tags: PropTypes.string,
+	/** Photoset/album id */
 	photoset_id: PropTypes.string,
+	/** Desired photo size label (e.g., 'Medium', 'Large') */
 	photoSize: PropTypes.string,
+	/** Callback invoked with an array of Carousel cards after data is fetched */
 	callback: PropTypes.func.isRequired,
 	/* 	callback: (arg0: CarouselCardType[]) => void; */
 };

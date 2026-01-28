@@ -8,14 +8,34 @@ import { layoutComponents } from '../lib/componentMap';
  * Shows Edit and Child buttons for each component
  */
 
+/**
+ * ComponentTree — Render a hierarchical tree of page components with edit, move, and delete controls.
+ *
+ * @param {array} [props.components] - Array of component objects that form the page tree.
+ * @param {function} [props.onSelectComponent] - Callback when a component is selected for adding children.
+ * @param {function} [props.onEditComponent] - Callback when the edit action is triggered for a component.
+ * @param {function} [props.onDeleteComponent] - Callback to remove a component from the tree.
+ * @param {function} [props.onMoveUp] - Move the component up within its parent's children array.
+ * @param {function} [props.onMoveDown] - Move the component down within its parent's children array.
+ * @param {string} [props.selectedPath] - Currently selected component path string.
+ * @param {string} [props.editPath] - Path of the component currently in edit mode.
+ */
 ComponentTree.propTypes = {
+/** Components forming the tree */
 	components: PropTypes.array.isRequired,
+	/** Select callback for child insertion */
 	onSelectComponent: PropTypes.func.isRequired,
+	/** Edit callback for component properties */
 	onEditComponent: PropTypes.func.isRequired,
+	/** Delete callback */
 	onDeleteComponent: PropTypes.func.isRequired,
+	/** Move-up callback */
 	onMoveUp: PropTypes.func.isRequired,
+	/** Move-down callback */
 	onMoveDown: PropTypes.func.isRequired,
+	/** Currently selected component path */
 	selectedPath: PropTypes.string,
+	/** Component path currently being edited */
 	editPath: PropTypes.string,
 };
 export type ComponentTreeType = InferProps<typeof ComponentTree.propTypes>;

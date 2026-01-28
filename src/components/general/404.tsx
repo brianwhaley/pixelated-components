@@ -7,7 +7,13 @@ import { SmartImage } from "../general/smartimage";
 import { usePixelatedConfig } from "../config/config.client";
 import "./404.css";
 
+/**
+ * FourOhFour — Simple 404 page that randomly displays an image and short message.
+ *
+ * @param {array} [props.images] - Array of image objects used to display the 404 page. Each object should contain { img: string, text: string, description?: string }.
+ */
 FourOhFour.propTypes = {
+	/** Array of image objects: { img: string, text: string, description?: string } */
 	images: PropTypes.array.isRequired,
 };
 export type FourOhFourType = InferProps<typeof FourOhFour.propTypes>;

@@ -7,13 +7,31 @@ import { usePixelatedConfig } from "../config/config.client";
 import { Tiles } from '../general/tiles';
 import type { CarouselCardType } from '../general/carousel';
 
+/**
+ * InstagramTiles — Fetch Instagram media and render as tiles.
+ *
+ * @param {string} [props.accessToken] - Instagram user access token with required permissions.
+ * @param {string} [props.userId] - Instagram user ID to fetch media from.
+ * @param {number} [props.limit] - Maximum number of media items to fetch (default: 12).
+ * @param {number} [props.rowCount] - Number of columns/rows to use in the tiles layout.
+ * @param {boolean} [props.useThumbnails] - Whether to prefer thumbnail images over full-size media.
+ * @param {boolean} [props.includeVideos] - Include video posts in results when true.
+ * @param {boolean} [props.includeCaptions] - Include captions in the returned tile metadata.
+ */
 InstagramTiles.propTypes = {
+/** Instagram access token */
 	accessToken: PropTypes.string,
+	/** Instagram user ID */
 	userId: PropTypes.string,
+	/** Max number of media items to fetch */
 	limit: PropTypes.number,
+	/** Number of columns/rows used by Tiles layout */
 	rowCount: PropTypes.number,
+	/** Prefer thumbnails when available */
 	useThumbnails: PropTypes.bool,
+	/** Include video posts */
 	includeVideos: PropTypes.bool,
+	/** Include captions in tile metadata */
 	includeCaptions: PropTypes.bool,
 };
 export type InstagramTilesType = InferProps<typeof InstagramTiles.propTypes>;

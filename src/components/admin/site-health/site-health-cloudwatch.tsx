@@ -13,9 +13,19 @@ interface CloudwatchHealthCheckData {
   successRate: number;
 }
 
+/**
+ * SiteHealthCloudwatch — Displays CloudWatch health-check metrics and availability over time.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch CloudWatch metrics.
+ * @param {string} [props.startDate] - Optional ISO date string to restrict the start of the range.
+ * @param {string} [props.endDate] - Optional ISO date string to restrict the end of the range.
+ */
 SiteHealthCloudwatch.propTypes = {
+/** Site identifier used to fetch CloudWatch metrics */
 	siteName: PropTypes.string.isRequired,
+	/** ISO start date for the metrics range (optional) */
 	startDate: PropTypes.string,
+	/** ISO end date for the metrics range (optional) */
 	endDate: PropTypes.string,
 };
 export type SiteHealthCloudwatchType = InferProps<typeof SiteHealthCloudwatch.propTypes>;

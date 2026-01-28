@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '../test/test-utils';
-import { SplitScroll } from '../components/general/splitscroll';
+import { SplitScroll, SplitScrollSection } from '../components/general/splitscroll';
 
 // Mock the SmartImage component
 vi.mock('../components/general/smartimage', () => ({
@@ -42,9 +42,9 @@ describe('SplitScroll Component', () => {
 		it('should render SplitScroll container', () => {
 			const { container } = renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test1.jpg" title="Section 1">
+					<SplitScrollSection img="/test1.jpg" title="Section 1">
 						Content 1
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -54,15 +54,15 @@ describe('SplitScroll Component', () => {
 		it('should render multiple sections', () => {
 			const { container } = renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test1.jpg" title="Section 1">
+					<SplitScrollSection img="/test1.jpg" title="Section 1">
 						Content 1
-					</SplitScroll.Section>
-					<SplitScroll.Section img="/test2.jpg" title="Section 2">
+					</SplitScrollSection>
+					<SplitScrollSection img="/test2.jpg" title="Section 2">
 						Content 2
-					</SplitScroll.Section>
-					<SplitScroll.Section img="/test3.jpg" title="Section 3">
+					</SplitScrollSection>
+					<SplitScrollSection img="/test3.jpg" title="Section 3">
 						Content 3
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -71,13 +71,13 @@ describe('SplitScroll Component', () => {
 		});
 	});
 
-	describe('SplitScroll.Section Component', () => {
+	describe('SplitScrollSection Component', () => {
 		it('should render as a split variant callout', () => {
 			const { container } = renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test.jpg" title="Test Section">
+					<SplitScrollSection img="/test.jpg" title="Test Section">
 						Test Content
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -87,9 +87,9 @@ describe('SplitScroll Component', () => {
 		it('should render section with image', () => {
 			renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test.jpg" imgAlt="Test Image" title="Test">
+					<SplitScrollSection img="/test.jpg" imgAlt="Test Image" title="Test">
 						Content
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -101,9 +101,9 @@ describe('SplitScroll Component', () => {
 		it('should render children content', () => {
 			renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test.jpg" title="Test">
+					<SplitScrollSection img="/test.jpg" title="Test">
 						<div data-testid="custom-content">Custom Content</div>
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -113,9 +113,9 @@ describe('SplitScroll Component', () => {
 		it('should render title', () => {
 			renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test.jpg" title="Test Title">
+					<SplitScrollSection img="/test.jpg" title="Test Title">
 						Content
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -125,13 +125,13 @@ describe('SplitScroll Component', () => {
 		it('should render subtitle', () => {
 			renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section 
+					<SplitScrollSection 
 						img="/test.jpg" 
 						title="Title"
 						subtitle="Test Subtitle"
 					>
 						Content
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -143,12 +143,12 @@ describe('SplitScroll Component', () => {
 		it('should add section index data attribute', () => {
 			const { container } = renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test1.jpg" title="Section 1">
+					<SplitScrollSection img="/test1.jpg" title="Section 1">
 						Content 1
-					</SplitScroll.Section>
-					<SplitScroll.Section img="/test2.jpg" title="Section 2">
+					</SplitScrollSection>
+					<SplitScrollSection img="/test2.jpg" title="Section 2">
 						Content 2
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -160,12 +160,12 @@ describe('SplitScroll Component', () => {
 		it('should set first section as active by default', () => {
 			const { container } = renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test1.jpg" title="Section 1">
+					<SplitScrollSection img="/test1.jpg" title="Section 1">
 						Content 1
-					</SplitScroll.Section>
-					<SplitScroll.Section img="/test2.jpg" title="Section 2">
+					</SplitScrollSection>
+					<SplitScrollSection img="/test2.jpg" title="Section 2">
 						Content 2
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -179,13 +179,13 @@ describe('SplitScroll Component', () => {
 		it('should pass imgShape to Callout', () => {
 			const { container } = renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section 
+					<SplitScrollSection 
 						img="/test.jpg" 
 						imgShape="round"
 						title="Test"
 					>
 						Content
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -195,12 +195,12 @@ describe('SplitScroll Component', () => {
 		it('should set aboveFold true for first section by default', () => {
 			renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test1.jpg" title="First">
+					<SplitScrollSection img="/test1.jpg" title="First">
 						Content 1
-					</SplitScroll.Section>
-					<SplitScroll.Section img="/test2.jpg" title="Second">
+					</SplitScrollSection>
+					<SplitScrollSection img="/test2.jpg" title="Second">
 						Content 2
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -214,12 +214,12 @@ describe('SplitScroll Component', () => {
 		it('should create IntersectionObserver instances', () => {
 			renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test1.jpg" title="Section 1">
+					<SplitScrollSection img="/test1.jpg" title="Section 1">
 						Content 1
-					</SplitScroll.Section>
-					<SplitScroll.Section img="/test2.jpg" title="Section 2">
+					</SplitScrollSection>
+					<SplitScrollSection img="/test2.jpg" title="Section 2">
 						Content 2
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -232,9 +232,9 @@ describe('SplitScroll Component', () => {
 		it('should handle single section', () => {
 			const { container } = renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test.jpg" title="Single">
+					<SplitScrollSection img="/test.jpg" title="Single">
 						Content
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -244,9 +244,9 @@ describe('SplitScroll Component', () => {
 		it('should handle section without title', () => {
 			renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test.jpg">
+					<SplitScrollSection img="/test.jpg">
 						Content without title
-					</SplitScroll.Section>
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -256,8 +256,8 @@ describe('SplitScroll Component', () => {
 		it('should handle empty children', () => {
 			const { container } = renderWithConfig(
 				<SplitScroll>
-					<SplitScroll.Section img="/test.jpg" title="Empty">
-					</SplitScroll.Section>
+					<SplitScrollSection img="/test.jpg" title="Empty">
+					</SplitScrollSection>
 				</SplitScroll>
 			);
 			
@@ -266,13 +266,13 @@ describe('SplitScroll Component', () => {
 	});
 
 	describe('Compound Component Pattern', () => {
-		it('should be accessible as SplitScroll.Section', () => {
-			expect(SplitScroll.Section).toBeDefined();
-			expect(typeof SplitScroll.Section).toBe('function');
+		it('should be accessible as SplitScrollSection', () => {
+			expect(SplitScrollSection).toBeDefined();
+			expect(typeof SplitScrollSection).toBe('function');
 		});
 
 		it('should have propTypes defined', () => {
-			expect(SplitScroll.Section.propTypes).toBeDefined();
+			expect(SplitScrollSection.propTypes).toBeDefined();
 		});
 	});
 });

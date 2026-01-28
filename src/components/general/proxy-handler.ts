@@ -1,15 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-/**
- * handlePixelatedProxy
- *
- * A centralized middleware handler for all Pixelated Technology sites.
- * Manages standard headers (x-path, x-url) and enforces a robust Security Policy.
- *
- * TODO: Future enhancement - Accept an options object to allow per-site CSP overrides,
- * enabling/disabling specific permissions (e.g., camera access), or setting custom rate limits.
- */
+
 
 /**
  * STANDARD_PROXY_MATCHER
@@ -19,6 +11,15 @@ import type { NextRequest } from "next/server";
  */
 export const STANDARD_PROXY_MATCHER = ["/((?!_next/image|_next/static|api|favicon.ico).*)"];
 
+/**
+ * handlePixelatedProxy
+ *
+ * A centralized middleware handler for all Pixelated Technology sites.
+ * Manages standard headers (x-path, x-url) and enforces a robust Security Policy.
+ *
+ * TODO: Future enhancement - Accept an options object to allow per-site CSP overrides,
+ * enabling/disabling specific permissions (e.g., camera access), or setting custom rate limits.
+ */
 export function handlePixelatedProxy(req: NextRequest) {
 	const path = req.nextUrl.pathname + (req.nextUrl.search || "");
 	const origin = (req.nextUrl as any)?.origin ?? new URL(req.url).origin;

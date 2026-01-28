@@ -20,11 +20,25 @@ function decodeString(str: string){
 }
 
 
+/**
+ * BlogPostList — Render a list of WordPress posts. If `posts` are provided they are used directly; otherwise the component will fetch posts from the configured WordPress endpoint.
+ *
+ * @param {string} [props.site] - WordPress site identifier (overrides provider config).
+ * @param {string} [props.baseURL] - Base URL for WordPress API if not using site config.
+ * @param {number} [props.count] - Maximum number of posts to fetch/display.
+ * @param {array} [props.posts] - Optional pre-fetched posts to render (bypasses remote fetch).
+ * @param {boolean} [props.showCategories] - Whether to show category icons for each post.
+ */
 BlogPostList.propTypes = {
+/** WordPress site identifier */
 	site: PropTypes.string,
+	/** Optional WordPress base URL */
 	baseURL: PropTypes.string,
+	/** Max number of posts to fetch/display */
 	count: PropTypes.number,
+	/** Optional array of pre-fetched posts */
 	posts: PropTypes.array,
+	/** Show category icons next to posts */
 	showCategories: PropTypes.bool,
 };
 export type BlogPostListType = InferProps<typeof BlogPostList.propTypes>;
@@ -84,14 +98,34 @@ export function BlogPostList(props: BlogPostListType) {
 	);
 }
 
+/**
+ * BlogPostSummary — Render a compact summary card for a single WordPress post.
+ *
+ * @param {oneOfType} [props.ID] - Post ID (string or number).
+ * @param {string} [props.title] - Post title.
+ * @param {string} [props.date] - Post publish date (ISO string).
+ * @param {string} [props.excerpt] - HTML excerpt to display as the summary.
+ * @param {string} [props.URL] - Canonical URL for the post.
+ * @param {object} [props.categories] - Categories object (keys -> category name) used to derive icons.
+ * @param {string} [props.featured_image] - URL of the post's featured image.
+ * @param {boolean} [props.showCategories] - Whether to render category icons beneath the summary.
+ */
 BlogPostSummary.propTypes = {
+/** Post ID (string or number) */
 	ID: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	/** Post title */
 	title: PropTypes.string,
+	/** Post publish date (ISO string) */
 	date: PropTypes.string,
+	/** HTML excerpt */
 	excerpt: PropTypes.string,
+	/** Canonical URL for the post */
 	URL: PropTypes.string,
+	/** Categories object used for icons */
 	categories: PropTypes.object,
+	/** Featured image URL */
 	featured_image: PropTypes.string,
+	/** Show categories flag */
 	showCategories: PropTypes.bool,
 };
 export type BlogPostSummaryType = InferProps<typeof BlogPostSummary.propTypes>;
@@ -147,7 +181,13 @@ export function BlogPostSummary(props: BlogPostSummaryType) {
 
 
 
+/**
+ * BlogPostCategories — Render a compact list of category names or icons for a post.
+ *
+ * @param {arrayOf} [props.categories] - Array of category strings to render.
+ */
 BlogPostCategories.propTypes = {
+/** Array of category names */
 	categories: PropTypes.arrayOf(PropTypes.string),
 };
 export type BlogPostCategoriesType = InferProps<typeof BlogPostCategories.propTypes>;

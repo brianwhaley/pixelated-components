@@ -11,7 +11,15 @@ const debug = false;
 Display all the components for a Form Builder -
 Element Buttons, Element Details, and the Form */
 
-FormBuilder.propTypes = {};
+/**
+ * FormBuilder — Visual editor for composing forms via JSON schema. Provides a field editor and a live preview powered by `FormEngine`.
+ *
+ * @param {function} [props.setFormData] - Callback that receives generated field JSON when building a new field (used by the UI to pass schema to the preview).
+ */
+FormBuilder.propTypes = {
+	/** Callback invoked with generated form JSON */
+	setFormData: PropTypes.func,
+};
 export type FormBuilderType = InferProps<typeof FormBuilder.propTypes>;
 export function FormBuilder(): JSX.Element {
 	// const [ url, setURL ] = useState('');
@@ -84,6 +92,7 @@ the JSON to create a form via FormEngine
 */
 
 FormBuild.propTypes = {
+/** Callback used to set the generated field JSON in the parent */
 	setFormData: PropTypes.func.isRequired,
 };
 export type FormBuildType = InferProps<typeof FormBuild.propTypes>;

@@ -19,11 +19,25 @@ export function initializeHubSpotScript(region: string, portalId: string) {
 	document.head.appendChild(script);
 }
 
+/**
+ * HubSpotForm — Embed a HubSpot form by injecting the HubSpot script and creating a form instance.
+ *
+ * @param {string} [props.region] - HubSpot region code (e.g., 'na1').
+ * @param {string} [props.portalId] - HubSpot portal ID (account identifier).
+ * @param {string} [props.formId] - HubSpot form GUID to render.
+ * @param {string} [props.target] - CSS selector target for where the form will be injected (overrides containerId).
+ * @param {string} [props.containerId] - ID of the container element to mount the form into (default: 'hubspot-form-container').
+ */
 HubSpotForm.propTypes = {
+/** HubSpot region code */
 	region: PropTypes.string,
+	/** HubSpot portal/account ID */
 	portalId: PropTypes.string,
+	/** HubSpot form GUID */
 	formId: PropTypes.string,
+	/** CSS selector or target element for the form */
 	target: PropTypes.string,
+	/** DOM ID of the container element for the form */
 	containerId: PropTypes.string,
 };
 export type HubSpotFormType = InferProps<typeof HubSpotForm.propTypes>;
@@ -65,7 +79,13 @@ export function HubSpotForm({
 
 
 
+/**
+ * HubspotTrackingCode — Inject the HubSpot tracking script for the given portal ID.
+ *
+ * @param {string} [props.hubID] - HubSpot portal ID used to load the tracking script.
+ */
 HubspotTrackingCode.propTypes = {
+/** HubSpot portal ID for tracking script injection */
 	hubID: PropTypes.string.isRequired,
 };
 export type HubspotTrackingCodeType = InferProps<typeof HubspotTrackingCode.propTypes>;
@@ -83,9 +103,19 @@ export function HubspotTrackingCode(props: HubspotTrackingCodeType) {
 
 
 
+/**
+ * getHubspotFormSubmissions — Retrieve submissions for a HubSpot form via the HubSpot Forms API (proxied).
+ *
+ * @param {string} [props.proxyURL] - Proxy base URL used to avoid CORS (must include trailing slash if required by proxy).
+ * @param {string} [props.formGUID] - HubSpot form GUID to fetch submissions for.
+ * @param {string} [props.apiToken] - HubSpot API token used for authorization.
+ */
 getHubspotFormSubmissions.propTypes = {
+/** Proxy base URL to route the request through */
 	proxyURL: PropTypes.string.isRequired,
+	/** HubSpot form GUID */
 	formGUID: PropTypes.string.isRequired,
+	/** Bearer API token for HubSpot requests */
 	apiToken: PropTypes.string.isRequired,
 };
 export type getHubspotFormSubmissionsType = InferProps<typeof getHubspotFormSubmissions.propTypes>;

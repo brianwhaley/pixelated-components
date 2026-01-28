@@ -11,7 +11,20 @@ import './pagebuilder.scss';
  * When editMode is false (default), renders clean components without edit UI
  */
 
+/**
+ * PageEngine — Render page components (and their children) with optional inline editing functionality.
+ *
+ * @param {shape} [props.pageData] - Page JSON containing a `components` array describing the page structure.
+ * @param {boolean} [props.editMode] - When true, show editing UI (borders, buttons) around components.
+ * @param {string} [props.selectedPath] - Path string identifying the currently selected component.
+ * @param {function} [props.onEditComponent] - Callback invoked to begin editing a component's properties.
+ * @param {function} [props.onSelectComponent] - Callback to select a component for adding children.
+ * @param {function} [props.onDeleteComponent] - Callback to delete a component at a given path.
+ * @param {function} [props.onMoveUp] - Callback to move a component up within its siblings.
+ * @param {function} [props.onMoveDown] - Callback to move a component down within its siblings.
+ */
 PageEngine.propTypes = {
+/** Page JSON with components array */
 	pageData: PropTypes.shape({
 		components: PropTypes.arrayOf(
 			PropTypes.shape({
@@ -21,12 +34,19 @@ PageEngine.propTypes = {
 			})
 		).isRequired,
 	}).isRequired,
+	/** Show inline edit UI when true */
 	editMode: PropTypes.bool,
+	/** Currently selected component path */
 	selectedPath: PropTypes.string,
+	/** Begin editing component properties */
 	onEditComponent: PropTypes.func,
+	/** Select a component for child insertion */
 	onSelectComponent: PropTypes.func,
+	/** Delete a component */
 	onDeleteComponent: PropTypes.func,
+	/** Move component up */
 	onMoveUp: PropTypes.func,
+	/** Move component down */
 	onMoveDown: PropTypes.func,
 };
 export type PageEngineType = InferProps<typeof PageEngine.propTypes>;

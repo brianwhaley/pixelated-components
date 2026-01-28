@@ -9,8 +9,16 @@ import { FormEngine } from '../../form/formengine';
  * Shows FormEngine when component is selected, placeholder otherwise
  */
 
+/**
+ * ComponentPropertiesForm — Display and edit the selected component's properties using FormEngine.
+ *
+ * @param {object} [props.editableComponent] - JSON schema for the currently selected component (contains `fields`).
+ * @param {function} [props.onSubmit] - Callback invoked when the edited component is saved; receives the component schema.
+ */
 ComponentPropertiesForm.propTypes = {
+/** JSON schema for the currently selected component */
 	editableComponent: PropTypes.object,
+	/** Callback invoked when component properties are submitted */
 	onSubmit: PropTypes.func.isRequired,
 };
 export type ComponentPropertiesFormType = InferProps<typeof ComponentPropertiesForm.propTypes>;

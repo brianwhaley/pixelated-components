@@ -16,12 +16,27 @@ const categoryIcons: Record<CategoryKey, string> = {
 	'': ''
 };
 
+/**
+ * FAQAccordion — list of frequently asked questions rendered as an accordion with search and expand controls.
+ *
+ * @param {shape} [props.faqsData] - Object containing FAQ data; expected to include a `mainEntity` array of question objects.
+ * @param {arrayOf} [props.mainEntity] - Array of FAQ objects each with `name`, `category`, and `acceptedAnswer`.
+ * @param {string} [props.name] - Question title text.
+ * @param {string} [props.category] - Category/section for the FAQ (used for grouping and icons).
+ * @param {shape} [props.acceptedAnswer] - Object with an answer, typically containing `text` as string or array of strings.
+ * @param {oneOfType} [props.text] - Answer text or an array of paragraphs.
+ */
 FAQAccordion.propTypes = {
+	/** FAQ data wrapper object; should contain mainEntity array. */
 	faqsData: PropTypes.shape({
+		/** Array of FAQ objects to render as accordion items. */
 		mainEntity: PropTypes.arrayOf(
 			PropTypes.shape({
+				/** Question text/title. */
 				name: PropTypes.string,
+				/** Category key for grouping or icons. */
 				category: PropTypes.string,
+				/** Accepted answer object with text or list of paragraphs. */
 				acceptedAnswer: PropTypes.shape({
 					text: PropTypes.oneOfType([
 						PropTypes.string,

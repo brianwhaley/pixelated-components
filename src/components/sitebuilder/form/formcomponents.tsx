@@ -132,10 +132,22 @@ const generateOptions = (
 
 
 
+/**
+ * FormLabel — Render a label and optional tooltip for a form field.
+ *
+ * @param {string} [props.id] - ID of the form control the label targets.
+ * @param {string} [props.label] - Text to display as the label.
+ * @param {string} [props.tooltip] - Optional tooltip text explaining the field.
+ * @param {string} [props.className] - Optional CSS class names for the label element.
+ */
 FormLabel.propTypes = {
+/** ID of the control associated with this label */
 	id: PropTypes.string.isRequired,
+	/** Label text to display */
 	label: PropTypes.string,
+	/** Optional tooltip text */
 	tooltip: PropTypes.string,
+	/** Additional CSS class names */
 	className: PropTypes.string,
 };
 FormLabel.defaultProps = {
@@ -162,10 +174,22 @@ function FormLabel(props: FormLabelType) {
 
 
 
+/**
+ * FormTooltip — Display contextual helper or validation messages for a form field.
+ *
+ * @param {string} [props.id] - ID used to associate the tooltip with a control.
+ * @param {arrayOf} [props.text] - Array of strings to render inside the tooltip.
+ * @param {string} [props.className] - CSS class names applied to the tooltip container.
+ * @param {oneOf} [props.mode] - Mode of the tooltip: 'tooltip' for help or 'validate' for validation messages.
+ */
 FormTooltip.propTypes = {
+/** Associated control id */
 	id: PropTypes.string,
+	/** Text lines to display in the tooltip */
 	text: PropTypes.arrayOf(PropTypes.string).isRequired,
+	/** Additional CSS class names */
 	className: PropTypes.string,
+	/** Tooltip mode */
 	mode: PropTypes.oneOf(['tooltip', 'validate']),
 };
 FormTooltip.defaultProps = {
@@ -222,39 +246,95 @@ function FormTooltip(props: FormTooltipType) {
 
 
 
+/**
+ * FormInput — Generic input field used by the FormEngine. Supports standard input attributes and validation hooks.
+ *
+ * @param {string} [props.type] - Input type (text, number, email, etc.).
+ * @param {string} [props.id] - Input id attribute (required).
+ * @param {string} [props.name] - Input name attribute.
+ * @param {string} [props.defaultValue] - Default value for uncontrolled inputs.
+ * @param {string} [props.value] - Controlled value for the input.
+ * @param {string} [props.list] - Datalist id to associate with the input.
+ * @param {string} [props.listItems] - Comma-separated datalist items (internal convenience prop).
+ * @param {string} [props.size] - Size attribute for text input.
+ * @param {string} [props.maxLength] - Maximum characters allowed.
+ * @param {string} [props.placeholder] - Placeholder text.
+ * @param {string} [props.autoComplete] - Autocomplete hint.
+ * @param {number} [props.tabIndex] - Tab order index.
+ * @param {object} [props.style] - Inline styles applied to the input element.
+ * @param {string} [props.min] - Minimum value (for number/date inputs).
+ * @param {string} [props.max] - Maximum value (for number/date inputs).
+ * @param {string} [props.step] - Step increment (for number inputs).
+ * @param {string} [props.autoFocus] - Whether to autofocus the input.
+ * @param {string} [props.disabled] - Disabled flag.
+ * @param {string} [props.readOnly] - Read-only flag.
+ * @param {string} [props.required] - Required flag.
+ * @param {string} [props.display] - Display style (inline/block) for layout purposes.
+ * @param {string} [props.label] - Label text associated with the input.
+ * @param {string} [props.tooltip] - Tooltip/help text for the input.
+ * @param {string} [props.className] - CSS class names applied to the input container.
+ * @param {string} [props.validate] - Named validation rule to run for this input.
+ * @param {function} [props.onChange] - Change handler invoked with synthetic change events.
+ */
 FormInput.propTypes = {
+/** Input type (text, number, email, etc.) */
 	type: PropTypes.string,
+	/** Input id attribute */
 	id: PropTypes.string.isRequired,
+	/** Input name attribute */
 	name: PropTypes.string,
+	/** Default value for uncontrolled inputs */
 	defaultValue: PropTypes.string,
+	/** Controlled value */
 	value: PropTypes.string,
+	/** Associated datalist id */
 	list: PropTypes.string,
+	/** Comma-separated datalist items */
 	listItems: PropTypes.string, /* this one is mine */
+	/** Input size attribute */
 	size: PropTypes.string,
+	/** Maximum allowed characters */
 	maxLength: PropTypes.string,
+	/** Placeholder text */
 	placeholder: PropTypes.string,
+	/** Autocomplete hint */
 	autoComplete: PropTypes.string,
+	/** Tab ordering index */
 	tabIndex: PropTypes.number,
+	/** Inline style object */
 	style: PropTypes.object,
 	"aria-label": PropTypes.string,
 	"aria-hidden": PropTypes.string,
+	/** Minimum value for numeric/date inputs */
 	min: PropTypes.string,
+	/** Maximum value for numeric/date inputs */
 	max: PropTypes.string,
+	/** Step increment for numeric inputs */
 	step: PropTypes.string,
 	// flag attributes
+	/** Autofocus flag */
 	autoFocus: PropTypes.string,
+	/** Disabled flag */
 	disabled: PropTypes.string,
+	/** Read-only flag */
 	readOnly: PropTypes.string,
+	/** Whether this field is required (use 'required' to mark mandatory) */
 	required: PropTypes.string,
 	// className, 
 	// data-mapping, data-component-endpoint, data-testid
 	// aria-invalid, aria-describedby, 
 	// ----- for calculations
+	/** Layout hint; use 'vertical' to stack label and control */
 	display: PropTypes.string,
+	/** Text label associated with the control */
 	label: PropTypes.string,
+	/** Helper text shown in a tooltip for the control */
 	tooltip: PropTypes.string,
+	/** Additional CSS classes applied to the container */
 	className: PropTypes.string,
+	/** Name of the validation rule to run for this field */
 	validate: PropTypes.string,
+	/** Change handler invoked with the new value */
 	onChange: PropTypes.func,
 };
 export type FormInputType = InferProps<typeof FormInput.propTypes>;
@@ -285,29 +365,65 @@ export function FormInput(props: FormInputType) {
 
 
 
+/**
+ * FormSelect — Render a standard HTML <select> element with generated option items.
+ *
+ * @param {string} [props.id] - Input id attribute.
+ * @param {string} [props.name] - Input name attribute.
+ * @param {string} [props.size] - visual size attribute for single-select lists.
+ * @param {string} [props.autoComplete] - Autocomplete hint.
+ * @param {oneOfType} [props.defaultValue] - Default selected value (string or array for multi-select).
+ * @param {string} [props.autoFocus] - Autofocus flag.
+ * @param {string} [props.disabled] - Disabled flag.
+ * @param {string} [props.multiple] - Multiple selection flag.
+ * @param {string} [props.readOnly] - Read-only flag.
+ * @param {string} [props.required] - Required flag.
+ * @param {string} [props.selected] - Currently selected value.
+ * @param {array} [props.options] - Array of option objects used to generate options.
+ * @param {string} [props.display] - Layout hint (e.g., 'vertical').
+ * @param {string} [props.label] - Field label text.
+ * @param {string} [props.tooltip] - Tooltip/help text.
+ * @param {string} [props.className] - CSS class names.
+ * @param {string} [props.validate] - Named validation rule.
+ * @param {function} [props.onChange] - Change handler invoked with new value.
+ */
 FormSelect.propTypes = {
+/** Input id */
 	id: PropTypes.string.isRequired,
+	/** Input name */
 	name: PropTypes.string,
+	/** Visual size for select */
 	size: PropTypes.string,
+	/** Autocomplete hint */
 	autoComplete: PropTypes.string,
+	/** Default selected value (or array for multi-select) */
 	defaultValue: PropTypes.oneOfType([
-		  PropTypes.string,
-		  PropTypes.array
+		PropTypes.string,
+		PropTypes.array
 	]),
-	// flag attributes
+	/** Autofocus flag */
 	autoFocus: PropTypes.string,
+	/** Disabled flag */
 	disabled: PropTypes.string,
+	/** Multiple selection flag */
 	multiple: PropTypes.string,
+	/** Read-only flag */
 	readOnly: PropTypes.string,
+	/** Required flag */
 	required: PropTypes.string,
-	// selected: PropTypes.string, // not used
-	// ----- for calculations
-	options : PropTypes.array,
+	/** Option list array */
+	options: PropTypes.array,
+	/** Layout hint (e.g., 'vertical') */
 	display: PropTypes.string,
+	/** Label text */
 	label: PropTypes.string,
+	/** Helper text shown in a tooltip for the control */
 	tooltip: PropTypes.string,
+	/** Additional CSS classes applied to the select container */
 	className: PropTypes.string,
+	/** Name of the validation rule to run for this field */
 	validate: PropTypes.string,
+	/** Change handler invoked with the new value */
 	onChange: PropTypes.func,
 };
 export type FormSelectType = InferProps<typeof FormSelect.propTypes>;
@@ -333,12 +449,20 @@ export function FormSelect(props: FormSelectType) {
 
 
 
+/**
+ * FormSelectOption — Render an individual <option> element for a select.
+ *
+ * @param {string} [props.text] - Visible option text.
+ * @param {string} [props.value] - Option value attribute.
+ * @param {boolean} [props.disabled] - Disable this option when true.
+ */
 FormSelectOption.propTypes = {
+/** Visible text for the option */
 	text: PropTypes.string,
+	/** Option value attribute */
 	value: PropTypes.string,
-	// flag attributes
+	/** Disabled flag for the option */
 	disabled: PropTypes.bool,
-	// selected : PropTypes.string
 };
 export type FormSelectOptionType = InferProps<typeof FormSelectOption.propTypes>;
 function FormSelectOption(props: FormSelectOptionType) {
@@ -360,26 +484,66 @@ function FormSelectOption(props: FormSelectOptionType) {
 
 
 
+/**
+ * FormTextarea — Multi-line text input with optional validation and label/tooltip support.
+ *
+ * @param {string} [props.id] - Textarea id attribute.
+ * @param {string} [props.name] - Textarea name attribute.
+ * @param {string} [props.rows] - Number of rows to display.
+ * @param {string} [props.cols] - Number of columns (cols) attribute.
+ * @param {string} [props.defaultValue] - Default text value for uncontrolled mode.
+ * @param {number} [props.maxLength] - Maximum characters allowed.
+ * @param {string} [props.placeholder] - Placeholder text.
+ * @param {string} [props.autoComplete] - Autocomplete hint.
+ * @param {string} [props.autoFocus] - Autofocus flag.
+ * @param {string} [props.disabled] - Disabled flag.
+ * @param {string} [props.readOnly] - Read-only flag.
+ * @param {string} [props.required] - Required flag.
+ * @param {string} [props.display] - Layout hint (e.g., 'vertical').
+ * @param {string} [props.label] - Field label text.
+ * @param {string} [props.tooltip] - Tooltip/help text.
+ * @param {string} [props.className] - CSS class names.
+ * @param {string} [props.validate] - Named validation rule.
+ * @param {function} [props.onChange] - Change handler invoked with new value.
+ */
 FormTextarea.propTypes = {
+/** Textarea id */
 	id: PropTypes.string.isRequired,
+	/** Textarea name */
 	name: PropTypes.string,
+	/** Number of rows */
 	rows: PropTypes.string,
+	/** Number of columns (visual width) */
 	cols: PropTypes.string,
+	/** Default uncontrolled text value */
 	defaultValue: PropTypes.string,
+	/** Maximum number of characters allowed */
 	maxLength: PropTypes.number,
+	/** Short hint displayed when the field is empty */
 	placeholder: PropTypes.string,
+	/** Browser autocomplete hint */
 	autoComplete: PropTypes.string,
 	// flag attributes
+	/** If set, the control will receive focus on mount */
 	autoFocus: PropTypes.string,
+	/** Set to 'disabled' to render the control disabled */
 	disabled: PropTypes.string,
+	/** Set to 'readOnly' to prevent user edits */
 	readOnly: PropTypes.string,
+	/** Whether this field is required ('required' to mark mandatory) */
 	required: PropTypes.string,
 	// ----- for calculations
+	/** Layout hint; use 'vertical' to stack label and control */
 	display: PropTypes.string,
+	/** Text label associated with the control */
 	label: PropTypes.string,
+	/** Helper text shown in a tooltip for the control */
 	tooltip: PropTypes.string,
+	/** Additional CSS classes applied to the container */
 	className: PropTypes.string,
+	/** Name of the validation rule to run for this field */
 	validate: PropTypes.string,
+	/** Change handler invoked with the new value */
 	onChange: PropTypes.func,
 };
 export type FormTextareaType = InferProps<typeof FormTextarea.propTypes>;
@@ -401,21 +565,50 @@ export function FormTextarea(props: FormTextareaType) {
 
 
 
+/**
+ * FormRadio — Render a group of radio buttons from the provided options and handle selection.
+ *
+ * @param {string} [props.id] - Unique id for this control group.
+ * @param {string} [props.name] - HTML name attribute shared by the radio inputs.
+ * @param {array} [props.options] - Array of option objects ({ text, value, ... }).
+ * @param {string} [props.autoFocus] - If present, the control will receive focus on mount.
+ * @param {string} [props.disabled] - Set to 'disabled' to disable the control group.
+ * @param {string} [props.readOnly] - Read-only flag; selection cannot be changed.
+ * @param {string} [props.required] - Set to 'required' to mark the group mandatory.
+ * @param {string} [props.selected] - Currently selected value.
+ * @param {string} [props.display] - Layout hint ('vertical' to stack options).
+ * @param {string} [props.label] - Optional label text shown above the group.
+ * @param {string} [props.tooltip] - Optional helper text shown in a tooltip.
+ * @param {string} [props.validate] - Named validation rule to apply to this field.
+ * @param {function} [props.onChange] - Handler invoked with the new selected value.
+ */
 FormRadio.propTypes = {
+/** Unique id for the control group */
 	id: PropTypes.string.isRequired, // not using?
+	/** HTML name attribute shared by all radio inputs in the group */
 	name: PropTypes.string.isRequired,
+	/** Array of option objects used to create radio options */
 	options : PropTypes.array,
 	// flag attributes
+	/** If present, the control will receive focus on mount */
 	autoFocus: PropTypes.string,
+	/** Set to 'disabled' to disable the control group */
 	disabled: PropTypes.string,
+	/** Read-only flag; prevent user changes when set to 'readOnly' */
 	readOnly: PropTypes.string,
+	/** Set to 'required' to mark the group mandatory */
 	required: PropTypes.string,
 	// ? selected: PropTypes.string,
 	// ----- for calculations
+	/** Layout hint (use 'vertical' to stack options) */
 	display: PropTypes.string,
+	/** Optional label text shown above the group */
 	label: PropTypes.string,
+	/** Helper text shown in a tooltip for the group */
 	tooltip: PropTypes.string,
+	/** Named validation rule to apply */
 	validate: PropTypes.string,
+	/** Handler invoked with the new selected value */
 	onChange: PropTypes.func,
 };
 export type FormRadioType = InferProps<typeof FormRadio.propTypes>;
@@ -438,13 +631,27 @@ export function FormRadio(props: FormRadioType) {
 
 
 
+/**
+ * FormRadioOption — Render an individual radio option within a FormRadio group.
+ *
+ * @param {string} [props.name] - HTML name attribute shared by the option.
+ * @param {string} [props.text] - Visible label text for the option.
+ * @param {string} [props.value] - Option value submitted when selected.
+ * @param {string} [props.checked] - Whether this option is currently selected.
+ * @param {any} [props.parent] - Reference to the parent control (used for controlled behavior).
+ */
 FormRadioOption.propTypes = {
+/** HTML name attribute shared by the option */
 	name: PropTypes.string,
+	/** Visible label text for the option */
 	text: PropTypes.string,
+	/** Option value submitted when selected */
 	value: PropTypes.string.isRequired,
 	// flag attributes
+	/** Whether this option is currently selected */
 	checked : PropTypes.string,
 	// ----- for calculations
+	/** Reference to the parent control (used for controlled behavior) */
 	parent : PropTypes.any,
 };
 export type FormRadioOptionType = InferProps<typeof FormRadioOption.propTypes>;
@@ -483,20 +690,48 @@ function FormRadioOption(props: FormRadioOptionType) {
 
 
 
+/**
+ * FormCheckbox — Render a set of checkbox inputs from provided options and manage selection array.
+ *
+ * @param {string} [props.id] - Unique id for this control group.
+ * @param {string} [props.name] - Base name used for generated checkbox inputs.
+ * @param {array} [props.options] - Array of option objects ({ text, value, ... }).
+ * @param {string} [props.autoFocus] - If present, the control will receive focus on mount.
+ * @param {string} [props.disabled] - Set to 'disabled' to disable the control group.
+ * @param {string} [props.readOnly] - Read-only flag; selection cannot be changed.
+ * @param {string} [props.display] - Layout hint (e.g., 'vertical' to stack checkboxes).
+ * @param {string} [props.label] - Optional label text shown above the group.
+ * @param {string} [props.tooltip] - Optional helper text shown in a tooltip.
+ * @param {string} [props.className] - Additional CSS classes applied to the container.
+ * @param {string} [props.validate] - Named validation rule to apply to the group.
+ * @param {function} [props.onChange] - Handler invoked with the updated selected values array.
+ */
 FormCheckbox.propTypes = {
+/** Unique id for the control group */
 	id: PropTypes.string.isRequired,
+	/** Base name used for generated checkbox inputs */
 	name: PropTypes.string.isRequired,
+	/** Array of option objects used to create checkbox options */
 	options : PropTypes.array,
 	// flag attributes
+	/** If present, the control will receive focus on mount */
 	autoFocus: PropTypes.string,
+	/** Set to 'disabled' to disable the control group */
 	disabled: PropTypes.string,
+	/** Read-only flag; prevent user changes when set to 'readOnly' */
 	readOnly: PropTypes.string,
 	// ----- for calculations
+	/** Layout hint; use 'vertical' to stack checkboxes */
 	display: PropTypes.string,
+	/** Optional label text shown above the group */
 	label: PropTypes.string,
+	/** Helper text shown in a tooltip for the group */
 	tooltip: PropTypes.string,
+	/** Additional CSS classes applied to the container */
 	className: PropTypes.string,
+	/** Named validation rule to apply to the group */
 	validate: PropTypes.string,
+	/** Handler invoked with the updated selected values array */
 	onChange: PropTypes.func,
 };
 export type FormCheckboxType = InferProps<typeof FormCheckbox.propTypes>;
@@ -520,12 +755,24 @@ export function FormCheckbox(props: FormCheckboxType) {
 
 
 
+/**
+ * FormCheckboxOption — Render a single checkbox option for a FormCheckbox group.
+ *
+ * @param {string} [props.text] - Visible label text for the checkbox option.
+ * @param {string} [props.value] - Value attribute for the option.
+ * @param {string} [props.selected] - Whether this option is selected (initial/default state).
+ * @param {any} [props.parent] - Reference to the parent control (used to update values).
+ */
 FormCheckboxOption.propTypes = {
+/** Visible label text for the checkbox option */
 	text: PropTypes.string.isRequired,
+	/** Value attribute for the option */
 	value: PropTypes.string.isRequired,
 	// flag attributes
+	/** Whether this option is selected (used for initial/default state) */
 	selected : PropTypes.string,
 	// ----- for calculations
+	/** Reference to the parent control (used to update values) */
 	parent : PropTypes.any,
 	
 };
@@ -564,12 +811,26 @@ function FormCheckboxOption(props: FormCheckboxOptionType) {
 
 
 
+/**
+ * FormButton — Render a standard HTML button used for form actions.
+ *
+ * @param {string} [props.type] - Button type: 'button' | 'submit' | 'reset'.
+ * @param {string} [props.id] - Unique identifier for the button element.
+ * @param {string} [props.text] - Text displayed inside the button.
+ * @param {string} [props.className] - Additional CSS classes for the button.
+ * @param {function} [props.onClick] - Click handler function.
+ */
 FormButton.propTypes = {
+/** Button type: 'button' | 'submit' | 'reset' */
 	type: PropTypes.string,
+	/** Unique identifier for the button element */
 	id: PropTypes.string.isRequired,
+	/** Text displayed inside the button */
 	text: PropTypes.string,
 	// ----- for calculations
+	/** Additional CSS classes for the button */
 	className: PropTypes.string,
+	/** Click handler function */
 	onClick: PropTypes.func
 };
 export type FormButtonType = InferProps<typeof FormButton.propTypes>;
@@ -592,8 +853,16 @@ export function FormButton(props: FormButtonType) {
 
 
 
+/**
+ * FormDataList — Render a native HTML <datalist> used to provide suggestions for text inputs.
+ *
+ * @param {string} [props.id] - Id attribute for the generated <datalist> element.
+ * @param {array} [props.items] - Array of string items to include as options.
+ */
 FormDataList.propTypes = {
+/** Id attribute for the generated <datalist> element */
 	id: PropTypes.string.isRequired,
+	/** Array of string items to include as options */
 	items: PropTypes.array,
 };
 export type FormDataListType = InferProps<typeof FormDataList.propTypes>;
@@ -617,23 +886,57 @@ export function FormDataList(props: FormDataListType) {
 
 
 
+/**
+ * FormTagInput — Tag entry control that allows adding/removing multiple string tags.
+ *
+ * @param {string} [props.id] - Unique id for the tag input control.
+ * @param {string} [props.name] - Name attribute for the input element.
+ * @param {arrayOf} [props.defaultValue] - Initial tags for uncontrolled mode.
+ * @param {arrayOf} [props.value] - Controlled tags array when used as a controlled component.
+ * @param {string} [props.placeholder] - Placeholder text shown when empty.
+ * @param {string} [props.autoComplete] - Browser autocomplete hint.
+ * @param {string} [props.disabled] - Set to 'disabled' to disable input.
+ * @param {string} [props.readOnly] - Set to 'readOnly' to prevent edits.
+ * @param {string} [props.required] - Mark field as required when set to 'required'.
+ * @param {string} [props.display] - Layout hint (e.g., 'vertical' to place validation below).
+ * @param {string} [props.label] - Label text for the control.
+ * @param {string} [props.tooltip] - Helper text shown in a tooltip.
+ * @param {string} [props.className] - Additional CSS classes for the component.
+ * @param {string} [props.validate] - Named validation rule to run for this field.
+ * @param {function} [props.onChange] - Change handler invoked with the updated tags array.
+ */
 FormTagInput.propTypes = {
+/** Unique id for the tag input control */
 	id: PropTypes.string.isRequired,
+	/** Name attribute for the input element */
 	name: PropTypes.string,
+	/** Initial tags for uncontrolled mode */
 	defaultValue: PropTypes.arrayOf(PropTypes.string),
+	/** Controlled tags array when used as a controlled component */
 	value: PropTypes.arrayOf(PropTypes.string),
+	/** Placeholder text shown when empty */
 	placeholder: PropTypes.string,
+	/** Browser autocomplete hint */
 	autoComplete: PropTypes.string,
 	// flag attributes
+	/** Set to 'disabled' to disable input */
 	disabled: PropTypes.string,
+	/** Set to 'readOnly' to prevent edits */
 	readOnly: PropTypes.string,
+	/** Mark field as required when set to 'required' */
 	required: PropTypes.string,
 	// ----- for calculations
+	/** Layout hint (e.g., 'vertical' to place validation below) */
 	display: PropTypes.string,
+	/** Label text for the control */
 	label: PropTypes.string,
+	/** Helper text shown in a tooltip */
 	tooltip: PropTypes.string,
+	/** Additional CSS classes for the component */
 	className: PropTypes.string,
+	/** Named validation rule to run for this field */
 	validate: PropTypes.string,
+	/** Change handler invoked with the updated tags array */
 	onChange: PropTypes.func,
 };
 export type FormTagInputType = InferProps<typeof FormTagInput.propTypes>;
@@ -769,8 +1072,15 @@ export function FormTagInput(props: FormTagInputType) {
 
 
 
-FormFieldset.propTypes = {
-};
+/**
+ * FormFieldset — Semantic grouping container used by form components.
+ *
+ * This component currently does not accept any props but provides a named
+ * placeholder for grouping form fields and future extensions.
+ * @param {any} [props] - No props are accepted by FormFieldset.
+ */
+/** FormFieldset.propTypes — No props */
+FormFieldset.propTypes = { /** no props */ };
 export type FormFieldsetType = InferProps<typeof FormFieldset.propTypes>;
 export function FormFieldset(props: FormFieldsetType) {
 	return (
@@ -793,8 +1103,16 @@ export function FormFieldset(props: FormFieldsetType) {
   - aria-hidden + tabIndex -1 + autocomplete="off"
   - no label / no validation / no required
 */
+/**
+ * FormHoneypot — Render a hidden honeypot text input used to trap automated spam bots.
+ *
+ * @param {string} [props.id] - Id for the honeypot field (defaults to 'winnie').
+ * @param {string} [props.name] - Name attribute for the honeypot input (defaults to 'website').
+ */
 FormHoneypot.propTypes = {
+/** Id for the honeypot field (defaults to 'winnie') */
 	id: PropTypes.string.isRequired,
+	/** Name attribute for the honeypot input (defaults to 'website') */
 	name: PropTypes.string,
 };
 export type FormHoneypotType = InferProps<typeof FormHoneypot.propTypes>;

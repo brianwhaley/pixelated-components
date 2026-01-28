@@ -75,9 +75,19 @@ export type EbayApiType = {
 }
 
 
+/**
+ * getShoppingCartItem — Convert an eBay API item object into the internal ShoppingCartType shape used by the cart.
+ *
+ * @param {any} [props.thisItem] - Raw eBay item object from the API.
+ * @param {string} [props.cloudinaryProductEnv] - Optional Cloudinary cloud name to transform image URLs.
+ * @param {any} [props.apiProps] - eBay API properties used to determine category/availability.
+ */
 getShoppingCartItem.propTypes = {
+/** Raw eBay item object */
 	thisItem: PropTypes.any.isRequired,
+	/** Optional Cloudinary product environment */
 	cloudinaryProductEnv: PropTypes.string,
+	/** eBay API properties */
 	apiProps: PropTypes.any,
 };
 export type getShoppingCartItemType = InferProps<typeof getShoppingCartItem.propTypes>;
@@ -121,7 +131,13 @@ getItem tokenScope: 'https://api.ebay.com/oauth/api_scope',
 /* ========== GET TOKEN ========== */
 
 
+/**
+ * getEbayAppToken — Retrieve an application access token from eBay for API calls.
+ *
+ * @param {object} [props.apiProps] - eBay API configuration (appId, appCertId, proxyURL, baseTokenURL, etc.).
+ */
 getEbayAppToken.propTypes = {
+/** eBay API configuration for token retrieval */
 	apiProps: PropTypes.object.isRequired,
 };
 export type getEbayAppTokenType = InferProps<typeof getEbayAppToken.propTypes>;
@@ -161,8 +177,16 @@ export function getEbayAppToken(props: getEbayAppTokenType){
 /* ========== ITEM SEARCH ========== */
 
 
+/**
+ * getEbayBrowseSearch — Execute a browse search request against the eBay Browse API and return results.
+ *
+ * @param {object} [props.apiProps] - eBay API configuration and query parameters.
+ * @param {string} [props.token] - OAuth token used to authorize the request.
+ */
 getEbayBrowseSearch.propTypes = {
+/** eBay API configuration */
 	apiProps: PropTypes.object.isRequired,
+	/** OAuth token to authorize the request */
 	token: PropTypes.string.isRequired,
 };
 export type getEbayBrowseSearchType = InferProps<typeof getEbayBrowseSearch.propTypes>;
@@ -212,8 +236,16 @@ export function getEbayBrowseSearch(props: getEbayBrowseSearchType){
 /* ========== GET ITEM ========== */
 
 
+/**
+ * getEbayBrowseItem — Retrieve a single item detail from the eBay Browse API.
+ *
+ * @param {object} [props.apiProps] - eBay API configuration (item URL/qsItemURL).
+ * @param {string} [props.token] - OAuth token used to authorize the request.
+ */
 getEbayBrowseItem.propTypes = {
+/** eBay API configuration */
 	apiProps: PropTypes.object.isRequired,
+	/** OAuth token to authorize the request */
 	token: PropTypes.string.isRequired,
 };
 export type getEbayBrowseItemType = InferProps<typeof getEbayBrowseItem.propTypes>;
@@ -263,8 +295,16 @@ export function getEbayBrowseItem(props: getEbayBrowseItemType){
 /* ========== RATE LIMITS ========== */
 
 
+/**
+ * getEbayRateLimits — Fetch API rate limit information for the eBay analytics endpoints.
+ *
+ * @param {object} [props.apiProps] - eBay analytics API config (baseAnalyticsURL, proxyURL).
+ * @param {string} [props.token] - OAuth token used to authorize analytics requests.
+ */
 getEbayRateLimits.propTypes = {
+/** eBay analytics API configuration */
 	apiProps: PropTypes.object.isRequired,
+	/** OAuth token for analytics requests */
 	token: PropTypes.string.isRequired,
 };
 export type getEbayRateLimitsType = InferProps<typeof getEbayRateLimits.propTypes>;
@@ -316,7 +356,13 @@ export function getEbayRateLimits(props: getEbayRateLimitsType){
 
 /* ========== GET EBAY ITEMS ========== */
 
+/**
+ * getEbayItems — Fetch a list of eBay items using the configured browse search helper.
+ *
+ * @param {object} [props.apiProps] - eBay API configuration and query parameters.
+ */
 getEbayItems.propTypes = {
+/** eBay API configuration and query params */
 	apiProps: PropTypes.object.isRequired,
 };
 export type getEbayItemsType = InferProps<typeof getEbayItems.propTypes>;
@@ -337,7 +383,13 @@ export async function getEbayItems(props: getEbayItemsType) {
 
 /* ========== GET EBAY ITEMS ========== */
 
+/**
+ * getEbayItem — Fetch a single eBay item using the configured eBay item helper.
+ *
+ * @param {object} [props.apiProps] - eBay API item config (baseItemURL, qsItemURL, proxyURL).
+ */
 getEbayItem.propTypes = {
+/** eBay API item config */
 	apiProps: PropTypes.object.isRequired,
 };
 export type getEbayItemType = InferProps<typeof getEbayItem.propTypes>;

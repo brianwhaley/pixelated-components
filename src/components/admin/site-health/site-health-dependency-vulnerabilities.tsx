@@ -5,7 +5,13 @@ import PropTypes, { InferProps } from 'prop-types';
 import { SiteHealthTemplate } from './site-health-template';
 import type { DependencyData } from './site-health-types';
 
+/**
+ * SiteHealthDependencyVulnerabilities — Shows known dependency vulnerabilities and their severities for the site.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch dependency vulnerability data.
+ */
 SiteHealthDependencyVulnerabilities.propTypes = {
+/** Site identifier used to fetch dependency vulnerability reports */
 	siteName: PropTypes.string.isRequired,
 };
 export type SiteHealthDependencyVulnerabilitiesType = InferProps<typeof SiteHealthDependencyVulnerabilities.propTypes>;

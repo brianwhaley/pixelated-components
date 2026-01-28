@@ -27,7 +27,14 @@ const debug = false;
 /* ========== SHOPPING CART UI COMPONENT ========== */
 /* ================================================ */
 
+/**
+ * ShoppingCart — page-level shopping cart UI that handles items, shipping, and checkout flows.
+ *
+ * Props:
+ * @param {string} [props.payPalClientID] - Optional PayPal client ID to enable the PayPal checkout button.
+ */
 ShoppingCart.propTypes = {
+	/** Optional PayPal client ID to enable PayPal checkout */
 	payPalClientID: PropTypes.string,
 };
 export type ShoppingCartType = InferProps<typeof ShoppingCart.propTypes>;
@@ -129,7 +136,13 @@ export function ShoppingCart( props: ShoppingCartType ) {
 		setShippingInfo(formObject);
 	}
 
+	/**
+	 * handleOnApprove — PayPal approval handler invoked after successful payment.
+	 *
+	 * @param {object} [props.data] - Payment approval payload returned by PayPal's onApprove.
+	 */
 	handleOnApprove.propTypes = {
+		/** PayPal onApprove payload */
 		data: PropTypes.object.isRequired
 	};
 	type handleOnApproveType = InferProps<typeof handleOnApprove.propTypes>;
@@ -221,13 +234,31 @@ export function ShoppingCart( props: ShoppingCartType ) {
 }
 
 
+/**
+ * ShoppingCartItem — Render a single cart line item showing thumbnail, title, quantity and price.
+ *
+ * @param {shape} [props.item] - Shopping cart line item with id, title, image, quantity and cost.
+ * @param {string} [props.itemID] - Unique identifier for the cart item.
+ * @param {string} [props.itemURL] - Optional item detail URL to link the title and image.
+ * @param {string} [props.itemTitle] - Display title for the item.
+ * @param {string} [props.itemImageURL] - Thumbnail image URL for the item.
+ * @param {number} [props.itemQuantity] - Quantity of this line item in the cart.
+ * @param {number} [props.itemCost] - Per-item cost (numeric) used to compute totals.
+ */
 ShoppingCartItem.propTypes = {
+/** Shopping cart line item object */
 	item: PropTypes.shape({
+		/** Unique item id */
 		itemID: PropTypes.string.isRequired,
+		/** Optional URL for the item details */
 		itemURL: PropTypes.string,
+		/** Item display title */
 		itemTitle: PropTypes.string.isRequired,
+		/** Thumbnail image URL */
 		itemImageURL: PropTypes.string,
+		/** Line item quantity */
 		itemQuantity: PropTypes.number.isRequired,
+		/** Per-item price */
 		itemCost: PropTypes.number.isRequired,
 	}).isRequired
 };
@@ -287,15 +318,35 @@ export function ShoppingCartItem(props: ShoppingCartItemType) {
 
 
 
+/**
+ * CheckoutItems — Display a checkout summary with itemized lines and shipping information.
+ *
+ * @param {arrayOf} [props.items] - Cart items included in the checkout summary.
+ * @param {shape} [props.shippingTo] - Shipping address object with name, street1, city, state and zip.
+ * @param {number} [props.subtotal_discount] - Discount amount applied to subtotal.
+ * @param {number} [props.subtotal] - Subtotal amount before shipping and taxes.
+ * @param {number} [props.shippingCost] - Shipping cost for the order.
+ * @param {number} [props.handlingFee] - Optional handling fees.
+ * @param {number} [props.salesTax] - Sales tax amount.
+ * @param {number} [props.total] - Final total amount charged.
+ */
 CheckoutItems.propTypes = {
+/** Array of cart items to summarize */
 	items: PropTypes.arrayOf(PropTypes.shape({
+		/** Item identifier */
 		itemID: PropTypes.string.isRequired,
+		/** Item detail URL (optional) */
 		itemURL: PropTypes.string,
+		/** Item title */
 		itemTitle: PropTypes.string.isRequired,
+		/** Item image URL */
 		itemImageURL: PropTypes.string,
+		/** Quantity for this item */
 		itemQuantity: PropTypes.number.isRequired,
+		/** Per-item price */
 		itemCost: PropTypes.number.isRequired,
 	})).isRequired,
+	/** Shipping address object */
 	shippingTo: PropTypes.shape({
 		name: PropTypes.string.isRequired,
 		street1: PropTypes.string.isRequired,
@@ -303,11 +354,17 @@ CheckoutItems.propTypes = {
 		state: PropTypes.string.isRequired,
 		zip: PropTypes.string.isRequired,
 	}).isRequired,
+	/** Discount amount applied to subtotal */
 	subtotal_discount: PropTypes.number.isRequired,
+	/** Subtotal amount before shipping and taxes */
 	subtotal: PropTypes.number.isRequired,
+	/** Shipping cost for the order */
 	shippingCost: PropTypes.number.isRequired,
+	/** Handling fee applied to the order */
 	handlingFee: PropTypes.number.isRequired,
+	/** Sales tax amount */
 	salesTax: PropTypes.number.isRequired,
+	/** Final total amount */
 	total: PropTypes.number.isRequired,
 };
 export type CheckoutItemsType = InferProps<typeof CheckoutItems.propTypes>;
@@ -366,7 +423,13 @@ export function CheckoutItems(props: CheckoutItemsType) {
 }
 
 
+/**
+ * CartButton — Render a cart button showing the current cart item count and navigates to the cart page when clicked.
+ *
+ * @param {string} [props.href] - Destination URL for the cart page.
+ */
 CartButton.propTypes = {
+/** Destination URL for viewing the shopping cart */
 	href: PropTypes.string.isRequired,
 };
 export type CartButtonType = InferProps<typeof CartButton.propTypes>;
@@ -406,8 +469,16 @@ export function CartButton(props: CartButtonType) {
 }
 
 
+/**
+ * ViewItemDetails — Button to navigate to an item detail page for a given item ID.
+ *
+ * @param {string} [props.href] - Base URL for the item detail page.
+ * @param {string} [props.itemID] - Item identifier appended to the URL when navigating.
+ */
 ViewItemDetails.propTypes = {
+/** Base URL for item details */
 	href: PropTypes.string.isRequired,
+	/** Item identifier to navigate to */
 	itemID: PropTypes.string.isRequired,
 };
 export type ViewItemDetailsType = InferProps<typeof ViewItemDetails.propTypes>;
@@ -422,9 +493,19 @@ export function ViewItemDetails(props: ViewItemDetailsType){
 }
 
 
+/**
+ * AddToCartButton — Button that adds an item to the shopping cart and displays a confirmation modal.
+ *
+ * @param {function} [props.handler] - Handler function that performs the add-to-cart action (receives the item object).
+ * @param {object} [props.item] - Shopping cart item object to add.
+ * @param {string} [props.itemID] - Unique identifier for the item used for modal IDs and button IDs.
+ */
 AddToCartButton.propTypes = {
+/** Handler called to add the item to cart */
 	handler: PropTypes.func.isRequired,
+	/** Shopping cart item object */
 	item: PropTypes.object.isRequired,
+	/** Unique item identifier */
 	itemID: PropTypes.string.isRequired,
 };
 export type AddToCartButtonType = InferProps<typeof AddToCartButton.propTypes>;
@@ -449,8 +530,16 @@ export function AddToCartButton(props: AddToCartButtonType){
 }
 
 
+/**
+ * GoToCartButton — Button that navigates the user to the shopping cart page.
+ *
+ * @param {string} [props.href] - Destination URL for the shopping cart.
+ * @param {string} [props.itemID] - ID used to compose button id attributes (not required for navigation).
+ */
 GoToCartButton.propTypes = {
+/** Cart page URL */
 	href: PropTypes.string.isRequired,
+	/** Item ID used for button id attributes */
 	itemID: PropTypes.string.isRequired,
 };
 export type GoToCartButtonType = InferProps<typeof GoToCartButton.propTypes>;

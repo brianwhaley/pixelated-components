@@ -7,7 +7,13 @@ import type { CoreWebVitalsResponse } from './site-health-types';
 import { getScoreIndicator } from './site-health-indicators';
 import { formatAuditItem, getAuditScoreIcon, getScoreColor } from './site-health-utils';
 
+/**
+ * SiteHealthSEO — SEO report panel focused on searchability and structured data checks.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch SEO-related metrics.
+ */
 SiteHealthSEO.propTypes = {
+/** Site identifier used to fetch SEO data */
 	siteName: PropTypes.string.isRequired,
 };
 export type SiteHealthSEOType = InferProps<typeof SiteHealthSEO.propTypes>;

@@ -11,10 +11,22 @@ import PropTypes, { InferProps } from 'prop-types';
     }
 */
 
+/**
+ * DragHandler — attaches global drag/touch handlers to enable swipe navigation for a carousel-like container.
+ *
+ * @param {number} [props.activeIndex] - Current active slide index (used to calculate offsets).
+ * @param {string} [props.targetDiv] - CSS class name of the container that should be draggable (e.g., 'carousel-card-wrapper').
+ * @param {function} [props.nextImage] - Callback invoked to advance to the next slide.
+ * @param {function} [props.previousImage] - Callback invoked to go to the previous slide.
+ */
 DragHandler.propTypes = {
+	/** Current active slide index. */
 	activeIndex: PropTypes.number.isRequired, 
+	/** CSS class of the container element to attach drag handlers to (without the leading dot). */
 	targetDiv: PropTypes.string.isRequired,
+	/** Callback to show the next image/slide. */
 	nextImage: PropTypes.func.isRequired, 
+	/** Callback to show the previous image/slide. */
 	previousImage:  PropTypes.func.isRequired, 
 };
 export type DragHandlerType = InferProps<typeof DragHandler.propTypes>;

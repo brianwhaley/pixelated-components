@@ -5,7 +5,13 @@ import PropTypes, { InferProps } from 'prop-types';
 import { SiteHealthTemplate } from './site-health-template';
 import type { UptimeData } from './site-health-types';
 
+/**
+ * SiteHealthUptime — Uptime report showing availability and recent failures for the site.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch uptime metrics.
+ */
 SiteHealthUptime.propTypes = {
+/** Site identifier used to fetch uptime metrics */
 	siteName: PropTypes.string.isRequired,
 };
 export type SiteHealthUptimeType = InferProps<typeof SiteHealthUptime.propTypes>;

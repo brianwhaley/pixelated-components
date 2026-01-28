@@ -31,8 +31,16 @@ const contentfulContentType: string = "item";
 
 /* ========== CONTENTFUL ITEMS PAGE ========== */
 
+/**
+ * ContentfulItems — Fetch and render a list of Contentful items (carousel or list) using provided API configuration.
+ *
+ * @param {object} [props.apiProps] - Contentful API configuration (base_url, space_id, delivery_access_token, etc.).
+ * @param {string} [props.cloudinaryProductEnv] - Optional Cloudinary cloud name used to build remote fetch URLs for images.
+ */
 ContentfulItems.propTypes = {
+/** Contentful API configuration object */
 	apiProps: PropTypes.object.isRequired,
+	/** Optional Cloudinary product environment (cloud name) for image transforms */
 	cloudinaryProductEnv: PropTypes.string,
 };
 export type ContentfulItemsType = InferProps<typeof ContentfulItems.propTypes>;
@@ -54,9 +62,19 @@ export function ContentfulItems(props: ContentfulItemsType) {
 	const mergedApiProps = { ...ContentfulApiProps, ...providerContentfulApiProps, ...props.apiProps, };
 	const [ apiProps ] = useState(mergedApiProps);
 
+	/**
+	 * paintItems — Convert Contentful API items and assets into rendered list nodes.
+	 *
+	 * @param {array} [props.items] - Array of Contentful item entries.
+ * @param {array} [props.assets] - Array of Contentful asset objects used for resolving images.
+ * @param {string} [props.cloudinaryProductEnv] - Optional Cloudinary cloud name used to transform image URLs.
+	 */
 	paintItems.propTypes = {
+		/** Array of Contentful items */
 		items: PropTypes.array.isRequired,
+		/** Array of Contentful assets */
 		assets: PropTypes.array.isRequired,
+		/** Optional Cloudinary product environment */
 		cloudinaryProductEnv: PropTypes.string,
 	};
     type paintItemsType = InferProps<typeof paintItems.propTypes>;
@@ -141,8 +159,16 @@ export function ContentfulItems(props: ContentfulItemsType) {
 
 /* ========== CONTENTFUL LIST ITEM ========== */
 
+/**
+ * ContentfulListItem — Render a single Contentful item with image, title and add-to-cart actions.
+ *
+ * @param {any} [props.item] - Single Contentful item entry to render.
+ * @param {string} [props.cloudinaryProductEnv] - Optional Cloudinary cloud name used to build image URLs.
+ */
 ContentfulListItem.propTypes = {
+/** Contentful item entry object */
 	item: PropTypes.any.isRequired,
+	/** Optional Cloudinary product environment */
 	cloudinaryProductEnv: PropTypes.string,
 };
 export type ContentfulListItemType = InferProps<typeof ContentfulListItem.propTypes>;
@@ -215,9 +241,19 @@ export function ContentfulListItem(props: ContentfulListItemType) {
 
 /* ========== CONTENTFUL ITEM HEADER ========== */
 
+/**
+ * ContentfulItemHeader — Render a title for a Contentful item and optionally wrap it in a link.
+ *
+ * @param {string} [props.title] - Item title text.
+ * @param {string} [props.url] - Optional URL to link the title to.
+ * @param {string} [props.target] - Optional link target attribute (e.g., '_blank').
+ */
 ContentfulItemHeader.propTypes = {
+/** Item title text */
 	title: PropTypes.string.isRequired,
+	/** Optional link URL for the title */
 	url: PropTypes.string,
+	/** Link target attribute (e.g., '_blank') */
 	target: PropTypes.string,
 };
 export type ContentfulItemHeaderType = InferProps<typeof ContentfulItemHeader.propTypes>;
@@ -238,9 +274,19 @@ export function ContentfulItemHeader(props: ContentfulItemHeaderType) {
 
 /* ========== CONTENTFUL ITEM DETAIL PAGE ========== */
 
+/**
+ * ContentfulItemDetail — Fetch and render a single Contentful item by entry ID.
+ *
+ * @param {object} [props.apiProps] - Contentful API configuration (base_url, space_id, delivery_access_token, etc.).
+ * @param {string} [props.entry_id] - Entry ID of the specific Contentful item to fetch.
+ * @param {string} [props.cloudinaryProductEnv] - Optional Cloudinary cloud name used to build image URLs.
+ */
 ContentfulItemDetail.propTypes = {
+/** Contentful API configuration object */
 	apiProps: PropTypes.object.isRequired,
+	/** Entry ID of the item to fetch */
 	entry_id: PropTypes.string.isRequired,
+	/** Optional Cloudinary product env (cloud name) for image transforms */
 	cloudinaryProductEnv: PropTypes.string,
 };
 export type ContentfulItemDetailType = InferProps<typeof ContentfulItemDetail.propTypes>;

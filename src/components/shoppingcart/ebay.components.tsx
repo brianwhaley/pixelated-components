@@ -17,8 +17,16 @@ const debug = false;
 
 /* ========== EBAY ITEMS PAGE ========== */
 
+/**
+ * EbayItems — Fetch and display eBay items using the configured API parameters and optional Cloudinary transforms.
+ *
+ * @param {object} [props.apiProps] - eBay API configuration and query parameters.
+ * @param {string} [props.cloudinaryProductEnv] - Optional Cloudinary cloud name used to transform image URLs.
+ */
 EbayItems.propTypes = {
+/** eBay API configuration and query params */
 	apiProps: PropTypes.object.isRequired,
+	/** Optional Cloudinary product environment for image transforms */
 	cloudinaryProductEnv: PropTypes.string,
 };
 export type EbayItemsType = InferProps<typeof EbayItems.propTypes>;
@@ -29,8 +37,16 @@ export function EbayItems(props: EbayItemsType) {
 	const [ aspects, setAspects ] = useState<any[]>([]);
 	const apiProps = { ...(config?.ebay || {}), ...props.apiProps };
 
+	/**
+	 * paintItems — Map raw eBay item data into rendered `EbayListItem` elements.
+	 *
+	 * @param {array} [props.items] - Array of eBay item objects returned by the API.
+ * @param {string} [props.cloudinaryProductEnv] - Optional Cloudinary cloud name for image URL transformations.
+	 */
 	paintItems.propTypes = {
+		/** Array of eBay item objects */
 		items: PropTypes.array.isRequired,
+		/** Optional Cloudinary product environment */
 		cloudinaryProductEnv: PropTypes.string,
 	};
 	type paintItemsType = InferProps<typeof paintItems.propTypes>;
@@ -47,8 +63,16 @@ export function EbayItems(props: EbayItemsType) {
 		return newItems;
 	}
 
+	/**
+	 * fetchItems — Perform a search query against eBay and update component state with results.
+	 *
+	 * @param {string} [props.aspectName] - Optional aspect name to filter search results.
+ * @param {string} [props.aspectValue] - Optional aspect value corresponding to `aspectName` to filter results.
+	 */
 	fetchItems.propTypes = {
+		/** Filter aspect name for the search (optional) */
 		aspectName: PropTypes.string,
+		/** Filter aspect value for the search (optional) */
 		aspectValue: PropTypes.string,
 	};
 	type fetchItemsType = InferProps<typeof fetchItems.propTypes>;
@@ -110,8 +134,16 @@ export function EbayItems(props: EbayItemsType) {
 
 
 
+/**
+ * EbayListFilter — UI for filtering eBay item lists by aspect values.
+ *
+ * @param {any} [props.aspects] - Aspect distributions returned by eBay used to build filter controls.
+ * @param {function} [props.callback] - Callback invoked when a filter selection changes; receives filter criteria.
+ */
 EbayListFilter.propTypes = {
+/** Aspect distributions used to render filter controls */
 	aspects: PropTypes.any.isRequired,
+	/** Callback to fetch filtered results */
 	callback: PropTypes.func.isRequired,
 };
 export type EbayListFilterType = InferProps<typeof EbayListFilter.propTypes>;
@@ -190,9 +222,19 @@ export function EbayListFilter(props: EbayListFilterType) {
 
 
 
+/**
+ * EbayListItem — Render a single eBay item with thumbnail, metadata and add-to-cart actions.
+ *
+ * @param {any} [props.item] - eBay item object returned by the API.
+ * @param {string} [props.cloudinaryProductEnv] - Optional Cloudinary cloud name to transform image URLs.
+ * @param {any} [props.apiProps] - eBay API properties (for link generation or calls).
+ */
 EbayListItem.propTypes = {
+/** eBay item object */
 	item: PropTypes.any.isRequired,
+	/** Optional Cloudinary product environment */
 	cloudinaryProductEnv: PropTypes.string,
+	/** eBay API properties */
 	apiProps: PropTypes.any,
 };
 export type EbayListItemType = InferProps<typeof EbayListItem.propTypes>;
@@ -256,9 +298,19 @@ export function EbayListItem(props: EbayListItemType) {
 
 
 
+/**
+ * EbayItemHeader — Render a heading for an eBay item; optionally wrap in a link when a `url` is provided.
+ *
+ * @param {string} [props.title] - The item title to display.
+ * @param {string} [props.url] - Optional URL to link the title to (opens in `props.target`).
+ * @param {string} [props.target] - Link target attribute (e.g., '_blank').
+ */
 EbayItemHeader.propTypes = {
+/** The item title text */
 	title: PropTypes.string.isRequired,
+	/** Optional link URL for the title */
 	url: PropTypes.string,
+	/** Link target attribute (e.g., '_blank') */
 	target: PropTypes.string,
 };
 export type EbayItemHeaderType = InferProps<typeof EbayItemHeader.propTypes>;
@@ -277,9 +329,19 @@ export function EbayItemHeader(props: EbayItemHeaderType) {
 /* ========== EBAY ITEM DETAIL PAGE ========== */
 
 
+/**
+ * EbayItemDetail — Display detailed information for a single eBay item fetched via the API.
+ *
+ * @param {object} [props.apiProps] - eBay API configuration used to fetch the item.
+ * @param {string} [props.itemID] - eBay item identifier to fetch details for.
+ * @param {string} [props.cloudinaryProductEnv] - Optional Cloudinary product environment for image transforms.
+ */
 EbayItemDetail.propTypes = {
+/** eBay API configuration */
 	apiProps: PropTypes.object.isRequired,
+	/** eBay item ID to fetch details for */
 	itemID: PropTypes.string.isRequired, // currently not used
+	/** Cloudinary product env for image transforms */
 	cloudinaryProductEnv: PropTypes.string,
 };
 export type EbayItemDetailType = InferProps<typeof EbayItemDetail.propTypes>;
@@ -375,8 +437,16 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 
 /* ========== EBAY RATE LIMITS VISUALIZER ========== */
 
+/**
+ * EbayRateLimitsVisualizer — Visualize eBay API rate limit information for debugging and monitoring.
+ *
+ * @param {string} [props.token] - OAuth access token used to authorize analytics requests.
+ * @param {object} [props.apiProps] - eBay analytics API configuration (baseAnalyticsURL, proxyURL).
+ */
 EbayRateLimitsVisualizer.propTypes = {
+/** OAuth access token for analytics endpoints */
 	token: PropTypes.string,
+	/** eBay analytics API configuration */
 	apiProps: PropTypes.object,
 };
 export type EbayRateLimitsVisualizerType = InferProps<typeof EbayRateLimitsVisualizer.propTypes>;

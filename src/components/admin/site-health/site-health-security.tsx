@@ -11,7 +11,13 @@ interface CombinedSecurityData {
   psiData?: CoreWebVitalsResponse;
 }
 
+/**
+ * SiteHealthSecurity — Security checks (certificate status, headers, known CVEs) for the site.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch security scan results.
+ */
 SiteHealthSecurity.propTypes = {
+/** Site identifier used to fetch security data */
 	siteName: PropTypes.string.isRequired,
 };
 export type SiteHealthSecurityType = InferProps<typeof SiteHealthSecurity.propTypes>;

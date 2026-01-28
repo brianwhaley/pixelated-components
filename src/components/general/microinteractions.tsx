@@ -12,15 +12,37 @@ import './microinteractions.css';
  * @param props - Configuration props for enabling/disabling interactions
  * @returns A cleanup function if scrollfadeElements is used
  */
+/**
+ * MicroInteractions — enables or disables lightweight UI micro-interactions by toggling body classes and initializing scroll-fade behavior.
+ *
+ * @param {boolean} [props.buttonring] - Enable pulsing ring animations on buttons.
+ * @param {boolean} [props.cartpulse] - Enable cart pulse animation for add-to-cart actions.
+ * @param {boolean} [props.formglow] - Enable focus-glow styles for form controls.
+ * @param {boolean} [props.grayscalehover] - Enable grayscale-to-color hover effects on images.
+ * @param {boolean} [props.imgscale] - Enable subtle image scaling on hover.
+ * @param {boolean} [props.imgtwist] - Enable small rotation animation on hover for images.
+ * @param {boolean} [props.imghue] - Enable hue-shift effects on hover for images.
+ * @param {boolean} [props.simplemenubutton] - Enable simplified menu button microinteractions.
+ * @param {string} [props.scrollfadeElements] - CSS selector for elements to apply scroll-fade animations to.
+ */
 MicroInteractions.propTypes = {
+/** Enable ring animation on buttons. */
 	buttonring: PropTypes.bool,
+	/** Enable pulse animation on cart icon or similar. */
 	cartpulse: PropTypes.bool,
+	/** Enable glow effects on focused form elements. */
 	formglow: PropTypes.bool,
+	/** Enable grayscale hover-to-color transitions on elements. */
 	grayscalehover: PropTypes.bool,
+	/** Enable scale-up animation on image hover. */
 	imgscale: PropTypes.bool,
+	/** Enable slight twist/rotation on image hover. */
 	imgtwist: PropTypes.bool,
+	/** Enable hue-shift color changes on hover. */
 	imghue: PropTypes.bool,
+	/** Toggle simplified menu button interactions. */
 	simplemenubutton: PropTypes.bool,
+	/** Selector for elements that should receive the scroll-fade animation. */
 	scrollfadeElements: PropTypes.string,
 };
 export type MicroInteractionsType = InferProps<typeof MicroInteractions.propTypes>;

@@ -11,8 +11,17 @@ https://www.andreaverlicchi.eu/blog/css-3-only-spinning-loading-animation/
 */
 
 /* ========== MARKDOWN ========== */
-Loading.propTypes = {};
-export type LoadingType = InferProps<typeof Loading.propTypes>;
+
+/**
+ * Loading — provides a spinner/loading indicator used across the UI.
+ *
+ * This component renders a CSS spinner; use `ToggleLoading` to control visibility programmatically.
+ */
+/** Loading.propTypes — No props (component renders a CSS spinner).
+ * @param {any} [props] - No props are accepted by Loading.
+ */
+Loading.propTypes = { /** no props */ };
+export type LoadingType = InferProps<typeof Loading.propTypes>;  
 export function Loading(props: LoadingType) {	 
 	return (
 		<>
@@ -37,6 +46,7 @@ export function Loading(props: LoadingType) {
 }
 
 ToggleLoading.propTypes = {
+/** When true shows the global loading spinner; false hides it; omitted toggles the current state. */
 	show: PropTypes.bool,
 };
 export type ToggleLoadingType = InferProps<typeof ToggleLoading.propTypes>;

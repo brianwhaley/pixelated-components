@@ -61,8 +61,16 @@ export function buildCloudinaryUrl(params: { src: string; productEnv: string | n
 
 
 
+/**
+ * getCloudinaryRemoteFetchURL — Build a Cloudinary remote fetch URL for a provided image path.
+ *
+ * @param {string} [props.url] - Image URL or path to convert to Cloudinary fetch URL.
+ * @param {string} [props.product_env] - Cloudinary product environment (cloud name) to use when building the URL.
+ */
 getCloudinaryRemoteFetchURL.propTypes = {
+/** Image URL or path to transform via Cloudinary */
 	url: PropTypes.string.isRequired,
+	/** Cloudinary product environment (cloud name) */
 	product_env: PropTypes.string.isRequired
 };
 export type getCloudinaryRemoteFetchURLType = InferProps<typeof getCloudinaryRemoteFetchURL.propTypes>;
@@ -84,8 +92,16 @@ export function userIsMobile() {
 }
 
 
+/**
+ * loadAllImagesFromCloudinary — Replace <img> sources with Cloudinary-built remote fetch URLs for improved delivery in production.
+ *
+ * @param {string} [props.origin] - Optional origin to validate local development environments (ignored in local dev).
+ * @param {string} [props.product_env] - Cloudinary product environment (cloud name) to use when building URLs.
+ */
 loadAllImagesFromCloudinary.propTypes = {
+/** Optional origin string to detect local dev */
 	origin: PropTypes.string,
+	/** Cloudinary product environment (cloud name) */
 	product_env: PropTypes.string.isRequired
 };
 export type loadAllImagesFromCloudinaryType = InferProps<typeof loadAllImagesFromCloudinary.propTypes>;

@@ -15,14 +15,34 @@ interface FontSelectorProps {
 	onChange?: (value: string) => void;
 }
 
+/**
+ * FontSelector — Single-font picker that supports Google Fonts, web-safe fonts, and generic families with autocomplete.
+ *
+ * @param {string} [props.id] - Input id attribute.
+ * @param {string} [props.name] - Input name attribute.
+ * @param {string} [props.label] - Display label for the selector.
+ * @param {oneOf} [props.fontType] - Font source type: 'google' | 'websafe' | 'generic'.
+ * @param {boolean} [props.required] - Whether the field is required.
+ * @param {string} [props.placeholder] - Placeholder text shown when empty.
+ * @param {string} [props.value] - Current selected font value.
+ * @param {function} [props.onChange] - Callback invoked when selection changes (receives the font value).
+ */
 FontSelector.propTypes = {
+/** Input id attribute */
 	id: PropTypes.string.isRequired,
+	/** Input name attribute */
 	name: PropTypes.string.isRequired,
+	/** Display label */
 	label: PropTypes.string.isRequired,
+	/** Font source type */
 	fontType: PropTypes.oneOf(['google', 'websafe', 'generic']).isRequired,
+	/** Required flag */
 	required: PropTypes.bool,
+	/** Placeholder text */
 	placeholder: PropTypes.string,
+	/** Selected font value */
 	value: PropTypes.string,
+	/** Change handler receives new font value */
 	onChange: PropTypes.func,
 };
 export type FontSelectorType = InferProps<typeof FontSelector.propTypes>;
@@ -162,13 +182,33 @@ export function FontSelector(props: FontSelectorType) {
 	);
 }
 
+/**
+ * FontSelector — Single-font picker that supports Google Fonts, web-safe fonts, and generic families with autocomplete.
+ *
+ * @param {string} [props.id] - Input id attribute.
+ * @param {string} [props.name] - Input name attribute.
+ * @param {string} [props.label] - Display label for the selector.
+ * @param {oneOf} [props.fontType] - Font source type: 'google' | 'websafe' | 'generic'.
+ * @param {boolean} [props.required] - Whether the field is required.
+ * @param {string} [props.placeholder] - Placeholder text shown when empty.
+ * @param {string} [props.value] - Current selected font value.
+ * @param {function} [props.onChange] - Callback invoked when selection changes (receives the font value).
+ */
 FontSelector.propTypes = {
+/** Input id attribute */
 	id: PropTypes.string.isRequired,
+	/** Input name attribute */
 	name: PropTypes.string.isRequired,
+	/** Display label */
 	label: PropTypes.string.isRequired,
+	/** Font source type */
 	fontType: PropTypes.oneOf(['google', 'websafe', 'generic']).isRequired,
+	/** Required flag */
 	required: PropTypes.bool,
+	/** Placeholder text */
 	placeholder: PropTypes.string,
+	/** Selected font value */
 	value: PropTypes.string,
+	/** Change handler receives new font value */
 	onChange: PropTypes.func,
 };

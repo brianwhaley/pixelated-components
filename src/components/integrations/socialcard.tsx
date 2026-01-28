@@ -33,7 +33,13 @@ function removeDeadHrefs(element: string) {
 }
 
 /* ========== SOCIALCARD ========== */
+/**
+ * SocialCards — Aggregate feeds from configured sources (RSS, APIs) and render as social cards.
+ *
+ * @param {object} [props.sources] - Map of source configurations (url/userID/entryCount/iconSrc/iconSrcAlt) keyed by source name.
+ */
 SocialCards.propTypes = {
+/** Map of feed source configurations (e.g., { instagram: { userID, entryCount }, blog: { url, entryCount }, ... }) */
 	sources: PropTypes.object.isRequired
 };
 export type SocialCardsType = InferProps<typeof SocialCards.propTypes>;
@@ -251,9 +257,19 @@ export function SocialCards(props: SocialCardsType) {
 
 }
 
+/**
+ * SocialCard — Render a single social feed item as a card with icon, title, description, and date.
+ *
+ * @param {string} [props.iconSrc] - URL/path to the source icon image.
+ * @param {string} [props.iconSrcAlt] - Alt text for the source icon.
+ * @param {any} [props.card] - Feed item object containing title, link, description and pubDate.
+ */
 SocialCard.propTypes = {
+/** Source icon image URL */
 	iconSrc: PropTypes.string.isRequired,
+	/** Alt text for the icon */
 	iconSrcAlt: PropTypes.string.isRequired,
+	/** Feed item object with title/link/description/pubDate */
 	card: PropTypes.any.isRequired
 };
 export type SocialCardType = InferProps<typeof SocialCard.propTypes>;
@@ -280,8 +296,12 @@ export function SocialCard(props: SocialCardType) {
 }
 
 /* ========== SPINNER ========== */
-SocialCardsLoading.propTypes = {};
-export type SocialCardsLoadingType = InferProps<typeof SocialCardsLoading.propTypes>;
+
+/** SocialCardsLoading.propTypes — No props (simple loading indicator).
+ * @param {any} [props] - No props are accepted by SocialCardsLoading.
+ */
+SocialCardsLoading.propTypes = { /** no props */ };
+export type SocialCardsLoadingType = InferProps<typeof SocialCardsLoading.propTypes>;    
 export function SocialCardsLoading() {
 	return (
 		<div className="cardsLoading">

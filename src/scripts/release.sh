@@ -338,18 +338,14 @@ if ! git push $REMOTE_NAME dev; then
 fi
 
 
-
 echo ""
+echo "🔄 Step $((STEP_COUNT++)): Updating main branch..."
+echo "================================================="
 if [ "$RELEASE_MODE" = "dev-only" ]; then
-    echo "🔕 Step $((STEP_COUNT++)): Skipping main update (RELEASE_MODE=dev-only)."
-    echo "================================================="
+	echo " 🔕 Skipping main update (RELEASE_MODE=dev-only)."
 else
-    echo ""
-    echo "🔄 Step $((STEP_COUNT++)): Updating main branch..."
-    echo "================================================="
     # Force main to match dev exactly
     git push $REMOTE_NAME dev:main --force
-
     # Also update main locally if it exists
     if git show-ref --verify --quiet refs/heads/main; then
         git branch -D main 2>/dev/null || true
@@ -363,13 +359,11 @@ fi
 
 
 echo ""
+echo "🏷️  Step $((STEP_COUNT++)): Creating and pushing git tag and release..."
+echo "================================================="
 if [ "$RELEASE_MODE" = "dev-only" ]; then
-    echo "🔕 Step $((STEP_COUNT++)): Skipping tag/release creation (RELEASE_MODE=dev-only)."
-    echo "================================================="
+    echo " 🔕 Skipping tag/release creation (RELEASE_MODE=dev-only)."
 else
-    echo ""
-    echo "🏷️  Step $((STEP_COUNT++)): Creating and pushing git tag and release..."
-    echo "================================================="
     new_version=$(get_current_version)
     release_tag="v${new_version}"
     # Use commit message as tag/release message when available, otherwise default
@@ -386,15 +380,13 @@ fi
 
 
 # Create a published GitHub release for this tag (prefer gh CLI, fallback to API)
+echo ""
+echo "📣 Step $((STEP_COUNT++)): Creating GitHub release..."
+echo "================================================="
 if [ "$RELEASE_MODE" = "dev-only" ]; then
-    echo "🔕 Skipping GitHub release creation (RELEASE_MODE=dev-only)."
-    echo "================================================="
+    echo " 🔕 Skipping GitHub release creation (RELEASE_MODE=dev-only)."
 else
-    echo ""
-    echo "📣 Step $((STEP_COUNT++)): Creating GitHub release..."
-    echo "================================================="
 	REMOTE_URL=$(git remote get-url $REMOTE_NAME 2>/dev/null || true)
-
 	# Use GitHub API only (no gh CLI). Ensure GITHUB_TOKEN is present
 	if [ -z "$GITHUB_TOKEN" ]; then
 		echo "⚠️  GITHUB_TOKEN not set; skipping GitHub release creation via API"
@@ -411,7 +403,6 @@ else
 			# Diagnostic: show remote and derived repo path (non-secret)
 			echo "Remote URL: $REMOTE_URL"
 			echo "Derived repo_path: $repo_path"
-
 		# Quick access check to see if token and repo path are valid
 		access_resp=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path")
 		if echo "$access_resp" | grep -q '"full_name"'; then
@@ -422,7 +413,6 @@ else
 			# Do not attempt to create a release if the repo isn't accessible
 			exit 1
 		fi
-
 		if curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/repos/$repo_path/releases/tags/$release_tag" | grep -q '"tag_name"'; then
 				echo "ℹ️  Release for $release_tag already exists on GitHub (API)."
 			else
@@ -439,12 +429,13 @@ else
 	fi
 fi
 
+
+
 echo ""
 echo "🔐 Step $((STEP_COUNT++)): Publishing to npm..."
 echo "================================================="
 if [ "$RELEASE_MODE" = "dev-only" ]; then
     echo "🔕 Skipping npm publish (RELEASE_MODE=dev-only)."
-    echo "You can publish manually with: npm publish --access public"
 else
     # Function to prompt for publishing
     prompt_publish() {

@@ -54,6 +54,7 @@ export * from './components/general/timeline';
 
 export * from './components/integrations/calendly';
 export * from './components/integrations/cloudinary';
+export * from './components/integrations/lipsum';
 export * from './components/integrations/loremipsum';
 export * from './components/integrations/contentful.delivery';
 export * from './components/integrations/contentful.items.components';

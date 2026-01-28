@@ -26,9 +26,19 @@ export type BlogPostType = {
 	}
 	attachments?: Record<string, any>;
 };
+/**
+ * getWordPressItems — Fetch posts from the WordPress REST API for a given site.
+ *
+ * @param {string} [props.site] - WordPress site identifier (site slug or domain).
+ * @param {number} [props.count] - Optional number of posts to fetch (omit to fetch all available).
+ * @param {string} [props.baseURL] - Optional base URL for the WordPress API (defaults to public WordPress API URL).
+ */
 getWordPressItems.propTypes = {
+/** WordPress site identifier (slug or domain) */
 	site: PropTypes.string.isRequired,
+	/** Number of posts to fetch (optional) */
 	count: PropTypes.number,
+	/** Base URL for WordPress API (optional) */
 	baseURL: PropTypes.string,
 };
 export type getWordPressItemsType = InferProps<typeof getWordPressItems.propTypes>;
@@ -78,7 +88,13 @@ export type WordPressSitemapImage = {
 	caption?: string;
 	thumbnail_loc?: string;
 };
+/**
+ * getWordPressItemImages — Extract image objects from a WordPress post for use in sitemaps and galleries.
+ *
+ * @param {object} [props.item] - WordPress post object to extract image URLs from.
+ */
 getWordPressItemImages.propTypes = {
+/** WordPress post object */
 	item: PropTypes.object.isRequired,
 };
 export type getWordPressItemImagesType = InferProps<typeof getWordPressItemImages.propTypes>;
@@ -136,8 +152,16 @@ export type BlogPostCategoryType = {
 	post_count: number;
 	feed_url: string;
 };
+/**
+ * getWordPressCategories — Retrieve categories for a WordPress site.
+ *
+ * @param {string} [props.site] - WordPress site identifier (slug or domain).
+ * @param {string} [props.baseURL] - Optional base URL for the WordPress API.
+ */
 getWordPressCategories.propTypes = {
+/** WordPress site identifier (slug or domain) */
 	site: PropTypes.string.isRequired,
+	/** Base URL for WordPress API (optional) */
 	baseURL: PropTypes.string,
 };
 export type getWordPressCategoriesType = InferProps<typeof getWordPressCategories.propTypes>;

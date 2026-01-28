@@ -6,12 +6,24 @@ import PropTypes, { InferProps } from 'prop-types';
 import { SmartImage } from './smartimage';
 import './menu-expando.css';
 
+/**
+ * MenuExpando — collapsible navigation menu with optional nested sections for mobile and compact navigation.
+ *
+ * @param {oneOfType} [props.menuItems] - Either an object map of name->href or an array of items that may include nested `routes`.
+ * @param {string} [props.name] - Name of a menu item when using the array format.
+ * @param {string} [props.path] - Href/path for a menu item when using the array format.
+ * @param {array} [props.routes] - Optional nested route array to create expandable submenus.
+ */
 MenuExpando.propTypes = {
+/** Menu items can be provided as { name: href } or as an array of items with optional nested routes. */
 	menuItems: PropTypes.oneOfType([
 		PropTypes.objectOf(PropTypes.string),
 		PropTypes.arrayOf(PropTypes.shape({
+			/** Menu item display name */
 			name: PropTypes.string.isRequired,
+			/** Href/path for the menu item */
 			path: PropTypes.string.isRequired,
+			/** Optional nested routes (array of route objects) */
 			routes: PropTypes.array,
 		}))
 	]).isRequired
@@ -168,8 +180,16 @@ export function MenuExpando(props: MenuExpandoType) {
 	);
 }
 
+/**
+ * MenuExpandoItem — simple menu item renderer for `MenuExpando`.
+ *
+ * @param {string} [props.name] - Display name for the menu entry.
+ * @param {string} [props.href] - Destination href for the menu entry.
+ */
 MenuExpandoItem.propTypes = {
+/** Display text for the menu item. */
 	name: PropTypes.string.isRequired,
+	/** Href or path for the menu item. */
 	href: PropTypes.string.isRequired
 };
 export type MenuExpandoItemType = InferProps<typeof MenuExpandoItem.propTypes>;
@@ -180,8 +200,11 @@ export function MenuExpandoItem(props: MenuExpandoItemType) {
 }
 
 
-MenuExpandoButton.propTypes = {};
-export type MenuExpandoButtonType = InferProps<typeof MenuExpandoButton.propTypes>;
+/** MenuExpandoButton.propTypes — No props (menu expando toggle).
+ * @param {any} [props] - No props are accepted by MenuExpandoButton.
+ */
+MenuExpandoButton.propTypes = { /** no props */ };
+export type MenuExpandoButtonType = InferProps<typeof MenuExpandoButton.propTypes>;    
 export function MenuExpandoButton(props: MenuExpandoButtonType) {  
 	function handleMenuExpandoButtonClick(event: React.MouseEvent<HTMLDivElement>) {
 		event.preventDefault();

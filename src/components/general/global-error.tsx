@@ -5,10 +5,22 @@ import PropTypes, { InferProps } from 'prop-types';
 import { SiteInfo } from '../config/config.types';
 import './global-error.css';
 
+/**
+ * GlobalErrorUI — displays a global error state with message, retry action and optional maintainer contact link.
+ *
+ * @param {any} [props.error] - Error object; may include message and stack for diagnostics.
+ * @param {function} [props.reset] - Optional retry/reset callback to attempt the failed action again.
+ * @param {object} [props.siteInfo] - Site-level information (used to render contact email/link when available).
+ * @param {string} [props.className] - Additional CSS class(es) to apply to the root element.
+ */
 GlobalErrorUI.propTypes = {
+	/** Error object; message and stack will be shown when details are expanded. */
 	error: PropTypes.any,
+	/** Optional retry/reset function called when the user clicks 'Try again'. */
 	reset: PropTypes.func,
+	/** Optional site information (used to build a contact mailto link when an email is available). */
 	siteInfo: PropTypes.object,
+	/** Additional class names to apply to the component root. */
 	className: PropTypes.string,
 };
 export type GlobalErrorUIType = InferProps<typeof GlobalErrorUI.propTypes>;

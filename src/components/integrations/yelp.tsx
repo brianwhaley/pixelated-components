@@ -19,8 +19,16 @@ https://helloputnam.medium.com/easiest-way-to-include-business-reviews-on-a-web-
 */
 
 
+/**
+ * YelpReviews — Fetch and display Yelp reviews for a given business ID (note: Yelp API access may require paid plan).
+ *
+ * @param {string} [props.businessID] - Yelp business ID used to fetch reviews (required).
+ * @param {string} [props.key] - Optional API key (not used by the demo placeholder implementation).
+ */
 YelpReviews.propTypes = {
+/** Yelp business identifier */
 	businessID: PropTypes.string.isRequired,
+	/** Optional Yelp API key */
 	key: PropTypes.string,
 };
 export type YelpReviewsType = InferProps<typeof YelpReviews.propTypes>;

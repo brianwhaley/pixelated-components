@@ -37,7 +37,13 @@ type simpleResumeProps = {
 	data: any
 } */
 
+/**
+ * Resume — Render a microformatted resume (h-resume) object into sections like contact, education, experience, and skills.
+ *
+ * @param {any} [props.data] - Resume data object (h-resume structured data expected).
+ */
 Resume.propTypes = {
+/** Resume data object (h-resume) */
 	data: PropTypes.any.isRequired,
 };
 export type ResumeType = InferProps<typeof Resume.propTypes>;
@@ -100,7 +106,13 @@ export function Resume (props: ResumeType) {
 	);
 }
 
+/**
+ * ResumeName — Render the candidate's name from the resume data.
+ *
+ * @param {any} [props.data] - Array containing name values; the first entry is used as the display name.
+ */
 ResumeName.propTypes = {
+/** Array containing the name value(s) */
 	data: PropTypes.any.isRequired,
 };
 export type ResumeNameType = InferProps<typeof ResumeName.propTypes>;
@@ -113,8 +125,16 @@ export function ResumeName(props: ResumeNameType) {
 	);
 }
 
+/**
+ * ResumeContact — Renders contact information (email, address, phone, website) from resume data.
+ *
+ * @param {any} [props.data] - Contact microformat data array (expects typical contact properties).
+ * @param {string} [props.title] - Section heading to display above contact information.
+ */
 ResumeContact.propTypes = {
+/** Contact microformat data array */
 	data: PropTypes.any.isRequired,
+/** Section title */
 	title: PropTypes.string.isRequired,
 };
 export type ResumeContactType = InferProps<typeof ResumeContact.propTypes>;
@@ -136,10 +156,22 @@ export function ResumeContact(props: ResumeContactType) {
 	);
 }
 
+/**
+ * ResumeEvents — Render a list of dated events (education, work, volunteer) with optional collapsible behavior.
+ *
+ * @param {any} [props.data] - Array of event objects with `properties` including start/end and location metadata.
+ * @param {string} [props.dateFormat] - Date format string passed to `date-fns` for rendering dates (e.g., 'MM/yyyy').
+ * @param {boolean} [props.collapsible] - If true, the event list is rendered inside a collapsible `<details>` element.
+ * @param {string} [props.title] - Section title for the events list.
+ */
 ResumeEvents.propTypes = {
+/** Array of event objects (work, education, etc.) */
 	data: PropTypes.any.isRequired,
+/** Date format string for display */
 	dateFormat: PropTypes.string.isRequired,
+/** When true, events are shown inside a collapsible details element */
 	collapsible: PropTypes.bool,
+/** Section title */
 	title: PropTypes.string.isRequired,
 };
 export type ResumeEventsType = InferProps<typeof ResumeEvents.propTypes>;
@@ -202,8 +234,16 @@ export function ResumeEvents(props: ResumeEventsType) {
 	}
 }
 
+/**
+ * ResumeQualifications — Render grouped qualification lists (e.g., certifications, licenses) by category.
+ *
+ * @param {any} [props.data] - Object mapping qualification categories to arrays of items.
+ * @param {string} [props.title] - Section title to display above qualifications.
+ */
 ResumeQualifications.propTypes = {
+/** Qualifications data by category */
 	data: PropTypes.any.isRequired,
+/** Section title */
 	title: PropTypes.string.isRequired,
 };
 export type ResumeQualificationsType = InferProps<typeof ResumeQualifications.propTypes>;
@@ -227,8 +267,16 @@ export function ResumeQualifications(props: ResumeQualificationsType) {
 	);
 }
 
+/**
+ * ResumeSkills — Render skill categories and values from the resume data.
+ *
+ * @param {any} [props.data] - Skills data (typically an object or array of categories and skill lists).
+ * @param {string} [props.title] - Section title for the skills block.
+ */
 ResumeSkills.propTypes = {
+/** Skills data (categories and lists) */
 	data: PropTypes.any.isRequired,
+/** Section title */
 	title: PropTypes.string.isRequired,
 };
 export type ResumeSkillsType = InferProps<typeof ResumeSkills.propTypes>;
@@ -251,8 +299,16 @@ export function ResumeSkills (props: ResumeSkillsType) {
 	);
 }
 
+/**
+ * ResumeSummary — Render a short professional summary paragraph or bullets.
+ *
+ * @param {any} [props.data] - Summary text or array of summary paragraphs.
+ * @param {string} [props.title] - Section title for the summary block.
+ */
 ResumeSummary.propTypes = {
+/** Summary text or paragraphs */
 	data: PropTypes.any.isRequired,
+/** Section title */
 	title: PropTypes.string.isRequired,
 };
 export type ResumeSummaryType = InferProps<typeof ResumeSummary.propTypes>;
@@ -272,9 +328,19 @@ export function ResumeSummary (props: ResumeSummaryType) {
 	);
 }
 
+/**
+ * ResumeReferences — Render a list of professional references with contact details.
+ *
+ * @param {any} [props.data] - Array of reference objects (microformat references).
+ * @param {any} [props.title] - Section title for references.
+ * @param {boolean} [props.collapsible] - When true, the reference list is collapsible.
+ */
 ResumeReferences.propTypes = {
+/** Reference objects array */
 	data: PropTypes.any.isRequired,
+/** Section title */
 	title: PropTypes.any.isRequired,
+/** When true, make the section collapsible */
 	collapsible: PropTypes.bool,
 };
 export type ResumeReferencesType = InferProps<typeof ResumeReferences.propTypes>;
@@ -306,7 +372,13 @@ export function ResumeReferences (props: ResumeReferencesType) {
 	}
 }
 
+/**
+ * ResumeReference — Render a single reference entry (name, organization, contact info).
+ *
+ * @param {any} [props.data] - Reference object with contact properties used for display.
+ */
 ResumeReference.propTypes = {
+/** Reference object with contact details */
 	data: PropTypes.any.isRequired,
 };
 export type ResumeReferenceType = InferProps<typeof ResumeReference.propTypes>;
@@ -332,9 +404,19 @@ export function ResumeReference (props: ResumeReferenceType) {
 	);
 }
 
+/**
+ * ResumeProjects — Render projects associated with work history or portfolios.
+ *
+ * @param {any} [props.data] - Array of project objects with properties like name, url, photo, and note.
+ * @param {any} [props.title] - Section title for the projects block.
+ * @param {boolean} [props.collapsible] - When true, projects render inside a collapsible element.
+ */
 ResumeProjects.propTypes = {
+/** Projects array */
 	data: PropTypes.any.isRequired,
+/** Section title */
 	title: PropTypes.any.isRequired,
+/** When true, make the section collapsible */
 	collapsible: PropTypes.bool,
 };
 export type ResumeProjectsType = InferProps<typeof ResumeProjects.propTypes>;

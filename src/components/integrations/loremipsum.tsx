@@ -6,10 +6,22 @@ import { usePixelatedConfig } from '../config/config.client';
 
 const debug = false; 
 
+/**
+ * LoremIpsum — Fetch and render placeholder paragraphs via an external API (with optional proxy fallback).
+ *
+ * @param {number} [props.paragraphs] - Number of paragraphs to fetch.
+ * @param {string} [props.seed] - Optional seed to generate deterministic content.
+ * @param {string} [props.proxyBase] - Optional proxy base URL to use when direct fetch fails due to CORS.
+ * @param {string} [props.className] - CSS class name(s) applied to the wrapper element.
+ */
 LoremIpsum.propTypes = {
+/** Paragraph count to request */
 	paragraphs: PropTypes.number,
+	/** Optional deterministic seed for content */
 	seed: PropTypes.string,
+	/** Proxy base URL used as a fallback */
 	proxyBase: PropTypes.string,
+	/** Wrapper CSS class name */
 	className: PropTypes.string,
 };
 export type LoremIpsumType = InferProps<typeof LoremIpsum.propTypes> & { proxyBase?: string };

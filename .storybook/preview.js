@@ -25,6 +25,13 @@ const preview = {
         date: /Date$/,
       },
     },
+    // Accessibility addon defaults
+    a11y: {
+      element: '#root',
+      manual: false,
+    },
+    // Enable Test Runner & interactions
+    interactions: { debounce: 64 }
   },
   decorators: [
     (Story) => (

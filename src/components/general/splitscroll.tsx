@@ -16,17 +16,23 @@ import './splitscroll.css';
  * @example
  * ```tsx
  * <SplitScroll>
- *   <SplitScroll.Section img="/image1.jpg" title="Section 1">
+ *   <SplitScrollSection img="/image1.jpg" title="Section 1">
  *     <YourContent />
- *   </SplitScroll.Section>
- *   <SplitScroll.Section img="/image2.jpg" title="Section 2">
+ *   </SplitScrollSection>
+ *   <SplitScrollSection img="/image2.jpg" title="Section 2">
  *     <MoreContent />
- *   </SplitScroll.Section>
+ *   </SplitScrollSection>
  * </SplitScroll>
  * ```
  */
 
+/**
+ * SplitScroll — a split-page layout where the left column shows sticky, layered images and the right column contains scrolling content sections.
+ *
+ * @param {node} [props.children] - One or more `SplitScrollSection` components that contain content for each section.
+ */
 SplitScroll.propTypes = {
+/** Collection of `SplitScrollSection` children used to build the layout. */
 	children: PropTypes.node.isRequired,
 };
 export type SplitScrollType = InferProps<typeof SplitScroll.propTypes>;
@@ -75,13 +81,18 @@ export function SplitScroll({ children }: SplitScrollType) {
 }
 
 /**
- * SplitScroll.Section - Individual section within a SplitScroll
- * 
+ * SplitScrollSection — Individual section within a SplitScroll.
+ *
  * A facade for the Callout component with variant="split" preset.
  * Automatically configured for the splitscroll layout.
+ *
+ * @param {string} [props.img] - Image URL shown on the left column.
+ * @param {string} [props.imgAlt] - Alt text for the image.
+ * @param {('square'|'bevel'|'squircle'|'round')} [props.imgShape] - Image shape style.
+ * @param {string} [props.title] - Section title text shown on the right column.
+ * @param {node} [props.children] - Content for the section's right column.
  */
-
-const splitscrollSectionPropTypes = {
+SplitScrollSection.propTypes = {
 	img: PropTypes.string.isRequired,
 	imgAlt: PropTypes.string,
 	imgShape: PropTypes.oneOf(['square', 'bevel', 'squircle', 'round'] as const),
@@ -96,12 +107,8 @@ const splitscrollSectionPropTypes = {
 	sectionIndex: PropTypes.number,
 	totalSections: PropTypes.number,
 };
-
-type SplitScrollSectionProps = InferProps<typeof splitscrollSectionPropTypes> & {
-	imgShape?: 'square' | 'bevel' | 'squircle' | 'round';
-};
-
-const SplitScrollSectionComponent = function SplitScrollSection({
+export type SplitScrollSectionType = InferProps<typeof SplitScrollSection.propTypes>;
+export function SplitScrollSection({
 	img,
 	imgAlt,
 	imgShape = 'square',
@@ -114,7 +121,7 @@ const SplitScrollSectionComponent = function SplitScrollSection({
 	isActive,
 	sectionIndex,
 	totalSections,
-}: SplitScrollSectionProps) {
+}: SplitScrollSectionType) {
 	return (
 		<div 
 			className={`splitscroll-section ${isActive ? 'active' : ''}`}
@@ -140,6 +147,3 @@ const SplitScrollSectionComponent = function SplitScrollSection({
 		</div>
 	);
 };
-
-SplitScrollSectionComponent.propTypes = splitscrollSectionPropTypes;
-SplitScroll.Section = SplitScrollSectionComponent;

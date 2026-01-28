@@ -17,7 +17,13 @@ import './pagebuilder.scss';
  * Composes all sub-components and manages layout with inline editing
  */
 
+/**
+ * PageBuilderUI — Main page builder orchestration UI. Composes selection, properties editing, preview, and save/load.
+ *
+ * @param {string} [props.apiEndpoint] - API endpoint base used for saving and loading page JSON.
+ */
 PageBuilderUI.propTypes = {
+/** API endpoint base for save/load operations (e.g., '/api/pagebuilder') */
 	apiEndpoint: PropTypes.string,
 };
 export type PageBuilderUIType = InferProps<typeof PageBuilderUI.propTypes>;

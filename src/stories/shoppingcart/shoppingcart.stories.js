@@ -4,6 +4,7 @@ import { ShoppingCart } from '@/components/shoppingcart/shoppingcart.components'
 
 export default {
 	title: 'ShoppingCart',
+	component: ShoppingCart,
 };
 
 const item1 = { 

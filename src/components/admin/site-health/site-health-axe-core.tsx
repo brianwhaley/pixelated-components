@@ -9,7 +9,13 @@ import { getImpactIndicator, getIncompleteIndicator, getPassingIndicator } from 
 // Debug logging: set to `true` temporarily when investigating issues locally. Keep `false` in production.
 const debug = false; 
 
+/**
+ * SiteHealthAxeCore — Accessibility violations viewer powered by axe-core results.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch axe-core scan results.
+ */
 SiteHealthAxeCore.propTypes = {
+/** Site identifier used to fetch axe-core data */
 	siteName: PropTypes.string.isRequired,
 };
 export type SiteHealthAxeCoreType = InferProps<typeof SiteHealthAxeCore.propTypes>;

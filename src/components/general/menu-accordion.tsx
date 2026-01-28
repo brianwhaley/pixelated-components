@@ -53,8 +53,16 @@ function generateMenuItems({menuData, state = "hide"}: {menuData: { [x: string]:
 	return myItems;
 }
 
+/**
+ * MenuAccordion — Accordion-style navigational menu that supports nested menu groups and individual items.
+ *
+ * @param {arrayOf} [props.menuItems] - Array (or object) of menu items; items should include { name, path?, target?, hidden?, routes? }.
+ * @param {boolean} [props.showHidden] - When true, items marked as `hidden` will be shown.
+ */
 MenuAccordion.propTypes = {
+/** Array of menu items (can contain nested `routes`) */
 	menuItems: PropTypes.arrayOf(menuItemShape).isRequired,
+	/** Show items marked `hidden` */
 	showHidden: PropTypes.bool,
 };
 export type MenuAccordionType = InferProps<typeof MenuAccordion.propTypes>;
@@ -170,11 +178,19 @@ export function MenuAccordion(props: MenuAccordionType) {
 
 
 /* ========== MENU GROUP ========== */
+/**
+ * MenuAccordionGroup — Renders a group of menu items (may be a single item with `routes` or an array of items).
+ *
+ * @param {oneOfType} [props.menuItems] - A menu item object or an array of menu items (used for nested groups).
+ * @param {string} [props.state] - Optional visibility state ('hide' or 'show').
+ */
 MenuAccordionGroup.propTypes = {
+/** Menu item or array of menu items (routes) */
 	menuItems: PropTypes.oneOfType([
 		menuItemShape,
 		PropTypes.arrayOf(menuItemShape)
 	]).isRequired,
+	/** Visibility state 'hide' | 'show' */
 	state: PropTypes.string,
 };
 export type MenuAccordionGroupType = InferProps<typeof MenuAccordionGroup.propTypes>;
@@ -191,9 +207,19 @@ export function MenuAccordionGroup(props: MenuAccordionGroupType) {
 
 
 /* ========== MENU ITEM ========== */
+/**
+ * MenuAccordionItem — Single menu entry used by the accordion.
+ *
+ * @param {string} [props.name] - Display text for the menu item.
+ * @param {string} [props.href] - Destination href (empty string for expand/collapse toggles).
+ * @param {string} [props.target] - Optional link target (e.g., '_self' or '_blank').
+ */
 MenuAccordionItem.propTypes = {
+/** Display text for the menu item */
 	name: PropTypes.string.isRequired,
+	/** Link href (or empty string for toggle items) */
 	href: PropTypes.string.isRequired,
+	/** Optional link target attribute */
 	target: PropTypes.string,
 };
 export type MenuAccordionItemType = InferProps<typeof MenuAccordionItem.propTypes>;
@@ -212,11 +238,16 @@ export function MenuAccordionItem(props: MenuAccordionItemType) {
 
 
 /* ========== MENU BUTTON ========== */
+
 /* 
 https://www.unclebigbay.com/blog/building-the-world-simplest-hamburger-with-html-and-css
 */
-MenuAccordionButton.propTypes = {};
-export type MenuAccordionButtonType = InferProps<typeof MenuAccordionButton.propTypes>;
+
+/** MenuAccordionButton — Mobile menu toggle button.
+ * @param {any} [props] - No props are accepted by MenuAccordionButton.
+ */
+MenuAccordionButton.propTypes = { /** no props */ };
+export type MenuAccordionButtonType = InferProps<typeof MenuAccordionButton.propTypes>;   
 export function MenuAccordionButton(props: MenuAccordionButtonType) {  
 	function slideMobilePanel() {
 		if (typeof window !== 'undefined' && window.moveMenu) {

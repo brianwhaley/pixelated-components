@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import * as FC from './formcomponents';
 import * as FVF from './formfieldvalidations';
-import { capitalize, attributeMap } from './formutils';
+import { capitalize, attributeMap } from '../../general/utilities';
 import { FormEngine } from './formengine';
 const debug = false;
 
@@ -12,8 +12,16 @@ Submit a page URL of a form to extract all form elements and
 convert them to JSON to create a form via FormEngine
 */
 
+/**
+ * FormExtractor — Extract a form from a URL or pasted HTML and convert it into a JSON schema usable by `FormEngine`.
+ *
+ * @param {string} [props.url] - URL pointing to a page containing a form to extract.
+ * @param {string} [props.htmlPaste] - Raw HTML snippet to parse for form elements instead of fetching a URL.
+ */
 FormExtractor.propTypes = {
+/** URL of the page to extract form elements from */
 	url: PropTypes.string,
+	/** Raw HTML string containing a form to extract */
 	htmlPaste: PropTypes.string
 };
 export type FormExtractorType = InferProps<typeof FormExtractor.propTypes>;
@@ -23,8 +31,16 @@ export function FormExtractor(props: FormExtractorType) {
 	const [ htmlPaste, setHtmlPaste ] = useState<string>(props.htmlPaste || "");
 	const [ formData, setFormData ] = useState ({ fields: [] });
 
+	/**
+	 * setParentState — Callback invoked by child UI to pass URL or pasted HTML values up to the parent extractor.
+	 *
+	 * @param {string} [props.url] - URL value provided by the UI.
+ * @param {string} [props.htmlPaste] - Pasted HTML value provided by the UI.
+	 */
 	setParentState.propTypes = {
+		/** URL value provided by the child UI */
 		url: PropTypes.string.isRequired,
+		/** Pasted HTML provided by the child UI */
 		htmlPaste: PropTypes.string.isRequired,
 	};
 	type setParentStateType = InferProps<typeof setParentState.propTypes>;
@@ -60,7 +76,13 @@ export function FormExtractor(props: FormExtractorType) {
 	);
 }
 
+/**
+ * FormExtractUI — UI allowing the user to enter a URL or paste HTML to extract form fields.
+ *
+ * @param {function} [props.setParentState] - Callback called with `{ url, htmlPaste }` when the user submits input.
+ */
 FormExtractUI.propTypes = {
+/** Callback to send URL/html values back to parent */
 	setParentState: PropTypes.func.isRequired
 };
 export type FormExtractUIType = InferProps<typeof FormExtractUI.propTypes>;
@@ -101,9 +123,19 @@ export function FormExtractUI(props: FormExtractUIType) {
 	);
 }
 
+/**
+ * FormExtractEngine — Parse the supplied URL or pasted HTML and convert found form elements into a JSON schema.
+ *
+ * @param {string} [props.url] - URL to fetch and parse for form markup.
+ * @param {string} [props.htmlPaste] - Raw HTML to parse instead of fetching a URL.
+ * @param {function} [props.setFormData] - Callback which receives the generated form JSON schema.
+ */
 FormExtractEngine.propTypes = {
+/** URL to fetch and parse */
 	url: PropTypes.string,
+	/** Raw HTML string to parse for forms */
 	htmlPaste: PropTypes.string,
+	/** Callback to receive the generated form JSON */
 	setFormData: PropTypes.func.isRequired
 };
 export type FormExtractEngineType = InferProps<typeof FormExtractEngine.propTypes>;

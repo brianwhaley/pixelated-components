@@ -67,7 +67,13 @@ export function useFormValidation() {
 	return context;
 }
 
+/**
+ * FormValidationProvider — Context provider for form validation state and helpers (field errors, validity checks).
+ *
+ * @param {node} [props.children] - Children components that require validation context (usually `FormEngine`).
+ */
 FormValidationProvider.propTypes = {
+/** Child nodes that consume the validation context */
 	children: PropTypes.node.isRequired
 };
 export type FormValidationProviderType = InferProps<typeof FormValidationProvider.propTypes>;

@@ -7,7 +7,13 @@ import type { CoreWebVitalsResponse } from './site-health-types';
 import { getScoreIndicator } from './site-health-indicators';
 import { formatAuditItem, getAuditScoreIcon, getScoreColor, formatScore } from './site-health-utils';
 
+/**
+ * SiteHealthPerformance — Performance metrics panel showing Lighthouse Core Web Vitals and related scores.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch performance data.
+ */
 SiteHealthPerformance.propTypes = {
+/** Site identifier used to fetch performance metrics */
 	siteName: PropTypes.string.isRequired,
 };
 export type SiteHealthPerformanceType = InferProps<typeof SiteHealthPerformance.propTypes>;

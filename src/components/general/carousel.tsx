@@ -37,22 +37,52 @@ function capitalize(str: string) {
 
 
 /* ========== CAROUSEL ========== */
+/**
+ * Carousel — renders a rotating set of card slides (images and optional text) with autoplay and optional drag support.
+ *
+ * @param {arrayOf} [props.cards] - Array of cards to display; each card may include image, header, subHeader, body and link.
+ * @param {number} [props.index] - Initial active index for the carousel (zero-based).
+ * @param {number} [props.cardIndex] - Current active index managed by the component (zero-based).
+ * @param {number} [props.cardLength] - Total number of cards (used for stacking and calculations).
+ * @param {string} [props.link] - Optional fallback link for a card when provided at the card level.
+ * @param {string} [props.linkTarget] - Target attribute for links (e.g. '_self', '_blank').
+ * @param {string} [props.image] - Image URL for a card.
+ * @param {string} [props.imageAlt] - Alt text for the card image (accessibility).
+ * @param {oneOf} [props.imgFit] - How to fit images: 'contain' | 'cover' | 'fill'.
+ * @param {string} [props.headerText] - Optional card header/title text.
+ * @param {string} [props.subHeaderText] - Optional card subtitle text.
+ * @param {string} [props.bodyText] - Optional card body content.
+ * @param {boolean} [props.draggable] - Enable swipe/drag interactions on touch devices.
+ */
 Carousel.propTypes = {
+/** Array of card objects used to render slides. */
 	cards: PropTypes.arrayOf(
 		PropTypes.shape({
+			/** Zero-based index of this card within the source array. */
 			index: PropTypes.number.isRequired,
+			/** Index of the currently active card as passed to each card. */
 			cardIndex: PropTypes.number.isRequired,
+			/** Total number of cards in the carousel (used for z-index/stacking). */
 			cardLength: PropTypes.number.isRequired,
+			/** Optional href for this card. */
 			link: PropTypes.string,
+			/** Optional link target attribute (e.g., '_self', '_blank'). */
 			linkTarget: PropTypes.string,
+			/** Image URL for the slide (required). */
 			image: PropTypes.string.isRequired,
+			/** Alt text for the image (used for accessibility). */
 			imageAlt: PropTypes.string,
+			/** Image fitting mode: 'contain' | 'cover' | 'fill'. */
 			imgFit: PropTypes.oneOf(['contain', 'cover', 'fill']),
+			/** Title or header text shown on the card. */
 			headerText: PropTypes.string,
+			/** Optional subtitle text for the card. */
 			subHeaderText: PropTypes.string,
+			/** Optional body content for the card. */
 			bodyText: PropTypes.string,
 		})
 	).isRequired,
+	/** Enable swipe/drag interactions on touch and pointer devices. */
 	draggable: PropTypes.bool,
 	imgFit: PropTypes.oneOf(['contain', 'cover', 'fill'])
 };
@@ -206,8 +236,16 @@ function CarouselCard( props: CarouselCardType ) {
 
 
 /* ========== CAROUSEL  ARROW ========== */
+/**
+ * CarouselButton — small interactive control used to navigate carousel slides.
+ *
+ * @param {function} [props.clickFunction] - Click handler invoked when the control is pressed.
+ * @param {string} [props.glyph] - Label or HTML entity used to visually render the button.
+ */
 CarouselButton.propTypes = {
+/** Click handler invoked when the control is clicked. */
 	clickFunction: PropTypes.func.isRequired,
+	/** Label or glyph to display inside the button. */
 	glyph: PropTypes.string.isRequired
 };
 function CarouselButton(props: { clickFunction: React.MouseEventHandler<HTMLButtonElement>; glyph: string; }) {
@@ -221,9 +259,21 @@ function CarouselButton(props: { clickFunction: React.MouseEventHandler<HTMLButt
 
 
 
+/**
+ * CarouselArrow — Render a directional navigation control used by the Carousel.
+ *
+ * Renders a button styled for left or right placement and calls the provided handler when clicked.
+ *
+ * @param {('left'|'right')} [props.direction] - Direction used to determine button styling/placement.
+ * @param {function} [props.clickFunction] - Click handler invoked when the control is pressed.
+ * @param {string} [props.glyph] - Glyph or label text displayed inside the button.
+ */
 CarouselArrow.propTypes = {
+	/** Direction keyword used to choose button styling/placement ('left'|'right'). */
 	direction: PropTypes.string.isRequired,
+	/** Click handler invoked by the arrow control. */
 	clickFunction: PropTypes.func.isRequired,
+	/** Glyph or label text used for the arrow control. */
 	glyph: PropTypes.string.isRequired
 };
 function CarouselArrow(props: { direction: string; clickFunction: React.MouseEventHandler<HTMLButtonElement>; glyph: string; }) {

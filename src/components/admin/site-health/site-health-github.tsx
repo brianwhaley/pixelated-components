@@ -6,9 +6,19 @@ import { Table } from '@pixelated-tech/components';
 import { SiteHealthTemplate } from './site-health-template';
 import type { GitData } from './site-health-types';
 
+/**
+ * SiteHealthGit — Shows recent Git commits and push notes retrieved for the site.
+ *
+ * @param {string} [props.siteName] - Site identifier used to fetch Git activity.
+ * @param {string} [props.startDate] - Optional ISO start date to filter commits.
+ * @param {string} [props.endDate] - Optional ISO end date to filter commits.
+ */
 SiteHealthGit.propTypes = {
+/** Site identifier used to fetch Git activity */
 	siteName: PropTypes.string.isRequired,
+	/** ISO start date to filter commits (optional) */
 	startDate: PropTypes.string,
+	/** ISO end date to filter commits (optional) */
 	endDate: PropTypes.string,
 };
 export type SiteHealthGitType = InferProps<typeof SiteHealthGit.propTypes>;

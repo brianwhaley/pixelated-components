@@ -33,28 +33,71 @@ export type VariantType = typeof variants[number];
 export type LayoutType = typeof layouts[number];
 export type DirectionType = typeof directions[number];
 
+/**
+ * Callout — versatile content block used for banners, promotional sections, and feature callouts.
+ *
+ * @param {oneOf} [props.variant] - Visual variant (e.g., 'default', 'boxed', 'full', 'grid', 'overlay', 'split').
+ * @param {oneOf} [props.boxShape] - Corner shape for boxed variants (e.g., 'square', 'bevel', 'squircle', 'round').
+ * @param {oneOf} [props.layout] - Layout direction: 'horizontal' (image + content) or 'vertical'.
+ * @param {oneOf} [props.direction] - When horizontal, whether the image appears on the 'left' or 'right'.
+ * @param {shape} [props.gridColumns] - Optional grid column counts used for boxed grid variants ({ left, right }).
+ * @param {number} [props.left] - Left column width for grid layouts.
+ * @param {number} [props.right] - Right column width for grid layouts.
+ * @param {string} [props.url] - Optional CTA URL for the callout button.
+ * @param {string} [props.img] - Image URL to display in the callout.
+ * @param {string} [props.imgAlt] - Alternate text for the image (accessibility and caption fallback).
+ * @param {oneOf} [props.imgShape] - Visual shape applied to the image container.
+ * @param {function} [props.imgClick] - Optional image click handler (event, url).
+ * @param {string} [props.title] - Primary title text for the callout.
+ * @param {string} [props.subtitle] - Secondary title/subtitle text.
+ * @param {oneOfType} [props.content] - Content as string or React node to place inside the callout body.
+ * @param {node} [props.children] - React children to render in the content area (takes precedence over content).
+ * @param {string} [props.buttonText] - Button/CTA text to display when `url` is provided.
+ * @param {boolean} [props.aboveFold] - Hint to prioritize image loading (above-the-fold) for performance.
+ * @param {string} [props.cloudinaryEnv] - Cloudinary environment key (internal use for SmartImage).
+ * @param {string} [props.cloudinaryDomain] - Cloudinary domain to use for image hosts.
+ * @param {string} [props.cloudinaryTransforms] - Optional Cloudinary transform presets.
+ */
 Callout.propTypes = {
+	/** Visual variant selector (e.g., 'default', 'boxed', 'grid', 'full'). */
 	variant: PropTypes.oneOf([...variants]),
+	/** Corner/box shape for boxed variants. */
 	boxShape: PropTypes.oneOf([...shapes]),
+	/** Layout direction: 'horizontal' or 'vertical'. */
 	layout: PropTypes.oneOf([...layouts]),
+	/** When horizontal layout is used, position image on 'left' or 'right'. */
 	direction: PropTypes.oneOf([...directions]),
+	/** Grid column sizing used for 'boxed grid' variants. */
 	gridColumns: PropTypes.shape({
+		/** Left column width in the grid configuration. */
 		left: PropTypes.number,
+		/** Right column width in the grid configuration. */
 		right: PropTypes.number
 	}),
+	/** Optional CTA URL used by CalloutButton. */
 	url: PropTypes.string,
+	/** Image URL to display in the callout. */
 	img: PropTypes.string,
+	/** Alt text for the image (used for accessibility and caption fallback). */
 	imgAlt: PropTypes.string,
+	/** Visual shape applied to the image container (e.g., 'square', 'round'). */
 	imgShape: PropTypes.oneOf([...shapes]),
+	/** Optional click handler for the image (event, url). */
 	imgClick: PropTypes.func,
+	/** Primary title text for the callout. */
 	title: PropTypes.string,
+	/** Optional subtitle/secondary heading. */
 	subtitle: PropTypes.string,
+	/** Content string or React node to render inside the body area. */
 	content: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
+	/** React children to render in the content area (takes precedence over content prop). */
 	children: PropTypes.node,
+	/** Button or CTA text used when `url` is provided. */
 	buttonText: PropTypes.string,
 	// SmartImage props
+	/** Hint to prioritize image loading (treat as above-the-fold). */
 	aboveFold: PropTypes.bool,
-	/* cloudinaryEnv: PropTypes.string,
+/* cloudinaryEnv: PropTypes.string,
 	cloudinaryDomain: PropTypes.string,
 	cloudinaryTransforms: PropTypes.string, */
 };
@@ -149,9 +192,19 @@ export function Callout({
 
 
 /* ========== CALLOUT HEADER ========== */
+/**
+ * CalloutHeader — renders the primary title and optional link wrapper for a Callout.
+ *
+ * @param {string} [props.title] - Title text displayed as the heading.
+ * @param {string} [props.url] - Optional URL that wraps the title as a link.
+ * @param {string} [props.target] - Link target (e.g., '_self', '_blank').
+ */
 CalloutHeader.propTypes = {
+/** Heading title text (required). */
 	title: PropTypes.string.isRequired,
+	/** Optional link URL for the heading. */
 	url: PropTypes.string,
+	/** Optional link target attribute. */
 	target: PropTypes.string
 };
 export type CalloutHeaderType = InferProps<typeof CalloutHeader.propTypes>;
@@ -169,9 +222,19 @@ export function CalloutHeader( {title, url, target}: CalloutHeaderType) {
 
 
 /* ========== CALLOUT BUTTON ========== */
+/**
+ * CalloutButton — renders a button that navigates to a provided CTA URL.
+ *
+ * @param {string} [props.title] - Button label text (required when URL is provided).
+ * @param {string} [props.url] - Required URL that the button navigates to.
+ * @param {string} [props.target] - Optional link target for cross-origin behavior.
+ */
 CalloutButton.propTypes = {
+/** Button label text. */
 	title: PropTypes.string.isRequired,
+	/** CTA URL that the button will navigate to when clicked. */
 	url: PropTypes.string.isRequired,
+	/** Optional target attribute for link behavior. */
 	target: PropTypes.string
 };
 export type CalloutButtonType = InferProps<typeof CalloutButton.propTypes>;

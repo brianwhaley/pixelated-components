@@ -8,10 +8,22 @@ import './modal.css';
 https://www.w3schools.com/howto/howto_css_modals.asp
 */
 
+/**
+ * Modal — accessible modal overlay component that can use either DOM events or a React close callback.
+ *
+ * @param {node} [props.modalContent] - Content to render inside the modal dialog (usually React nodes).
+ * @param {string} [props.modalID] - Optional suffix used to form DOM ids for compatibility with legacy event-based controls.
+ * @param {boolean} [props.isOpen] - Whether the modal is currently open and visible.
+ * @param {function} [props.handleCloseEvent] - Optional callback to close the modal (used by React-driven consumers).
+ */
 Modal.propTypes = {
+/** Content rendered inside the modal dialog. */
 	modalContent: PropTypes.node.isRequired,
+	/** Optional id suffix for the modal; used for legacy DOM-style open/close helpers. */
 	modalID: PropTypes.string,
+	/** Flag indicating whether the modal is visible. */
 	isOpen: PropTypes.bool,
+	/** Optional close callback invoked by escape key, overlay click, or controls. */
 	handleCloseEvent: PropTypes.func,
 };
 export type ModalType = InferProps<typeof Modal.propTypes>;

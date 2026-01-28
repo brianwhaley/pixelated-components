@@ -10,7 +10,13 @@ import { usePixelatedConfig } from "../config/config.client";
 import "./markdown.css";
 
 /* ========== MARKDOWN ========== */
+/**
+ * Markdown — Renders a simplified markdown string into HTML (supports headings, lists, links, images, inline code).
+ *
+ * @param {string} [props.markdowndata] - Markdown input string to be parsed and rendered as HTML.
+ */
 Markdown.propTypes = {
+	/** Markdown input (string) to render */
 	markdowndata: PropTypes.string.isRequired,
 };
 export type MarkdownType = InferProps<typeof Markdown.propTypes>;

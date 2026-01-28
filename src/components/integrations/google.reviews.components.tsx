@@ -8,11 +8,25 @@ import { usePixelatedConfig } from '../config/config.client';
 import './google.reviews.css';
 
 
+/**
+ * GoogleReviewsCard — Fetch and display Google Place reviews for a specific Place ID.
+ *
+ * @param {string} [props.placeId] - Google Place ID to fetch reviews for (required).
+ * @param {string} [props.language] - Optional language code to localize review text.
+ * @param {number} [props.maxReviews] - Maximum number of reviews to display.
+ * @param {string} [props.proxyBase] - Optional proxy base URL to avoid CORS restrictions.
+ * @param {string} [props.apiKey] - Optional Google API key to use when fetching reviews.
+ */
 GoogleReviewsCard.propTypes = {
+/** Google Place ID (required) */
 	placeId: PropTypes.string.isRequired,
+	/** Language code for localization (optional) */
 	language: PropTypes.string,
+	/** Max number of reviews to display */
 	maxReviews: PropTypes.number,
+	/** Optional proxy base URL to avoid CORS issues */
 	proxyBase: PropTypes.string,
+	/** Optional Google API key */
 	apiKey: PropTypes.string,
 };
 export type GoogleReviewsCardType = InferProps<typeof GoogleReviewsCard.propTypes>;

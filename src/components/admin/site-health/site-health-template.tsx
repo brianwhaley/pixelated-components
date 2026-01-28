@@ -15,20 +15,48 @@ interface EndpointConfig {
 	responseTransformer?: (response: any) => any;
 }
 
+/**
+ * SiteHealthTemplate — Generic data-fetching and rendering wrapper used by site-health panels.
+ *
+ * @param {string} [props.siteName] - Site identifier used to query health endpoints.
+ * @param {string} [props.title] - Optional title rendered in the panel header.
+ * @param {function} [props.children] - Render prop that receives fetched data and returns JSX.
+ * @param {shape} [props.endpoint] - Endpoint configuration object including `endpoint`, optional `params`, and a `responseTransformer`.
+ * @param {oneOf} [props.method] - HTTP method used to call the endpoint (default: 'GET').
+ * @param {object} [props.headers] - Optional headers to include in the request.
+ * @param {object} [props.params] - Optional query params to include in the request.
+ * @param {any} [props.body] - Optional request body for non-GET requests.
+ * @param {function} [props.responseTransformer] - Function to transform the API response into the shape consumed by the children render prop.
+ * @param {boolean} [props.enableCacheControl] - When true, respects the `cache` query param to bypass or enable caching.
+ * @param {number} [props.columnSpan] - Optional grid column span when rendering as a card.
+ * @param {any} [props.data] - Optional pre-fetched data to render instead of calling the endpoint.
+ */
 SiteHealthTemplate.propTypes = {
+/** Site identifier used to query health endpoints */
 	siteName: PropTypes.string.isRequired,
+	/** Optional title for the panel */
 	title: PropTypes.string,
+	/** Render prop receiving the fetched data */
 	children: PropTypes.func.isRequired,
+	/** Endpoint configuration */
 	endpoint: PropTypes.shape({
 		endpoint: PropTypes.string.isRequired,
+		/** HTTP method (GET/POST/PUT/DELETE) */
 		method: PropTypes.oneOf(['GET', 'POST', 'PUT', 'DELETE']),
+		/** Optional request headers */
 		headers: PropTypes.object,
+		/** Optional query parameters */
 		params: PropTypes.object,
+		/** Optional request body (for POST/PUT) */
 		body: PropTypes.any,
+		/** Optional response transformer function */
 		responseTransformer: PropTypes.func,
 	}),
+	/** Respect cache control query param when true */
 	enableCacheControl: PropTypes.bool,
+	/** Grid column span for card rendering */
 	columnSpan: PropTypes.number,
+	/** Optional pre-fetched data to render */
 	data: PropTypes.any,
 };
 export type SiteHealthTemplateType = InferProps<typeof SiteHealthTemplate.propTypes>;

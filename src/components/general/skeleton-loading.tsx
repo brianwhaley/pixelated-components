@@ -6,15 +6,19 @@ import { ToggleLoading } from './loading';
 import { Skeleton } from './skeleton';
 import './skeleton-loading.css';
 
-export type SkeletonLoadingProps = {
-  heroHeight?: number;
-  cardCount?: number;
-  className?: string;
-};
-
+/**
+ * SkeletonLoading — Accessible skeleton page used while content or data is loading.
+ *
+ * @param {number} [props.heroHeight] - Height in pixels for the hero skeleton block.
+ * @param {number} [props.cardCount] - Number of placeholder cards to render in the cards section.
+ * @param {string} [props.className] - Optional additional CSS classes applied to the root element.
+ */
 SkeletonLoading.propTypes = {
+/** Hero skeleton height (px) */
 	heroHeight: PropTypes.number,
+	/** Number of placeholder cards to render */
 	cardCount: PropTypes.number,
+	/** Extra CSS classes for the root element */
 	className: PropTypes.string,
 };
 export type SkeletonLoadingType = InferProps<typeof SkeletonLoading.propTypes>;
@@ -58,5 +62,3 @@ export function SkeletonLoading({ heroHeight = 220, cardCount = 6, className = '
 		</main>
 	);
 }
-
-export default SkeletonLoading;

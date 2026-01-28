@@ -38,6 +38,7 @@ For a complete working example of Pixelated Components in action, check out the 
 - [Gravatar](#gravatar)
 - [HubSpot](#hubspot)
 - [Instagram](#instagram)
+- [Lipsum](#lipsum)
 - [WordPress](#wordpress)
 
 ### UI Components
@@ -720,6 +721,33 @@ import { BlogPostSummary } from '@pixelated-tech/components';
   categories={['tech', 'react']}
 />
 ```
+
+### Lipsum
+
+Client-side helper for fetching placeholder text from `https://www.lipsum.com` and returning an array of paragraph strings. It is intended for Storybook playgrounds and client-side usage where `DOMParser` is available.
+
+**Default proxy**: `https://proxy.pixelated.tech/prod/proxy?url=` — requests are proxied by default to avoid CORS issues.
+
+#### Parameters
+
+- `LipsumTypeId` — `'Paragraph' | 'Word' | 'Char'` (required)
+- `Amount` — `number` (required)
+- `StartWithLoremIpsum` — `boolean` (optional)
+
+#### Usage
+
+```ts
+import { getLipsum } from '@pixelated-tech/components';
+
+const paragraphs = await getLipsum({ LipsumTypeId: 'Paragraph', Amount: 3, StartWithLoremIpsum: true });
+// -> array of paragraph strings
+```
+
+#### Notes
+
+- This helper runs in browser contexts (uses `DOMParser`) and is not intended for server-side rendering.
+- Story: `Integrations/Lipsum` (`src/stories/integrations/lipsum.stories.tsx`) — Playground uses a live fetch via the proxy; use controls to change the `LipsumTypeId`, `Amount`, and `StartWithLoremIpsum` values.
+- Unit tests: `src/tests/lipsum.test.ts` cover HTML parsing and error handling.
 
 ### Calendly
 

@@ -128,10 +128,20 @@ type RecipeDataType = {
 
 
 /* ========== RECIPE BOOK ========== */
+/**
+ * RecipeBook — renders a browsable collection of recipes grouped by category with deep-linking support.
+ *
+ * @param {shape} [props.recipeData] - Object containing recipe items in schema.org/Recipe format.
+ * @param {array} [props.items] - Array of recipe items (used internally by recipeData.items).
+ * @param {array} [props.recipeCategories] - Array of category names used to group and render recipes.
+ */
 RecipeBook.propTypes = {
+/** Object containing recipe items (schema.org/Recipe objects). */
 	recipeData: PropTypes.shape({
+		/** Array of recipe items used to render the book. */
 		items: PropTypes.array.isRequired
 	}).isRequired,
+	/** Categories used to group recipes in the book (array of strings). */
 	recipeCategories: PropTypes.array.isRequired
 };
 export type RecipeBookType = InferProps<typeof RecipeBook.propTypes>;
@@ -222,10 +232,22 @@ export function RecipeBook(props: RecipeBookType) {
 
 
 /* ========== RECIPE CATEGORY ========== */
+/**
+ * RecipeCategory — renders a category heading for a group of recipes.
+ *
+ * @param {string} [props.id] - DOM id for the category heading element.
+ * @param {string} [props.className] - CSS class names for the heading element.
+ * @param {string} [props.category] - Category name displayed to users.
+ * @param {string} [props.showOnly] - Optional filter key used to hide/show categories via deep link or selection.
+ */
 RecipeCategory.propTypes = {
+/** DOM id for the category heading. */
 	id: PropTypes.string.isRequired,
+	/** CSS class names to apply to the heading. */
 	className: PropTypes.string.isRequired,
+	/** Category display name. */
 	category: PropTypes.string.isRequired,
+	/** Filter token used to show only a specific recipe or category. */
 	showOnly: PropTypes.string.isRequired
 };
 export type RecipeCategoryType = InferProps<typeof RecipeCategory.propTypes>;
@@ -241,9 +263,19 @@ export function RecipeCategory(props: RecipeCategoryType) {
 
 
 /* ========== RECIPE ========== */
+/**
+ * RecipeBookItem — displays a single recipe including image, ingredients and instructions.
+ *
+ * @param {object} [props.recipeData] - Normalized recipe data used for rendering (name, photo, ingredients, instructions, etc.).
+ * @param {string} [props.id] - DOM id for deep-linking to this recipe.
+ * @param {string} [props.showOnly] - Filter token used to hide/show the item for deep-linking.
+ */
 RecipeBookItem.propTypes = {
+/** Normalized recipe data object used to render the recipe view. */
 	recipeData: PropTypes.object.isRequired,
+	/** DOM id used for deep-linking. */
 	id: PropTypes.string.isRequired,
+	/** Filter token used when deep-linking or scoping displayed recipes. */
 	showOnly: PropTypes.string.isRequired
 };
 export type RecipeBookItemType = InferProps<typeof RecipeBookItem.propTypes>;
@@ -293,9 +325,19 @@ export function RecipeBookItem (props: RecipeBookItemType) {
 
 
 /* ========== RECIPE PICK LIST ========== */
+/**
+ * RecipePickList — renders a select control for picking recipes by category and recipe name.
+ *
+ * @param {object} [props.recipeData] - Object containing recipe items accessible by category.
+ * @param {array} [props.recipeCategories] - Categories used to organize recipes in the select list.
+ * @param {function} [props.handleRecipePickListChange] - Callback invoked when the selected recipe changes (receives selected id).
+ */
 RecipePickList.propTypes = {
+/** Recipe data object containing items used to build the pick list. */
 	recipeData: PropTypes.object.isRequired,
+	/** Array of category names for grouping recipes in the select. */
 	recipeCategories: PropTypes.array.isRequired,
+	/** Change handler called with the selected recipe identifier when the pick list changes. */
 	handleRecipePickListChange: PropTypes.func.isRequired
 };
 export type RecipePickListType = InferProps<typeof RecipePickList.propTypes>;
@@ -348,8 +390,12 @@ export function RecipePickList(props: RecipePickListType) {
 }
 
 /* ========== RECIPE BACK TO TOP ========== */
-BackToTop.propTypes = {};
-export type BackToTopType = InferProps<typeof BackToTop.propTypes>;
+
+/** BackToTop.propTypes — No props (scroll-to-top control).
+ * @param {any} [props] - No props are accepted by BackToTop.
+ */
+BackToTop.propTypes = { /** no props */ };
+export type BackToTopType = InferProps<typeof BackToTop.propTypes>;    
 export function BackToTop() {
 	function scrollToTop(){
 		window.scroll({

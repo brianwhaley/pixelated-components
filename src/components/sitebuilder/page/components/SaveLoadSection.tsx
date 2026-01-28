@@ -4,9 +4,19 @@ import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import type { PageData } from '../lib/types';
 
+/**
+ * SaveLoadSection — UI for saving and loading page JSON to/from the configured API endpoint.
+ *
+ * @param {object} [props.pageData] - Current page data object to be saved.
+ * @param {function} [props.onLoad] - Callback invoked with loaded page data when a saved page is selected.
+ * @param {string} [props.apiEndpoint] - Base API endpoint used for save/load operations.
+ */
 SaveLoadSection.propTypes = {
+/** Current page data object to save */
 	pageData: PropTypes.object.isRequired,
+	/** Callback invoked when a saved page is loaded */
 	onLoad: PropTypes.func.isRequired,
+	/** API endpoint base for save/load interactions */
 	apiEndpoint: PropTypes.string,
 };
 export type SaveLoadSectionType = InferProps<typeof SaveLoadSection.propTypes>;

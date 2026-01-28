@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { generateKey } from './formutils';
+import { generateKey } from '../../general/utilities';
 import { FormValidationProvider, useFormValidation } from './formvalidator';
 
 import * as FC from './formcomponents';
@@ -22,11 +22,25 @@ const debug = false;
 Generate all the elements to display a form */
 
 
+/**
+ * FormEngine — Render a form defined by a JSON `formData` schema. Converts `formData.fields` to React components and manages submission handling and validation.
+ *
+ * @param {string} [props.name] - Form HTML name attribute.
+ * @param {string} [props.id] - Form HTML id attribute.
+ * @param {string} [props.method] - HTTP method for form submission (default: 'post').
+ * @param {function} [props.onSubmitHandler] - Optional submit handler invoked with the submit event.
+ * @param {object} [props.formData] - JSON schema describing fields (object with `fields` array).
+ */
 FormEngine.propTypes = {
+/** Form name attribute */
 	name: PropTypes.string,
+	/** Form id attribute */
 	id: PropTypes.string,
+	/** HTTP method (e.g., 'post') */
 	method: PropTypes.string,
+	/** Submit handler called when the form is valid and submitted */
 	onSubmitHandler: PropTypes.func,
+	/** JSON schema describing form fields */
 	formData: PropTypes.object.isRequired
 };
 export type FormEngineType = InferProps<typeof FormEngine.propTypes>;
@@ -38,11 +52,25 @@ export function FormEngine(props: FormEngineType) {
 	);
 }
 
+/**
+ * FormEngineInner — Internal implementation of the `FormEngine` that renders the generated fields and handles form submit/validation.
+ *
+ * @param {string} [props.name] - Form HTML name attribute.
+ * @param {string} [props.id] - Form HTML id attribute.
+ * @param {string} [props.method] - HTTP method for submission.
+ * @param {function} [props.onSubmitHandler] - Submit handler invoked when form is validated.
+ * @param {object} [props.formData] - JSON schema describing fields (object with `fields` array).
+ */
 FormEngineInner.propTypes = {
+/** Form name attribute */
 	name: PropTypes.string,
+	/** Form id attribute */
 	id: PropTypes.string,
+	/** HTTP method */
 	method: PropTypes.string,
+	/** Submit handler */
 	onSubmitHandler: PropTypes.func,
+	/** JSON form schema */
 	formData: PropTypes.object.isRequired
 };
 type FormEngineInnerType = InferProps<typeof FormEngineInner.propTypes>;
@@ -59,7 +87,13 @@ function FormEngineInner(props: FormEngineInnerType) {
 		return formProps;
 	}
 
+	/**
+	 * generateNewFields — Internal: convert JSON-form `formData.fields` into React elements for rendering.
+	 *
+	 * @param {any} [props.formData] - JSON form schema with `fields` array to convert.
+	 */
 	generateNewFields.propTypes = {
+		/** JSON form schema with `fields` array */
 		formData: PropTypes.any.isRequired,
 	};
 	type generateNewFieldsType = InferProps<typeof generateNewFields.propTypes>;

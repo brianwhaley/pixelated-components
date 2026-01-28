@@ -11,9 +11,15 @@ const __dirname = path.dirname(__filename);
 
 const config = {
     addons: [
-        // '@storybook/addon-controls', // consildated into main bundle as part of Storybook 9
+        // Storybook docs + accessibility
+        '@storybook/addon-docs',
+        '@storybook/addon-a11y',
         "@storybook/preset-scss",
     ],
+    // Enable autodocs (generates Docs tab from component metadata & stories)
+    docs: {
+        autodocs: true,
+    },
     core: {
         builder: {
             name: "@storybook/builder-webpack5",
@@ -21,7 +27,10 @@ const config = {
         },
         enableCrashReports: false,
     },
+	disableTelemetry: true,
     features: {
+    	disableChecklist: true,
+		disableWhatsNewNotifications: true,
         experimentalRSC: true,
     },
     framework: {
@@ -29,7 +38,19 @@ const config = {
         options: {},
     },
     staticDirs: [/* "../dist", */ "../src"],
+    // Only include JS/TS-based stories to avoid local MDX loader/indexing issues
     stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+
+    // TypeScript doc extraction for Storybook Docs (prop tables)
+    typescript: {
+        reactDocgen: 'react-docgen-typescript',
+        reactDocgenTypescriptOptions: {
+            shouldExtractLiteralValuesFromEnum: true,
+            shouldRemoveUndefinedFromOptional: true,
+            propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
+        },
+    },
+
 
     webpackFinal: async (config) => {
         // config.module.rules = sharedRulesConfig;

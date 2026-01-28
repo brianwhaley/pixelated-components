@@ -11,10 +11,22 @@ const TabItemPropTypes = {
 };
 // type TabItemType = InferProps<typeof TabItemPropTypes>;
 
+/**
+ * Tab — simple tabbed UI: clickable headers with content panes.
+ *
+ * @param {arrayOf} [props.tabs] - Array of tab items: { id, label, content }.
+ * @param {oneOf} [props.orientation] - Tab orientation: 'top' | 'bottom' | 'left' | 'right'.
+ * @param {string} [props.defaultActiveTab] - Id of the tab that should be active initially.
+ * @param {function} [props.onTabChange] - Callback invoked when the active tab changes (tabId).
+ */
 Tab.propTypes = {
+/** Array of tabs to render, each should include id, label, and content. */
 	tabs: PropTypes.arrayOf(PropTypes.shape(TabItemPropTypes).isRequired).isRequired,
+	/** Layout orientation for the tab headers. */
 	orientation: PropTypes.oneOf(['top', 'bottom', 'left', 'right']),
+	/** Optional default active tab id. */
 	defaultActiveTab: PropTypes.string,
+	/** Optional change handler called with the new tab id. */
 	onTabChange: PropTypes.func,
 };
 export type TabType = InferProps<typeof Tab.propTypes>;
