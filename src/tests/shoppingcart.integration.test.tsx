@@ -13,8 +13,10 @@ import {
   setShippingInfo,
   clearShoppingCart,
   getLocalDiscountCodes,
-  type ShoppingCartType,
+  type CartItemType,
 } from '../components/shoppingcart/shoppingcart.functions';
+
+type ShoppingCartType = CartItemType;
 
 // Use an on-disk fixture where possible (shipping / discount fixtures live with the component)
 import shippingToData from '../components/shoppingcart/shipping.to.json';

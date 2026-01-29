@@ -179,6 +179,20 @@ describe('pixelated-eslint-plugin', () => {
 		expect(linter.verify('const x = 1;', cfg, { filename: 'src/components/my_component.tsx' }).some(m => m.ruleId === 'pixelated/file-name-kebab-case')).toBe(true);
 	});
 
+	it('enforces kebab-case for JSX className values', async () => {
+		const mod = await import('../scripts/pixelated-eslint-plugin.js');
+		const linter = new (await import('eslint')).Linter();
+		linter.definePlugin('pixelated', mod.default);
+		const cfg = { parserOptions: { ecmaVersion: 2022, sourceType: 'module', ecmaFeatures: { jsx: true } }, plugins: { pixelated: true }, rules: { 'pixelated/class-name-kebab-case': 'warn' } };
+
+		// valid
+		expect(linter.verify('export default function X(){ return (<div className="callout-title-text other-class">Hi</div>); }', cfg).length).toBe(0);
+
+		// invalid: camelCase and snake_case
+		const msgs = linter.verify('export default function X(){ return (<div className="calloutTitleText callout_title_text">Hi</div>); }', cfg);
+		expect(msgs.some(m => m.ruleId === 'pixelated/class-name-kebab-case')).toBe(true);
+	});
+
 	it('detects duplicate exported identifiers when a barrel re-exports two modules that export the same name', async () => {
 		const mod = await import('../scripts/pixelated-eslint-plugin.js');
 		const linter = new (await import('eslint')).Linter();
@@ -263,7 +277,7 @@ describe('pixelated-eslint-plugin', () => {
 	it('regression: exported rules are present in recommended config', async () => {
 		const mod = await import('../scripts/pixelated-eslint-plugin.js');
 		const plugin = mod.default;
-		const expected = ['validate-test-locations', 'no-process-env', 'no-debug-true', 'file-name-kebab-case', 'required-proptypes-jsdoc'];
+		const expected = ['validate-test-locations', 'no-process-env', 'no-debug-true', 'file-name-kebab-case', 'required-proptypes-jsdoc', 'class-name-kebab-case'];
 		expected.forEach(r => {
 			expect(plugin.rules[r]).toBeDefined();
 			expect(plugin.configs).toBeDefined();

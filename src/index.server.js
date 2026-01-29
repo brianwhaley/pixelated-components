@@ -8,12 +8,11 @@ export * from './components/admin/sites/sites.integration';
 export * from './components/config/config';
 export * from './components/config/config.server';
 export * from './components/config/config.types';
-export * from './components/config/config.utils';
 export * from './components/config/config.validators';
 export * from './components/config/crypto';
 
-export * from './components/general/manifest';
 export * from './components/general/hero';
+export * from './components/general/manifest';
 export * from './components/general/metadata.functions';
 export * from './components/general/proxy-handler';
 export * from './components/general/resume';
@@ -25,9 +24,9 @@ export * from './components/general/schema-recipe';
 export * from './components/general/schema-services';
 export * from './components/general/schema-website';
 export * from './components/general/sitemap';
-export * from './components/general/humanstxt';
-export * from './components/general/utilities';
 export * from './components/general/skeleton';
+export * from './components/general/well-known';
+export * from './components/general/utilities';
 
 export * from './components/integrations/contentful.delivery';
 export * from './components/integrations/contentful.management';

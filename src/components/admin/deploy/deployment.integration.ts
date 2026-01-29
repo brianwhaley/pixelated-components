@@ -5,14 +5,9 @@
 
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import type { SiteConfig } from '../sites/sites.integration';
 
-const execAsync = promisify(exec);
-
-export interface SiteConfig {
-  name: string;
-  localPath: string;
-  remote: string;
-}
+const execAsync = promisify(exec); 
 
 export interface DeploymentRequest {
   site: string;
@@ -53,10 +48,20 @@ async function executeScript(
 	versionType: string,
 	commitMessage: string,
 	environments: string[],
-	localPath: string,
-	remote: string
+	localPath: string | undefined,
+	remote: string | undefined
 ): Promise<DeploymentResult> {
 	const sourceBranch = 'dev'; // Always deploy from dev branch
+
+	// Guard against missing localPath — callers may omit for non-local checks
+	if (!localPath) {
+		throw new Error('localPath is required for deployment execution');
+	}
+
+	// Guard against missing remote — required for git operations
+	if (!remote) {
+		throw new Error('remote is required for deployment execution');
+	}
 
 	try {
 		// Get current branch and ensure we're on dev
@@ -94,7 +99,7 @@ async function executeScript(
 /**
  * Run preparation commands before deployment
  */
-async function runPrepCommands(siteName: string, versionType: string, commitMessage: string, localPath: string): Promise<string> {
+async function runPrepCommands(siteName: string, versionType: string, commitMessage: string, localPath: string | undefined): Promise<string> {
 	const results: string[] = [];
 
 	try {

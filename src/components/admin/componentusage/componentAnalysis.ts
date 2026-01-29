@@ -5,11 +5,7 @@
 
 import { promises as fs } from 'fs';
 import path from 'path';
-
-export interface SiteConfig {
-  name: string;
-  localPath: string;
-}
+import type { SiteConfig } from '../sites/sites.integration'; 
 
 export interface ComponentUsageResult {
   components: string[];
@@ -82,8 +78,9 @@ export async function getAllFiles(dirPath: string, extensions: string[] = []): P
 /**
  * Check if a component is used in a site
  */
-export async function checkComponentUsage(sitePath: string, componentName: string): Promise<boolean> {
+export async function checkComponentUsage(sitePath: string | undefined, componentName: string): Promise<boolean> {
 	try {
+		if (!sitePath) return false; // nothing to scan
 		const files = await getAllFiles(sitePath, ['.tsx', '.ts', '.jsx', '.js']);
 
 		// Special case for semantic components that export multiple functions

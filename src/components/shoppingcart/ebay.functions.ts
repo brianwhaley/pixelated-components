@@ -1,5 +1,5 @@
 import PropTypes, { InferProps } from "prop-types";
-import type { ShoppingCartType } from "./shoppingcart.functions";
+import type { CartItemType } from "./shoppingcart.functions";
 import { getCloudinaryRemoteFetchURL as getImg} from "../integrations/cloudinary";
 import { CacheManager } from "../general/cache-manager";
 
@@ -104,7 +104,7 @@ export function getShoppingCartItem(props: getShoppingCartItemType) {
 	} else {
 		qty = 10;
 	}
-	const shoppingCartItem: ShoppingCartType = {
+	const shoppingCartItem: CartItemType = {
 		itemImageURL : ( thisItem.thumbnailImages && props.cloudinaryProductEnv ) 
 			? getImg({url: thisItem.thumbnailImages[0].imageUrl, product_env: props.cloudinaryProductEnv} ) 
 			: (thisItem.thumbnailImages) 

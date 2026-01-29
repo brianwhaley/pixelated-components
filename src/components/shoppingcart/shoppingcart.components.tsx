@@ -13,7 +13,7 @@ import { MicroInteractions } from '../general/microinteractions';
 import { Modal, handleModalOpen } from '../general/modal';
 import { Table } from "../general/table";
 import { getCart, getShippingInfo, setShippingInfo, setDiscountCodes, getRemoteDiscountCodes, getCheckoutData, removeFromShoppingCart, clearShoppingCart, formatAsUSD, getCartItemCount } from "./shoppingcart.functions";
-import type { ShoppingCartType as CartItemType, AddressType, CheckoutType } from "./shoppingcart.functions";
+import type { CartItemType, AddressType, CheckoutType } from "./shoppingcart.functions";
 import { usePixelatedConfig } from '../config/config.client';
 import { SmartImage } from '../general/smartimage';
 import shippingToData from "./shipping.to.json";

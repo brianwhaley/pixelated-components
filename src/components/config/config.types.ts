@@ -19,9 +19,9 @@ export interface CloudinaryConfig {
 
 export interface ContentfulConfig {
 	proxyURL?: string;
-	base_url: string;
+	base_url?: string;
 	space_id: string;
-	environment: string;
+	environment?: string;
 	delivery_access_token?: string;
 	management_access_token?: string;
 	preview_access_token?: string;

@@ -13,7 +13,7 @@ import {
   shoppingCartKey,
   shippingInfoKey,
   discountCodesKey,
-  type ShoppingCartType,
+  type CartItemType,
 } from '@/components/shoppingcart/shoppingcart.functions';
 
 describe('ShoppingCart — migration: internal use of CacheManager (tests-first)', () => {
@@ -36,7 +36,7 @@ describe('ShoppingCart — migration: internal use of CacheManager (tests-first)
   });
 
   it('setCart/getCart delegate to CacheManager', () => {
-    const cartItem: ShoppingCartType = { itemID: 'm-1', itemTitle: 'M', itemQuantity: 1, itemCost: 1 };
+    const cartItem: CartItemType = { itemID: 'm-1', itemTitle: 'M', itemQuantity: 1, itemCost: 1 };
     setCart([cartItem]);
     expect(setSpy).toHaveBeenCalled();
 
@@ -47,7 +47,7 @@ describe('ShoppingCart — migration: internal use of CacheManager (tests-first)
   });
 
   it('add/remove/clear use CacheManager and preserve observable contract', () => {
-    const item: ShoppingCartType = { itemID: 'm-2', itemTitle: 'M2', itemQuantity: 1, itemCost: 2 };
+    const item: CartItemType = { itemID: 'm-2', itemTitle: 'M2', itemQuantity: 1, itemCost: 2 };
     addToShoppingCart(item);
     expect(setSpy).toHaveBeenCalled();
     expect(getCart().length).toBeGreaterThanOrEqual(1);

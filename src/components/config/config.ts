@@ -1,8 +1,12 @@
 import { type PixelatedConfig, SECRET_CONFIG_KEYS } from './config.types';
 import { decrypt, isEncrypted } from './crypto';
-import { getClientOnlyPixelatedConfig as stripSecrets } from './config.utils';
 import fs from 'fs';
 import path from 'path';
+
+// NOTE: getClientOnlyPixelatedConfig implementation moved here from
+// src/components/config/config.utils.ts — this consolidates the public
+// config API into one module.
+
 
 const debug = false;
 /**
@@ -110,5 +114,41 @@ export function getFullPixelatedConfig(): PixelatedConfig {
 export function getClientOnlyPixelatedConfig(full?: PixelatedConfig): PixelatedConfig {
 	const src = (full === undefined) ? getFullPixelatedConfig() : full;
 	if (src === null || typeof src !== 'object') return (src || {}) as PixelatedConfig;
-	return stripSecrets(src);
-}
+
+	// Inlined secret stripping logic (previously in config.utils)
+	const visited = new WeakSet();
+
+	function isSecretKey(key: string, serviceName?: string) {
+		if (SECRET_CONFIG_KEYS.global.includes(key)) return true;
+		if (serviceName && (SECRET_CONFIG_KEYS.services as any)[serviceName]) {
+			const serviceSecrets = (SECRET_CONFIG_KEYS.services as any)[serviceName];
+			if (serviceSecrets.includes(key)) return true;
+		}
+		return false;
+	}
+
+	function strip(obj: any, serviceName?: string): any {
+		if (obj === null || typeof obj !== 'object') return obj;
+		if (visited.has(obj)) return '[Circular]';
+		visited.add(obj);
+
+		if (Array.isArray(obj)) {
+			return obj.map((item: any) => strip(item, serviceName));
+		}
+
+		const out: any = {};
+		for (const k of Object.keys(obj)) {
+			const currentService = serviceName || k;
+			if (isSecretKey(k, serviceName)) continue;
+			out[k] = strip(obj[k], currentService);
+		}
+		return out;
+	}
+
+	try {
+		return strip(src) as PixelatedConfig;
+	} catch (err) {
+		console.error('Failed to strip secrets from config', err);
+		return {} as PixelatedConfig;
+	}
+} 

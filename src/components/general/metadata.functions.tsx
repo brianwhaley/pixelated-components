@@ -221,7 +221,7 @@ export function generateMetaTags(props: GenerateMetaTagsProps) {
 			<meta name="twitter:title" content={title} />
 
 			{/* <link rel="alternate" href={url} hrefLang="en-us" /> */}
-			<link rel="author" href={newOrigin} />
+			<link rel="author" href="humans.txt" />
 			<link rel="canonical" href={url} />
 			<link rel="icon" type="image/x-icon" href={favicon} />
 			<link rel="shortcut icon" type="image/x-icon" href={favicon} />

@@ -4,7 +4,7 @@
 import React from 'react';
 import ReactDOM from "react-dom"
 import PropTypes, { InferProps } from 'prop-types';
-import type { ShoppingCartType, CheckoutType } from "./shoppingcart.functions";
+import type { CartItemType, CheckoutType } from "./shoppingcart.functions";
 const debug = false;
 
 function isScriptSrc(scriptSrc) {
@@ -80,7 +80,7 @@ export function initPayPalButton(props: {checkoutData: CheckoutType, onApprove: 
                                 "discount": { "currency_code": "USD", "value": checkoutData.subtotal_discount },
                             }
                         },
-                        "items": checkoutData.items.map((item: ShoppingCartType) => {
+                        "items": checkoutData.items.map((item: CartItemType) => {
                             return({
                                 "name": item.itemID,
                                 "quantity": item.itemQuantity.toString(),

@@ -8,12 +8,18 @@ import path from 'path';
 
 export interface SiteConfig {
   name: string;
-  localPath: string;
+  /** Optional local path (may be absent for remote-only checks) */
+  localPath?: string;
+  /** Optional remote (e.g., full URL or owner/repo string) */
   remote?: string;
+  /** Optional explicit repository identifier (e.g., "owner/repo" or just "repo") */
+  repo?: string;
+  /** Optional explicit repo owner */
+  owner?: string;
   ga4PropertyId?: string;
   searchConsoleUrl?: string;
   [key: string]: any;
-}
+}  
 
 /**
  * Load sites configuration from JSON file

@@ -9,7 +9,7 @@ import { usePixelatedConfig } from '../config/config.client';
 import { addToShoppingCart  } from "../shoppingcart/shoppingcart.functions";
 import { AddToCartButton, /* GoToCartButton */ ViewItemDetails } from "../shoppingcart/shoppingcart.components";
 import { getCloudinaryRemoteFetchURL as getImg} from "./cloudinary";
-import type { ShoppingCartType } from "../shoppingcart/shoppingcart.functions";
+import type { CartItemType } from "../shoppingcart/shoppingcart.functions";
 // import { Loading, ToggleLoading } from "../general/pixelated.loading";	
 import { SmartImage } from "../general/smartimage";
 import "../../css/pixelated.grid.scss";
@@ -177,7 +177,7 @@ export function ContentfulListItem(props: ContentfulListItemType) {
 	const itemURL = "./store/" + thisItem.sys.id;
 	const itemURLTarget = "_self"; 
 
-	const shoppingCartItem: ShoppingCartType = {
+	const shoppingCartItem: CartItemType = {
 		itemID: thisItem.sys.id,
 		itemURL: itemURL,
 		itemTitle: thisItem.fields.title,
@@ -362,7 +362,7 @@ export function ContentfulItemDetail(props: ContentfulItemDetailType)  {
 		const itemURL = undefined;
 		const itemURLTarget = "_self"; 
 		
-		const shoppingCartItem: ShoppingCartType = {
+		const shoppingCartItem: CartItemType = {
 			itemID: thisItem.sys.id,
 			itemURL: itemURL,
 			itemTitle: thisItem.fields.title,

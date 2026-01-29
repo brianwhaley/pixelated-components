@@ -11,8 +11,10 @@ import {
   setDiscountCodes,
   getLocalDiscountCodes,
   getCartSubtotalDiscount,
-  type ShoppingCartType,
+  type CartItemType,
 } from '../components/shoppingcart/shoppingcart.functions';
+
+type ShoppingCartType = CartItemType;
 
 // Use on-disk fixtures where available to keep tests 'real'
 import shippingToData from '../components/shoppingcart/shipping.to.json';

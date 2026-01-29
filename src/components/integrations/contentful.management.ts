@@ -4,11 +4,7 @@
  * Provides reusable CRUD operations for any Contentful content type
  */
 
-export interface ContentfulConfig {
-	spaceId: string;
-	accessToken: string;
-	environment?: string;
-}
+import type { ContentfulConfig } from '../config/config.types';
 
 export interface ContentfulEntry {
 	sys: {
@@ -54,14 +50,14 @@ export async function listEntries(
 	contentType: string,
 	config: ContentfulConfig
 ): Promise<ListEntriesResponse> {
-	const { spaceId, accessToken, environment = 'master' } = config;
+	const { space_id, delivery_access_token, environment = 'master' } = config;
 	
 	try {
 		const response = await fetch(
-			`https://api.contentful.com/spaces/${spaceId}/environments/${environment}/entries?content_type=${contentType}`,
+			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries?content_type=${contentType}`,
 			{
 				headers: {
-					'Authorization': `Bearer ${accessToken}`,
+					'Authorization': `Bearer ${delivery_access_token}`,
 					'Content-Type': 'application/json',
 				},
 			}
@@ -94,14 +90,14 @@ export async function getEntryById(
 	entryId: string,
 	config: ContentfulConfig
 ): Promise<GetEntryResponse> {
-	const { spaceId, accessToken, environment = 'master' } = config;
+	const { space_id, delivery_access_token, environment = 'master' } = config;
 	
 	try {
 		const response = await fetch(
-			`https://api.contentful.com/spaces/${spaceId}/environments/${environment}/entries/${entryId}`,
+			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${entryId}`,
 			{
 				headers: {
-					'Authorization': `Bearer ${accessToken}`,
+					'Authorization': `Bearer ${delivery_access_token}`,
 					'Content-Type': 'application/json',
 				},
 			}
@@ -140,14 +136,14 @@ export async function searchEntriesByField(
 	fieldValue: string,
 	config: ContentfulConfig
 ): Promise<ListEntriesResponse> {
-	const { spaceId, accessToken, environment = 'master' } = config;
+	const { space_id, delivery_access_token, environment = 'master' } = config;
 	
 	try {
 		const response = await fetch(
-			`https://api.contentful.com/spaces/${spaceId}/environments/${environment}/entries?content_type=${contentType}&fields.${fieldName}=${encodeURIComponent(fieldValue)}`,
+			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries?content_type=${contentType}&fields.${fieldName}=${encodeURIComponent(fieldValue)}`,
 			{
 				headers: {
-					'Authorization': `Bearer ${accessToken}`,
+					'Authorization': `Bearer ${delivery_access_token}`,
 					'Content-Type': 'application/json',
 				},
 			}
@@ -182,7 +178,7 @@ export async function createEntry(
 	config: ContentfulConfig,
 	autoPublish: boolean = true
 ): Promise<SaveEntryResponse> {
-	const { spaceId, accessToken, environment = 'master' } = config;
+	const { space_id, delivery_access_token, environment = 'master' } = config;
 	
 	try {
 		// Convert fields to Contentful format (with 'en-US' locale)
@@ -192,11 +188,11 @@ export async function createEntry(
 		}
 
 		const createResponse = await fetch(
-			`https://api.contentful.com/spaces/${spaceId}/environments/${environment}/entries`,
+			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries`,
 			{
 				method: 'POST',
 				headers: {
-					'Authorization': `Bearer ${accessToken}`,
+					'Authorization': `Bearer ${delivery_access_token}`,
 					'Content-Type': 'application/vnd.contentful.management.v1+json',
 					'X-Contentful-Content-Type': contentType,
 				},
@@ -216,11 +212,11 @@ export async function createEntry(
 		// Publish if requested
 		if (autoPublish) {
 			await fetch(
-				`https://api.contentful.com/spaces/${spaceId}/environments/${environment}/entries/${newEntry.sys.id}/published`,
+				`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${newEntry.sys.id}/published`,
 				{
 					method: 'PUT',
 					headers: {
-						'Authorization': `Bearer ${accessToken}`,
+						'Authorization': `Bearer ${delivery_access_token}`,
 						'X-Contentful-Version': newEntry.sys.version.toString(),
 					},
 				}
@@ -249,7 +245,7 @@ export async function updateEntry(
 	config: ContentfulConfig,
 	autoPublish: boolean = true
 ): Promise<SaveEntryResponse> {
-	const { spaceId, accessToken, environment = 'master' } = config;
+	const { space_id, delivery_access_token, environment = 'master' } = config;
 	
 	try {
 		// Get current entry to get version
@@ -270,11 +266,11 @@ export async function updateEntry(
 		}
 
 		const updateResponse = await fetch(
-			`https://api.contentful.com/spaces/${spaceId}/environments/${environment}/entries/${entryId}`,
+			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${entryId}`,
 			{
 				method: 'PUT',
 				headers: {
-					'Authorization': `Bearer ${accessToken}`,
+					'Authorization': `Bearer ${delivery_access_token}`,
 					'Content-Type': 'application/vnd.contentful.management.v1+json',
 					'X-Contentful-Version': currentEntry.sys.version.toString(),
 				},
@@ -294,11 +290,11 @@ export async function updateEntry(
 		// Publish if requested
 		if (autoPublish) {
 			await fetch(
-				`https://api.contentful.com/spaces/${spaceId}/environments/${environment}/entries/${entryId}/published`,
+				`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${entryId}/published`,
 				{
 					method: 'PUT',
 					headers: {
-						'Authorization': `Bearer ${accessToken}`,
+						'Authorization': `Bearer ${delivery_access_token}`,
 						'X-Contentful-Version': updatedEntry.sys.version.toString(),
 					},
 				}
@@ -325,7 +321,7 @@ export async function deleteEntry(
 	entryId: string,
 	config: ContentfulConfig
 ): Promise<DeleteEntryResponse> {
-	const { spaceId, accessToken, environment = 'master' } = config;
+	const { space_id, delivery_access_token, environment = 'master' } = config;
 	
 	try {
 		// Get current entry to get version
@@ -341,11 +337,11 @@ export async function deleteEntry(
 
 		// Unpublish first
 		await fetch(
-			`https://api.contentful.com/spaces/${spaceId}/environments/${environment}/entries/${entryId}/published`,
+			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${entry.sys.id}/published`,
 			{
-				method: 'DELETE',
+				method: 'PUT',
 				headers: {
-					'Authorization': `Bearer ${accessToken}`,
+					'Authorization': `Bearer ${delivery_access_token}`,
 					'X-Contentful-Version': entry.sys.version.toString(),
 				},
 			}
@@ -353,11 +349,11 @@ export async function deleteEntry(
 
 		// Delete the entry
 		const deleteResponse = await fetch(
-			`https://api.contentful.com/spaces/${spaceId}/environments/${environment}/entries/${entryId}`,
+			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${entryId}`,
 			{
 				method: 'DELETE',
 				headers: {
-					'Authorization': `Bearer ${accessToken}`,
+					'Authorization': `Bearer ${delivery_access_token}`,
 					'X-Contentful-Version': (entry.sys.version + 1).toString(),
 				},
 			}

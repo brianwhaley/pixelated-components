@@ -3,9 +3,10 @@
 import { getFullPixelatedConfig } from '../../config/config';
 import path from 'path';
 import type { GitCommit } from './site-health-types';
+import type { SiteConfig } from '../sites/sites.integration';
 
 // Debug logging is off by default. Set to true/false here (do not use env vars).
-const debug = false;
+const debug = false; 
 
 
 export interface GitHealthResult {
@@ -14,18 +15,6 @@ export interface GitHealthResult {
   status: 'success' | 'error';
   error?: string;
 }
-
-export interface SiteConfig {
-  name: string;
-  /** Optional: explicit repository identifier (e.g., "owner/repo" or just "repo") */
-  repo?: string;
-  /** Optional: remote name (legacy) */
-  remote?: string;
-  /** Optional explicit repo owner */
-  owner?: string;
-  /** Optional local path used to derive repo name if needed */
-  localPath?: string;
-} 
 
 /**
  * Analyze git repository health for a site using the GitHub REST API.

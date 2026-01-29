@@ -32,7 +32,15 @@ https://michalkotowski.pl/writings/how-to-refresh-a-react-component-when-local-s
 
 /* ========== TYPES ========== */
 
-export type ShoppingCartType = {
+/**
+ * Canonical Cart Item model (data-only)
+ *
+ * This type is the *single source of truth* for shopping cart items used by
+ * business logic, storage, and integrations. Component prop types should
+ * either alias this type (e.g. `ShoppingCartItemProps = { item: CartItemType }`)
+ * or use their own `...Props` names to remain UI-focused.
+ */
+export type CartItemType = {
     itemID: string,
     itemURL?: string,
     itemTitle: string,
@@ -41,23 +49,7 @@ export type ShoppingCartType = {
     itemCost: number,
 }
 
-/* export type ShoppingCartItemType = {
-    itemID: string,
-    itemURL?: string,
-    itemTitle: string,
-    itemQuantity: number,
-    itemCost: number,
-    itemDescription: string,
-    itemCategory?: string,
-    itemCondition?: string,
-    itemProperties?: { [key: string]: any },
-    itemImageThumbnail? : string,
-    itemImages?: string[],
-    itemSeller?: string,
-    itemBuyingFormat?: string,
-    itemLocation?: string,
-    itemListingDate: string, 
-} */
+/* Historical: legacy ShoppingCartItemType removed — use CartItemType as the canonical data type */
 
 export type AddressType = {
     name: string,
@@ -80,7 +72,7 @@ export type DiscountCodeType = {
 };
 
 export type CheckoutType = {
-    items: ShoppingCartType[];
+    items: CartItemType[];
     subtotal: number,
     subtotal_discount: number,
     shippingTo: AddressType,
@@ -170,22 +162,22 @@ export function getCart() {
 	if (debug) console.debug('ShoppingCart:getCart -> using CacheManager.get', shoppingCartKey);
 	// Use CacheManager as the single source-of-truth. Legacy raw-localStorage fallbacks
 	// were removed after migration completed — callers should use CacheManager APIs.
-	const cached = cartCache.get<ShoppingCartType[]>(shoppingCartKey);
+	const cached = cartCache.get<CartItemType[]>(shoppingCartKey);
 	if (cached) return cached;
 	// No cart found -> empty
 	return [];
 }
 
 
-export function setCart(shoppingCartJSON: ShoppingCartType[]) {
+export function setCart(shoppingCartJSON: CartItemType[]) {
 	if (debug) console.debug('ShoppingCart:setCart -> using CacheManager.set', shoppingCartKey, shoppingCartJSON);
-	cartCache.set<ShoppingCartType[]>(shoppingCartKey, shoppingCartJSON);
+	cartCache.set<CartItemType[]>(shoppingCartKey, shoppingCartJSON);
 	// preserve observable contract (storage event) for listeners
 	window.dispatchEvent(new Event('storage'));
 }
 
 
-export function alreadyInCart(cart: ShoppingCartType[], itemID: string) {
+export function alreadyInCart(cart: CartItemType[], itemID: string) {
 	for (const key in cart) {
 		const item = cart[key];
 		if (typeof item === 'object' && item !== null && Object.prototype.hasOwnProperty.call(item, 'itemID') && item.itemID == itemID) {
@@ -196,7 +188,7 @@ export function alreadyInCart(cart: ShoppingCartType[], itemID: string) {
 }
 
 
-export function increaseQuantityCart(cart: ShoppingCartType[], itemID: string) {
+export function increaseQuantityCart(cart: CartItemType[], itemID: string) {
 	for (const key in cart) {
 		const item = cart[key];
 		if (typeof item === 'object' && item !== null && Object.prototype.hasOwnProperty.call(item, 'itemID') && item.itemID == itemID) {
@@ -206,7 +198,7 @@ export function increaseQuantityCart(cart: ShoppingCartType[], itemID: string) {
 }
 
 
-export function getIndexInCart(cart: ShoppingCartType[], itemID: string) {
+export function getIndexInCart(cart: CartItemType[], itemID: string) {
 	for (let i = 0; i < cart.length; i++) {
 		const item = cart[i];
 		if (typeof item === 'object' && item !== null && Object.prototype.hasOwnProperty.call(item, 'itemID') && item.itemID == itemID) {
@@ -217,7 +209,7 @@ export function getIndexInCart(cart: ShoppingCartType[], itemID: string) {
 }
 
 
-export function getCartItemCount(cart: ShoppingCartType[]) {
+export function getCartItemCount(cart: CartItemType[]) {
 	let cartCount = 0 ;
 	for (let i = 0; i < cart.length; i++) {
 		const item = cart[i];
@@ -229,7 +221,7 @@ export function getCartItemCount(cart: ShoppingCartType[]) {
 }
 
 
-export function getCartSubTotal(cart: ShoppingCartType[]) {
+export function getCartSubTotal(cart: CartItemType[]) {
 	let cartSubTotal = 0;
 	for (let i = 0; i < cart.length; i++) {
 		const item = cart[i];
@@ -243,8 +235,8 @@ export function getCartSubTotal(cart: ShoppingCartType[]) {
 }
 
 
-export function addToShoppingCart(thisItem: ShoppingCartType) {
-	let cart: ShoppingCartType[] = getCart();
+export function addToShoppingCart(thisItem: CartItemType) {
+	let cart: CartItemType[] = getCart();
 	if(alreadyInCart(cart, thisItem.itemID)){
 		const index = getIndexInCart(cart, thisItem.itemID);
 		if ( cart[index].itemQuantity < thisItem.itemQuantity) {
@@ -262,18 +254,18 @@ export function addToShoppingCart(thisItem: ShoppingCartType) {
 		cart.push(cartItem);
 	} 
 	if (debug) console.debug('ShoppingCart:persisting cart -> CacheManager.set', shoppingCartKey, cart);
-	cartCache.set<ShoppingCartType[]>(shoppingCartKey, cart);
+	cartCache.set<CartItemType[]>(shoppingCartKey, cart);
 	window.dispatchEvent(new Event('storage'));
 }
 
 
-export function removeFromShoppingCart(thisItem: ShoppingCartType) { 
-	let cart: ShoppingCartType[] = getCart();
+export function removeFromShoppingCart(thisItem: CartItemType) { 
+	let cart: CartItemType[] = getCart();
 	if(alreadyInCart(cart, thisItem.itemID)){
 		cart.splice(getIndexInCart(cart, thisItem.itemID), 1);
 	}
 	if (debug) console.debug('ShoppingCart:removeFromShoppingCart -> persisting cart via CacheManager', shoppingCartKey, cart);
-	cartCache.set<ShoppingCartType[]>(shoppingCartKey, cart);
+	cartCache.set<CartItemType[]>(shoppingCartKey, cart);
 	window.dispatchEvent(new Event('storage'));
 }
 
@@ -391,7 +383,7 @@ export function getDiscountCode(codeString: string){
 }
 
 
-export function getCartSubtotalDiscount(cart: ShoppingCartType[]) {
+export function getCartSubtotalDiscount(cart: CartItemType[]) {
 	if (!cart) { return 0; } // If cart is empty, return null
 	const cartSubTotal = getCartSubTotal(cart);
 	const shippingInfo = getShippingInfo();

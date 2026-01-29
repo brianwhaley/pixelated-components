@@ -1,6 +1,6 @@
 import React from 'react';
 import { PixelatedClientConfigProvider } from '../src/components/config/config.client';
-import { getClientOnlyPixelatedConfig } from '../src/components/config/config.utils';
+import { getClientOnlyPixelatedConfig } from '../src/components/config/config';
 import '../src/css/pixelated.global.css'; // Global form styles
 import '../src/css/pixelated.grid.scss'; // Global form styles
 import '../src/css/pixelated.font.scss'; // Global grid styles

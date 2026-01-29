@@ -26,10 +26,12 @@ import {
 	shoppingCartKey,
 	shippingInfoKey,
 	discountCodesKey,
-	type ShoppingCartType,
+	type CartItemType,
 	type AddressType,
 	type DiscountCodeType,
 } from '../components/shoppingcart/shoppingcart.functions';
+
+type ShoppingCartType = CartItemType;
 
 describe('Shopping Cart Functions', () => {
 	beforeEach(() => {
@@ -138,7 +140,7 @@ describe('Shopping Cart Functions', () => {
 		});
 
 		it('should dispatch storage event', () => {
-			const mockCart: ShoppingCartType[] = [];
+			const mockCart: CartItemType[] = [];
 			setCart(mockCart);
 			expect(window.dispatchEvent).toHaveBeenCalledWith(new Event('storage'));
 		});

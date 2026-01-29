@@ -2069,6 +2069,35 @@ import { MetadataComponents } from '@pixelated-tech/components';
 
 ---
 
+### Well-Known Resources (.well-known / humans.txt / security.txt) 🔧
+
+Shared server helpers for serving canonical site metadata endpoints like `humans.txt` and `.well-known/security.txt` are provided from the server export.
+
+- **Canonical API**: Use `createWellKnownResponse(type, req, opts)` from the server entrypoint:
+
+```ts
+import { createWellKnownResponse } from '@pixelated-tech/components/server';
+
+// Example: app route for humans.txt
+export async function GET(req: NextRequest) {
+  return createWellKnownResponse('humans', req);
+}
+
+// Example: .well-known/security.txt
+export async function GET(req: NextRequest) {
+  return createWellKnownResponse('security', req);
+}
+```
+
+- **Behavior & migration notes**:
+  - The unified function supports both `"humans"` and `"security"` types and replaces the older `createHumansTxtResponse` and `createSecurityTxtResponse` helpers.
+  - Responses include sensible headers (Content-Type, Cache-Control) and an `ETag` to support conditional requests (304 Not Modified when `If-None-Match` matches).
+  - Pass `opts` (for example `routesJson`, `pkg`, or a `routes` arg) to customize generated content for your site.
+
+- **When to change**: After updating the components package, switch route imports from the old helpers to `createWellKnownResponse('humans'|'security', req, opts)` — no shim required.
+
+---
+
 ## Shopping Cart
 
 ### eBay Components
