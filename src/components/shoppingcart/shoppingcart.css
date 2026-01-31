@@ -2,56 +2,56 @@
 ==========    SHOPPING CART     ===========
 ======================================== */
 
-.pixCart {
+.pix-cart {
     --do-nothing: true
 }
 
-.pixCart .callout-header {
+.pix-cart .callout-header {
     text-align: left
 }
 
-.pixCartItems {
+.pix-cart-items {
     text-align: center;
 }
 
 @media screen and (max-width: 480px) {
-	.pixCartItems {
+	.pix-cart-items {
 		padding: 20px;
 	}
 }
 
-.pixCartItem {
+.pix-cart-item {
     border: 1px solid #DDD;
     text-align: left;
     padding: 20px 5px !important;
 }
 
 @media screen and (max-width: 480px) {
-	.pixCartItem {
+	.pix-cart-item {
 		text-align: center;
 	}
 }
 
-.pixCartItemHeader {
+.pix-cart-item-header {
     margin: 0 auto;
 }
 
-.pixCartItemHeader h2 {
+.pix-cart-item-header h2 {
     font-size: 1.25em;
     font-weight: bold;
 }
 
-.pixCartItemPhoto img {
+.pix-cart-item-photo img {
     padding: 10px 0;
     width: 100%;
 
 }
 
-.pixCartItemDetails {
+.pix-cart-item-details {
     padding-bottom: 10px;
 }
 
-.pixCartItemPrice{
+.pix-cart-item-price{
     font-size: 1.5em;
     font-weight: bold;
 
@@ -89,9 +89,9 @@
 
 /* ===== SHOPPING CART SHIPPING FIELDS ===== */
 
-.pixCartButton,
-.pixCart .pixCartButton,
-#pixCartButton.pixCartButton {
+.pix-cart-button,
+.pix-cart .pix-cart-button,
+#pix-cart-button.pix-cart-button {
     font-size: 1.1em;
     font-family: Verdana, Geneva, sans-serif;
     color: #000;
@@ -110,19 +110,19 @@
     margin: 5px auto;
 }
 
-.pixCartButton:hover,
-.pixCart .pixCartButton:hover,
-#pixCartButton.pixCartButton:hover {
+.pix-cart-button:hover,
+.pix-cart .pix-cart-button:hover,
+#pix-cart-button.pix-cart-button:hover {
     color: #369;
 	text-decoration: underline;
 }
 
-#pixCartButton.pixCartButton {
+#pix-cart-button.pix-cart-button {
     width: 80px;
     min-width: 80px;
     height: 30px;
 }
-#pixCartButton.pixCartButton img {
+#pix-cart-button.pix-cart-button img {
     width: 20px;
 }
 

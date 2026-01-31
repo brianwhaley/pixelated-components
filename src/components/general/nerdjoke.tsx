@@ -110,7 +110,7 @@ export function NerdJoke(props: NerdJokeType) {
 	}, [loadJoke, startTimer]);
 
 	return (
-		<div className="nerdJoke">
+		<div className="nerd-joke">
 			<div className="row-12col">
 				<div className="grid-s1-e5">
 					<div className="left">
@@ -128,10 +128,10 @@ export function NerdJoke(props: NerdJokeType) {
 						/>
 					</div>
 				</div>
-				<div className="jokeTimer grid-s1-e13">
+				<div className="joke-timer grid-s1-e13">
 					<div className="row-12col">
 						<div className="grid-s1-e11">
-							<svg className="jokeTimerSvg" xmlns="http://www.w3.org/2000/svg">
+							<svg className="joke-timer-svg" xmlns="http://www.w3.org/2000/svg">
 								<rect id="jokeTimerPathElapsed" />
 							</svg>
 						</div>
@@ -140,7 +140,7 @@ export function NerdJoke(props: NerdJokeType) {
 						</div>
 					</div>
 				</div>
-				<div className="jokeText grid-s1-e13">
+				<div className="joke-text grid-s1-e13">
 					<div>
 						<span className="label">Q: </span>
 						<span className="question"> {joke.question} </span>
@@ -169,7 +169,7 @@ function JokeButton(props: JokeButtonType) {
 			{props.buttonText}
 		</div> */
 	return (
-		<button className="jokeButton" onClick={props.clickFunction}>
+		<button className="joke-button" onClick={props.clickFunction}>
 			{props.buttonText}
 		</button>
 	);

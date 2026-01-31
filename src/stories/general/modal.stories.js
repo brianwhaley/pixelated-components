@@ -17,7 +17,7 @@ const PageModal = () => {
 	return (
 		<>
         	<div className="row-4col">
-				<div className="gridItem">
+				<div className="grid-item">
 					<Callout
 						url="https://farm66.static.flickr.com/65535/50797219348_a7f5b18dd5_b.jpg"
 						img="https://www.pixelvivid.com/images/customs/black-white-splatter.jpg"

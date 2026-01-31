@@ -169,7 +169,7 @@ export function ShoppingCart( props: ShoppingCartType ) {
 		// ========== THANK YOU ==========
 		const pmt = orderData.purchase_units[0].payments.captures[0];
 		return (
-			<div className="pixCart">
+			<div className="pix-cart">
 				<CalloutHeader title="Shopping Cart : " />
 				<br />
 				<div id="paypal-button-container" className="paypal-button-container" />
@@ -186,11 +186,11 @@ export function ShoppingCart( props: ShoppingCartType ) {
 	} else if ( progressStep === "Checkout" ) {
 		// ========== CHECKOUT ==========
 		return (
-			<div className="pixCart">
+			<div className="pix-cart">
 				<CalloutHeader title="Checkout Summary : " />
 				{ checkoutData && <CheckoutItems {...checkoutData} /> }
 				<br />
-				<FormButton className="pixCartButton" type="button" id="backToCart" text="<= Back To Cart"
+				<FormButton className="pix-cart-button" type="button" id="backToCart" text="<= Back To Cart"
 					onClick={() => SetProgressStep("ShippingInfo")} />
 				<br />
 				{payPalClientID && (
@@ -204,12 +204,12 @@ export function ShoppingCart( props: ShoppingCartType ) {
 		// ========== SHOPPING CART ==========
 		// ========== SHIPPING INFO ==========
 		return (
-			<div className="pixCart">
+			<div className="pix-cart">
 				<CalloutHeader title="Shopping Cart : " />
 				{ paintCartItems(shoppingCart ?? []) }
 				<br />
 				<div>
-					<FormButton className="pixCartButton" type="button" id="backToCart" text="Clear Cart"
+					<FormButton className="pix-cart-button" type="button" id="backToCart" text="Clear Cart"
 						onClick={() => clearShoppingCart()} />
 				</div>
 				<br /><br /><hr /><br /><br />
@@ -222,7 +222,7 @@ export function ShoppingCart( props: ShoppingCartType ) {
 	} else {
 		// ========== EMPTY SHOPPING CART ==========
 		return (
-			<div className="pixCart">
+			<div className="pix-cart">
 				<CalloutHeader title="Shopping Cart : " />
 				<br />
 				<div className="centered">No items in your shopping cart</div>
@@ -268,8 +268,8 @@ export function ShoppingCartItem(props: ShoppingCartItemType) {
 	const thisItemTarget = "_self"; // "_blank"
 	const config = usePixelatedConfig();
 	return (
-		<div className="pixCartItem row-12col">
-			<div className="pixCartItemPhoto grid-s1-e4">
+		<div className="pix-cart-item row-12col">
+			<div className="pix-cart-item-photo grid-s1-e4">
 				{ thisItem.itemURL && thisItem.itemImageURL
 					? <a href={thisItem.itemURL} target={thisItemTarget} rel="noopener noreferrer">
 						<SmartImage src={thisItem.itemImageURL} alt={thisItem.itemTitle} 
@@ -288,7 +288,7 @@ export function ShoppingCartItem(props: ShoppingCartItemType) {
 				}
 			</div>
 			<div className="grid-s4-e11">
-				<div className="pixCartItemHeader">
+				<div className="pix-cart-item-header">
 					<span>
 						{ thisItem.itemURL
 							? <a href={thisItem.itemURL} target={thisItemTarget} rel="noopener noreferrer"><h2 className="">{thisItem.itemTitle}</h2></a>
@@ -296,19 +296,19 @@ export function ShoppingCartItem(props: ShoppingCartItemType) {
 						}
 					</span>
 				</div>
-				<div className="pixCartItemDetails grid12">
+				<div className="pix-cart-item-details grid12">
 					<br />
 					<div><b>Item ID: </b>{thisItem.itemID}</div>
 					<div><b>Quantity: </b>{thisItem.itemQuantity}</div>
 					<br />
 					<div>
-						<FormButton className="pixCartButton" type="button" id={`btn-rm-${thisItem.itemID}`} text="Remove Item From Cart"
+						<FormButton className="pix-cart-button" type="button" id={`btn-rm-${thisItem.itemID}`} text="Remove Item From Cart"
 							onClick={()=>removeFromShoppingCart(thisItem as CartItemType)} />
 					</div>
 				</div>
 			</div>
 			<div className="grid-s11-e13">
-				<div className="pixCartItemPrice">
+				<div className="pix-cart-item-price">
 					{ formatAsUSD(thisItem.itemCost) }
 				</div>
 			</div>
@@ -455,8 +455,8 @@ export function CartButton(props: CartButtonType) {
 		}
 	}, [cartCount]);
 	return (
-		<div className="pixCart">
-			<button className="pixCartButton" type="button" id="pixCartButton" 
+		<div className="pix-cart">
+			<button className="pix-cart-button" type="button" id="pix-cart-button" 
 				onClick={()=>window.location.href=props.href} >
 				<SmartImage src="/images/icons/cart-icon.png" title="View Shopping Cart" alt="View Shopping Cart" 
 					cloudinaryEnv={config?.cloudinary?.product_env}
@@ -485,7 +485,7 @@ export type ViewItemDetailsType = InferProps<typeof ViewItemDetails.propTypes>;
 export function ViewItemDetails(props: ViewItemDetailsType){
 	return (
 		<div>
-			<FormButton className="pixCartButton" type="button" 
+			<FormButton className="pix-cart-button" type="button" 
 				id={`btn-item-${props.itemID}`} text="View Item Details"
 				onClick={()=>window.location.href = `${props.href}/${props.itemID}`} />
 		</div>
@@ -521,7 +521,7 @@ export function AddToCartButton(props: AddToCartButtonType){
 	}
 	return (
 		<div>
-			<FormButton className="pixCartButton" type="button" 
+			<FormButton className="pix-cart-button" type="button" 
 				id={`btn-add-${props.itemID}`} text="Add to Shopping Cart"
 				onClick={(e)=>handleClick(e)} />
 			{modalContent && <Modal modalContent={modalContent} modalID={"-" + props.itemID} />}
@@ -546,7 +546,7 @@ export type GoToCartButtonType = InferProps<typeof GoToCartButton.propTypes>;
 export function GoToCartButton(props: GoToCartButtonType){
 	return (
 		<div>
-			<FormButton className="pixCartButton" type="button" 
+			<FormButton className="pix-cart-button" type="button" 
 				id={`btn-cart-${props.itemID}`} text="Go to Shopping Cart"
 				onClick={()=>window.location.href=props.href} />
 		</div>

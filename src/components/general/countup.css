@@ -1,0 +1,19 @@
+.countup {
+	text-align: center;
+
+	.countup-pre,  .countup-counter,  .countup-post {
+		font-size: var(--font-size1);
+		font-family: var(--header-font);
+		font-weight: 800;
+		color: var(--primary-color);
+	}
+	.countup-pre {
+		--do-nothing: true;
+	}
+	.countup-counter {
+		--do-nothing: true;
+	}
+	.countup-post {
+		--do-nothing: true;
+	}
+}

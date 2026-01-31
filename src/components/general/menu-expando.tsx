@@ -42,7 +42,7 @@ export function MenuExpando(props: MenuExpandoType) {
 		if (!summary) return;
 
 		// Initialize nested menus to be closed
-		const nestedDetails = details.querySelectorAll('details.menuExpandoNested');
+		const nestedDetails = details.querySelectorAll('details.menu-expando-nested');
 		nestedDetails.forEach((nested: any) => {
 			const nestedUl = nested.querySelector('ul');
 			if (nestedUl) {
@@ -65,7 +65,7 @@ export function MenuExpando(props: MenuExpandoType) {
 
 			if (details.open) {
 				// Closing animation
-				ul.style.animation = 'menuExpandoSlideUp 0.3s ease-out forwards';
+				ul.style.animation = 'menu-expando-slide-up 0.3s ease-out forwards';
 				setTimeout(() => {
 					details.open = false;
 					ul.style.animation = '';
@@ -74,7 +74,7 @@ export function MenuExpando(props: MenuExpandoType) {
 			} else {
 				// Opening animation
 				details.open = true;
-				ul.style.animation = 'menuExpandoSlideDown 0.3s ease-out forwards';
+				ul.style.animation = 'menu-expando-slide-down 0.3s ease-out forwards';
 				setTimeout(() => {
 					ul.style.animation = '';
 					isAnimating = false;
@@ -83,7 +83,7 @@ export function MenuExpando(props: MenuExpandoType) {
 		});
 
 		// Handle nested menu animations
-		const nestedDetailsForAnimation = details.querySelectorAll('details.menuExpandoNested');
+		const nestedDetailsForAnimation = details.querySelectorAll('details.menu-expando-nested');
 		nestedDetailsForAnimation.forEach((nested: any) => {
 			nested.addEventListener('toggle', (e: any) => {
 				const nestedUl = nested.querySelector('ul');
@@ -125,7 +125,7 @@ export function MenuExpando(props: MenuExpandoType) {
 					// Item has nested routes - create expandable submenu
 					myItems.push(
 						<li key={item.name}>
-							<details className="menuExpandoNested">
+							<details className="menu-expando-nested">
 								<summary><a href={item.path}>{item.name}</a></summary>
 								<ul>
 									{item.routes.map((route: any) => (
@@ -169,7 +169,7 @@ export function MenuExpando(props: MenuExpandoType) {
 	}
 
 	return (
-		<div className="menuExpando" id="menuExpando">
+		<div className="menu-expando" id="menu-expando">
 			<details className="menu-expando-wrapper" id="menu-expando-wrapper" ref={detailsRef}>
 				<summary></summary>
 				<ul ref={ulRef}>
@@ -222,8 +222,8 @@ export function MenuExpandoButton(props: MenuExpandoButtonType) {
 
 	return (
 		<div 
-			className="menuExpandoButton" 
-			id="menuExpandoButton" 
+			className="menu-expando-button" 
+			id="menu-expando-button" 
 			onClick={handleMenuExpandoButtonClick}
 			onKeyDown={handleKeyDown}
 			tabIndex={0}

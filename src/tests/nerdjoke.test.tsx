@@ -20,7 +20,7 @@ describe('NerdJoke Component', () => {
   describe('Basic Rendering', () => {
     it('should render main nerdJoke container', () => {
       const { container } = render(<NerdJoke />);
-      expect(container.querySelector('.nerdJoke')).toBeInTheDocument();
+      expect(container.querySelector('.nerd-joke')).toBeInTheDocument();
     });
 
     it('should render row-12col grid container', () => {
@@ -48,17 +48,17 @@ describe('NerdJoke Component', () => {
 
     it('should render joke timer section', () => {
       const { container } = render(<NerdJoke />);
-      expect(container.querySelector('.jokeTimer')).toBeInTheDocument();
+      expect(container.querySelector('.joke-timer')).toBeInTheDocument();
     });
 
     it('should render joke text section', () => {
       const { container } = render(<NerdJoke />);
-      expect(container.querySelector('.jokeText')).toBeInTheDocument();
+      expect(container.querySelector('.joke-text')).toBeInTheDocument();
     });
 
     it('should render svg timer element', () => {
       const { container } = render(<NerdJoke />);
-      expect(container.querySelector('.jokeTimerSvg')).toBeInTheDocument();
+      expect(container.querySelector('.joke-timer-svg')).toBeInTheDocument();
     });
 
     it('should have grid layout classes', () => {
@@ -75,13 +75,13 @@ describe('NerdJoke Component', () => {
     it('should render pause button with correct class', () => {
       const { container } = render(<NerdJoke />);
       const buttons = container.querySelectorAll('button');
-      expect(buttons[0]).toHaveClass('jokeButton');
+      expect(buttons[0]).toHaveClass('joke-button');
     });
 
     it('should render next joke button with correct class', () => {
       const { container } = render(<NerdJoke />);
       const buttons = container.querySelectorAll('button');
-      expect(buttons[1]).toHaveClass('jokeButton');
+      expect(buttons[1]).toHaveClass('joke-button');
     });
 
     it('should have pause button on left side', () => {
@@ -146,7 +146,7 @@ describe('NerdJoke Component', () => {
   describe('Joke Content', () => {
     it('should render joke text container with correct class', () => {
       const { container } = render(<NerdJoke />);
-      expect(container.querySelector('.jokeText')).toBeInTheDocument();
+      expect(container.querySelector('.joke-text')).toBeInTheDocument();
     });
 
     it('should have label spans for question and answer', () => {
@@ -171,8 +171,8 @@ describe('NerdJoke Component', () => {
   describe('Component Structure', () => {
     it('should have main container with nerdJoke class', () => {
       const { container } = render(<NerdJoke />);
-      const main = container.querySelector('.nerdJoke');
-      expect(main).toHaveClass('nerdJoke');
+      const main = container.querySelector('.nerd-joke');
+      expect(main).toHaveClass('nerd-joke');
     });
 
     it('should have two button containers', () => {
@@ -186,7 +186,7 @@ describe('NerdJoke Component', () => {
     it('should have joke content structure with divs', async () => {
       const { container } = render(<NerdJoke />);
       await waitFor(() => {
-        const jokeText = container.querySelector('.jokeText');
+        const jokeText = container.querySelector('.joke-text');
         const divs = jokeText?.querySelectorAll('div');
         expect(divs?.length).toBeGreaterThanOrEqual(2);
       });
@@ -200,7 +200,7 @@ describe('NerdJoke Component', () => {
 
     it('should have nested row structure in timer', () => {
       const { container } = render(<NerdJoke />);
-      const timerSection = container.querySelector('.jokeTimer');
+      const timerSection = container.querySelector('.joke-timer');
       const rowCol = timerSection?.querySelector('.row-12col');
       expect(rowCol).toBeInTheDocument();
     });
@@ -209,28 +209,28 @@ describe('NerdJoke Component', () => {
   describe('CSS Classes and Styling', () => {
     it('should apply nerdJoke class to main container', () => {
       const { container } = render(<NerdJoke />);
-      expect(container.querySelector('.nerdJoke')).toBeInTheDocument();
+      expect(container.querySelector('.nerd-joke')).toBeInTheDocument();
     });
 
     it('should apply jokeButton class to buttons', () => {
       const { container } = render(<NerdJoke />);
-      const buttons = container.querySelectorAll('.jokeButton');
+      const buttons = container.querySelectorAll('.joke-button');
       expect(buttons.length).toBeGreaterThanOrEqual(2);
     });
 
     it('should apply jokeTimer class to timer section', () => {
       const { container } = render(<NerdJoke />);
-      expect(container.querySelector('.jokeTimer')).toBeInTheDocument();
+      expect(container.querySelector('.joke-timer')).toBeInTheDocument();
     });
 
     it('should apply jokeTimerSvg class to svg', () => {
       const { container } = render(<NerdJoke />);
-      expect(container.querySelector('.jokeTimerSvg')).toBeInTheDocument();
+      expect(container.querySelector('.joke-timer-svg')).toBeInTheDocument();
     });
 
     it('should apply jokeText class to text section', () => {
       const { container } = render(<NerdJoke />);
-      expect(container.querySelector('.jokeText')).toBeInTheDocument();
+      expect(container.querySelector('.joke-text')).toBeInTheDocument();
     });
 
     it('should apply center class to timer display', () => {
@@ -284,7 +284,7 @@ describe('NerdJoke Component', () => {
     it('should initialize and load a joke', () => {
       render(<NerdJoke />);
       // Joke should be loaded via API and displayed
-      const jokeText = document.querySelector('.jokeText');
+      const jokeText = document.querySelector('.joke-text');
       expect(jokeText).toBeInTheDocument();
     });
 
@@ -300,7 +300,7 @@ describe('NerdJoke Component', () => {
   describe('Timer Functionality', () => {
     it('should have timer SVG element with rect', () => {
       const { container } = render(<NerdJoke />);
-      const svg = container.querySelector('svg.jokeTimerSvg');
+      const svg = container.querySelector('svg.joke-timer-svg');
       const rect = svg?.querySelector('rect');
       expect(rect).toBeInTheDocument();
     });
@@ -313,7 +313,7 @@ describe('NerdJoke Component', () => {
 
     it('should have timer elements in correct structure', () => {
       const { container } = render(<NerdJoke />);
-      const timerSection = container.querySelector('.jokeTimer');
+      const timerSection = container.querySelector('.joke-timer');
       const rowCol = timerSection?.querySelector('.row-12col');
       expect(rowCol).toBeInTheDocument();
     });
@@ -371,7 +371,7 @@ describe('NerdJoke Component', () => {
       expect(document.getElementById('jokeTimerLabel')).toBeInTheDocument();
       
       // Check joke text section
-      expect(document.querySelector('.jokeText')).toBeInTheDocument();
+      expect(document.querySelector('.joke-text')).toBeInTheDocument();
     });
 
     it('should maintain structure through button interactions', () => {
@@ -381,9 +381,9 @@ describe('NerdJoke Component', () => {
       fireEvent.click(pauseButton as HTMLElement);
       
       // Structure should still be intact
-      expect(document.querySelector('.nerdJoke')).toBeInTheDocument();
-      expect(document.querySelector('.jokeTimer')).toBeInTheDocument();
-      expect(document.querySelector('.jokeText')).toBeInTheDocument();
+      expect(document.querySelector('.nerd-joke')).toBeInTheDocument();
+      expect(document.querySelector('.joke-timer')).toBeInTheDocument();
+      expect(document.querySelector('.joke-text')).toBeInTheDocument();
     });
 
     it('should have question and answer labels available', () => {

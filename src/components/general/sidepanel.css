@@ -110,7 +110,7 @@
 .sidepanel-tab-label { display: none; }
 
 /* Integration overrides for MenuAccordion inside SidePanel */
-.sidepanel-content .accordionMenuWrapper {
+.sidepanel-content .accordion-menu-wrapper {
 	position: relative !important;
 	top: auto !important;
 	left: auto !important;
@@ -123,7 +123,7 @@
 }
 
 /* Ensure the inner list takes full width */
-.sidepanel-content .accordionMenu,
-.sidepanel-content .accordionMenu ul {
+.sidepanel-content .accordion-menu,
+.sidepanel-content .accordion-menu ul {
 	width: 100% !important;
 }

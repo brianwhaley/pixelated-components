@@ -14,6 +14,7 @@ This document outlines the coding standards and conventions used in the pixelate
 - Use PropTypes for runtime validation
 - Use `InferProps<typeof Component.propTypes>` for TypeScript types
 - Define PropTypes before the component function
+- Require JSDoc on propTypes (either a JSDoc block immediately above the `propTypes` declaration or inline per-prop comments). Enforced by ESLint rule `pixelated/required-proptypes-jsdoc` (severity: **error**).
 - Example:
 ```typescript
 Component.propTypes = {
@@ -81,6 +82,7 @@ const clientCfg = getClientOnlyPixelatedConfig(cfg);
 
 ### Naming Convention
 - Use kebab-case for class names
+- Enforced by ESLint rule `pixelated/class-name-kebab-case` (severity: **error**)
 - Use BEM methodology when appropriate
 - Prefix component-specific classes: `.component-name__element`
 

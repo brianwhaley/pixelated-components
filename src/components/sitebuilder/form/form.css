@@ -17,14 +17,14 @@ form button {
     border-radius: 5px;
 }
 
-.displayVertical,
-span.displayVertical:last-child,
-span.displayVertical:last-of-type {
+.display-vertical,
+span.display-vertical:last-child,
+span.display-vertical:last-of-type {
     display:block;
 	margin: 1px 5px 20px 20px !important;
 }
 
-span.displayVertical {
+span.display-vertical {
     display:block;
 	margin: 1px 5px 1px 20px !important;
 }

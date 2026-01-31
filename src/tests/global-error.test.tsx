@@ -10,7 +10,7 @@ describe('GlobalError', () => {
     const err = new Error('boom');
     const { container } = render(<GlobalErrorUI error={err} reset={reset} siteInfo={{ email: 'a@x.com' }} />);
     expect(container.querySelector('.ge-title')?.textContent).toMatch(/something went wrong/i);
-    const btn = container.querySelector('.ge-btn--primary') as HTMLButtonElement;
+    const btn = container.querySelector('.ge-btn-primary') as HTMLButtonElement;
     await userEvent.click(btn);
     expect(reset).toHaveBeenCalled();
   });

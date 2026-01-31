@@ -44,7 +44,7 @@ describe('Table Component', () => {
       const { container } = render(
         <Table data={mockTableData} id="test-table" />
       );
-      expect(container.querySelector('table')).toHaveClass('pixTable');
+      expect(container.querySelector('table')).toHaveClass('pix-table');
     });
 
     it('should render thead element', () => {
@@ -92,7 +92,7 @@ describe('Table Component', () => {
       const { container } = render(
         <Table data={mockTableData} id="test-table" sortable={true} />
       );
-      const sortArrows = container.querySelectorAll('thead th .sortArrow');
+      const sortArrows = container.querySelectorAll('thead th .sort-arrow');
       expect(sortArrows.length).toBe(3);
     });
 
@@ -100,7 +100,7 @@ describe('Table Component', () => {
       const { container } = render(
         <Table data={mockTableData} id="test-table" sortable={false} />
       );
-      const sortArrows = container.querySelectorAll('thead th .sortArrow');
+      const sortArrows = container.querySelectorAll('thead th .sort-arrow');
       expect(sortArrows.length).toBe(0);
     });
   });
@@ -216,7 +216,7 @@ describe('Table Component', () => {
       const { container } = render(
         <Table data={mockTableData} id="test-table" sortable={true} />
       );
-      const arrows = container.querySelectorAll('thead .sortArrow');
+      const arrows = container.querySelectorAll('thead .sort-arrow');
       expect(arrows.length).toBe(3);
     });
 
@@ -224,7 +224,7 @@ describe('Table Component', () => {
       const { container } = render(
         <Table data={mockTableData} id="test-table" sortable={true} />
       );
-      const arrows = container.querySelectorAll('.sortArrow.asc, .sortArrow.desc');
+      const arrows = container.querySelectorAll('.sort-arrow.asc, .sort-arrow.desc');
       expect(arrows.length).toBe(0);
     });
 
@@ -236,8 +236,8 @@ describe('Table Component', () => {
         <Table data={mockTableData} id="test-table" sortable={false} />
       ).container;
       
-      const arrows1 = sortable1.querySelectorAll('.sortArrow');
-      const arrows0 = sortable0.querySelectorAll('.sortArrow');
+      const arrows1 = sortable1.querySelectorAll('.sort-arrow');
+      const arrows0 = sortable0.querySelectorAll('.sort-arrow');
       expect(arrows1.length).toBeGreaterThan(arrows0.length);
     });
   });
@@ -414,7 +414,7 @@ describe('Table Component', () => {
       const { container } = render(
         <Table data={mockTableData} id="test-table" />
       );
-      expect(container.querySelector('table')).toHaveClass('pixTable');
+      expect(container.querySelector('table')).toHaveClass('pix-table');
     });
 
     it('should support custom table ID for CSS targeting', () => {
@@ -457,7 +457,7 @@ describe('Table Component', () => {
       const { container } = render(
         <Table data={mockTableData} id="test-table" sortable={true} />
       );
-      const sortArrows = container.querySelectorAll('.sortArrow');
+      const sortArrows = container.querySelectorAll('.sort-arrow');
       expect(sortArrows.length).toBeGreaterThan(0);
     });
 
@@ -465,7 +465,7 @@ describe('Table Component', () => {
       const { container } = render(
         <Table data={mockTableData} id="test-table" sortable={false} />
       );
-      const sortArrows = container.querySelectorAll('.sortArrow');
+      const sortArrows = container.querySelectorAll('.sort-arrow');
       expect(sortArrows.length).toBe(0);
     });
 
@@ -474,7 +474,7 @@ describe('Table Component', () => {
         <Table data={mockTableData} id="test-table" sortable={true} />
       );
       const headers = container.querySelectorAll('th');
-      const arrows = container.querySelectorAll('.sortArrow');
+      const arrows = container.querySelectorAll('.sort-arrow');
       expect(arrows.length).toBe(headers.length);
     });
 
@@ -526,7 +526,7 @@ describe('Table Component', () => {
         fireEvent.click(headers[0]);
         fireEvent.click(headers[1]);
         // Only one arrow should be active at a time
-        const activeArrows = container.querySelectorAll('.sortArrow.asc, .sortArrow.desc');
+        const activeArrows = container.querySelectorAll('.sort-arrow.asc, .sort-arrow.desc');
         expect(activeArrows.length).toBeLessThanOrEqual(1);
       }
     });
@@ -552,7 +552,7 @@ describe('Table Component', () => {
         <Table data={mockTableData} id="test-table" sortable={true} />
       );
       expect(container.querySelector('table')).toBeInTheDocument();
-      expect(container.querySelectorAll('.sortArrow').length).toBe(3);
+      expect(container.querySelectorAll('.sort-arrow').length).toBe(3);
     });
 
     it('should render table with sortable prop false without errors', () => {
@@ -560,7 +560,7 @@ describe('Table Component', () => {
         <Table data={mockTableData} id="test-table" sortable={false} />
       );
       expect(container.querySelector('table')).toBeInTheDocument();
-      expect(container.querySelectorAll('.sortArrow').length).toBe(0);
+      expect(container.querySelectorAll('.sort-arrow').length).toBe(0);
     });
   });
 

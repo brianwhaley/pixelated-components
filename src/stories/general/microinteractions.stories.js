@@ -33,7 +33,7 @@ const PageMicroInteractions = () => {
 
 
 			<div>cartpulse : </div>
-			<div className='pixCart'><div className='button' id='pixCartButton'>Buy</div></div>
+			<div className='pix-cart'><div className='button' id='pix-cart-button'>Buy</div></div>
 			<br/><br/>
 
 
@@ -60,27 +60,27 @@ const PageMicroInteractions = () => {
 				<div className="grid-s2-e3">
 
 					<div>scrollfade : </div>
-					<div className="gridItem">
+					<div className="grid-item">
 						<Callout style="full" layout="vertical" url={cloudinaryAPI + "https://farm66.static.flickr.com/65535/50797219348_a7f5b18dd5_b.jpg"} 
 							img="https://www.pixelvivid.com/images/customs/black-white-splatter.jpg" 
 							imgAlt="Black White Splatter" subtitle="Black & White" imgShape="squircle" />
 					</div>
-					<div className="gridItem">
+					<div className="grid-item">
 						<Callout style="full" layout="vertical" url={cloudinaryAPI + "https://farm66.static.flickr.com/65535/50652292218_3df2a75475_b.jpg"} 
 							img="https://www.pixelvivid.com/images/customs/blue-splatter-3.jpg" 
 							imgAlt="Blue Splatter" subtitle="Winter Blue" imgShape="squircle" />
 					</div>
-					<div className="gridItem">
+					<div className="grid-item">
 						<Callout style="full" layout="vertical" url={cloudinaryAPI + "https://farm66.static.flickr.com/65535/50653036651_8cc8ec0a1c_b.jpg"} 
 							img="https://www.pixelvivid.com/images/customs/gold-silver-splatter.jpg" 
 							imgAlt="Gold Silver Splatter" subtitle="Gold & Silver" imgShape="squircle" />
 					</div>
-					<div className="gridItem">
+					<div className="grid-item">
 						<Callout style="full" layout="vertical" url={cloudinaryAPI + "https://farm66.static.flickr.com/65535/50664254938_bb746893d0_b.jpg"} 
 							img="https://www.pixelvivid.com/images/customs/neon-splatter.jpg" 
 							imgAlt="Neon Splatter" subtitle="Neon Splatter" imgShape="squircle" />
 					</div>
-					<div className="gridItem">
+					<div className="grid-item">
 						<Callout style="full" layout="vertical" url={cloudinaryAPI + "https://farm66.static.flickr.com/65535/50653037331_449ba8cece_b.jpg"} 
 							img="https://www.pixelvivid.com/images/customs/blue-marble.jpg" 
 							imgAlt="Blue Marble" subtitle={"Cobalt / Planet X"} imgShape="squircle" />

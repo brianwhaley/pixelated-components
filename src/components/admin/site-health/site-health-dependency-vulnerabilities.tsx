@@ -95,6 +95,7 @@ export function SiteHealthDependencyVulnerabilities({ siteName }: SiteHealthDepe
 								</h5>
 								<div className="health-audit-list">
 									{data.vulnerabilities.map((vuln: any, index: any) => (
+										// eslint-disable-next-line pixelated/class-name-kebab-case
 										<div key={index} className={`health-vulnerability-item health-vulnerability-${vuln.severity}`}>
 											<div className="health-vulnerability-header">
 												<span className="health-vulnerability-severity">

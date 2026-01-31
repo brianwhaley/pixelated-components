@@ -99,13 +99,13 @@ export function MenuAccordion(props: MenuAccordionType) {
 		const menuParent = menu ? menu.parentElement : null;
 		if (left.current === 0) { 
 			if (debug) console.log("Moving Menu Out");
-			menuParent?.classList.remove('accordionDown'); /* accordionIn */
-			menuParent?.classList.add('accordionUp'); /* accordionOut */
+			menuParent?.classList.remove('accordion-down'); /* accordionIn */
+			menuParent?.classList.add('accordion-up'); /* accordionOut */
 			setLeft( -250 ); 
 		} else { 
 			if (debug) console.log("Moving Menu In");
-			menuParent?.classList.remove('accordionUp'); /* accordionOut */
-			menuParent?.classList.add('accordionDown'); /* accordionIn */
+			menuParent?.classList.remove('accordion-up'); /* accordionOut */
+			menuParent?.classList.add('accordion-down'); /* accordionIn */
 			setLeft( 0 ); 
 		}
 	};
@@ -114,14 +114,14 @@ export function MenuAccordion(props: MenuAccordionType) {
 		if (debug) console.log("Expanding Menu Item...");
 		const parent = clickedItem.parentElement;
 		const subMenu = parent?.nextElementSibling;
-		if (subMenu && subMenu.classList.contains('menuHide')) { 
+		if (subMenu && subMenu.classList.contains('menu-hide')) { 
 			if (debug) console.log("Opening Submenu");
-			subMenu.classList.add('menuShow'); 
-			subMenu.classList.remove('menuHide'); 
+			subMenu.classList.add('menu-show'); 
+			subMenu.classList.remove('menu-hide'); 
 		} else { 
 			if (debug) console.log("Closing Submenu");
-			if (subMenu) subMenu.classList.add('menuHide'); 
-			if (subMenu) subMenu.classList.remove('menuShow'); 
+			if (subMenu) subMenu.classList.add('menu-hide'); 
+			if (subMenu) subMenu.classList.remove('menu-show'); 
 		}
 		
 	}
@@ -130,7 +130,7 @@ export function MenuAccordion(props: MenuAccordionType) {
 		window.moveMenu = moveMenu; // attach moveMenu function to the window object for use in MenuAccordionButton
 		documentRef.current = document; // for moveMenu
 		const menu = document.getElementById('accordionMenu');
-		const menuBtn = document.getElementById('panelMenuButton');
+		const menuBtn = document.getElementById('panel-menu-button');
 		function handleMenuClick(event: MouseEvent) {
 			if (debug) console.log("event : ", event, "target : ", event.target);
 			// const isClicked = (menu.contains(event.target) || menuBtn.contains(event.target));
@@ -165,8 +165,8 @@ export function MenuAccordion(props: MenuAccordionType) {
 	}, [] );
 
 	return (
-		<div className="accordionMenuWrapper accordionUp" suppressHydrationWarning>
-			<div className="accordionMenu" id="accordionMenu">
+		<div className="accordion-menu-wrapper accordion-up" suppressHydrationWarning>
+			<div className="accordion-menu" id="accordionMenu">
 				<MenuAccordionGroup key="accordionRoot" menuItems={menuItems} state={undefined} />
 			</div>
 		</div>
@@ -197,7 +197,7 @@ export type MenuAccordionGroupType = InferProps<typeof MenuAccordionGroup.propTy
 export function MenuAccordionGroup(props: MenuAccordionGroupType) {
 	const myMenuItems = ((props.menuItems as any).routes) ? (props.menuItems as any).routes : props.menuItems;
 	return (
-		<ul className={(props.state === "hide" ? "menuHide" : "menuShow")} key={"menu-group-" + (props.menuItems as any).name}>
+		<ul className={(props.state === "hide" ? "menu-hide" : "menu-show")} key={"menu-group-" + (props.menuItems as any).name}>
 			{ generateMenuItems( {menuData: myMenuItems, state: props.state ?? "hide"} ) }
 		</ul>
 	);
@@ -258,8 +258,8 @@ export function MenuAccordionButton(props: MenuAccordionButtonType) {
 	// suppressHydrationWarning suppresses hydration mismatch warnings for this button
 	return (
 		<button 
-			className="panelMenuButton" 
-			id="panelMenuButton" 
+			className="panel-menu-button" 
+			id="panel-menu-button" 
 			onClick={slideMobilePanel}
 			suppressHydrationWarning
 		>

@@ -1,13 +1,13 @@
-table.pixTable, .pixTable th, .pixTable tr, .pixTable td {
+table.pix-table, .pix-table th, .pix-table tr, .pix-table td {
 	border : 1px solid #ccc ;
 	text-align: left;
 }
 
-table.pixTable {
+table.pix-table {
 	width: 100%
 }
 
-table.pixTable {
+table.pix-table {
 	th {
 		text-transform: uppercase;
 		font-size: 1.2em;
@@ -60,14 +60,14 @@ dialog {
 }
 
 
-.sortArrow {
+.sort-arrow {
 	display: inline-block;
 	margin-left: 5px;
 	font-size: 0.8em;
 }
-.sortArrow.asc::before {
+.sort-arrow.asc::before {
 	content: '▲'; /* Up arrow for ascending */
 }
-.sortArrow.desc::before {
+.sort-arrow.desc::before {
 	content: '▼'; /* Down arrow for descending */
 }

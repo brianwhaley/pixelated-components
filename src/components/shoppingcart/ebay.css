@@ -2,23 +2,23 @@
 ===============    EBAY     ===============
 ======================================== */
 
-.ebayItems {
+.ebay-items {
     text-align: center;
 }
 
 @media screen and (max-width: 480px) {
-	.ebayItems {
+	.ebay-items {
 		padding: 20px;
 	}
 }
 
-.ebayItemsHeader {
+.ebay-items-header {
     font-size: 1.25em;
     font-weight: bold;
     text-align: center;
 }
 
-#ebayItemsFilter {
+#ebay-items-filter {
     font-size: 0.8em;
     margin: 20px auto;
 }
@@ -27,44 +27,44 @@
     #ebayItemsFilter {
         text-align: left;
     }
-	.filterInput { 
+	.filter-input { 
         display: block;
     }
 }
 
-.ebayItem {
+.ebay-item {
     border: 1px solid #DDD;
     text-align: left;
     padding: 20px 5px !important;
 }
 
 @media screen and (max-width: 480px) {
-	.ebayItem {
+	.ebay-item {
 		text-align: center;
 	}
 }
 
-.ebayItemBody {
+.ebay-item-body {
     grid-auto-rows: min-content;
     margin: 10px 0;
 }
 
-.ebayItemHeader {
+.ebay-item-header {
     margin: 0 auto;
 }
 
-.ebayItemHeader h2 {
+.ebay-item-header h2 {
     font-size: 1.25em;
     font-weight: bold;
 }
 
 /* ===== PHOTO CAROUSEL ON EBAY ITEM DETAIL PAGE ===== */
-.ebayItemPhotoCarousel {
+.ebay-item-photo-carousel {
     width: 100%;
     height: 400px;
 }
 
-.ebayItemPhotoCarousel { 
+.ebay-item-photo-carousel { 
 
     .carousel-container {
         background: none;
@@ -84,38 +84,38 @@
 }
 
 @media screen and (max-width: 480px) {
-	.ebayItemPhotoCarousel {
+	.ebay-item-photo-carousel {
         height: 350px;
     }
-    .ebayItemPhotoCarousel .carousel-container {
+    .ebay-item-photo-carousel .carousel-container {
         height: 300px;
     }
 }
 
-.ebayItemPhoto {
+.ebay-item-photo {
     overflow: hidden;
 }
 
-.ebayItemPhoto img {
+.ebay-item-photo img {
     padding: 10px 0;
     width: 100%;
 }
 
-.ebayItems .ebayItemDetails {
+.ebay-items .ebay-item-details {
     display: none;
 }
 
-.ebayItemDetails {
+.ebay-item-details {
     padding-bottom: 10px;
 }
 
 @media screen and (max-width: 480px) {
-	.ebayItemDetails {
+	.ebay-item-details {
         text-align: left;
     }
 }
 
-.ebayItemPrice{
+.ebay-item-price{
     font-size: 1.5em;
     font-weight: bold;
     /* background-image: url(/images/pix/pix-bg-sm-bw.gif); */

@@ -68,7 +68,7 @@ export function PageBuilderUI({ apiEndpoint = '/api/pagebuilder' }: PageBuilderU
 		<div className="row-2col" 
 			style={{ gridTemplateColumns: "1fr 3fr", alignItems: "start" }}>
 			{/* Left Column: Component Selection and Properties */}
-			<div className="gridItem">
+			<div className="grid-item">
 				<PageSectionHeader title="Component Editor" />
 				<SaveLoadSection 
 					pageData={pageJSON}
@@ -112,7 +112,7 @@ export function PageBuilderUI({ apiEndpoint = '/api/pagebuilder' }: PageBuilderU
 			</div>
 
 			{/* Right Column (Full Width): Live Preview with Inline Editing */}
-			<div className="gridItem">
+			<div className="grid-item">
 				<PageSectionHeader title="Page Preview" />
 				<section id="preview-section">
 					<div className="section-container">

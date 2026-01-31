@@ -22,7 +22,7 @@ describe('MenuExpando Component', () => {
 	describe('Rendering', () => {
 		it('should render the menu component', () => {
 			const { container } = render(<MenuExpando menuItems={mockMenuItems} />);
-			const menuExpando = container.querySelector('.menuExpando');
+			const menuExpando = container.querySelector('.menu-expando');
 			expect(menuExpando).toBeInTheDocument();
 		});
 
@@ -92,7 +92,7 @@ describe('MenuExpando Component', () => {
 
 		it('should have nested details for items with routes', () => {
 			const { container } = render(<MenuExpando menuItems={mockMenuItems} />);
-			const nestedDetails = container.querySelectorAll('details.menuExpandoNested');
+			const nestedDetails = container.querySelectorAll('details.menu-expando-nested');
 			expect(nestedDetails.length).toBeGreaterThan(0);
 		});
 
@@ -123,13 +123,13 @@ describe('MenuExpando Component', () => {
 	describe('Styling', () => {
 		it('should apply correct CSS classes', () => {
 			const { container } = render(<MenuExpando menuItems={mockMenuItems} />);
-			expect(container.querySelector('.menuExpando')).toBeInTheDocument();
+			expect(container.querySelector('.menu-expando')).toBeInTheDocument();
 			expect(container.querySelector('.menu-expando-wrapper')).toBeInTheDocument();
 		});
 
 		it('should have nested menu specific classes', () => {
 			const { container } = render(<MenuExpando menuItems={mockMenuItems} />);
-			const nested = container.querySelector('.menuExpandoNested');
+			const nested = container.querySelector('.menu-expando-nested');
 			expect(nested).toBeInTheDocument();
 		});
 	});
@@ -138,7 +138,7 @@ describe('MenuExpando Component', () => {
 describe('MenuExpandoButton Component', () => {
 	it('should render the button component', () => {
 		const { container } = render(<MenuExpandoButton />);
-		const button = container.querySelector('.menuExpandoButton');
+		const button = container.querySelector('.menu-expando-button');
 		expect(button).toBeInTheDocument();
 	});
 

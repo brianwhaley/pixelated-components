@@ -3,12 +3,12 @@
 ===============  NERDJOKE   ===============
 ======================================== */
 
-.nerdJoke {
+.nerd-joke {
 	padding-bottom: 20px;
 	font-size: 24px;
 }
 
-.nerdJoke .jokeText div {
+.nerd-joke .joke-text div {
 	padding-bottom: 15px;
 }
 
@@ -20,7 +20,7 @@
 	font-weight: bold;
 }
 
-.jokeButton {
+.joke-button {
 	/* background-image: url(/images/pix/pix-bg-sm-bw.gif); */
     border: 1px solid #999;
     display: inline-block;
@@ -44,14 +44,14 @@
 }
 
 
-.jokeTimer {
+.joke-timer {
     border: 1px solid #AAA;
 	position: relative;
 	/* height: 25px;
 	width: 100%; */
 }
 
-.jokeTimerSvg {
+.joke-timer-svg {
 	width: 100%;
 	height: 10px;
 	fill: rgb(190,190,190);

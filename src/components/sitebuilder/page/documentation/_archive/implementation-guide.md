@@ -591,7 +591,7 @@ Add tree viewer and pass selectedPath:
 return ( 
 	<>
 		<div className="row-2col">
-			<div className="gridItem">
+			<div className="grid-item">
 				<PageSectionHeader title="Component Selector" />
 				<ComponentSelector 
 					setEditableComponent={setEditableComponent}
@@ -607,7 +607,7 @@ return (
 				/>
 			</div>
 
-			<div className="gridItem">
+			<div className="grid-item">
 				{/* ADD THIS SECTION */}
 				<PageSectionHeader title="Component Tree" />
 				{pageJSON.components.length > 0 ? (

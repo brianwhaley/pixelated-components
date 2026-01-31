@@ -202,7 +202,7 @@ export function BlogPostCategories(props: BlogPostCategoriesType) {
 	).filter(Boolean).sort();
 	const config = usePixelatedConfig();
 	return (
-		<div className="blogPostCategories">
+		<div className="blog-post-categories">
 			<div>Categories: </div>
 			{ myCategoryImages.map((categoryImg, index) => 
 				categoryImg ? (

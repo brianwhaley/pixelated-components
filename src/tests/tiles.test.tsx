@@ -100,13 +100,13 @@ describe('Tiles Component', () => {
   describe('Grid Items', () => {
     it('should render grid items for each card', () => {
       const { container } = render(<Tiles cards={mockCards} />);
-      const gridItems = container.querySelectorAll('.gridItem');
+      const gridItems = container.querySelectorAll('.grid-item');
       expect(gridItems.length).toBe(mockCards.length);
     });
 
     it('should render tiles within grid items', () => {
       const { container } = render(<Tiles cards={mockCards} />);
-      const gridItems = container.querySelectorAll('.gridItem');
+      const gridItems = container.querySelectorAll('.grid-item');
       gridItems.forEach(item => {
         expect(item.querySelector('.tile')).toBeInTheDocument();
       });
@@ -116,13 +116,13 @@ describe('Tiles Component', () => {
   describe('Tile Links', () => {
     it('should render tiles with links when link is provided', () => {
       const { container } = render(<Tiles cards={mockCards} />);
-      const links = container.querySelectorAll('.tileLink');
+      const links = container.querySelectorAll('.tile-link');
       expect(links.length).toBe(3);
     });
 
     it('should set correct href on tile links', () => {
       const { container } = render(<Tiles cards={mockCards} />);
-      const links = container.querySelectorAll('.tileLink') as NodeListOf<HTMLAnchorElement>;
+      const links = container.querySelectorAll('.tile-link') as NodeListOf<HTMLAnchorElement>;
       expect(links[0].href).toContain('/tile1');
       expect(links[1].href).toContain('/tile2');
       expect(links[2].href).toContain('/tile3');
@@ -137,7 +137,7 @@ describe('Tiles Component', () => {
         imageAlt: 'No Link Tile'
       }];
       const { container } = render(<Tiles cards={cardsWithoutLinks as any} />);
-      expect(container.querySelector('.tileLink')).not.toBeInTheDocument();
+      expect(container.querySelector('.tile-link')).not.toBeInTheDocument();
     });
 
     it('should render tile body directly when no link', () => {
@@ -269,7 +269,7 @@ describe('Tiles Component', () => {
       const { container } = render(<Tiles cards={mockCards} />);
       expect(container.querySelector('.tiles-container')).toBeInTheDocument();
       expect(container.querySelector('.tile-container')).toBeInTheDocument();
-      expect(container.querySelectorAll('.gridItem').length).toBe(3);
+      expect(container.querySelectorAll('.grid-item').length).toBe(3);
       expect(container.querySelectorAll('.tile').length).toBe(3);
     });
 
@@ -402,9 +402,9 @@ describe('Tiles Component', () => {
   });
 
   describe('Tile Structure', () => {
-    it('should wrap link content with tileLink class', () => {
+    it('should wrap link content with tile-link class', () => {
       const { container } = render(<Tiles cards={mockCards} />);
-      const links = container.querySelectorAll('.tileLink');
+      const links = container.querySelectorAll('.tile-link');
       links.forEach(link => {
         expect(link.querySelector('.tile-image')).toBeInTheDocument();
       });

@@ -97,7 +97,7 @@ describe('MenuAccordion Component', () => {
         />
       );
       const ul = container.querySelector('ul');
-      expect(ul).toHaveClass('menuShow');
+      expect(ul).toHaveClass('menu-show');
     });
 
     it('should apply menuHide class when state is hide', () => {
@@ -108,7 +108,7 @@ describe('MenuAccordion Component', () => {
         />
       );
       const ul = container.querySelector('ul');
-      expect(ul).toHaveClass('menuHide');
+      expect(ul).toHaveClass('menu-hide');
     });
 
     it('should render multiple menu items', () => {
@@ -160,7 +160,7 @@ describe('MenuAccordion Component', () => {
       const { container } = render(
         <MenuAccordion menuItems={mockMenuData} />
       );
-      const wrapper = container.querySelector('.accordionMenuWrapper');
+      const wrapper = container.querySelector('.accordion-menu-wrapper');
       expect(wrapper).toBeInTheDocument();
     });
 
@@ -189,16 +189,16 @@ describe('MenuAccordion Component', () => {
       const { container } = render(
         <MenuAccordion menuItems={mockMenuData} />
       );
-      const wrapper = container.querySelector('.accordionMenuWrapper');
-      expect(wrapper).toHaveClass('accordionUp');
+      const wrapper = container.querySelector('.accordion-menu-wrapper');
+      expect(wrapper).toHaveClass('accordion-up');
     });
 
     it('should apply correct CSS classes to menu structure', () => {
       const { container } = render(
         <MenuAccordion menuItems={mockMenuData} />
       );
-      expect(container.querySelector('.accordionMenuWrapper')).toBeInTheDocument();
-      expect(container.querySelector('.accordionMenu')).toBeInTheDocument();
+      expect(container.querySelector('.accordion-menu-wrapper')).toBeInTheDocument();
+      expect(container.querySelector('.accordion-menu')).toBeInTheDocument();
     });
   });
 
@@ -254,11 +254,11 @@ describe('MenuAccordion Component', () => {
       const { container } = render(
         <MenuAccordion menuItems={mockMenuData} />
       );
-      const wrapper = container.querySelector('.accordionMenuWrapper');
-      expect(wrapper).toHaveClass('accordionUp');
+      const wrapper = container.querySelector('.accordion-menu-wrapper');
+      expect(wrapper).toHaveClass('accordion-up');
 
       // Click anywhere to simulate menu button behavior
-      const menuBtn = document.getElementById('panelMenuButton') || wrapper;
+      const menuBtn = document.getElementById('panel-menu-button') || wrapper;
       if (menuBtn) {
         fireEvent.click(menuBtn);
       }
@@ -296,14 +296,14 @@ describe('MenuAccordion Component', () => {
 
     it('should have correct ID', () => {
       render(<MenuAccordionButton />);
-      const button = document.getElementById('panelMenuButton');
+      const button = document.getElementById('panel-menu-button');
       expect(button).toBeInTheDocument();
     });
 
     it('should have correct CSS class', () => {
       render(<MenuAccordionButton />);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass('panelMenuButton');
+      expect(button).toHaveClass('panel-menu-button');
     });
 
     it('should display hamburger symbol', () => {
@@ -452,7 +452,7 @@ describe('MenuAccordion Component', () => {
       const { container } = render(
         <MenuAccordion menuItems={mockMenuData} />
       );
-      const wrapper = container.querySelector('.accordionMenuWrapper');
+      const wrapper = container.querySelector('.accordion-menu-wrapper');
       expect(wrapper).toBeInTheDocument();
     });
 
@@ -460,7 +460,7 @@ describe('MenuAccordion Component', () => {
       const { container } = render(
         <MenuAccordion menuItems={mockMenuData} />
       );
-      const menu = container.querySelector('.accordionMenu');
+      const menu = container.querySelector('.accordion-menu');
       expect(menu).toBeInTheDocument();
     });
 
@@ -468,8 +468,8 @@ describe('MenuAccordion Component', () => {
       const { container } = render(
         <MenuAccordion menuItems={mockMenuData} />
       );
-      const wrapper = container.querySelector('.accordionMenuWrapper');
-      expect(wrapper).toHaveClass('accordionUp');
+      const wrapper = container.querySelector('.accordion-menu-wrapper');
+      expect(wrapper).toHaveClass('accordion-up');
       
       // Simulate clicking to toggle state
       fireEvent.click(document);
@@ -537,7 +537,7 @@ describe('MenuAccordion Component', () => {
         </div>
       );
       
-      const button = document.getElementById('panelMenuButton');
+      const button = document.getElementById('panel-menu-button');
       const menu = document.getElementById('accordionMenu');
       
       expect(button).toBeInTheDocument();
@@ -548,7 +548,7 @@ describe('MenuAccordion Component', () => {
       const { container } = render(
         <MenuAccordion menuItems={mockMenuData} />
       );
-      const wrapper = container.querySelector('.accordionMenuWrapper');
+      const wrapper = container.querySelector('.accordion-menu-wrapper');
       
       fireEvent.click(document);
       expect(wrapper).toBeInTheDocument();

@@ -37,7 +37,7 @@ export function Table (props: TableType) {
 	function getHeadings (data: Array<{ [key: string]: any }>) {
 		const headings = Object.keys(data[0]).map((key, i) => {
 			return (props.sortable && props.sortable == true) 
-				? <th key={i} onClick={() => { sortTable(key); }}><span>{key}</span> <span className="sortArrow" /></th>
+				? <th key={i} onClick={() => { sortTable(key); }}><span>{key}</span> <span className="sort-arrow" /></th>
 				: <th key={i}><span>{key}</span></th>;
 		});
 		return <tr>{headings}</tr>;
@@ -95,7 +95,7 @@ export function Table (props: TableType) {
 	}
 
 	function getDirection(header: HTMLTableCellElement){
-		const arrow = header.querySelector('.sortArrow');
+		const arrow = header.querySelector('.sort-arrow');
 		let oldDirection = '';
 		if (arrow){
 			const oldClassList = arrow.classList;
@@ -112,7 +112,7 @@ export function Table (props: TableType) {
 		const table = document.getElementById(props.id) as HTMLTableElement;
 		const headers = table.querySelectorAll('th');
 		headers.forEach(header => {
-			const arrow = header.querySelector('.sortArrow');
+			const arrow = header.querySelector('.sort-arrow');
 			if (arrow) {
 				arrow.classList.remove('asc', 'desc');
 			}
@@ -121,7 +121,7 @@ export function Table (props: TableType) {
 
 	function updateArrow(column: string, oldDirection: string) {
 		const header = getHeader(column) as unknown as HTMLTableCellElement;
-		const arrow = header.querySelector('.sortArrow');
+		const arrow = header.querySelector('.sort-arrow');
 		if (arrow) {
 			if (oldDirection == 'asc') {
 				arrow.classList.add('desc');
@@ -148,7 +148,7 @@ export function Table (props: TableType) {
 
 	return (
 		<div>
-			<table id={props.id ?? undefined} className="pixTable">
+			<table id={props.id ?? undefined} className="pix-table">
 				<thead>{getHeadings(tableData)}</thead>
 				<tbody>{getRows(tableData)}</tbody>
 			</table>

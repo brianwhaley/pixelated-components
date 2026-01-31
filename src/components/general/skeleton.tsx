@@ -33,19 +33,19 @@ export function Skeleton({
 	height,
 	animated = true,
 }: SkeletonType) {
-	const base = `skeleton ${animated ? 'skeleton--animated' : ''}`;
+	const base = `skeleton ${animated ? 'skeleton-animated' : ''}`;
 
 	if (variant === 'avatar') {
 		const avatarStyle: React.CSSProperties | undefined =
       width != null || height != null ? { ...(width != null ? { width } : {}), ...(height != null ? { height } : {}) } : undefined;
-		return <div aria-hidden="true" className={`${base} skeleton--avatar`} style={avatarStyle} />;
+		return <div aria-hidden="true" className={`${base} skeleton-avatar`} style={avatarStyle} />;
 	}
 
 	if (variant === 'rect') {
 		return (
 			<div
 				aria-hidden="true"
-				className={`${base} skeleton--rect`}
+				className={`${base} skeleton-rect`}
 				style={{ width: width ?? '100%', height: (height as any) ?? 160 }}
 			/>
 		);

@@ -8,18 +8,18 @@
   min-height: 0;
 }
 
-.skeleton--animated {
+.skeleton-animated {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
-.skeleton--avatar {
+.skeleton-avatar {
   width: 3rem;
   height: 3rem;
   border-radius: 9999px;
   display: inline-block;
 }
 
-.skeleton--rect {
+.skeleton-rect {
   display: block;
   width: 100%;
   height: 160px;
@@ -44,5 +44,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skeleton--animated { animation: none }
+  .skeleton-animated { animation: none }
 }

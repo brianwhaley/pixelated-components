@@ -15,21 +15,21 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      expect(container.querySelector('.bingoCard')).toBeInTheDocument();
+      expect(container.querySelector('.bingo-card')).toBeInTheDocument();
     });
 
     it('should have grid layout class', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      expect(container.querySelector('.bingoCard')).toHaveClass('rowfix-5col');
+      expect(container.querySelector('.bingo-card')).toHaveClass('rowfix-5col');
     });
 
     it('should render bingo headers', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const headers = container.querySelectorAll('.bingoHeader');
+      const headers = container.querySelectorAll('.bingo-header');
       expect(headers.length).toBe(5);
     });
 
@@ -46,7 +46,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBox');
+      const boxes = container.querySelectorAll('.bingo-box');
       expect(boxes.length).toBe(25); // 5x5 grid
     });
 
@@ -54,7 +54,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const headers = container.querySelectorAll('.bingoHeader.gridItem');
+      const headers = container.querySelectorAll('.bingo-header.grid-item');
       expect(headers.length).toBe(5);
     });
 
@@ -62,7 +62,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBox.gridItem');
+      const boxes = container.querySelectorAll('.bingo-box.grid-item');
       expect(boxes.length).toBe(25);
     });
   });
@@ -72,7 +72,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBox');
+      const boxes = container.querySelectorAll('.bingo-box');
       const textBoxes = Array.from(boxes).filter(box => 
         box.textContent && box.textContent !== 'FREE SPACE'
       );
@@ -88,7 +88,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBox');
+      const boxes = container.querySelectorAll('.bingo-box');
       expect(boxes[12].textContent).toBe('FREE SPACE');
     });
 
@@ -106,17 +106,17 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const freeSpaceBox = Array.from(container.querySelectorAll('.bingoBox')).find(
+      const freeSpaceBox = Array.from(container.querySelectorAll('.bingo-box')).find(
         box => box.textContent === 'FREE SPACE'
       );
-      expect(freeSpaceBox?.querySelector('.bingoBoxFreeSpace')).toBeInTheDocument();
+      expect(freeSpaceBox?.querySelector('.bingo-box-free-space')).toBeInTheDocument();
     });
 
     it('should have bingoBoxText class on regular buzzwords', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBoxText');
+      const boxes = container.querySelectorAll('.bingo-box-text');
       // Should have 24 regular buzzwords + 5 headers with bingoBoxText class
       expect(boxes.length).toBe(29);
     });
@@ -125,8 +125,8 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const textBoxes = container.querySelectorAll('.bingoBoxText');
-      const freeSpaceElement = container.querySelector('.bingoBoxFreeSpace');
+      const textBoxes = container.querySelectorAll('.bingo-box-text');
+      const freeSpaceElement = container.querySelector('.bingo-box-free-space');
       expect(freeSpaceElement).toBeInTheDocument();
       expect(textBoxes.length).toBe(29); // 24 buzzword boxes + 5 headers
     });
@@ -144,8 +144,8 @@ describe('BuzzwordBingo Component', () => {
         <BuzzwordBingo buzzwords={buzzwords2} />
       );
 
-      const boxes1 = Array.from(container1.querySelectorAll('.bingoBoxText')).map(b => b.textContent);
-      const boxes2 = Array.from(container2.querySelectorAll('.bingoBoxText')).map(b => b.textContent);
+      const boxes1 = Array.from(container1.querySelectorAll('.bingo-box-text')).map(b => b.textContent);
+      const boxes2 = Array.from(container2.querySelectorAll('.bingo-box-text')).map(b => b.textContent);
 
       // With 24 items, it's extremely unlikely they'll be in the same order
       // But we can at least verify both are arrays of the same length with same content
@@ -157,7 +157,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={manyBuzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBox');
+      const boxes = container.querySelectorAll('.bingo-box');
       expect(boxes.length).toBe(25); // 24 buzzwords + 1 FREE SPACE
     });
 
@@ -166,7 +166,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={fewBuzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBox');
+      const boxes = container.querySelectorAll('.bingo-box');
       expect(boxes.length).toBe(5); // 4 buzzwords + 1 FREE SPACE
     });
   });
@@ -176,7 +176,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const items = container.querySelectorAll('.gridItem');
+      const items = container.querySelectorAll('.grid-item');
       expect(items.length).toBe(30); // 5 headers + 25 boxes
     });
 
@@ -184,7 +184,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const headers = container.querySelectorAll('.bingoHeader');
+      const headers = container.querySelectorAll('.bingo-header');
       expect(headers.length).toBe(5);
       Array.from(headers).forEach((header, index) => {
         expect(['B', 'I', 'N', 'G', 'O']).toContain(header.textContent);
@@ -195,7 +195,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const boxTexts = container.querySelectorAll('.bingoBoxText, .bingoBoxFreeSpace');
+      const boxTexts = container.querySelectorAll('.bingo-box-text, .bingo-box-free-space');
       expect(boxTexts.length).toBe(30); // 25 boxes + 5 headers
     });
   });
@@ -206,7 +206,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={minBuzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBox');
+      const boxes = container.querySelectorAll('.bingo-box');
       expect(boxes.length).toBe(2); // 1 buzzword + 1 FREE SPACE
     });
 
@@ -214,7 +214,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={[]} />
       );
-      const boxes = container.querySelectorAll('.bingoBox');
+      const boxes = container.querySelectorAll('.bingo-box');
       expect(boxes.length).toBe(1); // Only FREE SPACE
     });
 
@@ -229,7 +229,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={specialBuzzwords} />
       );
-      expect(container.querySelector('.bingoCard')).toBeInTheDocument();
+      expect(container.querySelector('.bingo-card')).toBeInTheDocument();
     });
 
     it('should handle very long buzzword text', () => {
@@ -238,7 +238,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={longBuzzwords} />
       );
-      expect(container.querySelector('.bingoCard')).toBeInTheDocument();
+      expect(container.querySelector('.bingo-card')).toBeInTheDocument();
     });
 
     it('should handle duplicate buzzwords', () => {
@@ -246,7 +246,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={dupeBuzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBox');
+      const boxes = container.querySelectorAll('.bingo-box');
       expect(boxes.length).toBe(25);
     });
   });
@@ -256,20 +256,20 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const buzzwordDivs = container.querySelectorAll('.bingoBoxText');
+      const buzzwordDivs = container.querySelectorAll('.bingo-box-text');
       buzzwordDivs.forEach(div => {
         expect(div.textContent).toBeTruthy();
       });
     });
 
-    it('should have nested structure: bingoBox > bingoBoxText', () => {
+    it('should have nested structure: bingo-box > bingo-box-text', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBox');
+      const boxes = container.querySelectorAll('.bingo-box');
       let nestedCount = 0;
       boxes.forEach(box => {
-        if (box.querySelector('.bingoBoxText, .bingoBoxFreeSpace')) {
+        if (box.querySelector('.bingo-box-text, .bingo-box-free-space')) {
           nestedCount++;
         }
       });
@@ -280,9 +280,9 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const headers = container.querySelectorAll('.bingoHeader');
+      const headers = container.querySelectorAll('.bingo-header');
       headers.forEach(header => {
-        const textDiv = header.querySelector('.bingoBoxText');
+        const textDiv = header.querySelector('.bingo-box-text');
         expect(textDiv).toBeInTheDocument();
       });
     });
@@ -306,8 +306,8 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      expect(container.querySelector('.bingoCard')).toBeInTheDocument();
-      expect(container.querySelectorAll('.gridItem').length).toBe(30);
+      expect(container.querySelector('.bingo-card')).toBeInTheDocument();
+      expect(container.querySelectorAll('.grid-item').length).toBe(30);
     });
   });
 
@@ -317,7 +317,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={buzzwords} />
       );
-      expect(container.querySelectorAll('.gridItem').length).toBe(30); // 5 headers + 25 boxes
+      expect(container.querySelectorAll('.grid-item').length).toBe(30); // 5 headers + 25 boxes
     });
 
     it('should always have exactly 25 bingo boxes with 24 buzzwords', () => {
@@ -325,7 +325,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={buzzwords} />
       );
-      expect(container.querySelectorAll('.bingoBox').length).toBe(25);
+      expect(container.querySelectorAll('.bingo-box').length).toBe(25);
     });
 
     it('should always have exactly 25 bingo boxes with 50 buzzwords', () => {
@@ -333,7 +333,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={buzzwords} />
       );
-      expect(container.querySelectorAll('.bingoBox').length).toBe(25);
+      expect(container.querySelectorAll('.bingo-box').length).toBe(25);
     });
 
     it('should always have exactly 25 bingo boxes with 100 buzzwords', () => {
@@ -341,7 +341,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={buzzwords} />
       );
-      expect(container.querySelectorAll('.bingoBox').length).toBe(25);
+      expect(container.querySelectorAll('.bingo-box').length).toBe(25);
     });
 
     it('should handle fewer buzzwords than 24', () => {
@@ -350,7 +350,7 @@ describe('BuzzwordBingo Component', () => {
         <BuzzwordBingo buzzwords={buzzwords} />
       );
       // With 3 buzzwords + 1 FREE SPACE = 4 total
-      expect(container.querySelectorAll('.bingoBox').length).toBe(4);
+      expect(container.querySelectorAll('.bingo-box').length).toBe(4);
     });
 
     it('should maintain FREE SPACE at center position with full array', () => {
@@ -358,7 +358,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={buzzwords} />
       );
-      const boxes = container.querySelectorAll('.bingoBox');
+      const boxes = container.querySelectorAll('.bingo-box');
       expect(boxes[12].textContent).toBe('FREE SPACE');
     });
   });
@@ -368,7 +368,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const headerBoxes = container.querySelectorAll('.bingoHeader .bingoBoxText');
+      const headerBoxes = container.querySelectorAll('.bingo-header .bingo-box-text');
       const texts = Array.from(headerBoxes).map(h => h.textContent);
       expect(texts).toEqual(['B', 'I', 'N', 'G', 'O']);
     });
@@ -377,7 +377,7 @@ describe('BuzzwordBingo Component', () => {
       const { container } = render(
         <BuzzwordBingo buzzwords={mockBuzzwords} />
       );
-      const buzzwordBoxes = container.querySelectorAll('.bingoBox .bingoBoxText, .bingoBox .bingoBoxFreeSpace');
+      const buzzwordBoxes = container.querySelectorAll('.bingo-box .bingo-box-text, .bingo-box .bingo-box-free-space');
       expect(buzzwordBoxes.length).toBe(25);
       buzzwordBoxes.forEach(box => {
         expect(box.textContent).toBeTruthy();

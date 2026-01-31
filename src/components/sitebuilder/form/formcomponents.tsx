@@ -29,7 +29,7 @@ const setupInputProps = (props: any, display?: string) => {
 	);
 
 	// Set className based on display mode
-	inputProps["className"] = (display == "vertical") ? "displayVertical" : "" ;
+	inputProps["className"] = (display == "vertical") ? "display-vertical" : "" ;
 
 	// Handle controlled vs uncontrolled inputs properly
 	// If value is provided, use it for controlled behavior
@@ -671,7 +671,7 @@ function FormRadioOption(props: FormRadioOptionType) {
 	const controlProps = parentHasOnChange ? { checked: isChecked } : { defaultChecked: isChecked };
 
 	return (
-		<span className={ props.parent && props.parent.display == "vertical" ? "displayVertical" : ""}>
+		<span className={ props.parent && props.parent.display == "vertical" ? "display-vertical" : ""}>
 			<input type="radio"
 				id={`${props.parent?.name}-${props.value}`}
 				name={props.parent?.name}
@@ -793,7 +793,7 @@ function FormCheckboxOption(props: FormCheckboxOptionType) {
 		}
 	};
 	return (
-		<span className={ props.parent.display == "vertical" ? "displayVertical" : ""}>
+		<span className={ props.parent.display == "vertical" ? "display-vertical" : ""}>
 			<input type="checkbox" 
 				id={props.parent.name + "_" + props.text} 
 				name={props.text} value={props.value} 

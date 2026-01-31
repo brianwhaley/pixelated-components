@@ -17,6 +17,7 @@ For a complete working example of Pixelated Components in action, check out the 
 ### General Components
 - [Accordion](#accordion)
 - [Callout](#callout)
+- [CountUp](#countup)
 - [CSS](#css)
 - [Loading](#loading)
 - [SplitScroll](#splitscroll)
@@ -210,6 +211,33 @@ import { Callout } from '@pixelated-tech/components';
 | `subtitle` | `string` | - | Subtitle text |
 | `aboveFold` | `boolean` | - | Image optimization hint |
 | `children` | `ReactNode` | - | Custom child content rendered below main content |
+
+### CountUp
+
+Animated numeric counter used for simple stat displays. The component will begin animating when it becomes visible in the viewport (uses an internal visibility observer).
+
+```tsx
+import { CountUp } from '@pixelated-tech/components';
+
+<CountUp id="happy-customers" start={0} end={2.5} decimals={1} duration={2000} post="K+" content="Happy customers" />
+```
+
+#### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` | `string` | - | Unique id applied to the numeric element |
+| `start` | `number` | - | The starting number for the counter |
+| `end` | `number` | - | The ending number for the counter |
+| `duration` | `number` | - | Animation duration in milliseconds |
+| `decimals` | `number` | `0` | Number of decimal places to display |
+| `pre` | `string` | `''` | Text to display before the number |
+| `post` | `string` | `''` | Text to display after the number |
+| `content` | `string` | `''` | Optional caption/content shown below the count |
+
+---
+
+
 
 #### Variants
 - **`default`**: Simple layout with optional border

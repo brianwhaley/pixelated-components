@@ -340,7 +340,7 @@ export function PageGridItem({
 	return (
 		/* THIS IS AN OLD STYLE */
 		/* <div className={"grid-item" + */
-		<div className={"gridItem" + 
+		<div className={"grid-item" + 
 		(className ? ` ${className}` : '') +
 		(columnStart && columnSpan && !columnEnd ? ` grid-s${columnStart}-w${columnSpan}` : '') + 
 		(columnStart && columnEnd && !columnSpan ? ` grid-s${columnStart}-e${columnEnd}` : '')} 

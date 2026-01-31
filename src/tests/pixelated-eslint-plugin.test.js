@@ -238,7 +238,7 @@ describe('pixelated-eslint-plugin', () => {
 		const messages = linter.verify(code, {
 			parserOptions: { ecmaVersion: 2022, sourceType: 'module', ecmaFeatures: { jsx: true } },
 			plugins: { pixelated: true },
-			rules: { 'pixelated/required-proptypes-jsdoc': 'warn' },
+			rules: { 'pixelated/required-proptypes-jsdoc': 'error' },
 		});
 		expect(messages.some(m => m.ruleId === 'pixelated/required-proptypes-jsdoc')).toBe(true);
 	});
@@ -254,7 +254,7 @@ describe('pixelated-eslint-plugin', () => {
 		const messages = linter.verify(code, {
 			parserOptions: { ecmaVersion: 2022, sourceType: 'module', ecmaFeatures: { jsx: true } },
 			plugins: { pixelated: true },
-			rules: { 'pixelated/required-proptypes-jsdoc': 'warn' },
+			rules: { 'pixelated/required-proptypes-jsdoc': 'error' },
 		});
 		expect(messages.some(m => m.ruleId === 'pixelated/required-proptypes-jsdoc')).toBe(false);
 	});
@@ -269,7 +269,7 @@ describe('pixelated-eslint-plugin', () => {
 		const messages = linter.verify(code, {
 			parserOptions: { ecmaVersion: 2022, sourceType: 'module', ecmaFeatures: { jsx: true } },
 			plugins: { pixelated: true },
-			rules: { 'pixelated/required-proptypes-jsdoc': 'warn' },
+			rules: { 'pixelated/required-proptypes-jsdoc': 'error' },
 		});
 		expect(messages.some(m => m.ruleId === 'pixelated/required-proptypes-jsdoc')).toBe(false);
 	});
@@ -283,6 +283,5 @@ describe('pixelated-eslint-plugin', () => {
 			expect(plugin.configs).toBeDefined();
 			expect(plugin.configs.recommended).toBeDefined();
 			expect(plugin.configs.recommended.rules[`pixelated/${r}`]).toBeDefined();
-		});
-	});
+		});			expect(plugin.configs.recommended.rules['pixelated/required-proptypes-jsdoc']).toBe('error');	});
 });

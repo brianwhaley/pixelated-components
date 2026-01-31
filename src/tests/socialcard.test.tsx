@@ -56,7 +56,7 @@ describe('SocialCard Components', () => {
   describe('SocialCardsLoading Component', () => {
     it('should render loading container', () => {
       const { container } = render(<SocialCardsLoading />);
-      expect(container.querySelector('.cardsLoading')).toBeInTheDocument();
+      expect(container.querySelector('.cards-loading')).toBeInTheDocument();
     });
 
     it('should render loading text', () => {
@@ -66,7 +66,7 @@ describe('SocialCard Components', () => {
 
     it('should have correct CSS class', () => {
       const { container } = render(<SocialCardsLoading />);
-      expect(container.querySelector('.cardsLoading')).toHaveClass('cardsLoading');
+      expect(container.querySelector('.cards-loading')).toHaveClass('cards-loading');
     });
   });
 
@@ -89,7 +89,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      expect(container.querySelector('.masonryItem')).toBeInTheDocument();
+      expect(container.querySelector('.masonry-item')).toBeInTheDocument();
     });
 
     it('should render card container', () => {
@@ -111,7 +111,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      expect(container.querySelector('.cardTitle')).toBeInTheDocument();
+      expect(container.querySelector('.card-title')).toBeInTheDocument();
     });
 
     it('should render card title link', () => {
@@ -122,7 +122,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const link = container.querySelector('.cardTitle a');
+      const link = container.querySelector('.card-title a');
       expect(link).toHaveAttribute('href', mockCardData.link);
     });
 
@@ -134,7 +134,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const link = container.querySelector('.cardTitle a');
+      const link = container.querySelector('.card-title a');
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     });
@@ -147,7 +147,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const icon = container.querySelector('.cardIcon');
+      const icon = container.querySelector('.card-icon');
       expect(icon).toBeInTheDocument();
       expect(icon).toHaveAttribute('src', '/images/logos/blog-logo.png');
       expect(icon).toHaveAttribute('alt', 'Blog Post');
@@ -172,7 +172,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const body = container.querySelector('.cardBody');
+      const body = container.querySelector('.card-body');
       expect(body).toBeInTheDocument();
       expect(body?.innerHTML).toContain('This is a test post');
     });
@@ -196,7 +196,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      expect(container.querySelector('.cardDate')).toBeInTheDocument();
+      expect(container.querySelector('.card-date')).toBeInTheDocument();
     });
 
     it('should sanitize HTML in description', () => {
@@ -211,7 +211,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const body = container.querySelector('.cardBody');
+      const body = container.querySelector('.card-body');
       expect(body?.innerHTML).toContain('Safe content');
     });
 
@@ -227,7 +227,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const body = container.querySelector('.cardBody');
+      const body = container.querySelector('.card-body');
       expect(body?.textContent).toContain('Plain text description');
     });
 
@@ -243,7 +243,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Github Activity"
         />
       );
-      const icon = container.querySelector('.cardIcon');
+      const icon = container.querySelector('.card-icon');
       expect(icon).toHaveAttribute('src', '/images/logos/github-logo.png');
     });
 
@@ -259,7 +259,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const link = container.querySelector('.cardTitle a');
+      const link = container.querySelector('.card-title a');
       expect(link).toHaveAttribute('href', 'https://custom-domain.com/unique/path');
     });
 
@@ -271,11 +271,11 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      expect(container.querySelector('.masonryItem')).toBeInTheDocument();
+      expect(container.querySelector('.masonry-item')).toBeInTheDocument();
       expect(container.querySelector('.card')).toBeInTheDocument();
-      expect(container.querySelector('.cardTitle')).toBeInTheDocument();
-      expect(container.querySelector('.cardBody')).toBeInTheDocument();
-      expect(container.querySelector('.cardDate')).toBeInTheDocument();
+      expect(container.querySelector('.card-title')).toBeInTheDocument();
+      expect(container.querySelector('.card-body')).toBeInTheDocument();
+      expect(container.querySelector('.card-date')).toBeInTheDocument();
     });
   });
 
@@ -381,7 +381,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      expect(container.querySelector('.cardBody')).toBeInTheDocument();
+      expect(container.querySelector('.card-body')).toBeInTheDocument();
     });
 
     it('should handle very long titles', () => {
@@ -441,7 +441,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      expect(container.querySelector('.cardDate')).toBeInTheDocument();
+      expect(container.querySelector('.card-date')).toBeInTheDocument();
     });
   });
 
@@ -462,7 +462,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Github Activity"
         />
       );
-      const link = container.querySelector('.cardTitle a');
+      const link = container.querySelector('.card-title a');
       expect(link).toHaveAttribute('href', githubCard.link);
     });
 
@@ -482,7 +482,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Twitter Tweet"
         />
       );
-      const link = container.querySelector('.cardTitle a');
+      const link = container.querySelector('.card-title a');
       expect(link).toHaveAttribute('href', twitterCard.link);
     });
 
@@ -502,7 +502,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Youtube Favorite Video"
         />
       );
-      const link = container.querySelector('.cardTitle a');
+      const link = container.querySelector('.card-title a');
       expect(link).toHaveAttribute('href', youtubeCard.link);
     });
   });
@@ -524,7 +524,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const body = container.querySelector('.cardBody');
+      const body = container.querySelector('.card-body');
       expect(body?.innerHTML).toContain('<p>');
       expect(body?.innerHTML).toContain('<strong>');
     });
@@ -545,7 +545,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const body = container.querySelector('.cardBody');
+      const body = container.querySelector('.card-body');
       expect(body?.innerHTML).toContain('<p>');
       expect(body?.innerHTML).toContain('<strong>');
       expect(body?.innerHTML).toContain('<em>');
@@ -567,7 +567,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const body = container.querySelector('.cardBody');
+      const body = container.querySelector('.card-body');
       // Dead href should be removed
       expect(body?.innerHTML).not.toContain('href="/relative');
     });
@@ -588,7 +588,7 @@ describe('SocialCard Components', () => {
           iconSrcAlt="Blog Post"
         />
       );
-      const body = container.querySelector('.cardBody');
+      const body = container.querySelector('.card-body');
       expect(body?.innerHTML).toContain('href="https://external.com');
     });
   });

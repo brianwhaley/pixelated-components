@@ -15,7 +15,7 @@ describe('SkeletonLoading (composite)', () => {
 
   it('respects props and accessibility', () => {
     const { container } = render(<SkeletonLoading heroHeight={88} cardCount={1} />);
-    const hero = container.querySelector('#hero-loading .skeleton--rect') as HTMLElement | null;
+    const hero = container.querySelector('#hero-loading .skeleton-rect') as HTMLElement | null;
     expect(hero).toBeInTheDocument();
     expect(hero?.style.height).toBe('88px');
     expect(container.querySelector('.visually-hidden')?.getAttribute('role')).toBe('status');

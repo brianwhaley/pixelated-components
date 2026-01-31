@@ -1,3 +1,4 @@
+/* eslint-disable pixelated/class-name-kebab-case */
 "use client";
 
 import React from 'react';
@@ -41,7 +42,7 @@ export function Tiles(props: TilesType) {
 			<div className="tiles-container">
 				<div className={`tile-container row-${rowCount}col`}>
 					{ props.cards.map((card: CarouselCardType, i: number) => (
-						<div key={i} className="gridItem">
+						<div key={i} className="grid-item">
 							<Tile
 								index={i}
 								cardLength={props.cards.length}
@@ -117,7 +118,7 @@ function Tile( props: TileType ) {
 	return (
 		<div className={rootClass} id={'tile-' + props.index} >
 			{ props.link ?
-				<a href={props.link} className="tileLink">
+				<a href={props.link} className="tile-link">
 					{ tileBody }
 				</a>
 				:

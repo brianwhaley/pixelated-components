@@ -32,7 +32,7 @@
 
 .ge-actions { display: flex; gap: var(--ge-gap); justify-content: center; margin-top: 20px; flex-wrap: wrap; }
 .ge-btn { border-radius: var(--ge-radius); padding: 0.6rem 1rem; cursor: pointer; border: none; background: transparent; }
-.ge-btn--primary { background: var(--ge-foreground); color: #fff; }
+.ge-btn-primary { background: var(--ge-foreground); color: #fff; }
 .ge-link { color: var(--ge-foreground); text-decoration: underline; align-self: center; }
 .ge-toggle { background: transparent; border: 1px solid #ddd; padding: 0.5rem 0.85rem; border-radius: var(--ge-radius); }
 

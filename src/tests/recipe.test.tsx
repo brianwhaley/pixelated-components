@@ -499,7 +499,7 @@ recipeCategories={recipeCategories}
 
     it('should have backToTop class', () => {
       const { container } = render(<BackToTop />);
-      const backToTop = container.querySelector('.backToTop');
+      const backToTop = container.querySelector('.back-to-top');
       expect(backToTop).toBeInTheDocument();
     });
 

@@ -43,7 +43,7 @@ body.buttonring {
         box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
     }
 }
-body.cartpulse .pixCart #pixCartButton {
+body.cartpulse .pix-cart #pix-cart-button {
     animation: pulse-glow 2s infinite;
 }
 

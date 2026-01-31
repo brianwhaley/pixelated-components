@@ -11,6 +11,7 @@ export * from './components/general/cache-manager';
 export * from './components/general/callout';
 export * from './components/general/carousel';
 export * from './components/general/carousel.drag';
+export * from './components/general/countup';
 export * from './components/general/css';
 export * from './components/general/faq-accordion';
 export * from './components/general/hero';

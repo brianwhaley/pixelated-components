@@ -108,13 +108,13 @@ export function EbayItems(props: EbayItemsType) {
 		return (
 			<>
 				<Loading />
-				<div className="ebayItemsHeader">
+				<div className="ebay-items-header">
 					<EbayItemHeader title={`${items.length} Store Items`} />
 				</div>
-				<div className="ebayItemsHeader">
+				<div className="ebay-items-header">
 					<EbayListFilter aspects={aspects} callback={fetchItems} />
 				</div>
-				<div id="ebayItems" className="ebayItems">
+				<div id="ebay-items" className="ebay-items">
 					{ paintItems({ items: items, cloudinaryProductEnv: props.cloudinaryProductEnv }) }
 				</div>
 			</>
@@ -122,7 +122,7 @@ export function EbayItems(props: EbayItemsType) {
 	} else {
 		return (
 			<div className="section-container">
-				<div id="ebayItems" className="ebayItems">
+				<div id="ebay-items" className="ebay-items">
 					<Loading />
 				</div>
 			</div>
@@ -195,8 +195,8 @@ export function EbayListFilter(props: EbayListFilterType) {
 	}
 
 	return (
-		<form name="ebayItemsFilter" id="ebayItemsFilter">
-			<span className="filterInput">
+		<form name="ebay-items-filter" id="ebay-items-filter">
+			<span className="filter-input">
 				<label htmlFor="aspectName">Aspect:</label>
 				<select id="aspectName" onChange={onAspectNameChange}>
 					<option value=""></option>
@@ -205,13 +205,13 @@ export function EbayListFilter(props: EbayListFilterType) {
 					)}
 				</select>
 			</span>
-			<span className="filterInput">
+			<span className="filter-input">
 				<label htmlFor="aspectValue" onChange={onAspectValueChange}>Value:</label>
 				<select id="aspectValue">
 					<option value=""></option>
 				</select>
 			</span>
-			<span className="filterInput">
+			<span className="filter-input">
 				<button type="button" onClick={handleAspectFilter}>Filter</button>
 			</span>
 		</form>
@@ -256,21 +256,21 @@ export function EbayListItem(props: EbayListItemType) {
 		cloudinaryDomain={config?.cloudinary?.baseUrl ?? undefined}
 		cloudinaryTransforms={config?.cloudinary?.transforms ?? undefined} />;
 	return (
-		<div className="ebayItem row-12col">
-			<div className="ebayItemPhoto grid-s1-e5">
+		<div className="ebay-item row-12col">
+			<div className="ebay-item-photo grid-s1-e5">
 				{ itemURL
 					? <a href={itemURL} target={itemURLTarget} rel="noopener noreferrer">{itemImageComponent}</a>
 					: ( itemImageComponent )
 				}
 			</div>
-			<div className="ebayItemBody grid-s5-e13">
-				<div className="ebayItemHeader">
+			<div className="ebay-item-body grid-s5-e13">
+				<div className="ebay-item-header">
 					{ itemURL
 						? <EbayItemHeader url={itemURL} target={itemURLTarget} title={thisItem.title} />
 						: <EbayItemHeader title={thisItem.title} />
 					}
 				</div>
-				<div className="ebayItemDetails grid12">
+				<div className="ebay-item-details grid12">
 					<div><b>Item ID: </b>{thisItem.legacyItemId}</div>
 					<div><b>Quantity: </b>{thisItem.categories[0].categoryId == apiProps.itemCategory ? 1 : 10}</div>
 					<div><b>Condition: </b>{thisItem.condition}</div>
@@ -279,14 +279,14 @@ export function EbayListItem(props: EbayListItemType) {
 					<div><b>Location: </b>{thisItem.itemLocation.postalCode + ", " + thisItem.itemLocation.country}</div>
 					<div><b>Listing Date: </b>{thisItem.itemCreationDate}</div>
 				</div>
-				<div className="ebayItemPrice">
+				<div className="ebay-item-price">
 					{ itemURL
 						? <a href={itemURL} target={itemURLTarget} rel="noreferrer">${thisItem.price.value + " " + thisItem.price.currency}</a>
 						: "$" + thisItem.price.value + " " + thisItem.price.currency
 					}
 				</div>
 				<br />
-				<div className="ebayItemAddToCart">
+				<div className="ebay-item-add-to-cart">
 					<ViewItemDetails href={"/store"} itemID={thisItem.legacyItemId} />
 					<AddToCartButton handler={addToShoppingCart} item={shoppingCartItem} itemID={thisItem.legacyItemId} />
 					{ /* <GoToCartButton href={"/cart"} itemID={thisItem.legacyItemId} /> */}
@@ -376,15 +376,15 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 		shoppingCartItem.itemURL = itemURL;
 		return (
 			<>
-				<div className="ebayItem row-12col">
-					<div className="ebayItemHeader grid-s1-e13">
+				<div className="ebay-item row-12col">
+					<div className="ebay-item-header grid-s1-e13">
 						{ itemURL
 							? <EbayItemHeader url={itemURL} title={thisItem.title} />
 							: <EbayItemHeader title={thisItem.title} />
 						}
 					</div>
 					<br />
-					<div className="ebayItemPhotoCarousel grid-s1-e7">
+					<div className="ebay-item-photo-carousel grid-s1-e7">
 						<Carousel 
 							cards={images} 
 							draggable={true} 
@@ -392,11 +392,11 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 						/>
 					</div>
 					<div className="grid-s7-e13">
-						<div className="ebayItemDetails grid12">
+						<div className="ebay-item-details grid12">
 							<div dangerouslySetInnerHTML={{ __html: thisItem.description.replace(/(<br\s*\/?>\s*){2,}/gi, '') }} />
 						</div>
 						<br />
-						<div className="ebayItemDetails grid12">
+						<div className="ebay-item-details grid12">
 							<div><b>Item ID: </b>{thisItem.legacyItemId}</div>
 							<div><b>Quantity: </b>{thisItem.categoryId == apiProps.itemCategory ? 1 : 10}</div>
 							<div><b>Category: </b>{thisItem.categoryPath}</div>
@@ -407,14 +407,14 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 							<div><b>Listing Date: </b>{thisItem.itemCreationDate}</div>
 							<br />
 						</div>
-						<div className="ebayItemPrice">
+						<div className="ebay-item-price">
 							{ itemURL
 								? <a href={itemURL} target={itemURLTarget} rel="noreferrer">${thisItem.price.value + " " + thisItem.price.currency}</a>
 								: "$" + thisItem.price.value + " " + thisItem.price.currency
 							}
 						</div>
 						<br />
-						<div className="ebayItemAddToCart">
+						<div className="ebay-item-add-to-cart">
 							<AddToCartButton handler={addToShoppingCart} item={shoppingCartItem} itemID={thisItem.legacyItemId} />
 							{ /* <GoToCartButton href={"/cart"} itemID={thisItem.legacyItemId} /> */}
 						</div>
@@ -426,7 +426,7 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 	} else {
 		return (
 			<>
-				<div id="ebayItems" className="ebayItems">
+				<div id="ebay-items" className="ebay-items">
 					<div className="centered">Loading...</div>
 				</div>
 			</>

@@ -276,11 +276,11 @@ export type SocialCardType = InferProps<typeof SocialCard.propTypes>;
 export function SocialCard(props: SocialCardType) {
 	const config = usePixelatedConfig();
 	return (
-		<div className="masonryItem" key={props.card.guid}>
+		<div className="masonry-item" key={props.card.guid}>
 			<div className="card">
-				<div className="cardTitle">
+				<div className="card-title">
 					<a href={props.card.link} target="_blank" rel="noopener noreferrer">
-						<SmartImage className="cardIcon" src={props.iconSrc} title={props.iconSrcAlt} alt={props.iconSrcAlt} 
+						<SmartImage className="card-icon" src={props.iconSrc} title={props.iconSrcAlt} alt={props.iconSrcAlt} 
 							cloudinaryEnv={config?.cloudinary?.product_env}
 							cloudinaryDomain={config?.cloudinary?.baseUrl}
 							cloudinaryTransforms={config?.cloudinary?.transforms}
@@ -288,8 +288,8 @@ export function SocialCard(props: SocialCardType) {
 						{props.card.title}
 					</a>
 				</div>
-				<div className="cardBody" dangerouslySetInnerHTML={{ __html: removeDeadHrefs(props.card.description) }} />
-				<div className="cardDate">{props.card.pubDate}</div>
+				<div className="card-body" dangerouslySetInnerHTML={{ __html: removeDeadHrefs(props.card.description) }} />
+				<div className="card-date">{props.card.pubDate}</div>
 			</div>
 		</div>
 	);
@@ -304,7 +304,7 @@ SocialCardsLoading.propTypes = { /** no props */ };
 export type SocialCardsLoadingType = InferProps<typeof SocialCardsLoading.propTypes>;    
 export function SocialCardsLoading() {
 	return (
-		<div className="cardsLoading">
+		<div className="cards-loading">
 			<div>Loading...</div>
 		</div>
 	);

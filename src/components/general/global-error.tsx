@@ -38,7 +38,7 @@ export function GlobalErrorUI({ error = null, reset, siteInfo, className = '' } 
 				<p className="ge-lead">We encountered an unexpected error. Please try again or contact the site maintainer.</p>
 
 				<div className="ge-actions">
-					<button onClick={() => reset?.()} className="ge-btn ge-btn--primary">Try again</button>
+					<button onClick={() => reset?.()} className="ge-btn ge-btn-primary">Try again</button>
 
 					{contactHref ? (
 						<a href={contactHref} rel="noopener noreferrer" className="ge-link">Contact support</a>

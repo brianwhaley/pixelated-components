@@ -11,12 +11,12 @@ describe('Skeleton', () => {
 
   it('renders avatar variant', () => {
     const { container } = render(<Skeleton variant="avatar" />);
-    expect(container.querySelector('.skeleton--avatar')).toBeInTheDocument();
+    expect(container.querySelector('.skeleton-avatar')).toBeInTheDocument();
   });
 
   it('renders rect variant with provided height', () => {
     const { container } = render(<Skeleton variant="rect" height={200} />);
-    const el = container.querySelector('.skeleton--rect') as HTMLElement | null;
+    const el = container.querySelector('.skeleton-rect') as HTMLElement | null;
     expect(el).toBeInTheDocument();
     expect(el?.style.height).toBe('200px');
   });

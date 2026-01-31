@@ -29,7 +29,7 @@ export function BuzzwordBingo(props: BuzzwordBingoType){
 		setBingoWords(getBingoWords(buzzwords, 24));
 	}, [buzzwords]);
 	return (
-		<div className="bingoCard rowfix-5col">
+		<div className="bingo-card rowfix-5col">
 			{ myBingoHeaders.map((word) => (
 				<BingoHeader word={word} key={word} />
 			))}
@@ -54,13 +54,13 @@ BingoHeader.propTypes = {
 export type BingoHeaderType = InferProps<typeof BingoHeader.propTypes>;
 function BingoHeader({ word }: BingoHeaderType) {
 	return (
-		<div className="bingoHeader gridItem">
-			<div className="bingoBoxText">
+		<div className="bingo-header grid-item">
+			<div className="bingo-box-text">
 				{word}
 			</div>
 		</div>
 	);
-}
+} 
 
 
 /**
@@ -75,8 +75,8 @@ BingoBox.propTypes = {
 export type BingoBoxType = InferProps<typeof BingoBox.propTypes>;
 function BingoBox({ word }: BingoBoxType) {
 	return (
-		<div className="bingoBox gridItem">
-			<div className={(word == "FREE SPACE") ? "bingoBoxFreeSpace" : "bingoBoxText" }>
+		<div className="bingo-box grid-item">
+			<div className={(word == "FREE SPACE") ? "bingo-box-free-space bingo-box-free-space bingoBoxFreeSpace" : "bingo-box-text bingo-box-text bingoBoxText" }>
 				{word}
 			</div>
 		</div>

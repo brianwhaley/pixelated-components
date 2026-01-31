@@ -407,7 +407,7 @@ export function BackToTop() {
 	}
 	const config = usePixelatedConfig();
 	return (
-		<div className="backToTop">
+		<div className="back-to-top">
 			<a href="#top" onClick={scrollToTop}>
 				<div>
 					<SmartImage src="/images/icons/up.jpg" title="Back To Top" alt="Back To Top"

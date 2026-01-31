@@ -4,7 +4,7 @@
 =====    MENU EXPANDO COMPONENT       =====
 ======================================== */
 
-.menuExpando {
+.menu-expando {
 	display: inline-block;
 }
 
@@ -72,7 +72,7 @@ details.menu-expando-wrapper a:hover {
 }
 
 /* ========== NESTED MENU STYLING ========== */
-details.menuExpandoNested {
+details.menu-expando-nested {
 	display: block;
 }
 
@@ -118,7 +118,7 @@ details.menuExpandoNested li {
 }
 
 /* ========== ANIMATIONS ========== */
-@keyframes menuExpandoSlideDown {
+@keyframes menu-expando-slide-down {
 	from {
 		opacity: 0;
 	}
@@ -127,7 +127,7 @@ details.menuExpandoNested li {
 	}
 }
 
-@keyframes menuExpandoSlideUp {
+@keyframes menu-expando-slide-up {
 	from {
 		opacity: 1;
 	}
