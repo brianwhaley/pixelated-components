@@ -311,9 +311,10 @@ const noTempDependencyRule = {
 	},
 	create(context) {
 		let ran = false;
+
 		function cmpParts(a, b) {
-			const A = a.split('.').map(n => parseInt(n,10) || 0);
-			const B = b.split('.').map(n => parseInt(n,10) || 0);
+			const A = (a || '').split('.').map(n => parseInt(n,10) || 0);
+			const B = (b || '').split('.').map(n => parseInt(n,10) || 0);
 			for (let i=0;i<3;i++) {
 				if ((A[i]||0) < (B[i]||0)) return -1;
 				if ((A[i]||0) > (B[i]||0)) return 1;
@@ -321,44 +322,104 @@ const noTempDependencyRule = {
 			return 0;
 		}
 
+		function normalizeVersion(v) {
+			if (!v || typeof v !== 'string') return '';
+			return v.trim().replace(/^[^0-9]*/, '').replace(/\s+.*$/, '');
+		}
+
 		function satisfiesRange(version, rangeSpec) {
 			if (!rangeSpec || typeof rangeSpec !== 'string') return false;
 			rangeSpec = rangeSpec.trim();
+			const ver = normalizeVersion(version);
 			// simple operators: <=, <, >=, >, =, exact
 			if (rangeSpec.startsWith('<=')) {
 				const v = rangeSpec.slice(2).trim();
-				return cmpParts(version,v) <= 0;
+				return cmpParts(ver,v) <= 0;
 			}
 			if (rangeSpec.startsWith('<')) {
 				const v = rangeSpec.slice(1).trim();
-				return cmpParts(version,v) < 0;
+				return cmpParts(ver,v) < 0;
 			}
 			if (rangeSpec.startsWith('>=')) {
 				const v = rangeSpec.slice(2).trim();
-				return cmpParts(version,v) >= 0;
+				return cmpParts(ver,v) >= 0;
 			}
 			if (rangeSpec.startsWith('>')) {
 				const v = rangeSpec.slice(1).trim();
-				return cmpParts(version,v) > 0;
+				return cmpParts(ver,v) > 0;
 			}
 			if (rangeSpec.startsWith('^')) {
 				const v = rangeSpec.slice(1).trim();
 				const [maj, min] = v.split('.').map(n=>parseInt(n,10)||0);
 				if (maj > 0) {
-					return cmpParts(version, v) >= 0 && cmpParts(version, (maj+1)+'.0.0') < 0;
+					return cmpParts(ver, v) >= 0 && cmpParts(ver, (maj+1)+'.0.0') < 0;
 				}
 				if (maj === 0 && min > 0) {
-					return cmpParts(version, v) >= 0 && cmpParts(version, '0.'+(min+1)+'.0') < 0;
+					return cmpParts(ver, v) >= 0 && cmpParts(ver, '0.'+(min+1)+'.0') < 0;
 				}
-				return cmpParts(version, v) >= 0 && cmpParts(version, '0.0.'+((parseInt(v.split('.')[2]||'0',10)||0)+1)) < 0;
+				return cmpParts(ver, v) >= 0 && cmpParts(ver, '0.0.'+((parseInt(v.split('.')[2]||'0',10)||0)+1)) < 0;
 			}
 			if (rangeSpec.startsWith('~')) {
 				const v = rangeSpec.slice(1).trim();
 				const [maj, min] = v.split('.').map(n=>parseInt(n,10)||0);
-				return cmpParts(version, v) >= 0 && cmpParts(version, maj + '.' + (min+1) + '.0') < 0;
+				return cmpParts(ver, v) >= 0 && cmpParts(ver, maj + '.' + (min+1) + '.0') < 0;
 			}
 			// exact equality
-			return cmpParts(version, rangeSpec) === 0 || rangeSpec === '=' + version;
+			return cmpParts(ver, normalizeVersion(rangeSpec)) === 0 || rangeSpec === '=' + ver;
+		}
+
+		function overrideCoversTarget(overrides, targetName) {
+			if (!overrides || typeof overrides !== 'object') return false;
+			if (Object.prototype.hasOwnProperty.call(overrides, targetName)) return true;
+			for (const [k,v] of Object.entries(overrides)) {
+				if (k === targetName) return true;
+				if (v && typeof v === 'object' && Object.prototype.hasOwnProperty.call(v, targetName)) return true;
+			}
+			return false;
+		}
+
+		function collectVersions(lock, pkgName) {
+			const versions = [];
+			try {
+				// New lockfile format (package-lock v3) exposes package paths under lock.packages
+				if (lock && lock.packages && typeof lock.packages === 'object') {
+					for (const [pkgPath, pkgObj] of Object.entries(lock.packages)) {
+						if (!pkgObj || !pkgObj.version) continue;
+						if (!pkgPath || pkgPath === '') continue; // skip root
+						if (!pkgPath.startsWith('node_modules/')) continue;
+						// Handle nested package paths like 'node_modules/@aws-sdk/xml-builder/node_modules/fast-xml-parser'
+						const segments = pkgPath.split('node_modules/').slice(1);
+						for (const seg of segments) {
+							let candidate;
+							if (seg.startsWith('@')) {
+								const p = seg.split('/'); candidate = p.slice(0,2).join('/');
+							} else {
+								candidate = seg.split('/')[0];
+							}
+							if (candidate === pkgName) {
+								versions.push(pkgObj.version);
+								break;
+							}
+						}
+					}
+				}
+
+				// Also search nested dependency trees if present (older lockfile layout)
+				function walk(deps) {
+					if (!deps) return;
+					for (const [k,v] of Object.entries(deps)) {
+						if (k === pkgName) {
+							if (v && typeof v === 'string') versions.push(v);
+							else if (v && v.version) versions.push(v.version);
+						}
+						if (v && v.dependencies) walk(v.dependencies);
+					}
+				}
+				if (lock && lock.dependencies) walk(lock.dependencies);
+			} catch (e) {
+				// defensive
+			}
+			return versions;
 		}
 
 		return {
@@ -369,22 +430,112 @@ const noTempDependencyRule = {
 				if (!fs.existsSync(lockPath)) return; // lockfile-only check
 				let lock;
 				try { lock = JSON.parse(fs.readFileSync(lockPath, 'utf8')); } catch (e) { return; }
-				const found = [];
-				function walk(deps) {
-					if (!deps) return;
-					for (const [k,v] of Object.entries(deps)) {
-						if (v && v.version) found.push({ name: k, version: v.version });
-						if (v && v.dependencies) walk(v.dependencies);
-					}
-				}
-				walk(lock.dependencies);
 
 				const rules = context.options[0] || [{ name: 'fast-xml-parser', vulnerableRange: '<=5.3.3', note: 'temporary security pin' }];
 				for (const r of rules) {
-					const hits = found.filter(f => f.name === r.name && satisfiesRange(f.version, r.vulnerableRange));
-					if (hits.length > 0) {
-						const h = hits[0];
-						context.report({ node, messageId: 'tempDepPresent', data: { name: r.name, version: h.version, range: r.vulnerableRange } });
+					// Check all installed copies (including nested) for vulnerable versions
+					const versions = collectVersions(lock, r.name);
+					const vulnerable = versions.some(v => satisfiesRange(v, r.vulnerableRange));
+					if (vulnerable) {
+						context.report({ node, messageId: 'tempDepPresent', data: { name: r.name, version: versions[0], range: r.vulnerableRange } });
+						continue;
+					}
+
+					// No vulnerable hits — do not report on overrides here; stale override checks are handled by `no-stale-override` rule.
+					// This rule only reports actual vulnerable installed copies.
+					// nothing to report here
+				}
+			}
+		};
+	}
+};
+
+/* ===== RULE: no-stale-override ===== */
+const noStaleOverrideRule = {
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Detect overrides that are now unnecessary because the target library already requires an equal-or-higher version.',
+			category: 'Security',
+			recommended: true
+		},
+		fixable: false,
+		messages: {
+			staleOverride: 'Override for "{{library}}" -> "{{dep}}" is stale: library declares "{{libConstraint}}" which satisfies or exceeds override "{{override}}". Remove the override.'
+		},
+		schema: [],
+	},
+	create(context) {
+		let ran = false;
+
+		function cmpParts(a, b) {
+			const A = (a || '').split('.').map(n => parseInt(n,10) || 0);
+			const B = (b || '').split('.').map(n => parseInt(n,10) || 0);
+			for (let i=0;i<3;i++) {
+				if ((A[i]||0) < (B[i]||0)) return -1;
+				if ((A[i]||0) > (B[i]||0)) return 1;
+			}
+			return 0;
+		}
+
+		function normalizeVersion(v) {
+			if (!v || typeof v !== 'string') return '';
+			return v.trim().replace(/^[^0-9]*/, '').replace(/\s+.*$/, '');
+		}
+
+		function parseBaseVersion(range) {
+			if (!range || typeof range !== 'string') return '';
+			const s = range.trim();
+			if (s.startsWith('^') || s.startsWith('~') || s.startsWith('>=') || s.startsWith('<=') || s.startsWith('>') || s.startsWith('<') || s.startsWith('=')) {
+				return normalizeVersion(s.replace(/^[^0-9]*/, ''));
+			}
+			return normalizeVersion(s);
+		}
+
+		function findLibraryEntry(lock, library) {
+			try {
+				if (!lock || !lock.packages) return null;
+				for (const [pkgPath, pkgObj] of Object.entries(lock.packages)) {
+					if (!pkgPath || !pkgPath.startsWith('node_modules/')) continue;
+					const after = pkgPath.split('node_modules/').pop();
+					let candidate;
+					if (after.startsWith('@')) {
+						const p = after.split('/'); candidate = p.slice(0,2).join('/');
+					} else {
+						candidate = after.split('/')[0];
+					}
+					if (candidate === library) return pkgObj;
+				}
+			} catch (e) { /* defensive */ }
+			return null;
+		}
+
+		return {
+			Program(node) {
+				if (ran) return; ran = true;
+				const projectRoot = process.cwd();
+				const lockPath = path.join(projectRoot, 'package-lock.json');
+				const pkgPath = path.join(projectRoot, 'package.json');
+				if (!fs.existsSync(lockPath) || !fs.existsSync(pkgPath)) return;
+				let lock, pkg;
+				try { lock = JSON.parse(fs.readFileSync(lockPath, 'utf8')); pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8')); } catch (e) { return; }
+
+				const overrides = pkg.overrides || pkg.resolutions || (pkg['pnpm'] && pkg['pnpm'].overrides) || {};
+				for (const [k,v] of Object.entries(overrides)) {
+					// only consider nested mapping overrides: library -> { dep: version }
+					if (v && typeof v === 'object') {
+						const library = k;
+						for (const [dep, overrideSpec] of Object.entries(v)) {
+							const libEntry = findLibraryEntry(lock, library);
+							if (!libEntry) continue;
+							const libDep = (libEntry.dependencies && libEntry.dependencies[dep]) || (libEntry.requires && libEntry.requires[dep]);
+							if (!libDep) continue;
+							const libBase = normalizeVersion(libDep);
+							const overrideBase = parseBaseVersion(overrideSpec);
+							if (libBase && overrideBase && cmpParts(libBase, overrideBase) >= 0) {
+								context.report({ node, messageId: 'staleOverride', data: { library, dep, libConstraint: libDep, override: overrideSpec } });
+							}
+						}
 					}
 				}
 			}
@@ -1014,6 +1165,7 @@ export default {
 		'no-debug-true': noDebugTrueRule,
 		'required-proptypes-jsdoc': propTypesJsdocRule,
 		'no-temp-dependency': noTempDependencyRule,
+		'no-stale-override': noStaleOverrideRule,
 		'file-name-kebab-case': fileNameKebabCaseRule,
 		'no-duplicate-export-names': noDuplicateExportNamesRule,
 		'class-name-kebab-case': classNameKebabCaseRule,
@@ -1024,6 +1176,7 @@ export default {
 				'pixelated/prop-types-inferprops': 'error',
 				'pixelated/required-schemas': 'warn',
 				'pixelated/no-temp-dependency': 'error',
+				'pixelated/no-stale-override': 'error',
 				'pixelated/required-files': 'warn',
 				'pixelated/no-raw-img': 'warn',
 				'pixelated/require-section-ids': 'error',

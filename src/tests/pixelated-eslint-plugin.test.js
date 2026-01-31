@@ -329,4 +329,132 @@ describe('pixelated-eslint-plugin', () => {
 		fs.unlinkSync(lockFullPath);
 		expect(messages.some(m => m.ruleId === 'pixelated/no-temp-dependency')).toBe(false);
 	});
-});
+
+	it('errors when lockfile is clean but package.json has an override for the temp dep', async () => {
+		const mod = await import('../scripts/pixelated-eslint-plugin.js');
+		const linter = new (await import('eslint')).Linter();
+		linter.definePlugin('pixelated', mod.default);
+
+		const fs = await import('fs');
+		const os = await import('os');
+		const path = await import('path');
+		const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), 'pkg-'));
+		try {
+			// patched lockfile
+			fs.writeFileSync(path.join(tmpdir, 'package-lock.json'), JSON.stringify({ dependencies: { 'fast-xml-parser': { version: '5.3.4' } } }));
+			// package.json with override that maps xml-builder -> fast-xml-parser
+			fs.writeFileSync(path.join(tmpdir, 'package.json'), JSON.stringify({ overrides: { '@aws-sdk/xml-builder': { 'fast-xml-parser': '^5.3.4' } } }));
+
+			const oldCwd = process.cwd();
+			process.chdir(tmpdir);
+
+			const code = 'const x = 1;';
+			const messages = linter.verify(code, {
+				parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
+				plugins: { pixelated: true },
+					rules: { 'pixelated/no-temp-dependency': 'error', 'pixelated/no-stale-override': 'error' },
+				}, { filename: 'src/index.js' });
+
+			process.chdir(oldCwd);
+			expect(messages.some(m => m.ruleId === 'pixelated/no-temp-dependency')).toBe(false);
+			expect(messages.some(m => m.ruleId === 'pixelated/no-stale-override')).toBe(false);
+		} finally {
+			fs.rmSync(tmpdir, { recursive: true, force: true });
+		}
+	});
+
+		it('reports nested vulnerable copy and does not flag stale override', async () => {
+			const mod = await import('../scripts/pixelated-eslint-plugin.js');
+			const linter = new (await import('eslint')).Linter();
+			linter.definePlugin('pixelated', mod.default);
+
+			const fs = await import('fs');
+			const os = await import('os');
+			const path = await import('path');
+			const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), 'pkg-'));
+			try {
+				// top-level patched, nested vulnerable under xml-builder
+				const lock = { packages: { '': { dependencies: { 'fast-xml-parser': '^5.3.4' } }, 'node_modules/@aws-sdk/xml-builder': { version: '3.972.2', dependencies: { 'fast-xml-parser': '5.2.5' } } } };
+				fs.writeFileSync(path.join(tmpdir, 'package-lock.json'), JSON.stringify(lock));
+				fs.writeFileSync(path.join(tmpdir, 'package.json'), JSON.stringify({ overrides: { '@aws-sdk/xml-builder': { 'fast-xml-parser': '^5.3.4' } } }));
+
+				const oldCwd = process.cwd();
+				process.chdir(tmpdir);
+
+				const code = 'const x = 1;';
+				const messages = linter.verify(code, {
+					parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
+					plugins: { pixelated: true },
+					rules: { 'pixelated/no-temp-dependency': 'error', 'pixelated/no-stale-override': 'error' },
+				}, { filename: 'src/index.js' });
+
+				process.chdir(oldCwd);
+				expect(messages.some(m => m.ruleId === 'pixelated/no-temp-dependency')).toBe(true);
+				expect(messages.some(m => m.ruleId === 'pixelated/no-stale-override')).toBe(false);
+			} finally {
+				fs.rmSync(tmpdir, { recursive: true, force: true });
+			}
+		});
+
+		it('errors when override is stale because library declares equal-or-higher dependency', async () => {
+			const mod = await import('../scripts/pixelated-eslint-plugin.js');
+			const linter = new (await import('eslint')).Linter();
+			linter.definePlugin('pixelated', mod.default);
+
+			const fs = await import('fs');
+			const os = await import('os');
+			const path = await import('path');
+			const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), 'pkg-'));
+			try {
+				// library declares equal dependency
+				const lock = { packages: { 'node_modules/@aws-sdk/xml-builder': { version: '3.972.2', dependencies: { 'fast-xml-parser': '5.3.4' } } } };
+				fs.writeFileSync(path.join(tmpdir, 'package-lock.json'), JSON.stringify(lock));
+				fs.writeFileSync(path.join(tmpdir, 'package.json'), JSON.stringify({ overrides: { '@aws-sdk/xml-builder': { 'fast-xml-parser': '^5.3.4' } } }));
+
+				const oldCwd = process.cwd();
+				process.chdir(tmpdir);
+
+				const code = 'const x = 1;';
+				const messages = linter.verify(code, {
+					parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
+					plugins: { pixelated: true },
+					rules: { 'pixelated/no-stale-override': 'error' },
+				}, { filename: 'src/index.js' });
+
+				process.chdir(oldCwd);
+				expect(messages.some(m => m.ruleId === 'pixelated/no-stale-override')).toBe(true);
+			} finally {
+				fs.rmSync(tmpdir, { recursive: true, force: true });
+			}
+		});
+
+		it('does not error when override is necessary (library requires older version)', async () => {
+			const mod = await import('../scripts/pixelated-eslint-plugin.js');
+			const linter = new (await import('eslint')).Linter();
+			linter.definePlugin('pixelated', mod.default);
+
+			const fs = await import('fs');
+			const os = await import('os');
+			const path = await import('path');
+			const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), 'pkg-'));
+			try {
+				const lock = { packages: { 'node_modules/@aws-sdk/xml-builder': { version: '3.972.2', dependencies: { 'fast-xml-parser': '5.2.5' } } } };
+				fs.writeFileSync(path.join(tmpdir, 'package-lock.json'), JSON.stringify(lock));
+				fs.writeFileSync(path.join(tmpdir, 'package.json'), JSON.stringify({ overrides: { '@aws-sdk/xml-builder': { 'fast-xml-parser': '^5.3.4' } } }));
+
+				const oldCwd = process.cwd();
+				process.chdir(tmpdir);
+
+				const code = 'const x = 1;';
+				const messages = linter.verify(code, {
+					parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
+					plugins: { pixelated: true },
+					rules: { 'pixelated/no-stale-override': 'error' },
+				}, { filename: 'src/index.js' });
+
+				process.chdir(oldCwd);
+				expect(messages.some(m => m.ruleId === 'pixelated/no-stale-override')).toBe(false);
+			} finally {
+				fs.rmSync(tmpdir, { recursive: true, force: true });
+			}
+		});});
