@@ -69,6 +69,7 @@ Exception (allowed env usage — single, narrowly-scoped):
 Enforcement & best practices:
 - Wrap any dev-only env reads in clear helpers and document them in `/docs`.
 - Add a CI check that reports any new references to `process.env` in `src/components` (denylist) unless explicitly approved.
+- Temporary security dependencies (e.g., `fast-xml-parser`) are flagged by the ESLint rule `pixelated/no-temp-dependency` (severity: **error**). This rule inspects the project's `package-lock.json` and errors the build when a configured temporary dependency remains; remove the dependency and update the rule options when the transient issue is resolved.
 - Example (preferred):
 ```ts
 // server-side: canonical config loader

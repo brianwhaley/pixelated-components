@@ -283,5 +283,50 @@ describe('pixelated-eslint-plugin', () => {
 			expect(plugin.configs).toBeDefined();
 			expect(plugin.configs.recommended).toBeDefined();
 			expect(plugin.configs.recommended.rules[`pixelated/${r}`]).toBeDefined();
-		});			expect(plugin.configs.recommended.rules['pixelated/required-proptypes-jsdoc']).toBe('error');	});
+		});
+			expect(plugin.configs.recommended.rules['pixelated/required-proptypes-jsdoc']).toBe('error');
+			expect(plugin.configs.recommended.rules['pixelated/no-temp-dependency']).toBe('error');
+		});
+
+	it('errors when package-lock contains vulnerable temp dep', async () => {
+		const mod = await import('../scripts/pixelated-eslint-plugin.js');
+		const linter = new (await import('eslint')).Linter();
+		linter.definePlugin('pixelated', mod.default);
+
+		const fs = await import('fs');
+		const lockPath = new URL('../../package-lock.test.json', import.meta.url);
+		const lockFullPath = lockPath.pathname;
+		fs.writeFileSync(lockFullPath, JSON.stringify({ dependencies: { 'fast-xml-parser': { version: '5.2.5' } } }));
+
+		const code = 'const x = 1;';
+		const messages = linter.verify(code, {
+			parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
+			plugins: { pixelated: true },
+			rules: { 'pixelated/no-temp-dependency': 'error' },
+		}, { filename: 'src/index.js' });
+
+		fs.unlinkSync(lockFullPath);
+		expect(messages.some(m => m.ruleId === 'pixelated/no-temp-dependency')).toBe(true);
+	});
+
+	it('does not error when package-lock contains patched dep', async () => {
+		const mod = await import('../scripts/pixelated-eslint-plugin.js');
+		const linter = new (await import('eslint')).Linter();
+		linter.definePlugin('pixelated', mod.default);
+
+		const fs = await import('fs');
+		const lockPath = new URL('../../package-lock.test.json', import.meta.url);
+		const lockFullPath = lockPath.pathname;
+		fs.writeFileSync(lockFullPath, JSON.stringify({ dependencies: { 'fast-xml-parser': { version: '5.3.4' } } }));
+
+		const code = 'const x = 1;';
+		const messages = linter.verify(code, {
+			parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
+			plugins: { pixelated: true },
+			rules: { 'pixelated/no-temp-dependency': 'error' },
+		}, { filename: 'src/index.js' });
+
+		fs.unlinkSync(lockFullPath);
+		expect(messages.some(m => m.ruleId === 'pixelated/no-temp-dependency')).toBe(false);
+	});
 });

@@ -294,6 +294,104 @@ const requiredSchemasRule = {
 	},
 };
 
+/* ===== RULE: no-temp-dependency ===== */
+const noTempDependencyRule = {
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Disallow temporary security dependencies listed in the rule options (lockfile-only check).',
+			category: 'Security',
+			recommended: true
+		},
+		fixable: false,
+		messages: {
+			tempDepPresent: 'Temporary dependency "{{name}}" detected at version {{version}} (vulnerable: {{range}}). Remove once upstream packages are fixed.'
+		},
+		schema: [{ type: 'array', items: { type: 'object' } }]
+	},
+	create(context) {
+		let ran = false;
+		function cmpParts(a, b) {
+			const A = a.split('.').map(n => parseInt(n,10) || 0);
+			const B = b.split('.').map(n => parseInt(n,10) || 0);
+			for (let i=0;i<3;i++) {
+				if ((A[i]||0) < (B[i]||0)) return -1;
+				if ((A[i]||0) > (B[i]||0)) return 1;
+			}
+			return 0;
+		}
+
+		function satisfiesRange(version, rangeSpec) {
+			if (!rangeSpec || typeof rangeSpec !== 'string') return false;
+			rangeSpec = rangeSpec.trim();
+			// simple operators: <=, <, >=, >, =, exact
+			if (rangeSpec.startsWith('<=')) {
+				const v = rangeSpec.slice(2).trim();
+				return cmpParts(version,v) <= 0;
+			}
+			if (rangeSpec.startsWith('<')) {
+				const v = rangeSpec.slice(1).trim();
+				return cmpParts(version,v) < 0;
+			}
+			if (rangeSpec.startsWith('>=')) {
+				const v = rangeSpec.slice(2).trim();
+				return cmpParts(version,v) >= 0;
+			}
+			if (rangeSpec.startsWith('>')) {
+				const v = rangeSpec.slice(1).trim();
+				return cmpParts(version,v) > 0;
+			}
+			if (rangeSpec.startsWith('^')) {
+				const v = rangeSpec.slice(1).trim();
+				const [maj, min] = v.split('.').map(n=>parseInt(n,10)||0);
+				if (maj > 0) {
+					return cmpParts(version, v) >= 0 && cmpParts(version, (maj+1)+'.0.0') < 0;
+				}
+				if (maj === 0 && min > 0) {
+					return cmpParts(version, v) >= 0 && cmpParts(version, '0.'+(min+1)+'.0') < 0;
+				}
+				return cmpParts(version, v) >= 0 && cmpParts(version, '0.0.'+((parseInt(v.split('.')[2]||'0',10)||0)+1)) < 0;
+			}
+			if (rangeSpec.startsWith('~')) {
+				const v = rangeSpec.slice(1).trim();
+				const [maj, min] = v.split('.').map(n=>parseInt(n,10)||0);
+				return cmpParts(version, v) >= 0 && cmpParts(version, maj + '.' + (min+1) + '.0') < 0;
+			}
+			// exact equality
+			return cmpParts(version, rangeSpec) === 0 || rangeSpec === '=' + version;
+		}
+
+		return {
+			Program(node) {
+				if (ran) return; ran = true;
+				const projectRoot = process.cwd();
+				const lockPath = path.join(projectRoot, 'package-lock.json');
+				if (!fs.existsSync(lockPath)) return; // lockfile-only check
+				let lock;
+				try { lock = JSON.parse(fs.readFileSync(lockPath, 'utf8')); } catch (e) { return; }
+				const found = [];
+				function walk(deps) {
+					if (!deps) return;
+					for (const [k,v] of Object.entries(deps)) {
+						if (v && v.version) found.push({ name: k, version: v.version });
+						if (v && v.dependencies) walk(v.dependencies);
+					}
+				}
+				walk(lock.dependencies);
+
+				const rules = context.options[0] || [{ name: 'fast-xml-parser', vulnerableRange: '<=5.3.3', note: 'temporary security pin' }];
+				for (const r of rules) {
+					const hits = found.filter(f => f.name === r.name && satisfiesRange(f.version, r.vulnerableRange));
+					if (hits.length > 0) {
+						const h = hits[0];
+						context.report({ node, messageId: 'tempDepPresent', data: { name: r.name, version: h.version, range: r.vulnerableRange } });
+					}
+				}
+			}
+		};
+	}
+};
+
 /* ===== RULE: prop-types-jsdoc ===== */
 const propTypesJsdocRule = {
 	meta: {
@@ -915,6 +1013,7 @@ export default {
 		'no-process-env': noProcessEnvRule,
 		'no-debug-true': noDebugTrueRule,
 		'required-proptypes-jsdoc': propTypesJsdocRule,
+		'no-temp-dependency': noTempDependencyRule,
 		'file-name-kebab-case': fileNameKebabCaseRule,
 		'no-duplicate-export-names': noDuplicateExportNamesRule,
 		'class-name-kebab-case': classNameKebabCaseRule,
@@ -924,6 +1023,7 @@ export default {
 			rules: {
 				'pixelated/prop-types-inferprops': 'error',
 				'pixelated/required-schemas': 'warn',
+				'pixelated/no-temp-dependency': 'error',
 				'pixelated/required-files': 'warn',
 				'pixelated/no-raw-img': 'warn',
 				'pixelated/require-section-ids': 'error',

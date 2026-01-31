@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.13.1",
+	"version": "3.13.2",
 	"private": false,
 	"author": {
 		"name": "Pixelated Technologies",
@@ -106,7 +106,8 @@
 	"dependencies": {
 		"date-fns": "^4.1.0",
 		"globals": "^17.2.0",
-		"html-entities": "^2.6.0"
+		"html-entities": "^2.6.0",
+		"fast-xml-parser": "^5.3.4"
 	},
 	"devDependencies": {
 		"@aws-sdk/client-amplify": "^3.980.0",
