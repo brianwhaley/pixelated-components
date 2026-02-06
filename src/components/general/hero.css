@@ -1,4 +1,20 @@
 
+/* main:has(.hero.anchored-img) > :not(.hero),
+section:has(.hero.anchored-img),
+header:has(.hero.anchored-img),
+footer:has(.hero.anchored-img),
+nav:has(.hero.anchored-img) {
+	background-color: white;
+} */
+
+body:has(.hero.anchored-div),
+body:has(.hero.anchored-img) {
+	main > :not(.hero),
+	header, section, nav, footer {
+		background-color: white;
+	}
+}
+
 .hero { 
 	width: 100%;
 	height: 60vh;
@@ -8,6 +24,9 @@
 	align-items: center;
 	margin-bottom: 30px; 
 	overflow: hidden;
+}
+
+.hero.static {
 	/* Background image styles */
 	background-position: center;
 	background-repeat: no-repeat;
@@ -15,6 +34,49 @@
 }
 
 .hero.anchored {
+	/* Background image styles */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
 	/* Create the parallax scrolling effect */
 	background-attachment: fixed;
+}
+
+.hero.anchored-div {
+
+	.hero-div-bg-img {
+		/* Create the parallax scrolling effect */
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: -1;
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		/* Critical for iOS to avoid zooming/jumping */
+		will-change: transform; 
+	}
+
+
+}
+
+.hero.anchored-img {
+	position: relative; /* Context for the fixed pseudo-element */
+
+	img {
+		position: fixed; /* Fixes image to viewport */
+		top: 0;
+		left: 0;
+		z-index: -1; /* Places image behind content */
+		min-width: 100vw;
+		min-height: 100vh;
+		object-fit: cover; /* Ensures image covers area */
+	}
+
+	.hero2.anchored img.hidden {
+		display: none; /* Hides image when not in view */
+	}
+	
 }

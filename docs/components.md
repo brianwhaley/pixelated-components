@@ -48,6 +48,7 @@ For a complete working example of Pixelated Components in action, check out the 
 - [Menu](#menu)
 - [Tables](#tables)
 - [Tiles](#tiles)
+- [ProjectTiles](#projecttiles)
 
 ### PageBuilder Components
 - [ComponentPropertiesForm](#componentpropertiesform)
@@ -89,6 +90,38 @@ For a complete working example of Pixelated Components in action, check out the 
 ## 📖 Usage Examples
 
 ### Basic Component Usage
+
+---
+
+## ProjectTiles
+
+`ProjectTiles` renders a titled project section and delegates rendering of the image grid to the `Tiles` component. It is a small utility component suitable for project/gallery sections on a website.
+
+#### Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | - | Section heading (required) |
+| `description` | `string` | - | Short descriptive text (required) |
+| `tileCards` | `Array<{index:number,cardIndex:number,cardLength:number,image:string,imageAlt:string}>` | - | Array of tile objects passed directly to `Tiles` (required) |
+| `onImageClick` | `(event: MouseEvent, url: string) => void` | - | Optional image click handler forwarded to `Tiles` |
+
+#### Usage
+
+```tsx
+import { ProjectTiles } from '@pixelated-tech/components';
+
+const cards = [
+  { index: 0, cardIndex: 0, cardLength: 3, image: '/img/one.jpg', imageAlt: 'One' },
+  { index: 1, cardIndex: 1, cardLength: 3, image: '/img/two.jpg', imageAlt: 'Two' },
+  { index: 2, cardIndex: 2, cardLength: 3, image: '/img/three.jpg', imageAlt: 'Three' },
+];
+
+<ProjectTiles title="Recent Projects" description="A selection of our latest work" tileCards={cards} />
+```
+
+---
+
 
 ```tsx
 import { Accordion, Callout, SmartImage } from '@pixelated-tech/components';

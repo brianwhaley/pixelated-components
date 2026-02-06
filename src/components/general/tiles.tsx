@@ -22,7 +22,16 @@ export type TilesVariantType = typeof TilesVariants[number] | undefined;
  */
 Tiles.propTypes = {
 /** Array of card objects used to populate the tile grid (image, link, imageAlt, bodyText). */
-	cards: PropTypes.array.isRequired,
+	cards: PropTypes.arrayOf(PropTypes.shape({
+		index: PropTypes.number,
+		cardLength: PropTypes.number,
+		link: PropTypes.string,
+		image: PropTypes.string.isRequired,
+		imageAlt: PropTypes.string,
+		bodyText: PropTypes.string,
+		imgClick: PropTypes.func,
+		variant: PropTypes.oneOf(TilesVariants),
+	})).isRequired,
 	/** Number of rows to display in the grid (controls layout). */
 	rowCount: PropTypes.number,
 	/** Optional click handler for tile images; called with (event, imageUrl). */
@@ -41,17 +50,18 @@ export function Tiles(props: TilesType) {
 		return (
 			<div className="tiles-container">
 				<div className={`tile-container row-${rowCount}col`}>
-					{ props.cards.map((card: CarouselCardType, i: number) => (
+					{ /*  card is not TileType due to index and cardLength not isRequired for Tiles  */ }
+					{ props.cards.map((card: any, i: number) => (
 						<div key={i} className="grid-item">
 							<Tile
-								index={i}
-								cardLength={props.cards.length}
+								index={card.index ?? i}
+								cardLength={card.cardLength ?? props.cards.length}
 								link={card.link}
 								image={card.image}
 								imageAlt={card.imageAlt}
 								bodyText={card.bodyText}
 								imgClick={props.imgClick}
-								variant={(props.variant ?? "overlay" )as TilesVariantType}
+								variant={(props.variant ?? "overlay" ) as TilesVariantType}
 							/>
 						</div>
 					))}
@@ -125,6 +135,42 @@ function Tile( props: TileType ) {
 				tileBody
 			}
 		</div>
+	);
+}
+
+
+
+/**
+ * ProjectTiles — Renders a titled section with description and a grid of project image tiles.
+ *
+ * @param {string} [props.title] - Title of the project section.
+ * @param {string} [props.description] - Description text for the project section.
+ * @param {array} [props.tileCards] - Array of tile card objects (index, cardIndex, cardLength, image, imageAlt).
+ * @param {function} [props.onImageClick] - Optional click handler for tile images (event, imageUrl).
+ */
+ProjectTiles.propTypes = {
+	title: PropTypes.string.isRequired,
+	description: PropTypes.string.isRequired,
+	tileCards: PropTypes.arrayOf(
+		PropTypes.shape({
+			index: PropTypes.number.isRequired,
+			cardIndex: PropTypes.number.isRequired,
+			cardLength: PropTypes.number.isRequired,
+			image: PropTypes.string.isRequired,
+			imageAlt: PropTypes.string.isRequired,
+		})
+	).isRequired,
+	onImageClick: PropTypes.func,
+};
+export type ProjectTilesType = InferProps<typeof ProjectTiles.propTypes>;
+export function ProjectTiles(props: ProjectTilesType) {
+	const { title, description, tileCards, onImageClick } = props;
+	return (
+		<>
+			<h3>{title}</h3>
+			<p>{description}</p>
+			<Tiles variant="caption" cards={tileCards} rowCount={3} imgClick={onImageClick} />
+		</>
 	);
 }
 
