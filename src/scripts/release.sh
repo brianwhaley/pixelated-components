@@ -162,19 +162,23 @@ fi
 
 
 echo ""
-echo "📦 Step $((STEP_COUNT++)): Updating dependencies..."
+echo "📦 Step $((STEP_COUNT++)): Updating dependencies (all sections)..."
 echo "================================================="
-# build list of packages we can actually update (use the "wanted" column \3 instead of latest \4  so we stay inside semver)
-UPDATES=$(npm outdated | awk 'NR>1 {print \$1"@"\$3}' || true)
-
-if [ -n "$UPDATES" ]; then
-    echo "Updating the following packages: $UPDATES"
-	# removed --force from npm install to avoid unnecessary breaking updates
-    echo "$UPDATES" | xargs npm install --save 2>/dev/null || true
-    echo "✅ Successfully updated: $UPDATES"
-else
-    echo "✅ No dependency updates needed."
-fi
+# iterate through prod/dev/optional sections, only bumping same-major versions
+for scope in "" dev optional; do
+    flag=$([ "$scope" ] && echo "--$scope" || echo "")
+    save=$([ "$scope" ] && echo "--save-$scope" || echo "--save")
+    pkgs=$(npm outdated $flag --parseable --long | awk -F: '{ split($2,c,"@"); split($4,l,"@"); split(c[2],cv,"\\."); split(l[2],lv,"\\."); if(cv[1]==lv[1]) print $4 }')
+    if [ -n "$pkgs" ]; then
+        echo "Updating $scope packages: $pkgs"
+        echo "$pkgs" | xargs npm install --force $save 2>/dev/null || true
+    else
+        echo "✅ No $scope updates needed"
+    fi
+done
+# report peer deps separately
+peers=$(npm outdated --parseable --long --peer | awk -F: '{print $4}')
+printf "peer deps (manual): %s\n" "$peers"
 
 
 

@@ -250,13 +250,13 @@ async function runAxeCoreAnalysis(url: string, runtime_env: 'auto' | 'local' | '
 			injectionSource = 'cdn';
 		} catch (err) {
 			let injected = false;
-			let lastError;
 			// Try common local node_modules locations relative to process.cwd() and __dirname
 			const possiblePaths = [
 				path.join(process.cwd(), 'node_modules', 'axe-core', 'axe.min.js'),
 				path.join(process.cwd(), '..', 'node_modules', 'axe-core', 'axe.min.js'),
 				path.join(__dirname, '..', '..', 'node_modules', 'axe-core', 'axe.min.js')
 			];
+			let lastError: unknown = null;
 			for (const p of possiblePaths) {
 				try {
 					if (fs.existsSync(p)) {
@@ -267,7 +267,8 @@ async function runAxeCoreAnalysis(url: string, runtime_env: 'auto' | 'local' | '
 						break;
 					}
 				} catch (e) {
-					// ignore local file read errors
+					// remember for diagnostics but otherwise ignore
+					lastError = e;
 				}
 			}
 
@@ -285,8 +286,15 @@ async function runAxeCoreAnalysis(url: string, runtime_env: 'auto' | 'local' | '
 			}
 
 			if (!injected) {
-				 
-				throw new Error('Could not load axe-core via CDN or local inline injection');
+				// include the original CDN error as the cause so eslint's
+				// ``preserve-caught-error`` rule is satisfied. append any
+				// local load failure info to the message for diagnostics.
+				const msg = 'Could not load axe-core via CDN or local inline injection';
+				const errorToThrow = new Error(msg, { cause: err });
+				if (lastError) {
+					errorToThrow.message += ` (local injection error: ${String(lastError)})`;
+				}
+				throw errorToThrow;
 			}
 		}
 

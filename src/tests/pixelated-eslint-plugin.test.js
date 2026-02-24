@@ -363,6 +363,39 @@ describe('pixelated-eslint-plugin', () => {
 		}
 	});
 
+		// new test: safe xml-builder version should not trigger the rule
+		it('ignores xml-builder 3.972.5 since parser is fixed', async () => {
+			const mod = await import('../scripts/pixelated-eslint-plugin.js');
+			const linter = new (await import('eslint')).Linter();
+			linter.definePlugin('pixelated', mod.default);
+
+			const fs = await import('fs');
+			const os = await import('os');
+			const path = await import('path');
+			const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), 'pkg-'));
+			try {
+				const lock = { packages: { 'node_modules/@aws-sdk/xml-builder': { version: '3.972.5', dependencies: { 'fast-xml-parser': '5.3.6' } } } };
+				fs.writeFileSync(path.join(tmpdir, 'package-lock.json'), JSON.stringify(lock));
+				fs.writeFileSync(path.join(tmpdir, 'package.json'), JSON.stringify({}));
+
+				const oldCwd = process.cwd();
+				process.chdir(tmpdir);
+
+				const code = 'const x = 1;';
+				const messages = linter.verify(code, {
+					parserOptions: { ecmaVersion: 2022, sourceType: 'module' },
+					plugins: { pixelated: true },
+					rules: { 'pixelated/no-temp-dependency': 'error', 'pixelated/no-stale-override': 'error' },
+				}, { filename: 'src/index.js' });
+
+				process.chdir(oldCwd);
+				expect(messages.some(m => m.ruleId === 'pixelated/no-temp-dependency')).toBe(false);
+				expect(messages.some(m => m.ruleId === 'pixelated/no-stale-override')).toBe(false);
+			} finally {
+				fs.rmSync(tmpdir, { recursive: true, force: true });
+			}
+		});
+
 		it('reports nested vulnerable copy and does not flag stale override', async () => {
 			const mod = await import('../scripts/pixelated-eslint-plugin.js');
 			const linter = new (await import('eslint')).Linter();
