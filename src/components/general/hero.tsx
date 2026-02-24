@@ -75,7 +75,10 @@ export function Hero({ img, imgAlt, imgId, variant = 'static', height = '60vh', 
 		return (
 			<>
 				<div className={"hero" + (variant ? " " + variant : '')} id={"hero-" + id?.toString()}>
-					<SmartImage src={img} alt={imgAlt || ''} id={id?.toString() || ''} quality={100} width="1000px" style={{height: height ?? '60vh'}} />
+					<SmartImage src={img} alt={imgAlt || ''} id={id?.toString() || ''} 
+						quality={100} width={4000} height={3000} /* unoptimized={true} */
+						fetchPriority="high" aboveFold={true}
+						style={{height: height ?? '60vh'}} />
 					{ children }
 				</div>
 			</>

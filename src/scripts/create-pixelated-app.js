@@ -255,7 +255,7 @@ export async function createAndPushRemote(destPath, siteName, defaultOwner) {
 	});`;
 	await fs.writeFile(tmpFile, tmpContent, 'utf8');
 
-	let execOut = null;
+	let execOut;
 	try {
 		execOut = await _exec(`npx tsx ${tmpFile}`, { cwd: destPath, timeout: 60_000 });
 	} catch (e) {
@@ -273,7 +273,7 @@ export async function createAndPushRemote(destPath, siteName, defaultOwner) {
 		throw new Error('Missing provider output');
 	}
 
-	let githubInfo = null;
+	let githubInfo;
 	try { githubInfo = JSON.parse(outStr); } catch (e) { console.error('❌ Invalid JSON from config provider:', outStr); throw e; }
 	const token = githubInfo?.token;
 	const cfgOwner = githubInfo?.defaultOwner;
@@ -373,7 +373,7 @@ export async function createAmplifyApp(rl, siteName, cloneUrl, sitePath) {
 	try {
 		createResp = await client.send(new CreateAppCommand({ name: siteName, platform: 'WEB_DYNAMIC', repository: cloneUrl || undefined, accessToken: githubToken || undefined }));
 	} catch (e) {
-		throw new Error('Failed to create Amplify app via SDK: ' + (e?.message || e));
+		throw new Error('Failed to create Amplify app via SDK: ' + (e?.message || e), { cause: e });
 	}
 
 	const appId = createResp?.app?.appId || createResp?.appId || createResp?.id;

@@ -44,9 +44,10 @@ export default [
 				// Disable rules that conflict with propTypes + InferProps pattern
 				'@typescript-eslint/no-unused-vars': 'off', // Allow unused props in function signatures and exported types
 				'react/prop-types': 'off', // We use our own propTypes system
+				'react/display-name': 'off',
 				...pixelatedPlugin.configs.recommended.rules,
 				"pixelated/prop-types-inferprops": "warn",
-		},
+			},
 		settings: {
 			react: {
 				version: 'detect',

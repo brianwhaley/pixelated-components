@@ -164,10 +164,13 @@ fi
 echo ""
 echo "📦 Step $((STEP_COUNT++)): Updating dependencies..."
 echo "================================================="
-UPDATES=$(npm outdated | awk 'NR>1 {print $1"@"$4}' || true)
+# build list of packages we can actually update (use the "wanted" column \3 instead of latest \4  so we stay inside semver)
+UPDATES=$(npm outdated | awk 'NR>1 {print \$1"@"\$3}' || true)
+
 if [ -n "$UPDATES" ]; then
     echo "Updating the following packages: $UPDATES"
-    echo "$UPDATES" | xargs npm install --force --save 2>/dev/null || true
+	# removed --force from npm install to avoid unnecessary breaking updates
+    echo "$UPDATES" | xargs npm install --save 2>/dev/null || true
     echo "✅ Successfully updated: $UPDATES"
 else
     echo "✅ No dependency updates needed."
@@ -178,7 +181,8 @@ fi
 echo ""
 echo "📦 Step $((STEP_COUNT++)): Updating Audit Fixes..."
 echo "================================================="
-npm audit fix --force 2>/dev/null || true
+# remove --force to avoid breaking changes
+npm audit fix 2>/dev/null || true
 
 
 

@@ -92,7 +92,7 @@ getShoppingCartItem.propTypes = {
 };
 export type getShoppingCartItemType = InferProps<typeof getShoppingCartItem.propTypes>;
 export function getShoppingCartItem(props: getShoppingCartItemType) {
-	let qty = 0;
+	let qty: number;
 	const thisItem = props.thisItem;
 	const apiProps = props.apiProps as EbayApiType;
 	const itemCategory = apiProps?.itemCategory;

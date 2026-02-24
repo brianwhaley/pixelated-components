@@ -61,7 +61,7 @@ function generateFieldJSON(component: string, type: string): any {
 	];
 
 	// Type-specific fields
-	let typeSpecificFields: any[] = [];
+	let typeSpecificFields: any[];
 
 	if (component === 'FormSelect') {
 		typeSpecificFields = [

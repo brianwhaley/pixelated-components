@@ -166,8 +166,8 @@ function analyzePatternMetric(html: string, metric: SEOMetricConfig): { score: n
 	const matches = html.match(regex) || [];
 	const count = matches.length;
 
-	let score = 0;
-	let displayValue = '';
+	let score: number;
+	let displayValue: string;
 	let details: any = undefined;
 
 	// Apply count logic
@@ -759,8 +759,8 @@ function calculateGzipCompressionScore(data: Awaited<ReturnType<typeof collectGz
 		};
 	}
 
-	let score = 0;
-	let displayValue = 'No compression detected';
+	let score: number = 0;
+	let displayValue: string;
 
 	if (data.isCompressed) {
 		score = 1;

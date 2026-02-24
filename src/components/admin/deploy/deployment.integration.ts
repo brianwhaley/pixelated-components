@@ -92,7 +92,7 @@ async function executeScript(
 			environments: environmentResults
 		};
 	} catch (error) {
-		throw new Error(`Deployment failed: ${(error as Error).message}`);
+		throw new Error(`Deployment failed: ${(error as Error).message}`, { cause: error });
 	}
 }
 
@@ -170,7 +170,7 @@ async function runPrepCommands(siteName: string, versionType: string, commitMess
 
 		return results.join('\n');
 	} catch (error) {
-		throw new Error(`Prep failed: ${(error as Error).message}`);
+		throw new Error(`Prep failed: ${(error as Error).message}`, { cause: error });
 	}
 }
 
@@ -214,6 +214,6 @@ async function deployToEnvironment(
 			return `${errorMsg}\nRepository not found or access denied. Check your git remote configuration.`;
 		}
 
-		throw new Error(errorMsg);
+		throw new Error(errorMsg, { cause: error });
 	}
 }

@@ -77,7 +77,7 @@ function parseGeminiResponse(data: any): GeminiRecommendationResponse {
 	} catch (error) {
 		console.error('Error parsing Gemini API response:', error);
 		console.error('Raw response data:', JSON.stringify(data, null, 2));
-		throw new Error('Failed to parse AI recommendations');
+		throw new Error('Failed to parse AI recommendations', { cause: error });
 	}
 }
 function buildRecommendationPrompt(request: GeminiRecommendationRequest): string {

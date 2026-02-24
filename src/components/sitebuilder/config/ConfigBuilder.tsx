@@ -684,7 +684,7 @@ export function ConfigBuilder(props: ConfigBuilderType) {
 														}}
 														className="route-button ai-recommend"
 													>
-														<span className="ai-icon">✨</span> Recommend
+														<span className="ai-icon" role="img" aria-label="sparkles">✨</span> Recommend
 													</button>
 													<button 
 														onClick={() => removeRoute(index)}

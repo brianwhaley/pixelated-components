@@ -168,7 +168,7 @@ export function SocialCards(props: SocialCardsType) {
 				(items: any) => {
 					let i = 0;
 					for (const prop in items) {
-						let myNewCard: any = {};
+						let myNewCard: any;
 						const item = items[prop];
 						myNewCard = item;
 						/* ===== FIX FOR SOURCE ===== */
@@ -190,7 +190,7 @@ export function SocialCards(props: SocialCardsType) {
 		let allCardData: any[] = [] ;
 		for (const prop in state.sources) {
 			const source = state.sources[prop];
-			let sourceCardData: any[] = [] ;
+			let sourceCardData: any[];
 			if (Object.prototype.hasOwnProperty.call(source, 'url') && source.url && source.url.length > 0) {
 				sourceCardData = await getFeedEntries(source.url, source.entryCount);
 				allCardData = [...allCardData, ...sourceCardData] ;

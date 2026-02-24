@@ -34,8 +34,8 @@ describe('SaveLoadSection', () => {
 
 		expect(screen.getByLabelText('Page Name:')).toBeInTheDocument();
 		expect(screen.getByPlaceholderText('my-landing-page')).toBeInTheDocument();
-		expect(screen.getByText('💾 Save Page')).toBeInTheDocument();
-		expect(screen.getByText('📁 Load Page')).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: /Save Page/ })).toBeInTheDocument();
+		expect(screen.getByRole('button', { name: /Load Page/ })).toBeInTheDocument();
 	});
 
 	it('should fetch saved pages on mount', async () => {
@@ -65,7 +65,7 @@ describe('SaveLoadSection', () => {
 			/>
 		);
 
-		const saveButton = screen.getByText('💾 Save Page');
+		const saveButton = screen.getByRole('button', { name: /Save Page/ });
 		expect(saveButton).toBeDisabled();
 	});
 
@@ -90,7 +90,7 @@ describe('SaveLoadSection', () => {
 		const nameInput = screen.getByPlaceholderText('my-landing-page');
 		await user.type(nameInput, 'test-page');
 
-		const saveButton = screen.getByText('💾 Save Page');
+		const saveButton = screen.getByRole('button', { name: /Save Page/ });
 		await user.click(saveButton);
 
 		await waitFor(() => {
@@ -125,7 +125,7 @@ describe('SaveLoadSection', () => {
 		const nameInput = screen.getByPlaceholderText('my-landing-page');
 		await user.type(nameInput, 'test-page');
 
-		const saveButton = screen.getByText('💾 Save Page');
+		const saveButton = screen.getByRole('button', { name: /Save Page/ });
 		await user.click(saveButton);
 
 		await waitFor(() => {
@@ -147,7 +147,7 @@ describe('SaveLoadSection', () => {
 			/>
 		);
 
-		const loadButton = screen.getByText('📁 Load Page');
+		const loadButton = screen.getByRole('button', { name: /Load Page/ });
 		await user.click(loadButton);
 
 		expect(screen.getByText('page1')).toBeInTheDocument();
@@ -171,7 +171,7 @@ describe('SaveLoadSection', () => {
 			/>
 		);
 
-		const loadButton = screen.getByText('📁 Load Page');
+		const loadButton = screen.getByRole('button', { name: /Load Page/ });
 		await user.click(loadButton);
 
 		expect(screen.getByText('No saved pages')).toBeInTheDocument();
@@ -196,7 +196,7 @@ describe('SaveLoadSection', () => {
 			/>
 		);
 
-		const loadButton = screen.getByText('📁 Load Page');
+		const loadButton = screen.getByRole('button', { name: /Load Page/ });
 		await user.click(loadButton);
 
 		const pageButton = screen.getByText('test-page');
@@ -230,7 +230,7 @@ describe('SaveLoadSection', () => {
 			/>
 		);
 
-		const loadButton = screen.getByText('📁 Load Page');
+		const loadButton = screen.getByRole('button', { name: /Load Page/ });
 		await user.click(loadButton);
 
 		const deleteButton = screen.getByText('🗑️');
@@ -264,7 +264,7 @@ describe('SaveLoadSection', () => {
 			/>
 		);
 
-		const loadButton = screen.getByText('📁 Load Page');
+		const loadButton = screen.getByRole('button', { name: /Load Page/ });
 		await user.click(loadButton);
 
 		const deleteButton = screen.getByText('🗑️');
@@ -320,7 +320,7 @@ describe('SaveLoadSection', () => {
 		const nameInput = screen.getByPlaceholderText('my-landing-page');
 		await user.type(nameInput, 'test-page');
 
-		const saveButton = screen.getByText('💾 Save Page');
+		const saveButton = screen.getByRole('button', { name: /Save Page/ });
 		await user.click(saveButton);
 
 		// Button should be disabled during save

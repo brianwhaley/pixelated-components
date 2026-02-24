@@ -30,7 +30,9 @@ describe('ComponentSelector', () => {
 			/>
 		);
 
-		expect(screen.getByText('➕ Adding child component')).toBeInTheDocument();
+		expect(
+			screen.getByText(content => content.includes('Adding child component'))
+		).toBeInTheDocument();
 		expect(screen.getByText('Select a component type to add as a child')).toBeInTheDocument();
 	});
 

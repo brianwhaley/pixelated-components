@@ -49,7 +49,7 @@ export function zipPixelatedTheme(inputPath, zipName = 'Pixelated.zip') {
 			console.log(`Removed existing zip: ${zipPath}`);
 		}
 	} catch (err) {
-		throw new Error(`Failed to remove existing zip '${zipPath}': ${err?.message ?? err}`);
+		throw new Error(`Failed to remove existing zip '${zipPath}': ${err?.message ?? err}`, { cause: err });
 	}
 
 	// Ensure `zip` command is available
@@ -74,9 +74,9 @@ export function zipPixelatedTheme(inputPath, zipName = 'Pixelated.zip') {
 	} catch (err) {
 		// Normalize ENOENT into a clearer message for callers/tests
 		if (err && err.code === 'ENOENT') {
-			throw new Error('`zip` command not found on PATH — please install zip (e.g. `brew install zip`)');
+			throw new Error('`zip` command not found on PATH — please install zip (e.g. `brew install zip`)', { cause: err });
 		}
-		throw new Error(`Failed to run zip: ${String(err)}`);
+		throw new Error(`Failed to run zip: ${String(err)}`, { cause: err });
 	}
 
 	if (result && result.error) {

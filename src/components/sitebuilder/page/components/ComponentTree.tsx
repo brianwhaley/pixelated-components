@@ -114,7 +114,7 @@ export function ComponentTree({
 								}}
 								title="Move down"
 							>
-								▼
+								<span role="img" aria-label="move down">▼</span>
 							</button>
 						</div>
 						<button
@@ -133,7 +133,7 @@ export function ComponentTree({
 							}}
 							title="Edit properties"
 						>
-							✏️ Edit
+							<span role="img" aria-label="edit">✏️</span> Edit
 						</button>
 						{isLayout && (
 							<button
@@ -152,7 +152,7 @@ export function ComponentTree({
 								}}
 								title="Add child component"
 							>
-								➕ Child
+								<span role="img" aria-label="add">➕</span> Child
 							</button>
 						)}
 						<button
@@ -171,7 +171,7 @@ export function ComponentTree({
 							}}
 							title="Delete component"
 						>
-							🗑️ Delete
+							<span role="img" aria-label="delete">🗑️</span> Delete
 						</button>
 					</div>
 				</div>

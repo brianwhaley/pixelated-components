@@ -128,7 +128,7 @@ export function FontSelector(props: FontSelectorType) {
 				{required && <span className="font-selector-required">*</span>}
 				{getTooltip() && (
 					<span className="font-selector-tooltip" title={getTooltip()!.replace(/\[([^\]]+)\]\([^)]+\)/, '$1')}>
-            👁️
+            			<span role="img" aria-label="preview">👁️</span>
 					</span>
 				)}
 			</label>

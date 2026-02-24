@@ -82,7 +82,7 @@ export function ComponentSelector(props: ComponentSelectorType) {
 					marginBottom: '1rem',
 					color: '#0d47a1'
 				}}>
-					<strong>➕ Adding child component</strong>
+					<strong><span role="img" aria-label="add">➕</span> Adding child component</strong>
 					<div style={{ fontSize: '0.875rem', marginTop: '0.25rem' }}>
 						Select a component type to add as a child
 					</div>
@@ -91,6 +91,7 @@ export function ComponentSelector(props: ComponentSelectorType) {
 			<label htmlFor="component-type-selector" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
 				Component Type:
 			</label>
+			{  }
 			<select 
 				id="component-type-selector"
 				onChange={handleComponentChange}

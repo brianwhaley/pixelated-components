@@ -297,7 +297,7 @@ export function FormExtractEngine(props: FormExtractEngineType) {
 				getHTML(newURL, formToJSON);
 			}
 		} else if (props.htmlPaste) {
-			let json: { [key: string]: any } = {};
+			let json: { [key: string]: any };
 			if (!htmlPaste || (props.htmlPaste !== htmlPaste)) {
 				setHtmlPaste( props.htmlPaste );
 				const thisHTML = new DOMParser().parseFromString(props.htmlPaste, 'text/html');

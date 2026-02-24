@@ -191,9 +191,9 @@ async function runNpmAudit(localPath: string): Promise<NpmAuditResult> {
 			try {
 				return JSON.parse(execError.stdout);
 			} catch (parseError) {
-				throw new Error(`Failed to parse npm audit output: ${(parseError as Error).message}`);
+				throw new Error(`Failed to parse npm audit output: ${(parseError as Error).message}`, { cause: parseError });
 			}
 		}
-		throw new Error(`npm audit failed: ${execError.message}`);
+		throw new Error(`npm audit failed: ${execError.message}`, { cause: error });
 	}
 }

@@ -374,7 +374,7 @@ export function RecipePickList(props: RecipePickListType) {
 		} else {
 			props.handleRecipePickListChange('');
 		}
-	}
+	} 
 
 	useEffect(() => {
 		setRecipeOptions( generateMyOptions() );
@@ -382,6 +382,7 @@ export function RecipePickList(props: RecipePickListType) {
 
 	return (
 		<form>
+			{  }
 			<select id="recipe-list" name="recipe-list" onChange={recipeListChanged}>
 				{ recipeOptions }
 			</select>

@@ -38,7 +38,7 @@ export async function loadSitesConfig(configPath?: string): Promise<SiteConfig[]
 		return sites;
 	} catch (error) {
 		console.error('Error loading sites:', error);
-		throw new Error('Failed to load sites configuration');
+		throw new Error('Failed to load sites configuration', { cause: error });
 	}
 }
 
@@ -58,7 +58,7 @@ export async function saveSitesConfig(sites: SiteConfig[], configPath?: string):
 		fs.writeFileSync(sitesPath, JSON.stringify(sites, null, 2), 'utf8');
 	} catch (error) {
 		console.error('Error saving sites:', error);
-		throw new Error('Failed to save sites configuration');
+		throw new Error('Failed to save sites configuration', { cause: error });
 	}
 }
 

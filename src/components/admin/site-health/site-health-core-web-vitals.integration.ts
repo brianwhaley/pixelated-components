@@ -152,7 +152,7 @@ export async function fetchPSIData(url: string): Promise<any> {
 						? 'PSI API request timed out after 60 seconds'
 						: `PSI API request failed: ${error instanceof Error ? error.message : 'Unknown error'}`;
 					if (debug) console.error('PSI request error (final):', { url, error });
-					throw new Error(errorMessage);
+					throw new Error(errorMessage, { cause: error });
 				}
 				// Wait before retry (exponential backoff) - retry on both network errors and timeouts
 				if (debug) console.info(`PSI retrying after failure, attempt=${attempt} url=${url}`);

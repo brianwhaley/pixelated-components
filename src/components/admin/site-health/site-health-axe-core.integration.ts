@@ -189,7 +189,7 @@ async function runAxeCoreAnalysis(url: string, runtime_env: 'auto' | 'local' | '
 			const original = err instanceof Error ? err.message : String(err);
 			const hint = `Could not launch Chrome/Chromium. Ensure Puppeteer browsers are installed (run 'npx puppeteer browsers install chrome') and that the browser binary is accessible. You can also set PUPPETEER_EXECUTABLE_PATH to the installed browser binary or adjust PUPPETEER_CACHE_DIR to point to a writable cache directory. Original error: ${original}`;
 			if (debug) console.error('Puppeteer launch failed:', err);
-			throw new Error(hint);
+			throw new Error(hint, { cause: err });
 		}
 
 		const page = await browser.newPage();
@@ -250,7 +250,7 @@ async function runAxeCoreAnalysis(url: string, runtime_env: 'auto' | 'local' | '
 			injectionSource = 'cdn';
 		} catch (err) {
 			let injected = false;
-
+			let lastError;
 			// Try common local node_modules locations relative to process.cwd() and __dirname
 			const possiblePaths = [
 				path.join(process.cwd(), 'node_modules', 'axe-core', 'axe.min.js'),
@@ -285,6 +285,7 @@ async function runAxeCoreAnalysis(url: string, runtime_env: 'auto' | 'local' | '
 			}
 
 			if (!injected) {
+				 
 				throw new Error('Could not load axe-core via CDN or local inline injection');
 			}
 		}

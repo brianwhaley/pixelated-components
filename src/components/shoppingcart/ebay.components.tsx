@@ -198,6 +198,7 @@ export function EbayListFilter(props: EbayListFilterType) {
 		<form name="ebay-items-filter" id="ebay-items-filter">
 			<span className="filter-input">
 				<label htmlFor="aspectName">Aspect:</label>
+				{   }
 				<select id="aspectName" onChange={onAspectNameChange}>
 					<option value=""></option>
 					{ aspectNames.map((aspectName: any, index: number) =>
@@ -589,7 +590,7 @@ export function EbayRateLimitsVisualizer(props: EbayRateLimitsVisualizerType) {
 
 			{hasTokenError && (
 				<div style={{ color: '#c53030', background: '#fff5f5', padding: '10px', borderRadius: '4px', marginBottom: '10px', border: '1px solid #feb2b2' }}>
-					🚨 <b>Authentication Error:</b> Your eBay access token is invalid or expired. Use &quot;Auto-Fetch Token&quot; if credentials are set, or paste a new one.
+					<span role="img" aria-label="error">🚨</span> <b>Authentication Error:</b> Your eBay access token is invalid or expired. Use &quot;Auto-Fetch Token&quot; if credentials are set, or paste a new one.
 				</div>
 			)}
 

@@ -226,7 +226,7 @@ export function GravatarCard(props: GravatarCardType) {
 
 			{location && (
 				<div className="gravatar-location">
-					📍 {location}
+					<span role="img" aria-label="location">📍</span> {location}
 				</div>
 			)}
 

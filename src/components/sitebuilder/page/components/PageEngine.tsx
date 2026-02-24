@@ -145,7 +145,7 @@ export function PageEngine(props: PageEngineType) {
 							}}
 							title="Move down"
 						>
-							▼
+							<span role="img" aria-label="move down">▼</span>
 						</button>
 					</div>
 					<button
@@ -156,7 +156,7 @@ export function PageEngine(props: PageEngineType) {
 						}}
 						title="Edit properties"
 					>
-						✏️
+						<span role="img" aria-label="edit">✏️</span>
 					</button>
 					{isLayout && (
 						<button
@@ -167,7 +167,7 @@ export function PageEngine(props: PageEngineType) {
 							}}
 							title="Add child component"
 						>
-							➕
+							<span role="img" aria-label="add">➕</span>
 						</button>
 					)}
 					<button
@@ -178,7 +178,7 @@ export function PageEngine(props: PageEngineType) {
 						}}
 						title="Delete component"
 					>
-						🗑️
+						<span role="img" aria-label="delete">🗑️</span>
 					</button>
 				</div>
 			</div>

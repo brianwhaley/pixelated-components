@@ -164,7 +164,7 @@ export function SaveLoadSection({ pageData, onLoad, apiEndpoint = '/api/pagebuil
 						opacity: isLoading || !pageName.trim() ? 0.5 : 1
 					}}
 				>
-					💾 Save Page
+					<span role="img" aria-label="save">💾</span> Save Page
 				</button>
 				<button
 					onClick={() => setShowLoadList(!showLoadList)}
@@ -177,7 +177,7 @@ export function SaveLoadSection({ pageData, onLoad, apiEndpoint = '/api/pagebuil
 						opacity: isLoading ? 0.5 : 1
 					}}
 				>
-					📁 {showLoadList ? 'Hide' : 'Load Page'}
+					<span role="img" aria-label="folder">📁</span> {showLoadList ? 'Hide' : 'Load Page'}
 				</button>
 			</div>
 
@@ -230,7 +230,7 @@ export function SaveLoadSection({ pageData, onLoad, apiEndpoint = '/api/pagebuil
 											fontSize: '0.875rem'
 										}}
 									>
-										🗑️
+										<span role="img" aria-label="delete">🗑️</span>
 									</button>
 								</li>
 							))}
