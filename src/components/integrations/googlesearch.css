@@ -13,29 +13,20 @@
 ============  GOOGLE SEARCH    ============
 ======================================== */
 
-.gsib_a {
-    padding: 1px 8px !important;
-}
+form.gsc-search-box {
+    max-width: 100% !important;
 
-.gsc-tabsArea {
-    border-color: #336699;
-}
+	table td {
+		height: 15px;
+	}
 
-.gsc-tabHeader.gsc-tabhActive {
-    border-color: #336699;
-}
+	input.gsc-input {
+		font-size: 1.0em !important;
+		background: none !important;
+	}
 
-input.gsc-search-button, input.gsc-search-button:hover, input.gsc-search-button:focus {
-    box-sizing: content-box;
-}
+	.gsc-input .gsc-input-box {
+		padding: 0px;
+	}
 
-input.gsc-input {
-	font-size: 1.0em !important;
-	background: none !important;
-}
-
-.gsc-control-cse {
-    border-color: transparent !important;
-    background-color: transparent !important;
-	padding: .5em !important;
 }

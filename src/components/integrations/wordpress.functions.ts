@@ -45,6 +45,7 @@ export type getWordPressItemsType = InferProps<typeof getWordPressItems.propType
 export async function getWordPressItems(props: { site: string; count?: number; baseURL?: string }){
 	const { baseURL = wpApiURL } = props;
 	const requested = props.count; // undefined means fetch all available
+	const tag = `wp-posts-${props.site}`; // unique per site so we can invalidate fetch cache separately
 	const posts: BlogPostType[] = [];
 	let page = 1;
 	while (true) {
@@ -52,14 +53,20 @@ export async function getWordPressItems(props: { site: string; count?: number; b
 		const number = Math.min(remaining || 100, 100);
 		const wpPostsURL = `${baseURL}${props.site}/posts?number=${number}&page=${page}`;
 		try {
-			const response = await fetch(wpPostsURL);
+			// const response = await fetch(wpPostsURL);
+			const response = await fetch(wpPostsURL, {
+				// cache the HTTP response and mark it with a tag so it can be
+				// invalidated independently of the page cache.
+				cache: 'force-cache',
+				next: { revalidate: 60 * 60 * 24 * 7, tags: [tag] }, // revalidate once per week
+			});
 			const data = await response.json();
 			const batch: BlogPostType[] = Array.isArray(data.posts) ? data.posts : [];
 			if (batch.length === 0) {
 				break; // no more posts
 			}
 			
-			// Process Photon URLs in featured images
+			// Process WordPress Photon URLs in featured images
 			const processedBatch = batch.map(post => ({
 				...post,
 				featured_image: post.featured_image ? photonToOriginalUrl(post.featured_image) : post.featured_image
@@ -75,7 +82,56 @@ export async function getWordPressItems(props: { site: string; count?: number; b
 			return;
 		}
 	}
+	
+	// once we've fetched the posts we can also compare the "modified" date from
+	// the first post (which is the most recent) with a fresh timestamp obtained
+	// via getWordPressLastModified.  if the header indicates a newer update than
+	// what we just fetched, bust the cache so future callers get the latest data.
+	try {
+		if (posts.length > 0 && posts[0].modified) {
+			const lastModified = await getWordPressLastModified({ site: props.site, baseURL });
+			if (lastModified && lastModified !== posts[0].modified) {
+				// our cached response is stale relative to origin
+				import('next/cache').then(({ revalidateTag }) => {
+					revalidateTag(`wp-posts-${props.site}`, {});
+				});
+			}
+		}
+	} catch (e) {
+		// non-fatal, we already have posts and can return them
+		console.warn('comparison check failed', e);
+	}
+	
 	return posts;
+}
+
+
+
+
+
+/*
+ * Retrieve the modified timestamp of the most recent post on a WP site.
+ * WordPress doesn’t support HEAD on the posts endpoint, so we fetch a single
+ * post and pull the `modified` field from the JSON payload.  This is still
+ * very light-weight compared to fetching the whole collection.
+ *
+ * @param props.site - WordPress site slug or domain
+ * @param props.baseURL - Optional API base URL (defaults to WordPress public API)
+ * @returns the ISO modified string or null if unavailable/error.
+ */
+export async function getWordPressLastModified(props: { site: string; baseURL?: string }) {
+	const { baseURL = wpApiURL } = props;
+	const url = `${baseURL}${props.site}/posts?number=1&fields=modified`;
+	try {
+		const res = await fetch(url);
+		if (!res.ok) return null;
+		const data = await res.json();
+		const modified = Array.isArray(data.posts) && data.posts[0]?.modified;
+		return modified || null;
+	} catch (e) {
+		console.error('Error fetching WP last-modified value', e);
+		return null;
+	}
 }
 
 

@@ -206,6 +206,7 @@ export function SmartImage(props: SmartImageType) {
 					transforms: newProps.cloudinaryTransforms ?? undefined, 
 					cloudinaryDomain: newProps.cloudinaryDomain 
 				});
+			// newProps.sizes = `${newProps.width}px`;
 			if (!(newProps.sizes)) newProps.sizes = `${newProps.width}px`;
 		} else {
 			const breakpoints = [320, 640, 768, 1024, 1280, 1536];

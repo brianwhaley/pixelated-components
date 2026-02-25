@@ -4,20 +4,52 @@ import React, { useEffect, useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { usePixelatedConfig } from "../config/config.client";
 import { SmartImage } from '../general/smartimage';
-import {PageGridItem } from '../general/semantic';
+import { PageGridItem } from '../general/semantic';
 import type { BlogPostType } from './wordpress.functions';
 import { getWordPressItems } from './wordpress.functions';
 import { Loading, ToggleLoading } from '../general/loading';
+import { CacheManager, type CacheMode } from "../general/cache-manager";
+
 
 import "./wordpress.css";
 
 // https://microformats.org/wiki/h-entry
 
-function decodeString(str: string){
+function decodeString(str: string) {
 	const textarea = document.createElement('textarea');
 	textarea.innerHTML = str;
 	return textarea.value;
 }
+
+
+
+
+
+const wpCacheTTL = 1000 * 60 * 60 * 24 * 7; // 1 week
+const wpCache = new CacheManager({ mode: 'local', ttl: wpCacheTTL, prefix: 'wp_' });
+/**
+ * getCachedWordPressItems — Fetch posts from the WordPress REST API with caching. Checks local cache first and returns cached posts if available and not expired; otherwise fetches from the API, stores in cache, and returns the fresh data.
+ *
+ * @param {string} [props.site] - WordPress site identifier (site slug or domain).
+ * @returns {array|undefined} Array of blog posts if successful, or undefined if site is not provided.
+ */
+getCachedWordPressItems.propTypes = {
+	/** WordPress site identifier (slug or domain) */
+	site: PropTypes.string.isRequired,
+};
+export type getCachedWordPressItemsType = InferProps<typeof getCachedWordPressItems.propTypes>;
+export async function getCachedWordPressItems(props: { site: string }) {
+	const site = props.site ?? '';
+	if (!site) return undefined;
+	const key = `posts-${site}`; 
+	let posts = wpCache.get<BlogPostType[]>(key) || undefined;
+	if (!posts) {
+		posts = await getWordPressItems({ site });
+		if (posts) wpCache.set(key, posts);
+	}
+	return posts;
+}
+
 
 
 /**
@@ -30,7 +62,7 @@ function decodeString(str: string){
  * @param {boolean} [props.showCategories] - Whether to show category icons for each post.
  */
 BlogPostList.propTypes = {
-/** WordPress site identifier */
+	/** WordPress site identifier */
 	site: PropTypes.string,
 	/** Optional WordPress base URL */
 	baseURL: PropTypes.string,
@@ -43,7 +75,7 @@ BlogPostList.propTypes = {
 };
 export type BlogPostListType = InferProps<typeof BlogPostList.propTypes>;
 export function BlogPostList(props: BlogPostListType) {
-	
+
 	const { site: propSite, baseURL: propBaseURL, count, posts: cachedPosts, showCategories = true } = props;
 	const config = usePixelatedConfig();
 	const site = propSite ?? config?.wordpress?.site;
@@ -65,7 +97,7 @@ export function BlogPostList(props: BlogPostListType) {
 		}
 
 		// Otherwise, fetch from WordPress
-		ToggleLoading({show: true});
+		ToggleLoading({ show: true });
 		(async () => {
 			const params: { site: string; count?: number; baseURL?: string } = { site };
 			if (count !== null && count !== undefined) params.count = count;
@@ -73,7 +105,7 @@ export function BlogPostList(props: BlogPostListType) {
 			const data = (await getWordPressItems(params)) ?? [];
 			const sorted = data.sort((a: BlogPostType, b: BlogPostType) => ((a.date ?? '') < (b.date ?? '')) ? 1 : -1);
 			setPosts(sorted);
-			ToggleLoading({show: false});
+			ToggleLoading({ show: false });
 		})();
 	}, [site, baseURL, count, cachedPosts]);
 
@@ -111,7 +143,7 @@ export function BlogPostList(props: BlogPostListType) {
  * @param {boolean} [props.showCategories] - Whether to render category icons beneath the summary.
  */
 BlogPostSummary.propTypes = {
-/** Post ID (string or number) */
+	/** Post ID (string or number) */
 	ID: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	/** Post title */
 	title: PropTypes.string,
@@ -144,7 +176,7 @@ export function BlogPostSummary(props: BlogPostSummaryType) {
 					</a>
 				</h2>
 				<div className="dt-published">Published: {props.date ? new Date(props.date).toLocaleDateString() : ''}</div>
-				{ props.featured_image ? (
+				{props.featured_image ? (
 					<div className="article-body row-12col">
 						<div className="article-featured-image grid-s1-e4">
 							<SmartImage className="u-photo" src={props.featured_image} alt={props.title ? decodeString(props.title) : ''} title={props.title ? decodeString(props.title) : ''}
@@ -157,16 +189,16 @@ export function BlogPostSummary(props: BlogPostSummaryType) {
 							<div className="p-summary" dangerouslySetInnerHTML={{ __html: myExcerpt }} />
 						</div>
 					</div>
-				) : 
+				) :
 					<div className="article-excerpt grid-s1-e13">
 						<div className="p-summary" dangerouslySetInnerHTML={{ __html: myExcerpt }} />
 					</div>
 				}
 				{props.showCategories !== false && (
-					<div>Categories: 
-						{ myCategoryImages.map(([categoryImg, index]) => (
+					<div>Categories:
+						{myCategoryImages.map(([categoryImg, index]) => (
 							<span className="p-category" key={categoryImg + "-" + index}>
-								<SmartImage src={`/images/icons/${categoryImg}.png`} title={String(categoryImg)} alt={String(categoryImg)} 
+								<SmartImage src={`/images/icons/${categoryImg}.png`} title={String(categoryImg)} alt={String(categoryImg)}
 									cloudinaryEnv={config?.cloudinary?.product_env ?? undefined}
 									cloudinaryDomain={config?.cloudinary?.baseUrl ?? undefined}
 									cloudinaryTransforms={config?.cloudinary?.transforms ?? undefined} />
@@ -187,24 +219,24 @@ export function BlogPostSummary(props: BlogPostSummaryType) {
  * @param {arrayOf} [props.categories] - Array of category strings to render.
  */
 BlogPostCategories.propTypes = {
-/** Array of category names */
+	/** Array of category names */
 	categories: PropTypes.arrayOf(PropTypes.string),
 };
 export type BlogPostCategoriesType = InferProps<typeof BlogPostCategories.propTypes>;
 export function BlogPostCategories(props: BlogPostCategoriesType) {
-	if(!props.categories || props.categories.length === 0) {
+	if (!props.categories || props.categories.length === 0) {
 		return null;
 	}
 	const myCategoryImages = props.categories.map(
-		(category) => (category && category !== "Uncategorized") 
-			? category.trim().toLowerCase().replace(/[ /]+/g, '-') 
+		(category) => (category && category !== "Uncategorized")
+			? category.trim().toLowerCase().replace(/[ /]+/g, '-')
 			: undefined
 	).filter(Boolean).sort();
 	const config = usePixelatedConfig();
 	return (
 		<div className="blog-post-categories">
 			<div>Categories: </div>
-			{ myCategoryImages.map((categoryImg, index) => 
+			{myCategoryImages.map((categoryImg, index) =>
 				categoryImg ? (
 					<span className="p-category" key={categoryImg + "-" + index}>
 						<SmartImage className="u-photo" src={`/images/icons/${categoryImg}.png`} title={String(categoryImg)} alt={String(categoryImg)}

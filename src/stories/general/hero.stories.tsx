@@ -7,7 +7,9 @@ export default {
   component: Hero,
   argTypes: {
 	img: { control: { type: 'text' } },
-    variant: { control: { type: 'radio' }, options: ['static', 'anchored'] },
+	video: { control: { type: 'text' } },
+	videoPoster: { control: { type: 'text' } },
+    variant: { control: { type: 'radio' }, options: ['static', 'anchored', 'video'] },
     height: { control: { type: 'number' } },
     paragraphs: { control: { type: 'number', min: 0, max: 50, step: 1 } }
   }
@@ -35,6 +37,26 @@ export const HeroPlayground = {
     variant: 'static',
     paragraphs: 15,
     height: 60
+  }
+};
+
+export const HeroVideo = {
+  render: (args: any) => (
+    <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      <Hero variant="video" video={args.video} videoPoster={args.videoPoster} height={args.height}>
+        <h2 style={{ color: 'white', textAlign: 'center' }}>Video Hero</h2>
+      </Hero>
+    </div>
+  ),
+  args: {
+    video: 'https://www.w3schools.com/html/mov_bbb.mp4',
+    videoPoster: 'https://via.placeholder.com/1600x900.png?text=Poster',
+    height: 60
+  },
+  argTypes: {
+    video: { control: { type: 'text' } },
+    videoPoster: { control: { type: 'text' } },
+    height: { control: { type: 'number' } }
   }
 };
 
