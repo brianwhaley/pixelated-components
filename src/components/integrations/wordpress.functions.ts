@@ -15,7 +15,19 @@ export type BlogPostType = {
     title: string;
     date: string;
     modified?: string;
-    author?: string;
+    author?: {
+		"ID": number;
+		"login": string;
+		"email": string | boolean;
+		"name": string;
+		"first_name": string;
+		"last_name": string;
+		"nice_name": string;
+		"URL": string;
+		"avatar_URL": string;
+		"profile_URL": string;
+		"ip_address": string | false;
+	};
     excerpt: string;
     content?: string;
     URL: string;
@@ -60,6 +72,7 @@ export async function getWordPressItems(props: { site: string; count?: number; b
 				cache: 'force-cache',
 				next: { revalidate: 60 * 60 * 24 * 7, tags: [tag] }, // revalidate once per week
 			});
+			// -> "HIT" or "MISS" (or "REVALIDATED" etc.)
 			const data = await response.json();
 			const batch: BlogPostType[] = Array.isArray(data.posts) ? data.posts : [];
 			if (batch.length === 0) {
@@ -85,22 +98,18 @@ export async function getWordPressItems(props: { site: string; count?: number; b
 	
 	// once we've fetched the posts we can also compare the "modified" date from
 	// the first post (which is the most recent) with a fresh timestamp obtained
-	// via getWordPressLastModified.  if the header indicates a newer update than
+	// via getWordPressLastModified.  if the lastModified indicates a newer update than
 	// what we just fetched, bust the cache so future callers get the latest data.
-	try {
-		if (posts.length > 0 && posts[0].modified) {
-			const lastModified = await getWordPressLastModified({ site: props.site, baseURL });
-			if (lastModified && lastModified !== posts[0].modified) {
-				// our cached response is stale relative to origin
-				import('next/cache').then(({ revalidateTag }) => {
-					revalidateTag(`wp-posts-${props.site}`, {});
-				});
-			}
+	if (posts && posts.length > 0 && posts[0].modified) {
+		const lastModified = await getWordPressLastModified({ site: props.site, baseURL });
+		if (lastModified && lastModified !== posts[0].modified) {
+			// our cached response is stale relative to origin
+			import('next/cache').then(({ revalidateTag }) => {
+				revalidateTag(`wp-posts-${props.site}`, {});
+			});
 		}
-	} catch (e) {
-		// non-fatal, we already have posts and can return them
-		console.warn('comparison check failed', e);
 	}
+	
 	
 	return posts;
 }

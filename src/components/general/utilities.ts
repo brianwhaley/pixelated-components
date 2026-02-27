@@ -3,7 +3,6 @@ const debug = false;
 
 export function html2dom (str: string) {
 	if (window.DOMParser) {
-		 
 		const parser = new DOMParser();
 		const doc = parser.parseFromString(str, 'text/html');
 		return doc.body.firstChild;

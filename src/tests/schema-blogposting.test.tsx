@@ -127,7 +127,19 @@ describe('mapWordPressToBlogPosting Transformation', () => {
 		title: 'Test Blog Post',
 		date: '2025-01-15T10:30:00Z',
 		modified: '2025-01-16T14:20:00Z',
-		author: 'Jane Smith',
+		author: {
+			ID: 14504310,
+			login: 'bwhaley73',
+			email: false,
+			name: 'Jane Smith',
+			first_name: 'Jane',
+			last_name: 'Smith',
+			nice_name: 'janesmith',
+			URL: 'http://www.pixelated.tech',
+			avatar_URL: 'https://secure.gravatar.com/avatar/dc969cfdd96b3ac82b1fb07acbb5f091109d795bf6e997e895be86bbb46c588f?s=96&d=identicon&r=g',
+			profile_URL: 'https://gravatar.com/11210563e86eb52e0f80423d72659cff',
+			ip_address: false,
+		},
 		excerpt: '<p>This is a test excerpt with <strong>HTML</strong></p>',
 		content: '<p>This is the full article content with more details.</p>',
 		URL: 'https://blog.pixelated.tech/test-post',
@@ -185,6 +197,7 @@ describe('mapWordPressToBlogPosting Transformation', () => {
 			expect(schema.author).toEqual({
 				'@type': 'Person',
 				name: 'Jane Smith',
+				url: 'https://blog.pixelated.tech/author/bwhaley73',
 			});
 		});
 
@@ -304,11 +317,11 @@ describe('mapWordPressToBlogPosting Transformation', () => {
 		});
 
 		it('should handle special characters in all fields', () => {
-			const post = {
+			const post: BlogPostType = {
 				...mockPost,
 				title: 'Post with "quotes" & special chars © ™',
 				excerpt: 'Excerpt with émojis 🎉 and symbols',
-				author: "O'Brien",
+				author: { ...mockPost.author, name: "O'Brien" } as any,
 				categories: ['Tech & News', 'Web/Dev'],
 			};
 			const schema = mapWordPressToBlogPosting(post, false);
@@ -331,15 +344,15 @@ describe('mapWordPressToBlogPosting Transformation', () => {
 		});
 
 		it('should handle empty strings', () => {
-			const post = {
+			const post: BlogPostType = {
 				...mockPost,
 				excerpt: '',
-				author: '',
+				author: { ...mockPost.author, name: '' } as any,
 			};
 			const schema = mapWordPressToBlogPosting(post, false);
 
 			expect(schema.description).toBe('Test Blog Post');
-			expect(schema.author).toBeUndefined();
+			expect(schema.author?.name).toBe('');
 		});
 	});
 });

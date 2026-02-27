@@ -6,11 +6,9 @@ import { usePixelatedConfig } from "../config/config.client";
 import { SmartImage } from '../general/smartimage';
 import { PageGridItem } from '../general/semantic';
 import type { BlogPostType } from './wordpress.functions';
-import { getWordPressItems } from './wordpress.functions';
+import { getWordPressItems, getWordPressLastModified } from './wordpress.functions';
 import { Loading, ToggleLoading } from '../general/loading';
 import { CacheManager, type CacheMode } from "../general/cache-manager";
-
-
 import "./wordpress.css";
 
 // https://microformats.org/wiki/h-entry
@@ -27,6 +25,7 @@ function decodeString(str: string) {
 
 const wpCacheTTL = 1000 * 60 * 60 * 24 * 7; // 1 week
 const wpCache = new CacheManager({ mode: 'local', ttl: wpCacheTTL, prefix: 'wp_' });
+const wpApiURL = "https://public-api.wordpress.com/rest/v1/sites/";
 /**
  * getCachedWordPressItems — Fetch posts from the WordPress REST API with caching. Checks local cache first and returns cached posts if available and not expired; otherwise fetches from the API, stores in cache, and returns the fresh data.
  *
@@ -43,10 +42,22 @@ export async function getCachedWordPressItems(props: { site: string }) {
 	if (!site) return undefined;
 	const key = `posts-${site}`; 
 	let posts = wpCache.get<BlogPostType[]>(key) || undefined;
+	
 	if (!posts) {
 		posts = await getWordPressItems({ site });
 		if (posts) wpCache.set(key, posts);
 	}
+
+	if (posts && posts.length > 0 && posts[0].modified) {
+		const lastModified = await getWordPressLastModified({ site: props.site, baseURL: wpApiURL });
+		if (lastModified && lastModified !== posts[0].modified) {
+			// our cached response is stale relative to origin
+			import('next/cache').then(({ revalidateTag }) => {
+				revalidateTag(`wp-posts-${props.site}`, {});
+			});
+		}
+	}
+
 	return posts;
 }
 

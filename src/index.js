@@ -76,6 +76,8 @@ export * from './components/integrations/wordpress.components';
 export * from './components/integrations/wordpress.functions';
 export * from './components/integrations/yelp';
 
+export * from './components/pixelated/pixelated.components';
+
 export * from './components/shoppingcart/ebay.components';
 export * from './components/shoppingcart/ebay.functions';
 export * from './components/shoppingcart/paypal';

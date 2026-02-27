@@ -4,6 +4,7 @@ import { decode } from 'html-entities';
 export interface BlogPostingSchema {
 	'@context': string;
 	'@type': string;
+	url: string;
 	headline: string;
 	description?: string;
 	image?: string;
@@ -42,6 +43,7 @@ export function mapWordPressToBlogPosting(
 	const schema: BlogPostingSchema = {
 		'@context': 'https://schema.org',
 		'@type': 'BlogPosting',
+		url: post.URL,
 		headline: decode(post.title.replace(/<[^>]*>/g, '')),
 		description: description || decode(post.title.replace(/<[^>]*>/g, '')),
 		datePublished: post.date,
@@ -64,7 +66,8 @@ export function mapWordPressToBlogPosting(
 	if (post.author) {
 		schema.author = {
 			'@type': 'Person',
-			name: post.author,
+			name: post.author.name,
+			url: `https://${new URL(post.URL).hostname}/author/${post.author.login}`,
 		};
 	}
 

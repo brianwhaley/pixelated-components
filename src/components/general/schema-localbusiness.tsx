@@ -18,6 +18,7 @@ import type { SiteInfo } from '../config/config.types';
  * LocalBusinessSchema — generates JSON-LD for a LocalBusiness using provided props or a fallback `siteInfo`.
  *
  * @param {string} [props.name] - Business name (overrides siteInfo.name).
+ * @param {object} [props.address] - Address object containing streetAddress, addressLocality, addressRegion, postalCode, and addressCountry.
  * @param {string} [props.streetAddress] - Street address line.
  * @param {string} [props.addressLocality] - City or locality.
  * @param {string} [props.addressRegion] - State, region or province.
@@ -37,6 +38,19 @@ import type { SiteInfo } from '../config/config.types';
 LocalBusinessSchema.propTypes = {
 /** Business name to include in schema (falls back to siteInfo.name). */
 	name: PropTypes.string,
+	/** Address object for the business */
+	address: PropTypes.shape({
+		/** Street address for the business. */
+		streetAddress: PropTypes.string,
+		/** City or locality for the business address. */
+		addressLocality: PropTypes.string,
+		/** State/region for the business address. */
+		addressRegion: PropTypes.string,
+		/** Postal or ZIP code for the address. */
+		postalCode: PropTypes.string,
+		/** Country for the address (defaults to United States when absent). */
+		addressCountry: PropTypes.string,
+	}),
 	/** Street address for the business. */
 	streetAddress: PropTypes.string,
 	/** City or locality for the business address. */
@@ -75,6 +89,7 @@ export function LocalBusinessSchema (props: LocalBusinessSchemaType) {
 
 	// Use props if provided, otherwise fall back to siteInfo
 	const name = props.name || siteInfo?.name;
+	const address = props.address || siteInfo?.address;
 	const streetAddress = props.streetAddress || siteInfo?.address?.streetAddress;
 	const addressLocality = props.addressLocality || siteInfo?.address?.addressLocality;
 	const addressRegion = props.addressRegion || siteInfo?.address?.addressRegion;
@@ -83,7 +98,7 @@ export function LocalBusinessSchema (props: LocalBusinessSchemaType) {
 	const telephone = props.telephone || siteInfo?.telephone;
 	const url = props.url || siteInfo?.url;
 	const logo = props.logo || siteInfo?.image;
-	const image = props.image || siteInfo?.image;
+	const image = props.image || siteInfo?.image || logo;
 	const openingHours = props.openingHours;
 	const description = props.description || siteInfo?.description;
 	const email = props.email || siteInfo?.email;
@@ -95,11 +110,13 @@ export function LocalBusinessSchema (props: LocalBusinessSchemaType) {
 		name,
 		address: {
 			'@type': 'PostalAddress',
-			streetAddress,
-			addressLocality,
-			addressRegion,
-			postalCode,
-			addressCountry
+			...( address || {
+				streetAddress,
+				addressLocality,
+				addressRegion,
+				postalCode,
+				addressCountry
+			})
 		},
 		telephone,
 		url,
