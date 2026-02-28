@@ -4,10 +4,10 @@ import * as fs from 'fs/promises';
 
 import {
   safeJSON,
-  sanitizeString,
   generateHumansTxt,
-} from "@/components/general/well-known";
-import { createWellKnownResponse } from '@/components/general/well-known';
+  sanitizeString,
+  createWellKnownResponse,
+} from '@/components/general/well-known';
 
 import testData from '../test/test-data';
 

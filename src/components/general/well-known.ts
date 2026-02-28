@@ -5,8 +5,6 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 import { flattenRoutes } from './sitemap';
 
-/* ===== Shared helpers for .well-known files ===== */
-
 /**
  * Read JSON from disk safely — returns null on error. Exported for testing.
  */

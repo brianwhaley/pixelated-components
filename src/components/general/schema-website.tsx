@@ -1,52 +1,30 @@
-import React from 'react';
-import PropTypes from "prop-types";
-import type { SiteInfo } from '../config/config.types';
+'use client';
 
-// Accept partial SiteInfo to accommodate config JSON shape without forcing callers to cast
-export interface WebsiteSchemaProps {
-	siteInfo?: SiteInfo;
-	name?: string;
-	url?: string;
-	description?: string;
-	keywords?: string;
-	inLanguage?: string;
-	sameAs?: string[];
-	potentialAction?: {
-		'@type'?: string;
-		target: {
-			'@type': string;
-			urlTemplate: string;
-		};
-		'query-input'?: string;
-	};
-	publisher?: {
-		'@type'?: string;
-		name: string;
-		url?: string;
-		logo?: {
-			'@type'?: string;
-			url: string;
-			width?: number;
-			height?: number;
-		};
-	};
-	copyrightYear?: number;
-	copyrightHolder?: {
-		'@type'?: string;
-		name: string;
-		url?: string;
-	};
-}
+import React from 'react';
+import PropTypes, { InferProps } from "prop-types";
+import type { SiteInfo } from '../config/config.types';
 
 /**
  * Website Schema Component
  * Generates JSON-LD structured data for websites
  * https://schema.org/WebSite
- * 
- * This component uses siteInfo passed as props to generate schema data.
- * It does not use client-side hooks and can be rendered on the server.
  */
 
+/**
+ * WebsiteSchema — Inject a JSON-LD <script> tag containing a WebSite schema object, using provided props or siteInfo from config.
+ *
+ * @param {object} [props.siteInfo] - Optional site information object containing business details to populate the schema.
+ * @param {string} [props.name] - Name of the website (overrides siteInfo.name).
+ * @param {string} [props.url] - URL of the website (overrides siteInfo.url).
+ * @param {string} [props.description] - Description of the website (overrides siteInfo.description).
+ * @param {string} [props.keywords] - Comma-separated keywords for the website (overrides siteInfo.keywords).
+ * @param {string} [props.inLanguage] - Language of the website content (overrides siteInfo.default_locale).
+ * @param {array} [props.sameAs] - Array of URLs representing social profiles or related sites (overrides siteInfo.sameAs).
+ * @param {object} [props.potentialAction] - Object defining a potentialAction for the website, such as a SearchAction (overrides siteInfo.potentialAction).
+ * @param {object} [props.publisher] - Object defining the publisher of the website, including name, url, and logo (overrides siteInfo).
+ * @param {number} [props.copyrightYear] - Year of copyright for the website (overrides siteInfo.copyrightYear).
+ * @param {object} [props.copyrightHolder] - Object defining the copyright holder, including name and url (overrides siteInfo).
+ */
 WebsiteSchema.propTypes = {
 	name: PropTypes.string,
 	url: PropTypes.string,
@@ -81,11 +59,9 @@ WebsiteSchema.propTypes = {
 	}),
 	siteInfo: PropTypes.object
 };
-
-export type WebsiteSchemaType = WebsiteSchemaProps;
-
-export function WebsiteSchema (props: WebsiteSchemaProps) {
-	const siteInfo = props.siteInfo;
+export type WebsiteSchemaType = InferProps<typeof WebsiteSchema.propTypes>;
+export function WebsiteSchema (props: WebsiteSchemaType) {
+	const siteInfo = props.siteInfo as SiteInfo | undefined;
 	const name = props.name || siteInfo?.name;
 	const url = props.url || siteInfo?.url;
 	if (!name || !url) {

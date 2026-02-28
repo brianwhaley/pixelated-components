@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import PropTypes, { InferProps } from 'prop-types';
 
 interface SchemaFAQProps {
   faqsData: any;
@@ -24,7 +27,17 @@ function normalizeFaqs(data: any): any {
 	return faqs;
 }
 
-export function SchemaFAQ({ faqsData }: SchemaFAQProps) {
+/**
+ * SchemaFAQ — Inject a JSON-LD <script> tag containing an FAQPage schema object.
+ *
+ * @param {object} [props.faqsData] - Structured JSON-LD object representing an FAQ page (FAQPage schema).
+ */
+SchemaFAQ.propTypes = {
+	/** Structured FAQPage JSON-LD object */
+	faqsData: PropTypes.object.isRequired,
+};
+export type SchemaFAQType = InferProps<typeof SchemaFAQ.propTypes>;
+export function SchemaFAQ({ faqsData }: SchemaFAQType) {
 	const normalized = normalizeFaqs(faqsData);
 	return (
 		<script
