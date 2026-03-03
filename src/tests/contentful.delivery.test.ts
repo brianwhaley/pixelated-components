@@ -531,4 +531,343 @@ describe('Contentful Delivery API', () => {
 			expect(Array.isArray(result)).toBe(true);
 		});
 	});
+
+	describe('getContentfulReviewsSchema', () => {
+		const mockApiProps = {
+			base_url: 'https://api.contentful.com',
+			space_id: 'test-space',
+			environment: 'master',
+			delivery_access_token: 'test-token'
+		};
+
+		it('should fetch reviews and convert to schema format', async () => {
+			const mockResponse = {
+				items: [
+					{
+						sys: {
+							contentType: { sys: { id: 'reviews' } },
+							createdAt: '2026-02-28T10:00:00.000Z'
+						},
+						fields: {
+							description: '"Amazing product! Highly recommend."',
+							reviewer: ' - John Doe'
+						}
+					}
+				]
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Product',
+				publisherName: 'Test Publisher'
+			});
+
+			expect(Array.isArray(result)).toBe(true);
+			expect(result.length).toBe(1);
+		});
+
+		it('should convert review to Review schema type', async () => {
+			const mockResponse = {
+				items: [
+					{
+						sys: {
+							contentType: { sys: { id: 'reviews' } },
+							createdAt: '2026-02-28T10:00:00.000Z'
+						},
+						fields: {
+							description: '"Great service!"',
+							reviewer: ' - Jane Smith'
+						}
+					}
+				]
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Service',
+				itemType: 'Service',
+				publisherName: 'Test Publisher'
+			});
+
+			expect(result[0]['@context']).toBe('https://schema.org/');
+			expect(result[0]['@type']).toBe('Review');
+			expect(result[0].itemReviewed['@type']).toBe('Service');
+		});
+
+		it('should extract reviewer name from reviewer field', async () => {
+			const mockResponse = {
+				items: [
+					{
+						sys: {
+							contentType: { sys: { id: 'reviews' } },
+							createdAt: '2026-02-28T10:00:00.000Z'
+						},
+						fields: {
+							description: '"Excellent!"',
+							reviewer: ' - Alice Johnson'
+						}
+					}
+				]
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Item',
+				publisherName: 'Test Publisher'
+			});
+
+			expect(result[0].author.name).toBe('Alice Johnson');
+		});
+
+		it('should handle reviewer name without dash prefix', async () => {
+			const mockResponse = {
+				items: [
+					{
+						sys: {
+							contentType: { sys: { id: 'reviews' } },
+							createdAt: '2026-02-28T10:00:00.000Z'
+						},
+						fields: {
+							description: '"Good product"',
+							reviewer: 'Bob Wilson'
+						}
+					}
+				]
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Item'
+			});
+
+			expect(result[0].author.name).toBe('Bob Wilson');
+		});
+
+		it('should remove quotes from review description', async () => {
+			const mockResponse = {
+				items: [
+					{
+						sys: {
+							contentType: { sys: { id: 'reviews' } },
+							createdAt: '2026-02-28T10:00:00.000Z'
+						},
+						fields: {
+							description: '"This is a quoted review"',
+							reviewer: ' - Test User'
+						}
+					}
+				]
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Item'
+			});
+
+			expect(result[0].reviewBody).toBe('This is a quoted review');
+		});
+
+		it('should set default rating of 5 stars', async () => {
+			const mockResponse = {
+				items: [
+					{
+						sys: {
+							contentType: { sys: { id: 'reviews' } },
+							createdAt: '2026-02-28T10:00:00.000Z'
+						},
+						fields: {
+							description: '"Good"',
+							reviewer: ' - User'
+						}
+					}
+				]
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Item'
+			});
+
+			expect(result[0].reviewRating.ratingValue).toBe('5');
+			expect(result[0].reviewRating.bestRating).toBe('5');
+			expect(result[0].reviewRating.worstRating).toBe('1');
+		});
+
+		it('should include publisher when provided', async () => {
+			const mockResponse = {
+				items: [
+					{
+						sys: {
+							contentType: { sys: { id: 'reviews' } },
+							createdAt: '2026-02-28T10:00:00.000Z'
+						},
+						fields: {
+							description: '"Awesome"',
+							reviewer: ' - Test'
+						}
+					}
+				]
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Item',
+				publisherName: 'Amazing Publisher'
+			});
+
+			expect(result[0].publisher['@type']).toBe('Organization');
+			expect(result[0].publisher.name).toBe('Amazing Publisher');
+		});
+
+		it('should exclude publisher when not provided', async () => {
+			const mockResponse = {
+				items: [
+					{
+						sys: {
+							contentType: { sys: { id: 'reviews' } },
+							createdAt: '2026-02-28T10:00:00.000Z'
+						},
+						fields: {
+							description: '"Nice"',
+							reviewer: ' - Test'
+						}
+					}
+				]
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Item'
+			});
+
+			expect(result[0].publisher).toBeUndefined();
+		});
+
+		it('should return empty array on error', async () => {
+			(global.fetch as any).mockRejectedValueOnce(new Error('API Error'));
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Item'
+			});
+
+			expect(result).toEqual([]);
+		});
+
+		it('should return empty array when no items found', async () => {
+			const mockResponse = {
+				items: undefined
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Item'
+			});
+
+			expect(result).toEqual([]);
+		});
+
+		it('should use default Product type when itemType not provided', async () => {
+			const mockResponse = {
+				items: [
+					{
+						sys: {
+							contentType: { sys: { id: 'reviews' } },
+							createdAt: '2026-02-28T10:00:00.000Z'
+						},
+						fields: {
+							description: '"Review"',
+							reviewer: ' - Test'
+						}
+					}
+				]
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Item'
+			});
+
+			expect(result[0].itemReviewed['@type']).toBe('Product');
+		});
+
+		it('should generate review name from first sentence of review body', async () => {
+			const mockResponse = {
+				items: [
+					{
+						sys: {
+							contentType: { sys: { id: 'reviews' } },
+							createdAt: '2026-02-28T10:00:00.000Z'
+						},
+						fields: {
+							description: '"This is the first sentence. This is the second sentence."',
+							reviewer: ' - Test'
+						}
+					}
+				]
+			};
+
+			(global.fetch as any).mockResolvedValueOnce({
+				ok: true,
+				json: async () => mockResponse
+			});
+
+			const result = await contentfulModule.getContentfulReviewsSchema({
+				apiProps: mockApiProps,
+				itemName: 'Test Item'
+			});
+
+			expect(result[0].name).toBe('This is the first sentence');
+		});
+	});
 });

@@ -24,5 +24,3 @@ export function SchemaBlogPosting(props: SchemaBlogPostingType) {
 		/>
 	);
 }
-
-export default SchemaBlogPosting;

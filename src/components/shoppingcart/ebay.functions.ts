@@ -454,3 +454,79 @@ export function getEbayItemsSearch(props: any){
 	return fetchData(props.token);
 }
 
+
+/* ========== PRODUCT SCHEMA ========== */
+
+/**
+ * getEbayProductSchema — Convert an eBay item into schema.org/Product JSON-LD format.
+ *
+ * @param {object} [props.item] - eBay item object from the Browse API.
+ * @param {string} [props.brandName] - Optional brand name to include in the schema.
+ * @param {string} [props.siteUrl] - Optional site URL for the offer URL.
+ */
+getEbayProductSchema.propTypes = {
+	/** eBay item object */
+	item: PropTypes.any.isRequired,
+	/** Optional brand name */
+	brandName: PropTypes.string,
+	/** Optional site URL for offer */
+	siteUrl: PropTypes.string,
+};
+export type getEbayProductSchemaType = InferProps<typeof getEbayProductSchema.propTypes>;
+export function getEbayProductSchema(props: getEbayProductSchemaType) {
+	const item = props.item;
+	const brandName = props.brandName || 'eBay';
+	const siteUrl = props.siteUrl || item.itemWebUrl || '';
+
+	if (!item || !item.title || !item.price) {
+		return null;
+	}
+
+	// Get the primary image
+	const primaryImage = item.image?.imageUrl || item.thumbnailImages?.[0]?.imageUrl || '';
+	
+	// Collect all images
+	const allImages = [];
+	if (primaryImage) allImages.push(primaryImage);
+	if (Array.isArray(item.additionalImages)) {
+		item.additionalImages.forEach((img: any) => {
+			if (img.imageUrl) allImages.push(img.imageUrl);
+		});
+	}
+
+	const productSchema = {
+		'@context': 'https://schema.org/',
+		'@type': 'Product',
+		name: item.title,
+		description: item.title,
+		image: allImages.length > 1 ? allImages : (allImages[0] || ''),
+		brand: {
+			'@type': 'Brand',
+			name: brandName
+		},
+		offers: {
+			'@type': 'Offer',
+			url: siteUrl,
+			priceCurrency: item.price?.currency || 'USD',
+			price: String(item.price?.value || '0'),
+			availability: 'https://schema.org/InStock',
+			seller: {
+				'@type': 'Organization',
+				name: item.seller?.username || 'eBay Seller'
+			}
+		}
+	};
+
+	// Add seller rating if available
+	if (item.seller?.feedbackPercentage || item.seller?.feedbackScore) {
+		(productSchema as any).aggregateRating = {
+			'@type': 'AggregateRating',
+			ratingValue: item.seller.feedbackPercentage ? String(item.seller.feedbackPercentage) : '0',
+			reviewCount: item.seller.feedbackScore ? String(item.seller.feedbackScore) : '0'
+		};
+	}
+
+	if (debug) console.log("eBay Product Schema:", productSchema);
+	return productSchema;
+}
+

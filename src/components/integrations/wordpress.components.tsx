@@ -10,6 +10,8 @@ import { getWordPressItems, getWordPressLastModified } from './wordpress.functio
 import { Loading, ToggleLoading } from '../general/loading';
 import { CacheManager, type CacheMode } from "../general/cache-manager";
 import "./wordpress.css";
+import { SchemaBlogPosting } from '../general/schema-blogposting';
+import { mapWordPressToBlogPosting } from '../general/schema-blogposting.functions';
 
 // https://microformats.org/wiki/h-entry
 
@@ -125,6 +127,7 @@ export function BlogPostList(props: BlogPostListType) {
 			<Loading />
 			{posts.map((post: BlogPostType) => (
 				<PageGridItem key={post.ID}>
+					<SchemaBlogPosting key={post.ID} post={mapWordPressToBlogPosting(post, false)} />
 					<BlogPostSummary
 						ID={post.ID}
 						title={post.title}

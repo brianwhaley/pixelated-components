@@ -65,5 +65,3 @@ export function RecipeSchema(props: RecipeSchemaType) {
 		/>
 	);
 }
-
-export default RecipeSchema;

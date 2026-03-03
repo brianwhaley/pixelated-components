@@ -46,7 +46,6 @@ export default [
 				'react/prop-types': 'off', // We use our own propTypes system
 				'react/display-name': 'off',
 				...pixelatedPlugin.configs.recommended.rules,
-				"pixelated/prop-types-inferprops": "warn",
 			},
 		settings: {
 			react: {

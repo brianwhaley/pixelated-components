@@ -405,3 +405,224 @@ export async function getContentfulDiscountCodes(props: getContentfulDiscountCod
 		return [];
 	}
 }
+
+
+
+/* ========== GET CONTENTFUL REVIEWS AS SCHEMA ========== */
+/**
+ * getContentfulReviewsSchema — Retrieve review entries from Contentful and convert them to schema.org/Review JSON-LD format.
+ *
+ * @param {shape} [props.apiProps] - Contentful API configuration object (base_url, space_id, environment, access tokens).
+ * @param {string} [props.itemName] - Name of the item/product being reviewed (e.g., 'Epoxy Flooring Service').
+ * @param {string} [props.itemType] - Schema type of the item being reviewed (default: 'Product').
+ * @param {string} [props.publisherName] - Name of the organization publishing the reviews.
+ */
+getContentfulReviewsSchema.propTypes = {
+/** Contentful API configuration */
+	apiProps: PropTypes.shape({
+		proxyURL: PropTypes.string,
+		base_url: PropTypes.string.isRequired,
+		space_id: PropTypes.string.isRequired,
+		environment: PropTypes.string.isRequired,
+		delivery_access_token: PropTypes.string.isRequired,
+	}).isRequired,
+	/** Name of the item/product being reviewed */
+	itemName: PropTypes.string.isRequired,
+	/** Schema type of the item being reviewed */
+	itemType: PropTypes.string,
+	/** Name of the organization publishing the reviews */
+	publisherName: PropTypes.string,
+};
+export type getContentfulReviewsSchemaType = InferProps<typeof getContentfulReviewsSchema.propTypes>;
+export async function getContentfulReviewsSchema(props: getContentfulReviewsSchemaType) {
+	const contentType = "reviews";
+	const itemName = props.itemName;
+	const itemType = props.itemType || "Product";
+	const publisherName = props.publisherName;
+
+	try {
+		if (debug) console.log("Fetching Reviews and converting to schema");
+		const response = await getContentfulEntriesByType({
+			apiProps: props.apiProps,
+			contentType: contentType
+		});
+
+		if (!response || !response.items) {
+			console.error("No reviews found in Contentful");
+			return [];
+		}
+
+		const reviewSchemas = response.items.map((item: any) => {
+			// Extract reviewer name from "fields.reviewer" which comes as " - Name"
+			const reviewerNameRaw = item.fields.reviewer || "Anonymous";
+			const reviewerName = reviewerNameRaw.replace(/^\s*-\s*/, "").trim();
+
+			// Convert Contentful date to ISO format (remove quotes if present)
+			const publishDate = new Date(item.sys.createdAt).toISOString().split("T")[0];
+
+			// Create Review schema object
+			const reviewSchema = {
+				"@context": "https://schema.org/",
+				"@type": "Review",
+				"name": "", // Will be extracted or generated from review body
+				"reviewBody": item.fields.description?.replace(/^"|"$/g, "").trim() || "",
+				"datePublished": publishDate,
+				"author": {
+					"@type": "Person",
+					"name": reviewerName
+				},
+				"itemReviewed": {
+					"@type": itemType,
+					"name": itemName
+				},
+				"reviewRating": {
+					"@type": "Rating",
+					"ratingValue": "5",
+					"bestRating": "5",
+					"worstRating": "1"
+				}
+			};
+
+			// Generate name from first sentence of review or use generic title
+			if (reviewSchema.reviewBody) {
+				const sentences = reviewSchema.reviewBody.split(/[.!?]/);
+				reviewSchema.name = sentences[0].trim().substring(0, 100) || "Review";
+			}
+
+			// Add publisher if provided
+			if (publisherName) {
+				(reviewSchema as any).publisher = {
+					"@type": "Organization",
+					"name": publisherName
+				};
+			}
+
+			return reviewSchema;
+		});
+
+		if (debug) console.log("Review Schemas: ", reviewSchemas);
+		return reviewSchemas;
+	} catch (error) {
+		console.error('Error fetching reviews:', error);
+		return [];
+	}
+}
+
+
+/* ========== GET CONTENTFUL PRODUCT AS SCHEMA ========== */
+/**
+ * getContentfulProductSchema — Retrieve a product entry from Contentful and convert it to schema.org/Product JSON-LD format.
+ *
+ * @param {shape} [props.apiProps] - Contentful API configuration object (base_url, space_id, environment, access tokens).
+ * @param {string} [props.productId] - The product ID field value to search for (e.g., 'PIX-000779').
+ * @param {string} [props.siteUrl] - Optional base site URL for the offer URL.
+ * @param {function} [props.getAssetUrl] - Optional function to transform asset URLs.
+ */
+getContentfulProductSchema.propTypes = {
+/** Contentful API configuration */
+	apiProps: PropTypes.shape({
+		proxyURL: PropTypes.string,
+		base_url: PropTypes.string.isRequired,
+		space_id: PropTypes.string.isRequired,
+		environment: PropTypes.string.isRequired,
+		delivery_access_token: PropTypes.string.isRequired,
+	}).isRequired,
+	/** Product ID to search for */
+	productId: PropTypes.string.isRequired,
+	/** Optional site URL for offer */
+	siteUrl: PropTypes.string,
+	/** Optional function to transform asset URLs */
+	getAssetUrl: PropTypes.func,
+};
+export type getContentfulProductSchemaType = InferProps<typeof getContentfulProductSchema.propTypes>;
+export async function getContentfulProductSchema(props: getContentfulProductSchemaType) {
+	const contentType = "item";
+	const productId = props.productId;
+	const siteUrl = props.siteUrl || '';
+	const getAssetUrl = props.getAssetUrl;
+
+	try {
+		if (debug) console.log("Fetching Product and converting to schema");
+		const response = await getContentfulEntriesByType({
+			apiProps: props.apiProps,
+			contentType: contentType
+		});
+
+		if (!response || !response.items) {
+			console.error("No products found in Contentful");
+			return null;
+		}
+
+		// Use existing helper function to find product by ID field
+		const product = await getContentfulEntryByField({
+			cards: response,
+			searchField: 'id',
+			searchVal: productId
+		});
+
+		if (!product) {
+			console.error(`Product with ID ${productId} not found`);
+			return null;
+		}
+
+		const fields = product.fields;
+
+		// Create Product schema object
+		const productSchema = {
+			'@context': 'https://schema.org/',
+			'@type': 'Product',
+			name: fields.title || '',
+			description: fields.description || '',
+			image: [] as string[],
+			brand: {
+				'@type': 'Brand',
+				name: fields.brand || 'Pixelated'
+			},
+			offers: {
+				'@type': 'Offer',
+				url: siteUrl || '',
+				priceCurrency: 'USD',
+				price: String(fields.price || '0'),
+				availability: 'https://schema.org/InStock'
+			}
+		};
+
+		// Handle images
+		if (Array.isArray(fields.images) && fields.images.length > 0) {
+			// Note: Contentful images are links to assets
+			// In a real implementation, you'd need to resolve these asset URLs
+			// For now, we store them as asset IDs that can be looked up later
+			(productSchema as any).image = fields.images.map((img: any) => {
+				if (img.sys?.id) {
+					return getAssetUrl ? getAssetUrl(img.sys.id) : `https://assets.ctfassets.net/${img.sys.id}`;
+				}
+				return '';
+			}).filter((url: string) => url);
+		}
+
+		// Add additional product attributes if available
+		if (fields.brand) {
+			(productSchema as any).brand.name = fields.brand;
+		}
+		if (fields.model) {
+			(productSchema as any).model = fields.model;
+		}
+		if (fields.color) {
+			(productSchema as any).color = fields.color;
+		}
+
+		// Add rating based on availability/quantity
+		if (fields.quantity !== undefined) {
+			const availability = fields.quantity > 0 
+				? 'https://schema.org/InStock' 
+				: 'https://schema.org/OutOfStock';
+			(productSchema.offers as any).availability = availability;
+		}
+
+		if (debug) console.log("Contentful Product Schema: ", productSchema);
+		return productSchema;
+	} catch (error) {
+		console.error('Error fetching product:', error);
+		return null;
+	}
+}
