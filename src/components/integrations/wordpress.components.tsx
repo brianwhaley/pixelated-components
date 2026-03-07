@@ -35,32 +35,40 @@ const wpApiURL = "https://public-api.wordpress.com/rest/v1/sites/";
  * @returns {array|undefined} Array of blog posts if successful, or undefined if site is not provided.
  */
 getCachedWordPressItems.propTypes = {
-	/** WordPress site identifier (slug or domain) */
+/** WordPress site identifier (slug or domain) */
 	site: PropTypes.string.isRequired,
+	/** Number of posts to fetch (optional) */
+	count: PropTypes.number,
+	/** Base URL for WordPress API (optional) */
+	baseURL: PropTypes.string,
 };
 export type getCachedWordPressItemsType = InferProps<typeof getCachedWordPressItems.propTypes>;
-export async function getCachedWordPressItems(props: { site: string }) {
+export async function getCachedWordPressItems(props: { site: string, count?: number }) {
 	const site = props.site ?? '';
 	if (!site) return undefined;
 	const key = `posts-${site}`; 
 	let posts = wpCache.get<BlogPostType[]>(key) || undefined;
 	
 	if (!posts) {
-		posts = await getWordPressItems({ site });
+		posts = await getWordPressItems({ site, baseURL: wpApiURL });
 		if (posts) wpCache.set(key, posts);
 	}
 
+	// Check if cached data is stale and refresh if needed
 	if (posts && posts.length > 0 && posts[0].modified) {
 		const lastModified = await getWordPressLastModified({ site: props.site, baseURL: wpApiURL });
 		if (lastModified && lastModified !== posts[0].modified) {
-			// our cached response is stale relative to origin
-			import('next/cache').then(({ revalidateTag }) => {
-				revalidateTag(`wp-posts-${props.site}`, {});
-			});
+			// FIX - prevously was busting next/cache, now busting wpCache
+			// Cached response is stale - fetch fresh data and update localStorage immediately
+			const freshPosts = await getWordPressItems({ site, baseURL: wpApiURL });
+			if (freshPosts && freshPosts.length > 0) {
+				wpCache.set(key, freshPosts);
+				posts = freshPosts;
+			}
 		}
 	}
 
-	return posts;
+	return posts?.slice(0, props.count ?? posts.length);
 }
 
 

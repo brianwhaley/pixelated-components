@@ -91,8 +91,8 @@ export function SiteHealthGoogleSearchConsole({ siteName, startDate, endDate }: 
 									/>
 									<YAxis tick={{ fontSize: 12 }} />
 									<Tooltip
-										formatter={(value: number | undefined, name: string | undefined) => [
-											value?.toLocaleString() || '0',
+										formatter={(value, name) => [
+											(value as number)?.toLocaleString() || '0',
 											name || 'Unknown'
 										]}
 										labelFormatter={(label: React.ReactNode) => `Date: ${String(label)}`}

@@ -25,12 +25,12 @@ describe('getCachedWordPressItems', () => {
     // first invocation should call underlying fetch
     const posts1 = await getCachedWordPressItems(opts);
     expect(mockedFetch).toHaveBeenCalledTimes(1);
-    expect(posts1).toBe(fakePosts);
+    expect(posts1).toStrictEqual(fakePosts);
 
     // call again with same site, still cached
     const posts2 = await getCachedWordPressItems(opts);
     expect(mockedFetch).toHaveBeenCalledTimes(1);
-    expect(posts2).toBe(fakePosts);
+    expect(posts2).toStrictEqual(fakePosts);
   });
 
   it('uses separate cached values for different sites', async () => {
@@ -41,8 +41,8 @@ describe('getCachedWordPressItems', () => {
     const result1 = await getCachedWordPressItems({ site: 'a' });
     const result2 = await getCachedWordPressItems({ site: 'b' });
 
-    expect(result1).toBe(postsA);
-    expect(result2).toBe(postsB);
+    expect(result1).toStrictEqual(postsA);
+    expect(result2).toStrictEqual(postsB);
     // two different sites should have triggered two fetches
     expect(mockedFetch).toHaveBeenCalledTimes(2);
   });

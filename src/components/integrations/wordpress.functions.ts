@@ -58,7 +58,7 @@ export async function getWordPressItems(props: { site: string; count?: number; b
 	const { baseURL = wpApiURL } = props;
 	const requested = props.count; // undefined means fetch all available
 	const tag = `wp-posts-${props.site}`; // unique per site so we can invalidate fetch cache separately
-	const posts: BlogPostType[] = [];
+	let posts: BlogPostType[] = [];
 	let page = 1;
 	while (true) {
 		const remaining = requested ? Math.max(requested - posts.length, 0) : 100;
@@ -100,17 +100,18 @@ export async function getWordPressItems(props: { site: string; count?: number; b
 	// the first post (which is the most recent) with a fresh timestamp obtained
 	// via getWordPressLastModified.  if the lastModified indicates a newer update than
 	// what we just fetched, bust the cache so future callers get the latest data.
-	if (posts && posts.length > 0 && posts[0].modified) {
+	// Only run this on the server ( no window object ) where revalidateTag is available
+	if (typeof window === 'undefined' && posts && posts.length > 0 && posts[0].modified) {
 		const lastModified = await getWordPressLastModified({ site: props.site, baseURL });
 		if (lastModified && lastModified !== posts[0].modified) {
-			// our cached response is stale relative to origin
+			// our cached response is stale relative to origin - bust Next.js cache
 			import('next/cache').then(({ revalidateTag }) => {
 				revalidateTag(`wp-posts-${props.site}`, {});
 			});
 		}
 	}
 	
-	
+	posts = posts.sort((a, b) => ((a.date ?? '') < (b.date ?? '')) ? 1 : -1);
 	return posts;
 }
 

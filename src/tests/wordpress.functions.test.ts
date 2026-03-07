@@ -73,19 +73,37 @@ describe('WordPress Functions', () => {
   describe('getWordPressItems', () => {
     const mockPosts = [
       {
-        id: 1,
-        title: { rendered: 'Test Post 1' },
-        featured_image: 'https://i0.wp.com/example.com/image1.jpg'
+        ID: 1,
+        title: 'Test Post 1',
+        featured_image: 'https://i0.wp.com/example.com/image1.jpg',
+        content: 'Test content 1',
+        excerpt: 'Excerpt 1',
+        date: '2024-01-01T00:00:00+00:00',
+        URL: 'https://example.com/post-1',
+        categories: [],
+        author: null
       },
       {
-        id: 2,
-        title: { rendered: 'Test Post 2' },
-        featured_image: 'https://example.com/image2.jpg' // Already direct URL
+        ID: 2,
+        title: 'Test Post 2',
+        featured_image: 'https://example.com/image2.jpg', // Already direct URL
+        content: 'Test content 2',
+        excerpt: 'Excerpt 2',
+        date: '2024-01-02T00:00:00+00:00',
+        URL: 'https://example.com/post-2',
+        categories: [],
+        author: null
       },
       {
-        id: 3,
-        title: { rendered: 'Test Post 3' },
-        featured_image: null // No featured image
+        ID: 3,
+        title: 'Test Post 3',
+        featured_image: null, // No featured image
+        content: 'Test content 3',
+        excerpt: 'Excerpt 3',
+        date: '2024-01-03T00:00:00+00:00',
+        URL: 'https://example.com/post-3',
+        categories: [],
+        author: null
       }
     ];
 
@@ -111,9 +129,10 @@ describe('WordPress Functions', () => {
 
       expect(result).toBeDefined();
       expect(result).toHaveLength(3);
-      expect(result![0].featured_image).toBe('https://example.com/image1.jpg'); // Converted
-      expect(result![1].featured_image).toBe('https://example.com/image2.jpg'); // Unchanged
-      expect(result![2].featured_image).toBeNull(); // Unchanged
+      // After sorting by date descending: Post 3, Post 2, Post 1
+      expect(result![0].featured_image).toBeNull(); // Post 3 (2024-01-03) - Unchanged
+      expect(result![1].featured_image).toBe('https://example.com/image2.jpg'); // Post 2 (2024-01-02) - Unchanged
+      expect(result![2].featured_image).toBe('https://example.com/image1.jpg'); // Post 1 (2024-01-01) - Converted
     });
 
     it('should handle API errors gracefully', async () => {

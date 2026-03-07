@@ -112,8 +112,8 @@ export function SiteHealthCloudwatch({ siteName, startDate, endDate }: SiteHealt
 										label={{ value: 'Check Count', angle: -90, position: 'insideLeft' }}
 									/>
 									<Tooltip
-										formatter={(value: number | undefined, name: string | undefined) => [
-											value?.toLocaleString() || '0',
+										formatter={(value, name) => [
+											(value as number)?.toLocaleString() || '0',
 											name || 'Unknown'
 										]}
 										labelFormatter={(label: React.ReactNode) => `Date: ${String(label)}`}
