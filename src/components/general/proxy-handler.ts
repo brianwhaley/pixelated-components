@@ -64,6 +64,7 @@ export function handlePixelatedProxy(req: NextRequest) {
 		"img-src 'self' data: https: https://*.gravatar.com https://*.staticflickr.com https://*.ctfassets.net https://res.cloudinary.com https://*.ebayimg.com",
 		"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.google.com https://www.paypalobjects.com",
 		"font-src 'self' data: https://fonts.gstatic.com",
+		"media-src 'self' https://*.ctfassets.net",
 		"frame-src 'self' https://*.hubspot.com https://*.googletagmanager.com https://*.adtrafficquality.google https://*.google.com https://calendly.com https://*.calendly.com https://*.hsforms.net https://www.paypal.com https://www.paypalobjects.com",
 		"frame-ancestors 'none'",
 		"object-src 'none'",
