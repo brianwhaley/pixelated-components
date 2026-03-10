@@ -1,13 +1,15 @@
 import React from 'react';
-import { LocalBusinessSchema } from '@/components/general/schema-localbusiness';
-import { WebsiteSchema } from '@/components/general/schema-website';
-import { ReviewSchema } from '@/components/general/schema-review';
-import { RecipeSchema } from '@/components/general/schema-recipe';
-import { SchemaFAQ } from '@/components/general/schema-faq';
-import { SchemaBlogPosting } from '@/components/general/schema-blogposting';
-import { ServicesSchema } from '@/components/general/schema-services';
-import { ProductSchema } from '@/components/general/schema-product';
-import { BreadcrumbListSchema } from '@/components/general/schema-breadcrumb';
+import {
+	LocalBusinessSchema,
+	WebsiteSchema,
+	ReviewSchema,
+	RecipeSchema,
+	SchemaFAQ,
+	SchemaBlogPosting,
+	ServicesSchema,
+	ProductSchema,
+	BreadcrumbListSchema,
+} from '@/components/general/schema';
 
 export default {
 	title: 'General',

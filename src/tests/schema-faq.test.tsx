@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { SchemaFAQ } from '@/components/general/schema-faq';
+import { SchemaFAQ } from '@/components/general/schema';
 
 describe('SchemaFAQ normalization', () => {
   it('merges multiple acceptedAnswer objects into single text', () => {

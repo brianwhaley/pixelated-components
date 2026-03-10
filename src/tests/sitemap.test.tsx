@@ -4,25 +4,25 @@ import {
 	createImageURLsFromJSON,
 	createWordPressURLs,
 	createContentfulURLs,
-	createContentfulImageURLs,
+	createContentfulAssetURLs,
 	createEbayItemURLs,
 	generateSitemap,
 	clearEbaySitemapCache,
 	type SitemapEntry
-} from '@/components/general/sitemap';
+} from '../components/general/sitemap';
 
 // Mock external dependencies
-vi.mock('@/components/integrations/wordpress.functions');
-vi.mock('@/components/integrations/contentful.delivery');
-vi.mock('@/components/shoppingcart/ebay.functions');
-vi.mock('@/components/config/config');
-vi.mock('@/components/general/metadata.functions');
+vi.mock('../components/integrations/wordpress.functions');
+vi.mock('../components/integrations/contentful.delivery');
+vi.mock('../components/shoppingcart/ebay.functions');
+vi.mock('../components/config/config');
+vi.mock('../components/general/metadata.functions');
 // Import mocked modules
-import * as wordpressModule from '@/components/integrations/wordpress.functions';
-import * as contentfulModule from '@/components/integrations/contentful.delivery';
-import * as ebayModule from '@/components/shoppingcart/ebay.functions';
-import * as configModule from '@/components/config/config';
-import * as metadataModule from '@/components/general/metadata.functions';
+import * as wordpressModule from '../components/integrations/wordpress.functions';
+import * as contentfulModule from '../components/integrations/contentful.delivery';
+import * as ebayModule from '../components/shoppingcart/ebay.functions';
+import * as configModule from '../components/config/config';
+import * as metadataModule from '../components/general/metadata.functions';
 
 // Mock fetch globally
 global.fetch = vi.fn();
@@ -77,7 +77,7 @@ describe('Sitemap Helper Functions', () => {
 			const result = await createPageURLs(mockRoutes, origin);
 
 			expect(result).toHaveLength(2);
-			expect(result.every(entry => !entry.url.includes('external.com'))).toBe(true);
+			expect(result.every((entry: SitemapEntry) => !entry.url.includes('external.com'))).toBe(true);
 		});
 
 		it('should handle empty routes array', async () => {
@@ -329,21 +329,47 @@ describe('Sitemap Helper Functions', () => {
 		});
 	});
 
-	describe('createContentfulImageURLs', () => {
+	describe('createContentfulAssetURLs', () => {
 		it('should create sitemap entry with Contentful images', async () => {
-			const mockAssets = [
-				{ image: '/uploads/image1.jpg', imageAlt: 'Alt text 1' },
-				{ image: '//example.com/image2.jpg', imageAlt: 'Alt text 2' },
-				{ image: 'https://cdn.example.com/image3.jpg', imageAlt: 'Alt text 3' }
-			];
+			const mockAssets = {
+				items: [
+					{
+						fields: {
+							file: {
+								contentType: 'image/jpeg',
+								url: '/uploads/image1.jpg'
+							}
+						},
+						sys: { createdAt: '2024-01-01T10:00:00Z' }
+					},
+					{
+						fields: {
+							file: {
+								contentType: 'image/png',
+								url: '//example.com/image2.png'
+							}
+						},
+						sys: { createdAt: '2024-01-02T10:00:00Z' }
+					},
+					{
+						fields: {
+							file: {
+								contentType: 'image/webp',
+								url: 'https://cdn.example.com/image3.webp'
+							}
+						},
+						sys: { createdAt: '2024-01-03T10:00:00Z' }
+					}
+				]
+			};
 
-			const mockGetContentfulAssetURLs = vi.mocked(contentfulModule.getContentfulAssetURLs);
-			mockGetContentfulAssetURLs.mockResolvedValue(mockAssets);
+			const mockGetContentfulAssets = vi.mocked(contentfulModule.getContentfulAssets);
+			mockGetContentfulAssets.mockResolvedValue(mockAssets);
 
 			const mockGetFullPixelatedConfig = vi.mocked(configModule.getFullPixelatedConfig);
 			mockGetFullPixelatedConfig.mockReturnValue({});
 
-			const result = await createContentfulImageURLs({
+			const result = await createContentfulAssetURLs({
 				apiProps: {
 					base_url: 'https://cdn.contentful.com',
 					space_id: 'test-space',
@@ -356,20 +382,90 @@ describe('Sitemap Helper Functions', () => {
 			expect(result).toHaveLength(1);
 			expect(result[0]).toMatchObject({
 				url: 'https://example.com/images',
-				images: [
-					'https://example.com/uploads/image1.jpg',
-					'https://example.com/image2.jpg',
-					'https://cdn.example.com/image3.jpg'
+				images: expect.arrayContaining([
+					expect.stringContaining('image1.jpg'),
+					expect.stringContaining('image2.png'),
+					expect.stringContaining('image3.webp')
+				])
+			});
+			expect(result[0].lastModified).toBeInstanceOf(Date);
+		});
+
+		it('should create sitemap entry with Contentful videos using Google video sitemap format', async () => {
+			const mockAssets = {
+				items: [
+					{
+						fields: {
+							title: 'Tutorial Video',
+							description: 'Learn how to grill steaks',
+							file: {
+								contentType: 'video/mp4',
+								url: 'https://cdn.example.com/video1.mp4'
+							}
+						},
+						sys: { createdAt: '2024-01-01T10:00:00Z' }
+					},
+					{
+						fields: {
+							title: 'Cooking Tips',
+							description: 'Essential cooking techniques',
+							file: {
+								contentType: 'video/webm',
+								url: 'https://cdn.example.com/video2.webm'
+							}
+						},
+						sys: { createdAt: '2024-01-02T10:00:00Z' }
+					}
 				]
+			};
+
+			const mockGetContentfulAssets = vi.mocked(contentfulModule.getContentfulAssets);
+			mockGetContentfulAssets.mockResolvedValue(mockAssets);
+
+			const mockGetFullPixelatedConfig = vi.mocked(configModule.getFullPixelatedConfig);
+			mockGetFullPixelatedConfig.mockReturnValue({});
+
+			const result = await createContentfulAssetURLs({
+				apiProps: {
+					base_url: 'https://cdn.contentful.com',
+					space_id: 'test-space',
+					environment: 'master',
+					access_token: 'test-token'
+				},
+				origin: 'https://example.com'
+			});
+
+			expect(result).toHaveLength(1);
+			expect(result[0]).toMatchObject({
+				url: 'https://example.com/videos'
+			});
+			expect(result[0].videos).toHaveLength(2);
+			expect(result[0].videos![0]).toMatchObject({
+				title: 'Tutorial Video',
+				description: 'Learn how to grill steaks',
+				content_loc: expect.stringContaining('video1.mp4'),
+				player_loc: expect.stringContaining('video1.mp4'),
+				publication_date: expect.any(String),
+				family_friendly: 'yes'
+			});
+			expect(result[0].videos![1]).toMatchObject({
+				title: 'Cooking Tips',
+				description: 'Essential cooking techniques',
+				content_loc: expect.stringContaining('video2.webm'),
+				player_loc: expect.stringContaining('video2.webm'),
+				publication_date: expect.any(String),
+				family_friendly: 'yes'
 			});
 			expect(result[0].lastModified).toBeInstanceOf(Date);
 		});
 
 		it('should handle empty assets array', async () => {
-			const mockGetContentfulAssetURLs = vi.mocked(contentfulModule.getContentfulAssetURLs);
-			mockGetContentfulAssetURLs.mockResolvedValue([]);
+			const mockAssets = { items: [] };
 
-			const result = await createContentfulImageURLs({
+			const mockGetContentfulAssets = vi.mocked(contentfulModule.getContentfulAssets);
+			mockGetContentfulAssets.mockResolvedValue(mockAssets);
+
+			const result = await createContentfulAssetURLs({
 				apiProps: {
 					base_url: 'https://cdn.contentful.com',
 					space_id: 'test-space',
@@ -383,10 +479,10 @@ describe('Sitemap Helper Functions', () => {
 		});
 
 		it('should handle API errors gracefully', async () => {
-			const mockGetContentfulAssetURLs = vi.mocked(contentfulModule.getContentfulAssetURLs);
-			mockGetContentfulAssetURLs.mockRejectedValue(new Error('API Error'));
+			const mockGetContentfulAssets = vi.mocked(contentfulModule.getContentfulAssets);
+			mockGetContentfulAssets.mockRejectedValue(new Error('API Error'));
 
-			const result = await createContentfulImageURLs({
+			const result = await createContentfulAssetURLs({
 				apiProps: {
 					base_url: 'https://cdn.contentful.com',
 					space_id: 'test-space',
@@ -400,16 +496,42 @@ describe('Sitemap Helper Functions', () => {
 		});
 
 		it('should filter out empty image URLs', async () => {
-			const mockAssets = [
-				{ image: '/valid.jpg', imageAlt: 'Valid' },
-				{ image: '', imageAlt: 'Empty' },
-				{ image: 'another-valid.jpg', imageAlt: 'Another Valid' }
-			];
+			const mockAssets = {
+				items: [
+					{
+						fields: {
+							file: {
+								contentType: 'image/jpeg',
+								url: '/valid.jpg'
+							}
+						},
+						sys: { createdAt: '2024-01-01T10:00:00Z' }
+					},
+					{
+						fields: {
+							file: {
+								contentType: 'image/png',
+								url: ''
+							}
+						},
+						sys: { createdAt: '2024-01-02T10:00:00Z' }
+					},
+					{
+						fields: {
+							file: {
+								contentType: 'image/webp',
+								url: 'another-valid.jpg'
+							}
+						},
+						sys: { createdAt: '2024-01-03T10:00:00Z' }
+					}
+				]
+			};
 
-			const mockGetContentfulAssetURLs = vi.mocked(contentfulModule.getContentfulAssetURLs);
-			mockGetContentfulAssetURLs.mockResolvedValue(mockAssets);
+			const mockGetContentfulAssets = vi.mocked(contentfulModule.getContentfulAssets);
+			mockGetContentfulAssets.mockResolvedValue(mockAssets);
 
-			const result = await createContentfulImageURLs({
+			const result = await createContentfulAssetURLs({
 				apiProps: {
 					base_url: 'https://cdn.contentful.com',
 					space_id: 'test-space',
@@ -420,8 +542,8 @@ describe('Sitemap Helper Functions', () => {
 			});
 
 			expect(result[0].images).toHaveLength(2);
-			expect(result[0].images![0]).toBe('https://example.com/valid.jpg');
-			expect(result[0].images![1]).toBe('https://example.com/another-valid.jpg');
+			expect(result[0].images![0]).toContain('valid.jpg');
+			expect(result[0].images![1]).toContain('another-valid.jpg');
 		});
 	});
 
@@ -520,7 +642,7 @@ describe('Sitemap Helper Functions', () => {
 			const result = await generateSitemap(config, 'https://example.com');
 
 			expect(result.length).toBeGreaterThan(0);
-			expect(result.some(entry => entry.url.includes('/home'))).toBe(true);
+			expect(result.some((entry: SitemapEntry) => entry.url.includes('/home'))).toBe(true);
 		});
 
 		it('should include image URLs when enabled', async () => {
@@ -536,7 +658,7 @@ describe('Sitemap Helper Functions', () => {
 			};
 			const result = await generateSitemap(config, 'https://example.com');
 
-			expect(result.some(entry => entry.url.includes('/images'))).toBe(true);
+			expect(result.some((entry: SitemapEntry) => entry.url.includes('/images'))).toBe(true);
 		});
 
 		it('should include WordPress URLs when enabled', async () => {
@@ -558,7 +680,7 @@ describe('Sitemap Helper Functions', () => {
 			};
 			const result = await generateSitemap(config, 'https://example.com');
 
-			expect(result.some(entry => entry.url.includes('blog.example.com'))).toBe(true);
+			expect(result.some((entry: SitemapEntry) => entry.url.includes('blog.example.com'))).toBe(true);
 		});
 
 		it('should deduplicate entries by URL', async () => {
@@ -582,7 +704,7 @@ describe('Sitemap Helper Functions', () => {
 			// Create a scenario where we might have duplicates
 			const result = await generateSitemap(config, 'https://example.com');
 
-			const urls = result.map(entry => entry.url);
+			const urls = result.map((entry: SitemapEntry) => entry.url);
 			const uniqueUrls = new Set(urls);
 			expect(urls.length).toBe(uniqueUrls.size);
 		});

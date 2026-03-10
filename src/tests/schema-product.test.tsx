@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '../test/test-utils';
-import { ProductSchema, type ProductSchemaType } from '@/components/general/schema-product';
+import { ProductSchema, type ProductSchemaType } from '@/components/general/schema';
 
 const defaultProduct: ProductSchemaType['product'] = {
 	'@context': 'https://schema.org/',

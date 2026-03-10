@@ -10,8 +10,8 @@ import { getWordPressItems, getWordPressLastModified } from './wordpress.functio
 import { Loading, ToggleLoading } from '../general/loading';
 import { CacheManager, type CacheMode } from "../general/cache-manager";
 import "./wordpress.css";
-import { SchemaBlogPosting } from '../general/schema-blogposting';
-import { mapWordPressToBlogPosting } from '../general/schema-blogposting.functions';
+import { SchemaBlogPosting } from '../general/schema';
+import { mapWordPressToBlogPosting } from '../general/schema.functions';
 
 // https://microformats.org/wiki/h-entry
 

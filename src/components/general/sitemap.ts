@@ -1,8 +1,9 @@
 import PropTypes, { InferProps } from "prop-types";
 import type { MetadataRoute } from 'next';
+import { encode } from 'html-entities';
 import { getAllRoutes } from "./metadata.functions";
 import { getWordPressItems, getWordPressItemImages } from "../integrations/wordpress.functions";
-import { getContentfulFieldValues, getContentfulAssetURLs } from "../integrations/contentful.delivery";
+import { getContentfulFieldValues, getContentfulAssets } from "../integrations/contentful.delivery";
 import { getEbayAppToken, getEbayItemsSearch } from "../shoppingcart/ebay.functions";
 import { getFullPixelatedConfig } from '../config/config';
 import { CacheManager } from '../general/cache-manager';
@@ -26,7 +27,7 @@ export type SitemapConfig = {
 	createImageURLs?: boolean;
 	createImageURLsFromJSON?: boolean;
 	createContentfulURLs?: boolean;
-	createContentfulImageURLs?: boolean;
+	createContentfulAssetURLs?: boolean;
 	createPageBuilderURLs?: boolean;
 	createEbayItemURLs?: boolean;
 	wordpress?: { site?: string };
@@ -126,7 +127,7 @@ export async function generateSitemap(cfg: SitemapConfig = {}, originInput?: str
 	const useWPImages = cfg.createWordPressImageURLs ?? false;
 	const useImageJSON = cfg.createImageURLsFromJSON ?? true;
 	const useContentful = cfg.createContentfulURLs ?? false;
-	const useContentfulImages = cfg.createContentfulImageURLs ?? false;
+	const useContentfulAssets = cfg.createContentfulAssetURLs ?? false;
 	const usePageBuilder = cfg.createPageBuilderURLs ?? false;
 	const useEbay = cfg.createEbayItemURLs ?? false;
 
@@ -149,9 +150,9 @@ export async function generateSitemap(cfg: SitemapConfig = {}, originInput?: str
 	if (useContentful && cfg.contentful) {
 		sitemapEntries.push(...(await createContentfulURLs({ apiProps: cfg.contentful, origin })));
 	}
-	// Contentful images
-	if (useContentfulImages && cfg.contentful) {
-		sitemapEntries.push(...(await createContentfulImageURLs({ apiProps: cfg.contentful, origin })));
+	// Contentful assets (images and videos)
+	if (useContentfulAssets && cfg.contentful) {
+		sitemapEntries.push(...(await createContentfulAssetURLs({ apiProps: cfg.contentful, origin })));
 	}
 	// Page Builder (existing helper in package not always present)
 	if (usePageBuilder && cfg.contentful) {
@@ -368,17 +369,17 @@ export async function createContentfulPageBuilderURLs(props: createContentfulPag
 
 
 /**
- * createContentfulImageURLs — Fetch Contentful assets and generate absolute image URLs for the sitemap.
+ * createContentfulAssetURLs — Fetch Contentful assets and generate absolute image and video URLs for the sitemap.
  *
  * @param {shape} [props.apiProps] - Contentful API props (proxyURL optional, base_url, space_id, environment, access_token).
- * @param {string} [props.proxyURL] - Optional proxy base URL to route image requests through.
+ * @param {string} [props.proxyURL] - Optional proxy base URL to route asset requests through.
  * @param {string} [props.base_url] - Contentful base API URL.
  * @param {string} [props.space_id] - Contentful space id.
  * @param {string} [props.environment] - Contentful environment.
  * @param {string} [props.access_token] - Access token to read assets from Contentful.
- * @param {string} [props.origin] - Origin used to convert relative image paths to absolute URLs.
+ * @param {string} [props.origin] - Origin used to convert relative asset paths to absolute URLs.
  */
-createContentfulImageURLs.propTypes = {
+createContentfulAssetURLs.propTypes = {
 /** Contentful API properties */
 	apiProps: PropTypes.shape({
 		/** Optional proxy URL */
@@ -395,31 +396,79 @@ createContentfulImageURLs.propTypes = {
 	/** Origin used to convert relative URLs to absolute */
 	origin: PropTypes.string.isRequired,
 };
-export type createContentfulImageURLsType = InferProps<typeof createContentfulImageURLs.propTypes>;
-export async function createContentfulImageURLs(props: createContentfulImageURLsType): Promise<SitemapEntry[]> {
+export type createContentfulAssetURLsType = InferProps<typeof createContentfulAssetURLs.propTypes>;
+export async function createContentfulAssetURLs(props: createContentfulAssetURLsType): Promise<SitemapEntry[]> {
 	const sitemap: SitemapEntry[] = [];
 	const providerContentfulApiProps = getFullPixelatedConfig()?.contentful;
 	// Changed order: provider config overrides apiProps for security (tokens)
 	const mergedApiProps = { ...props.apiProps, ...providerContentfulApiProps };
-	// const mergedApiProps = { ...providerContentfulApiProps, ...props.apiProps }; // Old: apiProps overrode provider
 	try {
-		const assets = await getContentfulAssetURLs({ apiProps: mergedApiProps });
-		if (!Array.isArray(assets) || assets.length === 0) return sitemap;
-		const newImages = assets.map((a: any) => {
-			let i = a.image || '';
-			if (!i) return ''; // Filter out empty images before processing
-			if (i.startsWith('//')) i = `https:${i}`;
-			else if (i.startsWith('/')) i = `${props.origin}${i}`;
-			else if (!i.startsWith('http://') && !i.startsWith('https://')) i = `${props.origin}/${i}`; // Handle relative URLs
-			return i;
-		}).filter(Boolean);
-		sitemap.push({
-			url: `${props.origin}/images`,
-			images: newImages,
-			lastModified: new Date(),
-		});
+		const rawAssets = await getContentfulAssets({ apiProps: mergedApiProps });
+		if (!Array.isArray(rawAssets?.items) || rawAssets.items.length === 0) {
+			return sitemap;
+		}
+
+		// Process assets into images and videos by content type
+		const imageAssets = rawAssets.items.filter((a: any) => 
+			a.fields?.file?.contentType?.startsWith('image/')
+		);
+		// Process image assets
+		if (imageAssets.length > 0) {
+			const imageURLs = imageAssets.map((a: any) => {
+				let url = a.fields?.file?.url || '';
+				if (!url) return '';
+				if (url.startsWith('//')) url = `https:${url}`;
+				else if (url.startsWith('/')) url = `${props.origin}${url}`;
+				else if (!url.startsWith('http://') && !url.startsWith('https://')) url = `${props.origin}/${url}`;
+				return encode(url);
+			}).filter(Boolean);
+			if (imageURLs.length > 0) {
+				sitemap.push({
+					url: `${props.origin}/images`,
+					lastModified: new Date(),
+					changeFrequency: 'always',
+					priority: 1.0,
+					images: imageURLs,
+				});
+			}
+		}
+
+		const videoAssets = rawAssets.items.filter((a: any) => 
+			a.fields?.file?.contentType?.startsWith('video/')
+		);
+		// Process video assets
+		if (videoAssets.length > 0) {
+
+			console.log("Video Assets", videoAssets);
+
+			sitemap.push({
+				url: `${props.origin}/videos`,
+				lastModified: new Date(),
+				changeFrequency: 'always',
+				priority: 1.0,
+				// videos: videoURLs,
+				videos: videoAssets.map((a: any) => {
+					let url = a.fields?.file?.url || '';
+					if (!url) return null;
+					if (url.startsWith('//')) url = `https:${url}`;
+					else if (url.startsWith('/')) url = `${props.origin}${url}`;
+					else if (!url.startsWith('http://') && !url.startsWith('https://')) url = `${props.origin}/${url}`;
+					return { 
+						title: a.fields?.title || 'Untitled Video',
+						thumbnail_loc: '/images/placeholder.png',
+						description: a.fields?.description || 'No description available',
+						publication_date: a.sys?.createdAt || new Date().toISOString(),
+						content_loc: encode(url),
+						player_loc: encode(url),
+						family_friendly: 'yes',
+						// duration: 600,
+					};
+				})
+			});
+		}
+
 	} catch(e) {
-		if (typeof console !== 'undefined') console.warn('createContentfulImageURLs failed', e);
+		if (typeof console !== 'undefined') console.warn('createContentfulAssetURLs failed', e);
 	}
 	return sitemap as SitemapEntry[];
 }

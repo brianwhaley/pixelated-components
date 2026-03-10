@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '../test/test-utils';
-import { RecipeSchema, type RecipeSchemaType } from '@/components/general/schema-recipe';
+import { RecipeSchema, type RecipeSchemaType } from '@/components/general/schema';
 import { realRecipes } from '../test/test-data';
 
 const defaultRecipe: RecipeSchemaType['recipe'] = realRecipes.items?.[0] || { '@context': 'https://schema.org', '@type': 'Recipe', name: 'Fallback' };

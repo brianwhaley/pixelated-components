@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import { BreadcrumbListSchema } from '../components/general/schema-breadcrumb';
+import { BreadcrumbListSchema } from '../components/general/schema';
 
 describe('BreadcrumbListSchema', () => {
 	const mockRoutes = [

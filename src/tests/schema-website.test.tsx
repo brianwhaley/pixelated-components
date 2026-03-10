@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '../test/test-utils';
 import type { SiteInfo } from '@/components/config/config.types';
-import { WebsiteSchema, type WebsiteSchemaType } from '@/components/general/schema-website';
+import { WebsiteSchema, type WebsiteSchemaType } from '@/components/general/schema';
 import configData from '../test/test-data';
 
 describe('WebsiteSchema', () => {

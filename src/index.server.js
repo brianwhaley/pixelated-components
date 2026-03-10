@@ -15,7 +15,7 @@ export * from './components/general/manifest';
 export * from './components/general/metadata.functions';
 export * from './components/general/proxy-handler';
 export * from './components/general/resume';
-export * from './components/general/schema-blogposting.functions';
+export * from './components/general/schema.functions';
 export * from './components/general/sitemap';
 export * from './components/general/skeleton';
 export * from './components/general/well-known';
@@ -30,6 +30,8 @@ export * from './components/integrations/google.reviews.functions';
 export * from './components/integrations/gravatar.functions';
 export * from './components/integrations/instagram.functions';
 export * from './components/integrations/lipsum';
+export * from './components/integrations/spotify.components';
+export * from './components/integrations/spotify.functions';
 export * from './components/integrations/wordpress.functions';
 
 export * from './components/shoppingcart/ebay.functions';
