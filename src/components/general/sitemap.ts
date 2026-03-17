@@ -455,7 +455,7 @@ export async function createContentfulAssetURLs(props: createContentfulAssetURLs
 					else if (!url.startsWith('http://') && !url.startsWith('https://')) url = `${props.origin}/${url}`;
 					return { 
 						title: a.fields?.title || 'Untitled Video',
-						thumbnail_loc: '/images/placeholder.png',
+						thumbnail_loc: `${props.origin}/images/placeholder.png`,
 						description: a.fields?.description || 'No description available',
 						publication_date: a.sys?.createdAt || new Date().toISOString(),
 						content_loc: encode(url),

@@ -143,6 +143,15 @@ const config = {
 			})
 		);
 
+        // Externalize Next.js server-side modules that can't run in browser
+        config.externals = config.externals || {};
+        config.externals = {
+            ...config.externals,
+            'next/cache': 'commonjs next/cache',
+            'next/server': 'commonjs next/server',
+            '@opentelemetry/api': 'commonjs @opentelemetry/api',
+        };
+
         // Removed NormalModuleReplacementPlugin to avoid dist/ dependency
 
         return config;

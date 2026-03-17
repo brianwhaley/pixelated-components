@@ -164,21 +164,15 @@ fi
 echo ""
 echo "📦 Step $((STEP_COUNT++)): Updating dependencies (all sections)..."
 echo "================================================="
-# iterate through prod/dev/optional sections, only bumping same-major versions
-for scope in "" dev optional; do
-    flag=$([ "$scope" ] && echo "--$scope" || echo "")
-    save=$([ "$scope" ] && echo "--save-$scope" || echo "--save")
-    pkgs=$(npm outdated $flag --parseable --long | awk -F: '{ split($2,c,"@"); split($4,l,"@"); split(c[2],cv,"\\."); split(l[2],lv,"\\."); if(cv[1]==lv[1]) print $4 }')
-    if [ -n "$pkgs" ]; then
-        echo "Updating $scope packages: $pkgs"
-        echo "$pkgs" | xargs npm install --force $save 2>/dev/null || true
-    else
-        echo "✅ No $scope updates needed"
-    fi
-done
-# report peer deps separately
-peers=$(npm outdated --parseable --long --peer | awk -F: '{print $4}')
-printf "peer deps (manual): %s\n" "$peers"
+if [ -f "src/scripts/update.sh" ]; then
+    bash src/scripts/update.sh
+elif [ -f "scripts/update.sh" ]; then
+    bash scripts/update.sh
+elif command -v npm &> /dev/null; then
+    npm run update 2>/dev/null || echo "⚠️  No update script found; skipping dependency update"
+else
+    echo "⚠️  Could not find update.sh; skipping dependency update"
+fi
 
 
 

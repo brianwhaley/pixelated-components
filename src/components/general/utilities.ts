@@ -1,6 +1,8 @@
 
 const debug = false; 
 
+
+
 export function html2dom (str: string) {
 	if (window.DOMParser) {
 		const parser = new DOMParser();
@@ -11,6 +13,7 @@ export function html2dom (str: string) {
 	dom.innerHTML = str;
 	return dom;
 }
+
 
  
 export function mergeDeep (a: any, b: any) {
@@ -34,6 +37,8 @@ export function mergeDeep (a: any, b: any) {
 	return extended;
 }
 
+
+
 export function randomBetween (min: number, max: number) {
 	/* ===== RANDOM NUM BETWEEN MIN AND MAX ===== */
 	if (min < 0) {
@@ -42,6 +47,8 @@ export function randomBetween (min: number, max: number) {
 		return min + Math.random() * (max - min);
 	}
 }
+
+
 
 export function generateKey () {
 	const vals = [];
@@ -59,6 +66,8 @@ export function generateKey () {
 	);
 }
 
+
+
 export function generateUUID () {
 	// https://stackoverflow.com/questions/105034/how-do-i-create-a-guid-uuid
 	// var d8 = crypto.randomUUID();
@@ -66,9 +75,12 @@ export function generateUUID () {
 	return window.URL.createObjectURL(new Blob([])).substr(-36);
 }
 
+
+
 export function capitalize (str: string) {
 	return str[0].toUpperCase() + str.toLowerCase().slice(1);
 }
+
 
 
 /** Capitalize the first letter of each word in `input`. */
@@ -79,11 +91,15 @@ export function capitalizeWords(input: string): string {
 	);
 }
 
+
+
 /*
 Array.prototype.contains = function(obj) {
   return this.indexOf(obj) > -1;
 };
 */
+
+
 
 export function attributeMap (oldAttribute: string) {
 	// https://reactjs.org/docs/dom-elements.html
@@ -185,6 +201,8 @@ export const CLIENT_ONLY_PATTERNS = [
 	/["']use client["']/  // Client directive
 ];
 
+
+
 /* ===== COMPONENT FILE DETECTION ===== */
 /**
  * Glob patterns for finding component files
@@ -199,6 +217,8 @@ export const TS_FILE_IGNORE_PATTERNS = [
 	'**/*.example.*'
 ];
 
+
+
 export const TSX_FILE_IGNORE_PATTERNS = [
 	'**/*.test.tsx',
 	'**/*.spec.tsx',
@@ -207,6 +227,8 @@ export const TSX_FILE_IGNORE_PATTERNS = [
 	'**/examples/**',
 	'**/*.example.*'
 ];
+
+
 
 /* ===== SERVER COMPONENT DETECTION ===== */
 /**
@@ -234,3 +256,45 @@ export const SERVER_ONLY_PATTERNS = [
 //	/\bNextResponse\b/
 ];
 
+
+
+export function stringTo1337_v1 (str: string) {
+	return str
+		.replace(/o/gi, '0')
+		// .replace(/i/gi, '1')
+		.replace(/l/gi, '1')
+		.replace(/r/gi, '2')
+		.replace(/e/gi, '3')
+		.replace(/a/gi, '4')
+		.replace(/s/gi, '5')
+		.replace(/g/gi, '6')
+		.replace(/t/gi, '7')
+		.replace(/b/gi, '8')
+		.replace(/g/gi, '9');
+}
+
+
+
+export function stringTo1337(str: string): string {
+	//converts lowercase non consecutive, non number characters (and doublets) to leet speak numbers
+	const leetMap: Record<string, string> = {
+		'o': '0', 'l': '1', 'z': '2', 'e': '3', 
+		'a': '4', 's': '5', 'b': '6', 't': '7', 
+		'g': '9'
+	};
+	let result = '';
+	for (const char of str) {
+		const leet = leetMap[char];
+		const last = result.slice(-1);
+		const lastIsNumber = /[0-9]/.test(last);
+		// Convert if: 
+		// 1. There is a mapping 
+		// 2. AND (the last char isn't a leet number OR it's matches for a doublet)
+		if (leet && (!lastIsNumber || last === leet)) {
+			result += leet;
+		} else {
+			result += char;
+		}
+	}
+	return result;
+}
