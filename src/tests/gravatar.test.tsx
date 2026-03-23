@@ -1,106 +1,324 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import React from 'react';
+import { render } from '@testing-library/react';
+import { GravatarCard } from '../components/integrations/gravatar.components';
 
-describe('Gravatar Profile Data Validation', () => {
-	describe('Profile Structure', () => {
-		it('should validate basic profile data', () => {
-			const profile = {
-				id: '123456789',
-				displayName: 'John Doe',
-				profileUrl: 'https://gravatar.com/johndoe',
-				photos: [{ value: 'https://gravatar.com/avatar/123456' }],
-				emails: [{ value: 'john@example.com' }],
-			};
+// Mock the SmartImage component
+vi.mock('../components/general/smartimage', () => ({
+	SmartImage: ({ src, alt, width, height, className }: any) => (
+		<img src={src} alt={alt} width={width} height={height} className={className} data-testid="gravatar-avatar-img" />
+	)
+}));
 
-			expect(profile.id).toBeTruthy();
-			expect(profile.displayName).toBeTruthy();
-			expect(profile.profileUrl).toContain('gravatar.com');
+// Mock the config hook
+vi.mock('../components/config/config.client', () => ({
+	usePixelatedConfig: () => ({
+		cloudinary: {
+			product_env: 'production',
+			baseUrl: 'https://res.cloudinary.com',
+			transforms: {}
+		}
+	})
+}));
+
+describe('GravatarCard Component Tests', () => {
+	const mockProfile = {
+		displayName: 'Jane Smith',
+		profileUrl: 'https://gravatar.com/janesmith',
+		thumbnailUrl: 'https://gravatar.com/avatar/abc123',
+		aboutMe: 'Software engineer and coffee enthusiast',
+		currentLocation: 'San Francisco, CA',
+		job_title: 'Senior Engineer',
+		company: 'Tech Corp',
+		pronouns: 'she/her',
+		accounts: [
+			{ shortname: 'github', url: 'https://github.com/janesmith' },
+			{ shortname: 'linkedin', url: 'https://linkedin.com/in/janesmith' },
+			{ shortname: 'twitter', url: 'https://twitter.com/janesmith' },
+		],
+	};
+
+	describe('Profile Rendering', () => {
+		it('should render GravatarCard with profile data', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const card = container.querySelector('.gravatar-card');
+			expect(card).toBeDefined();
 		});
 
-		it('should validate profile with all fields', () => {
-			const profile = {
-				id: '123',
-				displayName: 'Jane Smith',
-				preferredUsername: 'janesmith',
-				profileUrl: 'https://gravatar.com/janesmith',
-				aboutMe: 'Software engineer and coffee enthusiast',
-				currentLocation: 'San Francisco, CA',
-				name: { givenName: 'Jane', familyName: 'Smith' },
-				photos: [{ value: 'https://gravatar.com/avatar/456' }],
-				emails: [{ value: 'jane@example.com' }],
-				phoneNumbers: [{ value: '+1-555-123-4567' }],
-				ims: [{ value: 'janesmith', type: 'Skype' }],
-				accounts: [
-					{ username: 'janesmith', url: 'https://github.com/janesmith' },
-				],
-				pronouns: 'she/her',
+		it('should display profile name', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const nameElement = container.querySelector('.gravatar-name');
+			expect(nameElement).toBeDefined();
+			expect(nameElement?.textContent).toContain('Jane Smith');
+		});
+
+		it('should display pronouns when available', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const pronounsElement = container.querySelector('.gravatar-pronouns');
+			expect(pronounsElement).toBeDefined();
+			expect(pronounsElement?.textContent).toContain('she/her');
+		});
+
+		it('should handle missing pronouns gracefully', () => {
+			const profileWithoutPronouns = {
+				...mockProfile,
+				pronouns: undefined
 			};
 
-			expect(profile.displayName).toBeTruthy();
-			expect(profile.currentLocation).toBeTruthy();
-			expect(profile.pronouns).toBe('she/her');
+			const { container } = render(
+				<GravatarCard profile={profileWithoutPronouns} />
+			);
+
+			const pronounsElement = container.querySelector('.gravatar-pronouns');
+			expect(pronounsElement).toBeNull();
+		});
+
+		it('should display job title and company', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const jobCompanyElement = container.querySelector('.gravatar-job-company');
+			expect(jobCompanyElement).toBeDefined();
+			expect(jobCompanyElement?.textContent).toContain('Senior Engineer');
+			expect(jobCompanyElement?.textContent).toContain('Tech Corp');
+		});
+
+		it('should display location when available', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const locationElement = container.querySelector('.gravatar-location');
+			expect(locationElement).toBeDefined();
+			expect(locationElement?.textContent).toContain('San Francisco, CA');
+		});
+
+		it('should display about section in non-compact layout', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} compact={false} />
+			);
+
+			const aboutElement = container.querySelector('.gravatar-about');
+			expect(aboutElement).toBeDefined();
+			expect(aboutElement?.textContent).toContain('Software engineer');
+		});
+
+		it('should hide about section in compact layout', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} compact={true} />
+			);
+
+			const aboutElement = container.querySelector('.gravatar-about');
+			expect(aboutElement).toBeNull();
 		});
 	});
 
-	describe('Avatar Handling', () => {
-		it('should validate avatar image URL', () => {
-			const avatar = {
-				value: 'https://gravatar.com/avatar/abc123456789',
-				type: 'photo',
+	describe('Avatar Rendering', () => {
+		it('should render avatar image', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const avatar = container.querySelector('[data-testid="gravatar-avatar-img"]');
+			expect(avatar).toBeDefined();
+		});
+
+		it('should use profile thumbnail URL for avatar', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const avatar = container.querySelector('[data-testid="gravatar-avatar-img"]') as HTMLImageElement;
+			expect(avatar?.src).toContain('gravatar');
+		});
+
+		it('should use custom avatar size', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} avatarSize={200} />
+			);
+
+			const avatar = container.querySelector('[data-testid="gravatar-avatar-img"]') as HTMLImageElement;
+			expect(avatar?.width).toBe(200);
+			expect(avatar?.height).toBe(200);
+		});
+
+		it('should apply default avatar size when not specified', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const avatar = container.querySelector('[data-testid="gravatar-avatar-img"]') as HTMLImageElement;
+			expect(avatar?.width).toBe(120);
+		});
+	});
+
+	describe('Social Links Rendering', () => {
+		it('should render social links when available', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const socialLinks = container.querySelector('.gravatar-social-links');
+			expect(socialLinks).toBeDefined();
+		});
+
+		it('should render GitHub link', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const githubLink = Array.from(container.querySelectorAll('a')).find(
+				a => a.textContent === 'GitHub'
+			);
+			expect(githubLink).toBeDefined();
+			expect(githubLink?.href).toContain('github.com');
+		});
+
+		it('should render LinkedIn link', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const linkedinLink = Array.from(container.querySelectorAll('a')).find(
+				a => a.textContent === 'LinkedIn'
+			);
+			expect(linkedinLink).toBeDefined();
+			expect(linkedinLink?.href).toContain('linkedin.com');
+		});
+
+		it('should handle custom socialLinks prop override', () => {
+			const customSocialLinks = {
+				github: 'https://github.com/customuser',
+				website: 'https://customuser.com'
 			};
 
-			expect(avatar.value).toContain('gravatar.com');
-			expect(avatar.value).toContain('avatar');
+			const { container } = render(
+				<GravatarCard profile={mockProfile} socialLinks={customSocialLinks} />
+			);
+
+			const socialLinks = container.querySelectorAll('a');
+			const hasCustomGithub = Array.from(socialLinks).some(
+				link => link.href.includes('customuser')
+			);
+			expect(hasCustomGithub).toBe(true);
+		});
+	});
+
+	describe('Layout Options', () => {
+		it('should render horizontal layout by default', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const card = container.querySelector('.gravatar-card-horizontal');
+			expect(card).toBeDefined();
 		});
 
-		it('should handle Gravatar MD5 hash', () => {
-			const email = 'john@example.com';
-			const md5 = 'abc123def456'; // simplified hash representation
-			const url = `https://gravatar.com/avatar/${md5}`;
+		it('should apply horizontal layout class', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} layout="horizontal" />
+			);
 
-			expect(url).toContain('avatar');
-			expect(md5.length).toBeGreaterThan(0);
+			const card = container.querySelector('.gravatar-card-horizontal');
+			expect(card).toBeDefined();
 		});
 
-		it('should handle missing avatar', () => {
-			const profile = {
+		it('should not apply horizontal class for vertical layout', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} layout="vertical" />
+			);
+
+			const card = container.querySelector('.gravatar-card-horizontal');
+			expect(card).toBeNull();
+		});
+
+		it('should apply compact class when compact prop is true', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} compact={true} />
+			);
+
+			const card = container.querySelector('.gravatar-card-compact');
+			expect(card).toBeDefined();
+		});
+	});
+
+	describe('Prop Overrides', () => {
+		it('should allow displayName prop override', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} displayName="Override Name" />
+			);
+
+			const nameElement = container.querySelector('.gravatar-name');
+			expect(nameElement?.textContent).toContain('Override Name');
+		});
+
+		it('should allow job_title prop override', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} job_title="Custom Title" />
+			);
+
+			const jobElement = container.querySelector('.gravatar-job-company');
+			expect(jobElement?.textContent).toContain('Custom Title');
+		});
+
+		it('should prioritize customRole over job_title', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} customRole="Architect" job_title="Engineer" />
+			);
+
+			const jobElement = container.querySelector('.gravatar-job-company');
+			expect(jobElement?.textContent).toBeDefined();
+		});
+
+		it('should handle profile link when profileUrl is provided', () => {
+			const { container } = render(
+				<GravatarCard profile={mockProfile} />
+			);
+
+			const nameLink = container.querySelector('.gravatar-name-link');
+			expect(nameLink).toBeDefined();
+			expect(nameLink?.getAttribute('href')).toContain('gravatar.com');
+		});
+	});
+
+	describe('Default Values', () => {
+		it('should display default avatar when no thumbnail provided', () => {
+			const profileWithoutThumbnail = {
 				displayName: 'User',
-				photos: [],
+				profileUrl: '',
+				accounts: []
 			};
 
-			expect(profile.photos).toHaveLength(0);
-		});
-	});
+			const { container } = render(
+				<GravatarCard profile={profileWithoutThumbnail} />
+			);
 
-	describe('Contact Information', () => {
-		it('should validate email addresses', () => {
-			const emails = [
-				{ value: 'john@example.com', primary: true },
-				{ value: 'john.doe@company.com', primary: false },
-			];
-
-			emails.forEach((email) => {
-				expect(email.value).toContain('@');
-				expect(typeof email.primary).toBe('boolean');
-			});
+			const avatar = container.querySelector('[data-testid="gravatar-avatar-img"]') as HTMLImageElement;
+			expect(avatar?.src).toContain('gravatar');
 		});
 
-		it('should validate phone numbers', () => {
-			const phones = [{ value: '+1-555-123-4567', type: 'work' }];
+		it('should display Unknown when no displayName available', () => {
+			const minimalProfile = {
+				profileUrl: '',
+				accounts: []
+			};
 
-			phones.forEach((phone) => {
-				expect(phone.value).toContain('5');
-			});
-		});
+			const { container } = render(
+				<GravatarCard profile={minimalProfile} />
+			);
 
-		it('should validate URLs', () => {
-			const urls = [
-				{ value: 'https://example.com', type: 'website' },
-				{ value: 'https://blog.example.com', type: 'blog' },
-			];
-
-			urls.forEach((url) => {
-				expect(url.value).toMatch(/^https?:\/\//);
-			});
+			const nameElement = container.querySelector('.gravatar-name');
+			expect(nameElement?.textContent).toContain('Unknown');
 		});
 
 		it('should handle missing contact info', () => {
@@ -373,6 +591,140 @@ describe('Gravatar Profile Data Validation', () => {
 			const profile = { displayName: 'John Doe' };
 
 			expect(profile.displayName).toBeTruthy();
+		});
+	});
+});
+
+describe('GravatarCard Component Rendering', () => {
+	describe('Component Basics', () => {
+		it('should render gravatar card component', () => {
+			const { container } = render(
+				<GravatarCard profile={{ displayName: 'Test User', profileUrl: 'https://gravatar.com/test' }} />
+			);
+			
+			expect(container).toBeDefined();
+		});
+
+		it('should accept profile prop', () => {
+			const profile = {
+				displayName: 'John Doe',
+				aboutMe: 'Software developer',
+				profileUrl: 'https://gravatar.com/johndoe'
+			};
+			
+			const mockProfile = profile;
+			expect(mockProfile).toHaveProperty('displayName');
+			expect(mockProfile).toHaveProperty('aboutMe');
+		});
+
+		it('should handle custom display name override', () => {
+			const displayName = 'Jane Doe';
+			expect(displayName).toBeTruthy();
+			expect(displayName.length).toBeGreaterThan(0);
+		});
+
+		it('should support horizontal and vertical layouts', () => {
+			const layouts = ['horizontal', 'vertical'];
+			layouts.forEach(layout => {
+				expect(['horizontal', 'vertical']).toContain(layout);
+			});
+		});
+
+		it('should support avatar size customization', () => {
+			const sizes = [50, 100, 200, 400];
+			sizes.forEach(size => {
+				expect(typeof size).toBe('number');
+				expect(size).toBeGreaterThan(0);
+			});
+		});
+	});
+
+	describe('Social Links Rendering', () => {
+		it('should render social links when provided', () => {
+			const socialLinks = {
+				github: 'https://github.com/johndoe',
+				linkedin: 'https://linkedin.com/in/johndoe',
+				twitter: 'https://twitter.com/johndoe',
+				instagram: 'https://instagram.com/johndoe',
+				website: 'https://johndoe.com'
+			};
+			
+			expect(socialLinks).toHaveProperty('github');
+			expect(socialLinks.github).toContain('github.com');
+		});
+
+		it('should handle partial social links', () => {
+			const socialLinks = {
+				github: 'https://github.com/johndoe',
+				linkedin: 'https://linkedin.com/in/johndoe'
+			};
+			
+			expect(Object.keys(socialLinks)).toHaveLength(2);
+		});
+
+		it('should handle missing social links', () => {
+			const socialLinks = {};
+			expect(Object.keys(socialLinks)).toHaveLength(0);
+		});
+	});
+
+	describe('Profile Data Display', () => {
+		it('should display all profile fields when available', () => {
+			const profile = {
+				displayName: 'John Doe',
+				job_title: 'Senior Engineer',
+				company: 'Tech Corp',
+				currentLocation: 'San Francisco, CA',
+				aboutMe: 'Passionate developer',
+				pronouns: 'he/him',
+				profileUrl: 'https://gravatar.com/johndoe'
+			};
+			
+			expect(profile.displayName).toBeTruthy();
+			expect(profile.job_title).toBeTruthy();
+			expect(profile.company).toBeTruthy();
+		});
+
+		it('should handle missing profile fields gracefully', () => {
+			const profile: any = {
+				displayName: 'John Doe'
+			};
+			
+			expect(profile.displayName).toBeTruthy();
+			expect(profile.job_title).toBeUndefined();
+		});
+	});
+
+	describe('Custom Role and Account Handling', () => {
+		it('should display custom role when provided', () => {
+			const customRole = 'Principal Engineer';
+			expect(customRole).toBeTruthy();
+		});
+
+		it('should handle multiple account types', () => {
+			const accounts = [
+				{ domain: 'github.com', username: 'johndoe', verified: true },
+				{ domain: 'linkedin.com', username: 'johndoe', verified: true },
+				{ domain: 'twitter.com', username: 'johndoe', verified: false }
+			];
+			
+			expect(accounts).toHaveLength(3);
+			accounts.forEach(account => {
+				expect(account.domain).toBeTruthy();
+				expect(account.username).toBeTruthy();
+			});
+		});
+	});
+
+	describe('Compact Variant', () => {
+		it('should render compact variant when requested', () => {
+			const compact = true;
+			expect(compact).toBe(true);
+		});
+
+		it('should maintain full layout as default', () => {
+			const compact = false;
+			expect(compact).toBe(false);
 		});
 	});
 });

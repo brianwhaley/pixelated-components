@@ -69,7 +69,29 @@ export function decrypt(payload: string, keyHex: string): string {
 
 /**
  * Checks if a string is encrypted using our format.
+ * Validates that the string has the proper structure: pxl:v1:iv:authTag:encryptedContent
  */
 export function isEncrypted(text: string): boolean {
-	return typeof text === 'string' && text.startsWith(ENCRYPTED_PREFIX);
+	if (typeof text !== 'string' || !text.startsWith(ENCRYPTED_PREFIX)) {
+		return false;
+	}
+	
+	// Remove prefix and check that we have the expected structure (3 colon-separated parts)
+	const data = text.slice(ENCRYPTED_PREFIX.length);
+	const parts = data.split(':');
+	
+	// Must have exactly 3 parts: iv, authTag, encryptedContent
+	if (parts.length !== 3) {
+		return false;
+	}
+	
+	// Each part should be valid hex and have minimum length
+	// IV: 12 bytes = 24 hex chars, AuthTag: 16 bytes = 32 hex chars, Content: at least 1 byte = 2 hex chars
+	const [ivHex, authTagHex, encryptedHex] = parts;
+	
+	return (
+		ivHex.length === 24 && /^[0-9a-f]*$/i.test(ivHex) &&
+		authTagHex.length === 32 && /^[0-9a-f]*$/i.test(authTagHex) &&
+		encryptedHex.length > 0 && /^[0-9a-f]*$/i.test(encryptedHex)
+	);
 }

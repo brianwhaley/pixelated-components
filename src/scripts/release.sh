@@ -192,7 +192,20 @@ npm run lint
 
 
 echo ""
-echo "🔨 Step $((STEP_COUNT++)): Encrypting configuration..."
+echo "� Step $((STEP_COUNT++)): Running code coverage check..."
+echo "================================================="
+# Check if test directory exists before running coverage
+if [ -d "src/tests" ] || [ -d "src/test" ]; then
+	npm run test:coverage || exit 1
+	echo "✅ Coverage check passed."
+else
+	echo "⚠️  No test directory found; skipping coverage check"
+fi
+
+
+
+echo ""
+echo "�🔨 Step $((STEP_COUNT++)): Encrypting configuration..."
 echo "================================================="
 if grep -q "\"config:encrypt\":" package.json; then
     echo "🔒 Encrypting configuration..."

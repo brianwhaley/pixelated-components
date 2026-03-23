@@ -16,19 +16,18 @@
 				"tooltip" : "Please enter your First and Last Name"
 			}
 		},{
-			"component" : "FormInput",
+			"component" : "FormGooglePlacesInput",
 			"props" : {
-				"type" : "text",
 				"id" : "street1",
 				"name" : "street1",
 				"defaultValue" : null,
-				"placeholder": "Street Address",
+				"placeholder": "Street Address (start typing)",
 				"autoComplete" : "street-address",
 				"size" : "40",
 				"display" : "horizontal",
 				"required": true,
 				"label" : "Street Address : ",
-				"tooltip" : "Please enter your Street Address"
+				"tooltip" : "Start typing your street address and select from suggestions"
 			}
 		},{
 			"component" : "FormInput",

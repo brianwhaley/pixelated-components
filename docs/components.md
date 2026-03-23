@@ -547,7 +547,8 @@ import { CacheManager } from "@pixelated-tech/components";
 // Initialize a session-based cache with 1 hour TTL
 const myCache = new CacheManager({
     mode: 'session',
-    prefix: 'myapp_',
+    domain: 'pixelvivid',
+    namespace: 'checkout',
     ttl: 60 * 60 * 1000
 });
 

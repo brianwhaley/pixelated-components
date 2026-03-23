@@ -7,6 +7,8 @@ import { exec } from 'child_process';
 import { promisify } from 'util';
 import type { SiteConfig } from '../sites/sites.integration';
 
+export type { SiteConfig };
+
 const execAsync = promisify(exec); 
 
 export interface DeploymentRequest {

@@ -12,13 +12,11 @@ vi.mock('googleapis', () => {
 	return {
 		google: {
 			auth: {
-				GoogleAuth: class {
-					constructor(_opts: any) { /* accept any credentials */ }
-					async getClient() { return {}; }
-				},
-				OAuth2: class { constructor(_id: any, _secret: any) {} ; setCredentials() { /* noop */ } }
+				GoogleAuth: vi.fn(),
+				OAuth2: vi.fn()
 			},
-			searchconsole: () => ({ searchanalytics: { query } })
+			searchconsole: vi.fn(),
+			analyticsdata: vi.fn()
 		}
 	};
 });
@@ -50,7 +48,7 @@ describe('Site-Health CacheManager (consumer contract)', () => {
 
 	beforeEach(async () => {
 		// ensure a fresh cache instance per-test
-		cache = new CacheManager({ ttl: 100, prefix: 'test-sitehealth-' }); // short TTL for tests
+		cache = new CacheManager({ ttl: 100, domain: 'test', namespace: 'sitehealth' }); // short TTL for tests
 		vi.restoreAllMocks();
 
 		// --- canonical googleapi mocks (reuse pattern from google.api.integration.test.ts) ---

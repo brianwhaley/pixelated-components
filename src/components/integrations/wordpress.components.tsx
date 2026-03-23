@@ -9,6 +9,7 @@ import type { BlogPostType } from './wordpress.functions';
 import { getWordPressItems, getWordPressLastModified } from './wordpress.functions';
 import { Loading, ToggleLoading } from '../general/loading';
 import { CacheManager, type CacheMode } from "../general/cache-manager";
+import { getDomain } from '../general/utilities';
 import "./wordpress.css";
 import { SchemaBlogPosting } from '../general/schema';
 import { mapWordPressToBlogPosting } from '../general/schema.functions';
@@ -26,7 +27,7 @@ function decodeString(str: string) {
 
 
 const wpCacheTTL = 1000 * 60 * 60 * 24 * 7; // 1 week
-const wpCache = new CacheManager({ mode: 'local', ttl: wpCacheTTL, prefix: 'wp_' });
+const wpCache = new CacheManager({ mode: 'local', ttl: wpCacheTTL, domain: getDomain(), namespace: 'wp' });
 const wpApiURL = "https://public-api.wordpress.com/rest/v1/sites/";
 /**
  * getCachedWordPressItems — Fetch posts from the WordPress REST API with caching. Checks local cache first and returns cached posts if available and not expired; otherwise fetches from the API, stores in cache, and returns the fresh data.

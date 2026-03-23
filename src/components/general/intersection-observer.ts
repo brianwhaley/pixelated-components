@@ -150,6 +150,7 @@ export function observeIntersection(
  * Check if an element is fully in the viewport
  */
 export function isElementInViewport(element: Element): boolean {
+	if (!element) return false;
 	const rect = element.getBoundingClientRect();
 	return (
 		rect.top >= 0 &&
@@ -163,6 +164,7 @@ export function isElementInViewport(element: Element): boolean {
  * Check if an element is partially in the viewport
  */
 export function isElementPartiallyInViewport(element: Element): boolean {
+	if (!element) return false;
 	const rect = element.getBoundingClientRect();
 	return (
 		rect.top < (window.innerHeight || document.documentElement.clientHeight) &&

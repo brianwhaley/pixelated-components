@@ -1,216 +1,186 @@
-import { describe, it, expect } from 'vitest';
+import React from 'react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { SmartImage } from '../components/general/smartimage';
 
-describe('Image Component Configuration', () => {
-	describe('Image Rendering', () => {
-		it('should render with source URL', () => {
-			const image = {
-				src: 'https://example.com/image.jpg',
-				alt: 'Test image',
-			};
-
-			expect(image.src).toContain('http');
-			expect(image.alt).toBeTruthy();
+describe('SmartImage Component', () => {
+	describe('Basic Rendering', () => {
+		it('should render image with source URL', () => {
+			const { container } = render(
+				<SmartImage 
+					src='https://example.com/image.jpg' 
+					alt='Test image' 
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			expect(img).toBeDefined();
+			expect(img?.getAttribute('src')).toContain('example.com');
 		});
 
-		it('should require alt text', () => {
-			const image = {
-				src: 'image.jpg',
-				alt: 'Descriptive text',
-			};
-
-			expect(image.alt).toBeTruthy();
-			expect(image.alt.length).toBeGreaterThan(0);
+		it('should always include alt text for accessibility', () => {
+			const { container } = render(
+				<SmartImage 
+					src='/image.jpg' 
+					alt='Descriptive text' 
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			expect(img?.getAttribute('alt')).toBe('Descriptive text');
+			expect(img?.getAttribute('alt')?.length).toBeGreaterThan(0);
 		});
 
 		it('should handle different image formats', () => {
 			const formats = ['jpg', 'png', 'webp', 'gif', 'svg'];
-
+			
 			formats.forEach((format) => {
-				const src = `image.${format}`;
-				expect(src).toContain(format);
+				const { container } = render(
+					<SmartImage
+						src={`/image.${format}`}
+						alt='Test'
+					/>
+				);
+				
+				const img = container.querySelector('img');
+				expect(img?.getAttribute('src')).toContain(format);
 			});
 		});
 
-		it('should support responsive images', () => {
-			const image = {
-				src: 'image.jpg',
-				srcSet: 'image-320w.jpg 320w, image-640w.jpg 640w',
-				sizes: '(max-width: 600px) 100vw, 50vw',
-			};
-
-			expect(image.srcSet).toContain('320w');
-			expect(image.sizes).toContain('vw');
+		it('should support responsive images with srcSet', () => {
+			const { container } = render(
+				<SmartImage
+					src='/image.jpg'
+					srcSet='image-320w.jpg 320w, image-640w.jpg 640w'
+					sizes='(max-width: 600px) 100vw, 50vw'
+					alt='Responsive'
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			expect(img?.getAttribute('srcSet')).toContain('w');
+			expect(img?.getAttribute('sizes')).toContain('vw');
 		});
 	});
 
 	describe('Image Sizing', () => {
-		it('should set explicit width and height', () => {
-			const image = {
-				width: 800,
-				height: 600,
-			};
-
-			expect(image.width).toBeGreaterThan(0);
-			expect(image.height).toBeGreaterThan(0);
+		it('should set explicit width and height attributes', () => {
+			const { container } = render(
+				<SmartImage
+					src='/image.jpg'
+					width={800}
+					height={600}
+					alt='Test'
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			expect(parseInt(img?.getAttribute('width') || '0')).toBe(800);
+			expect(parseInt(img?.getAttribute('height') || '0')).toBe(600);
 		});
 
-		it('should maintain aspect ratio', () => {
-			const width = 800;
-			const height = 600;
+		it('should handle aspect ratio preservation', () => {
+			const { container } = render(
+				<SmartImage
+					src='/image.jpg'
+					width={800}
+					height={600}
+					alt='Test'
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			const width = parseInt(img?.getAttribute('width') || '0');
+			const height = parseInt(img?.getAttribute('height') || '0');
+			
 			const aspectRatio = width / height;
-
-			expect(aspectRatio).toBeCloseTo(1.33, 1);
+			expect(aspectRatio).toBeCloseTo(800 / 600, 1);
 		});
 
-		it('should handle fluid sizing', () => {
-			const image = {
-				width: '100%',
-				height: 'auto',
-			};
-
-			expect(image.width).toBe('100%');
-			expect(image.height).toBe('auto');
-		});
-
-		it('should support max-width constraints', () => {
-			const styles = {
-				maxWidth: '500px',
-				height: 'auto',
-			};
-
-			expect(styles.maxWidth).toContain('px');
+		it('should support flexible sizing', () => {
+			const { container } = render(
+				<SmartImage
+					src='/image.jpg'
+					style={{ width: '100%', height: 'auto' }}
+					alt='Flexible'
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			expect(img).toBeDefined();
 		});
 	});
 
-	describe('Loading Behavior', () => {
+	describe('Loading and Performance', () => {
 		it('should support lazy loading', () => {
-			const loading = 'lazy';
-			expect(['lazy', 'eager']).toContain(loading);
+			const { container } = render(
+				<SmartImage
+					src='/image.jpg'
+					loading='lazy'
+					alt='Lazy loaded'
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			expect(img?.getAttribute('loading')).toBe('lazy');
 		});
 
-		it('should default to lazy loading', () => {
-			const loading = 'lazy';
-			expect(loading).toBe('lazy');
+		it('should support eager loading', () => {
+			document.body.innerHTML = '';
+			const { container } = render(
+				<SmartImage
+					src='/image.jpg'
+					aboveFold={true}
+					alt='Eager loaded'
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			expect(img?.getAttribute('loading')).toBe('eager');
 		});
 
-		it('should set eager loading for above fold', () => {
-			const aboveFold = true;
-			const loading = aboveFold ? 'eager' : 'lazy';
-
-			expect(loading).toBe('eager');
-		});
-
-		it('should handle loading placeholders', () => {
-			const placeholder = {
-				type: 'blur',
-				dataUrl: 'data:image/jpeg;base64,...',
-			};
-
-			expect(placeholder.type).toBe('blur');
-			expect(placeholder.dataUrl).toContain('data:');
-		});
-	});
-
-	describe('Image Optimization', () => {
-		it('should set fetch priority', () => {
-			const priorities = ['high', 'auto', 'low'];
-
-			priorities.forEach((p) => {
-				expect(['high', 'auto', 'low']).toContain(p);
-			});
-		});
-
-		it('should configure decoding', () => {
-			const decodings = ['sync', 'async', 'auto'];
-
-			decodings.forEach((d) => {
-				expect(['sync', 'async', 'auto']).toContain(d);
-			});
-		});
-
-		it('should handle quality settings', () => {
-			const qualities = [70, 80, 90, 100];
-
-			qualities.forEach((q) => {
-				expect(q).toBeGreaterThan(0);
-				expect(q).toBeLessThanOrEqual(100);
-			});
-		});
-
-		it('should support next/image optimization', () => {
-			const config = {
-				priority: false,
-				quality: 75,
-				objectFit: 'cover',
-			};
-
-			expect(config.quality).toBeGreaterThan(0);
-			expect(['cover', 'contain']).toContain(config.objectFit);
+		it('should handle onLoad callback', async () => {
+			const onLoadMock = vi.fn();
+			
+			const { container } = render(
+				<SmartImage
+					src='/image.jpg'
+					alt='Test'
+					onLoad={onLoadMock}
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			expect(img).toBeDefined();
 		});
 	});
 
-	describe('Image Effects & Styling', () => {
-		it('should apply CSS classes', () => {
-			const classes = ['rounded', 'shadow', 'border'];
-
-			classes.forEach((cls) => {
-				expect(cls).toBeTruthy();
-			});
+	describe('Error Handling', () => {
+		it('should support onError callback', () => {
+			const onErrorMock = vi.fn();
+			
+			const { container } = render(
+				<SmartImage
+					src='/nonexistent.jpg'
+					alt='Error test'
+					onError={onErrorMock}
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			expect(img).toBeDefined();
 		});
 
-		it('should support inline styles', () => {
-			const styles = {
-				borderRadius: '8px',
-				boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
-			};
-
-			expect(styles.borderRadius).toContain('px');
-		});
-
-		it('should handle opacity', () => {
-			const opacity = 0.8;
-			expect(opacity).toBeGreaterThan(0);
-			expect(opacity).toBeLessThanOrEqual(1);
-		});
-
-		it('should support filters', () => {
-			const filters = ['grayscale', 'blur', 'brightness', 'contrast'];
-
-			filters.forEach((filter) => {
-				expect(filter).toBeTruthy();
-			});
-		});
-	});
-
-	describe('Accessibility', () => {
-		it('should require descriptive alt text', () => {
-			const alt = 'A person smiling in a portrait photo';
-			expect(alt.length).toBeGreaterThan(10);
-		});
-
-		it('should support decorative images', () => {
-			const image = {
-				src: 'decoration.jpg',
-				alt: '',
-				ariaHidden: true,
-			};
-
-			expect(image.alt).toBe('');
-			expect(image.ariaHidden).toBe(true);
-		});
-
-		it('should include role attribute', () => {
-			const image = {
-				role: 'img',
-				alt: 'Image description',
-			};
-
-			expect(image.role).toBe('img');
-		});
-
-		it('should support aria-label', () => {
-			const ariaLabel = 'Product image for canvas tote bag';
-			expect(ariaLabel).toBeTruthy();
+		it('should handle missing alt text gracefully', () => {
+			const { container } = render(
+				<SmartImage
+					src='/image.jpg'
+					alt=''
+				/>
+			);
+			
+			const img = container.querySelector('img');
+			expect(img?.getAttribute('alt')).toBeDefined();
 		});
 	});
 

@@ -8,6 +8,7 @@
 
 import { google } from 'googleapis';
 import { CacheManager } from '../../general/cache-manager';
+import { getDomain } from '../../general/utilities';
 import { calculateDateRanges, formatChartDate, getCachedData, setCachedData } from './google.api.utils';
 
 // Migration-time debug flag (owner requested): verbose cache traces during migration
@@ -126,8 +127,8 @@ export interface GoogleAnalyticsResponse {
 	error?: string;
 }
 
-// Cache for analytics data (1 hour)
-const analyticsCache = new CacheManager({ prefix: 'sitehealth-analytics-', ttl: 60 * 60 * 1000 });
+// Cache for analytics data (1 hour) — isolated per domain
+const analyticsCache = new CacheManager({ domain: getDomain(), namespace: 'analytics', ttl: 60 * 60 * 1000 });
 
 /**
  * Get Google Analytics data for a site with current/previous period comparison
@@ -265,8 +266,8 @@ export interface SearchConsoleResponse {
   details?: string;
 }
 
-// Cache for search console data (1 hour)
-const searchConsoleCache = new CacheManager({ prefix: 'sitehealth-searchconsole-', ttl: 60 * 60 * 1000 });
+// Cache for search console data (1 hour) — isolated per domain
+const searchConsoleCache = new CacheManager({ domain: getDomain(), namespace: 'searchconsole', ttl: 60 * 60 * 1000 });
 
 /**
  * Get Google Search Console data for a site with current/previous period comparison

@@ -2,13 +2,15 @@ import PropTypes, { InferProps } from "prop-types";
 import type { CartItemType } from "./shoppingcart.functions";
 import { getCloudinaryRemoteFetchURL as getImg} from "../integrations/cloudinary";
 import { CacheManager } from "../general/cache-manager";
+import { getDomain } from "../general/utilities";
 
 const debug = false;
 
-// Initialize eBay Cache (Session storage, 1 hour TTL)
+// Initialize eBay Cache (Session storage, 1 hour TTL) — isolated per domain
 const ebayCache = new CacheManager({
 	mode: 'session',
-	prefix: 'ebay_',
+	domain: getDomain(),
+	namespace: 'ebay',
 	ttl: 60 * 60 * 1000
 });
 
@@ -111,7 +113,7 @@ export function getShoppingCartItem(props: getShoppingCartItemType) {
 				? thisItem.thumbnailImages[0].imageUrl 
 				: (thisItem.image && props.cloudinaryProductEnv)
 					? getImg({url: thisItem.image.imageUrl, product_env: props.cloudinaryProductEnv})
-					: thisItem.image.imageUrl,
+					: thisItem.image?.imageUrl || '',
 		itemID: thisItem.legacyItemId,
 		itemURL: thisItem.itemWebUrl,
 		itemTitle: thisItem.title,

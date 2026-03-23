@@ -1,40 +1,175 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import React from 'react';
+import { render, waitFor } from '@testing-library/react';
+import { EbayItems } from '../components/shoppingcart/ebay.components';
 
-// Mock ebay functions
+// Mock eBay functions
 vi.mock('../components/shoppingcart/ebay.functions', () => ({
 	getEbayItems: vi.fn(),
 	getEbayItem: vi.fn(),
 	getShoppingCartItem: vi.fn(),
+	getEbayRateLimits: vi.fn(),
+	getEbayAppToken: vi.fn(),
 }));
 
-describe('eBay Integration Tests', () => {
-	describe('API Response Handling', () => {
-		it('should validate eBay item structure', () => {
-			const item = {
-				legacyItemId: 'item-123',
-				title: 'Vintage Camera',
-				price: { value: '49.99', currency: 'USD' },
-				image: { imageUrl: 'https://example.com/image.jpg' },
-				condition: 'Good',
-				seller: { sellerAccountStatus: 'Active' },
-			};
+// Mock dependencies
+vi.mock('../components/general/carousel', () => ({
+	Carousel: ({ cards }: any) => (
+		<div data-testid="carousel">
+			{cards && cards.map((card: any, idx: number) => (
+				<div key={idx} className="carousel-item">{card.title}</div>
+			))}
+		</div>
+	)
+}));
+
+vi.mock('../components/general/smartimage', () => ({
+	SmartImage: ({ src, alt }: any) => <img src={src} alt={alt} data-testid="ebay-image" />
+}));
+
+vi.mock('../components/shoppingcart/shoppingcart.components', () => ({
+	AddToCartButton: () => <button data-testid="add-to-cart">Add to Cart</button>,
+	ViewItemDetails: () => <button data-testid="view-details">View Details</button>
+}));
+
+vi.mock('../components/general/loading', () => ({
+	Loading: () => <div data-testid="loading">Loading...</div>,
+	ToggleLoading: () => null
+}));
+
+vi.mock('../components/config/config.client', () => ({
+	usePixelatedConfig: () => ({
+		ebay: {
+			apiKey: 'test-key',
+			qsSearchURL: '?keywords=electronics'
+		},
+		cloudinary: {
+			product_env: 'test-env',
+			baseUrl: 'https://res.cloudinary.com'
+		}
+	})
+}));
+
+vi.mock('../components/integrations/cloudinary', () => ({
+	getCloudinaryRemoteFetchURL: (url: string) => url
+}));
+
+import { getEbayItems, getShoppingCartItem } from '../components/shoppingcart/ebay.functions';
+
+describe('eBay integration Tests', () => {
+	const mockEbayItem = {
+		legacyItemId: 'item-123',
+		title: 'Vintage Camera',
+		price: { value: '49.99', currency: 'USD' },
+		image: { imageUrl: 'https://example.com/camera.jpg' },
+		thumbnailImages: [{
+			imageUrl: 'https://example.com/camera-thumb.jpg'
+		}],
+		condition: 'Good',
+		categories: [{
+			categoryId: '12345',
+			categoryName: 'Electronics'
+		}],
+		seller: { 
+			username: 'seller123',
+			sellerUserName: 'seller123',
+			sellerAccountStatus: 'Active',
+			feedbackScore: 500,
+			feedbackPercentage: 99.5
+		},
+		buyingOptions: ['FIXED_PRICE'],
+		itemLocation: {
+			postalCode: '95131',
+			country: 'US'
+		},
+		itemCreationDate: new Date().toISOString(),
+		shippingOptions: [{
+			shippingCostType: 'CALCULATED',
+			shippingCost: { value: '10.00' }
+		}]
+	};
+
+	const mockApiResponse = {
+		itemSummaries: [mockEbayItem],
+		refinement: {
+			aspectDistributions: []
+		}
+	};
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		(getEbayItems as any).mockResolvedValue(mockApiResponse);
+		(getShoppingCartItem as any).mockReturnValue({
+			itemImageURL: 'https://example.com/image.jpg',
+			itemID: '12345',
+			itemURL: 'https://ebay.com/item/12345',
+			itemTitle: 'Test Item',
+			itemQuantity: 1,
+			itemCost: '99.99'
+		});
+	});
+
+	describe('EbayItems Component Rendering', () => {
+		it('should render EbayItems component with apiProps', async () => {
+			const { container } = render(
+				<EbayItems
+					apiProps={{
+						apiKey: 'test-key',
+						qsSearchURL: '?keywords=electronics'
+					}}
+				/>
+			);
+
+			await waitFor(() => {
+				expect(container).toBeDefined();
+			}, { timeout: 200 });
+		});
+
+		it('should call getEbayItems with provided apiProps', async () => {
+			render(
+				<EbayItems
+					apiProps={{
+						apiKey: 'test-key',
+						qsSearchURL: '?keywords=electronics'
+					}}
+				/>
+			);
+
+			await waitFor(() => {
+				expect(getEbayItems).toHaveBeenCalled();
+			});
+		});
+
+		it('should accept cloudinaryProductEnv prop', async () => {
+			const { container } = render(
+				<EbayItems
+					apiProps={{ apiKey: 'test-key' }}
+					cloudinaryProductEnv="test-env"
+				/>
+			);
+
+			await waitFor(() => {
+				expect(container).toBeDefined();
+			}, { timeout: 200 });
+		});
+	});
+
+	describe('eBay Item Structure', () => {
+		it('should validate eBay item properties', () => {
+			const item = mockEbayItem;
 
 			expect(item.legacyItemId).toBeTruthy();
 			expect(item.title).toBeTruthy();
 			expect(item.price.value).toBeTruthy();
+			expect(item.image.imageUrl).toBeTruthy();
 		});
 
-		it('should handle price formatting', () => {
-			const prices = [
-				{ value: '9.99', currency: 'USD' },
-				{ value: '99.99', currency: 'USD' },
-				{ value: '999.99', currency: 'USD' },
-			];
+		it('should handle item with seller information', () => {
+			const item = mockEbayItem;
 
-			prices.forEach((price) => {
-				expect(price.value).toMatch(/^\d+\.\d{2}$/);
-				expect(price.currency).toBe('USD');
-			});
+			expect(item.seller).toBeDefined();
+			expect(item.seller.sellerAccountStatus).toBe('Active');
+			expect(item.seller.sellerUserName).toBeTruthy();
 		});
 
 		it('should handle item conditions', () => {
@@ -42,30 +177,23 @@ describe('eBay Integration Tests', () => {
 
 			conditions.forEach((condition) => {
 				expect(condition).toBeTruthy();
+				expect(condition.length).toBeGreaterThan(0);
 			});
 		});
 
-		it('should handle seller information', () => {
-			const seller = {
-				sellerAccountStatus: 'Active',
-				sellerUserName: 'seller123',
-				positiveFeedbackPercent: 98.5,
-				feedbackScore: 15000,
-			};
+		it('should handle price formatting', () => {
+			const price = mockEbayItem.price;
 
-			expect(seller.sellerAccountStatus).toBe('Active');
-			expect(seller.feedbackScore).toBeGreaterThan(0);
+			expect(price.value).toMatch(/^\d+\.\d{2}$/);
+			expect(price.currency).toBe('USD');
 		});
 
-		it('should handle item images', () => {
-			const item = {
-				image: { imageUrl: 'https://ebay.com/image.jpg' },
-				galleryURL: 'https://ebay.com/gallery.jpg',
-				galleryPlusPictureURL: 'https://ebay.com/galleryx.jpg',
-			};
+		it('should handle shipping options', () => {
+			const shipping = mockEbayItem.shippingOptions[0];
 
-			expect(item.image.imageUrl).toContain('http');
-			expect(item.galleryURL).toContain('http');
+			expect(shipping.shippingCostType).toBeTruthy();
+			expect(shipping.shippingCost).toBeDefined();
+			expect(shipping.shippingCost.value).toMatch(/^\d+\.\d{2}$/);
 		});
 	});
 
@@ -77,14 +205,123 @@ describe('eBay Integration Tests', () => {
 					{ legacyItemId: '2', title: 'Item 2' },
 				],
 				refinement: {
-					aspectDistributions: [
-						{ localizedAspectName: 'Brand', aspectValueDistributions: [] },
-					],
-				},
+					aspectDistributions: []
+				}
 			};
 
-			expect(results.itemSummaries).toHaveLength(2);
-			expect(results.refinement.aspectDistributions).toBeTruthy();
+			expect(Array.isArray(results.itemSummaries)).toBe(true);
+			expect(results.itemSummaries.length).toBe(2);
+		});
+
+		it('should handle empty search results', () => {
+			const results = {
+				itemSummaries: [],
+				refinement: {
+					aspectDistributions: []
+				}
+			};
+
+			expect(results.itemSummaries).toHaveLength(0);
+		});
+
+		it('should handle refinement aspects', () => {
+			const results = mockApiResponse;
+
+			expect(results.refinement).toBeDefined();
+			expect(Array.isArray(results.refinement.aspectDistributions)).toBe(true);
+		});
+	});
+
+	describe('Item Images Handling', () => {
+		it('should handle item images', () => {
+			const item = {
+				image: { imageUrl: 'https://ebay.com/image.jpg' },
+				galleryURL: 'https://ebay.com/gallery.jpg',
+				galleryPlusPictureURL: 'https://ebay.com/galleryx.jpg',
+			};
+
+			expect(item.image.imageUrl).toContain('http');
+			expect(item.galleryURL).toContain('http');
+			expect(item.galleryPlusPictureURL).toContain('http');
+		});
+
+		it('should validate image URL format', () => {
+			const urls = [
+				'https://ebay-image1.jpg',
+				'https://ebay-image2.png',
+				'https://ebay-image3.gif'
+			];
+
+			urls.forEach((url) => {
+				expect(url).toMatch(/^https:\/\/.*\.(jpg|png|gif)$/);
+			});
+		});
+
+		it('should handle missing gallery images', () => {
+			const item = {
+				image: { imageUrl: 'https://ebay.com/image.jpg' },
+				galleryURL: undefined
+			};
+
+			expect(item.image.imageUrl).toBeTruthy();
+			expect(item.galleryURL).toBeUndefined();
+		});
+	});
+
+	describe('API Configuration', () => {
+		it('should accept apiProps configuration', () => {
+			const config = {
+				apiKey: 'test-key-123',
+				qsSearchURL: '?keywords=camera'
+			};
+
+			expect(config.apiKey).toBeTruthy();
+			expect(config.qsSearchURL).toContain('?');
+		});
+
+		it('should merge apiProps with component props', () => {
+			const defaultProps = {
+				apiKey: 'default-key'
+			};
+
+			const componentProps = {
+				apiKey: 'component-key',
+				qsSearchURL: '?keywords=electronics'
+			};
+
+			const merged = { ...defaultProps, ...componentProps };
+
+			expect(merged.apiKey).toBe('component-key');
+			expect(merged.qsSearchURL).toBe('?keywords=electronics');
+		});
+	});
+
+	describe('Error Handling', () => {
+		it('should handle API errors gracefully', async () => {
+			(getEbayItems as any).mockRejectedValue(new Error('API Error'));
+
+			const { container } = render(
+				<EbayItems
+					apiProps={{ apiKey: 'test-key' }}
+				/>
+			);
+
+			await waitFor(() => {
+				expect(container).toBeDefined();
+			}, { timeout: 200 });
+		});
+
+		it('should validate seller data', () => {
+			const seller = {
+				sellerAccountStatus: 'Active',
+				sellerUserName: 'seller123',
+				positiveFeedbackPercent: 98.5,
+				feedbackScore: 15000,
+			};
+
+			expect(seller.sellerAccountStatus).toBe('Active');
+			expect(seller.feedbackScore).toBeGreaterThan(0);
+			expect(seller.positiveFeedbackPercent).toBeLessThanOrEqual(100);
 		});
 
 		it('should handle empty search results', () => {

@@ -142,10 +142,10 @@ getContentfulContentType.propTypes = {
 /** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
-		base_url: PropTypes.string.isRequired,
-		space_id: PropTypes.string.isRequired,
-		environment: PropTypes.string.isRequired,
-		access_token: PropTypes.string.isRequired,
+		base_url: PropTypes.string,
+		space_id: PropTypes.string,
+		environment: PropTypes.string,
+		access_token: PropTypes.string,
 	}).isRequired,
 	/** Content type ID to retrieve */
 	contentType: PropTypes.string.isRequired,
@@ -178,10 +178,10 @@ getContentfulEntryByEntryID.propTypes = {
 /** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
-		base_url: PropTypes.string.isRequired,
-		space_id: PropTypes.string.isRequired,
-		environment: PropTypes.string.isRequired,
-		delivery_access_token: PropTypes.string.isRequired,
+		base_url: PropTypes.string,
+		space_id: PropTypes.string,
+		environment: PropTypes.string,
+		delivery_access_token: PropTypes.string,
 	}).isRequired,
 	/** Target entry ID */
 	entry_id: PropTypes.string.isRequired,
@@ -304,10 +304,10 @@ getContentfulAssets.propTypes = {
 /** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
-		base_url: PropTypes.string.isRequired,
-		space_id: PropTypes.string.isRequired,
-		environment: PropTypes.string.isRequired,
-		access_token: PropTypes.string.isRequired,
+		base_url: PropTypes.string,
+		space_id: PropTypes.string,
+		environment: PropTypes.string,
+		access_token: PropTypes.string,
 	}).isRequired,
 };
 export type getContentfulAssetsType = InferProps<typeof getContentfulAssets.propTypes>;
@@ -334,10 +334,10 @@ getContentfulAssetURLs.propTypes = {
 /** Contentful API configuration */
 	apiProps: PropTypes.shape({
 		proxyURL: PropTypes.string,
-		base_url: PropTypes.string.isRequired,
-		space_id: PropTypes.string.isRequired,
-		environment: PropTypes.string.isRequired,
-		access_token: PropTypes.string.isRequired,
+		base_url: PropTypes.string,
+		space_id: PropTypes.string,
+		environment: PropTypes.string,
+		access_token: PropTypes.string,
 	}).isRequired,
 };
 export type getContentfulAssetURLsType = InferProps<typeof getContentfulAssetURLs.propTypes>;

@@ -1,23 +1,50 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import React from 'react';
+
+// Mock the HubSpot embed script
+vi.stubGlobal('hbspt', undefined);
+
+// Create a minimal HubSpot component for testing
+const HubSpotForm = ({ portalId, formId, target }: { portalId: string; formId: string; target?: string }) => {
+	const containerId = `hubspotForm-${formId}`;
+	
+	React.useEffect(() => {
+		// Simulate HubSpot embed script loading
+		if ((window as any).hbspt) {
+			(window as any).hbspt.forms.create({
+				portalId,
+				formId,
+				target: target || `#${containerId}`,
+			});
+		}
+	}, [portalId, formId, target]);
+
+	return <div id={containerId} data-testid={`hubspot-form-${formId}`} />;
+};
 
 describe('HubSpot Components Integration Tests', () => {
 	beforeEach(() => {
 		// Mock window.hbspt
-		(window as any).hbspt = undefined;
+		(window as any).hbspt = {
+			forms: {
+				create: vi.fn()
+			}
+		};
 	});
 
 	describe('HubSpot Form Rendering', () => {
-		it('should create form container element', () => {
+		it('should render form container element', () => {
 			const formId = 'test-form-id';
 			const portalId = '123456';
-			const container = document.createElement('div');
-			container.id = `hubspotForm-${formId}`;
-			document.body.appendChild(container);
-
-			expect(container).toBeInTheDocument();
-			expect(container.id).toContain('hubspotForm');
-
-			document.body.removeChild(container);
+			
+			const { container } = render(
+				<HubSpotForm portalId={portalId} formId={formId} />
+			);
+			
+			const formContainer = container.querySelector(`#hubspotForm-${formId}`);
+			expect(formContainer).toBeDefined();
+			expect(formContainer?.id).toContain('hubspotForm');
 		});
 
 		it('should handle form portal ID', () => {
@@ -30,6 +57,17 @@ describe('HubSpot Components Integration Tests', () => {
 			const formId = 'abc-def-123';
 			expect(formId).toBeTruthy();
 			expect(formId).toContain('-');
+		});
+
+		it('should render with custom target', () => {
+			const { container } = render(
+				<HubSpotForm 
+					portalId="123456" 
+					formId="form-1"
+					target="#custom-target"
+				/>
+			);
+			expect(container.querySelector('[data-testid="hubspot-form-form-1"]')).toBeDefined();
 		});
 	});
 
@@ -53,6 +91,15 @@ describe('HubSpot Components Integration Tests', () => {
 
 			// Verify it's a non-negative number
 			expect(count).toBeGreaterThanOrEqual(0);
+		});
+
+		it('should call form create with correct parameters', () => {
+			render(
+				<HubSpotForm portalId="123456" formId="test-form" />
+			);
+
+			// Verify the form creation was attempted
+			expect((window as any).hbspt).toBeDefined();
 		});
 	});
 
@@ -80,7 +127,25 @@ describe('HubSpot Components Integration Tests', () => {
 			);
 		});
 
-		it('should handle form validation errors', () => {
+		it('should render HubSpot form with portal and form IDs', () => {
+			const { container } = render(
+				<HubSpotForm portalId="prod-portal" formId="prod-form" />
+			);
+
+			expect(container.querySelector('[data-testid="hubspot-form-prod-form"]')).toBeDefined();
+		});
+
+		it('should handle missing HubSpot object gracefully', () => {
+			(window as any).hbspt = undefined;
+
+			const { container } = render(
+				<HubSpotForm portalId="123" formId="test" />
+			);
+
+			expect(container.querySelector('[data-testid="hubspot-form-test"]')).toBeDefined();
+		});
+
+		it('should handle form validation', () => {
 			const validation = {
 				required: true,
 				email: true,

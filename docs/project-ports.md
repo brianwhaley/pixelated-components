@@ -16,6 +16,8 @@ This document lists the localhost ports used by various projects in the Pixelate
 | oaktreelandscaping | 3007 | https://localhost:3007 |
 | pixelated-template | 3008 | https://localhost:3008 |
 | jz-home-improvement | 3009 | https://localhost:3009 |
+| manningmetalworks | 3010 | https://localhost:3010 |
+| three-muses | 3011 | https://localhost:3011 |
 
 ## Component Library
 

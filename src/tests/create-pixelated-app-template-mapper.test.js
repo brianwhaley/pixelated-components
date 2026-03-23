@@ -2,8 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
 import { describe, it, expect } from 'vitest';
-import { findTemplateForSlug, pruneTemplateDirs, printAvailableTemplates } from '../scripts/create-pixelated-app-template-mapper.js';
-import { copyTemplateForPage } from '../scripts/create-pixelated-app.js';
+import { findTemplateForSlug, printAvailableTemplates } from '../scripts/create-pixelated-app.js';
 
 describe('template-mapper', () => {
 	it('findTemplateForSlug matches aliases and fuzzy variants', () => {
@@ -18,37 +17,6 @@ describe('template-mapper', () => {
 		expect(findTemplateForSlug(manifest, 'faqs-us')?.name).toBe('FAQs');
 		expect(findTemplateForSlug(manifest, 'about')?.name).toBe('About');
 		expect(findTemplateForSlug(manifest, 'not-a-match')).toBeNull();
-	});
-
-	it('pruneTemplateDirs removes only unused template page folders and associated files', async () => {
-		const tmp = await fs.mkdtemp(path.join(os.tmpdir(), 'pixelated-test-'));
-		const dest = path.join(tmp, 'site');
-		const pagesDir = path.join(dest, 'src', 'app', '(pages)');
-		const dataDir = path.join(dest, 'src', 'app', 'data');
-		await fs.mkdir(pagesDir, { recursive: true });
-		await fs.mkdir(dataDir, { recursive: true });
-		// create two candidate template folders
-		await fs.mkdir(path.join(pagesDir, 'faqs'));
-		await fs.mkdir(path.join(pagesDir, 'contact'));
-		// create associated data files
-		await fs.writeFile(path.join(dataDir, 'contactform.json'), '{}', 'utf8');
-		await fs.writeFile(path.join(dataDir, 'faqs.json'), '{}', 'utf8');
-
-		const manifest = {
-			templates: [
-				{ name: 'FAQs', aliases: ['faq', 'faqs'], src: '/whatever/faqs', associated_files: ['src/app/data/faqs.json'] },
-				{ name: 'Contact', aliases: ['contact'], src: '/whatever/contact', associated_files: ['src/app/data/contactform.json'] }
-			]
-		};
-
-		const removed = await pruneTemplateDirs(manifest, dest, ['faqs']);
-		expect(removed).toContain('contact');
-		// contact should not exist, faqs should still exist
-		await expect(fs.access(path.join(pagesDir, 'contact'))).rejects.toBeTruthy();
-		await expect(fs.access(path.join(pagesDir, 'faqs'))).resolves.toBeUndefined();
-		// contact associated file should be removed, faqs file should still exist
-		await expect(fs.access(path.join(dataDir, 'contactform.json'))).rejects.toBeTruthy();
-		await expect(fs.access(path.join(dataDir, 'faqs.json'))).resolves.toBeUndefined();
 	});
 
 	it('printAvailableTemplates logs names and aliases', () => {

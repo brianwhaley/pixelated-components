@@ -7,6 +7,7 @@
 
 import { CloudWatchClient, GetMetricDataCommand } from '@aws-sdk/client-cloudwatch';
 import { CacheManager } from '../../general/cache-manager';
+import { getDomain } from '../../general/utilities';
 import { getFullPixelatedConfig } from '../../config/config';
 
 const debug = false; // migration-time verbose logging
@@ -30,8 +31,8 @@ export interface CloudwatchHealthCheckResponse {
 	error?: string;
 }
 
-// Cache for health check data (15 minutes)
-const healthCheckCache = new CacheManager({ prefix: 'sitehealth-cloudwatch-', ttl: 15 * 60 * 1000 });
+// Cache for health check data (15 minutes) — isolated per domain
+const healthCheckCache = new CacheManager({ domain: getDomain(), namespace: 'cloudwatch', ttl: 15 * 60 * 1000 });
 
 /**
  * Get health check data for a site using CloudWatch metrics

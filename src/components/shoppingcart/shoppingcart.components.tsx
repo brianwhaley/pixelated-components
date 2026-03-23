@@ -85,7 +85,8 @@ export function ShoppingCart( props: ShoppingCartType ) {
 	useEffect(() => {
 		// UPDATE DISCOUNT CODES ON EACH PAGE LOAD
 		(async () => {
-			setDiscountCodes(await getRemoteDiscountCodes());
+			const contentfulConfig = config?.contentful;
+			setDiscountCodes(await getRemoteDiscountCodes(contentfulConfig));
 		})();
 		// UPDATE SHOPPINGCART AND SHIPPINGDATA STATES IF LOCALSTORAGE CHANGES
 		function handleStorageChange(){
@@ -157,10 +158,11 @@ export function ShoppingCart( props: ShoppingCartType ) {
 
 	if ( progressStep === "ThankYou" ) {
 		// ========== SENDMAIL ==========
+		const cartConfig = config?.shoppingcart;
 		const json = {
-			'to' : 'brian@pixelvivid.com',
-			'from' : 'brian@pixelvivid.com',
-			'subject' : 'PixelVivid Purchase',
+			'to' : cartConfig?.orderTo,
+			'from' : cartConfig?.orderFrom,
+			'subject' : cartConfig?.orderSubject,
 			'orderData' : JSON.stringify(orderData, null, 2),
 		};
 		const sendMailResponse = emailJSON(json);
@@ -177,7 +179,7 @@ export function ShoppingCart( props: ShoppingCartType ) {
 					<h3>Thank you for your payment!</h3>
                         Payment ID : {pmt.id} <br />
                         Status : {pmt.status} <br />
-                        Amount : ${pmt.amount.value + " " + pmt.amount.currency_code} <br />
+                        Amount : ${pmt.amount.value + " " + (config?.shoppingcart?.currency || pmt.amount.currency_code)} <br />
                         Created : {pmt.create_time} <br />
 				</div>
 			</div>

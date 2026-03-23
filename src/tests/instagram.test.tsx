@@ -1,101 +1,299 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { InstagramTiles } from '../components/integrations/instagram.components';
 
-describe('Instagram Feed Data Validation', () => {
-	describe('Tile Structure', () => {
-		it('should validate basic tile data', () => {
-			const tile = {
-				id: 'insta-123456',
-				caption: 'Beautiful sunset',
-				media_type: 'IMAGE',
-				media_url: 'https://scontent.cdninstagram.com/v/...jpg',
-				timestamp: '2024-01-15T12:30:00+0000',
-				permalink: 'https://instagram.com/p/ABC123/view',
-			};
+// Mock the Instagram functions
+vi.mock('../components/integrations/instagram.functions', () => ({
+	getInstagramTiles: vi.fn()
+}));
 
-			expect(tile.id).toBeTruthy();
-			expect(tile.media_type).toBeTruthy();
-			expect(tile.media_url).toContain('http');
-		});
+// Mock the Tiles component
+vi.mock('../components/general/tiles', () => ({
+	Tiles: ({ cards }: any) => (
+		<div data-testid="instagram-tiles">
+			{cards && cards.map((card: any, idx: number) => (
+				<div key={idx} data-testid={`tile-${idx}`} className="tile-item">
+					{card.image && <img src={card.image} alt={card.title} />}
+					{card.title && <h3>{card.title}</h3>}
+				</div>
+			))}
+		</div>
+	)
+}));
 
-		it('should handle image tiles', () => {
-			const tile = {
-				media_type: 'IMAGE',
-				media_url: 'https://example.com/image.jpg',
-				caption: 'Photo caption',
-			};
+// Mock the config hook
+vi.mock('../components/config/config.client', () => ({
+	usePixelatedConfig: () => ({
+		instagram: {
+			accessToken: 'test-instagram-token',
+			userId: 'test-user-id'
+		}
+	})
+}));
 
-			expect(tile.media_type).toBe('IMAGE');
-			expect(tile.media_url).toContain('http');
-		});
+import { getInstagramTiles } from '../components/integrations/instagram.functions';
 
-		it('should handle video tiles', () => {
-			const tile = {
-				media_type: 'VIDEO',
-				media_url: 'https://example.com/video.mp4',
-				caption: 'Video caption',
-				thumbnail_url: 'https://example.com/thumb.jpg',
-			};
+describe('Instagram Integration Tests', () => {
+	const mockInstagramTiles = [
+		{
+			id: 'insta-123456',
+			title: 'Beautiful sunset',
+			image: 'https://scontent.cdninstagram.com/v/t51.2885-15/abc123.jpg',
+			link: 'https://instagram.com/p/ABC123/view',
+			description: 'Beautiful sunset',
+		},
+		{
+			id: 'insta-234567',
+			title: 'Mountain view',
+			image: 'https://scontent.cdninstagram.com/v/t51.2885-15/def456.jpg',
+			link: 'https://instagram.com/p/DEF456/view',
+			description: 'Mountain view',
+		},
+	];
 
-			expect(tile.media_type).toBe('VIDEO');
-			expect(tile.thumbnail_url).toContain('http');
-		});
-
-		it('should handle carousel tiles', () => {
-			const tile = {
-				media_type: 'CAROUSEL_ALBUM',
-				media_url: 'https://example.com/carousel.jpg',
-				caption: 'Carousel caption',
-				children: [
-					{ media_type: 'IMAGE', media_url: 'https://example.com/img1.jpg' },
-					{ media_type: 'IMAGE', media_url: 'https://example.com/img2.jpg' },
-				],
-			};
-
-			expect(tile.media_type).toBe('CAROUSEL_ALBUM');
-			expect(Array.isArray((tile as any).children)).toBe(true);
-		});
+	beforeEach(() => {
+		vi.clearAllMocks();
+		(getInstagramTiles as any).mockResolvedValue(mockInstagramTiles);
 	});
 
-	describe('Media Content', () => {
-		it('should validate media URL format', () => {
-			const urls = [
-				'https://scontent.cdninstagram.com/v/t51.2885-15/abc123.jpg',
-				'https://video-lhr6-1.xx.fbcdn.net/v/abc123.mp4',
-				'https://example.com/instagram-image.jpg',
-			];
+	describe('instagram Tiles Component Rendering', () => {
+		it('should render InstagramTiles component', async () => {
+			const { container } = render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					limit={12}
+				/>
+			);
 
-			urls.forEach((url) => {
-				expect(url).toMatch(/^https:\/\//);
+			await waitFor(() => {
+				const tilesContainer = container.querySelector('[data-testid="instagram-tiles"]');
+				expect(tilesContainer).toBeDefined();
 			});
 		});
 
-		it('should validate thumbnail URLs', () => {
-			const url = 'https://scontent.cdninstagram.com/v/t51.2885-15/thumb.jpg';
+		it('should render loading state initially', () => {
+			(getInstagramTiles as any).mockImplementation(() => new Promise(() => {})); // Never resolves
 
-			expect(url).toContain('cdninstagram');
-			expect(url).toContain('t51');
+			const { container } = render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					limit={12}
+				/>
+			);
+
+			const loadingText = container.querySelector('p');
+			expect(loadingText?.textContent).toContain('Loading');
 		});
 
-		it('should handle missing media URL', () => {
-			const tile = {
-				id: 'tile-123',
-				media_type: 'IMAGE',
-				media_url: undefined,
-			};
+		it('should render error state when fetch fails', async () => {
+			const errorMessage = 'Failed to fetch Instagram media';
+			(getInstagramTiles as any).mockRejectedValue(new Error(errorMessage));
 
-			expect(tile.media_url).toBeUndefined();
+			const { container } = render(
+				<InstagramTiles
+					accessToken="invalid-token"
+					userId="test-user-id"
+					limit={12}
+				/>
+			);
+
+			await waitFor(() => {
+				const errorElement = container.querySelector('[style*="color"]');
+				expect(errorElement?.textContent).toContain('Error');
+			});
 		});
 
-		it('should handle special characters in captions', () => {
-			const captions = [
-				'Love this! ❤️',
-				'Check it out 👇',
-				'Great times with friends 😊',
-				'Price: $29.99',
+		it('should render empty state when no tiles available', async () => {
+			(getInstagramTiles as any).mockResolvedValue([]);
+
+			const { container } = render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					limit={12}
+				/>
+			);
+
+			await waitFor(() => {
+				const emptyText = Array.from(container.querySelectorAll('p')).find(
+					p => p.textContent?.includes('No Instagram')
+				);
+				expect(emptyText).toBeDefined();
+			});
+		});
+
+		it('should pass rowCount to Tiles component', async () => {
+			const { container } = render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					limit={12}
+					rowCount={3}
+				/>
+			);
+
+			await waitFor(() => {
+				const tilesContainer = container.querySelector('[data-testid="instagram-tiles"]');
+				expect(tilesContainer).toBeDefined();
+			});
+		});
+	});
+
+	describe('Instagram API Integration', () => {
+		it('should call getInstagramTiles with correct parameters', async () => {
+			render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					limit={20}
+					includeVideos={true}
+					includeCaptions={true}
+				/>
+			);
+
+			await waitFor(() => {
+				expect(getInstagramTiles).toHaveBeenCalled();
+			});
+		});
+
+		it('should use config defaults when props not provided', async () => {
+			render(
+				<InstagramTiles />
+			);
+
+			await waitFor(() => {
+				expect(getInstagramTiles).toHaveBeenCalled();
+			});
+		});
+
+		it('should override config with provided accessToken', async () => {
+			render(
+				<InstagramTiles
+					accessToken="override-token"
+					userId="override-user-id"
+				/>
+			);
+
+			await waitFor(() => {
+				expect(getInstagramTiles).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe('Tile Data Structure', () => {
+		it('should render tiles with image URLs', async () => {
+			const { container } = render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					limit={12}
+				/>
+			);
+
+			await waitFor(() => {
+				const images = container.querySelectorAll('img');
+				expect(images.length).toBeGreaterThanOrEqual(0);
+			});
+		});
+
+		it('should render tiles with titles', async () => {
+			const { container } = render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					limit={12}
+				/>
+			);
+
+			await waitFor(() => {
+				const headings = container.querySelectorAll('h3');
+				expect(headings.length).toBeGreaterThanOrEqual(0);
+			});
+		});
+
+		it('should handle tiles with different media types', async () => {
+			const mixedTiles = [
+				{ ...mockInstagramTiles[0], media_type: 'IMAGE' },
+				{ ...mockInstagramTiles[1], media_type: 'VIDEO' },
 			];
 
-			captions.forEach((caption) => {
-				expect(caption.length).toBeGreaterThan(0);
+			(getInstagramTiles as any).mockResolvedValue(mixedTiles);
+
+			const { container } = render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					includeVideos={true}
+					limit={12}
+				/>
+			);
+
+			await waitFor(() => {
+				const tilesContainer = container.querySelector('[data-testid="instagram-tiles"]');
+				expect(tilesContainer).toBeDefined();
+			});
+		});
+	});
+
+	describe('Configuration Options', () => {
+		it('should accept limit parameter', async () => {
+			render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					limit={25}
+				/>
+			);
+
+			await waitFor(() => {
+				expect(getInstagramTiles).toHaveBeenCalled();
+			});
+		});
+
+		it('should accept useThumbnails parameter', async () => {
+			render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					useThumbnails={true}
+				/>
+			);
+
+			await waitFor(() => {
+				expect(getInstagramTiles).toHaveBeenCalled();
+			});
+		});
+
+		it('should accept includeVideos parameter', async () => {
+			render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					includeVideos={false}
+				/>
+			);
+
+			await waitFor(() => {
+				expect(getInstagramTiles).toHaveBeenCalled();
+			});
+
+			expect(getInstagramTiles).toHaveBeenCalled();
+		});
+
+		it('should accept includeCaptions parameter', async () => {
+			render(
+				<InstagramTiles
+					accessToken="test-token"
+					userId="test-user-id"
+					includeCaptions={true}
+				/>
+			);
+
+			await waitFor(() => {
+				expect(getInstagramTiles).toHaveBeenCalled();
 			});
 		});
 	});

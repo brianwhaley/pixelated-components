@@ -100,6 +100,74 @@ Array.prototype.contains = function(obj) {
 */
 
 
+/**
+ * Get the domain name to use as a key component for CacheManager.
+ * Safe to call in browser contexts. For server-side, use getDomainFromHeaders() instead.
+ *
+ * Extracts the domain name from the current hostname to use as a cache/storage prefix.
+ * This ensures multi-tenant applications don't have key collisions across different domain instances.
+ *
+ * @returns Domain name suitable for multi-tenant cache isolation (lowercase, no special characters)
+ *
+ * @example
+ * const domain = getDomain();
+ * const cache = new CacheManager({
+ *   mode: 'local',
+ *   domain,
+ *   namespace: 'checkout'
+ * });
+ *
+ * @example
+ * // In different environments:
+ * // www.pixelvivid.com → "pixelvivid"
+ * // manningmetalworks.com → "manningmetalworks"
+ * // localhost → "pixelated" (development)
+ */
+export function getDomain(): string {
+	// Browser environment
+	if (typeof window !== 'undefined' && window.location?.hostname) {
+		return extractDomainName(window.location.hostname);
+	}
+	// SSR/Node environment - return safe fallback
+	// Library is deployed per-domain, so no actual multi-tenancy at library level
+	// Each domain runs its own isolated copy of this library
+	return 'pixelated';
+}
+
+
+
+/**
+ * Extract the domain name from a hostname string.
+ * Handles www prefixes and multi-level TLDs.
+ *
+ * @param hostname - The hostname (e.g., "www.example.com" or "example.com")
+ * @returns The domain name without www or TLD (lowercase)
+ *
+ * @example
+ * extractDomainName('www.pixelvivid.com') // → "pixelvivid"
+ * extractDomainName('manningmetalworks.com') // → "manningmetalworks"
+ * extractDomainName('localhost') // → "pixelated"
+ */
+export function extractDomainName(hostname: string): string {
+	if (!hostname) return 'pixelated';
+	// Normalize: lowercase, trim whitespace
+	const normalized = hostname.toLowerCase().trim();
+	// Handle localhost / 127.0.0.1 - use development prefix
+	if (normalized === 'localhost' || normalized === '127.0.0.1' || normalized.startsWith('localhost:')) {
+		return 'pixelated';
+	}
+	// Split by dots
+	const parts = normalized.split('.');
+	// Single label (rare but possible in development)
+	if (parts.length === 1) { return parts[0]; }
+	// Two labels: domain.com → domain
+	if (parts.length === 2) { return parts[0]; }
+	// Multiple labels: www.domain.com or subdomain.domain.com → domain
+	// Take the second-to-last part (the domain before the TLD)
+	return parts[parts.length - 2];
+}
+
+
 
 export function attributeMap (oldAttribute: string) {
 	// https://reactjs.org/docs/dom-elements.html

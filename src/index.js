@@ -26,7 +26,7 @@ export * from './components/general/menu-simple';
 export * from './components/general/metadata.components';
 export * from './components/general/metadata.functions';
 export * from './components/general/microinteractions';
-export * from './components/general/proxy-csp-listener';
+
 export * from './components/general/modal';
 export * from './components/general/nerdjoke';
 export * from './components/general/recipe';
@@ -56,6 +56,7 @@ export * from './components/integrations/flickr';
 export * from './components/integrations/gemini-api.client';
 export * from './components/integrations/google.reviews.components';
 export * from './components/integrations/google.reviews.functions';
+export * from './components/integrations/googleplaces';
 export * from './components/integrations/googleanalytics';
 export * from './components/integrations/googlemap';
 export * from './components/integrations/googlesearch';

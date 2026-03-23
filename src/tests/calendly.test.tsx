@@ -1,110 +1,190 @@
-import { describe, it, expect, vi } from 'vitest';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { Calendly } from '../components/integrations/calendly';
 
-describe('Calendly Components Integration Tests', () => {
-	describe('Calendly Embed', () => {
-		it('should create calendly container', () => {
-			const container = document.createElement('div');
-			container.className = 'calendly-inline-widget';
-			container.setAttribute('data-url', 'https://calendly.com/user/30min');
-			document.body.appendChild(container);
+describe('Calendly Component', () => {
+	beforeEach(() => {
+		document.head.innerHTML = '';
+		vi.clearAllMocks();
+	});
 
-			expect(container).toBeInTheDocument();
-			expect(container.getAttribute('data-url')).toContain('calendly');
+	it('should render the calendly inline widget div', () => {
+		render(
+			<Calendly 
+				url="https://calendly.com/example" 
+				width="320px" 
+				height="700px" 
+			/>
+		);
+		
+		const widget = document.querySelector('.calendly-inline-widget');
+		expect(widget).toBeInTheDocument();
+	});
 
-			document.body.removeChild(container);
+	it('should set the correct data-url attribute', () => {
+		render(
+			<Calendly 
+				url="https://calendly.com/john-doe" 
+				width="320px" 
+				height="700px" 
+			/>
+		);
+		
+		const widget = document.querySelector('.calendly-inline-widget');
+		expect(widget?.getAttribute('data-url')).toBe('https://calendly.com/john-doe');
+	});
+
+	it('should set provided width style', () => {
+		render(
+			<Calendly 
+				url="https://calendly.com/example" 
+				width="500px" 
+				height="700px" 
+			/>
+		);
+		
+		const widget = document.querySelector('.calendly-inline-widget') as HTMLElement;
+		expect(widget?.style.minWidth).toBe('500px');
+	});
+
+	it('should set provided height style', () => {
+		render(
+			<Calendly 
+				url="https://calendly.com/example" 
+				width="320px" 
+				height="800px" 
+			/>
+		);
+		
+		const widget = document.querySelector('.calendly-inline-widget') as HTMLElement;
+		expect(widget?.style.height).toBe('800px');
+	});
+
+	it('should have data-resize attribute set to true', () => {
+		render(
+			<Calendly 
+				url="https://calendly.com/example" 
+				width="320px" 
+				height="700px" 
+			/>
+		);
+		
+		const widget = document.querySelector('.calendly-inline-widget');
+		expect(widget?.getAttribute('data-resize')).toBe('true');
+	});
+
+	it('should load the Calendly external widget script', () => {
+		render(
+			<Calendly 
+				url="https://calendly.com/example" 
+				width="320px" 
+				height="700px" 
+			/>
+		);
+		
+		const script = document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]');
+		expect(script).toBeInTheDocument();
+	});
+
+	it('should set script type to text/javascript', () => {
+		render(
+			<Calendly 
+				url="https://calendly.com/example" 
+				width="320px" 
+				height="700px" 
+			/>
+		);
+		
+		const script = document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]');
+		expect(script?.getAttribute('type')).toBe('text/javascript');
+	});
+
+	it('should set script async attribute', () => {
+		render(
+			<Calendly 
+				url="https://calendly.com/example" 
+				width="320px" 
+				height="700px" 
+			/>
+		);
+		
+		const script = document.querySelector('script[src="https://assets.calendly.com/assets/external/widget.js"]');
+		expect(script?.getAttribute('async')).toBe('true');
+	});
+
+	it('should have suppressHydrationWarning attribute', () => {
+		const { container } = render(
+			<Calendly 
+				url="https://calendly.com/example" 
+				width="320px" 
+				height="700px" 
+			/>
+		);
+		
+		const widget = container.querySelector('.calendly-inline-widget');
+		// suppressHydrationWarning is a React prop, not a DOM attribute, so just verify the widget renders
+		expect(widget).toBeInTheDocument();
+	});
+
+	it('should load script only once on mount', () => {
+		const { rerender } = render(
+			<Calendly 
+				url="https://calendly.com/example" 
+				width="320px" 
+				height="700px" 
+			/>
+		);
+		
+		let scripts = document.querySelectorAll('script[src="https://assets.calendly.com/assets/external/widget.js"]');
+		expect(scripts.length).toBe(1);
+		
+		rerender(
+			<Calendly 
+				url="https://calendly.com/different" 
+				width="400px" 
+				height="700px" 
+			/>
+		);
+		
+		scripts = document.querySelectorAll('script[src="https://assets.calendly.com/assets/external/widget.js"]');
+		expect(scripts.length).toBe(1);
+	});
+
+	it('should handle missing head element gracefully', () => {
+		const originalHead = document.head;
+		Object.defineProperty(document, 'head', {
+			value: null,
+			configurable: true
 		});
-
-		it('should load Calendly script', () => {
-			const scriptSrc = 'https://assets.calendly.com/assets/external/widget.js';
-			expect(scriptSrc).toContain('calendly');
-		});
-
-		it('should handle Calendly URL validation', () => {
-			const url = 'https://calendly.com/john-doe/30-minute-meeting';
-			expect(url).toMatch(/^https:\/\/calendly\.com\//);
-		});
-
-		it('should handle different meeting durations', () => {
-			const durations = [
-				'15min',
-				'30min',
-				'45min',
-				'60min',
-				'custom',
-			];
-
-			durations.forEach((duration) => {
-				expect(duration).toBeTruthy();
-			});
+		
+		expect(() => {
+			render(
+				<Calendly 
+					url="https://calendly.com/example" 
+					width="320px" 
+					height="700px" 
+				/>
+			);
+		}).not.toThrow();
+		
+		Object.defineProperty(document, 'head', {
+			value: originalHead,
+			configurable: true
 		});
 	});
 
-	describe('Calendly Configuration', () => {
-		it('should configure booking page URL', () => {
-			const config = {
-				url: 'https://calendly.com/user/event',
-				backgroundColor: '#ffffff',
-				hideLandingPageDetails: false,
-				hideEventTypeDetails: false,
-			};
-
-			expect(config.url).toContain('calendly');
-			expect(config.backgroundColor).toMatch(/^#[0-9a-f]{6}$/i);
-		});
-
-		it('should handle custom colors', () => {
-			const colors = ['#000000', '#ffffff', '#ff0000'];
-			colors.forEach((color) => {
-				expect(color).toMatch(/^#[0-9a-f]{6}$/i);
-			});
-		});
-
-		it('should configure text labels', () => {
-			const labels = {
-				scheduled_events: 'Scheduled Events',
-				upcoming: 'Upcoming',
-				past: 'Past',
-			};
-
-			expect(labels.upcoming).toBe('Upcoming');
-		});
-	});
-
-	describe('Calendly Popup Mode', () => {
-		it('should handle popup trigger element', () => {
-			const button = document.createElement('button');
-			button.className = 'calendly-trigger';
-			button.textContent = 'Schedule Now';
-			document.body.appendChild(button);
-
-			expect(button).toBeInTheDocument();
-			expect(button.textContent).toBe('Schedule Now');
-
-			document.body.removeChild(button);
-		});
-
-		it('should configure popup options', () => {
-			const popupConfig = {
-				url: 'https://calendly.com/user',
-				text: 'Schedule Now',
-				color: '#00a2ff',
-				textColor: '#ffffff',
-				branding: false,
-			};
-
-			expect(popupConfig.text).toBe('Schedule Now');
-			expect(popupConfig.color).toMatch(/^#/);
-		});
-
-		it('should handle popup events', () => {
-			const events = {
-				onModalOpen: vi.fn(),
-				onModalClose: vi.fn(),
-				onEventScheduled: vi.fn(),
-			};
-
-			events.onModalOpen();
-			expect(events.onModalOpen).toHaveBeenCalled();
-		});
+	it('should render widget with default styles when provided', () => {
+		const { container } = render(
+			<Calendly 
+				url="https://calendly.com/example" 
+				width="600px" 
+				height="900px" 
+			/>
+		);
+		
+		const widget = container.querySelector('.calendly-inline-widget') as HTMLElement;
+		expect(widget?.style.minWidth).toBe('600px');
+		expect(widget?.style.height).toBe('900px');
 	});
 });

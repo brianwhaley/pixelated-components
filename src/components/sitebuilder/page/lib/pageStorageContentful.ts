@@ -32,7 +32,7 @@ export async function listContentfulPages(
 ): Promise<ListPagesResponse> {
 	// Map management-style config to delivery apiProps for the CDN-based read helper
 	const apiProps = {
-		base_url: 'https://cdn.contentful.com',
+		base_url: config.base_url || 'https://cdn.contentful.com',
 		space_id: config.space_id,
 		environment: config.environment || 'master',
 		delivery_access_token: config.delivery_access_token,
@@ -67,7 +67,7 @@ export async function loadContentfulPage(
 
 	// Use delivery API for reads
 	const apiProps = {
-		base_url: 'https://cdn.contentful.com',
+		base_url: config.base_url || 'https://cdn.contentful.com',
 		space_id: config.space_id,
 		environment: config.environment || 'master',
 		delivery_access_token: config.delivery_access_token,

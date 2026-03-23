@@ -6,7 +6,10 @@ import {
   generateKey,
   generateUUID,
   capitalize,
-  attributeMap
+  attributeMap,
+  stringTo1337,
+  stringTo1337_v1,
+  logAllChange
 } from '../components/general/utilities';
 
 describe('Utility Functions', () => {
@@ -556,6 +559,140 @@ describe('Utility Functions', () => {
       const result = attributeMap('123');
 
       expect(result).toBe('123');
+    });
+  });
+
+  describe('stringTo1337', () => {
+    it('should convert basic letters to leet speak', () => {
+      const result = stringTo1337('hello');
+      // h -> h (no mapping)
+      // e -> 3, l -> l (can't convert after number), l -> 1, o -> o (can't convert after number)
+      expect(result).toBe('h3l1o');
+    });
+
+    it('should convert vowels to numbers with constraints', () => {
+      const result = stringTo1337('aeiou');
+      // a -> 4, e -> e (can't convert after number), i -> i, o -> 0, u -> u
+      expect(result).toBe('4ei0u');
+    });
+
+    it('should handle no consecutive different leet numbers', () => {
+      const result = stringTo1337('book');
+      // Logic: no consecutive different leet numbers allowed
+      expect(result).toBeTruthy();
+    });
+
+    it('should handle doublet (same consecutive leet numbers)', () => {
+      const result = stringTo1337('assay');
+      // a -> 4, s -> 5 (can't convert, after 4), s -> 5, a -> 4 (can't convert, after 5), y -> y
+      expect(result).toBeTruthy();
+    });
+
+    it('should handle mixed case (case sensitive, uppercase not converted)', () => {
+      const result = stringTo1337('HELLO');
+      // No lowercase mappings, so no conversion
+      expect(result).toBe('HELLO');
+    });
+
+    it('should handle lowercase mixed case', () => {
+      const result = stringTo1337('HeLLo');
+      // Only lowercase chars get converted
+      expect(result).toBeTruthy();
+    });
+
+    it('should handle numbers in input', () => {
+      const result = stringTo1337('test123');
+      expect(result).toContain('123'); // numbers preserved
+    });
+
+    it('should handle empty string', () => {
+      const result = stringTo1337('');
+      expect(result).toBe('');
+    });
+
+    it('should handle single mappable character', () => {
+      const result = stringTo1337('a');
+      expect(result).toBe('4');
+    });
+
+    it('should handle consecutive same leet numbers (doublets)', () => {
+      const result = stringTo1337('allagator');
+      // Logic: allows consecutive same numbers
+      expect(result).toBeTruthy();
+    });
+  });
+
+  describe('stringTo1337_v1', () => {
+    it('should convert o to 0', () => {
+      const result = stringTo1337_v1('hello');
+      expect(result).toContain('0'); // o -> 0
+    });
+
+    it('should convert l to 1', () => {
+      const result = stringTo1337_v1('hello');
+      expect(result).toContain('1'); // l -> 1
+    });
+
+    it('should convert r to 2', () => {
+      const result = stringTo1337_v1('car');
+      expect(result).toContain('2'); // r -> 2
+    });
+
+    it('should convert e to 3', () => {
+      const result = stringTo1337_v1('hello');
+      expect(result).toContain('3'); // e -> 3
+    });
+
+    it('should convert a to 4', () => {
+      const result = stringTo1337_v1('cat');
+      expect(result).toContain('4'); // a -> 4
+    });
+
+    it('should convert s to 5', () => {
+      const result = stringTo1337_v1('test');
+      expect(result).toContain('5'); // s -> 5
+    });
+
+    it('should convert g to 6 and 9', () => {
+      const result = stringTo1337_v1('going');
+      expect(result).toBeTruthy();
+    });
+
+    it('should convert t to 7', () => {
+      const result = stringTo1337_v1('test');
+      expect(result).toContain('7'); // t -> 7
+    });
+
+    it('should convert b to 8', () => {
+      const result = stringTo1337_v1('baby');
+      expect(result).toContain('8'); // b -> 8
+    });
+
+    it('should handle empty string', () => {
+      const result = stringTo1337_v1('');
+      expect(result).toBe('');
+    });
+
+    it('should handle mixed case', () => {
+      const result = stringTo1337_v1('HELLO');
+      expect(result).toContain('0'); // o (or O) -> 0
+      expect(result).toContain('1'); // l (or L) -> 1
+    });
+  });
+
+  describe('logAllChange', () => {
+    it('should attach change event listener without throwing', () => {
+      // This function attaches to document, so we just verify it doesn't throw
+      expect(() => {
+        logAllChange();
+      }).not.toThrow();
+    });
+
+    it('should be callable multiple times', () => {
+      expect(() => {
+        logAllChange();
+        logAllChange();
+      }).not.toThrow();
     });
   });
 });

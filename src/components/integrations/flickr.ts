@@ -20,13 +20,17 @@ type FlickrApiType = {
     };
 };
 
+// Flickr API base URL - non-secret configuration
+const FLICKR_API_BASE_URL = 'https://api.flickr.com/services/rest/?';
+
 const defaultFlickr = { 
 	flickr : {
-		baseURL: 'https://api.flickr.com/services/rest/?',
+		baseURL: FLICKR_API_BASE_URL,
 		urlProps: {
 			method: 'flickr.photos.search',
-			api_key: '882cab5548d53c9e6b5fb24d59cc321d',
-			user_id: '15473210@N04',
+			// api_key and user_id must come from props or config provider - do not hardcode
+			api_key: '',
+			user_id: '',
 			tags: 'pixelatedviewsgallery',
 			extras: 'date_taken,description,owner_name',
 			sort: 'date-taken-desc',
@@ -208,7 +212,7 @@ export type FlickrWrapperType = InferProps<typeof FlickrWrapper.propTypes>;
 export function FlickrWrapper (props: FlickrWrapperType) {
 	const flickr = {
 		flickr : {
-			baseURL: 'https://api.flickr.com/services/rest/?',
+			baseURL: FLICKR_API_BASE_URL,
 			urlProps: {
 				method: props.method || 'flickr.photos.search',
 				api_key: props.api_key /* || '882cab5548d53c9e6b5fb24d59cc321d' */ ,

@@ -96,6 +96,14 @@ export interface GoogleMapsConfig {
 	apiKey: string;
 }
 
+export interface GooglePlacesConfig {
+	apiKey?: string;
+	language?: string;
+	countryRestrictions?: string[];
+	debounceDelay?: number;
+	cacheTTL?: number;
+}
+
 export interface GoogleSearchConsoleConfig {
 	id: string;
 }
@@ -126,6 +134,21 @@ export interface PaypalConfig {
 	sandboxPayPalSecret: string;
 	payPalApiKey: string;
 	payPalSecret: string;
+}
+
+export interface ShoppingCartConfig {
+	/** Email address for order notifications */
+	orderTo: string;
+	/** Sender email address for transactional emails */
+	orderFrom: string;
+	/** Subject line for order confirmation emails */
+	orderSubject: string;
+	/** Store/company name displayed in communications */
+	storeName: string;
+	/** Currency code (e.g., 'USD', 'EUR') */
+	currency?: string;
+	/** Tax rate as a decimal (e.g., 0.07 for 7%) */
+	taxRate?: number;
 }
 
 export interface WordpressConfig {
@@ -235,11 +258,13 @@ export interface PixelatedConfig {
 	google?: Google;
 	googleAnalytics?: GoogleAnalyticsConfig;
 	googleMaps?: GoogleMapsConfig;
+	googlePlaces?: GooglePlacesConfig;
 	googleSearchConsole?: GoogleSearchConsoleConfig;
 	hubspot?: HubspotConfig;
 	instagram?: InstagramConfig;
 	nextAuth?: NextAuth;
 	paypal?: PaypalConfig;
+	shoppingcart?: ShoppingCartConfig;
 	wordpress?: WordpressConfig;
 	puppeteer?: PuppeteerConfig;
 }

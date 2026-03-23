@@ -22,9 +22,9 @@ export default function PageBuilderPage() {
 ```typescript
 // src/app/my-page/page.tsx
 import { PageEngine } from '@pixelated-tech/components';
-import pageData from '@/../../public/data/pages/my-page.json';
 
 export default function MyPage() {
+  // Load pageData from your CMS or API
   return <PageEngine pageData={pageData} />;
 }
 ```

@@ -246,8 +246,8 @@ export function EbayListItem(props: EbayListItemType) {
 	const itemURL = "./store/" + thisItem.legacyItemId;
 	const itemURLTarget = "_self"; /* "_blank" */
 	const itemImage = (props.cloudinaryProductEnv) 
-		? getImg({url: thisItem.thumbnailImages[0].imageUrl, product_env: props.cloudinaryProductEnv}) 
-		: thisItem.thumbnailImages[0].imageUrl;
+		? getImg({url: thisItem.thumbnailImages?.[0]?.imageUrl || thisItem.image?.imageUrl || '', product_env: props.cloudinaryProductEnv}) 
+		: thisItem.thumbnailImages?.[0]?.imageUrl || thisItem.image?.imageUrl || '';
 	const shoppingCartItem = getShoppingCartItem({ thisItem: thisItem, cloudinaryProductEnv: props.cloudinaryProductEnv, apiProps: apiProps });
 	// CHANGE EBAY URL TO LOCAL EBAY ITEM DETAIL URL
 	shoppingCartItem.itemURL = itemURL;
@@ -273,11 +273,11 @@ export function EbayListItem(props: EbayListItemType) {
 				</div>
 				<div className="ebay-item-details grid12">
 					<div><b>Item ID: </b>{thisItem.legacyItemId}</div>
-					<div><b>Quantity: </b>{thisItem.categories[0].categoryId == apiProps.itemCategory ? 1 : 10}</div>
+					<div><b>Quantity: </b>{thisItem.categories?.[0]?.categoryId == apiProps.itemCategory ? 1 : 10}</div>
 					<div><b>Condition: </b>{thisItem.condition}</div>
-					<div><b>Seller: </b>{thisItem.seller.username} ({thisItem.seller.feedbackScore})<br />{thisItem.seller.feedbackPercentage}% positive</div>
-					<div><b>Buying Options: </b>{thisItem.buyingOptions[0]}</div>
-					<div><b>Location: </b>{thisItem.itemLocation.postalCode + ", " + thisItem.itemLocation.country}</div>
+					<div><b>Seller: </b>{thisItem.seller?.username} ({thisItem.seller?.feedbackScore})<br />{thisItem.seller?.feedbackPercentage}% positive</div>
+					<div><b>Buying Options: </b>{thisItem.buyingOptions?.[0]}</div>
+					<div><b>Location: </b>{thisItem.itemLocation?.postalCode + ", " + thisItem.itemLocation?.country}</div>
 					<div><b>Listing Date: </b>{thisItem.itemCreationDate}</div>
 				</div>
 				<div className="ebay-item-price">
@@ -366,7 +366,7 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 	if ( item && Object.keys(item) && Object.keys(item).length > 0 ) {
 		const thisItem = { ...item } as any;
 		if (debug) console.log(thisItem);
-		const images = thisItem.additionalImages.map(( thisImage: any ) => (
+		const images = (thisItem.additionalImages || []).map(( thisImage: any ) => (
 			{ image: (props.cloudinaryProductEnv) 
 				? getImg({url: thisImage.imageUrl, product_env: props.cloudinaryProductEnv}) 
 				: thisImage.imageUrl }
@@ -394,7 +394,7 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 					</div>
 					<div className="grid-s7-e13">
 						<div className="ebay-item-details grid12">
-							<div dangerouslySetInnerHTML={{ __html: thisItem.description.replace(/(<br\s*\/?>\s*){2,}/gi, '') }} />
+							<div dangerouslySetInnerHTML={{ __html: thisItem.description?.replace(/(<br\s*\/?>\s*){2,}/gi, '') || '' }} />
 						</div>
 						<br />
 						<div className="ebay-item-details grid12">
@@ -402,9 +402,9 @@ export function EbayItemDetail(props: EbayItemDetailType)  {
 							<div><b>Quantity: </b>{thisItem.categoryId == apiProps.itemCategory ? 1 : 10}</div>
 							<div><b>Category: </b>{thisItem.categoryPath}</div>
 							<div><b>Condition: </b>{thisItem.condition}</div>
-							<div><b>Seller: </b>{thisItem.seller.username} ({thisItem.seller.feedbackScore})<br />{thisItem.seller.feedbackPercentage}% positive</div>
-							<div><b>Buying Options: </b>{thisItem.buyingOptions[0]}</div>
-							<div><b>Location: </b>{thisItem.itemLocation.city + ", " + thisItem.itemLocation.stateOrProvince}</div>
+							<div><b>Seller: </b>{thisItem.seller?.username} ({thisItem.seller?.feedbackScore})<br />{thisItem.seller?.feedbackPercentage}% positive</div>
+							<div><b>Buying Options: </b>{thisItem.buyingOptions?.[0]}</div>
+							<div><b>Location: </b>{thisItem.itemLocation?.city + ", " + thisItem.itemLocation?.stateOrProvince}</div>
 							<div><b>Listing Date: </b>{thisItem.itemCreationDate}</div>
 							<br />
 						</div>

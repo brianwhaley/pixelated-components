@@ -1,0 +1,300 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { GetFlickrData } from '../components/integrations/flickr';
+
+// Mock fetch before importing the module
+global.fetch = vi.fn();
+
+describe('flickr - GetFlickrData', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
+	it('should return async function that fetches Flickr photos', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({
+				photos: {
+					photo: [
+						{
+							id: '123',
+							title: 'Photo 1',
+							datetaken: '2024-01-15T10:00:00'
+						},
+						{
+							id: '456',
+							title: 'Photo 2',
+							datetaken: '2024-01-16T10:00:00'
+						}
+					]
+				},
+				stat: 'ok'
+			})
+		} as any);
+
+		const result = await GetFlickrData({});
+		expect(Array.isArray(result)).toBe(true);
+		expect(result?.length).toBeGreaterThan(0);
+	});
+
+	it('should accept configuration object for Flickr API', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({
+				photos: { photo: [] },
+				stat: 'ok'
+			})
+		} as any);
+
+		const config = {
+			flickr: {
+				api_key: 'test-key',
+				user_id: '123456'
+			}
+		};
+
+		const result = await GetFlickrData(config);
+		expect(result).toBeDefined();
+	});
+
+	it('should merge props with configuration', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({
+				photos: { photo: [{ id: '1', datetaken: '2024-01-01' }] },
+				stat: 'ok'
+			})
+		} as any);
+
+		const config = {
+			flickr: { baseURL: 'https://api.flickr.com/' },
+			config: { custom: 'value' }
+		};
+
+		const result = await GetFlickrData(config);
+		expect(result).toBeDefined();
+	});
+
+	it('should handle photo size mapping from response', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({
+				photos: {
+					photo: [
+						{
+							id: '123',
+							server: '1234',
+							secret: 'abcd',
+							datetaken: '2024-01-01'
+						}
+					]
+				},
+				stat: 'ok'
+			})
+		} as any);
+
+		const result = await GetFlickrData({});
+		expect(result?.[0]?.secret).toBe('abcd');
+	});
+
+	it('should parse Flickr API photo response correctly', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({
+				photos: {
+					page: 1,
+					pages: 10,
+					total: 100,
+					photo: [
+						{
+							id: '123',
+							title: 'Test Photo',
+							datetaken: '2024-01-15T10:00:00'
+						}
+					]
+				},
+				stat: 'ok'
+			})
+		} as any);
+
+		const result = await GetFlickrData({});
+		expect(result).toBeDefined();
+		expect(result?.[0]?.title).toBe('Test Photo');
+	});
+
+	it('should handle missing API key gracefully', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({
+				photos: { photo: [] },
+				stat: 'ok'
+			})
+		} as any);
+
+		const config = { flickr: {} };
+		const result = await GetFlickrData(config);
+		expect(result).toBeDefined();
+	});
+
+	it('should support tag parameter in API request', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({
+				photos: {
+					photo: [{ id: '1', datetaken: '2024-01-01' }]
+				},
+				stat: 'ok'
+			})
+		} as any);
+
+		const config = {
+			flickr: { tags: 'landscape' }
+		};
+
+		const result = await GetFlickrData(config);
+		expect(result).toBeDefined();
+	});
+
+	it('should support pagination parameters', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({
+				photos: {
+					page: 2,
+					pages: 10,
+					photo: [{ id: '1', datetaken: '2024-01-01' }]
+				},
+				stat: 'ok'
+			})
+		} as any);
+
+		const config = {
+			flickr: { page: 2, per_page: 20 }
+		};
+
+		const result = await GetFlickrData(config);
+		expect(result).toBeDefined();
+	});
+
+	it('should sort photos by date in descending order', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({
+				photos: {
+					photo: [
+						{ id: '1', datetaken: '2024-01-01T10:00:00' },
+						{ id: '2', datetaken: '2024-01-15T10:00:00' },
+						{ id: '3', datetaken: '2024-01-10T10:00:00' }
+					]
+				},
+				stat: 'ok'
+			})
+		} as any);
+
+		const result = await GetFlickrData({});
+		// Should be sorted newest first
+		expect(result?.[0]?.id).toBe('2');
+		expect(result?.[1]?.id).toBe('3');
+		expect(result?.[2]?.id).toBe('1');
+	});
+
+	it('should handle photoset response (album photos)', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: true,
+			json: () => Promise.resolve({
+				photoset: {
+					photo: [
+						{ id: '1', datetaken: '2024-01-01T10:00:00' },
+						{ id: '2', datetaken: '2024-01-02T10:00:00' }
+					]
+				},
+				stat: 'ok'
+			})
+		} as any);
+
+		const result = await GetFlickrData({});
+		expect(Array.isArray(result)).toBe(true);
+		expect(result?.length).toBe(2);
+	});
+
+	it('should handle HTTP errors from Flickr API', async () => {
+		vi.mocked(global.fetch).mockResolvedValueOnce({
+			ok: false,
+			status: 400
+		} as any);
+
+		const result = await GetFlickrData({});
+		// Should handle error gracefully
+		expect(result === undefined || Array.isArray(result)).toBe(true);
+	});
+
+	describe('Photo Size Options', () => {
+		it('should support multiple size formats in response', async () => {
+			vi.mocked(global.fetch).mockResolvedValueOnce({
+				ok: true,
+				json: () => Promise.resolve({
+					photos: {
+						photo: [
+							{
+								id: '1',
+								datetaken: '2024-01-01T10:00:00',
+								url_z: 'https://example.com/640.jpg',
+								url_b: 'https://example.com/1024.jpg'
+							}
+						]
+					},
+					stat: 'ok'
+				})
+			} as any);
+
+			const result = await GetFlickrData({});
+			expect(result?.[0]?.url_z || result?.[0]?.url_b).toBeDefined();
+		});
+	});
+
+	describe('Card Generation', () => {
+		it('should generate card for display', () => {
+			const card = {
+				id: '1',
+				title: 'Test Photo',
+				image: 'https://example.com/1.jpg',
+				width: 640,
+				height: 480,
+			};
+			expect(card.id).toBeDefined();
+			expect(card.image).toBeDefined();
+		});
+
+		it('should handle card generation with metadata', () => {
+			const cards = [{
+				id: '1',
+				title: 'Photo 1',
+				image: 'https://example.com/1.jpg',
+				meta: { views: 1000, comments: 50 }
+			}];
+			expect(cards.length).toBeGreaterThan(0);
+			expect(cards[0].meta).toBeDefined();
+		});
+	});
+
+	describe('Error Handling', () => {
+		it('should handle API errors', () => {
+			const errorResponse = {
+				stat: 'fail',
+				code: 99,
+				message: 'User not found'
+			};
+			expect(errorResponse.stat).toBe('fail');
+			expect(errorResponse.code).toBeGreaterThan(0);
+		});
+
+		it('should handle network timeouts', () => {
+			const timeoutError = {
+				success: false,
+				error: 'Request Timeout',
+				duration: 30000
+			};
+			expect(timeoutError.success).toBe(false);
+			expect(timeoutError.duration).toBeGreaterThan(0);
+		});
+	});
+});

@@ -1,81 +1,198 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { setClientMetadata } from '../components/general/metadata.components';
 
 describe('Metadata Components Tests', () => {
-	describe('Meta Tag Generation', () => {
-		it('should generate title tag', () => {
-			const title = 'My Website';
-			expect(title).toBeTruthy();
-			expect(title.length).toBeGreaterThan(0);
+	beforeEach(() => {
+		// Setup meta tags in the document for testing
+		document.head.innerHTML = `
+			<meta name="description" content="" />
+			<meta property="og:title" content="" />
+			<meta property="og:description" content="" />
+			<meta itemprop="description" content="" />
+			<meta name="keywords" content="" />
+		`;
+	});
+
+	describe('setClientMetadata Function', () => {
+		it('should set document title', () => {
+			setClientMetadata({
+				title: 'My Website',
+				description: 'My website description',
+				keywords: 'website, example'
+			});
+
+			expect(document.title).toBe('My Website');
 		});
 
-		it('should generate description meta tag', () => {
-			const description = 'My website description';
-			expect(description).toBeTruthy();
-			expect(description.length).toBeGreaterThan(10);
+		it('should set og:title meta tag', () => {
+			setClientMetadata({
+				title: 'Website Title',
+				description: 'Description',
+				keywords: 'keywords'
+			});
+
+			const ogTitle = document.querySelector("meta[property='og:title']");
+			expect(ogTitle?.getAttribute('content')).toBe('Website Title');
 		});
 
-		it('should generate keywords meta tag', () => {
-			const keywords = 'keyword1, keyword2, keyword3';
-			const keywordArray = keywords.split(',').map(k => k.trim());
-			expect(keywordArray.length).toBeGreaterThan(0);
+		it('should set meta description tag', () => {
+			setClientMetadata({
+				title: 'Title',
+				description: 'My website description',
+				keywords: 'keywords'
+			});
+
+			const description = document.querySelector("meta[name='description']");
+			expect(description?.getAttribute('content')).toBe('My website description');
 		});
 
-		it('should generate charset meta tag', () => {
-			const charset = 'UTF-8';
-			expect(charset).toBe('UTF-8');
+		it('should set og:description meta tag', () => {
+			setClientMetadata({
+				title: 'Title',
+				description: 'Website description',
+				keywords: 'keywords'
+			});
+
+			const ogDescription = document.querySelector("meta[property='og:description']");
+			expect(ogDescription?.getAttribute('content')).toBe('Website description');
 		});
 
-		it('should generate viewport meta tag', () => {
-			const viewport = 'width=device-width, initial-scale=1.0';
-			expect(viewport).toContain('width=device-width');
+		it('should set itemprop description meta tag', () => {
+			setClientMetadata({
+				title: 'Title',
+				description: 'Item description',
+				keywords: 'keywords'
+			});
+
+			const itemDescription = document.querySelector("meta[itemprop='description']");
+			expect(itemDescription?.getAttribute('content')).toBe('Item description');
+		});
+
+		it('should set keywords meta tag', () => {
+			setClientMetadata({
+				title: 'Title',
+				description: 'Description',
+				keywords: 'keyword1, keyword2, keyword3'
+			});
+
+			const keywords = document.querySelector("meta[name='keywords']");
+			expect(keywords?.getAttribute('content')).toBe('keyword1, keyword2, keyword3');
+		});
+
+		it('should handle long descriptions', () => {
+			const longDescription = 'This is a very long description that contains multiple sentences. It provides comprehensive information about the website content.';
+
+			setClientMetadata({
+				title: 'Title',
+				description: longDescription,
+				keywords: 'keywords'
+			});
+
+			expect(document.title).toBe('Title');
+			const description = document.querySelector("meta[name='description']");
+			expect(description?.getAttribute('content')).toBe(longDescription);
+		});
+
+		it('should overwrite existing metadata', () => {
+			// Set initial metadata
+			setClientMetadata({
+				title: 'Old Title',
+				description: 'Old description',
+				keywords: 'old keywords'
+			});
+
+			// Overwrite with new metadata
+			setClientMetadata({
+				title: 'New Title',
+				description: 'New description',
+				keywords: 'new keywords'
+			});
+
+			expect(document.title).toBe('New Title');
+			const description = document.querySelector("meta[name='description']");
+			expect(description?.getAttribute('content')).toBe('New description');
+		});
+
+		it('should handle all metadata fields simultaneously', () => {
+			const testData = {
+				title: 'Complete Title',
+				description: 'Complete description for the website',
+				keywords: 'website, complete, test'
+			};
+
+			setClientMetadata(testData);
+
+			expect(document.title).toBe(testData.title);
+			expect(document.querySelector("meta[property='og:title']")?.getAttribute('content')).toBe(testData.title);
+			expect(document.querySelector("meta[name='description']")?.getAttribute('content')).toBe(testData.description);
+			expect(document.querySelector("meta[property='og:description']")?.getAttribute('content')).toBe(testData.description);
+			expect(document.querySelector("meta[name='keywords']")?.getAttribute('content')).toBe(testData.keywords);
+		});
+
+		it('should validate title is persisted', () => {
+			const title = 'Test Page Title';
+			setClientMetadata({
+				title,
+				description: 'Test description',
+				keywords: 'test'
+			});
+
+			const ogTitle = document.querySelector("meta[property='og:title']");
+			expect(ogTitle?.getAttribute('content')).toBe(title);
+		});
+
+		it('should validate description is persisted across multiple meta tags', () => {
+			const description = 'Consistent description';
+			setClientMetadata({
+				title: 'Title',
+				description,
+				keywords: 'keywords'
+			});
+
+			const metaDescription = document.querySelector("meta[name='description']");
+			const ogDescription = document.querySelector("meta[property='og:description']");
+			const itemDescription = document.querySelector("meta[itemprop='description']");
+
+			expect(metaDescription?.getAttribute('content')).toBe(description);
+			expect(ogDescription?.getAttribute('content')).toBe(description);
+			expect(itemDescription?.getAttribute('content')).toBe(description);
 		});
 	});
 
-	describe('Open Graph Tags', () => {
-		it('should generate og:title', () => {
-			const ogTitle = 'Website Title';
-			expect(ogTitle).toBeTruthy();
+	describe('Meta Tag Content Validation', () => {
+		it('should accept special characters in metadata', () => {
+			setClientMetadata({
+				title: 'Title with & special © characters™',
+				description: 'Description with special chars: © 2024',
+				keywords: 'keywords & more'
+			});
+
+			expect(document.title).toContain('&');
+			const keywords = document.querySelector("meta[name='keywords']");
+			expect(keywords?.getAttribute('content')).toContain('&');
 		});
 
-		it('should generate og:description', () => {
-			const ogDescription = 'Website description';
-			expect(ogDescription).toBeTruthy();
+		it('should accept URL format for keywords', () => {
+			setClientMetadata({
+				title: 'Title',
+				description: 'Description',
+				keywords: 'web-design, mobile-app, url-based'
+			});
+
+			const keywords = document.querySelector("meta[name='keywords']");
+			expect(keywords?.getAttribute('content')).toContain('-');
 		});
 
-		it('should generate og:image', () => {
-			const ogImage = 'https://example.com/image.jpg';
-			expect(ogImage).toContain('https://');
-			expect(ogImage).toContain('image.jpg');
-		});
+		it('should preserve whitespace in descriptions', () => {
+			const description = 'First line\nSecond line';
+			setClientMetadata({
+				title: 'Title',
+				description,
+				keywords: 'keywords'
+			});
 
-		it('should generate og:image:height', () => {
-			const height = '630';
-			expect(parseInt(height)).toBeGreaterThan(0);
-		});
-
-		it('should generate og:image:width', () => {
-			const width = '1200';
-			expect(parseInt(width)).toBeGreaterThan(0);
-		});
-
-		it('should generate og:type', () => {
-			const ogType = 'website';
-			expect(ogType).toBe('website');
-		});
-
-		it('should generate og:url', () => {
-			const ogUrl = 'https://example.com/page';
-			expect(ogUrl).toContain('https://');
-		});
-
-		it('should generate og:site_name', () => {
-			const siteName = 'My Site';
-			expect(siteName).toBeTruthy();
-		});
-
-		it('should generate og:locale', () => {
-			const locale = 'en_US';
-			expect(locale).toMatch(/^\w{2}_\w{2}$/);
+			const metaDescription = document.querySelector("meta[name='description']");
+			expect(metaDescription?.getAttribute('content')).toBe(description);
 		});
 	});
 

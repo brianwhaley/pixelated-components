@@ -1152,6 +1152,146 @@ const noDuplicateExportNamesRule = {
 	}
 };
 
+/**
+ * no-hardcoded-config-keys Rule
+ * 
+ * Prevents hardcoding of Pixelated-specific configuration keys that should come from:
+ * - Config provider (usePixelatedConfig)
+ * - Environment variables
+ * - Function parameters/props
+ * 
+ * Only flags keys that are Pixelated-specific to avoid false positives.
+ * Severity: ERROR for secrets, WARNING for other Pixelated config keys.
+ */
+const noHardcodedConfigKeysRule = {
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Prevent hardcoded Pixelated configuration keys that should come from config provider',
+			category: 'Security',
+			recommended: true,
+		},
+		fixable: false,
+		schema: [],
+		messages: {
+			secretConfigKey: 'Hardcoded SECRET configuration key "{{keyName}}" ({{serviceName}}) detected. Must use config provider (usePixelatedConfig) or environment variables.',
+			publicConfigKey: 'Hardcoded Pixelated config key "{{keyName}}" ({{serviceName}}) detected. Should use config provider (usePixelatedConfig) or pass as parameter instead.',
+		},
+	},
+	create(context) {
+		// Pixelated-SPECIFIC configuration keys (keys that are unlikely to be false positives)
+		// Keys that are unique/distinctive to Pixelated integrations, excluding generic names
+		const pixelatedConfigKeys = {
+			// Contentful (very Pixelated-specific)
+			contentful: ['space_id', 'delivery_access_token', 'management_access_token', 'preview_access_token', 'proxyURL', 'base_url', 'environment'],
+			// eBay (very distinctive)
+			ebay: ['appId', 'appDevId', 'appCertId', 'sbxAppId', 'sbxAppDevId', 'sbxAppCertId', 'globalId', 'baseTokenURL', 'baseSearchURL', 'baseAnalyticsURL', 'qsSearchURL', 'baseItemURL', 'qsItemURL'],
+			// AWS (distinctive with service prefix or secretive names)
+			aws: ['access_key_id', 'secret_access_key', 'session_token'],
+			// Cloudinary
+			cloudinary: ['product_env', 'api_key', 'api_secret'],
+			// Flickr
+			flickr: ['user_id'],
+			// GitHub
+			github: ['token', 'apiBaseUrl', 'defaultOwner'],
+			// Google services
+			google: ['client_id', 'client_secret', 'api_key', 'refresh_token'],
+			// Google Analytics
+			googleAnalytics: [],  // Skip 'id' and 'adId' as too generic
+			// Google Maps
+			googleMaps: ['apiKey'],
+			// HubSpot (keep only distinctive ones)
+			hubspot: ['portalId', 'formId', 'trackingCode'],
+			// Instagram
+			instagram: ['accessToken', 'userId'],
+			// NextAuth
+			nextAuth: ['secret'],
+			// PayPal
+			paypal: ['sandboxPayPalApiKey', 'sandboxPayPalSecret', 'payPalApiKey', 'payPalSecret'],
+			// WordPress
+			wordpress: ['baseURL', 'site'],
+			// Puppeteer
+			puppeteer: ['executable_path', 'cache_dir'],
+			// Global
+			global: ['PIXELATED_CONFIG_KEY']
+		};
+
+		// Secret keys that should NEVER be hardcoded (ERROR severity)
+		const secretKeys = new Set([
+			// AWS
+			'access_key_id', 'secret_access_key', 'session_token',
+			// Cloudinary
+			'api_key', 'api_secret',
+			// Contentful
+			'management_access_token', 'preview_access_token',
+			// eBay
+			'sbxAppId',
+			// GitHub
+			'token',
+			// Instagram
+			'accessToken',
+			// PayPal
+			'sandboxPayPalApiKey', 'sandboxPayPalSecret', 'payPalApiKey', 'payPalSecret',
+			// NextAuth
+			'secret',
+			// Global
+			'PIXELATED_CONFIG_KEY'
+		]);
+
+		// Build set of all known Pixelated config keys
+		const allConfigKeys = new Set();
+		Object.values(pixelatedConfigKeys).forEach(keys => {
+			keys.forEach(key => allConfigKeys.add(key));
+		});
+
+		function findServiceForKey(keyName) {
+			for (const [serviceName, keys] of Object.entries(pixelatedConfigKeys)) {
+				if (keys.includes(keyName)) {
+					return serviceName;
+				}
+			}
+			return 'unknown';
+		}
+
+		function isConfigKey(keyName) {
+			return allConfigKeys.has(keyName);
+		}
+
+		function isSecretKey(keyName) {
+			return secretKeys.has(keyName);
+		}
+
+		return {
+			ObjectExpression(node) {
+				node.properties.forEach(prop => {
+					// Check properties that look like { space_id: "value" } or { api_key: "..." }
+					if (prop.type === 'Property' && prop.key) {
+						const keyName = prop.key.name || prop.key.value;
+						
+						// Check if this is a known Pixelated config key
+						if (isConfigKey(keyName)) {
+							// Check if value is a string literal (hardcoded)
+							if (prop.value.type === 'Literal' && typeof prop.value.value === 'string') {
+								const stringValue = prop.value.value;
+								if (stringValue && stringValue.length > 0) {
+									const serviceName = findServiceForKey(keyName);
+									const messageId = isSecretKey(keyName) ? 'secretConfigKey' : 'publicConfigKey';
+									
+									context.report({
+										node: prop,
+										messageId,
+										data: { keyName, serviceName },
+									});
+								}
+							}
+						}
+					}
+				});
+			}
+		};
+	}
+};
+
 export default {
 	rules: {
 		'prop-types-inferprops': propTypesInferPropsRule,
@@ -1169,6 +1309,7 @@ export default {
 		'file-name-kebab-case': fileNameKebabCaseRule,
 		'no-duplicate-export-names': noDuplicateExportNamesRule,
 		'class-name-kebab-case': classNameKebabCaseRule,
+		'no-hardcoded-config-keys': noHardcodedConfigKeysRule,
 	},
 	configs: {
 		recommended: {
@@ -1188,6 +1329,7 @@ export default {
 				'pixelated/required-proptypes-jsdoc': 'error',
 				'pixelated/no-duplicate-export-names': 'error',
 				'pixelated/class-name-kebab-case': 'error',
+				'pixelated/no-hardcoded-config-keys': 'error',
 			},
 		},
 	},

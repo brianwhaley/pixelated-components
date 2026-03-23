@@ -3,13 +3,27 @@
  * 
  * A unified caching utility that supports Memory, LocalStorage, and SessionStorage. 
  * Includes TTL (Time-To-Live) support and automatic SSR fallback.
+ * 
+ * ARCHITECTURE NOTE: The `domain` parameter is required to enforce clear namespace separation and
+ * provide future-proofing. While the library is currently deployed **per-domain** (each site gets
+ * its own isolated copy of this library), the domain parameter serves important purposes:
+ * 1. **Code Clarity**: Makes the multi-tenant intent explicit in code
+ * 2. **Future-Proofing**: If architecture changes to shared backends (Redis), isolation is built-in
+ * 3. **Safety**: Prevents accidental empty prefixes that could cause collisions
+ * 
+ * Each domain runs in isolation:
+ * - Client-side: Uses window.location to determine domain (e.g., pixelvivid.com → "pixelvivid")
+ * - Server-side: Defaults to 'pixelated' (safe because server caches are in-memory per process)
+ * - Memory caches: Naturally isolated to their process, so multi-tenancy doesn't apply
+ * - Local/Session storage: Browser-based, inherently isolated by domain
  */
 
 export type CacheMode = 'memory' | 'local' | 'session' | 'none';
 
 export interface CacheOptions {
+	domain: string;    // Tenant/domain name (e.g., 'pixelvivid', 'sitehealth') - prevents multi-tenant collisions
+	namespace?: string; // Optional namespace within domain (e.g., 'cart', 'analytics', 'cloudwatch')
 	ttl?: number;      // Expiration time in milliseconds (Default: 1 hour)
-	prefix?: string;   // Key prefix to avoid collisions (Default: 'pix_')
 	mode?: CacheMode;  // Storage engine (Default: 'memory')
 }
 
@@ -25,10 +39,15 @@ export class CacheManager {
 	private prefix: string;
 	private ttl: number;
 
-	constructor(options: CacheOptions = {}) {
+	constructor(options: CacheOptions) {
 		this.mode = options.mode || 'memory';
-		this.prefix = options.prefix || 'pix_';
 		this.ttl = options.ttl || this.defaultTTL;
+
+		// Build prefix from domain + optional namespace
+		// domain + namespace pattern: "pixelvivid_cart_" or "sitehealth_analytics_"
+		this.prefix = options.namespace 
+			? `${options.domain}_${options.namespace}_`
+			: `${options.domain}_`;
 
 		// Fallback to memory if browser storage is requested but unavailable (SSR/Node environment)
 		if (typeof window === 'undefined' && (this.mode === 'local' || this.mode === 'session')) {

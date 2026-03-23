@@ -7,6 +7,7 @@ import { getContentfulFieldValues, getContentfulAssets } from "../integrations/c
 import { getEbayAppToken, getEbayItemsSearch } from "../shoppingcart/ebay.functions";
 import { getFullPixelatedConfig } from '../config/config';
 import { CacheManager } from '../general/cache-manager';
+import { getDomain } from './utilities';
 
 
 export type SitemapEntry = MetadataRoute.Sitemap[number];
@@ -511,7 +512,7 @@ export async function createEbayItemURLs(origin: string) {
 
 const SITEMAP_TTL = 24 * 60 * 60 * 1000; // one day
 const EBAY_SITE_SITEMAP_KEY = 'ebay_sitemap_items';
-const ebaySitemapCache = new CacheManager({ mode: 'memory', prefix: 'ebaySitemap_', ttl: SITEMAP_TTL });
+const ebaySitemapCache = new CacheManager({ mode: 'memory', domain: getDomain(), namespace: 'ebaySitemap', ttl: SITEMAP_TTL });
 
 function getEbayCacheTTL(configTTL?: number) {
 	if (typeof configTTL === 'number' && configTTL > 0) {

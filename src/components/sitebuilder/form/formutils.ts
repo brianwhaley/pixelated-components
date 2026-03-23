@@ -7,6 +7,9 @@ const debug = false;
  * Maps input type to form component name
  */
 export function mapTypeToComponent(myType: string): string {
+	if (!myType) {
+		throw new Error('Field type is required');
+	}
 	if (debug) console.log("Mapping Type Field to Component");
 	let myComponent =
     (["button"].includes(myType)) ? 'FormButton' :

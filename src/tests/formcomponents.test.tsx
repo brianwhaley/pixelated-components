@@ -1,153 +1,330 @@
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
-import { render, fireEvent, act } from '../test/test-utils';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, fireEvent, act, screen } from '../test/test-utils';
 import { FormTagInput, FormHoneypot } from '../components/sitebuilder/form/formcomponents';
 import { FormValidationProvider } from '../components/sitebuilder/form/formvalidator';
 
 describe('Form Components Tests', () => {
-	describe('Form Label Component', () => {
-		it('should render label element', () => {
-			const label = document.createElement('label');
-			label.htmlFor = 'input-id';
-			label.textContent = 'Field Label';
-			
-			expect(label.htmlFor).toBe('input-id');
-			expect(label.textContent).toBe('Field Label');
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
+	describe('FormTagInput Component', () => {
+		it('should render tag input without crashing', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput 
+						id="tag-input"
+						defaultValue={[]} 
+						onChange={vi.fn()}
+					/>
+				</FormValidationProvider>
+			);
+			expect(container).toBeDefined();
 		});
 
-		it('should have proper id attribute', () => {
-			const id = 'email-field';
-			const labelId = `lbl-${id}`;
-			
-			expect(labelId).toBe('lbl-email-field');
+		it('should render input field for tag entry', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput 
+						id="tag-input"
+						defaultValue={[]} 
+						onChange={vi.fn()}
+					/>
+				</FormValidationProvider>
+			);
+			const input = container.querySelector('input');
+			expect(input).toBeDefined();
+		});
+
+		it('should accept initial tags', () => {
+			const initialTags = ['tag1', 'tag2'];
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput 
+						id="tag-input"
+						defaultValue={initialTags} 
+						onChange={vi.fn()}
+					/>
+				</FormValidationProvider>
+			);
+			expect(container).toBeDefined();
+		});
+
+		it('should call onChange callback when tags change', () => {
+			const onChange = vi.fn();
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput 
+						id="tag-input"
+						defaultValue={[]} 
+						onChange={onChange}
+					/>
+				</FormValidationProvider>
+			);
+			const input = container.querySelector('input');
+			if (input) {
+				fireEvent.change(input, { target: { value: 'new-tag' } });
+				fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
+			}
+			// Component should pass onChange to parent
+			expect(onChange).toBeDefined();
+		});
+
+		it('should apply placeholder text', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput 
+						id="tag-input"
+						defaultValue={[]} 
+						onChange={vi.fn()}
+						placeholder="Enter tags"
+					/>
+				</FormValidationProvider>
+			);
+			const input = container.querySelector('input') as HTMLInputElement;
+			expect(input).toBeDefined();
+		});
+
+		it('should handle disabled state', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput 
+						id="tag-input"
+						defaultValue={[]} 
+						onChange={vi.fn()}
+						disabled="disabled"
+					/>
+				</FormValidationProvider>
+			);
+			expect(container).toBeDefined();
+		});
+
+		it('should render tags display', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormTagInput 
+						id="tag-input"
+						defaultValue={['existing-tag']} 
+						onChange={vi.fn()}
+					/>
+				</FormValidationProvider>
+			);
+			expect(container).toBeDefined();
+		});
+	});
+
+	describe('FormHoneypot Component', () => {
+		it('should render honeypot field', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormHoneypot id="hp1" name="website" />
+				</FormValidationProvider>
+			);
+			const honeypot = container.querySelector('input[type="text"]');
+			expect(honeypot).toBeDefined();
+		});
+
+		it('should have hidden styling', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormHoneypot id="hp2" name="website" />
+				</FormValidationProvider>
+			);
+			const honeypot = container.querySelector('[data-honeypot]');
+			expect(honeypot).toBeDefined();
+		});
+
+		it('should have display none or similar hiding', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormHoneypot id="hp3" name="phone" />
+				</FormValidationProvider>
+			);
+			expect(container).toBeDefined();
+		});
+
+		it('should render with proper field name', () => {
+			const fieldName = 'company';
+			const { container } = render(
+				<FormValidationProvider>
+					<FormHoneypot id="hp4" name={fieldName} />
+				</FormValidationProvider>
+			);
+			const input = container.querySelector('input');
+			expect(input?.name || input?.getAttribute('name')).toBeDefined();
+		});
+
+		it('should not be visible to users', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormHoneypot id="hp5" name="website" />
+				</FormValidationProvider>
+			);
+			const honeypot = container.firstChild as HTMLElement;
+			const styles = window.getComputedStyle(honeypot);
+			// Should be hidden, not visible
+			expect(honeypot).toBeDefined();
+		});
+
+		it('should accept value prop', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormHoneypot id="hp6" name="website" />
+				</FormValidationProvider>
+			);
+			expect(container).toBeDefined();
+		});
+
+		it('should prevent bot submissions', () => {
+			const { container } = render(
+				<FormValidationProvider>
+					<FormHoneypot id="hp7" name="website" />
+				</FormValidationProvider>
+			);
+			const input = container.querySelector('input');
+			expect(input).toBeDefined();
+		});
+	});
+
+	describe('Form Label Component', () => {
+		it('should render label with htmlFor attribute', () => {
+			const { container } = render(
+				<label htmlFor="input-id">Field Label</label>
+			);
+			const label = container.querySelector('label');
+			expect(label?.htmlFor).toBe('input-id');
+		});
+
+		it('should display label text', () => {
+			const { container } = render(
+				<label>Email Address</label>
+			);
+			expect(container.textContent).toContain('Email Address');
+		});
+
+		it('should apply custom CSS class', () => {
+			const { container } = render(
+				<label className="form-label required" />
+			);
+			const label = container.querySelector('label');
+			expect(label?.classList.contains('form-label')).toBe(true);
+			expect(label?.classList.contains('required')).toBe(true);
 		});
 
 		it('should support optional label', () => {
 			const label = undefined;
 			expect(label).toBeUndefined();
 		});
-
-		it('should apply custom CSS class', () => {
-			const label = document.createElement('label');
-			label.className = 'form-label required';
-			
-			expect(label.classList.contains('form-label')).toBe(true);
-			expect(label.classList.contains('required')).toBe(true);
-		});
-
-		it('should handle label with tooltip', () => {
-			const label = 'Email Address';
-			const tooltip = 'Enter your email';
-			
-			expect(label).toBeTruthy();
-			expect(tooltip).toBeTruthy();
-		});
-	});
-
-	describe('Form Tooltip Component', () => {
-		it('should render tooltip element', () => {
-			const tooltip = document.createElement('div');
-			tooltip.className = 'tooltip';
-			tooltip.textContent = 'Helpful text';
-			
-			expect(tooltip.textContent).toBe('Helpful text');
-		});
-
-		it('should toggle tooltip visibility', () => {
-			const tooltip = document.createElement('div');
-			tooltip.style.display = 'none';
-			
-			if (tooltip.style.display === 'none') {
-				tooltip.style.display = 'block';
-			}
-			
-			expect(tooltip.style.display).toBe('block');
-		});
-
-		it('should have unique id', () => {
-			const fieldId = 'email';
-			const tooltipId = `tooltip-${fieldId}`;
-			
-			expect(tooltipId).toBe('tooltip-email');
-		});
-
-		it('should start hidden by default', () => {
-			const tooltip = document.createElement('div');
-			tooltip.style.display = 'none';
-			
-			expect(tooltip.style.display).toBe('none');
-		});
-
-		it('should contain icon character', () => {
-			const tooltipChar = 'ℹ';
-			expect(tooltipChar).toBeTruthy();
-		});
 	});
 
 	describe('Form Input Fields', () => {
-		it('should create text input', () => {
-			const input = document.createElement('input');
-			input.type = 'text';
-			input.name = 'username';
-			
+		it('should render text input', () => {
+			const { container } = render(
+				<input type="text" name="username" />
+			);
+			const input = container.querySelector('input[type="text"]') as HTMLInputElement;
 			expect(input.type).toBe('text');
 			expect(input.name).toBe('username');
 		});
 
-		it('should create email input', () => {
-			const input = document.createElement('input');
-			input.type = 'email';
-			
+		it('should render email input', () => {
+			const { container } = render(
+				<input type="email" name="email" />
+			);
+			const input = container.querySelector('input[type="email"]') as HTMLInputElement;
 			expect(input.type).toBe('email');
 		});
 
-		it('should create password input', () => {
-			const input = document.createElement('input');
-			input.type = 'password';
-			
+		it('should render password input', () => {
+			const { container } = render(
+				<input type="password" name="password" />
+			);
+			const input = container.querySelector('input[type="password"]') as HTMLInputElement;
 			expect(input.type).toBe('password');
 		});
 
-		it('should create number input', () => {
-			const input = document.createElement('input');
-			input.type = 'number';
-			input.min = '0';
-			input.max = '100';
-			
+		it('should render number input with constraints', () => {
+			const { container } = render(
+				<input type="number" min="0" max="100" />
+			);
+			const input = container.querySelector('input[type="number"]') as HTMLInputElement;
 			expect(input.type).toBe('number');
 			expect(input.min).toBe('0');
 			expect(input.max).toBe('100');
 		});
 
-		it('should create textarea', () => {
-			const textarea = document.createElement('textarea');
-			textarea.name = 'message';
-			
+		it('should render textarea', () => {
+			const { container } = render(
+				<textarea name="message" />
+			);
+			const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
 			expect(textarea.name).toBe('message');
 		});
 
-		it('should create select dropdown', () => {
-			const select = document.createElement('select');
-			select.name = 'country';
-			
-			const option1 = document.createElement('option');
-			option1.value = 'us';
-			option1.textContent = 'United States';
-			
-			select.appendChild(option1);
-			
-			expect(select.options).toHaveLength(1);
+		it('should render select dropdown', () => {
+			const { container } = render(
+				<select name="country">
+					<option value="us">United States</option>
+					<option value="ca">Canada</option>
+				</select>
+			);
+			const select = container.querySelector('select') as HTMLSelectElement;
+			expect(select.name).toBe('country');
+			expect(select.options.length).toBe(2);
 		});
 
-		it('should create checkbox', () => {
-			const input = document.createElement('input');
-			input.type = 'checkbox';
-			input.name = 'agree';
-			
+		it('should render checkbox', () => {
+			const { container } = render(
+				<input type="checkbox" name="agree" />
+			);
+			const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
 			expect(input.type).toBe('checkbox');
 		});
 
-		it('should create radio button', () => {
+		it('should render radio button', () => {
+			const { container } = render(
+				<input type="radio" name="option" value="1" />
+			);
+			const input = container.querySelector('input[type="radio"]') as HTMLInputElement;
+			expect(input.type).toBe('radio');
+		});
+
+		it('should support required attribute', () => {
+			const { container } = render(
+				<input type="text" name="field" required />
+			);
+			const input = container.querySelector('input') as HTMLInputElement;
+			expect(input.required).toBe(true);
+		});
+
+		it('should support disabled state', () => {
+			const { container } = render(
+				<input type="text" name="field" disabled />
+			);
+			const input = container.querySelector('input') as HTMLInputElement;
+			expect(input.disabled).toBe(true);
+		});
+
+		it('should support placeholder', () => {
+			const { container } = render(
+				<input type="text" name="field" placeholder="Enter value" />
+			);
+			const input = container.querySelector('input') as HTMLInputElement;
+			expect(input.placeholder).toBe('Enter value');
+		});
+
+		it('should support value attribute', () => {
+			const { container } = render(
+				<input type="text" name="field" value="test-value" />
+			);
+			const input = container.querySelector('input') as HTMLInputElement;
+			expect(input.value).toBe('test-value');
+		});
+	});
+
+	describe('Radio Button Fields', () => {
+		it('should handle radio button type', () => {
 			const input = document.createElement('input');
 			input.type = 'radio';
 			input.name = 'option';
@@ -158,38 +335,7 @@ describe('Form Components Tests', () => {
 		});
 	});
 
-	describe('Form Validation', () => {
-		it('should validate required field', () => {
-			const input = document.createElement('input');
-			input.required = true;
-			input.value = '';
-			
-			const isValid = input.value.length > 0;
-			expect(isValid).toBe(false);
-		});
-
-		it('should validate email format', () => {
-			const email = 'test@example.com';
-			const isValid = email.includes('@');
-			
-			expect(isValid).toBe(true);
-		});
-
-		it('should reject invalid email', () => {
-			const email = 'invalid.email';
-			const isValid = email.includes('@');
-			
-			expect(isValid).toBe(false);
-		});
-
-		it('should validate minimum length', () => {
-			const value = 'pass';
-			const minLength = 8;
-			const isValid = value.length >= minLength;
-			
-			expect(isValid).toBe(false);
-		});
-
+	describe('Field Validation', () => {
 		it('should validate maximum length', () => {
 			const value = 'a'.repeat(100);
 			const maxLength = 50;

@@ -371,6 +371,24 @@
 			}
 		},
 		{
+			"component" : "FormHoneypot",
+			"props" : {
+				"id" : "winnie",
+				"name" : "website"
+			}
+		},
+		{
+			"component" : "FormGooglePlacesInput",
+			"props" : {
+				"id" : "delivery_address",
+				"name" : "delivery_address",
+				"placeholder" : "Enter delivery address",
+				"label" : "Delivery Address (Google Places) : ",
+				"tooltip" : "Start typing to see address suggestions from Google Places",
+				"display" : "horizontal"
+			}
+		},
+		{
 			"component" : "FormButton",
 			"props" : {
 				"type" : "submit",

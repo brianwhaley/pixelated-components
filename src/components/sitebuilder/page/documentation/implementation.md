@@ -192,9 +192,9 @@ Best for: Static pages that rarely change.
 
 ```typescript
 import { PageEngine } from '@pixelated-tech/components';
-import pageData from '../../public/data/pages/home.json';
 
 export default function HomePage() {
+  // Load pageData from your CMS or API
   return <PageEngine pageData={pageData} />;
 }
 ```

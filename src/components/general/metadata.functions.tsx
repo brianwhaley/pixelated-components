@@ -7,7 +7,7 @@ export function descriptionToKeywords(descriptionText: string, numKeywords = 5, 
   	// Define a default list of common English stop words
   	const defaultStopWords = new Set([
     	'a', 'an', 'and', 'are', 'as', 'at', 'be', 'but', 'by', 'for', 'if', 'in', 'into',
-    	'is', 'it', 'no', 'not', 'of', 'on', 'or', 'such', 'that', 'the', 'their',
+    	'is', 'it', 'no', 'not', 'of', 'on', 'or', 'over', 'such', 'that', 'the', 'their',
     	'then', 'there', 'these', 'they', 'this', 'to', 'was', 'will', 'with'
   	]);
   	const allStopWords = new Set([...defaultStopWords, ...customStopWords]);

@@ -1,12 +1,13 @@
 
 import { getContentfulDiscountCodes } from "../integrations/contentful.delivery";
 import { CacheManager } from "../general/cache-manager";
+import { getDomain } from "../general/utilities";
 
 // Migration-time verbose tracing per user request — remove after verification
 const debug = false;
 
-// Use CacheManager but preserve existing localStorage keys by using empty prefix
-const cartCache = new CacheManager({ mode: 'local', prefix: '' });
+// Use CacheManager with domain + namespace to prevent multi-tenant cache collisions
+const cartCache = new CacheManager({ mode: 'local', domain: getDomain(), namespace: 'checkout' });
 /* ========== LOCALSTORAGE KEYS ========== */
 export const shoppingCartKey = "pixelvividCart";
 export const shippingInfoKey = "pixelvividCartShipping";
@@ -18,12 +19,8 @@ export const checkoutInfoKey = "pixelvividCartCheckout";
 // const payPalSecret = "EBvYvynRXZCI6RbK4rg2NiENNG4N8tbgl8qAmpxB6f9nUkZjXMODxXJZ91JycP439kPrQcnB7uRKp0-F";
 
 
-const apiProps = {
-	base_url: "https://cdn.contentful.com",
-	space_id: "soi9w77t7027",
-	environment: "master",
-	delivery_access_token: "muY9LfpCt4qoXosDsnRkkoH3DAVVuUFEuB0WRKRdBUM",
-};
+// API configuration is now provided via config provider and function parameters
+// See config/config.ts for contentful configuration
 
 /* 
 https://stackoverflow.com/questions/55328748/how-to-store-and-retrieve-shopping-cart-items-in-localstorage
@@ -308,7 +305,7 @@ export function getShippingCost(): number {
 /* ========== DISCOUNT CODE FUNCTIONS ========== */
 
 
-export async function validateDiscountCode(field: { value: string ; }) { 
+export async function validateDiscountCode(field: { value: string ; }, apiProps?: any) { 
 	try {
 		const codeList = await getContentfulDiscountCodes({ apiProps: apiProps, contentType: "discountCodes" });
 		if (!codeList) { return false; } // If no codes are found, return false
@@ -335,7 +332,7 @@ export async function validateDiscountCode(field: { value: string ; }) {
 }
 
 
-export async function getRemoteDiscountCodes(){
+export async function getRemoteDiscountCodes(apiProps?: any){
 	if (debug) console.log("Getting Contentful Discount Codes");
 	try {
 		const discountCodes = await getContentfulDiscountCodes({ 

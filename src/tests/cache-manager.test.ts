@@ -15,25 +15,25 @@ describe('CacheManager', () => {
 
 	describe('Memory Mode', () => {
 		it('should store and retrieve values in memory', () => {
-			const cache = new CacheManager({ mode: 'memory' });
+		const cache = new CacheManager({ mode: 'memory', domain: 'test' });
 			cache.set('testKey', { foo: 'bar' });
 			expect(cache.get('testKey')).toEqual({ foo: 'bar' });
 		});
 
 		it('should return null for missing keys', () => {
-			const cache = new CacheManager({ mode: 'memory' });
+		const cache = new CacheManager({ mode: 'memory', domain: 'test' });
 			expect(cache.get('nonExistent')).toBeNull();
 		});
 
 		it('should remove items correctly', () => {
-			const cache = new CacheManager({ mode: 'memory' });
+		const cache = new CacheManager({ mode: 'memory', domain: 'test' });
 			cache.set('testKey', 'value');
 			cache.remove('testKey');
 			expect(cache.get('testKey')).toBeNull();
 		});
 
 		it('should clear all items with its prefix', () => {
-			const cache = new CacheManager({ mode: 'memory', prefix: 'test_' });
+		const cache = new CacheManager({ mode: 'memory', domain: 'test' });
 			cache.set('a', 1);
 			cache.set('b', 2);
 			cache.clear();
@@ -44,12 +44,11 @@ describe('CacheManager', () => {
 
 	describe('Session/Local Storage Modes', () => {
 		it('should persist to sessionStorage in session mode', () => {
-			const cache = new CacheManager({ mode: 'session', prefix: 'sess_' });
-			cache.set('myKey', 'myValue');
-			
-			// Verify it's in sessionStorage
-			const raw = window.sessionStorage.getItem('sess_myKey');
-			expect(raw).toBeDefined();
+		const cache = new CacheManager({ mode: 'session', domain: 'sess', namespace: 'test' });
+		cache.set('myKey', 'myValue');
+		
+		// Verify it's in sessionStorage (prefix is sess_test_)
+		const raw = window.sessionStorage.getItem('sess_test_myKey');
 			expect(JSON.parse(raw!).data).toBe('myValue');
 			
 			// Verify retrieval
@@ -57,27 +56,26 @@ describe('CacheManager', () => {
 		});
 
 		it('should persist to localStorage in local mode', () => {
-			const cache = new CacheManager({ mode: 'local', prefix: 'loc_' });
-			cache.set('myKey', 'myValue');
-			
-			const raw = window.localStorage.getItem('loc_myKey');
-			expect(raw).toBeDefined();
+		const cache = new CacheManager({ mode: 'local', domain: 'loc', namespace: 'test' });
+		cache.set('myKey', 'myValue');
+		
+		const raw = window.localStorage.getItem('loc_test_myKey');
 			expect(JSON.parse(raw!).data).toBe('myValue');
 		});
 
 		it('should recover from storage if memory cache is lost (simulated)', () => {
-			const cache1 = new CacheManager({ mode: 'local', prefix: 'persist_' });
-			cache1.set('shared', 'data');
+		const cache1 = new CacheManager({ mode: 'local', domain: 'persist', namespace: 'test' });
+		cache1.set('shared', 'data');
 
-			// Create a new instance with same config, it should find the data in localStorage
-			const cache2 = new CacheManager({ mode: 'local', prefix: 'persist_' });
+		// Create a new instance with same config, it should find the data in localStorage
+		const cache2 = new CacheManager({ mode: 'local', domain: 'persist', namespace: 'test' });
 			expect(cache2.get('shared')).toBe('data');
 		});
 	});
 
 	describe('TTL and Expiration', () => {
 		it('should expire items after default TTL (1 hour)', () => {
-			const cache = new CacheManager({ mode: 'memory' });
+		const cache = new CacheManager({ mode: 'memory', domain: 'test' });
 			cache.set('expiring', 'val');
 			
 			// Advance time by 1 hour + 1 second
@@ -87,7 +85,7 @@ describe('CacheManager', () => {
 		});
 
 		it('should support custom TTL on a per-item basis', () => {
-			const cache = new CacheManager({ mode: 'memory', ttl: 10000 }); // Default 10s
+			const cache = new CacheManager({ mode: 'memory', domain: 'test', ttl: 10000 }); // Default 10s
 			cache.set('short', 'val', 500); // Override to 500ms
 			
 			vi.advanceTimersByTime(600);
@@ -95,7 +93,7 @@ describe('CacheManager', () => {
 		});
 
 		it('should not expire items before time is up', () => {
-			const cache = new CacheManager({ mode: 'memory' });
+			const cache = new CacheManager({ mode: 'memory', domain: 'test' });
 			cache.set('steady', 'val');
 			
 			vi.advanceTimersByTime(30 * 60 * 1000); // 30 mins
@@ -105,13 +103,13 @@ describe('CacheManager', () => {
 
 	describe('Advanced Behavior', () => {
 		it('should not store or retrieve anything in "none" mode', () => {
-			const cache = new CacheManager({ mode: 'none' });
+		const cache = new CacheManager({ mode: 'none', domain: 'test' });
 			cache.set('any', 'thing');
 			expect(cache.get('any')).toBeNull();
 		});
 
 		it('should handle complex nested objects', () => {
-			const cache = new CacheManager({ mode: 'session' });
+		const cache = new CacheManager({ mode: 'session', domain: 'test' });
 			const complex = {
 				id: 1,
 				tags: ['a', 'b'],
@@ -122,8 +120,8 @@ describe('CacheManager', () => {
 		});
 
 		it('should only clear items with the manager prefix', () => {
-			const cacheA = new CacheManager({ mode: 'local', prefix: 'a_' });
-			const cacheB = new CacheManager({ mode: 'local', prefix: 'b_' });
+			const cacheA = new CacheManager({ mode: 'local', domain: 'a' });
+			const cacheB = new CacheManager({ mode: 'local', domain: 'b' });
 
 			cacheA.set('key', 'valA');
 			cacheB.set('key', 'valB');

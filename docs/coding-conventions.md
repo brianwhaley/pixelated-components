@@ -2,6 +2,35 @@
 
 This document outlines the coding standards and conventions used in the pixelated-components project.
 
+## AI Agent & Code Review Discipline
+
+**For AI agents and code reviewers:**
+- Never recommend changes based on assumptions about library/framework behavior
+- All claims must be backed by actual code analysis, testing, or documentation
+- Always provide documentation URLs when claiming something about a tool or library
+- If unsure about behavior: test it first or explicitly state the uncertainty
+- Read actual type definitions (node_modules) and official docs before claiming "X doesn't support Y"
+- Verify changes work by running tests before recommending them
+
+Example: Don't say "vitest v8 doesn't support coverage thresholds" — test it first or link to the actual vitest docs proving it.
+
+## Terminal Command Output - CRITICAL Rule for AI Agents
+
+**🚫 NEVER pipe command output to files or use grep/tail/head to filter results**
+
+- All command output MUST display directly to stdout/stderr in the terminal
+- User must be able to see all output in the terminal
+- Transparency is required - do not hide, filter, or pre-process execution details
+- **FORBIDDEN patterns**:
+  - `npm run test | grep "FAIL"` - user can't see full output
+  - `npm run build > build.log` - user can't see results
+  - `command 2>&1 | tail -100` - user doesn't see beginning
+  - Any piping to files or output truncation
+- **REQUIRED patterns**:
+  - `npm run test:coverage` - full unfiltered output visible
+  - `npm run build` - complete results displayed
+  - Let the user see everything, always
+
 ## General
 
 ### Indentation
@@ -70,6 +99,7 @@ Enforcement & best practices:
 - Wrap any dev-only env reads in clear helpers and document them in `/docs`.
 - Add a CI check that reports any new references to `process.env` in `src/components` (denylist) unless explicitly approved.
 - Temporary security dependencies (e.g., `fast-xml-parser`) are flagged by the ESLint rule `pixelated/no-temp-dependency` (severity: **error**). This rule inspects the project's `package-lock.json` and errors the build when a configured temporary dependency remains; remove the dependency and update the rule options when the transient issue is resolved. If the lockfile no longer contains vulnerable versions but the dependency is still pinned via `overrides`/`resolutions` in `package.json`, the rule will also error and require removal of the override so the dependency graph is normalized.
+- Hardcoded configuration values are prevented by the ESLint rule `pixelated/no-hardcoded-config-keys` (severity: **error**). This rule detects hardcoded Pixelated-specific configuration keys (e.g., `space_id`, `api_key`, `access_token`, etc.) and enforces their use via the config provider instead. **SECRET keys** (API tokens, encryption keys, credentials) are reported with heightened messaging; **non-secret config keys** are reported with standard messaging. Migration: any hardcoded config keys must be moved to `pixelated.config.json`, `pixelated.config.json.enc` (for secrets), or accessed via `usePixelatedConfig()` / `getFullPixelatedConfig()`. Example fix: replace `const base_url = 'https://cdn.contentful.com'` with `const base_url = config.base_url || 'https://cdn.contentful.com'` (where `config` comes from the provider).
 - Example (preferred):
 ```ts
 // server-side: canonical config loader
@@ -146,6 +176,31 @@ Acceptance criteria:
 - No persistent `console.log`/`console.debug` calls in production bundles (enforce via lint rule).
 - File naming: prefer `kebab-case` for source file names (lowercase, hyphen-separated). Examples: `my-component.tsx`, `form-utils.ts`. Exceptions: `index.*`, TypeScript declaration files (`*.d.ts`), test/spec (`*.test.tsx`, `*.spec.ts`), Storybook stories (`*.stories.tsx`), documentation (`docs/`) and intentionally generated files. This is enforced by `pixelated/file-name-kebab-case` (recommended `warn`).
 - One-shot diagnostics are documented and gated behind explicit opt-in.
+
+### Code Coverage Requirements
+
+Code coverage thresholds enforce quality gates during releases:
+
+**Thresholds** (configured in [vitest.config.ts](../vitest.config.ts)):
+- **Lines**: 60% minimum (global, per-file, per-function)
+- **Functions**: 60% minimum (global, per-file, per-function)
+- **Branches**: 60% minimum (global, per-file, per-function)
+- **Statements**: 60% minimum (global, per-file, per-function)
+
+**Only .ts, .tsx, and .js files are counted** (.css, .scss, .json, build scripts, and test files are excluded).
+
+**When coverage is enforced:**
+- `npm run test:coverage` – Manual coverage check with report (shows HTML report in `coverage/` directory)
+- `npm run release:prep` – Fails immediately if coverage drops below thresholds; prevents build/deployment
+- `npm run release` (in release.sh) – Conditional check: runs only if `src/tests/` or `src/test/` directory exists
+
+**Adjusting thresholds:**
+Edit `COVERAGE_THRESHOLDS` constants at the top of [vitest.config.ts](../vitest.config.ts). Changes take effect immediately on next run.
+
+**Development workflow:**
+- `npm test` – Fast test run (no coverage check, development-friendly)
+- `npm run test:coverage` – Full coverage report with enforcement (use frequently before release)
+- `npm run release:prep` – Final gate before production (must pass coverage to proceed)
 
 ## Versioning & releases — Semantic Versioning
 - This project follows [Semantic Versioning 2.0.0](https://semver.org/): `MAJOR.MINOR.PATCH`.

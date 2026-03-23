@@ -701,9 +701,9 @@ npm install @pixelated-tech/components@latest
 ```typescript
 // src/app/landing/page.tsx
 import { PageEngine } from '@pixelated-tech/components';
-import pageData from '@/../../public/data/pages/landing-page.json';
 
 export default function LandingPage() {
+  // Load pageData from your CMS or API
   return <PageEngine pageData={pageData} />;
 }
 ```

@@ -1,26 +1,48 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+
+// Mock Cloudinary URL builder - simulate real implementation
+const buildCloudinaryUrl = (
+	publicId: string,
+	opts: { quality?: number; width?: number; crop?: string; format?: string; dpr?: string } = {}
+) => {
+	const baseUrl = 'https://res.cloudinary.com/test/image/upload/';
+	const transforms: string[] = [];
+
+	if (opts.format) transforms.push(`f_${opts.format}`);
+	if (opts.crop) transforms.push(opts.crop);
+	if (opts.quality) transforms.push(`q_${opts.quality}`);
+	if (opts.width) transforms.push(`w_${opts.width}`);
+	if (opts.dpr) transforms.push(`dpr_${opts.dpr}`);
+
+	const transformString = transforms.join(',');
+	return transformString ? `${baseUrl}${transformString}/${publicId}` : `${baseUrl}${publicId}`;
+};
 
 describe('Cloudinary Image Configuration Tests', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
 	describe('URL Building', () => {
 		it('should construct valid Cloudinary URLs', () => {
-			const baseUrl = 'https://res.cloudinary.com/test/image/upload/';
-			const transforms = 'f_auto,c_limit,q_75';
-			const filename = 'test-image.jpg';
-			const url = `${baseUrl}${transforms}/${filename}`;
+			const url = buildCloudinaryUrl('test-image.jpg', {
+				quality: 75,
+				format: 'auto',
+				crop: 'c_limit'
+			});
 
 			expect(url).toContain('res.cloudinary.com');
 			expect(url).toContain('f_auto');
 			expect(url).toContain('test-image.jpg');
+			expect(url).toContain('q_75');
 		});
 
 		it('should handle image quality settings', () => {
 			const qualities = [50, 75, 85, 95];
 
 			qualities.forEach((quality) => {
-				const transform = `q_${quality}`;
-				expect(transform).toMatch(/q_\d+/);
-				expect(quality).toBeGreaterThan(0);
-				expect(quality).toBeLessThanOrEqual(100);
+				const url = buildCloudinaryUrl('test.jpg', { quality });
+				expect(url).toContain(`q_${quality}`);
 			});
 		});
 
@@ -28,24 +50,51 @@ describe('Cloudinary Image Configuration Tests', () => {
 			const widths = [300, 500, 768, 1024];
 
 			widths.forEach((width) => {
-				const transform = `w_${width}`;
-				expect(transform).toMatch(/w_\d+/);
-				expect(width).toBeGreaterThan(0);
+				const url = buildCloudinaryUrl('test.jpg', { width });
+				expect(url).toContain(`w_${width}`);
 			});
 		});
 
 		it('should handle responsive width formats', () => {
-			const transform = 'c_limit,w_auto';
-			expect(transform).toContain('w_auto');
+			const url = buildCloudinaryUrl('test.jpg', {
+				crop: 'c_limit',
+				width: 300
+			});
+			expect(url).toContain('w_300');
 		});
 
 		it('should combine multiple transforms', () => {
-			const transforms = ['f_auto', 'c_limit', 'q_75', 'dpr_auto'];
-			const combined = transforms.join(',');
+			const url = buildCloudinaryUrl('test.jpg', {
+				format: 'auto',
+				crop: 'c_limit',
+				quality: 75,
+				dpr: 'auto'
+			});
 
-			expect(combined).toContain('f_auto');
-			expect(combined).toContain('q_75');
-			expect(combined).toContain('dpr_auto');
+			expect(url).toContain('f_auto');
+			expect(url).toContain('q_75');
+			expect(url).toContain('c_limit');
+			expect(url).toContain('dpr_auto');
+		});
+
+		it('should build URL without transforms', () => {
+			const url = buildCloudinaryUrl('test.jpg');
+			expect(url).toContain('test.jpg');
+			expect(url).toContain('res.cloudinary.com');
+		});
+
+		it('should handle multiple quality and width combinations', () => {
+			const combinations = [
+				{ quality: 50, width: 300 },
+				{ quality: 85, width: 768 },
+				{ quality: 95, width: 1024 }
+			];
+
+			combinations.forEach(({ quality, width }) => {
+				const url = buildCloudinaryUrl('test.jpg', { quality, width });
+				expect(url).toContain(`q_${quality}`);
+				expect(url).toContain(`w_${width}`);
+			});
 		});
 	});
 
@@ -54,19 +103,24 @@ describe('Cloudinary Image Configuration Tests', () => {
 			const formats = ['jpg', 'png', 'webp', 'gif'];
 
 			formats.forEach((format) => {
-				expect(format).toBeTruthy();
-				expect(typeof format).toBe('string');
+				const url = buildCloudinaryUrl('test.jpg', { format });
+				expect(url).toContain(`f_${format}`);
 			});
 		});
 
 		it('should handle format conversion', () => {
-			const transform = 'f_webp';
-			expect(transform).toMatch(/f_\w+/);
+			const url = buildCloudinaryUrl('test.jpg', { format: 'webp' });
+			expect(url).toContain('f_webp');
 		});
 
-		it('should apply format with fetch_format', () => {
-			const transform = 'f_auto,fetch_format:auto';
-			expect(transform).toContain('auto');
+		it('should apply auto format selection', () => {
+			const url = buildCloudinaryUrl('test.jpg', { format: 'auto' });
+			expect(url).toContain('f_auto');
+		});
+
+		it('should default to original format when not specified', () => {
+			const url = buildCloudinaryUrl('test.jpg');
+			expect(url).toContain('test.jpg');
 		});
 	});
 
@@ -75,7 +129,8 @@ describe('Cloudinary Image Configuration Tests', () => {
 			const cropModes = ['c_fill', 'c_fit', 'c_limit', 'c_scale', 'c_crop'];
 
 			cropModes.forEach((mode) => {
-				expect(mode).toMatch(/c_\w+/);
+				const url = buildCloudinaryUrl('test.jpg', { crop: mode });
+				expect(url).toContain(mode);
 			});
 		});
 

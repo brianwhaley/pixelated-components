@@ -440,7 +440,7 @@ See [Implementation Guide](./implementation.md) for complete examples of all met
 
 **Method 1: Direct Import** (fastest)
 ```typescript
-import pageData from '@/../../public/data/pages/home.json';
+// Load pageData from your CMS or API
 <PageEngine pageData={pageData} />
 ```
 

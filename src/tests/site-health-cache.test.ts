@@ -8,7 +8,7 @@ describe('CacheManager (site-health compatibility)', () => {
   const testKey = 'test-key';
 
   beforeEach(() => {
-    cache = new CacheManager({ prefix: 'test-sitehealth-' });
+    cache = new CacheManager({ domain: 'test', namespace: 'sitehealth' });
     vi.useFakeTimers();
   });
 
@@ -18,12 +18,12 @@ describe('CacheManager (site-health compatibility)', () => {
 
   describe('constructor', () => {
     it('should create cache with default duration (1 hour)', () => {
-      const defaultCache = new CacheManager({ prefix: 'test-sitehealth-default-' });
+      const defaultCache = new CacheManager({ domain: 'test', namespace: 'sitehealth-default' });
       expect(defaultCache).toBeInstanceOf(CacheManager);
     });
 
     it('should create cache with custom duration', () => {
-      const customCache = new CacheManager({ ttl: 30 * 60 * 1000, prefix: 'test-sitehealth-custom-' }); // 30 minutes
+      const customCache = new CacheManager({ ttl: 30 * 60 * 1000, domain: 'test', namespace: 'sitehealth-custom' }); // 30 minutes
       expect(customCache).toBeInstanceOf(CacheManager);
     });
   });
@@ -77,7 +77,7 @@ describe('CacheManager (site-health compatibility)', () => {
     });
 
     it('should respect custom duration', () => {
-      const shortCache = new CacheManager({ ttl: 10 * 60 * 1000, prefix: 'test-sitehealth-short-' }); // 10 minutes
+      const shortCache = new CacheManager({ ttl: 10 * 60 * 1000, domain: 'test', namespace: 'sitehealth-short' }); // 10 minutes
       shortCache.set(testKey, testData);
 
       // Advance time by 5 minutes (still valid)
@@ -110,8 +110,8 @@ describe('CacheManager (site-health compatibility)', () => {
 
   describe('cache isolation', () => {
     it('should maintain separate cache instances', () => {
-      const cache1 = new CacheManager({ prefix: 'test-sitehealth-1-' });
-      const cache2 = new CacheManager({ prefix: 'test-sitehealth-2-' });
+      const cache1 = new CacheManager({ domain: 'test', namespace: 'sitehealth-1' });
+      const cache2 = new CacheManager({ domain: 'test', namespace: 'sitehealth-2' });
 
       cache1.set('shared', 'cache1-data');
       cache2.set('shared', 'cache2-data');

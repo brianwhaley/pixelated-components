@@ -39,6 +39,7 @@ done
 # Handle peer dependencies
 echo ""
 echo "Checking peer dependencies for updates..."
+{
 if command -v jq &> /dev/null; then
     peers=$(jq -r '.peerDependencies // {} | to_entries[] | "\(.key)=\(.value)"' package.json 2>/dev/null)
     if [ -n "$peers" ]; then
@@ -66,5 +67,6 @@ else
     echo "⚠️  jq not found - skipping peer dependency updates"
     echo "   Run 'npm ls --peer' to check peer dependencies manually"
 fi
+} || true
 
 npm audit fix 2>/dev/null || true

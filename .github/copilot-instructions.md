@@ -30,6 +30,46 @@
 3. **Actionable Next Steps** - Suggest what to do, but don't do it unless instructed
 4. **Code Only When Asked** - Wait for explicit implementation requests
 
+### Terminal Command Output - CRITICAL
+**🚫 NEVER pipe command output to files or use grep/tail/head to filter results**
+
+- All command output MUST display directly to stdout/stderr
+- User must be able to see all output in the terminal
+- Transparency is required - do not hide or pre-filter execution details
+- **Bad examples** (FORBIDDEN):
+  - `npm run test:coverage | grep "FAIL"`
+  - `npm run build > build.log`
+  - `command 2>&1 | tail -100`
+- **Good examples**:
+  - `npm run test:coverage` (full unfiltered output visible)
+  - `npm run test` (complete results displayed)
+
+### Verification & Evidence Requirements
+
+**CRITICAL:**  All recommendations, claims about library/framework behavior, and proposed solutions MUST be backed by actual evidence before suggesting them.
+
+**For Library/Framework Claims:**
+- ❌ Never say "vitest doesn't support feature X" based on assumptions or TypeScript errors
+- ✅ Always verify with actual testing, reading node_modules type definitions, or official documentation
+- ✅ Provide documentation URLs (GitHub repo, official docs, blog posts, etc.)
+- ✅ Share links so user can verify independently
+
+**For Architecture/Code Changes:**
+- ✅ Read actual source code before recommending changes
+- ✅ Test proposed changes before claiming they work
+- ✅ If unsure about behavior: test it first or admit uncertainty
+- ✅ Cite specific files and line numbers when making claims
+
+**For Configuration Changes:**
+- ✅ Check actual type definitions in node_modules (not assumptions)
+- ✅ Verify against official documentation with provided URLs
+- ✅ Test configuration changes before recommending them
+
+**When You Don't Know:**
+- Say "I need to test/verify this first" instead of guessing
+- Propose a test you'll run to validate the claim
+- Reference actual docs/code that contradicts your assumption
+
 ## Project Overview
 Pixelated Components is a comprehensive React component library built for Next.js applications, specializing in CMS integrations, UI components, SEO optimization, and accessibility-first design. The library provides production-ready components for building modern web applications with integrations for Contentful, WordPress, Cloudinary, and other services.
 
@@ -131,22 +171,33 @@ npm run build-webpack  # Webpack-based build for complex scenarios
 Comprehensive testing setup with Vitest and strict coverage requirements:
 
 ```bash
-npm run test           # Single run for CI pipelines
-npm run test:watch        # Interactive dashboard at http://localhost:51204
-npm run test:coverage  # Generates coverage reports (text, json, html, lcov)
+npm run test           # Single test run (fast, no coverage)
+npm run test:watch    # Interactive dashboard at http://localhost:51204
+npm run test:coverage # Full coverage report with enforcement (text, json, html, lcov)
 ```
 
 **Testing Configuration (`vitest.config.ts`):**
 - **Environment**: jsdom for DOM simulation
 - **Coverage Provider**: v8 for accurate metrics
-- **Coverage Thresholds**: 
-  - Statements: 70%
-  - Lines: 70% 
-  - Functions: 70%
+- **Coverage Thresholds** (enforced on all metrics — global, per-file, per-function):
+  - Statements: 60%
+  - Lines: 60%
+  - Functions: 60%
   - Branches: 60%
+- **Threshold Adjustment**: Edit `COVERAGE_THRESHOLDS` constant at top of vitest.config.ts (applies globally and per-file/per-function)
 - **Test Discovery**: `src/**/*.{test,spec}.{ts,tsx}`
-- **Exclusions**: Stories, node_modules, dist, coverage reports
+- **Exclusions**: Stories, node_modules, dist, CSS/SCSS, JSON files, build scripts
 - **Setup File**: `src/tests/setup.ts` for global test configuration
+
+**When Coverage Enforcement Happens:**
+- `npm run test:coverage` – Manual run with full report
+- `npm run release:prep` – Pre-release gate: fails if coverage drops below thresholds, blocks build/deployment
+- `npm run release` (release.sh) – Conditional run if test directory exists
+
+**Coverage Thresholds Are Mandatory:**
+- Coverage gates prevent low-quality releases
+- Adjust `COVERAGE_THRESHOLDS` if you need temporary flexibility, but note in your PR
+- Thresholds apply to all three dimensions: global, per-file, and per-function coverage (not by directory)
 
 File layout conventions (important):
 - **Unit & integration tests:** `src/tests` — colocate tests next to feature areas and name them `*.test.tsx` or `*.honeypot.test.ts` for targeted cases.

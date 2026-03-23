@@ -49,7 +49,6 @@ import { promisify } from 'util';
 import readline from 'readline/promises';
 import { stdin as input, stdout as output } from 'process';
 import { fileURLToPath } from 'url';
-import { loadManifest, findTemplateForSlug, pruneTemplateDirs, printAvailableTemplates } from './create-pixelated-app-template-mapper.js';
 import { AmplifyClient, CreateAppCommand, CreateBranchCommand, UpdateAppCommand, UpdateBranchCommand } from '@aws-sdk/client-amplify';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -67,6 +66,51 @@ async function exists(p) {
 		return true;
 	} catch (e) {
 		return false;
+	}
+}
+
+// Template manifest utilities
+export async function loadManifest(baseDir = path.resolve(__dirname)) {
+	const manifestPath = path.resolve(baseDir, 'create-pixelated-app.json');
+	try {
+		if (await exists(manifestPath)) {
+			const txt = await fs.readFile(manifestPath, 'utf8');
+			return JSON.parse(txt);
+		}
+	} catch (e) {
+		// ignore parse/read errors
+	}
+	return null;
+}
+
+export function findTemplateForSlug(manifest, slug) {
+	if (!manifest || !Array.isArray(manifest.templates)) return null;
+	slug = (slug || '').toLowerCase();
+	for (const t of manifest.templates) {
+		// Skip templates that have action: "ignore" (metadata routes in Admin section)
+		if (t.action === 'ignore') continue;
+		if (!t.aliases || !Array.isArray(t.aliases)) continue;
+		for (let a of t.aliases) {
+			a = a.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+			if (a === slug) return t;
+		}
+		// also fuzzy match (e.g., 'about-us' -> 'about')
+		for (let a of t.aliases) {
+			a = a.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+			if (slug === a || slug.startsWith(a + '-') || slug.endsWith('-' + a) || slug.includes('-' + a + '-')) return t;
+		}
+	}
+	return null;
+}
+
+export function printAvailableTemplates(manifest) {
+	if (!manifest || !Array.isArray(manifest.templates) || manifest.templates.length === 0) return;
+	console.log('\nAvailable templates:');
+	for (const t of manifest.templates) {
+		// Skip templates in Admin section (marked with action: "ignore")
+		if (t.action === 'ignore') continue;
+		const aliases = Array.isArray(t.aliases) ? t.aliases.join(', ') : '';
+		console.log(` - ${t.name}${aliases ? ': ' + aliases : ''}`);
 	}
 }
 
@@ -245,7 +289,8 @@ export async function createAndPushRemote(destPath, siteName, defaultOwner) {
 	const tmpDir = path.join(destPath, '.px-scripts');
 	const tmpFile = path.join(tmpDir, 'get_github_token.ts');
 	await fs.mkdir(tmpDir, { recursive: true });
-	const tmpContent = `import('./src/components/config/config').then(m => {
+	const configModulePath = path.resolve(destPath, 'src', 'components', 'config', 'config');
+	const tmpContent = `import('${configModulePath}').then(m => {
 		const cfg = m.getFullPixelatedConfig();
 		// Only print the github object (or null) as JSON to stdout
 		console.log(JSON.stringify(cfg?.github || null));
@@ -550,121 +595,184 @@ async function main() {
 		}
 
 
-		// Pages prompt: show available templates and ask which pages to create (comma-separated)
-		console.log(`\nStep ${stepNumber++}: Page Creation`);
+		// Pages selection: ask which pages user wants (from template or custom new pages)
+		console.log(`\nStep ${stepNumber++}: Page Selection`);
 		console.log('================================================================================\n');
 		if (manifest && Array.isArray(manifest.templates) && manifest.templates.length) {
 			printAvailableTemplates(manifest);
 		}
-		const pagesInput = (await rl.question('Pages to create (comma-separated, e.g. about,contact) [leave blank to skip]: ')).trim();
-		let pagesToCreate = [];
-		let existingPages = ['humans.txt', 'styleguide'];
+		const pagesInput = (await rl.question('Pages you want (comma-separated, e.g. about,contact,custom-legal) [leave blank to skip]: ')).trim();
+		let wantedPages = [];
 		if (pagesInput) {
 			const raw = pagesInput.split(',').map(s => s.trim()).filter(Boolean);
-			// sanitize and normalize
 			const seen = new Set();
-			for (const r of raw) {
-				const lower = r.toLowerCase();
-				if (lower === 'home' || lower === 'index') {
-					existingPages.push('home');
-					continue;
-				}
-				let slug = r.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-				if (!slug) continue;
-				if (seen.has(slug)) continue;
+			
+			// Normalize each input
+			for (const userInput of raw) {
+				const slug = userInput.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+				if (!slug || seen.has(slug)) continue;
 				seen.add(slug);
+				
+				// Check if it's a template page
 				const matchedTemplate = findTemplateForSlug(manifest, slug);
-				pagesToCreate.push({ slug, displayName: r.trim(), template: matchedTemplate });
+				const isTemplate = !!matchedTemplate;
+				
+				wantedPages.push({
+					slug,
+					displayName: userInput.trim(),
+					isTemplate,
+					matchedTemplate
+				});
 			}
 
-			console.log('\nSummary of pages:');
-			if (existingPages.length) console.log(` - Existing (skipped): ${existingPages.join(', ')}`);
-			if (pagesToCreate.length) {
-				console.log(' - To be created:');
-				for (const p of pagesToCreate) {
-					if (p.template) {
-						console.log(`   - ${p.slug} (mapped to template: ${p.template.name})`);
-					} else {
-						console.log(`   - ${p.slug} (no template match)`);
+			if (wantedPages.length) {
+				console.log('\nSummary of pages:');
+				const templatePages = wantedPages.filter(p => p.isTemplate);
+				const customPages = wantedPages.filter(p => !p.isTemplate);
+				
+				if (templatePages.length) {
+					console.log(' - Template pages:');
+					for (const p of templatePages) {
+						console.log(`   - ${p.slug} (from template: ${p.matchedTemplate.name})`);
+					}
+				}
+				if (customPages.length) {
+					console.log(' - Custom pages (new):');
+					for (const p of customPages) {
+						console.log(`   - ${p.slug}`);
 					}
 				}
 			}
-			const proceedPages = (await rl.question('Proceed to create these pages? (Y/n): ')) || 'y';
+
+			const proceedPages = (await rl.question('Proceed with these pages? (Y/n): ')) || 'y';
 			if (proceedPages.toLowerCase() === 'y' || proceedPages.toLowerCase() === 'yes') {
-				// perform creation
-				const templatePagesHome = path.join(templatePath, 'src', 'app', '(pages)', '(home)');
 				const siteRoutesFile = path.join(destPath, 'src', 'app', 'data', 'routes.json');
 				let routesJson = null;
+				
 				try {
 					routesJson = JSON.parse(await fs.readFile(siteRoutesFile, 'utf8'));
-					// Ensure siteInfo exists and set its name to the root display name
 					routesJson.siteInfo = routesJson.siteInfo || {};
 					routesJson.siteInfo.name = rootDisplayName;
 				} catch (e) {
-					console.warn('⚠️  Could not read routes.json, routes will not be updated.');
+					console.error('❌ Failed to read routes.json:', e?.message || e);
+					process.exit(1);
 				}
 
-				for (const p of pagesToCreate) {
-					const targetDir = path.join(destPath, 'src', 'app', '(pages)', p.slug);
-					console.log(`Creating page ${p.slug} -> ${targetDir}`);
-					let copyResult = null;
-					if (p.template && p.template.src) {
-						copyResult = await copyTemplateForPage(templatePath, p.template.src, templatePagesHome, targetDir);
-						if (copyResult.used === 'template') {
-							console.log(` - Copied template ${p.template.name} from ${copyResult.src}`);
-						} else {
-							console.warn(`⚠️  Template source ${path.join(templatePath, 'src', 'app', '(pages)', path.basename(p.template.src))} not found; using default page template instead.`);
+				const templatePagesHome = path.join(templatePath, 'src', 'app', '(pages)', '(home)');
+				const pagesDir = path.join(destPath, 'src', 'app', '(pages)');
+				const wantedSlugs = new Set(wantedPages.map(p => p.slug));
+
+				// Process wanted pages: rename templates or create custom pages
+				for (const p of wantedPages) {
+					if (p.isTemplate) {
+						// Get the actual template folder name (e.g., "about")
+						const templateFolderName = path.basename(p.matchedTemplate.src);
+						const oldPath = path.join(pagesDir, templateFolderName);
+						const newPath = path.join(pagesDir, p.slug);
+						
+						// Rename if user requested a different name
+						if (templateFolderName !== p.slug) {
+							try {
+								await fs.rename(oldPath, newPath);
+								console.log(`Renamed ${templateFolderName} → ${p.slug}`);
+								
+								// Update component name in page.tsx
+								const pageFile = path.join(newPath, 'page.tsx');
+								let content = await fs.readFile(pageFile, 'utf8');
+								const compName = p.displayName.replace(/[^a-zA-Z0-9]+/g, ' ').split(/\s+/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('') + 'Page';
+								content = content.replace(/export default function\s+\w+\s*\(/, `export default function ${compName}(`);
+								await fs.writeFile(pageFile, content, 'utf8');
+								console.log(` - Updated component name to ${compName}`);
+								
+								// Update route path in routes.json
+								const route = routesJson.routes.find(r => r.path === `/${templateFolderName}`);
+								if (route) {
+									route.path = `/${p.slug}`;
+									route.name = p.displayName.split(/\s+/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' ');
+									console.log(` - Updated route path to /${p.slug}`);
+								}
+							} catch (e) {
+								console.error(`❌ Failed to rename ${templateFolderName} to ${p.slug}:`, e?.message || e);
+								process.exit(1);
+							}
 						}
 					} else {
-						await copyRecursive(templatePagesHome, targetDir);
-					}
-					// rename component in page.tsx
-					const pageFile = path.join(targetDir, 'page.tsx');
-					try {
-						let content = await fs.readFile(pageFile, 'utf8');
-						const compName = p.displayName.replace(/[^a-zA-Z0-9]+/g,' ').split(/\s+/).map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join('') + 'Page';
-						content = content.replace(/export default function\s+\w+\s*\(/, `export default function ${compName}(`);
-						await fs.writeFile(pageFile, content, 'utf8');
-						console.log(` - Updated component name to ${compName} in ${path.relative(destPath, pageFile)}`);
-					} catch (e) {
-						console.warn(`⚠️  Failed to update component name for ${p.slug}:`, e?.message || e);
-					}
-
-					// update routes.json
-					if (routesJson && Array.isArray(routesJson.routes)) {
-						// Skip if route path already exists
-						const candidatePath = `/${p.slug}`;
-						if (!routesJson.routes.some(r => r.path === candidatePath)) {
-							routesJson.routes.push({
-								"name": p.displayName.split(/\s+/).map(s=>s.charAt(0).toUpperCase()+s.slice(1)).join(' '),
-								"path": candidatePath,
+						// Create custom page from default template
+						try {
+							const targetDir = path.join(pagesDir, p.slug);
+							await copyRecursive(templatePagesHome, targetDir);
+							console.log(`Created custom page ${p.slug}`);
+							
+							// Update component name in page.tsx
+							const pageFile = path.join(targetDir, 'page.tsx');
+							let content = await fs.readFile(pageFile, 'utf8');
+							const compName = p.displayName.replace(/[^a-zA-Z0-9]+/g, ' ').split(/\s+/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('') + 'Page';
+							content = content.replace(/export default function\s+\w+\s*\(/, `export default function ${compName}(`);
+							await fs.writeFile(pageFile, content, 'utf8');
+							console.log(` - Updated component name to ${compName}`);
+							
+							// Add route entry
+							const newRoute = {
+								"name": p.displayName.split(/\s+/).map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(' '),
+								"path": `/${p.slug}`,
 								"title": `${rootDisplayName} - ${p.displayName}`,
 								"description": "",
 								"keywords": ""
-							});
-						} else {
-							console.log(` - Route ${candidatePath} already exists; skipping route add.`);
+							};
+							routesJson.routes.push(newRoute);
+							console.log(` - Added route /${p.slug}`);
+						} catch (e) {
+							console.error(`❌ Failed to create custom page ${p.slug}:`, e?.message || e);
+							process.exit(1);
 						}
 					}
 				}
 
-				if (manifest) {
-					const removed = await pruneTemplateDirs(manifest, destPath, pagesToCreate.map(p=>p.slug));
-					for (const r of removed) {
-						console.log(`Removed unused template page ${r} from new site...`);
+				// Delete unwanted template pages
+				// The Admin section (an object with nested routes for metadata pages) is in routesJson.routes
+				// but doesn't have folders in the (pages) directory, so it's never encountered by fs.readdir().
+				// We can safely delete page folders without worrying about removing the Admin section.
+				try {
+					const existingFolders = await fs.readdir(pagesDir);
+					const foldersToDelete = [];
+					
+					for (const folderName of existingFolders) {
+						if (!wantedSlugs.has(folderName)) {
+							const folderTemplate = findTemplateForSlug(manifest, folderName);
+							if (folderTemplate) {
+								foldersToDelete.push(folderName);
+							}
+						}
 					}
+					
+					// Delete unwanted folders and their routes
+					for (const folderName of foldersToDelete) {
+						try {
+							const folderPath = path.join(pagesDir, folderName);
+							await fs.rm(folderPath, { recursive: true });
+							console.log(`Deleted template page ${folderName}`);
+							
+							// Remove the corresponding route from routes.json
+							routesJson.routes = routesJson.routes.filter(r => r.path !== `/${folderName}`);
+						} catch (e) {
+							console.warn(`⚠️  Failed to delete ${folderName}:`, e?.message || e);
+						}
+					}
+				} catch (e) {
+					// readdir might fail if pages dir doesn't exist, but that's OK
+					console.warn(`⚠️  Could not read pages directory for cleanup:`, e?.message || e);
 				}
 
-				if (routesJson) {
-					try {
-						await fs.writeFile(siteRoutesFile, JSON.stringify(routesJson, null, '\t'), 'utf8');
-						console.log('✅ routes.json updated.');
-					} catch (e) {
-						console.warn('⚠️  Failed to write routes.json:', e?.message || e);
-					}
+				// Write final routes.json
+				try {
+					await fs.writeFile(siteRoutesFile, JSON.stringify(routesJson, null, '\t'), 'utf8');
+					console.log('✅ routes.json updated.');
+				} catch (e) {
+					console.error('❌ Failed to write routes.json:', e?.message || e);
+					process.exit(1);
 				}
 			} else {
-				console.log('Skipping page creation.');
+				console.log('Skipping page selection.');
 			}
 		}
 

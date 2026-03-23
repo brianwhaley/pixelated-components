@@ -16,16 +16,6 @@ import "../../css/pixelated.grid.scss";
 import "./contentful.items.css";
 const debug = false;
 
-
-let ContentfulApiProps = {
-	proxyURL: 'https://proxy.pixelated.tech/prod/proxy?url=',
- 	base_url: "https://cdn.contentful.com",
- 	space_id: "soi9w77t7027",
- 	environment: "master",
-	management_access_token: "",
- 	delivery_access_token: "muY9LfpCt4qoXosDsnRkkoH3DAVVuUFEuB0WRKRdBUM",
-	preview_access_token: "",
-};
 const contentfulContentType: string = "item";
 
 
@@ -59,7 +49,7 @@ export function ContentfulItems(props: ContentfulItemsType) {
 		if ((providerContentful as any).proxyURL) localContentfulApiProps.proxyURL = (providerContentful as any).proxyURL;
 	} */
 	const providerContentfulApiProps = usePixelatedConfig()?.contentful;
-	const mergedApiProps = { ...ContentfulApiProps, ...providerContentfulApiProps, ...props.apiProps, };
+	const mergedApiProps = { ...providerContentfulApiProps, ...props.apiProps } as any;
 	const [ apiProps ] = useState(mergedApiProps);
 
 	/**
@@ -297,7 +287,7 @@ export function ContentfulItemDetail(props: ContentfulItemDetailType)  {
 	const [ cards, setCards ] = useState<CarouselCardType[]>([]);
 
 	const providerContentfulApiProps = usePixelatedConfig()?.contentful;
-	const [ apiProps ] = useState({ ...ContentfulApiProps, ...providerContentfulApiProps, ...props.apiProps });
+	const [ apiProps ] = useState({ ...providerContentfulApiProps, ...props.apiProps } as any);
 
 	useEffect(() => {
 		if (debug) console.log("Running useEffect");

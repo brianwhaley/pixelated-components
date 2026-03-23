@@ -8,6 +8,7 @@ import { useFormValidation } from "./formvalidator";
 import * as FVF from "./formfieldvalidations";
 import { FontSelector } from "../config/FontSelector";
 import { CompoundFontSelector } from "../config/CompoundFontSelector";
+import { usePixelatedConfig } from "../../config/config.client";
 import "./form.css";
 
 
@@ -245,6 +246,213 @@ function FormTooltip(props: FormTooltipType) {
 
 
 
+
+/**
+ * FormGooglePlacesInput — Address input with Google Places autocomplete and address component parsing.
+ *
+ * @param {string} [props.id] - Input id attribute (required).
+ * @param {string} [props.name] - Input name attribute.
+ * @param {string} [props.defaultValue] - Default value for uncontrolled inputs.
+ * @param {string} [props.placeholder] - Placeholder text.
+ * @param {string} [props.autoComplete] - Autocomplete hint.
+ * @param {string} [props.size] - Size attribute for text input.
+ * @param {string} [props.maxLength] - Maximum characters allowed.
+ * @param {string} [props.required] - Required flag.
+ * @param {string} [props.display] - Display style (inline/block) for layout purposes.
+ * @param {string} [props.label] - Label text associated with the input.
+ * @param {string} [props.tooltip] - Tooltip/help text for the input.
+ * @param {string} [props.className] - CSS class names applied to the input container.
+ * @param {string} [props.validate] - Named validation rule to run for this input.
+ * @param {function} [props.onChange] - Change handler invoked when place is selected.
+ * @param {function} [props.onAddressParsed] - Callback invoked with parsed address components when place is selected.
+ */
+FormGooglePlacesInput.propTypes = {
+	id: PropTypes.string.isRequired,
+	name: PropTypes.string,
+	defaultValue: PropTypes.string,
+	placeholder: PropTypes.string,
+	autoComplete: PropTypes.string,
+	size: PropTypes.string,
+	maxLength: PropTypes.string,
+	required: PropTypes.string,
+	disabled: PropTypes.string,
+	display: PropTypes.string,
+	label: PropTypes.string,
+	tooltip: PropTypes.string,
+	className: PropTypes.string,
+	validate: PropTypes.string,
+	onChange: PropTypes.func,
+	onAddressParsed: PropTypes.func,
+};
+export type FormGooglePlacesInputType = InferProps<typeof FormGooglePlacesInput.propTypes>;
+export function FormGooglePlacesInput(props: FormGooglePlacesInputType) {
+	const [inputValue, setInputValue] = React.useState(props.defaultValue || '');
+	const [predictions, setPredictions] = React.useState<any[]>([]);
+	const [showPredictions, setShowPredictions] = React.useState(false);
+	const [isLoading, setIsLoading] = React.useState(false);
+	const { formValidate, inputProps } = useFormComponent(props);
+	const config = usePixelatedConfig();
+	const debounceTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+	const inputRef = React.useRef<HTMLInputElement>(null);
+
+	// Debounced fetch predictions
+	const fetchPredictions = React.useCallback(async (input: string) => {
+		if (!input || input.length < 2) {
+			setPredictions([]);
+			setShowPredictions(false);
+			return;
+		}
+
+		setIsLoading(true);
+		try {
+			const { getGooglePlacesService } = await import('../../integrations/googleplaces');
+			const service = getGooglePlacesService(config);
+			const results = await service.getPlacePredictions(input, config);
+			setPredictions(results);
+			setShowPredictions(true);
+		} catch (error) {
+			console.error('Error fetching predictions:', error);
+			setPredictions([]);
+		} finally {
+			setIsLoading(false);
+		}
+	}, [config]);
+
+	// Handle input change with debounce
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setInputValue(value);
+
+		// Call parent onChange
+		if (props.onChange) {
+			props.onChange(value);
+		}
+
+		// Clear previous timer
+		if (debounceTimer.current) {
+			clearTimeout(debounceTimer.current);
+		}
+
+		// Set new debounced fetch
+		debounceTimer.current = setTimeout(
+			() => fetchPredictions(value),
+			config?.googlePlaces?.debounceDelay || 300
+		);
+	};
+
+	// Handle place selection
+	const handleSelectPlace = React.useCallback(async (prediction: any) => {
+		setInputValue(prediction.fullText);
+		setShowPredictions(false);
+
+		try {
+			const { getGooglePlacesService } = await import('../../integrations/googleplaces');
+			const service = getGooglePlacesService(config);
+			const details = await service.getPlaceDetails(prediction.placeId, config);
+
+			if (details && service.isValidCountry(details, config?.googlePlaces?.countryRestrictions)) {
+				// Auto-fill address components
+				if (props.onAddressParsed) {
+					props.onAddressParsed({
+						street1: details.street1,
+						city: details.city,
+						state: details.state,
+						zip: details.zip,
+						country: details.country,
+					});
+				}
+
+				// Update form fields if available
+				const form = (inputRef.current?.closest('form') || document.getElementById('address_to')) as HTMLFormElement | null;
+				if (form) {
+					if (details.city) {
+						const cityElement = form.elements.namedItem('city') as HTMLInputElement | null;
+						if (cityElement) cityElement.value = details.city;
+					}
+					if (details.state) {
+						const stateElement = form.elements.namedItem('state') as HTMLSelectElement | null;
+						if (stateElement) stateElement.value = details.state;
+					}
+					if (details.zip) {
+						const zipElement = form.elements.namedItem('zip') as HTMLInputElement | null;
+						if (zipElement) zipElement.value = details.zip;
+					}
+					if (details.country) {
+						const countryElement = form.elements.namedItem('country') as HTMLSelectElement | null;
+						if (countryElement) countryElement.value = details.country;
+					}
+				}
+			} else {
+				console.warn('Selected address is not in allowed countries');
+			}
+		} catch (error) {
+			console.error('Error fetching place details:', error);
+		}
+	}, [config, props]);
+
+	// Close predictions on blur
+	const handleBlur = () => {
+		setTimeout(() => setShowPredictions(false), 200);
+	};
+
+	// Cleanup timer on unmount
+	React.useEffect(() => {
+		return () => {
+			if (debounceTimer.current) {
+				clearTimeout(debounceTimer.current);
+			}
+		};
+	}, []);
+
+	return (
+		<div className={`form-google-places-input ${props.className || ''}`}>
+			<FormLabel key={"label-" + props.id} id={props.id} label={props.label} />
+			{props.tooltip ? <FormTooltip id={props.id} text={[props.tooltip]} /> : ""}
+			{props.display === "vertical" ? formValidate : ""}
+
+			<div className="google-places-container">
+				<input
+					ref={inputRef}
+					{...inputProps}
+					role="combobox"
+					type="text"
+					value={inputValue}
+					onChange={handleInputChange}
+					onBlur={handleBlur}
+					placeholder={props.placeholder || "Start typing an address..."}
+					autoComplete="off"
+					aria-autocomplete="list"
+					aria-controls={`${props.id}-predictions`}
+					aria-expanded={showPredictions}
+					defaultValue={undefined}
+				/>
+
+				{isLoading && <div className="google-places-loading">Loading...</div>}
+
+				{showPredictions && predictions.length > 0 && (
+					<ul
+						id={`${props.id}-predictions`}
+						className="google-places-predictions"
+						role="listbox"
+					>
+						{predictions.map((pred, idx) => (
+							<li key={idx} role="option" aria-selected={false}>
+								<button
+									type="button"
+									onClick={() => handleSelectPlace(pred)}
+									className="prediction-item"
+								>
+									<strong>{pred.mainText}</strong>
+									{pred.secondaryText && <small>{pred.secondaryText}</small>}
+								</button>
+							</li>
+						))}
+					</ul>
+				)}
+			</div>
+		</div>
+	);
+}
 
 /**
  * FormInput — Generic input field used by the FormEngine. Supports standard input attributes and validation hooks.

@@ -45,19 +45,23 @@ SocialCards.propTypes = {
 export type SocialCardsType = InferProps<typeof SocialCards.propTypes>;
 export function SocialCards(props: SocialCardsType) {
 	const debug = false;
+	// Get config values from provider
+	const config = usePixelatedConfig();
+	const proxyURL = config?.global?.proxyUrl || 'https://proxy.pixelated.tech/prod/proxy';
+
 	const [ state, setState ] = useState({
 		loading: true,
 		targetID: '#social',
 		myCardData: [],
 		mySocialCards: [],
 		proxy: {
-			proxyURL: 'https://proxy.pixelated.tech/prod/proxy',
+			proxyURL,
 			proxyURLParam: 'url'
 		},
 		rss2json: {
 			apiURL: 'https://api.rss2json.com/v1/api.json',
 			apiURLParam: 'rss_url',
-			apiKey: 'c3wsmqh4h1iydxxip3sgkr1jtk3brllbp61jc6yd'
+			apiKey: ''
 
 		},
 		toptal: {

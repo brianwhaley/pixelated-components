@@ -181,30 +181,26 @@ export function DragHandler(props: DragHandlerType ) {
 		}
 	};
 
-	function handleEventListeners(activeIndex: number) {
-		useEffect(() => {
-			// const container = document.getElementById(classSelector);
-			// { passive: true } is needed for preventDefault to work on drag events
-			document.addEventListener('touchstart', dragStart as EventListener, { capture: true, passive: false });
-			document.addEventListener('touchmove', draggable as EventListener, { capture: true, passive: false });
-			document.addEventListener('touchend', dragEnd as EventListener, { capture: true, passive: true });
-			document.addEventListener('mousedown', dragStart as EventListener, { capture: true, passive: false });
-			document.addEventListener('mousemove', draggable as EventListener, { capture: true, passive: false });
-			document.addEventListener('mouseup', dragEnd as EventListener, { capture: true, passive: true });
-			document.addEventListener('transitionend', transitionEnd as EventListener, { capture: true, passive: true });
-			return () => {
-				// { passive: true } is not needed to match and remove an event listener
-				document.removeEventListener('touchstart', dragStart as EventListener, { capture: true });
-				document.removeEventListener('touchmove', draggable as EventListener, { capture: true });
-				document.removeEventListener('touchend', dragEnd as EventListener, { capture: true });
-				document.removeEventListener('mousedown', dragStart as EventListener, { capture: true });
-				document.removeEventListener('mousemove', draggable as EventListener, { capture: true });
-				document.removeEventListener('mouseup', dragEnd as EventListener, { capture: true });
-				document.removeEventListener('transitionend', transitionEnd as EventListener, { capture: true });
-			};
-		}, [activeIndex]);
-	}
-
-	handleEventListeners(props.activeIndex);
+	useEffect(() => {
+		// const container = document.getElementById(classSelector);
+		// { passive: true } is needed for preventDefault to work on drag events
+		document.addEventListener('touchstart', dragStart as EventListener, { capture: true, passive: false });
+		document.addEventListener('touchmove', draggable as EventListener, { capture: true, passive: false });
+		document.addEventListener('touchend', dragEnd as EventListener, { capture: true, passive: true });
+		document.addEventListener('mousedown', dragStart as EventListener, { capture: true, passive: false });
+		document.addEventListener('mousemove', draggable as EventListener, { capture: true, passive: false });
+		document.addEventListener('mouseup', dragEnd as EventListener, { capture: true, passive: true });
+		document.addEventListener('transitionend', transitionEnd as EventListener, { capture: true, passive: true });
+		return () => {
+			// { passive: true } is not needed to match and remove an event listener
+			document.removeEventListener('touchstart', dragStart as EventListener, { capture: true });
+			document.removeEventListener('touchmove', draggable as EventListener, { capture: true });
+			document.removeEventListener('touchend', dragEnd as EventListener, { capture: true });
+			document.removeEventListener('mousedown', dragStart as EventListener, { capture: true });
+			document.removeEventListener('mousemove', draggable as EventListener, { capture: true });
+			document.removeEventListener('mouseup', dragEnd as EventListener, { capture: true });
+			document.removeEventListener('transitionend', transitionEnd as EventListener, { capture: true });
+		};
+	}, [props.activeIndex]);
 
 }
