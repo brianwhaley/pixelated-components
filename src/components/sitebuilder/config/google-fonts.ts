@@ -143,7 +143,7 @@ export function generateGoogleFontsLink(fonts: string[]): string {
 	const url = generateGoogleFontsUrl(fonts);
 	if (!url) return '';
 
-	return `<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="${url}" rel="stylesheet">`;
+	return `<link rel="preconnect" fetchPriority="high" href="https://fonts.googleapis.com">
+<link rel="preconnect" fetchPriority="high" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" fetchPriority="high" href="${url}">`;
 }

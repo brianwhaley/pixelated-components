@@ -59,7 +59,7 @@ describe('Google Analytics Components', () => {
 			
 			expect(() => {
 				render(React.createElement(GoogleAnalytics, {}));
-			}).toThrow('Google Analytics ID');
+			}).toThrow(/Google Analytics ID/);
 		});
 
 		it('should include ad ID config when available', () => {

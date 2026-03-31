@@ -229,8 +229,8 @@ export function PageSectionHeader( { title , url }: PageSectionHeaderType) {
 	return (
 		<>
 			{url
-				? <a href={url} target={calloutTarget} rel="noopener noreferrer"><h2 className="page-section-header">{title}</h2></a>
-				: <h2 className="page-section-header">{title}</h2>
+				? <a href={url} target={calloutTarget} rel="noopener noreferrer"><h2 className="page-section-header" suppressHydrationWarning={true}>{title}</h2></a>
+				: <h2 className="page-section-header" suppressHydrationWarning={true}>{title}</h2>
 			}
 		</>
 	);

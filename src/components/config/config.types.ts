@@ -102,6 +102,7 @@ export interface GooglePlacesConfig {
 	countryRestrictions?: string[];
 	debounceDelay?: number;
 	cacheTTL?: number;
+	placeId: string; 
 }
 
 export interface GoogleSearchConsoleConfig {

@@ -1746,9 +1746,9 @@ import { GoogleFontsImports } from '@pixelated-tech/components';
 
 **Generated HTML:**
 ```html
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat|Open+Sans&display=swap" rel="stylesheet">
+<link rel="preconnect" fetchPriority="high" ="https://fonts.googleapis.com">
+<link rel="preconnect" fetchPriority="high" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" fetchPriority="high" href="https://fonts.googleapis.com/css2?family=Montserrat|Open+Sans&display=swap">
 ```
 
 #### Features

@@ -64,7 +64,7 @@ export function CountUp({ id, pre = '', post = '', start, end, duration, decimal
 
 	return (
 		<>
-			<div ref={containerRef} className="countup">
+			<div ref={containerRef} className="countup" suppressHydrationWarning>
 				<span className='countup-pre'>{pre}</span>
 				<span id={id} className='countup-counter'>{counter}</span>
 				<span className='countup-post'>{post}</span>

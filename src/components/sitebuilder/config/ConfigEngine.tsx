@@ -110,8 +110,8 @@ export function VisualDesignStyles({ visualdesign }: { visualdesign: VisualDesig
 		<>
 			{googleFontsUsed && (
 				<>
-					<link rel="preconnect" href="https://fonts.googleapis.com" />
-					<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+					<link rel="preconnect" fetchPriority="high" href="https://fonts.googleapis.com" />
+					<link rel="preconnect" fetchPriority="high" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
 				</>
 			)}
 			<style dangerouslySetInnerHTML={{ __html: css }} />
@@ -142,9 +142,9 @@ export function GoogleFontsImports({ visualdesign }: { visualdesign: VisualDesig
 
 	return (
 		<>
-			<link rel="preconnect" href="https://fonts.googleapis.com" />
-			<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-			<link href={googleFontsUrl} rel="stylesheet" />
+			<link rel="preconnect" fetchPriority="high" href="https://fonts.googleapis.com" />
+			<link rel="preconnect" fetchPriority="high" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+			<link rel="stylesheet" fetchPriority="high" href={googleFontsUrl} />
 		</>
 	);
 }

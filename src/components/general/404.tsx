@@ -45,6 +45,7 @@ export function FourOhFour (props: FourOhFourType) {
 					<div className="fof-image-wrapper">
 						<SmartImage src={imageURL} 
 							// src={cloudinaryURL} 
+							aboveFold={true}
 							title={"Page Not Found - " + images[randomIndex].description} 
 							alt={"Page Not Found - " + images[randomIndex].description} 
 							variant="nextjs"

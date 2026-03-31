@@ -4,6 +4,9 @@
     { "path": "./tsconfig.server.json" }
   ], */
   "compilerOptions": {
+
+	"ignoreDeprecations": "6.0",
+	
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Projects */

@@ -141,7 +141,7 @@ export function Carousel(props: CarouselType) {
 
 	if (props.cards && props.cards.length > 0) {
 		return (
-			<div className="carousel-container">
+			<div className="carousel-container" suppressHydrationWarning>
 				<div className="carousel-cards-container">
 					{ (props.cards as CarouselCardType[]).map((card, i) => (
 						<CarouselCard
@@ -177,7 +177,7 @@ export function Carousel(props: CarouselType) {
 	} else {
 		return (
 			<div className='section-container'>
-				<div className="carousel-container">
+				<div className="carousel-container" suppressHydrationWarning>
 					<CarouselLoading />
 				</div>
 			</div>
@@ -209,6 +209,7 @@ function CarouselCard( props: CarouselCardType ) {
 			{ (props.image) ? <div draggable='false' className="carousel-card-image">
 				<SmartImage draggable={false} src={props.image} title={props?.imageAlt} 
 					alt={props?.imageAlt || ""} className={imgFit} 
+					aboveFold={ props?.index === 0 ? true : false }
 					cloudinaryEnv={config?.cloudinary?.product_env ?? undefined}
 					cloudinaryDomain={config?.cloudinary?.baseUrl ?? undefined}
 					cloudinaryTransforms={config?.cloudinary?.transforms ?? undefined} />

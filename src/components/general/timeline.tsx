@@ -73,7 +73,7 @@ export type TimelineItemType = InferProps<typeof TimelineItem.propTypes> & { [ke
 export default function TimelineItem(props: TimelineItemType) {
 	const config = usePixelatedConfig();
 	return (
-		<div className={"timeline-container timeline-" + props.direction }>
+		<div className={"timeline-container timeline-" + props.direction} suppressHydrationWarning={true}>
 			<div className="timeline-content">
 				<div className="row-3col">
 					<div className="grid-s1-e2">

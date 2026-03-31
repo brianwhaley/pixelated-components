@@ -8,6 +8,11 @@ import { usePixelatedConfig } from '../config/config.client';
 import './google.reviews.css';
 
 
+/* 
+https://maps.googleapis.com/maps/api/place/textsearch/json?query=Manning+Metalworks+Morris+Plains+NJ&key=AIzaSyBJVi0O9Ir9imRgINLZbojTifatX-Z4aUs
+*/
+
+
 /**
  * GoogleReviewsCard — Fetch and display Google Place reviews for a specific Place ID.
  *

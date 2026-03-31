@@ -221,18 +221,18 @@ export function generateMetaTags(props: GenerateMetaTagsProps) {
 			<meta name="twitter:title" content={title} />
 
 			{/* <link rel="alternate" href={url} hrefLang="en-us" /> */}
-			<link rel="author" href="humans.txt" />
-			<link rel="canonical" href={url} />
-			<link rel="icon" type="image/x-icon" href={favicon} />
-			<link rel="shortcut icon" type="image/x-icon" href={favicon} />
-			<link rel="manifest" href="/manifest.webmanifest" />
+			<link rel="author" fetchPriority="high" href="humans.txt" />
+			<link rel="canonical" fetchPriority="high" href={url} />
+			<link rel="icon" fetchPriority="high" type="image/x-icon" href={favicon} />
+			<link rel="shortcut icon" fetchPriority="high" type="image/x-icon" href={favicon} />
+			<link rel="manifest" fetchPriority="high" href="/manifest.webmanifest" />
 
-			<link rel="preconnect" href="https://images.ctfassets.net/" />
-			<link rel="preconnect" href="https://res.cloudinary.com/" />
-			<link rel="preconnect" href="https://farm2.static.flickr.com" />
-			<link rel="preconnect" href="https://farm6.static.flickr.com" />
-			<link rel="preconnect" href="https://farm8.static.flickr.com" />
-			<link rel="preconnect" href="https://farm66.static.flickr.com" />
+			<link rel="preconnect" fetchPriority="high" href="https://images.ctfassets.net/" />
+			<link rel="preconnect" fetchPriority="high" href="https://res.cloudinary.com/" />
+			<link rel="preconnect" fetchPriority="high" href="https://farm2.static.flickr.com" />
+			<link rel="preconnect" fetchPriority="high" href="https://farm6.static.flickr.com" />
+			<link rel="preconnect" fetchPriority="high" href="https://farm8.static.flickr.com" />
+			<link rel="preconnect" fetchPriority="high" href="https://farm66.static.flickr.com" />
 
 		</>
 	);

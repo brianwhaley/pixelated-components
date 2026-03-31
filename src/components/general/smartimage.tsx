@@ -246,6 +246,7 @@ export function SmartImage(props: SmartImageType) {
 					src={newProps.src} // required
 					alt={newProps.alt} // required
 					onError={handleError}
+					suppressHydrationWarning={true}
 				/>
 			);
 		} catch (e) {
@@ -261,7 +262,9 @@ export function SmartImage(props: SmartImageType) {
 		<img 
 			{...newProps as any} 
 			ref={imgRef}
-			alt={newProps.alt} />
+			alt={newProps.alt}
+			suppressHydrationWarning={true}
+		/>
 	);
 
 }

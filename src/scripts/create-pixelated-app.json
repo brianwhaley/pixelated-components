@@ -92,6 +92,11 @@
 			"name": "Style Guide",
 			"aliases": ["styleguide", "style-guide", "design-system", "ui-kit", "pattern-library"],
 			"src": "../../pixelated-template/src/app/(pages)/styleguide"
+		},
+		{
+			"name": "Updates",
+			"aliases": ["updates", "update", "changelog"],
+			"src": "../../pixelated-template/src/app/(pages)/updates"
 		}
 	]
 } 

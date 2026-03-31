@@ -49,7 +49,7 @@ export function Tiles(props: TilesType) {
 	if (props.cards && props.cards.length > 0) {
 		return (
 			<div className="tiles-container">
-				<div className={`tile-container row-${rowCount}col`}>
+				<div className={`tile-container row-${rowCount}col`} suppressHydrationWarning>
 					{ /*  card is not TileType due to index and cardLength not isRequired for Tiles  */ }
 					{ props.cards.map((card: any, i: number) => (
 						<div key={i} className="grid-item">
@@ -126,7 +126,7 @@ function Tile( props: TileType ) {
 	</div>;
 	const rootClass = `tile${ (props.variant) ? ' ' + props.variant : ''}`;
 	return (
-		<div className={rootClass} id={'tile-' + props.index} >
+		<div className={rootClass} id={'tile-' + props.index} suppressHydrationWarning>
 			{ props.link ?
 				<a href={props.link} className="tile-link">
 					{ tileBody }

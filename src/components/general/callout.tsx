@@ -183,7 +183,9 @@ export function Callout({
 			(layout && variant!=='split' ? " " + layout : "") + 
 			(direction && layout!=='vertical' ? " " + direction : "") +
 			(variant && (variant==='boxed grid' || variant==='grid') && gridColumns ? ` callout-grid-${gridColumns.left}-${gridColumns.right}` : '')
-			} >
+			}
+			suppressHydrationWarning={true}
+		>
 			{ (direction === "right") ? <>{body}{image}</> : <>{image}{body}</> }
 		</div>
 	);

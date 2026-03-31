@@ -60,15 +60,15 @@ export function StyleGuideUI(props: StyleGuideUIType) {
 			`}</style>
 
 			<PageSection columns={1} maxWidth="1024px" padding="20px" id="fonts-section">
-				<h1>H1 - {primaryHeaderFont} font</h1>
-				<h2>H2 - {primaryHeaderFont} font</h2>
-				<h3>H3 - {primaryHeaderFont} font</h3>
-				<h4>H4 - {primaryHeaderFont} font</h4>
-				<h5>H5 - {primaryHeaderFont} font</h5>
-				<h6>H6 - {primaryHeaderFont} font</h6>
-				<p>{primaryBodyFont} font.  This is a paragraph of text to demonstrate the body font style. </p>
-				<p>{primaryBodyFont} font.  The quick brown fox jumps over the lazy dog. </p>
-				<p>{primaryBodyFont} font.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+				<h1 suppressHydrationWarning>H1 - {primaryHeaderFont} font</h1>
+				<h2 suppressHydrationWarning>H2 - {primaryHeaderFont} font</h2>
+				<h3 suppressHydrationWarning>H3 - {primaryHeaderFont} font</h3>
+				<h4 suppressHydrationWarning>H4 - {primaryHeaderFont} font</h4>
+				<h5 suppressHydrationWarning>H5 - {primaryHeaderFont} font</h5>
+				<h6 suppressHydrationWarning>H6 - {primaryHeaderFont} font</h6>
+				<p suppressHydrationWarning>{primaryBodyFont} font.  This is a paragraph of text to demonstrate the body font style. </p>
+				<p suppressHydrationWarning>{primaryBodyFont} font.  The quick brown fox jumps over the lazy dog. </p>
+				<p suppressHydrationWarning>{primaryBodyFont} font.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
 			</PageSection>
 
 			<PageSection columns={1} maxWidth="1024px" padding="20px" id="fonts-section">

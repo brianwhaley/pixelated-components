@@ -46,7 +46,7 @@ export function PayPal(props: any) {
     }
 	return (
 		<>
-			<link rel="stylesheet" type="text/css" href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"/>
+			<link rel="stylesheet" type="text/css" fetchPriority="high" href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"/>
 			<div id="paypal-button-container" className="paypal-button-container" />
 		</>
 	);

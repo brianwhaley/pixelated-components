@@ -10,7 +10,7 @@ const mockSeoHtml = `
 		<title>Example Page</title>
 		<meta name="description" content="Test meta description">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="canonical" href="https://example.com/page">
+		<link rel="canonical" fetchPriority="high" href="https://example.com/page">
 		<script type="application/ld+json">{ "@type": "WebSite" }</script>
 	</head>
 	<body>
