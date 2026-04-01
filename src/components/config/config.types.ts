@@ -50,6 +50,7 @@ export interface EbayConfig {
 
 export interface FlickrConfig {
 	baseURL: string; // e.g. 'https://api.flickr.com/services/rest/?'
+	proxyURL?: string; // Optional proxy URL for Flickr API
 	urlProps: {
 		method?: string; // 'flickr.photos.search',
 		api_key: string;

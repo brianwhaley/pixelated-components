@@ -23,7 +23,6 @@ export * from './components/general/utilities';
 
 export * from './components/integrations/contentful.delivery';
 export * from './components/integrations/contentful.management';
-export * from './components/integrations/flickr';
 export * from './components/integrations/gemini-api.server';
 export * from './components/integrations/googleplaces';
 export * from './components/integrations/googlemap';

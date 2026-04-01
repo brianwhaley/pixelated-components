@@ -1,62 +1,67 @@
 
 import PropTypes, { InferProps } from 'prop-types';
 import { mergeDeep } from '../general/utilities';
+import { hashCode } from '../general/utilities';
+import { CacheManager } from '../general/cache-manager';
+import { getDomain } from '../general/utilities';
 import type { CarouselCardType } from '../general/carousel';
-
-type FlickrApiType = {
-    baseURL: string;
-    urlProps: {
-        method: string;
-        api_key: string;
-        user_id: string;
-        tags?: string;
-        photoset_id?: string;
-        extras: string;
-        sort: string;
-        per_page: number;
-        format: string;
-        photoSize: string;
-        nojsoncallback: string;
-    };
-};
+import type { FlickrConfig, GlobalConfig } from '../config/config.types';
 
 // Flickr API base URL - non-secret configuration
 const FLICKR_API_BASE_URL = 'https://api.flickr.com/services/rest/?';
 
-const defaultFlickr = { 
-	flickr : {
-		baseURL: FLICKR_API_BASE_URL,
-		urlProps: {
-			method: 'flickr.photos.search',
-			// api_key and user_id must come from props or config provider - do not hardcode
-			api_key: '',
-			user_id: '',
-			tags: 'pixelatedviewsgallery',
-			extras: 'date_taken,description,owner_name',
-			sort: 'date-taken-desc',
-			per_page: 500,
-			format: 'json',
-			photoSize: 'Medium',
-			nojsoncallback: 'true' /*,
+const defaultFlickr: FlickrConfig = {
+	baseURL: FLICKR_API_BASE_URL,
+	proxyURL: '',
+	urlProps: {
+		method: 'flickr.photos.search',
+		// api_key and user_id must come from props or config provider - do not hardcode
+		api_key: '',
+		user_id: '',
+		tags: 'pixelatedviewsgallery',
+		extras: 'date_taken,description,owner_name',
+		sort: 'date-taken-desc',
+		per_page: 500,
+		format: 'json',
+		photoSize: 'Medium',
+		nojsoncallback: 'true' /*,
 			startPos: 0 */
-		}
-	} , 
+	}
 };
 
 
+// Utility to build the final Flickr API URL, using proxy if available
+function buildFlickrApiUrl(flickr: any) {
+	let baseUrl = flickr.baseURL;
+	let queryParams = '';
+	Object.keys(flickr.urlProps).forEach((prop) => {
+		const value = flickr.urlProps[prop as keyof typeof flickr.urlProps];
+		queryParams += (queryParams.length === 0) ? prop + '=' + value : '&' + prop + '=' + value;
+	});
+	const apiUrl = baseUrl + queryParams;
+	// Prefer flickr.proxyURL, then globalConfig.proxyUrl, else direct
+	if (flickr.proxyURL) {
+		return flickr.proxyURL + encodeURIComponent(apiUrl);
+	} else {
+		return apiUrl;
+	}
+}
 
-function getFlickrSize (size: string) {
+
+
+
+function getFlickrSize(size: string) {
 	// https://www.flickr.com/services/api/misc.urls.html
 	switch (size) {
-	case 'Square' : return '_s'; // 75
-	case 'Large Square' : return '_q'; // 150
-	case 'Thumbnail' : return '_t'; // 100
-	case 'Small' : return '_m'; // 240
-	case 'Small 320' : return '_n'; // 320
-	case 'Medium' : return ''; // 500
-	case 'Medium 640' : return '_z'; // 640
-	case 'Medium 800' : return '_c'; // 800
-	case 'Large' : return '_b'; // 1024
+	case 'Square': return '_s'; // 75
+	case 'Large Square': return '_q'; // 150
+	case 'Thumbnail': return '_t'; // 100
+	case 'Small': return '_m'; // 240
+	case 'Small 320': return '_n'; // 320
+	case 'Medium': return ''; // 500
+	case 'Medium 640': return '_z'; // 640
+	case 'Medium 800': return '_c'; // 800
+	case 'Large': return '_b'; // 1024
 		// case "Large2" : return "_h"; // 1600 + secret
 		// case "Large3" : return "_k"; // 2048 + secret
 		// case "XL3K" : return "_3k"; // 3072 + secret
@@ -65,7 +70,7 @@ function getFlickrSize (size: string) {
 		// case "XL5K" : return "_5k"; // 5120 + secret
 		// case "XL6K" : return "_6k"; // 6144 + secret
 		// case "Original" : return "_o"; // secret + EXIF data; not rotated, ? ext
-	default : return '';
+	default: return '';
 	}
 }
 
@@ -78,39 +83,42 @@ function getFlickrSize (size: string) {
  * @param {object} [props.config] - Optional provider config to merge with defaults.
  */
 GetFlickrData.propTypes = {
-/** Flickr-specific query overrides */
-	flickr: PropTypes.object,
+	/** Flickr-specific query overrides */
+	flickr: PropTypes.any,
 	/** Optional provider configuration for Flickr requests */
-	config: PropTypes.object,
+	config: PropTypes.any,
 };
 export type GetFlickrDataType = InferProps<typeof GetFlickrData.propTypes>;
-export function GetFlickrData( props: GetFlickrDataType ) {
-
+export function GetFlickrData(props: GetFlickrDataType) {
 	const debug = false;
-	
 	// Use provided flickr config, or fall back to config provider, or use defaults
-	let flickrConfig: any = { ...defaultFlickr.flickr };
-	
+	let flickrConfig: FlickrConfig = { ...defaultFlickr };
 	if (props.config) {
-		flickrConfig = mergeDeep(flickrConfig, props.config);
+		if (props.config.global?.proxyURL) {
+			flickrConfig.proxyURL = props.config.global.proxyURL;
+		}
+		if (props.config.flickr) flickrConfig = mergeDeep(flickrConfig, props.config.flickr as FlickrConfig) as FlickrConfig;
 	}
-	
 	if (props.flickr) {
-		flickrConfig = mergeDeep(flickrConfig, props.flickr);
+		flickrConfig = mergeDeep(flickrConfig, props.flickr as FlickrConfig) as FlickrConfig;
 	}
-	
-	const flickr = flickrConfig as FlickrApiType;
+	const myURL = buildFlickrApiUrl(flickrConfig);
 
-	// Build URL with query parameters
-	let myURL = flickr.baseURL;
-	let queryParams = '';
-	Object.keys(flickr.urlProps).forEach((prop) => {
-		const value = flickr.urlProps[prop as keyof typeof flickr.urlProps];
-		queryParams += (queryParams.length === 0) ? prop + '=' + value : '&' + prop + '=' + value;
+	// CacheManager: localStorage, 1 week TTL, domain isolation, namespace 'flickr'
+	const flickrCache = new CacheManager({
+		mode: 'local',
+		ttl: 1000 * 60 * 60 * 24 * 7, // 1 week
+		domain: getDomain(),
+		namespace: 'flickr'
 	});
-	myURL += queryParams;
 
 	const fetchFlickrData = async () => {
+		const cacheKey = hashCode(myURL);
+		let cached = flickrCache.get<any[]>(cacheKey);
+		if (cached) {
+			if (debug) console.log('Flickr cache hit:', cacheKey);
+			return cached;
+		}
 		try {
 			const response = await fetch(myURL);
 			if (!response.ok) {
@@ -118,7 +126,7 @@ export function GetFlickrData( props: GetFlickrDataType ) {
 			}
 			const jsonData = await response.json();
 			let myFlickrImages = [];
-			if(jsonData.photos) {
+			if (jsonData.photos) {
 				// photos for tags - flickr.photos.search
 				myFlickrImages = jsonData.photos.photo;
 			} else if (jsonData.photoset) {
@@ -130,11 +138,9 @@ export function GetFlickrData( props: GetFlickrDataType ) {
 			myFlickrImages.sort((a: any, b: any) => {
 				return new Date(b.datetaken).getTime() - new Date(a.datetaken).getTime();
 			}); // b - a for reverse sort
+			flickrCache.set(cacheKey, myFlickrImages);
 			if (debug) console.log('Flickr Cards:', myFlickrImages);
 			return myFlickrImages;
-			// const myFlickrCards = GenerateFlickrCards(myFlickrImages);
-			// console.log('Flickr Cards:', myFlickrCards);
-			// return myFlickrCards;
 		} catch (err) {
 			console.log('Error fetching Flickr data:', err);
 		} finally {
@@ -142,7 +148,6 @@ export function GetFlickrData( props: GetFlickrDataType ) {
 		}
 	};
 	return fetchFlickrData();
-
 }
 
 
@@ -154,7 +159,7 @@ export function GetFlickrData( props: GetFlickrDataType ) {
  * @param {string} [props.photoSize] - Desired photo size label (e.g., 'Medium', 'Large').
  */
 GenerateFlickrCards.propTypes = {
-/** Flickr image array */
+	/** Flickr image array */
 	flickrImages: PropTypes.array.isRequired,
 	/** Desired photo size label */
 	photoSize: PropTypes.string.isRequired,
@@ -165,13 +170,13 @@ export function GenerateFlickrCards(props: GenerateFlickrCardsType) {
 		const photoSize = getFlickrSize(props.photoSize);
 		const flickrCards = props.flickrImages.map((image: any, i: number) => (
 			{
-				link: 'https://farm' + image.farm + '.static.flickr.com/' + image.server + '/' + image.id + '_' + image.secret + photoSize + '.jpg' ,
-				image: 'https://farm' + image.farm + '.static.flickr.com/' + image.server + '/' + image.id + '_' + image.secret + photoSize + '.jpg' ,
+				link: 'https://farm' + image.farm + '.static.flickr.com/' + image.server + '/' + image.id + '_' + image.secret + photoSize + '.jpg',
+				image: 'https://farm' + image.farm + '.static.flickr.com/' + image.server + '/' + image.id + '_' + image.secret + photoSize + '.jpg',
 				imageAlt: image.title,
 				headerText: image.title,
-				subHeaderText: ( i + 1 ) + " of " + props.flickrImages.length + " by " + image.ownername + " on " + image.datetaken,
+				subHeaderText: (i + 1) + " of " + props.flickrImages.length + " by " + image.ownername + " on " + image.datetaken,
 				bodyText: image.description._content,
-			} 
+			}
 		));
 		return flickrCards;
 	}
@@ -192,7 +197,7 @@ export function GenerateFlickrCards(props: GenerateFlickrCardsType) {
  * @param {function} [props.callback] - Optional callback function invoked after data fetch.
  */
 FlickrWrapper.propTypes = {
-/** Flickr API method */
+	/** Flickr API method */
 	method: PropTypes.string,
 	/** Flickr API key */
 	api_key: PropTypes.string.isRequired,
@@ -209,34 +214,34 @@ FlickrWrapper.propTypes = {
 	/* 	callback: (arg0: CarouselCardType[]) => void; */
 };
 export type FlickrWrapperType = InferProps<typeof FlickrWrapper.propTypes>;
-export function FlickrWrapper (props: FlickrWrapperType) {
+export function FlickrWrapper(props: FlickrWrapperType) {
 	const flickr = {
-		flickr : {
+		flickr: {
 			baseURL: FLICKR_API_BASE_URL,
 			urlProps: {
 				method: props.method || 'flickr.photos.search',
-				api_key: props.api_key /* || '882cab5548d53c9e6b5fb24d59cc321d' */ ,
+				api_key: props.api_key /* || '882cab5548d53c9e6b5fb24d59cc321d' */,
 				user_id: props.user_id /* || '15473210@N04' */,
-				tags: props.tags || '' /* || 'btw-customsunglasses' */ ,
+				tags: props.tags || '' /* || 'btw-customsunglasses' */,
 				photoset_id: props.photoset_id || '',
 				photoSize: props.photoSize || 'Large',
 				extras: 'date_taken,description,owner_name',
 				sort: 'date-taken-desc',
 				per_page: 500,
 				format: 'json',
-				nojsoncallback: 'true' 
+				nojsoncallback: 'true'
 			}
-		} 
+		}
 	};
-    
+
 	async function getFlickrCards() {
 		const myPromise = GetFlickrData(flickr);
 		const myFlickrImages = await myPromise;
 		const myPhotoSize = flickr.flickr.urlProps.photoSize;
-		const myFlickrCards = GenerateFlickrCards({flickrImages: myFlickrImages, photoSize: myPhotoSize});
+		const myFlickrCards = GenerateFlickrCards({ flickrImages: myFlickrImages, photoSize: myPhotoSize });
 		// REMOVE LINKS
-		if (myFlickrCards) { 
-			const myScrubbedFlickrCards = myFlickrCards.map((obj, index): CarouselCardType => {
+		if (myFlickrCards) {
+			const myScrubbedFlickrCards = myFlickrCards.map((obj: any, index: number): CarouselCardType => {
 				return {
 					index: index,
 					cardIndex: index,
@@ -249,6 +254,6 @@ export function FlickrWrapper (props: FlickrWrapperType) {
 			props.callback(myScrubbedFlickrCards);
 			return myScrubbedFlickrCards;
 		}
-	} 
+	}
 	return getFlickrCards();
 }

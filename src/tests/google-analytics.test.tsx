@@ -4,13 +4,14 @@ import { render } from '@testing-library/react';
 import { GoogleAnalytics, GoogleAnalyticsEvent } from '../components/integrations/googleanalytics';
 
 // Mock usePixelatedConfig
+const pixelatedConfigStub: { googleAnalytics?: { id: string; adId: string } } = {
+	googleAnalytics: {
+		id: 'G-TEST123',
+		adId: 'AW-TEST456'
+	}
+};
 vi.mock('../components/config/config.client', () => ({
-	usePixelatedConfig: vi.fn(() => ({
-		googleAnalytics: {
-			id: 'G-TEST123',
-			adId: 'AW-TEST456'
-		}
-	}))
+	usePixelatedConfig: () => pixelatedConfigStub
 }));
 
 describe('Google Analytics Components', () => {
@@ -52,14 +53,12 @@ describe('Google Analytics Components', () => {
 		});
 
 		it('should throw error when no ID provided and config missing', () => {
-			vi.resetModules();
-			vi.mock('../components/config/config.client', () => ({
-				usePixelatedConfig: vi.fn(() => ({}))
-			}));
-			
+			const originalGoogleAnalytics = pixelatedConfigStub.googleAnalytics;
+			pixelatedConfigStub.googleAnalytics = undefined;
 			expect(() => {
 				render(React.createElement(GoogleAnalytics, {}));
 			}).toThrow(/Google Analytics ID/);
+			pixelatedConfigStub.googleAnalytics = originalGoogleAnalytics;
 		});
 
 		it('should include ad ID config when available', () => {

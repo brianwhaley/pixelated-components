@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.14.1",
+	"version": "3.14.2",
 	"type": "module",
 	"private": false,
 	"author": {
@@ -159,7 +159,7 @@
 		"jsdom": "^29.0.1",
 		"less-loader": "^12.3.2",
 		"mini-css-extract-plugin": "^2.10.2",
-		"next": "16.2.1",
+		"next": "16.2.2",
 		"null-loader": "^4.0.1",
 		"prop-types": "^15.8.1",
 		"react": "19.2.4",
@@ -184,7 +184,7 @@
 		"flatted": "^3.4.2"
 	},
 	"peerDependencies": {
-		"next": "^16.2.1",
+		"next": "^16.2.2",
 		"react": "^19.2.4",
 		"react-dom": "^19.2.4"
 	},

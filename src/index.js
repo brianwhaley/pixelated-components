@@ -26,7 +26,6 @@ export * from './components/general/menu-simple';
 export * from './components/general/metadata.components';
 export * from './components/general/metadata.functions';
 export * from './components/general/microinteractions';
-
 export * from './components/general/modal';
 export * from './components/general/nerdjoke';
 export * from './components/general/recipe';

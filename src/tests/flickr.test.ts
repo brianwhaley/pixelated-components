@@ -7,6 +7,9 @@ global.fetch = vi.fn();
 describe('flickr - GetFlickrData', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
+		if (typeof window !== 'undefined' && window.localStorage) {
+			window.localStorage.clear();
+		}
 	});
 
 	it('should return async function that fetches Flickr photos', async () => {
@@ -75,6 +78,7 @@ describe('flickr - GetFlickrData', () => {
 	});
 
 	it('should handle photo size mapping from response', async () => {
+
 		vi.mocked(global.fetch).mockResolvedValueOnce({
 			ok: true,
 			json: () => Promise.resolve({
@@ -82,9 +86,15 @@ describe('flickr - GetFlickrData', () => {
 					photo: [
 						{
 							id: '123',
+							title: 'Test Photo',
 							server: '1234',
 							secret: 'abcd',
-							datetaken: '2024-01-01'
+							farm: 1,
+							datetaken: '2024-01-01T10:00:00',
+							url_z: 'https://example.com/640.jpg',
+							url_b: 'https://example.com/1024.jpg',
+							description: { _content: 'desc' },
+							ownername: 'owner'
 						}
 					]
 				},
@@ -93,10 +103,12 @@ describe('flickr - GetFlickrData', () => {
 		} as any);
 
 		const result = await GetFlickrData({});
+		// The implementation returns the photo array as-is, so secret should be present
 		expect(result?.[0]?.secret).toBe('abcd');
 	});
 
 	it('should parse Flickr API photo response correctly', async () => {
+
 		vi.mocked(global.fetch).mockResolvedValueOnce({
 			ok: true,
 			json: () => Promise.resolve({
@@ -108,7 +120,26 @@ describe('flickr - GetFlickrData', () => {
 						{
 							id: '123',
 							title: 'Test Photo',
-							datetaken: '2024-01-15T10:00:00'
+							server: '1234',
+							secret: 'abcd',
+							farm: 1,
+							datetaken: '2024-01-15T10:00:00',
+							url_z: 'https://example.com/640.jpg',
+							url_b: 'https://example.com/1024.jpg',
+							description: { _content: 'desc' },
+							ownername: 'owner'
+						},
+						{
+							id: '456',
+							title: 'Photo 2',
+							server: '5678',
+							secret: 'efgh',
+							farm: 2,
+							datetaken: '2024-01-10T10:00:00',
+							url_z: 'https://example.com/640b.jpg',
+							url_b: 'https://example.com/1024b.jpg',
+							description: { _content: 'desc2' },
+							ownername: 'owner2'
 						}
 					]
 				},
@@ -118,6 +149,7 @@ describe('flickr - GetFlickrData', () => {
 
 		const result = await GetFlickrData({});
 		expect(result).toBeDefined();
+		// The implementation sorts by datetaken descending, so the first photo should be 'Test Photo'
 		expect(result?.[0]?.title).toBe('Test Photo');
 	});
 
@@ -176,14 +208,15 @@ describe('flickr - GetFlickrData', () => {
 	});
 
 	it('should sort photos by date in descending order', async () => {
+
 		vi.mocked(global.fetch).mockResolvedValueOnce({
 			ok: true,
 			json: () => Promise.resolve({
 				photos: {
 					photo: [
-						{ id: '1', datetaken: '2024-01-01T10:00:00' },
-						{ id: '2', datetaken: '2024-01-15T10:00:00' },
-						{ id: '3', datetaken: '2024-01-10T10:00:00' }
+						{ id: '1', datetaken: '2024-01-01T10:00:00', server: '1', secret: 'a', farm: 1, title: 'Photo 1', description: { _content: 'desc1' }, ownername: 'owner1' },
+						{ id: '2', datetaken: '2024-01-15T10:00:00', server: '2', secret: 'b', farm: 2, title: 'Photo 2', description: { _content: 'desc2' }, ownername: 'owner2' },
+						{ id: '3', datetaken: '2024-01-10T10:00:00', server: '3', secret: 'c', farm: 3, title: 'Photo 3', description: { _content: 'desc3' }, ownername: 'owner3' }
 					]
 				},
 				stat: 'ok'
@@ -191,7 +224,7 @@ describe('flickr - GetFlickrData', () => {
 		} as any);
 
 		const result = await GetFlickrData({});
-		// Should be sorted newest first
+		// Should be sorted newest first (descending by datetaken)
 		expect(result?.[0]?.id).toBe('2');
 		expect(result?.[1]?.id).toBe('3');
 		expect(result?.[2]?.id).toBe('1');
@@ -229,6 +262,7 @@ describe('flickr - GetFlickrData', () => {
 
 	describe('Photo Size Options', () => {
 		it('should support multiple size formats in response', async () => {
+
 			vi.mocked(global.fetch).mockResolvedValueOnce({
 				ok: true,
 				json: () => Promise.resolve({
@@ -238,7 +272,13 @@ describe('flickr - GetFlickrData', () => {
 								id: '1',
 								datetaken: '2024-01-01T10:00:00',
 								url_z: 'https://example.com/640.jpg',
-								url_b: 'https://example.com/1024.jpg'
+								url_b: 'https://example.com/1024.jpg',
+								server: '1',
+								secret: 'a',
+								farm: 1,
+								title: 'Photo 1',
+								description: { _content: 'desc1' },
+								ownername: 'owner1'
 							}
 						]
 					},
@@ -247,6 +287,7 @@ describe('flickr - GetFlickrData', () => {
 			} as any);
 
 			const result = await GetFlickrData({});
+			// The implementation does not modify or remove url_z/url_b, so this should be defined
 			expect(result?.[0]?.url_z || result?.[0]?.url_b).toBeDefined();
 		});
 	});

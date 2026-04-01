@@ -2,6 +2,7 @@
 // This entry requires optional dependencies: recharts
 // Sites using admin client components should import from 'pixelated-components/adminclient'
 
+export * from './components/admin/site-health/google.api.integration';
 export * from './components/admin/site-health/site-health-accessibility';
 export * from './components/admin/site-health/site-health-axe-core';
 export * from './components/admin/site-health/site-health-cloudwatch';

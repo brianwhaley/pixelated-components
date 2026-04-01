@@ -127,8 +127,8 @@ export interface GoogleAnalyticsResponse {
 	error?: string;
 }
 
-// Cache for analytics data (1 hour) — isolated per domain
-const analyticsCache = new CacheManager({ domain: getDomain(), namespace: 'analytics', ttl: 60 * 60 * 1000 });
+// Cache for analytics data (1 day, localStorage) — isolated per domain
+const analyticsCache = new CacheManager({ domain: getDomain(), namespace: 'analytics', ttl: 1000 * 60 * 60 * 24, mode: 'local' });
 
 /**
  * Get Google Analytics data for a site with current/previous period comparison
@@ -266,8 +266,8 @@ export interface SearchConsoleResponse {
   details?: string;
 }
 
-// Cache for search console data (1 hour) — isolated per domain
-const searchConsoleCache = new CacheManager({ domain: getDomain(), namespace: 'searchconsole', ttl: 60 * 60 * 1000 });
+// Cache for search console data (1 day, localStorage) — isolated per domain
+const searchConsoleCache = new CacheManager({ domain: getDomain(), namespace: 'searchconsole', ttl: 1000 * 60 * 60 * 24, mode: 'local' });
 
 /**
  * Get Google Search Console data for a site with current/previous period comparison
