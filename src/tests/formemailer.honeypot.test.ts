@@ -217,6 +217,32 @@ describe('formemailer honeypot guard', () => {
       await emailFormData(event, cb as any);
       expect(cb).toHaveBeenCalled();
     });
+
+    it('should call callback on sendmail 502 response and not throw', async () => {
+      // Make fetch return a 502 error JSON body
+      vi.stubGlobal('fetch', vi.fn(() => Promise.resolve({
+        ok: false,
+        status: 502,
+        statusText: 'Bad Gateway',
+        text: () => Promise.resolve('{"message":"Internal server error"}')
+      } as any)));
+
+      const form = document.createElement('form');
+      form.id = 'form-502';
+      const emailInput = document.createElement('input');
+      emailInput.type = 'email';
+      emailInput.name = 'email';
+      emailInput.value = 'user@example.com';
+      form.appendChild(emailInput);
+      document.body.appendChild(form);
+
+      const cb = vi.fn();
+      const event = { target: form, preventDefault: () => {} } as unknown as Event;
+
+      await expect(emailFormData(event, cb as any)).resolves.not.toThrow();
+      expect(cb).toHaveBeenCalled();
+      expect(global.fetch).toHaveBeenCalled();
+    });
   });
 
   describe('JSON Payload Validation', () => {

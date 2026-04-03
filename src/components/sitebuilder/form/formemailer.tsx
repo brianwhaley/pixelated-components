@@ -40,25 +40,46 @@ export async function emailFormData(e: Event, callback: (e: Event) => void) {
 		return;
 	}
 
-	myFormData.Date = new Date().toLocaleDateString() ;
+	myFormData.Date = new Date().toISOString();
 	myFormData.Status = "Submitted" ;
-	await fetch(sendmail_api, {
-		method: 'POST',
-		mode: 'cors', 
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(myFormData),
-	})
-		.then((response) => {
-			if (response.status !== 200) {
-				throw new Error(response.statusText);
-			}
-			return response.json();
+	const startTime = new Date().toISOString();
+	if (debug) console.info('[emailFormData] submit-start', { sendmail_api, startTime, myFormData });
+	try {
+		const response = await fetch(sendmail_api, {
+			method: 'POST',
+			mode: 'cors', 
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(myFormData),
 		});
-	if (debug) console.debug('emailFormData — submission data:', myFormData);
-	callback(e);
+		const responseText = await response.text();
+		const requestId = response.headers.get('x-amzn-requestid') || response.headers.get('x-amz-requestid');
+		const elapsedMs = new Date().getTime() - new Date(startTime).getTime();
+		if (debug) console.info('[emailFormData] submit-finish', { sendmail_api, status: response.status, statusText: response.statusText, requestId, elapsedMs, responseText });
+		if (!response.ok) {
+			console.error('emailFormData sendmail failed', {
+				url: sendmail_api,
+				status: response.status,
+				statusText: response.statusText,
+				body: responseText,
+			});
+			throw new Error(`sendmail failed ${response.status} ${response.statusText} ${responseText}`);
+		}
+		let parsed;
+		try {
+			parsed = responseText ? JSON.parse(responseText) : null;
+		} catch (parseErr) {
+			if (debug) console.warn('emailFormData response JSON parse failed', parseErr, responseText);
+			parsed = null;
+		}
+		if (debug) console.debug('emailFormData — submission data:', myFormData, 'response:', parsed);
+		callback(e);
+	} catch (err) {
+		console.error('emailFormData error', err);
+		callback(e);
+	}
 }
 
 

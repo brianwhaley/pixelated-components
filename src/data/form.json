@@ -1,6 +1,46 @@
 {
 	"fields" : [
-		{
+        {
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "from",
+				"name" : "from",
+				"value" : "contactus@pixelvivid.com"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "to",
+				"name" : "to",
+				"value" : "contactus@pixelvivid.com"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "subject",
+				"name" : "subject",
+				"value" : "PixelVivid Custom Request Submit"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "domain",
+				"name" : "domain",
+				"value" : "pixelvivid.com"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "formName",
+				"name" : "formName",
+				"value" : "custom-request"
+			}
+		},{
 			"component" : "FormSelect",
 			"props" : {
 				"id" : "title",

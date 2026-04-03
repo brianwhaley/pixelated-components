@@ -160,7 +160,7 @@ export function SmartImage(props: SmartImageType) {
 	newProps.fetchPriority = props.aboveFold ? 'high' : 'auto';
 	newProps.loading = props.aboveFold ? 'eager' : 'lazy';
 	newProps.decoding = props.aboveFold ? 'sync' : 'async';
-	newProps.preload = props.aboveFold ? true : props.preload || false;
+	newProps.preload = props.aboveFold ? true : undefined;
 	newProps.src = safeString(props.src) ?? (props.src as any) ?? undefined;
 	newProps.id = safeString(props.id);
 	newProps.name = safeString(props.name);

@@ -100,6 +100,11 @@ function getSegmentName(routes: Route[], path: string, segment: string): string 
 		.join(' ');
 }
 
+
+/* ========================================
+	BREADCRUMB SCHEMA COMPONENTS
+======================================== */
+
 /**
  * BreadcrumbListSchema — auto-generates a breadcrumb list as JSON-LD from routes.json data.
  * Parses the current path, builds breadcrumb trail by matching path segments to routes array,

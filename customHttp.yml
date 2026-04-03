@@ -1,0 +1,26 @@
+customHeaders:
+
+  # 1. Next.js Internal Assets (Always Hashed - 1 Year)
+  - pattern: "/_next/static/**/*"
+    headers: &static_headers
+      - key: "Cache-Control"
+        value: "public, max-age=31536000, s-maxage=31536000, immutable"
+
+  # 2. Public & Image Assets (1 Week - Safe to update)
+  - pattern: "/_next/image/**/*"
+    headers: &public_headers
+      - key: "Cache-Control"
+        value: "public, max-age=604800, s-maxage=31536000, stale-while-revalidate=86400"
+
+  - pattern: "/images/**/*"
+    headers: *public_headers
+
+  - pattern: "/fonts/**/*"
+    headers: *public_headers
+
+  - pattern: "/videos/**/*"
+    headers: *public_headers
+
+  # 3. Everything else (HTML, Pages, etc.)
+  - pattern: "**/*"
+    headers: *public_headers

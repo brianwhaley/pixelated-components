@@ -502,49 +502,6 @@ export function PageHeader({
 }
 
 
-// ========== PAGE HERO ==========
-/**
- * PageHero — Generic hero wrapper used within page layouts.
- *
- * @param {string} [props.id] - Optional id for the hero section.
- * @param {string} [props.className] - Additional CSS classes for the hero.
- * @param {string} [props.background] - Background color or CSS value.
- * @param {string} [props.backgroundImage] - Background image URL to render behind content.
- * @param {node} [props.children] - Content to display inside the hero.
- */
-PageHero.propTypes = {
-/** Optional id for hero */
-	id: PropTypes.string,
-	/** Optional CSS classes */
-	className: PropTypes.string,
-	/** Background color or CSS string */
-	background: PropTypes.string,
-	/** Background image URL */
-	backgroundImage: PropTypes.string,
-	/** Child nodes */
-	children: PropTypes.node,
-};
-export type PageHeroType = InferProps<typeof PageHero.propTypes>;
-export function PageHero({
-	id,
-	className,
-	background,
-	backgroundImage,
-	children,
-}: PageHeroType) {
-	const wrapperStyle: React.CSSProperties = {
-		...(background && { background }),
-	};
-	return (
-		<section id={id || undefined} className={`page-hero${className ? ` ${className}` : ""}`} style={wrapperStyle}>
-			{backgroundImage && <PageSectionBackgroundImage backgroundImage={backgroundImage} id={id} />}
-			<div className="page-hero-content">
-				{children}
-			</div>
-		</section>
-	);
-}
-
 
 // ========== PAGE MAIN ==========
 /**
