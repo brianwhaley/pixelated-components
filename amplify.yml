@@ -15,7 +15,8 @@ frontend:
         - echo "Building Next.js app"
         - node -v
         - npm run build --legacy-peer-deps
-        - npm run buildStorybook --legacy-peer-deps
+        - echo "Building Storybook with extra memory to avoid CI OOM"
+        - NODE_OPTIONS=--max-old-space-size=8192 npm run buildStorybook --legacy-peer-deps
     postBuild:
       commands:
         - echo "Calling Config Vault postbuild"
