@@ -1,7 +1,19 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import * as spotifyModule from '../components/integrations/spotify.functions';
 import { getSpotifySeries, getSpotifyEpisodes, type SpotifyPodcastSeriesType, type SpotifyPodcastEpisodeType } from '../components/integrations/spotify.functions';
 
+// Mock smartFetch module
+vi.mock('../components/general/smartfetch', () => ({
+	smartFetch: vi.fn(),
+}));
+
+import { smartFetch } from '../components/general/smartfetch';
+
 describe('Spotify Functions', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
 	describe('getSpotifySeries', () => {
 		it('should fetch podcast series from RSS feed', async () => {
 			const mockRSSData = `<?xml version="1.0" encoding="UTF-8"?>
@@ -14,11 +26,7 @@ describe('Spotify Functions', () => {
   </channel>
 </rss>`;
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(mockRSSData)
-				} as Response)
-			);
+			vi.mocked(smartFetch).mockResolvedValue(mockRSSData);
 
 			const series = await getSpotifySeries({ rssURL: 'https://example.com/rss' });
 			expect(series).toBeDefined();
@@ -26,9 +34,7 @@ describe('Spotify Functions', () => {
 		});
 
 		it('should handle network errors gracefully', async () => {
-			global.fetch = vi.fn(() =>
-				Promise.reject(new Error('Network error'))
-			);
+			vi.mocked(smartFetch).mockRejectedValue(new Error('Network error'));
 
 			const result = await getSpotifySeries({ rssURL: 'https://example.com/rss' });
 			expect(result).toBeUndefined();
@@ -46,11 +52,7 @@ describe('Spotify Functions', () => {
   </channel>
 </rss>`;
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(mockRSSData)
-				} as Response)
-			);
+			vi.mocked(smartFetch).mockResolvedValue(mockRSSData);
 
 			const series = await getSpotifySeries({ rssURL: 'https://example.com/rss' });
 			expect(series?.description).toBe('Description here');
@@ -58,11 +60,7 @@ describe('Spotify Functions', () => {
 		});
 
 		it('should handle malformed RSS gracefully', async () => {
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve('<invalid>')
-				} as Response)
-			);
+			vi.mocked(smartFetch).mockResolvedValue('<invalid>');
 
 			const series = await getSpotifySeries({ rssURL: 'https://example.com/rss' });
 			expect(series).toBeDefined();
@@ -73,11 +71,7 @@ describe('Spotify Functions', () => {
 <rss>
 </rss>`;
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(mockRSSData)
-				} as Response)
-			);
+			vi.mocked(smartFetch).mockResolvedValue(mockRSSData);
 
 			const series = await getSpotifySeries({ rssURL: 'https://example.com/rss' });
 			expect(series).toEqual({});
@@ -104,11 +98,7 @@ describe('Spotify Functions', () => {
   </channel>
 </rss>`;
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(mockRSSData)
-				} as Response)
-			);
+			vi.mocked(smartFetch).mockResolvedValue(mockRSSData);
 
 			const episodes = await getSpotifyEpisodes({ rssURL: 'https://example.com/rss' });
 			expect(Array.isArray(episodes)).toBe(true);
@@ -130,11 +120,7 @@ describe('Spotify Functions', () => {
   </channel>
 </rss>`;
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(mockRSSData)
-				} as Response)
-			);
+			vi.mocked(smartFetch).mockResolvedValue(mockRSSData);
 
 			const episodes = await getSpotifyEpisodes({ rssURL: 'https://example.com/rss' });
 			expect(episodes?.[0].title).toBe('Episode 2');
@@ -152,11 +138,7 @@ describe('Spotify Functions', () => {
   </channel>
 </rss>`;
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(mockRSSData)
-				} as Response)
-			);
+			vi.mocked(smartFetch).mockResolvedValue(mockRSSData);
 
 			const episodes = await getSpotifyEpisodes({ rssURL: 'https://example.com/rss' });
 			expect(episodes?.[0].enclosure.url).toBe('https://example.com/audio.mp3');
@@ -165,9 +147,7 @@ describe('Spotify Functions', () => {
 		});
 
 		it('should handle network errors gracefully', async () => {
-			global.fetch = vi.fn(() =>
-				Promise.reject(new Error('Network error'))
-			);
+			vi.mocked(smartFetch).mockRejectedValue(new Error('Network error'));
 
 			const result = await getSpotifyEpisodes({ rssURL: 'https://example.com/rss' });
 			expect(result).toBeUndefined();
@@ -180,11 +160,7 @@ describe('Spotify Functions', () => {
   </channel>
 </rss>`;
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(mockRSSData)
-				} as Response)
-			);
+			vi.mocked(smartFetch).mockResolvedValue(mockRSSData);
 
 			const episodes = await getSpotifyEpisodes({ rssURL: 'https://example.com/rss' });
 		expect(episodes).toBeUndefined();
@@ -207,11 +183,7 @@ describe('Spotify Functions', () => {
   </channel>
 </rss>`;
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(mockRSSData)
-				} as Response)
-			);
+			vi.mocked(smartFetch).mockResolvedValue(mockRSSData);
 
 			const episodes = await getSpotifyEpisodes({ rssURL: 'https://example.com/rss' });
 			expect(episodes?.[0].title).toBe('Test Episode');

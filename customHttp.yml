@@ -10,7 +10,7 @@ customHeaders:
   - pattern: "/_next/image/**/*"
     headers: &public_headers
       - key: "Cache-Control"
-        value: "public, max-age=604800, s-maxage=31536000, stale-while-revalidate=86400"
+        value: "public, max-age=259200, s-maxage=31536000, stale-while-revalidate=604800"
 
   - pattern: "/images/**/*"
     headers: *public_headers
@@ -23,4 +23,6 @@ customHeaders:
 
   # 3. Everything else (HTML, Pages, etc.)
   - pattern: "**/*"
-    headers: *public_headers
+    headers: &page_headers
+      - key: "Cache-Control"
+        value: "public, max-age=604800, s-maxage=31536000, stale-while-revalidate=86400"

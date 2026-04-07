@@ -8,6 +8,7 @@ import { getEbayAppToken, getEbayItemsSearch } from "../shoppingcart/ebay.functi
 import { getFullPixelatedConfig } from '../config/config';
 import { CacheManager } from '../general/cache-manager';
 import { getDomain } from './utilities';
+import { smartFetch } from './smartfetch';
 
 
 export type SitemapEntry = MetadataRoute.Sitemap[number];
@@ -217,9 +218,7 @@ export async function createImageURLsFromJSON(origin: string, jsonPath = 'public
 		let urlPath = jsonPath;
 		if (urlPath.startsWith('public/')) urlPath = urlPath.slice('public/'.length);
 		if (!urlPath.startsWith('/')) urlPath = `/${urlPath}`;
-		const resp = await fetch(`${origin}${urlPath}`);
-		if (!resp.ok) return sitemap;
-		const json = await resp.json();
+		const json = await smartFetch(`${origin}${urlPath}`);
 		let imgs: string[] = [];
 		if (Array.isArray(json)) {
 			imgs = json;
@@ -543,8 +542,4 @@ async function fetchCachedEbayItems(apiProps: any, cacheTTL: number) {
 export function clearEbaySitemapCache() {
 	ebaySitemapCache.clear();
 }
-
-
-
-
 

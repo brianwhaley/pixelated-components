@@ -6,6 +6,9 @@ import { RouteType, SiteInfoType } from '../sitebuilder/config/ConfigBuilder';
 const debug = false;
 
 
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
+
 export interface GeminiRecommendationRequest {
   route: RouteType;
   siteInfo: SiteInfoType;
@@ -43,21 +46,15 @@ export class GeminiApiService {
 	async generateRouteRecommendations(request: GeminiRecommendationRequest): Promise<GeminiApiResponse> {
 		try {
 			// Use the proxy API route instead of direct Google API call
-			const response = await fetch('/api/ai/recommendations', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(request)
+			const data = await smartFetch('/api/ai/recommendations', {
+				requestInit: {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(request)
+				}
 			});
-
-			if (!response.ok) {
-				const errorText = await response.text();
-				console.error('AI API Error Response:', errorText);
-				throw new Error(`AI API error: ${response.status} ${response.statusText}`);
-			}
-
-			const data = await response.json();
 
 			if (!data.success) {
 				throw new Error(data.error || 'AI API request failed');
@@ -82,18 +79,20 @@ export class GeminiApiService {
    */
 	async listModels(): Promise<any> {
 		try {
-			const response = await fetch(`${this.baseUrl}/v1/models?key=${this.apiKey}`, {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-				},
+			const url = buildUrl({
+				baseUrl: this.baseUrl,
+				pathSegments: ['v1', 'models'],
+				params: { key: this.apiKey },
+			});
+			const data = await smartFetch(url, {
+				requestInit: {
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
 			});
 
-			if (!response.ok) {
-				throw new Error(`Failed to list models: ${response.status} ${response.statusText}`);
-			}
-
-			const data = await response.json();
 			if (debug) console.log('Available models:', data);
 			return data; 
 		} catch (error) {

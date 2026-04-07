@@ -5,6 +5,8 @@
  */
 
 import type { ContentfulConfig } from '../config/config.types';
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
 
 export interface ContentfulEntry {
 	sys: {
@@ -50,24 +52,23 @@ export async function listEntries(
 	contentType: string,
 	config: ContentfulConfig
 ): Promise<ListEntriesResponse> {
-	const { space_id, delivery_access_token, environment = 'master' } = config;
+	const { space_id, management_access_token, environment = 'master' } = config;
 	
 	try {
-		const response = await fetch(
-			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries?content_type=${contentType}`,
-			{
+		const url = buildUrl({
+			baseUrl: 'https://api.contentful.com',
+			pathSegments: ['spaces', space_id, 'environments', environment, 'entries'],
+			params: { content_type: contentType }
+		});
+		const data = await smartFetch(url, {
+			requestInit: {
 				headers: {
-					'Authorization': `Bearer ${delivery_access_token}`,
+					'Authorization': `Bearer ${management_access_token}`,
 					'Content-Type': 'application/json',
 				},
 			}
-		);
+		});
 
-		if (!response.ok) {
-			throw new Error(`Contentful API error: ${response.status}`);
-		}
-
-		const data = await response.json();
 		const entries = data.items || [];
 
 		return {
@@ -90,36 +91,33 @@ export async function getEntryById(
 	entryId: string,
 	config: ContentfulConfig
 ): Promise<GetEntryResponse> {
-	const { space_id, delivery_access_token, environment = 'master' } = config;
+	const { space_id, management_access_token, environment = 'master' } = config;
 	
 	try {
-		const response = await fetch(
-			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${entryId}`,
-			{
+		const url = buildUrl({
+			baseUrl: 'https://api.contentful.com',
+			pathSegments: ['spaces', space_id, 'environments', environment, 'entries', entryId]
+		});
+		const entry = await smartFetch(url, {
+			requestInit: {
 				headers: {
-					'Authorization': `Bearer ${delivery_access_token}`,
+					'Authorization': `Bearer ${management_access_token}`,
 					'Content-Type': 'application/json',
 				},
 			}
-		);
-
-		if (!response.ok) {
-			if (response.status === 404) {
-				return {
-					success: false,
-					message: 'Entry not found.',
-				};
-			}
-			throw new Error(`Contentful API error: ${response.status}`);
-		}
-
-		const entry = await response.json();
+		});
 
 		return {
 			success: true,
 			entry,
 		};
-	} catch (error) {
+	} catch (error: any) {
+		if (error.status === 404) {
+			return {
+				success: false,
+				message: 'Entry not found.',
+			};
+		}
 		return {
 			success: false,
 			message: `Failed to get entry: ${error}`,
@@ -136,29 +134,28 @@ export async function searchEntriesByField(
 	fieldValue: string,
 	config: ContentfulConfig
 ): Promise<ListEntriesResponse> {
-	const { space_id, delivery_access_token, environment = 'master' } = config;
+	const { space_id, management_access_token, environment = 'master' } = config;
 	
 	try {
-		const response = await fetch(
-			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries?content_type=${contentType}&fields.${fieldName}=${encodeURIComponent(fieldValue)}`,
-			{
+		const url = buildUrl({
+			baseUrl: 'https://api.contentful.com',
+			pathSegments: ['spaces', space_id, 'environments', environment, 'entries'],
+			params: { content_type: contentType, [`fields.${fieldName}`]: fieldValue }
+		});
+		const entries = await smartFetch(url, {
+			requestInit: {
 				headers: {
-					'Authorization': `Bearer ${delivery_access_token}`,
+					'Authorization': `Bearer ${management_access_token}`,
 					'Content-Type': 'application/json',
 				},
 			}
-		);
+		});
 
-		if (!response.ok) {
-			throw new Error(`Contentful API error: ${response.status}`);
-		}
-
-		const data = await response.json();
-		const entries = data.items || [];
+		const items = entries.items || [];
 
 		return {
 			success: true,
-			entries,
+			entries: items,
 		};
 	} catch (error) {
 		return {
@@ -178,7 +175,7 @@ export async function createEntry(
 	config: ContentfulConfig,
 	autoPublish: boolean = true
 ): Promise<SaveEntryResponse> {
-	const { space_id, delivery_access_token, environment = 'master' } = config;
+	const { space_id, management_access_token, environment = 'master' } = config;
 	
 	try {
 		// Convert fields to Contentful format (with 'en-US' locale)
@@ -187,12 +184,15 @@ export async function createEntry(
 			contentfulFields[key] = { 'en-US': value };
 		}
 
-		const createResponse = await fetch(
-			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries`,
-			{
+		const url = buildUrl({
+			baseUrl: 'https://api.contentful.com',
+			pathSegments: ['spaces', space_id, 'environments', environment, 'entries']
+		});
+		const data = await smartFetch(url, {
+			requestInit: {
 				method: 'POST',
 				headers: {
-					'Authorization': `Bearer ${delivery_access_token}`,
+					'Authorization': `Bearer ${management_access_token}`,
 					'Content-Type': 'application/vnd.contentful.management.v1+json',
 					'X-Contentful-Content-Type': contentType,
 				},
@@ -200,25 +200,24 @@ export async function createEntry(
 					fields: contentfulFields,
 				}),
 			}
-		);
-
-		if (!createResponse.ok) {
-			const error = await createResponse.json();
-			throw new Error(`Create failed: ${JSON.stringify(error)}`);
-		}
-
-		const newEntry = await createResponse.json();
+		});
 
 		// Publish if requested
 		if (autoPublish) {
-			await fetch(
-				`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${newEntry.sys.id}/published`,
+			const publishUrl = buildUrl({
+				baseUrl: 'https://api.contentful.com',
+				pathSegments: ['spaces', space_id, 'environments', environment, 'entries', data.sys.id, 'published']
+			});
+			await smartFetch(
+				publishUrl,
 				{
-					method: 'PUT',
-					headers: {
-						'Authorization': `Bearer ${delivery_access_token}`,
-						'X-Contentful-Version': newEntry.sys.version.toString(),
-					},
+					requestInit: {
+						method: 'PUT',
+						headers: {
+							'Authorization': `Bearer ${management_access_token}`,
+							'X-Contentful-Version': data.sys.version.toString(),
+						},
+					}
 				}
 			);
 		}
@@ -226,7 +225,7 @@ export async function createEntry(
 		return {
 			success: true,
 			message: 'Entry created successfully.',
-			entryId: newEntry.sys.id,
+			entryId: data.sys.id,
 		};
 	} catch (error) {
 		return {
@@ -245,7 +244,7 @@ export async function updateEntry(
 	config: ContentfulConfig,
 	autoPublish: boolean = true
 ): Promise<SaveEntryResponse> {
-	const { space_id, delivery_access_token, environment = 'master' } = config;
+	const { space_id, management_access_token, environment = 'master' } = config;
 	
 	try {
 		// Get current entry to get version
@@ -265,38 +264,41 @@ export async function updateEntry(
 			contentfulFields[key] = { 'en-US': value };
 		}
 
-		const updateResponse = await fetch(
-			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${entryId}`,
+		const updatedEntry = await smartFetch(
+			buildUrl({
+				baseUrl: 'https://api.contentful.com',
+				pathSegments: ['spaces', space_id, 'environments', environment, 'entries', entryId],
+			}),
 			{
-				method: 'PUT',
-				headers: {
-					'Authorization': `Bearer ${delivery_access_token}`,
-					'Content-Type': 'application/vnd.contentful.management.v1+json',
-					'X-Contentful-Version': currentEntry.sys.version.toString(),
-				},
-				body: JSON.stringify({
-					fields: contentfulFields,
-				}),
+				requestInit: {
+					method: 'PUT',
+					headers: {
+						'Authorization': `Bearer ${management_access_token}`,
+						'Content-Type': 'application/vnd.contentful.management.v1+json',
+						'X-Contentful-Version': currentEntry.sys.version.toString(),
+					},
+					body: JSON.stringify({
+						fields: contentfulFields,
+					}),
+				}
 			}
 		);
 
-		if (!updateResponse.ok) {
-			const error = await updateResponse.json();
-			throw new Error(`Update failed: ${JSON.stringify(error)}`);
-		}
-
-		const updatedEntry = await updateResponse.json();
-
 		// Publish if requested
 		if (autoPublish) {
-			await fetch(
-				`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${entryId}/published`,
+			await smartFetch(
+				buildUrl({
+					baseUrl: 'https://api.contentful.com',
+					pathSegments: ['spaces', space_id, 'environments', environment, 'entries', entryId, 'published'],
+				}),
 				{
-					method: 'PUT',
-					headers: {
-						'Authorization': `Bearer ${delivery_access_token}`,
-						'X-Contentful-Version': updatedEntry.sys.version.toString(),
-					},
+					requestInit: {
+						method: 'PUT',
+						headers: {
+							'Authorization': `Bearer ${management_access_token}`,
+							'X-Contentful-Version': updatedEntry.sys.version.toString(),
+						},
+					}
 				}
 			);
 		}
@@ -321,7 +323,7 @@ export async function deleteEntry(
 	entryId: string,
 	config: ContentfulConfig
 ): Promise<DeleteEntryResponse> {
-	const { space_id, delivery_access_token, environment = 'master' } = config;
+	const { space_id, management_access_token, environment = 'master' } = config;
 	
 	try {
 		// Get current entry to get version
@@ -336,32 +338,38 @@ export async function deleteEntry(
 		const entry = getResponse.entry as ContentfulEntry;
 
 		// Unpublish first
-		await fetch(
-			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${entry.sys.id}/published`,
+		await smartFetch(
+			buildUrl({
+				baseUrl: 'https://api.contentful.com',
+				pathSegments: ['spaces', space_id, 'environments', environment, 'entries', entry.sys.id, 'published'],
+			}),
 			{
-				method: 'PUT',
-				headers: {
-					'Authorization': `Bearer ${delivery_access_token}`,
-					'X-Contentful-Version': entry.sys.version.toString(),
-				},
+				requestInit: {
+					method: 'PUT',
+					headers: {
+						'Authorization': `Bearer ${management_access_token}`,
+						'X-Contentful-Version': entry.sys.version.toString(),
+					},
+				}
 			}
 		);
 
 		// Delete the entry
-		const deleteResponse = await fetch(
-			`https://api.contentful.com/spaces/${space_id}/environments/${environment}/entries/${entryId}`,
+		await smartFetch(
+			buildUrl({
+				baseUrl: 'https://api.contentful.com',
+				pathSegments: ['spaces', space_id, 'environments', environment, 'entries', entryId],
+			}),
 			{
-				method: 'DELETE',
-				headers: {
-					'Authorization': `Bearer ${delivery_access_token}`,
-					'X-Contentful-Version': (entry.sys.version + 1).toString(),
-				},
+				requestInit: {
+					method: 'DELETE',
+					headers: {
+						'Authorization': `Bearer ${management_access_token}`,
+						'X-Contentful-Version': (entry.sys.version + 1).toString(),
+					},
+				}
 			}
 		);
-
-		if (!deleteResponse.ok) {
-			throw new Error(`Delete failed: ${deleteResponse.status}`);
-		}
 
 		return {
 			success: true,
@@ -410,20 +418,21 @@ export interface ContentType {
  */
 export async function validateContentfulCredentials(credentials: ContentfulCredentials): Promise<{ valid: boolean; error?: string }> {
 	try {
-		const response = await fetch(
-			`https://api.contentful.com/spaces/${credentials.spaceId}`,
+		await smartFetch(
+			buildUrl({
+				baseUrl: 'https://api.contentful.com',
+				pathSegments: ['spaces', credentials.spaceId],
+			}),
 			{
-				method: 'GET',
-				headers: {
-					'Authorization': `Bearer ${credentials.accessToken}`,
-					'Content-Type': 'application/vnd.contentful.management.v1+json',
-				},
+				requestInit: {
+					method: 'GET',
+					headers: {
+						'Authorization': `Bearer ${credentials.accessToken}`,
+						'Content-Type': 'application/vnd.contentful.management.v1+json',
+					},
+				}
 			}
 		);
-
-		if (!response.ok) {
-			return { valid: false, error: 'Failed to access space' };
-		}
 
 		return { valid: true };
 	} catch (error) {
@@ -438,53 +447,55 @@ export async function getContentTypes(credentials: ContentfulCredentials): Promi
 	const { spaceId, accessToken } = credentials;
 
 	// First get space info to find the default environment
-	const spaceResponse = await fetch(
-		`https://api.contentful.com/spaces/${spaceId}`,
+	await smartFetch(
+		buildUrl({
+			baseUrl: 'https://api.contentful.com',
+			pathSegments: ['spaces', spaceId],
+		}),
 		{
-			method: 'GET',
-			headers: {
-				'Authorization': `Bearer ${accessToken}`,
-				'Content-Type': 'application/vnd.contentful.management.v1+json',
-			},
+			requestInit: {
+				method: 'GET',
+				headers: {
+					'Authorization': `Bearer ${accessToken}`,
+					'Content-Type': 'application/vnd.contentful.management.v1+json',
+				},
+			}
 		}
 	);
 
-	if (!spaceResponse.ok) {
-		throw new Error('Failed to access space');
-	}
-
 	// Try different environment names - Contentful uses 'master' for older spaces, 'main' for newer ones
 	const environmentsToTry = ['master', 'main'];
-	let contentTypesResponse = null;
+	let contentTypesData = null;
 	let lastError = null;
 
 	for (const env of environmentsToTry) {
 		try {
-			const response = await fetch(
-				`https://api.contentful.com/spaces/${spaceId}/environments/${env}/content_types`,
+			const data = await smartFetch(
+				buildUrl({
+					baseUrl: 'https://api.contentful.com',
+					pathSegments: ['spaces', spaceId, 'environments', env, 'content_types'],
+				}),
 				{
-					method: 'GET',
-					headers: {
-						'Authorization': `Bearer ${accessToken}`,
-						'Content-Type': 'application/vnd.contentful.management.v1+json',
-					},
+					requestInit: {
+						method: 'GET',
+						headers: {
+							'Authorization': `Bearer ${accessToken}`,
+							'Content-Type': 'application/vnd.contentful.management.v1+json',
+						},
+					}
 				}
 			);
-
-			if (response.ok) {
-				contentTypesResponse = response;
-				break;
-			}
+			contentTypesData = data;
+			break;
 		} catch (error) {
 			lastError = error;
 		}
 	}
 
-	if (!contentTypesResponse) {
+	if (!contentTypesData) {
 		throw new Error(`Failed to fetch content types: ${lastError}`);
 	}
 
-	const contentTypesData = await contentTypesResponse.json();
 	return contentTypesData.items || [];
 }
 
@@ -499,42 +510,41 @@ export async function migrateContentType(
 	try {
 		// Get content type from source
 		const sourceEnv = sourceCredentials.environment || 'master';
-		const sourceResponse = await fetch(
-			`https://api.contentful.com/spaces/${sourceCredentials.spaceId}/environments/${sourceEnv}/content_types/${contentTypeId}`,
+		const contentType = await smartFetch(
+			buildUrl({
+				baseUrl: 'https://api.contentful.com',
+				pathSegments: ['spaces', sourceCredentials.spaceId, 'environments', sourceEnv, 'content_types', contentTypeId],
+			}),
 			{
-				method: 'GET',
-				headers: {
-					'Authorization': `Bearer ${sourceCredentials.accessToken}`,
-					'Content-Type': 'application/vnd.contentful.management.v1+json',
-				},
+				requestInit: {
+					method: 'GET',
+					headers: {
+						'Authorization': `Bearer ${sourceCredentials.accessToken}`,
+						'Content-Type': 'application/vnd.contentful.management.v1+json',
+					},
+				}
 			}
 		);
-
-		if (!sourceResponse.ok) {
-			throw new Error('Failed to fetch content type from source');
-		}
-
-		const contentType = await sourceResponse.json();
 
 		// Create content type in destination
 		const destEnv = destCredentials.environment || 'master';
-		const createResponse = await fetch(
-			`https://api.contentful.com/spaces/${destCredentials.spaceId}/environments/${destEnv}/content_types`,
+		await smartFetch(
+			buildUrl({
+				baseUrl: 'https://api.contentful.com',
+				pathSegments: ['spaces', destCredentials.spaceId, 'environments', destEnv, 'content_types'],
+			}),
 			{
-				method: 'POST',
-				headers: {
-					'Authorization': `Bearer ${destCredentials.accessToken}`,
-					'Content-Type': 'application/vnd.contentful.management.v1+json',
-					'X-Contentful-Version': '1',
-				},
-				body: JSON.stringify(contentType),
+				requestInit: {
+					method: 'POST',
+					headers: {
+						'Authorization': `Bearer ${destCredentials.accessToken}`,
+						'Content-Type': 'application/vnd.contentful.management.v1+json',
+						'X-Contentful-Version': '1',
+					},
+					body: JSON.stringify(contentType),
+				}
 			}
 		);
-
-		if (!createResponse.ok) {
-			const errorData = await createResponse.json();
-			throw new Error(`Failed to create content type: ${errorData.message}`);
-		}
 
 		return { success: true };
 	} catch (error) {

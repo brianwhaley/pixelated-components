@@ -18,6 +18,8 @@ export * from './components/general/resume';
 export * from './components/general/schema.functions';
 export * from './components/general/sitemap';
 export * from './components/general/skeleton';
+export * from './components/general/smartfetch';
+export * from './components/general/urlbuilder';
 export * from './components/general/well-known';
 export * from './components/general/utilities';
 
@@ -41,7 +43,7 @@ export * from './components/sitebuilder/config/fonts';
 export * from './components/sitebuilder/config/google-fonts';
 
 export * from './components/sitebuilder/form/formtypes';
-export * from './components/sitebuilder/form/formutils';
+export * from './components/sitebuilder/form/formengineutilities';
 
 export * from './components/sitebuilder/page/lib/componentGeneration';
 export * from './components/sitebuilder/page/lib/componentMap';

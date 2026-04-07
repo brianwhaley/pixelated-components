@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import type { PageData } from '../lib/types';
+import { smartFetch } from '../../../general/smartfetch';
+import { buildUrl } from '../../../general/urlbuilder';
 
 /**
  * SaveLoadSection — UI for saving and loading page JSON to/from the configured API endpoint.
@@ -34,8 +36,7 @@ export function SaveLoadSection({ pageData, onLoad, apiEndpoint = '/api/pagebuil
 
 	async function fetchPages() {
 		try {
-			const response = await fetch(`${apiEndpoint}/list`);
-			const result = await response.json();
+			const result = await smartFetch(`${apiEndpoint}/list`);
 			if (result.success) {
 				setSavedPages(result.pages);
 			}
@@ -54,13 +55,13 @@ export function SaveLoadSection({ pageData, onLoad, apiEndpoint = '/api/pagebuil
 		setMessage('');
 
 		try {
-			const response = await fetch(`${apiEndpoint}/save`, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name: pageName, data: pageData })
+			const result = await smartFetch(`${apiEndpoint}/save`, {
+				requestInit: {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ name: pageName, data: pageData })
+				}
 			});
-
-			const result = await response.json();
 			
 			if (result.success) {
 				setMessage(`✓ ${result.message}`);
@@ -81,8 +82,12 @@ export function SaveLoadSection({ pageData, onLoad, apiEndpoint = '/api/pagebuil
 		setMessage('');
 
 		try {
-			const response = await fetch(`${apiEndpoint}/load?name=${encodeURIComponent(name)}`);
-			const result = await response.json();
+			const loadUrl = buildUrl({
+				baseUrl: apiEndpoint || '/api/pagebuilder',
+				pathSegments: ['load'],
+				params: { name }
+			});
+			const result = await smartFetch(loadUrl);
 			
 			if (result.success && result.data) {
 				onLoad(result.data as PageData);
@@ -109,11 +114,16 @@ export function SaveLoadSection({ pageData, onLoad, apiEndpoint = '/api/pagebuil
 		setMessage('');
 
 		try {
-			const response = await fetch(`${apiEndpoint}/delete?name=${encodeURIComponent(name)}`, {
-				method: 'DELETE'
+			const deleteUrl = buildUrl({
+				baseUrl: apiEndpoint || '/api/pagebuilder',
+				pathSegments: ['delete'],
+				params: { name }
 			});
-
-			const result = await response.json();
+			const result = await smartFetch(deleteUrl, {
+				requestInit: {
+					method: 'DELETE'
+				}
+			});
 			
 			if (result.success) {
 				setMessage(`✓ ${result.message}`);

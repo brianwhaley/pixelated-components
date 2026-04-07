@@ -114,7 +114,9 @@ function Tile( props: TileType ) {
 	const imgClick = props.imgClick;
 	const captionText = (props.bodyText && props.bodyText.length > 0) ? props.bodyText : (props.imageAlt ?? "");
 	const tileBody = <div className={"tile-image" + (imgClick ? " clickable" : "")}>
-		<SmartImage src={props.image} title={props?.imageAlt ?? undefined} alt={props?.imageAlt ?? ""}
+		<SmartImage 
+			src={props.image} aboveFold={(props.index === 0) ? true : undefined} 
+			title={props?.imageAlt ?? undefined} alt={props?.imageAlt ?? ""}
 			onClick={imgClick ? (event) => imgClick(event, props.image) : undefined}
 			cloudinaryEnv={config?.cloudinary?.product_env ?? undefined} />
 		<div className="tile-image-overlay">

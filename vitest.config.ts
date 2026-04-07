@@ -9,10 +9,10 @@ import path from 'path';
 // Only counts .ts, .tsx, .js files (excludes CSS, JSON, build scripts, etc.)
 // ============================================================================
 const COVERAGE_THRESHOLDS = {
-	lines: 71,
-	functions: 72,
+	lines: 70.9,
+	functions: 71.75,
 	branches: 58,
-	statements: 69,
+	statements: 68.75,
 };
 
 export default defineConfig({

@@ -4,6 +4,8 @@ const debug = false;
 
 import { CoreWebVitalsData, PSIScores, PSICategory, PSIAudit } from './site-health-types';
 import { getFullPixelatedConfig } from '../../config/config';
+import { smartFetch } from '../../general/smartfetch';
+import { buildUrl } from '../../general/urlbuilder';
 
 
 /**
@@ -120,13 +122,21 @@ export async function performCoreWebVitalsAnalysis(
 }
 
 export async function fetchPSIData(url: string): Promise<any> {
-	// Require the API key from the unified pixelated.config.json. No environment fallback.
-	const apiKey = getFullPixelatedConfig()?.google?.api_key;
+	// Require the PSI API key from the unified pixelated.config.json. No environment fallback.
+	const apiKey = getFullPixelatedConfig()?.googlePSI?.api_key;
 	if (!apiKey) {
-		throw new Error('Google API key is not set; set google.api_key in pixelated.config.json');
+		throw new Error('Google PSI API key is not set; set googlePSI.api_key in pixelated.config.json');
 	}
 
-	const psiUrl = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(url)}&key=${apiKey}&strategy=mobile&category=performance&category=accessibility&category=best-practices&category=seo`;
+	const psiUrl = buildUrl({
+		baseUrl: 'https://www.googleapis.com/pagespeedonline/v5/runPagespeed',
+		params: {
+			url,
+			key: apiKey,
+			strategy: 'mobile',
+			category: 'performance,accessibility,best-practices,seo'
+		}
+	});
 
 	const fetchWithRetry = async (url: string, maxRetries = 2): Promise<Response> => {
 		for (let attempt = 0; attempt <= maxRetries; attempt++) {
@@ -136,10 +146,13 @@ export async function fetchPSIData(url: string): Promise<any> {
 				const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
 
 				const start = Date.now();
-				const response = await fetch(url, {
-					signal: controller.signal,
-					headers: {
-						'User-Agent': 'Mozilla/5.0 (compatible; SiteHealthMonitor/1.0)'
+				const response = await smartFetch(url, {
+					responseType: 'ok',
+					requestInit: {
+						signal: controller.signal,
+						headers: {
+							'User-Agent': 'Mozilla/5.0 (compatible; SiteHealthMonitor/1.0)'
+						}
 					}
 				});
 				const elapsed = Date.now() - start;

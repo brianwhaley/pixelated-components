@@ -1,7 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { generateAiRecommendations, GeminiRecommendationRequest, GeminiRecommendationResponse } from '../components/integrations/gemini-api.server';
 
-vi.stubGlobal('fetch', vi.fn());
+// Mock smartFetch
+vi.mock('../components/general/smartfetch', () => ({
+	smartFetch: vi.fn()
+}));
+
+import { smartFetch } from '../components/general/smartfetch';
 
 describe('Gemini API Server Integration', () => {
 	const mockSiteInfo = {
@@ -44,6 +49,7 @@ describe('Gemini API Server Integration', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		vi.mocked(smartFetch).mockClear();
 	});
 
 	describe('Function Export', () => {
@@ -52,7 +58,7 @@ describe('Gemini API Server Integration', () => {
 		});
 
 		it('should be async function', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
+			vi.mocked(smartFetch).mockResolvedValueOnce(
 				new Response(JSON.stringify({
 					candidates: [{
 						content: { parts: [{ text: '{"title": "Test Title"}' }] },
@@ -105,7 +111,7 @@ describe('Gemini API Server Integration', () => {
 
 	describe('API Request to Gemini', () => {
 		it('should call fetch with correct API endpoint', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
+			vi.mocked(smartFetch).mockResolvedValueOnce(
 				new Response(JSON.stringify({
 					candidates: [{
 						content: { parts: [{ text: '{"title": "Test"}' }] },
@@ -116,13 +122,13 @@ describe('Gemini API Server Integration', () => {
 
 			await generateAiRecommendations(mockGeminiRequest, 'test-key');
 
-			expect(fetch).toHaveBeenCalled();
-			const callArgs = (fetch as any).mock.calls[0][0];
+			expect(smartFetch).toHaveBeenCalled();
+			const callArgs = (smartFetch as any).mock.calls[0][0];
 			expect(callArgs).toContain('generativelanguage.googleapis.com');
 		});
 
 		it('should include API key in request', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
+			vi.mocked(smartFetch).mockResolvedValueOnce(
 				new Response(JSON.stringify({
 					candidates: [{
 						content: { parts: [{ text: '{"title": "Test"}' }] },
@@ -134,47 +140,43 @@ describe('Gemini API Server Integration', () => {
 			const apiKey = 'my-secret-key-12345';
 			await generateAiRecommendations(mockGeminiRequest, apiKey);
 
-			expect(fetch).toHaveBeenCalled();
-			const callArgs = (fetch as any).mock.calls[0][0];
+			expect(smartFetch).toHaveBeenCalled();
+			const callArgs = (smartFetch as any).mock.calls[0][0];
 			expect(callArgs).toContain(apiKey);
 		});
 
 		it('should use POST method', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: '{"title": "Test"}' }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: '{"title": "Test"}' }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			await generateAiRecommendations(mockGeminiRequest, 'test-key');
 
-			const options = (fetch as any).mock.calls[0][1];
-			expect(options.method).toBe('POST');
+			const options = (smartFetch as any).mock.calls[0][1];
+			expect(options.requestInit?.method).toBe('POST');
 		});
 
 		it('should send JSON content type', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: '{"title": "Test"}' }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: '{"title": "Test"}' }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			await generateAiRecommendations(mockGeminiRequest, 'test-key');
 
-			const options = (fetch as any).mock.calls[0][1];
-			expect(options.headers['Content-Type']).toBe('application/json');
+			const options = (smartFetch as any).mock.calls[0][1];
+			expect(options.requestInit?.headers?.['Content-Type']).toBe('application/json');
 		});
 	});
 
 	describe('Response Parsing', () => {
 		it('should return recommendation response object', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
+			vi.mocked(smartFetch).mockResolvedValueOnce(
 				new Response(JSON.stringify({
 					candidates: [{
 						content: { parts: [{ text: '{"title": "Test Title", "description": "Test desc", "keywords": ["test"]}' }] },
@@ -190,14 +192,12 @@ describe('Gemini API Server Integration', () => {
 
 		it('should parse title from response', async () => {
 			const expectedTitle = 'Best Gaming Laptop - RTX 4090';
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: `{"title": "${expectedTitle}"}` }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: `{"title": "${expectedTitle}"}` }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			const result = await generateAiRecommendations(mockGeminiRequest, 'test-key');
 			expect(result.title).toBe(expectedTitle);
@@ -205,14 +205,12 @@ describe('Gemini API Server Integration', () => {
 
 		it('should parse description from response', async () => {
 			const expectedDesc = 'Premium gaming laptop with cutting-edge graphics';
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: `{"description": "${expectedDesc}"}` }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: `{"description": "${expectedDesc}"}` }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			const result = await generateAiRecommendations(mockGeminiRequest, 'test-key');
 			expect(result.description).toBe(expectedDesc);
@@ -221,14 +219,12 @@ describe('Gemini API Server Integration', () => {
 		it('should parse keywords array from response', async () => {
 			const expectedKeywords = ['gaming laptop', 'RTX 4090', 'high-performance'];
 			const keywordJson = JSON.stringify(expectedKeywords);
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: `{"keywords": ${keywordJson}}` }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: `{"keywords": ${keywordJson}}` }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			const result = await generateAiRecommendations(mockGeminiRequest, 'test-key');
 			expect(Array.isArray(result.keywords)).toBe(true);
@@ -237,7 +233,7 @@ describe('Gemini API Server Integration', () => {
 
 	describe('Error Handling', () => {
 		it('should handle invalid API key', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(new Response('Unauthorized', { status: 401 }));
+			vi.mocked(smartFetch).mockResolvedValueOnce(new Response('Unauthorized', { status: 401 }));
 
 			const request: GeminiRecommendationRequest = {
 				route: { name: 'test', path: '/test', title: 'Test', description: '', keywords: [] },
@@ -249,7 +245,7 @@ describe('Gemini API Server Integration', () => {
 		});
 
 		it('should handle network failures', async () => {
-			vi.mocked(fetch).mockRejectedValueOnce(new Error('Network error'));
+			vi.mocked(smartFetch).mockRejectedValueOnce(new Error('Network error'));
 
 			const request: GeminiRecommendationRequest = {
 				route: { name: 'test', path: '/', title: '', description: '', keywords: [] },
@@ -265,13 +261,11 @@ describe('Gemini API Server Integration', () => {
 		});
 
 		it('should handle max tokens error', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						finishReason: 'MAX_TOKENS'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					finishReason: 'MAX_TOKENS'
+				}]
+			});
 
 			const request: GeminiRecommendationRequest = {
 				route: { name: 'test', path: '/', title: 'Test', description: '', keywords: [] },
@@ -286,9 +280,7 @@ describe('Gemini API Server Integration', () => {
 		});
 
 		it('should handle missing candidates in response', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({});
 
 			const request: GeminiRecommendationRequest = {
 				route: { name: 'test', path: '/', title: 'Test', description: '', keywords: [] },
@@ -305,14 +297,12 @@ describe('Gemini API Server Integration', () => {
 
 	describe('Optional Parameters', () => {
 		it('should support optional baseUrl parameter', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: '{"title": "Test"}' }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: '{"title": "Test"}' }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			const request: GeminiRecommendationRequest = {
 				route: mockGeminiRequest.route,
@@ -325,14 +315,12 @@ describe('Gemini API Server Integration', () => {
 		});
 
 		it('should work without baseUrl', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: '{"title": "Test"}' }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: '{"title": "Test"}' }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			const request: GeminiRecommendationRequest = {
 				route: mockGeminiRequest.route,
@@ -347,14 +335,12 @@ describe('Gemini API Server Integration', () => {
 	describe('Title Generation Quality', () => {
 		it('should generate SEO-optimized title', async () => {
 			const title = 'Best Gaming Laptop for Professionals - RTX 4090';
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: `{"title": "${title}"}` }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: `{"title": "${title}"}` }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			const result = await generateAiRecommendations(mockGeminiRequest, 'test-key');
 			expect(result.title).toBeDefined();
@@ -364,14 +350,12 @@ describe('Gemini API Server Integration', () => {
 
 		it('should include primary keywords in title', async () => {
 			const title = 'Gaming Laptop with RTX 4090 Graphics';
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: `{"title": "${title}"}` }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: `{"title": "${title}"}` }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			const result = await generateAiRecommendations(mockGeminiRequest, 'test-key');
 			expect(result.title?.toLowerCase()).toContain('gaming');
@@ -381,14 +365,12 @@ describe('Gemini API Server Integration', () => {
 	describe('Description Generation Quality', () => {
 		it('should generate proper length description', async () => {
 			const description = 'Discover our premium gaming laptop with cutting-edge RTX 4090 graphics. Perfect for competitive gaming and professional work.';
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: `{"description": "${description}"}` }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: `{"description": "${description}"}` }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			const result = await generateAiRecommendations(mockGeminiRequest, 'test-key');
 			expect(result.description).toBeDefined();
@@ -400,14 +382,12 @@ describe('Gemini API Server Integration', () => {
 		it('should generate multiple keywords', async () => {
 			const keywords = ['gaming laptop', 'RTX 4090', 'high-performance', 'professional gaming'];
 			const keywordJson = JSON.stringify(keywords);
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: `{"keywords": ${keywordJson}}` }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: `{"keywords": ${keywordJson}}` }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			const result = await generateAiRecommendations(mockGeminiRequest, 'test-key');
 			expect(result.keywords).toBeDefined();
@@ -418,14 +398,12 @@ describe('Gemini API Server Integration', () => {
 		it('should include long-tail keywords', async () => {
 			const keywords = ['gaming laptop', 'RTX 4090 laptop', 'high-performance gaming'];
 			const keywordJson = JSON.stringify(keywords);
-			vi.mocked(fetch).mockResolvedValueOnce(
-				new Response(JSON.stringify({
-					candidates: [{
-						content: { parts: [{ text: `{"keywords": ${keywordJson}}` }] },
-						finishReason: 'STOP'
-					}]
-				}))
-			);
+			vi.mocked(smartFetch).mockResolvedValueOnce({
+				candidates: [{
+					content: { parts: [{ text: `{"keywords": ${keywordJson}}` }] },
+					finishReason: 'STOP'
+				}]
+			});
 
 			const result = await generateAiRecommendations(mockGeminiRequest, 'test-key');
 			expect(result.keywords).toBeDefined();
@@ -434,7 +412,7 @@ describe('Gemini API Server Integration', () => {
 
 	describe('Response Format Compatibility', () => {
 		it('should return compatible response format', async () => {
-			vi.mocked(fetch).mockResolvedValueOnce(
+			vi.mocked(smartFetch).mockResolvedValueOnce(
 				new Response(JSON.stringify({
 					candidates: [{
 						content: { parts: [{ text: '{"title": "Test", "description": "Desc", "keywords": ["test"]}' }] },

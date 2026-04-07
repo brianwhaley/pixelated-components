@@ -1,4 +1,5 @@
 import PropTypes, { InferProps } from 'prop-types';
+import { smartFetch } from '../general/smartfetch';
 
 // https://www.outsystems.com/forge/component-documentation/12204/lorem-ipsum-lipsum-com-o11/0
 
@@ -24,25 +25,20 @@ export async function getLipsum(props: LipsumType): Promise<string[]> {
 	const baseURL = "https://www.lipsum.com/feed/html";
 	const qs = `?LipsumTypeId=${LipsumTypeId}&amount=${Amount}&StartWithLoremIpsum=${StartWithLoremIpsum}`;
 	const fulURL = `${proxyURL}${baseURL}${qs}`;
-	const res = await fetch(fulURL)
-		.then((response) => {
-			return response.text();
-		})
-		.then((html) => {
-			const parser = new DOMParser();
-			const doc = parser.parseFromString(html, 'text/html');
-			const lipsum = doc.getElementById('lipsum');
-			// const lipsums = doc.getElementById('lipsum')?.innerHTML || "";
-			const paragraphs = lipsum?.querySelectorAll('p');
-			const strings: string[] = [];
-			paragraphs?.forEach((p: any) => {
-				strings.push(p.textContent.trim());
-			});
-			return strings;
-		})
-		.catch(error => {
-			console.error('Failed to fetch page: ', error);
-			return [];
+	try {
+		const html = await smartFetch(fulURL, { responseType: 'text' });
+		
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(html, 'text/html');
+		const lipsum = doc.getElementById('lipsum');
+		const paragraphs = lipsum?.querySelectorAll('p');
+		const strings: string[] = [];
+		paragraphs?.forEach((p: any) => {
+			strings.push(p.textContent.trim());
 		});
-	return res;
+		return strings;
+	} catch (error) {
+		console.error('Failed to fetch page: ', error);
+		return [];
+	}
 }

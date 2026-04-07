@@ -49,6 +49,17 @@ This document outlines planned improvements and refactoring initiatives for the 
 - [ ] **CMS API Client**: Create standardized CMS API clients (`ContentfulClient.ts`, `WordPressClient.ts`) with base `ApiClient.ts` for consistent error handling.
 
 
+### WORKSPACE Enhancements
+
+- [  ] **Convert to a monorepo/workspaces setup** - Use npm workspaces, pnpm workspaces, or Yarn workspaces. Define root-level package.json with workspaces for:  packages/pixelated-components, apps/pixelvivid, apps/pixelated-admin etc. Replace manual copy2... scripts with workspace dependency linking: @pixelated-tech/components can be a workspace package.
+
+- [  ] **Share common Next.js config** Create a shared next.config.shared.ts or package export and import it from each app. Common config to extract: transpilePackages, typescript.ignoreBuildErrors, env settings, images.remotePatterns, outputFileTracingIncludes, any identical turbopack/webpack boilerplate
+
+- [  ] **Share base TypeScript & ESLint config** - Introduce root/base configs: tsconfig.base.json, .eslintrc.base.cjs or .eslintrc.json.  Have apps extend the shared base instead of duplicating config.  This reduces per-app config drift and improves consistency across builds.
+
+- [  ] **Standardize app scripts** - Move repeated script definitions into shared tooling if possible. Example: config:encrypt, config:decrypt, generate-site-images, update. With workspaces, apps can run shared scripts from the component package without repeating them.
+
+- [  ] **Simplify build targets** - If the apps are all using the same @pixelated-tech/components package, consider: prebuilding pixelated-components once, then building apps. This is faster than rebuilding or copying component outputs for every app independently.
 
 
 ### Shopping Cart Enhancements

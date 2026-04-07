@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { usePixelatedConfig } from '../config/config.client';
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
 
 const debug = false; 
 
@@ -36,40 +38,41 @@ export function LoremIpsum({ paragraphs = 1, seed = '', proxyBase, className = '
 	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
-		const controller = new AbortController();
 		const apiUrl = new URL('https://lorem-api.com/api/lorem');
 		apiUrl.searchParams.set('paragraphs', String(paragraphs));
 		if (seed) apiUrl.searchParams.set('seed', String(seed));
-
-		const tryFetch = async (url: string) => {
-			const res = await fetch(url, { signal: controller.signal });
-			if (!res.ok) throw new Error(`fetch failed: ${res.status}`);
-			return res;
-		};
 
 		(async () => {
 			setItems(null);
 			setError(null);
 			try {
-				// First attempt: direct fetch
-				let res;
+				// Fetch with proxy fallback support built into smartFetch
+				let txt: string;
 				try {
-					res = await tryFetch(apiUrl.toString());
-					if (debug) console.log('LoremIpsum: fetched directly', res);
+					const res = await smartFetch(apiUrl.toString(), {
+						responseType: 'text',
+						proxy: resolvedProxy ? {
+							url: resolvedProxy,
+							fallbackOnCors: true
+						} : undefined
+					});
+					txt = res;
+					if (debug) console.log('LoremIpsum: fetched directly or via proxy', txt);
 				} catch (err) {
-					// If CORS/network error and we have a proxy, retry via proxy
+					// If we have a proxy configured but direct fetch failed, try proxy explicitly
 					if (resolvedProxy) {
-						const proxied = `${resolvedProxy}${encodeURIComponent(apiUrl.toString())}`;
-						res = await tryFetch(proxied);
-						if (debug) console.log('LoremIpsum: fetched via proxy', res);
+						const proxied = buildUrl({
+							baseUrl: apiUrl.toString(),
+							proxyUrl: resolvedProxy,
+						});
+						txt = await smartFetch(proxied, { responseType: 'text' });
+						if (debug) console.log('LoremIpsum: fetched via explicit proxy', txt);
 					} else {
 						throw err;
 					}
 				}
 
-				// Read response as text to avoid "body stream already read" errors,
-				// then attempt to parse JSON; otherwise treat as plaintext.
-				const txt = await res.text();
+				// Attempt to parse JSON; otherwise treat as plaintext.
 				try {
 					const parsed = JSON.parse(txt);
 					if (Array.isArray(parsed)) {
@@ -112,12 +115,9 @@ export function LoremIpsum({ paragraphs = 1, seed = '', proxyBase, className = '
 					return;
 				}
 			} catch (err: any) {
-				if (err?.name === 'AbortError') return;
 				setError(err?.message ?? 'Unable to load placeholder text.');
 			}
 		})();
-
-		return () => controller.abort();
 	}, [paragraphs, seed, resolvedProxy]);
 
 	if (error) return <div className={`loremipsum ${className}`} aria-live="polite">{error}</div>;

@@ -2,6 +2,8 @@
 // Fetch avatar and profile data from Gravatar API
 
 import md5 from 'md5';
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
 
 export type GravatarAccount = {
 	domain: string;
@@ -56,7 +58,11 @@ export function getGravatarAvatarUrl(
 	defaultImage: '404' | 'mp' | 'identicon' | 'monsterid' | 'wavatar' | 'retro' | 'blank' = 'mp'
 ): string {
 	const hash = getGravatarHash(email);
-	return `https://www.gravatar.com/avatar/${hash}?s=${size}&d=${defaultImage}`;
+	return buildUrl({
+		baseUrl: 'https://www.gravatar.com',
+		pathSegments: ['avatar', hash],
+		params: { s: size, d: defaultImage },
+	});
 }
 
 /**
@@ -66,17 +72,19 @@ export function getGravatarAvatarUrl(
  */
 export async function getGravatarProfile(email: string): Promise<GravatarProfile | null> {
 	const hash = getGravatarHash(email);
-	const url = `https://en.gravatar.com/${hash}.json`;
+	const url = buildUrl({
+		baseUrl: 'https://en.gravatar.com',
+		pathSegments: [hash + '.json'],
+	});
 
 	try {
-		const response = await fetch(url, { cache: 'no-store' });
-		if (!response.ok) return null;
+		const data: GravatarResponse = await smartFetch(url, { });
 
-		const data: GravatarResponse = await response.json();
 		if (!data.entry || data.entry.length === 0) return null;
-
 		return data.entry[0];
-	} catch {
+	} catch (error) {
+		// Silently fail on CORS or network errors - Gravatar is optional
+		// CORS errors are expected in some environments and don't indicate user data issues
 		return null;
 	}
 }

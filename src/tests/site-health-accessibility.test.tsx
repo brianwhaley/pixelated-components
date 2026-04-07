@@ -142,4 +142,38 @@ describe('SiteHealthAccessibility Component', () => {
 
 		expect(container).toBeDefined();
 	});
+
+	it('should render error message when no data available', () => {
+		render(
+			<SiteHealthAccessibility siteName="example.com" />
+		)
+		const errorMsg = screen.queryByText(/No accessibility data available/i);
+		if (errorMsg) {
+			expect(errorMsg).toBeInTheDocument();
+		}
+	});
+
+	it('should accept siteName prop', () => {
+		const { container } = render(
+			<SiteHealthAccessibility siteName="test-site.com" />
+		);
+		expect(container).toBeDefined();
+	});
+
+	it('should render component without crashing for different site names', () => {
+		const sites = ['example.com', 'test.org', 'demo.io'];
+		
+		sites.forEach(site => {
+			const { container } = render(
+				<SiteHealthAccessibility siteName={site} />
+			);
+			expect(container).toBeDefined();
+		});
+	});
+
+	it('should use SiteHealthTemplate for rendering', () => {
+		return render(
+			<SiteHealthAccessibility siteName="example.com" />
+		).container;
+	});
 });

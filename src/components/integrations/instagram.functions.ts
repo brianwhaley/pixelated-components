@@ -2,6 +2,8 @@
 // Requires: Instagram Business/Creator account, Facebook Page, OAuth access token
 // Returns: Array compatible with Tiles/Carousel components
 
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
 import type { CarouselCardType } from '../general/carousel';
 
 export type InstagramMedia = {
@@ -44,12 +46,16 @@ export async function getInstagramMedia(params: {
 	const accessToken = params.accessToken || 'EAAtmg2zNJnABQCcGOWOUt7tR03RAF3dBZC2HFk9T0XZCvRaTddrUos8qV0UGSswVdc5d2N0o3ZAir5sEjyiglCkoffzvTwn068WTJUgSAdaRzfqRhE6Pb8D9u9wgjJuqIpDqQRIdFTlgsIVbKZBLBP2qPx72yjO3k6IuK2ksQZB4SqkyCr7ZBy7NaVXh9x2AZDZD';
 	const { userId = 'me', limit = 25, fields = 'id,media_type,media_url,thumbnail_url,permalink,caption,timestamp,username' } = params;
 	
-	const url = `https://graph.instagram.com/${userId}/media?fields=${encodeURIComponent(fields)}&limit=${limit}&access_token=${accessToken}`;
+	const url = buildUrl({
+		baseUrl: 'https://graph.instagram.com',
+		pathSegments: [userId, 'media'],
+		params: { fields, limit, access_token: accessToken },
+	});
 	
-	const response = await fetch(url, { cache: 'no-store' });
-	const data: InstagramMediaResponse = await response.json();
+	const data: InstagramMediaResponse = await smartFetch(url, {
+	});
 	
-	if (!response.ok || !data.data) {
+	if (!data.data) {
 		throw new Error(`Instagram API error: ${JSON.stringify(data)}`);
 	}
 	

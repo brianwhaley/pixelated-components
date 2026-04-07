@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import PropTypes, { InferProps } from "prop-types";
+import { smartFetch } from '../general/smartfetch';
 import "../../css/pixelated.grid.scss";
 import "./nerdjoke.css";
 
@@ -67,9 +68,7 @@ export function NerdJoke(props: NerdJokeType) {
 		const myURLProps = { command: "%2Fnerdjokes", text: "getjokejson" };
 		try {
 			const url = myURL + "command=" + myURLProps.command + "&text=" + myURLProps.text;
-			const response = await fetch(url);
-			if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-			const jokeData = await response.json();
+			const jokeData = await smartFetch(url);
 			setJoke(jokeData);
 		} catch (error) {
 			console.error('Failed to fetch joke:', error);

@@ -3,7 +3,7 @@ import {
 	mapTypeToComponent,
 	generateTypeField,
 	convertNumericProps
-} from '../components/sitebuilder/form/formutils';
+} from '../components/sitebuilder/form/formengineutilities';
 
 describe('Form Utilities', () => {
 	describe('mapTypeToComponent', () => {

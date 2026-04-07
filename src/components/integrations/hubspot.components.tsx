@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { usePixelatedConfig } from '../config/config.client';
+import { smartFetch } from '../general/smartfetch';
 
 
 
@@ -121,18 +122,15 @@ getHubspotFormSubmissions.propTypes = {
 export type getHubspotFormSubmissionsType = InferProps<typeof getHubspotFormSubmissions.propTypes>;
 export async function getHubspotFormSubmissions(props: getHubspotFormSubmissionsType) {
 	const url = `${props.proxyURL}https://api.hubapi.com/form-integrations/v1/submissions/forms/${props.formGUID}`;
-	const headers = {
-		Authorization: "Bearer " + props.apiToken,
-	};
 	try {
-		const response = await fetch(url, {
-			method: 'GET',
-			headers: headers,
+		const data = await smartFetch(url, {
+			requestInit: {
+				method: 'GET',
+				headers: {
+					Authorization: "Bearer " + props.apiToken,
+				},
+			}
 		});
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-		const data = await response.json();
 		return data;
 	} catch (error) {
 		console.error('Error fetching HubSpot form submissions:', error);

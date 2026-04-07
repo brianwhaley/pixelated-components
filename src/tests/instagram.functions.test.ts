@@ -1,12 +1,22 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
 	getInstagramMedia,
 	instagramMediaToTiles,
 	getInstagramTiles,
 	type InstagramMedia
 } from '../components/integrations/instagram.functions';
+import { buildUrl } from '../components/general/urlbuilder';
+
+vi.mock('../components/general/smartfetch');
+
+const { smartFetch } = await import('../components/general/smartfetch');
+const mockSmartFetch = vi.mocked(smartFetch);
 
 describe('Instagram Functions', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
 	describe('getInstagramMedia', () => {
 		it('should fetch Instagram media from Graph API', async () => {
 			const mockResponse = {
@@ -22,12 +32,7 @@ describe('Instagram Functions', () => {
 				]
 			};
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					json: () => Promise.resolve(mockResponse)
-				} as Response)
-			);
+			mockSmartFetch.mockResolvedValue(mockResponse);
 
 			const media = await getInstagramMedia({ limit: 10 });
 			expect(media).toHaveLength(1);
@@ -35,51 +40,31 @@ describe('Instagram Functions', () => {
 		});
 
 		it('should throw error on API failure', async () => {
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: false,
-					json: () => Promise.resolve({ error: 'Invalid token' })
-				} as Response)
-			);
+			mockSmartFetch.mockRejectedValue(new Error('API Error'));
 
 			await expect(getInstagramMedia({})).rejects.toThrow();
 		});
 
 		it('should handle missing data in response', async () => {
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					json: () => Promise.resolve({})
-				} as Response)
-			);
+			mockSmartFetch.mockResolvedValue({});
 
 			await expect(getInstagramMedia({})).rejects.toThrow();
 		});
 
 		it('should accept custom access token', async () => {
 			const mockResponse = { data: [] };
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					json: () => Promise.resolve(mockResponse)
-				} as Response)
-			);
+			mockSmartFetch.mockResolvedValue(mockResponse);
 
 			await getInstagramMedia({ accessToken: 'custom-token' });
-			expect(global.fetch).toHaveBeenCalled();
+			expect(mockSmartFetch).toHaveBeenCalled();
 		});
 
 		it('should use default limit of 25', async () => {
 			const mockResponse = { data: [] };
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					json: () => Promise.resolve(mockResponse)
-				} as Response)
-			);
+			mockSmartFetch.mockResolvedValue(mockResponse);
 
 			await getInstagramMedia({});
-			const callUrl = (global.fetch as any).mock.calls[0][0];
+			const callUrl = mockSmartFetch.mock.calls[0][0] as string;
 			expect(callUrl).toContain('limit=25');
 		});
 
@@ -102,12 +87,7 @@ describe('Instagram Functions', () => {
 				]
 			};
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					json: () => Promise.resolve(mockResponse)
-				} as Response)
-			);
+			mockSmartFetch.mockResolvedValue(mockResponse);
 
 			const media = await getInstagramMedia({});
 			expect(media).toHaveLength(2);
@@ -220,12 +200,7 @@ describe('Instagram Functions', () => {
 				}]
 			};
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					json: () => Promise.resolve(mockResponse)
-				} as Response)
-			);
+			mockSmartFetch.mockResolvedValue(mockResponse);
 
 			const tiles = await getInstagramTiles({ limit: 12 });
 			expect(Array.isArray(tiles)).toBe(true);
@@ -234,15 +209,10 @@ describe('Instagram Functions', () => {
 
 		it('should use default limit of 12', async () => {
 			const mockResponse = { data: [] };
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					json: () => Promise.resolve(mockResponse)
-				} as Response)
-			);
+			mockSmartFetch.mockResolvedValue(mockResponse);
 
 			await getInstagramTiles({});
-			const callUrl = (global.fetch as any).mock.calls[0][0];
+			const callUrl = mockSmartFetch.mock.calls[0][0] as string;
 			expect(callUrl).toContain('limit=12');
 		});
 
@@ -258,12 +228,7 @@ describe('Instagram Functions', () => {
 				}]
 			};
 
-			global.fetch = vi.fn(() =>
-				Promise.resolve({
-					ok: true,
-					json: () => Promise.resolve(mockResponse)
-				} as Response)
-			);
+			mockSmartFetch.mockResolvedValue(mockResponse);
 
 			const tiles = await getInstagramTiles({
 				useThumbnails: false,
@@ -271,6 +236,91 @@ describe('Instagram Functions', () => {
 			});
 
 			expect(tiles[0].image).toBe('https://example.com/video.mp4');
+		});
+	});
+
+	describe('buildUrl URL Construction for Instagram APIs', () => {
+		describe('Instagram Graph API URL building', () => {
+			it('should construct Instagram media URL with buildUrl (Section 1)', () => {
+				const userId = 'user123';
+				const accessToken = 'token-abc123';
+
+				const mediaUrl = buildUrl({
+					baseUrl: 'https://graph.instagram.com/' + userId + '/media',
+					params: {
+						fields: 'id,media_type,media_url,permalink,caption',
+						access_token: accessToken,
+						limit: 12
+					}
+				});
+
+				expect(mediaUrl).toContain('graph.instagram.com');
+				expect(mediaUrl).toContain(userId);
+				expect(mediaUrl).toContain('media');
+				expect(mediaUrl).toContain('access_token=token-abc123');
+				expect(mediaUrl).toContain('limit=12');
+			});
+
+			it('should handle different user IDs with buildUrl (Section 2)', () => {
+				const accessToken = 'token-123';
+				const userIds = ['user1', 'user2', 'user3'];
+
+				userIds.forEach(userId => {
+					const url = buildUrl({
+						baseUrl: 'https://graph.instagram.com/' + userId + '/media',
+						params: {
+							access_token: accessToken,
+							limit: 12
+						}
+					});
+
+					expect(url).toContain(userId);
+					expect(url).toContain('access_token=token-123');
+				});
+			});
+
+			it('should handle pagination with buildUrl (Section 3)', () => {
+				const userId = 'user123';
+				const accessToken = 'token-123';
+
+				const url1 = buildUrl({
+					baseUrl: 'https://graph.instagram.com/' + userId + '/media',
+					params: {
+						access_token: accessToken,
+						limit: 12,
+						after: 'cursor1'
+					}
+				});
+
+				const url2 = buildUrl({
+					baseUrl: 'https://graph.instagram.com/' + userId + '/media',
+					params: {
+						access_token: accessToken,
+						limit: 12,
+						after: 'cursor2'
+					}
+				});
+
+				expect(url1).toContain('after=cursor1');
+				expect(url2).toContain('after=cursor2');
+			});
+
+			it('should construct fields parameter correctly (Section 4)', () => {
+				const userId = 'user123';
+				const accessToken = 'token-123';
+				const fields = 'id,media_type,media_url,permalink,caption,timestamp,username';
+
+				const url = buildUrl({
+					baseUrl: 'https://graph.instagram.com/' + userId + '/media',
+					params: {
+						fields,
+						access_token: accessToken
+					}
+				});
+
+				expect(url).toContain('fields=');
+				expect(url).toContain('media_type');
+			});
 		});
 	});
 });

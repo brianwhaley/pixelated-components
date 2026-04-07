@@ -88,6 +88,14 @@ export interface Google {
 	refresh_token: string;
 }
 
+export interface GooglePSI {
+	api_key: string;
+}
+
+export interface GoogleGemini {
+	api_key: string;
+}
+
 export interface GoogleAnalyticsConfig {
 	id: string; // e.g. G-XXXXXXX
 	adId?: string; // e.g. AW-XXXXXXXXX
@@ -231,6 +239,18 @@ export const SECRET_CONFIG_KEYS = {
 		github: [
 			'token'
 		],
+		google: [
+			'api_key',
+			'client_id',
+			'client_secret',
+			'refresh_token'
+		],
+		googlePSI: [
+			'api_key'
+		],
+		googleGemini: [
+			'api_key'
+		],
 		instagram: [
 			'accessToken'
 		],
@@ -259,8 +279,10 @@ export interface PixelatedConfig {
 	globlalConfig?: GlobalConfig;
 	google?: Google;
 	googleAnalytics?: GoogleAnalyticsConfig;
+	googleGemini?: GoogleGemini;
 	googleMaps?: GoogleMapsConfig;
 	googlePlaces?: GooglePlacesConfig;
+	googlePSI?: GooglePSI;
 	googleSearchConsole?: GoogleSearchConsoleConfig;
 	hubspot?: HubspotConfig;
 	instagram?: InstagramConfig;

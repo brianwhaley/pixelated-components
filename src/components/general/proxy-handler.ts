@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-
-
 /**
  * STANDARD_PROXY_MATCHER
  *
@@ -56,18 +54,30 @@ export function handlePixelatedProxy(req: NextRequest) {
 	// Content Security Policy (CSP)
 	// Includes all discovered domains in the workspace: HubSpot, Gravatar, Flickr, Contentful, Cloudinary, eBay, and Google Analytics + Search.
 	const scriptSrc = "'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://*.googletagmanager.com https://*.hs-scripts.com https://*.hs-analytics.net https://*.hsforms.net https://*.hscollectedforms.net https://*.hs-banner.com https://*.google.com https://*.doubleclick.net https://*.googleadservices.com https://*.adtrafficquality.google https://*.hsappstatic.net https://assets.calendly.com https://cdn.jsdelivr.net https://www.paypal.com https://www.paypalobjects.com https://cdn.curator.io https://connect.facebook.net";
+	
 	const csp = [
 		"default-src 'self'",
+
 		`script-src ${scriptSrc}`,
+
 		`script-src-elem ${scriptSrc}`,
-		"connect-src 'self' https: https://*.hubspot.com https://proxy.pixelated.tech https://sendmail.pixelated.tech https://*.google-analytics.com https://*.analytics.google.com https://cdn.jsdelivr.net",
+
+		"connect-src 'self' https: https://*.hubspot.com https://*.pixelated.tech https://*.google-analytics.com https://*.analytics.google.com https://cdn.jsdelivr.net https://*.gravatar.com",
+
 		"img-src 'self' data: https: https://*.gravatar.com https://*.staticflickr.com https://*.ctfassets.net https://res.cloudinary.com https://*.ebayimg.com",
+
 		"style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://*.google.com https://www.paypalobjects.com https://cdn.curator.io",
+
 		"font-src 'self' data: https://fonts.gstatic.com",
+
 		"media-src 'self' https://*.ctfassets.net",
-		"frame-src 'self' https://*.hubspot.com https://*.googletagmanager.com https://*.adtrafficquality.google https://*.google.com https://calendly.com https://*.calendly.com https://*.hsforms.net https://www.paypal.com https://www.paypalobjects.com",
+
+		"frame-src 'self' https://calendly.com https://*.hubspot.com https://*.googletagmanager.com https://*.adtrafficquality.google https://*.google.com https://*.calendly.com https://*.hsforms.net https://www.paypal.com https://www.paypalobjects.com https://syndicatedsearch.goog",
+
 		"frame-ancestors 'none'",
+
 		"object-src 'none'",
+
 	].join("; ");
 
 	response.headers.set("Content-Security-Policy", csp);

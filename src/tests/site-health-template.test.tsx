@@ -2,10 +2,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, act } from '../test/test-utils';
 import { SiteHealthTemplate } from '../components/admin/site-health/site-health-template';
+import * as smartFetchModule from '../components/general/smartfetch';
 
-// Mock fetch
-const mockFetch = vi.fn();
-global.fetch = mockFetch;
+// Mock smartFetch
+const mockSmartFetch = vi.fn();
+vi.spyOn(smartFetchModule, 'smartFetch').mockImplementation(mockSmartFetch);
 
 describe('SiteHealthTemplate', () => {
   beforeEach(() => {
@@ -28,7 +29,7 @@ describe('SiteHealthTemplate', () => {
   });
 
   it('shows loading state initially', () => {
-    mockFetch.mockImplementation(() => new Promise(() => {})); // Never resolves
+    mockSmartFetch.mockImplementation(() => new Promise(() => {})); // Never resolves
 
     render(
       <SiteHealthTemplate 
@@ -47,10 +48,13 @@ describe('SiteHealthTemplate', () => {
 
   it('renders children with data when fetch succeeds', async () => {
     const mockData = { success: true, data: { test: 'data' } };
-    mockFetch.mockResolvedValue({
+    const mockResponse = {
       ok: true,
+      status: 200,
+      statusText: 'OK',
       json: () => Promise.resolve(mockData)
-    });
+    };
+    mockSmartFetch.mockResolvedValue(mockResponse);
 
     render(
       <SiteHealthTemplate 
@@ -68,17 +72,20 @@ describe('SiteHealthTemplate', () => {
       expect(screen.getByText('Data: data')).toBeInTheDocument();
     });
 
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:3000/api/test?siteName=test-site', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: undefined,
+    expect(mockSmartFetch).toHaveBeenCalledWith('http://localhost:3000/api/test?siteName=test-site', {
+      responseType: 'ok',
+      requestInit: {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: undefined,
+      }
     });
   });
 
   it('shows error state when fetch fails', async () => {
-    mockFetch.mockRejectedValue(new Error('Fetch failed'));
+    mockSmartFetch.mockRejectedValue(new Error('Fetch failed'));
 
     render(
       <SiteHealthTemplate 
@@ -98,7 +105,7 @@ describe('SiteHealthTemplate', () => {
   });
 
   it('handles non-Error thrown values', async () => {
-    mockFetch.mockRejectedValue('String error');
+    mockSmartFetch.mockRejectedValue('String error');
 
     render(
       <SiteHealthTemplate 
@@ -119,10 +126,13 @@ describe('SiteHealthTemplate', () => {
 
   it('re-fetches data when siteName changes', async () => {
     const mockData = { success: true, data: { test: 'data' } };
-    mockFetch.mockResolvedValue({
+    const mockResponse = {
       ok: true,
+      status: 200,
+      statusText: 'OK',
       json: () => Promise.resolve(mockData)
-    });
+    };
+    mockSmartFetch.mockResolvedValue(mockResponse);
 
     const { rerender } = render(
       <SiteHealthTemplate 
@@ -140,13 +150,16 @@ describe('SiteHealthTemplate', () => {
       expect(screen.getByText('Data: data')).toBeInTheDocument();
     });
 
-    expect(mockFetch).toHaveBeenCalledTimes(1);
-    expect(mockFetch).toHaveBeenCalledWith('http://localhost:3000/api/test?siteName=site1', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: undefined,
+    expect(mockSmartFetch).toHaveBeenCalledTimes(1);
+    expect(mockSmartFetch).toHaveBeenCalledWith('http://localhost:3000/api/test?siteName=site1', {
+      responseType: 'ok',
+      requestInit: {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: undefined,
+      }
     });
 
     // Change siteName
@@ -163,24 +176,30 @@ describe('SiteHealthTemplate', () => {
     );
 
     await waitFor(() => {
-      expect(mockFetch).toHaveBeenCalledTimes(2);
+      expect(mockSmartFetch).toHaveBeenCalledTimes(2);
     });
 
-    expect(mockFetch).toHaveBeenLastCalledWith('http://localhost:3000/api/test?siteName=site2', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: undefined,
+    expect(mockSmartFetch).toHaveBeenLastCalledWith('http://localhost:3000/api/test?siteName=site2', {
+      responseType: 'ok',
+      requestInit: {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: undefined,
+      }
     });
   });
 
   it('does not fetch when siteName becomes empty', async () => {
     const mockData = { success: true, data: { test: 'data' } };
-    mockFetch.mockResolvedValue({
+    const mockResponse = {
       ok: true,
+      status: 200,
+      statusText: 'OK',
       json: () => Promise.resolve(mockData)
-    });
+    };
+    mockSmartFetch.mockResolvedValue(mockResponse);
 
     const { rerender } = render(
       <SiteHealthTemplate 
@@ -211,11 +230,11 @@ describe('SiteHealthTemplate', () => {
       </SiteHealthTemplate>
     );
 
-    expect(mockFetch).toHaveBeenCalledTimes(1); // Should not call again
+    expect(mockSmartFetch).toHaveBeenCalledTimes(1); // Should not call again
   });
 
   it('cleans up on unmount', async () => {
-    mockFetch.mockImplementation(() => new Promise(() => {})); // Never resolves
+    mockSmartFetch.mockImplementation(() => new Promise(() => {})); // Never resolves
 
     const { unmount } = render(
       <SiteHealthTemplate 

@@ -1,7 +1,7 @@
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '../test/test-utils';
-import { Markdown } from '../components/general/markdown';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, waitFor } from '../test/test-utils';
+import { Markdown, useFileData } from '../components/general/markdown';
 
 // Mock SmartImage component
 vi.mock('../components/cms/smartimage', () => ({
@@ -12,6 +12,13 @@ vi.mock('../components/cms/smartimage', () => ({
     'data-testid': 'smart-image'
   })
 }));
+
+// Mock smartFetch
+vi.mock('../components/general/smartfetch', () => ({
+  smartFetch: vi.fn()
+}));
+
+import { smartFetch } from '../components/general/smartfetch';
 
 describe('Markdown Component', () => {
   describe('Basic Rendering', () => {
@@ -281,6 +288,312 @@ describe('Markdown Component', () => {
       const markdown = '[test](https://example.com)';
       const { container } = render(<Markdown markdowndata={markdown} />);
       expect(container.querySelector('a')).toBeInTheDocument();
+    });
+  });
+});
+
+/* ========== useFileData Hook Tests ========== */
+
+// Test component to use the hook
+function TestFileDataComponent({ filePath, responseType }: any) {
+  const { data, loading, error } = useFileData(filePath, responseType);
+  
+  return (
+    <div>
+      <div data-testid="loading">{loading ? 'loading' : 'done'}</div>
+      <div data-testid="error">{error || 'no error'}</div>
+      <div data-testid="data">{data ? JSON.stringify(data) : 'null'}</div>
+    </div>
+  );
+}
+
+describe('useFileData Hook', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('text file loading', () => {
+    it('should load text file successfully', async () => {
+      const mockText = '# My Markdown\nThis is content';
+      vi.mocked(smartFetch).mockResolvedValueOnce(mockText);
+
+      render(<TestFileDataComponent filePath="/data/readme.md" responseType="text" />);
+
+      // Initially loading
+      expect(screen.getByTestId('loading')).toHaveTextContent('loading');
+
+      // Wait for data to load
+      await waitFor(() => {
+        expect(screen.getByTestId('loading')).toHaveTextContent('done');
+      });
+
+      // Check that the data element contains the escaped JSON representation
+      const dataElement = screen.getByTestId('data');
+      expect(dataElement.textContent).toBe(JSON.stringify(mockText));
+      expect(screen.getByTestId('error')).toHaveTextContent('no error');
+    });
+
+    it('should use default responseType of "text"', async () => {
+      const mockText = 'File content';
+      vi.mocked(smartFetch).mockResolvedValueOnce(mockText);
+
+      render(<TestFileDataComponent filePath="/data/test.md" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('loading')).toHaveTextContent('done');
+      });
+
+      // Verify smartFetch was called with 'text' as responseType
+      expect(smartFetch).toHaveBeenCalledWith('/data/test.md', expect.objectContaining({
+        responseType: 'text'
+      }));
+
+      expect(screen.getByTestId('data')).toHaveTextContent(mockText);
+    });
+  });
+
+  describe('JSON file loading', () => {
+    it('should load JSON file successfully', async () => {
+      const mockJson = { name: 'Test', items: [1, 2, 3] };
+      vi.mocked(smartFetch).mockResolvedValueOnce(mockJson);
+
+      render(<TestFileDataComponent filePath="/data/config.json" responseType="json" />);
+
+      // Initially loading
+      expect(screen.getByTestId('loading')).toHaveTextContent('loading');
+
+      // Wait for data to load
+      await waitFor(() => {
+        expect(screen.getByTestId('loading')).toHaveTextContent('done');
+      });
+
+      expect(screen.getByTestId('data')).toHaveTextContent(JSON.stringify(mockJson));
+      expect(screen.getByTestId('error')).toHaveTextContent('no error');
+    });
+
+    it('should parse JSON arrays correctly', async () => {
+      const mockArray = [
+        { id: 1, name: 'Item 1' },
+        { id: 2, name: 'Item 2' }
+      ];
+      vi.mocked(smartFetch).mockResolvedValueOnce(mockArray);
+
+      render(<TestFileDataComponent filePath="/data/items.json" responseType="json" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('loading')).toHaveTextContent('done');
+      });
+
+      expect(screen.getByTestId('data')).toHaveTextContent(JSON.stringify(mockArray));
+    });
+  });
+
+  describe('error handling', () => {
+    it('should handle fetch errors gracefully', async () => {
+      const errorMsg = 'File not found';
+      vi.mocked(smartFetch).mockRejectedValueOnce(new Error(errorMsg));
+
+      render(<TestFileDataComponent filePath="/data/missing.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('loading')).toHaveTextContent('done');
+      });
+
+      expect(screen.getByTestId('error')).toHaveTextContent(errorMsg);
+      expect(screen.getByTestId('data')).toHaveTextContent('null');
+    });
+
+    it('should handle non-Error exceptions', async () => {
+      vi.mocked(smartFetch).mockRejectedValueOnce('Some error string');
+
+      render(<TestFileDataComponent filePath="/data/error.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('loading')).toHaveTextContent('done');
+      });
+
+      expect(screen.getByTestId('error')).toHaveTextContent('Failed to load file');
+      expect(screen.getByTestId('data')).toHaveTextContent('null');
+    });
+
+    it('should have loading=false when error occurs', async () => {
+      vi.mocked(smartFetch).mockRejectedValueOnce(new Error('Network error'));
+
+      render(<TestFileDataComponent filePath="/data/fail.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('loading')).toHaveTextContent('done');
+      });
+
+      // Verify loading state is false (done)
+      expect(screen.getByTestId('loading')).toHaveTextContent('done');
+    });
+  });
+
+  describe('loading states', () => {
+    it('should start in loading state', async () => {
+      vi.mocked(smartFetch).mockImplementationOnce(() =>
+        new Promise(() => {}) // Never resolves
+      );
+
+      render(<TestFileDataComponent filePath="/data/delayed.md" responseType="text" />);
+
+      // Should be loading initially
+      expect(screen.getByTestId('loading')).toHaveTextContent('loading');
+    });
+
+    it('should transition from loading to done', async () => {
+      const mockText = 'Loaded content';
+      vi.mocked(smartFetch).mockResolvedValueOnce(mockText);
+
+      const { rerender } = render(<TestFileDataComponent filePath="/data/file.md" responseType="text" />);
+
+      // Check initial state
+      expect(screen.getByTestId('loading')).toHaveTextContent('loading');
+
+      // Wait for completion
+      await waitFor(() => {
+        expect(screen.getByTestId('loading')).toHaveTextContent('done');
+      });
+    });
+  });
+
+  describe('dependency tracking', () => {
+    it('should refresh when filePath changes', async () => {
+      const mockText1 = 'Content 1';
+      const mockText2 = 'Content 2';
+      vi.mocked(smartFetch)
+        .mockResolvedValueOnce(mockText1)
+        .mockResolvedValueOnce(mockText2);
+
+      const { rerender } = render(<TestFileDataComponent filePath="/data/file1.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('data')).toHaveTextContent(mockText1);
+      });
+
+      // Change filePath
+      rerender(<TestFileDataComponent filePath="/data/file2.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('data')).toHaveTextContent(mockText2);
+      });
+
+      // Should have called smartFetch twice
+      expect(smartFetch).toHaveBeenCalledTimes(2);
+    });
+
+    it('should refresh when responseType changes', async () => {
+      const mockText = 'Text data';
+      const mockJson = { key: 'value' };
+      
+      vi.mocked(smartFetch)
+        .mockResolvedValueOnce(mockText)
+        .mockResolvedValueOnce(mockJson);
+
+      const { rerender } = render(<TestFileDataComponent filePath="/data/data.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('data')).toHaveTextContent(mockText);
+      });
+
+      // Change responseType
+      rerender(<TestFileDataComponent filePath="/data/data.md" responseType="json" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('data')).toHaveTextContent(JSON.stringify(mockJson));
+      });
+
+      expect(smartFetch).toHaveBeenCalledTimes(2);
+    });
+  });
+
+  describe('smartFetch integration', () => {
+    it('should pass filePath to smartFetch', async () => {
+      const filePath = '/data/custom.md';
+      vi.mocked(smartFetch).mockResolvedValueOnce('content');
+
+      render(<TestFileDataComponent filePath={filePath} responseType="text" />);
+
+      await waitFor(() => {
+        expect(smartFetch).toHaveBeenCalledWith(filePath, expect.any(Object));
+      });
+    });
+
+    it('should pass responseType to smartFetch', async () => {
+      vi.mocked(smartFetch).mockResolvedValueOnce('content');
+
+      render(<TestFileDataComponent filePath="/data/file.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(smartFetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
+          responseType: 'text'
+        }));
+      });
+    });
+
+    it('should handle smartFetch with JSON responseType', async () => {
+      vi.mocked(smartFetch).mockResolvedValueOnce({ test: true });
+
+      render(<TestFileDataComponent filePath="/data/data.json" responseType="json" />);
+
+      await waitFor(() => {
+        expect(smartFetch).toHaveBeenCalledWith(expect.any(String), expect.objectContaining({
+          responseType: 'json'
+        }));
+      });
+    });
+  });
+
+  describe('data clearing on error', () => {
+    it('should clear data when error occurs', async () => {
+      const mockText = 'Initial content';
+      
+      vi.mocked(smartFetch)
+        .mockResolvedValueOnce(mockText)
+        .mockRejectedValueOnce(new Error('Network failure'));
+
+      const { rerender } = render(<TestFileDataComponent filePath="/data/file1.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('data')).toHaveTextContent(mockText);
+      });
+
+      // Change filePath to trigger re-fetch with error
+      rerender(<TestFileDataComponent filePath="/data/file2.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).not.toHaveTextContent('no error');
+      });
+
+      // Data should be cleared
+      expect(screen.getByTestId('data')).toHaveTextContent('null');
+    });
+  });
+
+  describe('error state cleared on success', () => {
+    it('should clear error when subsequent load succeeds', async () => {
+      const mockText1 = 'First content';
+      const mockText2 = 'Second content';
+      
+      vi.mocked(smartFetch)
+        .mockRejectedValueOnce(new Error('First error'))
+        .mockResolvedValueOnce(mockText2);
+
+      const { rerender } = render(<TestFileDataComponent filePath="/data/file1.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('error')).not.toHaveTextContent('no error');
+      });
+
+      // Trigger new fetch with success
+      rerender(<TestFileDataComponent filePath="/data/file2.md" responseType="text" />);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('data')).toHaveTextContent(mockText2);
+      });
+
+      expect(screen.getByTestId('error')).toHaveTextContent('no error');
     });
   });
 });

@@ -1,36 +1,43 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getSpotifyEpisodes, type SpotifyPodcastEpisodeType } from '../components/integrations/spotify.functions';
 import { PodcastEpisodeList } from '../components/integrations/spotify.components';
 
+// Mock smartFetch module
+vi.mock('../components/general/smartfetch', () => ({
+	smartFetch: vi.fn(),
+}));
+
+import { smartFetch } from '../components/general/smartfetch';
+
 describe('Spotify Podcast Integration', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+	});
+
 	describe('getSpotifyEpisodes', () => {
 		it('should fetch and parse RSS feed', async () => {
 			const mockRSSURL = 'https://anchor.fm/s/10fc04b98/podcast/rss';
 			
-			vi.stubGlobal('fetch', vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(`<?xml version="1.0"?>
-						<rss version="2.0">
-							<channel>
-								<item>
-									<title>Test Episode</title>
-									<description>Test Description</description>
-									<link>https://example.com/test</link>
-									<guid>test-guid-123</guid>
-									<creator>Test Creator</creator>
-									<pubDate>Wed, 04 Mar 2026 13:00:00 GMT</pubDate>
-									<enclosure url="https://example.com/audio.mp3" type="audio/mpeg" length="1000"/>
-									<summary>Test Summary</summary>
-									<explicit>false</explicit>
-									<duration>00:30:00</duration>
-									<image href="https://example.com/image.jpg"/>
-									<episode>1</episode>
-									<episodeType>full</episodeType>
-								</item>
-							</channel>
-						</rss>`),
-				})
-			));
+			vi.mocked(smartFetch).mockResolvedValue(`<?xml version="1.0"?>
+				<rss version="2.0">
+					<channel>
+						<item>
+							<title>Test Episode</title>
+							<description>Test Description</description>
+							<link>https://example.com/test</link>
+							<guid>test-guid-123</guid>
+							<creator>Test Creator</creator>
+							<pubDate>Wed, 04 Mar 2026 13:00:00 GMT</pubDate>
+							<enclosure url="https://example.com/audio.mp3" type="audio/mpeg" length="1000"/>
+							<summary>Test Summary</summary>
+							<explicit>false</explicit>
+							<duration>00:30:00</duration>
+							<image href="https://example.com/image.jpg"/>
+							<episode>1</episode>
+							<episodeType>full</episodeType>
+						</item>
+					</channel>
+				</rss>`);
 
 			const episodes = await getSpotifyEpisodes({ rssURL: mockRSSURL });
 
@@ -45,45 +52,41 @@ describe('Spotify Podcast Integration', () => {
 		it('should sort episodes by pubDate descending', async () => {
 			const mockRSSURL = 'https://anchor.fm/s/test/podcast/rss';
 
-			vi.stubGlobal('fetch', vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(`<?xml version="1.0"?>
-						<rss version="2.0">
-							<channel>
-								<item>
-									<title>Episode 1</title>
-									<pubDate>Mon, 01 Mar 2026 10:00:00 GMT</pubDate>
-									<description>Desc 1</description>
-									<link>https://example.com/1</link>
-									<guid>guid-1</guid>
-									<creator>Creator</creator>
-									<enclosure url="https://example.com/1.mp3" type="audio/mpeg" length="1000"/>
-									<summary>Sum 1</summary>
-									<explicit>false</explicit>
-									<duration>30:00</duration>
-									<image href="https://example.com/1.jpg"/>
-									<episode>1</episode>
-									<episodeType>full</episodeType>
-								</item>
-								<item>
-									<title>Episode 2</title>
-									<pubDate>Wed, 03 Mar 2026 10:00:00 GMT</pubDate>
-									<description>Desc 2</description>
-									<link>https://example.com/2</link>
-									<guid>guid-2</guid>
-									<creator>Creator</creator>
-									<enclosure url="https://example.com/2.mp3" type="audio/mpeg" length="1000"/>
-									<summary>Sum 2</summary>
-									<explicit>false</explicit>
-									<duration>30:00</duration>
-									<image href="https://example.com/2.jpg"/>
-									<episode>2</episode>
-									<episodeType>full</episodeType>
-								</item>
-							</channel>
-						</rss>`),
-				})
-			));
+			vi.mocked(smartFetch).mockResolvedValue(`<?xml version="1.0"?>
+				<rss version="2.0">
+					<channel>
+						<item>
+							<title>Episode 1</title>
+							<pubDate>Mon, 01 Mar 2026 10:00:00 GMT</pubDate>
+							<description>Desc 1</description>
+							<link>https://example.com/1</link>
+							<guid>guid-1</guid>
+							<creator>Creator</creator>
+							<enclosure url="https://example.com/1.mp3" type="audio/mpeg" length="1000"/>
+							<summary>Sum 1</summary>
+							<explicit>false</explicit>
+							<duration>30:00</duration>
+							<image href="https://example.com/1.jpg"/>
+							<episode>1</episode>
+							<episodeType>full</episodeType>
+						</item>
+						<item>
+							<title>Episode 2</title>
+							<pubDate>Wed, 03 Mar 2026 10:00:00 GMT</pubDate>
+							<description>Desc 2</description>
+							<link>https://example.com/2</link>
+							<guid>guid-2</guid>
+							<creator>Creator</creator>
+							<enclosure url="https://example.com/2.mp3" type="audio/mpeg" length="1000"/>
+							<summary>Sum 2</summary>
+							<explicit>false</explicit>
+							<duration>30:00</duration>
+							<image href="https://example.com/2.jpg"/>
+							<episode>2</episode>
+							<episodeType>full</episodeType>
+						</item>
+					</channel>
+				</rss>`);
 
 			const episodes = await getSpotifyEpisodes({ rssURL: mockRSSURL });
 
@@ -94,15 +97,11 @@ describe('Spotify Podcast Integration', () => {
 		it('should handle empty RSS feed', async () => {
 			const mockRSSURL = 'https://anchor.fm/s/empty/podcast/rss';
 
-			vi.stubGlobal('fetch', vi.fn(() =>
-				Promise.resolve({
-					text: () => Promise.resolve(`<?xml version="1.0"?>
-						<rss version="2.0">
-							<channel>
-							</channel>
-						</rss>`),
-				})
-			));
+			vi.mocked(smartFetch).mockResolvedValue(`<?xml version="1.0"?>
+				<rss version="2.0">
+					<channel>
+					</channel>
+				</rss>`);
 
 			const episodes = await getSpotifyEpisodes({ rssURL: mockRSSURL });
 
@@ -112,9 +111,7 @@ describe('Spotify Podcast Integration', () => {
 		it('should handle network error gracefully', async () => {
 			const mockRSSURL = 'https://anchor.fm/s/invalid/podcast/rss';
 
-			vi.stubGlobal('fetch', vi.fn(() =>
-				Promise.reject(new Error('Network error'))
-			));
+			vi.mocked(smartFetch).mockRejectedValue(new Error('Network error'));
 
 			const episodes = await getSpotifyEpisodes({ rssURL: mockRSSURL });
 

@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { getLipsum } from '../components/integrations/lipsum';
 
+vi.mock('../components/general/smartfetch');
+
 describe('Lipsum Functions', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -14,11 +16,8 @@ describe('Lipsum Functions', () => {
 			</div>
 		`;
 		
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve(mockHTML)
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue(mockHTML);
 		
 		const result = await getLipsum({
 			LipsumTypeId: 'Paragraph',
@@ -30,11 +29,8 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should construct correct proxy URL with parameters', async () => {
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve('<div id="lipsum"></div>')
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
 			LipsumTypeId: 'Word',
@@ -42,7 +38,7 @@ describe('Lipsum Functions', () => {
 			StartWithLoremIpsum: true
 		});
 		
-		const callURL = (global.fetch as any).mock.calls[0][0];
+		const callURL = vi.mocked(smartFetch).mock.calls[0][0];
 		expect(callURL).toContain('LipsumTypeId=Word');
 		expect(callURL).toContain('amount=50');
 		expect(callURL).toContain('StartWithLoremIpsum=true');
@@ -56,11 +52,8 @@ describe('Lipsum Functions', () => {
 			</div>
 		`;
 		
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve(mockHTML)
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue(mockHTML);
 		
 		const result = await getLipsum({
 			LipsumTypeId: 'Paragraph',
@@ -73,43 +66,34 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should handle Word type', async () => {
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve('<div id="lipsum"></div>')
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
 			LipsumTypeId: 'Word',
 			Amount: 30
 		});
 		
-		const callURL = (global.fetch as any).mock.calls[0][0];
+		const callURL = vi.mocked(smartFetch).mock.calls[0][0];
 		expect(callURL).toContain('LipsumTypeId=Word');
 	});
 
 	it('should handle Char type', async () => {
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve('<div id="lipsum"></div>')
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
 			LipsumTypeId: 'Char',
 			Amount: 500
 		});
 		
-		const callURL = (global.fetch as any).mock.calls[0][0];
+		const callURL = vi.mocked(smartFetch).mock.calls[0][0];
 		expect(callURL).toContain('LipsumTypeId=Char');
 	});
 
 	it('should start with Lorem Ipsum when flag is true', async () => {
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve('<div id="lipsum"></div>')
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
 			LipsumTypeId: 'Paragraph',
@@ -117,7 +101,7 @@ describe('Lipsum Functions', () => {
 			StartWithLoremIpsum: true
 		});
 		
-		const callURL = (global.fetch as any).mock.calls[0][0];
+		const callURL = vi.mocked(smartFetch).mock.calls[0][0];
 		expect(callURL).toContain('StartWithLoremIpsum=true');
 	});
 
@@ -131,11 +115,8 @@ describe('Lipsum Functions', () => {
 			</div>
 		`;
 		
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve(mockHTML)
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue(mockHTML);
 		
 		const result = await getLipsum({
 			LipsumTypeId: 'Paragraph',
@@ -147,9 +128,8 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should return empty array on fetch error', async () => {
-		global.fetch = vi.fn(() =>
-			Promise.reject(new Error('Network error'))
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockRejectedValue(new Error('Network error'));
 		
 		const result = await getLipsum({
 			LipsumTypeId: 'Paragraph',
@@ -162,11 +142,8 @@ describe('Lipsum Functions', () => {
 	it('should return empty array when lipsum element not found', async () => {
 		const mockHTML = '<div>No lipsum element</div>';
 		
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve(mockHTML)
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue(mockHTML);
 		
 		const result = await getLipsum({
 			LipsumTypeId: 'Paragraph',
@@ -177,35 +154,29 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should use proxy.pixelated.tech URL', async () => {
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve('<div id="lipsum"></div>')
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
 			LipsumTypeId: 'Paragraph',
 			Amount: 1
 		});
 		
-		const callURL = (global.fetch as any).mock.calls[0][0];
+		const callURL = vi.mocked(smartFetch).mock.calls[0][0];
 		expect(callURL).toContain('proxy.pixelated.tech');
 		expect(callURL).toContain('lipsum.com');
 	});
 
 	it('should URL encode the lipsum.com endpoint', async () => {
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve('<div id="lipsum"></div>')
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
 			LipsumTypeId: 'Paragraph',
 			Amount: 1
 		});
 		
-		const callURL = (global.fetch as any).mock.calls[0][0];
+		const callURL = vi.mocked(smartFetch).mock.calls[0][0];
 		expect(callURL).toContain('https://www.lipsum.com/feed/html');
 	});
 
@@ -218,11 +189,8 @@ describe('Lipsum Functions', () => {
 			</div>
 		`;
 		
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve(mockHTML)
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue(mockHTML);
 		
 		const result = await getLipsum({
 			LipsumTypeId: 'Paragraph',
@@ -236,11 +204,8 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should handle HTML parsing errors gracefully', async () => {
-		global.fetch = vi.fn(() =>
-			Promise.resolve({
-				text: () => Promise.resolve('Invalid HTML <<<<>>>>')
-			} as Response)
-		);
+		const { smartFetch } = await import('../components/general/smartfetch');
+		vi.mocked(smartFetch).mockResolvedValue('Invalid HTML <<<<>>>>');
 		
 		const result = await getLipsum({
 			LipsumTypeId: 'Paragraph',

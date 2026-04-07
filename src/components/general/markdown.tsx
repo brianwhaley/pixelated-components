@@ -3,11 +3,13 @@
  
 /* https://randyperkins2k.medium.com/writing-a-simple-markdown-parser-using-javascript-1f2e9449a558 */
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { SmartImage } from "./smartimage";
 import { usePixelatedConfig } from "../config/config.client";
+import { smartFetch } from "./smartfetch";
 import "./markdown.css";
+
 
 /* ========== MARKDOWN ========== */
 /**
@@ -59,3 +61,41 @@ export function Markdown(props: MarkdownType) {
 	);
 }
 
+
+
+/* ========== HOOK: useFileData ========== */
+/**
+ * useFileData — Load markdown or JSON files from /data/ directory
+ *
+ * @param {string} filePath - Path to file (e.g., '/data/readme.md')
+ * @param {string} responseType - 'text' or 'json' (default: 'text')
+ * @returns {Object} { data, loading, error }
+ */
+export function useFileData<T = string>(
+	filePath: string,
+	responseType: 'text' | 'json' = 'text'
+) {
+	const [data, setData] = useState<T | null>(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				setLoading(true);
+				setError(null);
+				const result = await smartFetch(filePath, { responseType: responseType as any });
+				setData(result as T);
+			} catch (err) {
+				setError(err instanceof Error ? err.message : 'Failed to load file');
+				setData(null);
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchData();
+	}, [filePath, responseType]);
+
+	return { data, loading, error };
+}

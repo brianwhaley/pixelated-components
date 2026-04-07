@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.14.5",
+	"version": "3.15.0",
 	"type": "module",
 	"private": false,
 	"author": {
@@ -114,10 +114,10 @@
 		"html-entities": "^2.6.0"
 	},
 	"devDependencies": {
-		"@aws-sdk/client-amplify": "^3.1023.0",
-		"@aws-sdk/client-cloudwatch": "^3.1023.0",
-		"@aws-sdk/client-iam": "^3.1023.0",
-		"@aws-sdk/client-route-53": "^3.1023.0",
+		"@aws-sdk/client-amplify": "^3.1025.0",
+		"@aws-sdk/client-cloudwatch": "^3.1025.0",
+		"@aws-sdk/client-iam": "^3.1025.0",
+		"@aws-sdk/client-route-53": "^3.1025.0",
 		"@aws-sdk/xml-builder": "^3.972.16",
 		"@babel/core": "^7.29.0",
 		"@babel/plugin-proposal-class-properties": "^7.18.6",
@@ -156,7 +156,7 @@
 		"eslint-plugin-react": "^7.37.5",
 		"file-loader": "^6.2.0",
 		"happy-dom": "^20.8.9",
-		"jsdom": "^29.0.1",
+		"jsdom": "^29.0.2",
 		"less-loader": "^12.3.2",
 		"mini-css-extract-plugin": "^2.10.2",
 		"next": "16.2.2",

@@ -1,5 +1,6 @@
 
 import PropTypes, { InferProps } from "prop-types";
+import { smartFetch } from '../general/smartfetch';
 
 
 export type SpotifyPodcastSeriesType = {
@@ -75,8 +76,9 @@ export type getSpotifySeriesType = InferProps<typeof getSpotifySeries.propTypes>
 export async function getSpotifySeries(props: getSpotifySeriesType){
 	const { rssURL } = props;
 	try {
-		const response = await fetch(rssURL);
-		const data = await response.text();
+		const data = await smartFetch(rssURL, {
+			responseType: 'text',
+		});
 		let rssJSON = SpotifyRSSSeriesToJson(data);
 		return rssJSON as unknown as SpotifyPodcastSeriesType;
 	} catch (error) {
@@ -156,8 +158,9 @@ export type getSpotifyEpisodesType = InferProps<typeof getSpotifyEpisodes.propTy
 export async function getSpotifyEpisodes(props: getSpotifyEpisodesType){
 	const { rssURL } = props;
 	try {
-		const response = await fetch(rssURL);
-		const data = await response.text();
+		const data = await smartFetch(rssURL, {
+			responseType: 'text',
+		});
 		let rssJSON = SpotifyRSSItemsToJson(data);
 		if (rssJSON) rssJSON = rssJSON.sort((a, b) => ((a.pubDate ?? '') < (b.pubDate ?? '')) ? 1 : -1);
 		return rssJSON as unknown as SpotifyPodcastEpisodeType[];

@@ -3,7 +3,7 @@ import { render, fireEvent, screen, act } from '../test/test-utils';
 import { describe, it, expect, vi } from 'vitest';
 import { FormEngine } from '../components/sitebuilder/form/formengine';
 import formJSON from '../data/requestform.json';
-import { emailFormData } from '../components/sitebuilder/form/formemailer';
+import { emailFormData } from '../components/sitebuilder/form/formsubmit';
 
 // Integration: ensure FormEngine + emailFormData reliably drop honeypot values
 describe('FormEngine → emailFormData integration (honeypot)', () => {

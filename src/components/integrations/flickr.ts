@@ -4,6 +4,8 @@ import { mergeDeep } from '../general/utilities';
 import { hashCode } from '../general/utilities';
 import { CacheManager } from '../general/cache-manager';
 import { getDomain } from '../general/utilities';
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
 import type { CarouselCardType } from '../general/carousel';
 import type { FlickrConfig, GlobalConfig } from '../config/config.types';
 
@@ -32,13 +34,11 @@ const defaultFlickr: FlickrConfig = {
 
 // Utility to build the final Flickr API URL, using proxy if available
 function buildFlickrApiUrl(flickr: any) {
-	let baseUrl = flickr.baseURL;
-	let queryParams = '';
-	Object.keys(flickr.urlProps).forEach((prop) => {
-		const value = flickr.urlProps[prop as keyof typeof flickr.urlProps];
-		queryParams += (queryParams.length === 0) ? prop + '=' + value : '&' + prop + '=' + value;
+	// Use buildUrl to construct the Flickr REST API URL from parameters
+	const apiUrl = buildUrl({
+		baseUrl: flickr.baseURL,
+		params: flickr.urlProps,
 	});
-	const apiUrl = baseUrl + queryParams;
 	// Prefer flickr.proxyURL, then globalConfig.proxyUrl, else direct
 	if (flickr.proxyURL) {
 		return flickr.proxyURL + encodeURIComponent(apiUrl);
@@ -114,17 +114,18 @@ export function GetFlickrData(props: GetFlickrDataType) {
 
 	const fetchFlickrData = async () => {
 		const cacheKey = hashCode(myURL);
-		let cached = flickrCache.get<any[]>(cacheKey);
-		if (cached) {
-			if (debug) console.log('Flickr cache hit:', cacheKey);
-			return cached;
-		}
 		try {
-			const response = await fetch(myURL);
-			if (!response.ok) {
-				throw new Error(`HTTP error! Status: ${response.status}`);
+			const jsonData = await smartFetch(myURL, {
+				cache: flickrCache,
+				cacheKey,
+				debug,
+			});
+			
+			// Check if Flickr API returned an error response
+			if (jsonData.stat === 'fail') {
+				throw new Error(`Flickr API error: ${jsonData.message || 'Unknown error'}`);
 			}
-			const jsonData = await response.json();
+			
 			let myFlickrImages = [];
 			if (jsonData.photos) {
 				// photos for tags - flickr.photos.search
@@ -133,18 +134,15 @@ export function GetFlickrData(props: GetFlickrDataType) {
 				// photoset for albums - flickr.photosets.getPhotos
 				myFlickrImages = jsonData.photoset.photo;
 			} else {
-				console.log('Error fetching Flickr images');
+				throw new Error('No photos or photoset found in Flickr API response');
 			}
 			myFlickrImages.sort((a: any, b: any) => {
 				return new Date(b.datetaken).getTime() - new Date(a.datetaken).getTime();
 			}); // b - a for reverse sort
-			flickrCache.set(cacheKey, myFlickrImages);
 			if (debug) console.log('Flickr Cards:', myFlickrImages);
 			return myFlickrImages;
 		} catch (err) {
 			console.log('Error fetching Flickr data:', err);
-		} finally {
-			if (debug) console.log('Flickr data fetch completed');
 		}
 	};
 	return fetchFlickrData();

@@ -3,7 +3,7 @@
 import React, { useState, JSX } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import * as FC from './formcomponents';
-import { mapTypeToComponent, generateTypeField } from './formutils';
+import { mapTypeToComponent, generateTypeField } from './formengineutilities';
 import { FormEngine } from './formengine';
 const debug = false;
 

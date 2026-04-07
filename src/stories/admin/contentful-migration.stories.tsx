@@ -1,5 +1,49 @@
 import React, { useState } from 'react';
 
+/**
+ * INTEGRATION REFERENCE: URL Building with buildUrl
+ * 
+ * The Contentful Management API integrations use the buildUrl utility to construct
+ * consistent, properly-formatted URLs with path segments and query parameters.
+ * 
+ * EXAMPLE: Building URLs for Contentful Management API
+ * 
+ * // List all entries in a space
+ * const listUrl = buildUrl({
+ *   baseUrl: 'https://api.contentful.com',
+ *   pathSegments: ['spaces', spaceId, 'environments', environment, 'entries'],
+ *   params: { access_token }
+ * });
+ * 
+ * // Get specific entry by ID
+ * const entryUrl = buildUrl({
+ *   baseUrl: 'https://api.contentful.com',
+ *   pathSegments: ['spaces', spaceId, 'environments', environment, 'entries', entryId],
+ *   params: { access_token }
+ * });
+ * 
+ * // Publish an entry
+ * const publishUrl = buildUrl({
+ *   baseUrl: 'https://api.contentful.com',
+ *   pathSegments: ['spaces', spaceId, 'environments', environment, 'entries', entryId, 'published']
+ * });
+ * 
+ * // Get content types
+ * const ctUrl = buildUrl({
+ *   baseUrl: 'https://api.contentful.com',
+ *   pathSegments: ['spaces', spaceId, 'environments', env, 'content_types'],
+ *   params: { access_token }
+ * });
+ * 
+ * BENEFITS:
+ * - Consistent URL construction across all Contentful integrations
+ * - Automatic path segment joining with proper separators
+ * - Automatic query parameter encoding
+ * - Support for both direct API calls and proxy-routed requests
+ * 
+ * See contentful.management.ts for implementation details
+ */
+
 export default {
   title: 'Admin/Contentful Migration',
   component: ContentfulMigrationDemo,

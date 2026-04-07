@@ -34,6 +34,6 @@ describe('fetchPSIData', () => {
 
 	it('throws when api key is missing from config', async () => {
 		getFullConfigSpy.mockReturnValue({} as any);
-		await expect(fetchPSIData('https://example.com')).rejects.toThrow('Google API key is not set');
+		await expect(fetchPSIData('https://example.com')).rejects.toThrow('Google PSI API key is not set');
 	});
 });

@@ -5,8 +5,10 @@ import { FormGooglePlacesInput } from '../components/sitebuilder/form/formcompon
 import { FormValidationProvider } from '../components/sitebuilder/form/formvalidator';
 import { GooglePlacesService } from '../components/integrations/googleplaces';
 
-// Mock fetch globally
-global.fetch = vi.fn();
+vi.mock('../components/general/smartfetch');
+
+const { smartFetch } = await import('../components/general/smartfetch');
+const mockSmartFetch = vi.mocked(smartFetch);
 
 describe('GooglePlacesService', () => {
 	const mockConfig = {
@@ -62,9 +64,7 @@ describe('GooglePlacesService', () => {
 				]
 			};
 
-			(global.fetch as any).mockResolvedValueOnce({
-				json: async () => mockPredictions
-			});
+			mockSmartFetch.mockResolvedValueOnce(mockPredictions);
 
 			const service = new GooglePlacesService(mockConfig);
 			const results = await service.getPlacePredictions('123 main', mockConfig);
@@ -90,25 +90,23 @@ describe('GooglePlacesService', () => {
 				]
 			};
 
-			(global.fetch as any).mockResolvedValueOnce({
-				json: async () => mockPredictions
-			});
+			mockSmartFetch.mockResolvedValueOnce(mockPredictions);
 
 			const service = new GooglePlacesService(mockConfig);
 			
 			// First call
 			const results1 = await service.getPlacePredictions('123 main', mockConfig);
 			expect(results1).toHaveLength(1);
-			expect((global.fetch as any)).toHaveBeenCalledTimes(1);
+			expect(mockSmartFetch).toHaveBeenCalledTimes(1);
 
 			// Second call should use cache (no new fetch)
 			const results2 = await service.getPlacePredictions('123 main', mockConfig);
 			expect(results2).toHaveLength(1);
-			expect((global.fetch as any)).toHaveBeenCalledTimes(1); // Still 1, not 2
+			expect(mockSmartFetch).toHaveBeenCalledTimes(1); // Still 1, not 2
 		});
 
 		it('should handle API errors gracefully', async () => {
-			(global.fetch as any).mockRejectedValueOnce(new Error('Network error'));
+			mockSmartFetch.mockRejectedValueOnce(new Error('Network error'));
 
 			const service = new GooglePlacesService(mockConfig);
 			const results = await service.getPlacePredictions('123 main', mockConfig);
@@ -117,24 +115,24 @@ describe('GooglePlacesService', () => {
 		});
 
 		it('should include country restrictions in API call', async () => {
-			(global.fetch as any).mockResolvedValueOnce({
-				json: async () => ({ predictions: [] })
+			mockSmartFetch.mockResolvedValueOnce({
+				predictions: []
 			});
 
 			const service = new GooglePlacesService(mockConfig);
 			await service.getPlacePredictions('test', mockConfig);
 
-			const callUrl = (global.fetch as any).mock.calls[0][0];
-			expect(callUrl).toContain('components=country:us');
+			const callUrl = mockSmartFetch.mock.calls[0][0];
+			// buildUrl encodes the colon in country:us as %3A
+			expect(callUrl).toContain('components=country');
+			expect(callUrl).toContain('us');
 		});
 	});
 
 	describe('getPlaceDetails', () => {
 		it('should return null for invalid placeId', async () => {
 			const service = new GooglePlacesService(mockConfig);
-			(global.fetch as any).mockResolvedValueOnce({
-				json: async () => ({})
-			});
+			mockSmartFetch.mockResolvedValueOnce({});
 
 			const result = await service.getPlaceDetails('invalid-id', mockConfig);
 			expect(result).toBeNull();
@@ -155,9 +153,7 @@ describe('GooglePlacesService', () => {
 				}
 			};
 
-			(global.fetch as any).mockResolvedValueOnce({
-				json: async () => mockDetails
-			});
+			mockSmartFetch.mockResolvedValueOnce(mockDetails);
 
 			const service = new GooglePlacesService(mockConfig);
 			const result = await service.getPlaceDetails('place1', mockConfig);
@@ -180,9 +176,7 @@ describe('GooglePlacesService', () => {
 				}
 			};
 
-			(global.fetch as any).mockResolvedValueOnce({
-				json: async () => mockDetails
-			});
+			mockSmartFetch.mockResolvedValueOnce(mockDetails);
 
 			const service = new GooglePlacesService(mockConfig);
 			const result = await service.getPlaceDetails('place1', mockConfig);
@@ -193,7 +187,7 @@ describe('GooglePlacesService', () => {
 		});
 
 		it('should handle API errors gracefully', async () => {
-			(global.fetch as any).mockRejectedValueOnce(new Error('Network error'));
+			mockSmartFetch.mockRejectedValueOnce(new Error('Network error'));
 
 			const service = new GooglePlacesService(mockConfig);
 			const result = await service.getPlaceDetails('place1', mockConfig);
@@ -279,22 +273,20 @@ describe('GooglePlacesService', () => {
 				]
 			};
 
-			(global.fetch as any).mockResolvedValue({
-				json: async () => mockPredictions
-			});
+			mockSmartFetch.mockResolvedValue(mockPredictions);
 
 			const service = new GooglePlacesService(mockConfig);
 			
 			// First call
 			await service.getPlacePredictions('test', mockConfig);
-			expect((global.fetch as any)).toHaveBeenCalledTimes(1);
+			expect(mockSmartFetch).toHaveBeenCalledTimes(1);
 
 			// Clear cache
 			service.clearCache();
 
 			// Second call should fetch again
 			await service.getPlacePredictions('test', mockConfig);
-			expect((global.fetch as any)).toHaveBeenCalledTimes(2);
+			expect(mockSmartFetch).toHaveBeenCalledTimes(2);
 		});
 	});
 });
@@ -310,7 +302,7 @@ describe('FormGooglePlacesInput Component', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		(global.fetch as any).mockReset();
+		mockSmartFetch.mockReset();
 	});
 
 	it('should render input field', () => {

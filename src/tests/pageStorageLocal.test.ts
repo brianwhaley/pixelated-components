@@ -1,134 +1,171 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { validatePageName } from '../components/sitebuilder/page/lib/pageStorageLocal';
 
-describe('Page Storage Local', () => {
+describe('Page Storage Local - Data Validation', () => {
 	beforeEach(() => {
-		// Clear localStorage before each test
 		localStorage.clear();
 	});
 
-	describe('Page Name Validation', () => {
-		it('should validate correct page names', () => {
-			expect(validatePageName('page-1')).toBe(true);
-			expect(validatePageName('my_page')).toBe(true);
-			expect(validatePageName('Page123')).toBe(true);
+	describe('Page creation and validation structures', () => {
+		it('should validate page name patterns', () => {
+			expect(validatePageName('valid-page')).toBe(true);
+			expect(validatePageName('valid_page')).toBe(true);
+			expect(validatePageName('ValidPage123')).toBe(true);
 		});
 
-		it('should reject invalid page names', () => {
-			expect(validatePageName('page@#')).toBe(false);
-			expect(validatePageName('page with spaces')).toBe(false);
+		it('should reject invalid characters in names', () => {
+			expect(validatePageName('invalid@page')).toBe(false);
+			expect(validatePageName('invalid$page')).toBe(false);
+			expect(validatePageName('invalid page')).toBe(false);
+		});
+
+		it('should enforce length constraints', () => {
+			const max = 'a'.repeat(100);
+			const tooLong = 'a'.repeat(101);
+			expect(validatePageName(max)).toBe(true);
+			expect(validatePageName(tooLong)).toBe(false);
 			expect(validatePageName('')).toBe(false);
 		});
 
-		it('should enforce name length limits', () => {
-			const tooLong = 'a'.repeat(101);
-			expect(validatePageName(tooLong)).toBe(false);
-			
-			const validLength = 'a'.repeat(100);
-			expect(validatePageName(validLength)).toBe(true);
-		});
-
-		it('should allow alphanumeric, dashes, and underscores', () => {
-			expect(validatePageName('valid-page_1')).toBe(true);
-			expect(validatePageName('UPPERCASE')).toBe(true);
-			expect(validatePageName('lowercase')).toBe(true);
-		});
-
-		it('should reject special characters', () => {
-			expect(validatePageName('page!name')).toBe(false);
-			expect(validatePageName('page$name')).toBe(false);
-			expect(validatePageName('page%name')).toBe(false);
-			expect(validatePageName('page&name')).toBe(false);
+		it('should handle edge cases', () => {
+			expect(validatePageName('a')).toBe(true);
+			expect(validatePageName('A')).toBe(true);
+			expect(validatePageName('1')).toBe(true);
+			expect(validatePageName('-')).toBe(true);
+			expect(validatePageName('_')).toBe(true);
 		});
 	});
 
-	describe('Local Storage Page Structure', () => {
-		it('should define valid page data structure', () => {
-			const page = { 
-				id: 'page-1',
-				title: 'Test Page',
+	describe('Page data structures', () => {
+		it('should support basic page structure', () => {
+			const page = {
+				id: 'page-id',
+				title: 'Page Title',
 				components: [],
-				config: {},
+				config: {}
 			};
 			expect(page.id).toBeDefined();
-			expect(page.title).toBeDefined();
+			expect(typeof page.title).toBe('string');
 			expect(Array.isArray(page.components)).toBe(true);
+			expect(typeof page.config).toBe('object');
 		});
 
-		it('should store and retrieve page metadata', () => {
-			const metadata = {
-				created: new Date().toISOString(),
-				modified: new Date().toISOString(),
-				author: 'test-user',
-				version: 1
-			};
-			expect(metadata.created).toBeDefined();
-			expect(metadata.modified).toBeDefined();
-			expect(metadata.version).toBeGreaterThan(0);
-		});
-
-		it('should track storage quota usage', () => {
-			const storageQuota = { 
-				used: 1024,
-				available: 5000000,
-				percent: (1024 / 5000000) * 100,
-			};
-			expect(storageQuota.available).toBeGreaterThan(storageQuota.used);
-			expect(storageQuota.percent).toBeLessThan(100);
-			expect(storageQuota.percent).toBeGreaterThan(0);
-		});
-
-		it('should manage draft entries correctly', () => {
-			const drafts = [
-				{ id: 'draft-1', title: 'Draft 1', modified: new Date() },
-				{ id: 'draft-2', title: 'Draft 2', modified: new Date() },
+		it('should maintain component array', () => {
+			const components = [
+				{ type: 'Header', props: { title: 'Title' } },
+				{ type: 'Footer', props: {} }
 			];
-			expect(Array.isArray(drafts)).toBe(true);
-			expect(drafts.length).toBe(2);
-			expect(drafts[0].id).toBeDefined();
+			expect(components.length).toBe(2);
+			expect(components[0].type).toBe('Header');
+		});
+
+		it('should support nested config', () => {
+			const config = {
+				theme: { primary: '#000', secondary: '#fff' },
+				layout: { type: 'grid', columns: 3 },
+				metadata: { seo: { title: 'SEO Title' } }
+			};
+			expect(config.theme.primary).toBe('#000');
+			expect(config.layout.columns).toBe(3);
+			expect(config.metadata.seo.title).toBe('SEO Title');
+		});
+
+		it('should handle large datasets', () => {
+			const largeArray = Array(500).fill({ id: 'item', value: 123 });
+			expect(largeArray.length).toBe(500);
+			expect(largeArray[0].value).toBe(123);
+		});
+
+		it('should manage pagination data', () => {
+			const pages = [
+				{ id: 'page1', title: 'Page 1' },
+				{ id: 'page2', title: 'Page 2' },
+				{ id: 'page3', title: 'Page 3' }
+			];
+			const pagination = { currentPage: 1, totalPages: Math.ceil(pages.length / 10) };
+			expect(pagination.totalPages).toBe(1);
+			expect(pages.length).toBe(3);
 		});
 	});
 
-	describe('Local Storage Operations', () => {
-		it('should support save operations', () => {
-			const saveResult = {
-				success: true,
-				pageId: 'local-page-1',
-				timestamp: new Date().toISOString()
+	describe('Page metadata handling', () => {
+		it('should track timestamps', () => {
+			const now = new Date();
+			const page = {
+				id: 'page-1',
+				title: 'Test Page',
+				created: now.toISOString(),
+				modified: now.toISOString(),
+				components: [],
+				config: {}
 			};
-			expect(saveResult.success).toBe(true);
-			expect(saveResult.pageId).toBeDefined();
+			expect(page.created).toBeDefined();
+			expect(page.modified).toBeDefined();
 		});
 
-		it('should support retrieve operations', () => {
-			const retrievedPage = {
-				id: 'local-page-1',
-				title: 'Local Page',
-				lastModified: new Date().toISOString(),
-			};
-			expect(retrievedPage.id).toBeDefined();
-			expect(retrievedPage.title).toBeDefined();
+		it('should support versioning', () => {
+			const version1 = { id: 'page', version: 1, content: 'v1' };
+			const version2 = { ...version1, version: 2, content: 'v2' };
+			expect(version2.version).toBe(2);
+			expect(version1.version).toBe(1);
 		});
 
-		it('should list multiple pages', () => {
-			const pagesList = [
-				{ id: 'page-1', title: 'Page 1', modified: new Date() },
-				{ id: 'page-2', title: 'Page 2', modified: new Date() },
-				{ id: 'page-3', title: 'Page 3', modified: new Date() },
+		it('should manage draft status', () => {
+			const draft = { isDraft: true, id: 'draft-1', title: 'Draft Page' };
+			const published = { ...draft, isDraft: false };
+			expect(draft.isDraft).toBe(true);
+			expect(published.isDraft).toBe(false);
+		});
+
+		it('should track authorship', () => {
+			const page = {
+				id: 'page-1',
+				title: 'Page',
+				author: 'user@example.com',
+				contributors: ['contributor1', 'contributor2'],
+				components: [],
+				config: {}
+			};
+			expect(page.author).toBe('user@example.com');
+			expect(page.contributors.length).toBe(2);
+		});
+	});
+
+	describe('Page operations and state', () => {
+		it('should handle page state changes', () => {
+			const states = ['draft', 'preview', 'published', 'archived'];
+			const page = { id: 'page-1', title: 'Page', state: 'draft' };
+			expect(states).toContain(page.state);
+		});
+
+		it('should manage page permissions', () => {
+			const permissions = {
+				owner: 'user1',
+				editors: ['user2', 'user3'],
+				viewers: ['user4'],
+				public: false
+			};
+			expect(permissions.editors.length).toBe(2);
+		});
+
+		it('should support page organization', () => {
+			const organization = {
+				pages: ['page-1', 'page-2', 'page-3'],
+				categories: { home: ['page-1'], blog: ['page-2'], contact: ['page-3'] },
+				tags: ['important', 'draft', 'review']
+			};
+			expect(Object.keys(organization.categories).length).toBe(3);
+			expect(organization.tags).toContain('important');
+		});
+
+		it('should handle concurrent modifications', () => {
+			const modifications = [
+				{ timestamp: Date.now(), user: 'user1', action: 'update' },
+				{ timestamp: Date.now() + 1, user: 'user2', action: 'comment' },
+				{ timestamp: Date.now() + 2, user: 'user1', action: 'save' }
 			];
-			expect(pagesList.length).toBeGreaterThan(0);
-			pagesList.forEach(page => {
-				expect(page.id).toBeDefined();
-				expect(page.title).toBeDefined();
-			});
-		});
-
-		it('should delete pages', () => {
-			const deleteResult = {
-				success: true,
-				deletedId: 'page-to-delete'
-			};
-			expect(deleteResult.success).toBe(true);
+			expect(modifications.length).toBe(3);
+			expect(modifications[2].action).toBe('save');
 		});
 	});
 });

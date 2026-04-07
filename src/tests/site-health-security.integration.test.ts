@@ -147,4 +147,48 @@ describe('site-health-security.integration', () => {
 		expect(result1).toBeDefined();
 		expect(result2).toBeDefined();
 	});
+
+	it('should handle npm audit with vulnerabilities', async () => {
+		const result = await analyzeSecurityHealth('/path', 'site');
+		if (result.status === 'success' && result.data) {
+			expect(result.data.summary).toBeDefined();
+			expect(result.data.summary.total).toBeGreaterThanOrEqual(0);
+		}
+	});
+
+	it('should return result for path with siteName only', async () => {
+		const result = await analyzeSecurityHealth('/path', 'mysite');
+		expect(result).toHaveProperty('status');
+	});
+
+	it('should return result for path with repoName only', async () => {
+		const result = await analyzeSecurityHealth('/path', undefined, 'myrepo');
+		expect(result).toHaveProperty('status');
+	});
+
+	it('should return result for path with both siteName and repoName', async () => {
+		const result = await analyzeSecurityHealth('/path', 'site', 'repo');
+		expect(result).toHaveProperty('status');
+	});
+
+	it('should handle vulnerabilities categorized by severity', async () => {
+		const result = await analyzeSecurityHealth('/test');
+		if (result.status === 'success' && result.data) {
+			const summary = result.data.summary;
+			expect(summary).toHaveProperty('critical');
+			expect(summary).toHaveProperty('high');
+			expect(summary).toHaveProperty('moderate');
+			expect(summary).toHaveProperty('low');
+			expect(summary).toHaveProperty('info');
+		}
+	});
+
+	it('should calculate total vulnerabilities correctly', async () => {
+		const result = await analyzeSecurityHealth('/test');
+		if (result.status === 'success' && result.data) {
+			const { summary } = result.data;
+			const total = summary.critical + summary.high + summary.moderate + summary.low + summary.info;
+			expect(total).toBeGreaterThanOrEqual(0);
+		}
+	});
 });

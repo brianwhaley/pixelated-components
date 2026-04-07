@@ -10,6 +10,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer';
+import { smartFetch } from '../../general/smartfetch';
 import {
 	EXCLUDED_URL_PATTERNS,
 	EXCLUDED_FILE_EXTENSIONS,
@@ -441,10 +442,13 @@ function calculateFacetedNavigationScore(data: ReturnType<typeof collectFacetedN
  */
 async function collectBrowserCachingData(url: string) {
 	try {
-		const response = await fetch(url, {
-			method: 'HEAD', // Use HEAD to get headers without downloading the full content
-			headers: {
-				'User-Agent': 'Mozilla/5.0 (compatible; SEO Analysis Bot)'
+		const response = await smartFetch(url, {
+			responseType: 'ok',
+			requestInit: {
+				method: 'HEAD',
+				headers: {
+					'User-Agent': 'Mozilla/5.0 (compatible; SEO Analysis Bot)'
+				}
 			}
 		});
 
@@ -560,11 +564,14 @@ function calculateBrowserCachingScore(data: Awaited<ReturnType<typeof collectBro
  */
 async function collectGzipCompressionData(url: string) {
 	try {
-		const response = await fetch(url, {
-			method: 'GET', // Changed from HEAD to GET to properly detect compression
-			headers: {
-				'User-Agent': 'Mozilla/5.0 (compatible; SEO Analysis Bot)',
-				'Accept-Encoding': 'gzip, deflate' // Added Accept-Encoding like browsers
+		const response = await smartFetch(url, {
+			responseType: 'ok',
+			requestInit: {
+				method: 'GET',
+				headers: {
+					'User-Agent': 'Mozilla/5.0 (compatible; SEO Analysis Bot)',
+					'Accept-Encoding': 'gzip, deflate'
+				}
 			}
 		});
 
@@ -888,8 +895,11 @@ async function crawlSite(baseUrl: string, maxPages: number = 10): Promise<string
 			discovered.push(currentUrl);
 
 			try {
-				const response = await fetch(currentUrl, {
-					headers: { 'User-Agent': 'Mozilla/5.0 (compatible; SEO Analysis Bot)' }
+				const response = await smartFetch(currentUrl, {
+					responseType: 'ok',
+					requestInit: {
+						headers: { 'User-Agent': 'Mozilla/5.0 (compatible; SEO Analysis Bot)' }
+					}
 				});
 
 				if (!response.ok) continue;
@@ -1189,7 +1199,9 @@ async function performSiteWideAudits(baseUrl: string): Promise<OnSiteSEOAudit[]>
 			case 'robots-txt':
 				try {
 					const robotsUrl = `${protocol}//${baseDomain}/robots.txt`;
-					const robotsResponse = await fetch(robotsUrl);
+					const robotsResponse = await smartFetch(robotsUrl, {
+						responseType: 'ok'
+					});
 					score = robotsResponse.ok ? 1 : 0;
 					displayValue = score ? 'Robots.txt accessible' : 'Robots.txt not found or inaccessible';
 				} catch {
@@ -1201,7 +1213,9 @@ async function performSiteWideAudits(baseUrl: string): Promise<OnSiteSEOAudit[]>
 			case 'sitemap-xml':
 				try {
 					const sitemapUrl = `${protocol}//${baseDomain}/sitemap.xml`;
-					const sitemapResponse = await fetch(sitemapUrl);
+					const sitemapResponse = await smartFetch(sitemapUrl, {
+						responseType: 'ok'
+					});
 					score = sitemapResponse.ok ? 1 : 0;
 					displayValue = score ? 'Sitemap.xml accessible' : 'Sitemap.xml not found or inaccessible';
 				} catch {
@@ -1228,7 +1242,9 @@ async function performSiteWideAudits(baseUrl: string): Promise<OnSiteSEOAudit[]>
 			case 'manifest-file':
 				try {
 					const manifestUrl = `${protocol}//${baseDomain}/manifest.webmanifest`;
-					const manifestResponse = await fetch(manifestUrl);
+					const manifestResponse = await smartFetch(manifestUrl, {
+						responseType: 'ok'
+					});
 					score = manifestResponse.ok ? 1 : 0;
 					displayValue = score ? 'Manifest.webmanifest accessible' : 'Manifest.webmanifest not found or inaccessible';
 				} catch {
@@ -1309,7 +1325,9 @@ async function getUrlsFromSitemap(baseUrl: string): Promise<string[]> {
 
 		// Attempt to parse robots.txt for sitemap directives
 		try {
-			const robotsResp = await fetch(`${baseUrl}/robots.txt`);
+			const robotsResp = await smartFetch(`${baseUrl}/robots.txt`, {
+				responseType: 'ok'
+			});
 			if (robotsResp.ok) {
 				const robotsText = await robotsResp.text();
 				const sitemapRegex = /^sitemap:\s*(.+)$/gim;
@@ -1330,7 +1348,9 @@ async function getUrlsFromSitemap(baseUrl: string): Promise<string[]> {
 		for (const sitemapUrl of candidates) {
 			triedUrls.push(sitemapUrl);
 			try {
-				const response = await fetch(sitemapUrl);
+				const response = await smartFetch(sitemapUrl, {
+					responseType: 'ok'
+				});
 				if (!response.ok) {
 					console.warn(`Sitemap URL ${sitemapUrl} returned status ${response.status}`);
 					continue;

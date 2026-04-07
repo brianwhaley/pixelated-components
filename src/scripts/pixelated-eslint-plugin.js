@@ -1292,6 +1292,55 @@ const noHardcodedConfigKeysRule = {
 	}
 };
 
+/* ===== RULE: no-direct-fetch ===== */
+const noDirectFetchRule = {
+	meta: {
+		type: 'suggestion',
+		docs: {
+			description: 'Warn when fetch() is used directly instead of smartFetch. smartFetch provides caching, retries, error handling, and timeout support.',
+			category: 'Best Practices',
+			recommended: true,
+		},
+		fixable: false,
+		schema: [],
+		messages: {
+			useSmartFetch: 'Use smartFetch instead of direct fetch(). smartFetch provides caching, retries, proper error handling, timeouts, and proxy fallback. See components/general/smartfetch.ts for details.',
+		},
+	},
+	create(context) {
+		const filename = context.getFilename() || '';
+		
+		// Skip ESLint config files, tests, node_modules, build scripts, old files, and smartfetch itself
+		if (
+			filename.includes('node_modules') ||
+			filename.includes('eslint.config') ||
+			filename.includes('.old.') ||
+			filename.endsWith('.old.js') ||
+			filename.endsWith('.old.ts') ||
+			filename.includes('/scripts/') ||
+			filename.includes('/build/') ||
+			filename.endsWith('/smartfetch.ts')
+		) {
+			return {};
+		}
+
+		return {
+			CallExpression(node) {
+				// Check if this is a direct fetch() call
+				if (
+					node.callee.type === 'Identifier' &&
+					node.callee.name === 'fetch'
+				) {
+					context.report({
+						node,
+						messageId: 'useSmartFetch',
+					});
+				}
+			},
+		};
+	}
+};
+
 export default {
 	rules: {
 		'prop-types-inferprops': propTypesInferPropsRule,
@@ -1310,6 +1359,7 @@ export default {
 		'no-duplicate-export-names': noDuplicateExportNamesRule,
 		'class-name-kebab-case': classNameKebabCaseRule,
 		'no-hardcoded-config-keys': noHardcodedConfigKeysRule,
+		'no-direct-fetch': noDirectFetchRule,
 	},
 	configs: {
 		recommended: {
@@ -1330,6 +1380,7 @@ export default {
 				'pixelated/no-duplicate-export-names': 'error',
 				'pixelated/class-name-kebab-case': 'error',
 				'pixelated/no-hardcoded-config-keys': 'error',
+				'pixelated/no-direct-fetch': 'warn',
 			},
 		},
 	},

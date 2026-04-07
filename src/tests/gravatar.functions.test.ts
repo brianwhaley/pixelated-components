@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { getGravatarAvatarUrl, getGravatarProfile, getGravatarAccountUrl, type GravatarProfile } from '../components/integrations/gravatar.functions';
+import { buildUrl } from '../components/general/urlbuilder';
 
 describe('Gravatar Functions', () => {
 	describe('getGravatarAvatarUrl', () => {
@@ -181,6 +182,94 @@ describe('Gravatar Functions', () => {
 			
 			expect(githubUrl).toBe('https://github.com/testuser');
 			expect(linkedinUrl).toBe('https://linkedin.com/in/testuser');
+		});
+	});
+
+	describe('buildUrl URL Construction for Gravatar APIs', () => {
+		describe('Avatar URL building', () => {
+			it('should construct gravatar avatar URL with buildUrl (Section 1)', () => {
+				const email = 'test@example.com';
+				const hash = '8f0cbb7375d6bba2e9a3e9b5c5c5c5c5'; // MD5 of lowercased email
+
+				const avatarUrl = buildUrl({
+					baseUrl: 'https://gravatar.com/avatar/' + hash,
+					params: {
+						s: 200,
+						d: 'mp'
+					}
+				});
+
+				expect(avatarUrl).toContain('gravatar.com/avatar');
+				expect(avatarUrl).toContain(hash);
+				expect(avatarUrl).toContain('s=200');
+				expect(avatarUrl).toContain('d=mp');
+			});
+
+			it('should handle different avatar sizes with buildUrl (Section 2)', () => {
+				const hash = 'abc123';
+				
+				const size200 = buildUrl({
+					baseUrl: 'https://gravatar.com/avatar/' + hash,
+					params: { s: 200, d: 'mp' }
+				});
+				
+				const size400 = buildUrl({
+					baseUrl: 'https://gravatar.com/avatar/' + hash,
+					params: { s: 400, d: 'mp' }
+				});
+
+				expect(size200).toContain('s=200');
+				expect(size400).toContain('s=400');
+			});
+		});
+
+		describe('Profile URL building', () => {
+			it('should construct gravatar profile URL with buildUrl (Section 3)', () => {
+				const hash = 'abc123';
+
+				const profileUrl = buildUrl({
+					baseUrl: 'https://gravatar.com/' + hash,
+					params: {
+						format: 'json'
+					}
+				});
+
+				expect(profileUrl).toContain('gravatar.com');
+				expect(profileUrl).toContain(hash);
+				expect(profileUrl).toContain('format=json');
+			});
+
+			it('should construct JSON profile URL correctly (Section 4)', () => {
+				const hash = 'test-hash-123';
+
+				const jsonUrl = buildUrl({
+					baseUrl: 'https://gravatar.com/' + hash,
+					params: {
+						format: 'json'
+					}
+				});
+
+				expect(jsonUrl).toContain('gravatar.com/' + hash);
+				expect(jsonUrl).toContain('format=json');
+			});
+
+			it('should handle gravatar profile with different parameters', () => {
+				const hash = 'user-hash';
+				
+				const url1 = buildUrl({
+					baseUrl: 'https://gravatar.com/' + hash,
+					params: { format: 'json', callback: 'myCallback' }
+				});
+				
+				const url2 = buildUrl({
+					baseUrl: 'https://gravatar.com/' + hash,
+					params: { format: 'xml' }
+				});
+
+				expect(url1).toContain('format=json');
+				expect(url1).toContain('callback=myCallback');
+				expect(url2).toContain('format=xml');
+			});
 		});
 	});
 });

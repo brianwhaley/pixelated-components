@@ -9,7 +9,9 @@ import {
   attributeMap,
   stringTo1337,
   stringTo1337_v1,
-  logAllChange
+  logAllChange,
+  extractDomainName,
+  getDomain
 } from '../components/general/utilities';
 
 describe('Utility Functions', () => {
@@ -693,6 +695,171 @@ describe('Utility Functions', () => {
         logAllChange();
         logAllChange();
       }).not.toThrow();
+    });
+
+    it('should listen for input changes', () => {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = 'initial';
+      document.body.appendChild(input);
+
+      const consoleSpy = vi.spyOn(console, 'log');
+      logAllChange();
+      
+      const event = new Event('change', { bubbles: true });
+      input.dispatchEvent(event);
+
+      document.body.removeChild(input);
+      consoleSpy.mockRestore();
+    });
+
+    it('should listen for select changes', () => {
+      const select = document.createElement('select');
+      const option = document.createElement('option');
+      option.value = 'test';
+      select.appendChild(option);
+      document.body.appendChild(select);
+
+      const consoleSpy = vi.spyOn(console, 'log');
+      logAllChange();
+
+      const event = new Event('change', { bubbles: true });
+      select.dispatchEvent(event);
+
+      document.body.removeChild(select);
+      consoleSpy.mockRestore();
+    });
+
+    it('should listen for textarea changes', () => {
+      const textarea = document.createElement('textarea');
+      textarea.value = 'initial text';
+      document.body.appendChild(textarea);
+
+      const consoleSpy = vi.spyOn(console, 'log');
+      logAllChange();
+
+      const event = new Event('change', { bubbles: true });
+      textarea.dispatchEvent(event);
+
+      document.body.removeChild(textarea);
+      consoleSpy.mockRestore();
+    });
+
+    it('should handle checkbox changes', () => {
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.checked = false;
+      document.body.appendChild(checkbox);
+
+      const consoleSpy = vi.spyOn(console, 'log');
+      logAllChange();
+
+      const event = new Event('change', { bubbles: true });
+      checkbox.dispatchEvent(event);
+
+      document.body.removeChild(checkbox);
+      consoleSpy.mockRestore();
+    });
+
+    it('should handle radio button changes', () => {
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.checked = true;
+      document.body.appendChild(radio);
+
+      const consoleSpy = vi.spyOn(console, 'log');
+      logAllChange();
+
+      const event = new Event('change', { bubbles: true });
+      radio.dispatchEvent(event);
+
+      document.body.removeChild(radio);
+      consoleSpy.mockRestore();
+    });
+
+    it('should ignore non-form elements', () => {
+      const div = document.createElement('div');
+      document.body.appendChild(div);
+
+      const consoleSpy = vi.spyOn(console, 'log');
+      logAllChange();
+
+      const event = new Event('change', { bubbles: true });
+      div.dispatchEvent(event);
+
+      document.body.removeChild(div);
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('extractDomainName', () => {
+    it('should extract domain from www prefix', () => {
+      expect(extractDomainName('www.example.com')).toBe('example');
+    });
+
+    it('should extract domain from plain domain', () => {
+      expect(extractDomainName('example.com')).toBe('example');
+    });
+
+    it('should handle localhost as pixelated', () => {
+      expect(extractDomainName('localhost')).toBe('pixelated');
+    });
+
+    it('should handle 127.0.0.1 as pixelated', () => {
+      expect(extractDomainName('127.0.0.1')).toBe('pixelated');
+    });
+
+    it('should handle localhost with port', () => {
+      expect(extractDomainName('localhost:3000')).toBe('pixelated');
+    });
+
+    it('should extract domain from subdomains', () => {
+      expect(extractDomainName('api.example.com')).toBe('example');
+    });
+
+    it('should handle single label domain', () => {
+      expect(extractDomainName('dev')).toBe('dev');
+    });
+
+    it('should handle case-insensitively', () => {
+      const domain1 = extractDomainName('WWW.EXAMPLE.COM');
+      const domain2 = extractDomainName('www.example.com');
+      expect(domain1).toBe(domain2);
+      expect(domain1).toBe('example');
+    });
+
+    it('should trim whitespace', () => {
+      expect(extractDomainName('  www.example.com  ')).toBe('example');
+    });
+
+    it('should handle empty string as pixelated', () => {
+      expect(extractDomainName('')).toBe('pixelated');
+    });
+
+    it('should extract from two-part domain', () => {
+      expect(extractDomainName('pixelvivid.com')).toBe('pixelvivid');
+    });
+
+    it('should handle multi-level subdomains', () => {
+      expect(extractDomainName('sub.api.example.com')).toBe('example');
+    });
+  });
+
+  describe('getDomain', () => {
+    it('should return a string', () => {
+      const domain = getDomain();
+      expect(typeof domain).toBe('string');
+    });
+
+    it('should not be empty', () => {
+      const domain = getDomain();
+      expect(domain.length).toBeGreaterThan(0);
+    });
+
+    it('should return pixelated if window is undefined', () => {
+      // getDomain falls back to 'pixelated' in non-browser environments
+      const domain = getDomain();
+      expect(typeof domain).toBe('string');
     });
   });
 });

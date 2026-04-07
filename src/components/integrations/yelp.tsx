@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes, { InferProps } from 'prop-types';
+import { smartFetch } from '../general/smartfetch';
 
 /* 
 NOTE : development has stopped for this component 
@@ -43,17 +44,14 @@ export function YelpReviews(props: YelpReviewsType) {
 			const url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${props.businessID}/reviews`;
 
 			try {
-				const response = await fetch(url, {
-					headers: {
-						Authorization: `Bearer ${apiKey}`,
+				const data = await smartFetch(url, {
+					requestInit: {
+						headers: {
+							Authorization: `Bearer ${apiKey}`,
+						},
 					},
 				});
 
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
-
-				const data = await response.json();
 				setReviews(data.reviews);
 				setLoading(false);
 			} catch (e: any) {

@@ -4,6 +4,7 @@ import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { generateKey } from '../../general/utilities';
 import { FormValidationProvider, useFormValidation } from './formvalidator';
+import { FormSubmitWrapper, useFormSubmitContext } from './formsubmit';
 
 import * as FC from './formcomponents';
 import { CompoundFontSelector } from '../config/CompoundFontSelector';
@@ -25,29 +26,44 @@ Generate all the elements to display a form */
 /**
  * FormEngine — Render a form defined by a JSON `formData` schema. Converts `formData.fields` to React components and manages submission handling and validation.
  *
- * @param {string} [props.name] - Form HTML name attribute.
- * @param {string} [props.id] - Form HTML id attribute.
+ * Can be used in two ways:
+ * 1. JSON-driven (recommended): formData.properties defines form behavior. Wrap in FormSubmitWrapper or use alone (defaults apply)
+ * 2. Code-driven (backwards compatible): Pass name, id, onSubmitHandler as props
+ *
+ * @param {string} [props.name] - Form HTML name attribute. Falls back to formData.properties.name
+ * @param {string} [props.id] - Form HTML id attribute. Falls back to formData.properties.id
  * @param {string} [props.method] - HTTP method for form submission (default: 'post').
  * @param {function} [props.onSubmitHandler] - Optional submit handler invoked with the submit event.
- * @param {object} [props.formData] - JSON schema describing fields (object with `fields` array).
+ * @param {object} [props.formData] - JSON schema describing fields (object with `fields` array and optional `properties` object).
  */
 FormEngine.propTypes = {
-/** Form name attribute */
+/** Form name attribute. Falls back to formData.properties.name */
 	name: PropTypes.string,
-	/** Form id attribute */
+	/** Form id attribute. Falls back to formData.properties.id */
 	id: PropTypes.string,
 	/** HTTP method (e.g., 'post') */
 	method: PropTypes.string,
-	/** Submit handler called when the form is valid and submitted */
+	/** Submit handler called when the form is valid and submitted. Falls back to FormSubmitWrapper context if available */
 	onSubmitHandler: PropTypes.func,
-	/** JSON schema describing form fields */
+	/** JSON schema describing form fields and submission properties */
 	formData: PropTypes.object.isRequired
 };
 export type FormEngineType = InferProps<typeof FormEngine.propTypes>;
 export function FormEngine(props: FormEngineType) {
+	// Check if form should use internal FormSubmitWrapper
+	const hasJsonProperties = (props.formData as any)?.properties;
+	const hasNoSubmitHandler = !props.onSubmitHandler;
+	const shouldUseFormSubmitWrapper = hasJsonProperties && hasNoSubmitHandler;
+
 	return (
 		<FormValidationProvider>
-			<FormEngineInner {...(props as any)} />
+			{shouldUseFormSubmitWrapper ? (
+				<FormSubmitWrapper {...(props.formData as any).properties}>
+					<FormEngineInner {...(props as any)} />
+				</FormSubmitWrapper>
+			) : (
+				<FormEngineInner {...(props as any)} />
+			)}
 		</FormValidationProvider>
 	);
 }
@@ -77,11 +93,29 @@ type FormEngineInnerType = InferProps<typeof FormEngineInner.propTypes>;
 function FormEngineInner(props: FormEngineInnerType) {
 	const { validateAllFields } = useFormValidation();
 
+	// Try to get handleSubmit from FormSubmitWrapper context
+	let contextSubmitHandler: ((event: React.FormEvent<HTMLFormElement>) => Promise<void>) | undefined;
+	try {
+		const context = useFormSubmitContext();
+		contextSubmitHandler = context?.handleSubmit;
+	} catch (e) {
+		// Not inside FormSubmitWrapper - use provided handler
+	}
+
 	function generateFormProps(props: any) {
 		// GENERATE PROPS TO RENDER THE FORM CONTAINER, INTERNAL FUNCTION
 		if (debug) console.log("Generating Form Props");
 		// Create a clean copy without non-serializable properties
 		const { formData, onSubmitHandler, ...formProps } = props;
+		
+		// Extract name/id from properties with fallback to props
+		if (!formProps.name && (formData as any)?.properties?.name) {
+			formProps.name = (formData as any).properties.name;
+		}
+		if (!formProps.id && (formData as any)?.properties?.id) {
+			formProps.id = (formData as any).properties.id;
+		}
+		
 		// Safety: default to POST to avoid accidental GET navigation (prevents query leakage)
 		if (!formProps.method) formProps.method = 'post';
 		return formProps;
@@ -147,7 +181,9 @@ function FormEngineInner(props: FormEngineInnerType) {
 			return false;
 		}
 
-		if (props.onSubmitHandler) props.onSubmitHandler(event);
+		// Try context handler first (from FormSubmitWrapper), then props handler
+		const handler = contextSubmitHandler || props.onSubmitHandler;
+		if (handler) handler(event as any);
 		return true;
 	}
 

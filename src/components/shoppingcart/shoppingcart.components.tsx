@@ -7,7 +7,7 @@ import { PayPal } from "./paypal";
 import { CalloutHeader } from "../general/callout";
 import { FormEngine } from "../sitebuilder/form/formengine";
 import { FormButton } from '../sitebuilder/form/formcomponents';
-import { emailJSON } from "../sitebuilder/form/formemailer";
+import { emailJSON } from "../sitebuilder/form/formsubmit";
 import '../sitebuilder/form/form.css';
 import { MicroInteractions } from '../general/microinteractions';
 import { Modal, handleModalOpen } from '../general/modal';

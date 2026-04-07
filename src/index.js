@@ -37,7 +37,9 @@ export * from './components/general/sidepanel';
 export * from './components/general/sitemap';
 export * from './components/general/skeleton';
 export * from './components/general/skeleton-loading';
+export * from './components/general/smartfetch';
 export * from './components/general/smartimage';
+export * from './components/general/urlbuilder';
 export * from './components/general/splitscroll';
 export * from './components/general/styleguide';
 export * from './components/general/global-error';
@@ -90,12 +92,12 @@ export * from './components/sitebuilder/config/google-fonts';
 
 export * from './components/sitebuilder/form/formbuilder';
 export * from './components/sitebuilder/form/formcomponents';
-export * from './components/sitebuilder/form/formemailer';
+export * from './components/sitebuilder/form/formsubmit';
 export * from './components/sitebuilder/form/formengine';
 export * from './components/sitebuilder/form/formextractor';
 export * from './components/sitebuilder/form/formfieldvalidations';
 export * from './components/sitebuilder/form/formtypes';
-export * from './components/sitebuilder/form/formutils';
+export * from './components/sitebuilder/form/formengineutilities';
 export * from './components/sitebuilder/form/formvalidator';
 
 export * from './components/sitebuilder/page/components/ComponentPropertiesForm';

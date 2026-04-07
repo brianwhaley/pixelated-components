@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { PageGridItem } from '../../general/semantic';
+import { smartFetch } from '../../general/smartfetch';
 import "./site-health.css";
 import { useSiteHealthMockData } from './site-health-mock-context';
 
@@ -97,13 +98,16 @@ export function SiteHealthTemplate<T>(
 		}
 
 
-		const response = await fetch(url.toString(), {
-			method,
-			headers: {
-				'Content-Type': 'application/json',
-				...headers,
+		const response = await smartFetch(url.toString(), {
+			responseType: 'ok',
+			requestInit: {
+				method,
+				headers: {
+					'Content-Type': 'application/json',
+					...headers,
+				},
+				body: body ? JSON.stringify(body) : undefined,
 			},
-			body: body ? JSON.stringify(body) : undefined,
 		});
 
 		if (!response.ok) {

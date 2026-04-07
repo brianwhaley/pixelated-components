@@ -2,26 +2,83 @@ import React, { useEffect, useState } from 'react';
 import { GravatarCard, type GravatarCardType } from '@/components/integrations/gravatar.components';
 import { getGravatarProfile, type GravatarProfile } from '@/components/integrations/gravatar.functions';
 
-// Wrapper to handle async data fetching for the story
-const GravatarStoryWrapper = (args: GravatarCardType & { email?: string }) => {
-	const { email, ...componentProps } = args;
+/**
+ * Gravatar API Integration with buildUrl
+ *
+ * The Gravatar integration now uses buildUrl() for consistent URL construction:
+ *
+ * **Avatar URL Construction:**
+ * ```typescript
+ * buildUrl({
+ *   baseUrl: 'https://www.gravatar.com',
+ *   pathSegments: ['avatar', hash],
+ *   params: { s: size, d: defaultImage }
+ * })
+ * // Result: https://www.gravatar.com/avatar/{hash}?s=200&d=mp
+ * ```
+ *
+ * **Profile JSON URL Construction:**
+ * ```typescript
+ * buildUrl({
+ *   baseUrl: 'https://en.gravatar.com',
+ *   pathSegments: [hash, 'json']
+ * })
+ * // Result: https://en.gravatar.com/{hash}/json
+ * ```
+ *
+ * **Benefits:**
+ * - Automatic URL parameter encoding (e.g., special characters in hashes)
+ * - Consistent path segment joining with `/` separators
+ * - Type-safe parameter handling
+ * - Transparent integration with smartFetch() for retries and caching
+ * - Enhanced error handling with domain context
+ * - Timeout protection (30s default)
+ * - Debug logging support
+ *
+ * **Implementation Files:**
+ * - URL building logic: `src/components/general/urlbuilder.ts`
+ * - Avatar/Profile functions: `src/components/integrations/gravatar.functions.ts`
+ * - UI Component: `src/components/integrations/gravatar.components.tsx`
+ */
+const GravatarStoryWrapper = (args: GravatarCardType & { email?: string; debug?: boolean }) => {
+	const { email, debug, ...componentProps } = args;
 	const [fetchedProfile, setFetchedProfile] = useState<GravatarProfile | null>(null);
 	const [loading, setLoading] = useState(!!email);
+	const [error, setError] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (email) {
 			setLoading(true);
-			getGravatarProfile(email).then((data) => {
-				setFetchedProfile(data);
-				setLoading(false);
-			});
+			setError(null);
+			getGravatarProfile(email)
+				.then((data) => {
+					setFetchedProfile(data);
+					setLoading(false);
+				})
+				.catch((err) => {
+					setError(err instanceof Error ? err.message : 'Failed to fetch profile');
+					setLoading(false);
+				});
 		} else {
 			setFetchedProfile(null);
 			setLoading(false);
+			setError(null);
 		}
 	}, [email]);
 
 	if (loading) return <div style={{ padding: 16 }}>Loading profile for {email}...</div>;
+
+	if (error) {
+		return (
+			<div style={{ padding: 16, color: '#d32f2f', fontFamily: 'monospace', fontSize: 12 }}>
+				<strong>Error loading profile:</strong>
+				<br />
+				{error}
+				<br />
+				<small>smartFetch automatically retried with exponential backoff before failing</small>
+			</div>
+		);
+	}
 
 	return <GravatarCard profile={fetchedProfile} {...componentProps} />;
 };

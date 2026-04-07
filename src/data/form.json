@@ -1,4 +1,11 @@
 {
+	"properties": {
+		"name": "custom-request",
+		"id": "custom-request-form",
+		"toggleLoading": true,
+		"openModal": true,
+		"resetForm": true
+	},
 	"fields" : [
         {
 			"component" : "FormInput",

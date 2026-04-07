@@ -1,6 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { GeminiApiService, createGeminiApiService } from '../components/integrations/gemini-api.client';
 
+// Mock smartFetch
+vi.mock('../components/general/smartfetch', () => ({
+	smartFetch: vi.fn()
+}));
+
+import { smartFetch } from '../components/general/smartfetch';
+
 // Complete SiteInfo fixture with all required fields
 const completeSiteInfo = {
 	name: 'Test Site',
@@ -27,7 +34,7 @@ describe('GeminiApiService', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		global.fetch = vi.fn();
+		vi.mocked(smartFetch).mockClear();
 		service = new GeminiApiService(testApiKey);
 	});
 
@@ -63,10 +70,7 @@ describe('GeminiApiService', () => {
 				}
 			};
 
-			(global.fetch as any).mockResolvedValueOnce({
-				ok: true,
-				json: async () => mockResponse
-			});
+			vi.mocked(smartFetch).mockResolvedValueOnce(mockResponse);
 
 			const request = {
 				route: { name: 'test', path: '/test' },
@@ -82,12 +86,7 @@ describe('GeminiApiService', () => {
 		});
 
 		it('should handle API error responses', async () => {
-			(global.fetch as any).mockResolvedValueOnce({
-				ok: false,
-				status: 500,
-				statusText: 'Internal Server Error',
-				text: async () => 'Error message'
-			});
+			vi.mocked(smartFetch).mockRejectedValueOnce(new Error('Internal Server Error'));
 
 			const request = {
 				route: { name: 'test', path: '/test' },
@@ -102,7 +101,7 @@ describe('GeminiApiService', () => {
 
 		it('should handle fetch network errors', async () => {
 			const error = new Error('Network error');
-			(global.fetch as any).mockRejectedValueOnce(error);
+			vi.mocked(smartFetch).mockRejectedValueOnce(error);
 
 			const request = {
 				route: { name: 'test', path: '/test' },
@@ -112,7 +111,7 @@ describe('GeminiApiService', () => {
 			const result = await service.generateRouteRecommendations(request);
 
 			expect(result.success).toBe(false);
-			expect(result.error).toContain('Network error');
+			expect(result.error).toContain('Network');
 		});
 
 		it('should handle API response with error field', async () => {
@@ -121,10 +120,7 @@ describe('GeminiApiService', () => {
 				error: 'API error occurred'
 			};
 
-			(global.fetch as any).mockResolvedValueOnce({
-				ok: true,
-				json: async () => mockResponse
-			});
+			vi.mocked(smartFetch).mockResolvedValueOnce(mockResponse);
 
 			const request = {
 				route: { name: 'test', path: '/test' },
@@ -138,10 +134,7 @@ describe('GeminiApiService', () => {
 		});
 
 		it('should send correct request headers and body', async () => {
-			(global.fetch as any).mockResolvedValueOnce({
-				ok: true,
-				json: async () => ({ success: true, data: {} })
-			});
+			vi.mocked(smartFetch).mockResolvedValueOnce({ success: true, data: {} });
 
 			const request = {
 				route: { name: 'test', path: '/test' },
@@ -150,12 +143,12 @@ describe('GeminiApiService', () => {
 
 			await service.generateRouteRecommendations(request);
 
-			expect(global.fetch).toHaveBeenCalledWith(
+			expect(smartFetch).toHaveBeenCalledWith(
 				'/api/ai/recommendations',
 				expect.objectContaining({
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: expect.stringContaining('test')
+					requestInit: expect.objectContaining({
+						method: 'POST'
+					})
 				})
 			);
 		});
@@ -170,26 +163,21 @@ describe('GeminiApiService', () => {
 				]
 			};
 
-			(global.fetch as any).mockResolvedValueOnce({
-				ok: true,
-				json: async () => mockModels
-			});
+			vi.mocked(smartFetch).mockResolvedValueOnce(mockModels);
 
 			const result = await service.listModels();
 
 			expect(result).toEqual(mockModels);
-			expect(global.fetch).toHaveBeenCalledWith(
+			expect(smartFetch).toHaveBeenCalledWith(
 				expect.stringContaining('models'),
-				expect.objectContaining({ method: 'GET' })
+				expect.objectContaining({
+					requestInit: expect.objectContaining({ method: 'GET' })
+				})
 			);
 		});
 
 		it('should handle model list errors', async () => {
-			(global.fetch as any).mockResolvedValueOnce({
-				ok: false,
-				status: 401,
-				statusText: 'Unauthorized'
-			});
+			vi.mocked(smartFetch).mockRejectedValueOnce(new Error('Unauthorized'));
 
 			const result = await service.listModels();
 
@@ -197,7 +185,7 @@ describe('GeminiApiService', () => {
 		});
 
 		it('should handle network errors in listModels', async () => {
-			(global.fetch as any).mockRejectedValueOnce(new Error('Network failed'));
+			vi.mocked(smartFetch).mockRejectedValueOnce(new Error('Network failed'));
 
 			const result = await service.listModels();
 

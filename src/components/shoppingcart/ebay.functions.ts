@@ -3,6 +3,8 @@ import type { CartItemType } from "./shoppingcart.functions";
 import { getCloudinaryRemoteFetchURL as getImg} from "../integrations/cloudinary";
 import { CacheManager } from "../general/cache-manager";
 import { getDomain } from "../general/utilities";
+import { smartFetch } from "../general/smartfetch";
+import { buildUrl } from "../general/urlbuilder";
 
 const debug = false;
 
@@ -149,22 +151,20 @@ export function getEbayAppToken(props: getEbayAppTokenType){
 	const fetchToken = async () => {
 		if (debug) console.log("Fetching Token");
 		try {
-			const response = await fetch(
+			const data = await smartFetch(
 				apiProps.proxyURL + apiProps.baseTokenURL, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded',
-						'Authorization': 'Basic ' + btoa(`${apiProps.appId}:${apiProps.appCertId}`) // Base64 encoded
-					},
-					body: new URLSearchParams({
-						grant_type: 'client_credentials',
-						scope: apiProps.tokenScope
-					})
+					requestInit: {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded',
+							'Authorization': 'Basic ' + btoa(`${apiProps.appId}:${apiProps.appCertId}`) // Base64 encoded
+						},
+						body: new URLSearchParams({
+							grant_type: 'client_credentials',
+							scope: apiProps.tokenScope
+						})
+					}
 				});
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data = await response.json();
 			const accessToken = data.access_token;
 			if (debug) console.log("Fetched eBay Access Token:", accessToken);
 			return accessToken;
@@ -207,20 +207,21 @@ export function getEbayBrowseSearch(props: getEbayBrowseSearchType){
 
 		if (debug) console.log("Fetching ebay API Browse Search Data");
 		try {
-			const response = await fetch(
-				apiProps.proxyURL + encodeURIComponent( fullURL ) , {
-					method: 'GET',
-					headers: {
-						'Authorization' : 'Bearer ' + token ,
-						'X-EBAY-C-MARKETPLACE-ID' : 'EBAY_US',
-						'X-EBAY-C-ENDUSERCTX' : 'affiliateCampaignId=<ePNCampaignId>,affiliateReferenceId=<referenceId>',
-						'X-EBAY-SOA-SECURITY-APPNAME' : 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe',
+			const data = await smartFetch(
+				buildUrl({
+					baseUrl: fullURL,
+					proxyUrl: apiProps.proxyURL,
+				}), {
+					requestInit: {
+						method: 'GET',
+						headers: {
+							'Authorization' : 'Bearer ' + token ,
+							'X-EBAY-C-MARKETPLACE-ID' : 'EBAY_US',
+							'X-EBAY-C-ENDUSERCTX' : 'affiliateCampaignId=<ePNCampaignId>,affiliateReferenceId=<referenceId>',
+							'X-EBAY-SOA-SECURITY-APPNAME' : 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe',
+						}
 					}
 				});
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data = await response.json();
 			if (debug) console.log("Fetched eBay API Browse Search Data:", data);
 			
 			// Store in Cache
@@ -266,20 +267,21 @@ export function getEbayBrowseItem(props: getEbayBrowseItemType){
 
 		if (debug) console.log("Fetching ebay API Browse Item Data");
 		try {
-			const response = await fetch(
-				apiProps.proxyURL + encodeURIComponent( fullURL ) , {
-					method: 'GET',
-					headers: {
-						'Authorization' : 'Bearer ' + token ,
-						'X-EBAY-C-MARKETPLACE-ID' : 'EBAY_US',
-						'X-EBAY-C-ENDUSERCTX' : 'affiliateCampaignId=<ePNCampaignId>,affiliateReferenceId=<referenceId>',
-						'X-EBAY-SOA-SECURITY-APPNAME' : 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe',
+			const data = await smartFetch(
+				buildUrl({
+					baseUrl: fullURL,
+					proxyUrl: apiProps.proxyURL,
+				}), {
+					requestInit: {
+						method: 'GET',
+						headers: {
+							'Authorization' : 'Bearer ' + token ,
+							'X-EBAY-C-MARKETPLACE-ID' : 'EBAY_US',
+							'X-EBAY-C-ENDUSERCTX' : 'affiliateCampaignId=<ePNCampaignId>,affiliateReferenceId=<referenceId>',
+							'X-EBAY-SOA-SECURITY-APPNAME' : 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe',
+						}
 					}
 				});
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data = await response.json();
 			if (debug) console.log("Fetched eBay Item Data:", data);
 
 			// Store in Cache
@@ -317,14 +319,30 @@ export function getEbayRateLimits(props: getEbayRateLimitsType){
 		if (debug) console.log("Fetching all eBay API Rate Limits");
 		
 		try {
+			const rateLimitUrl = buildUrl({
+				baseUrl: apiProps.baseAnalyticsURL,
+				pathSegments: ['rate_limit'],
+				proxyUrl: apiProps.proxyURL,
+			});
+			const userRateLimitUrl = buildUrl({
+				baseUrl: apiProps.baseAnalyticsURL,
+				pathSegments: ['user_rate_limit'],
+				proxyUrl: apiProps.proxyURL,
+			});
 			const [rateLimitRes, userRateLimitRes] = await Promise.all([
-				fetch(apiProps.proxyURL + encodeURIComponent( apiProps.baseAnalyticsURL + '/rate_limit' ), {
-					method: 'GET',
-					headers: { 'Authorization' : 'Bearer ' + token }
+				smartFetch(rateLimitUrl, {
+					responseType: 'ok',
+					requestInit: {
+						method: 'GET',
+						headers: { 'Authorization' : 'Bearer ' + token }
+					}
 				}),
-				fetch(apiProps.proxyURL + encodeURIComponent( apiProps.baseAnalyticsURL + '/user_rate_limit' ), {
-					method: 'GET',
-					headers: { 'Authorization' : 'Bearer ' + token }
+				smartFetch(userRateLimitUrl, {
+					responseType: 'ok',
+					requestInit: {
+						method: 'GET',
+						headers: { 'Authorization' : 'Bearer ' + token }
+					}
 				})
 			]);
 
@@ -430,20 +448,18 @@ export function getEbayItemsSearch(props: any){
 
 		if (debug) console.log("Fetching ebay API Items Search Data");
 		try {
-			const response = await fetch(
+			const data = await smartFetch(
 				apiProps.proxyURL + encodeURIComponent( fullURL ) , {
-					method: 'GET',
-					headers: {
-						'Authorization' : 'Bearer ' + token ,
-						'X-EBAY-C-MARKETPLACE-ID' : 'EBAY_US',
-						'X-EBAY-C-ENDUSERCTX' : 'affiliateCampaignId=<ePNCampaignId>,affiliateReferenceId=<referenceId>',
-						'X-EBAY-SOA-SECURITY-APPNAME' : 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe',
+					requestInit: {
+						method: 'GET',
+						headers: {
+							'Authorization' : 'Bearer ' + token ,
+							'X-EBAY-C-MARKETPLACE-ID' : 'EBAY_US',
+							'X-EBAY-C-ENDUSERCTX' : 'affiliateCampaignId=<ePNCampaignId>,affiliateReferenceId=<referenceId>',
+							'X-EBAY-SOA-SECURITY-APPNAME' : 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe',
+						}
 					}
 				});
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data = await response.json();
 
 			// Store in Cache
 			ebayCache.set(cacheKey, data);

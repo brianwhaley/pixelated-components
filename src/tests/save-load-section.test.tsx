@@ -2,9 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '../test/test-utils';
 import userEvent from '@testing-library/user-event';
 import { SaveLoadSection } from "../components/sitebuilder/page/components/SaveLoadSection";
+import { buildUrl } from '../components/general/urlbuilder';
 
-// Mock fetch globally
-global.fetch = vi.fn();
+// Mock smartFetch
+vi.mock('../components/general/smartfetch', () => ({
+	smartFetch: vi.fn()
+}));
+
+const { smartFetch } = await import('../components/general/smartfetch');
 
 describe('SaveLoadSection', () => {
 	const mockOnLoad = vi.fn();
@@ -20,8 +25,6 @@ describe('SaveLoadSection', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		// Reset fetch mock
-		(global.fetch as any).mockClear();
 	});
 
 	it('should render save/load interface', () => {
@@ -39,9 +42,7 @@ describe('SaveLoadSection', () => {
 	});
 
 	it('should fetch saved pages on mount', async () => {
-		(global.fetch as any).mockResolvedValueOnce({
-			json: () => Promise.resolve({ success: true, pages: ['page1', 'page2'] })
-		});
+		vi.mocked(smartFetch).mockResolvedValueOnce({ success: true, pages: ['page1', 'page2'] });
 
 		render(
 			<SaveLoadSection
@@ -51,7 +52,7 @@ describe('SaveLoadSection', () => {
 		);
 
 		await waitFor(() => {
-			expect(global.fetch).toHaveBeenCalledWith('/api/pagebuilder/list');
+			expect(smartFetch).toHaveBeenCalledWith('/api/pagebuilder/list');
 		});
 	});
 
@@ -72,13 +73,9 @@ describe('SaveLoadSection', () => {
 	it('should save page successfully', async () => {
 		const user = userEvent.setup();
 
-		(global.fetch as any)
-			.mockResolvedValueOnce({
-				json: () => Promise.resolve({ success: true, pages: [] })
-			})
-			.mockResolvedValueOnce({
-				json: () => Promise.resolve({ success: true, message: 'Page saved successfully' })
-			});
+		vi.mocked(smartFetch)
+			.mockResolvedValueOnce({ success: true, pages: [] })
+			.mockResolvedValueOnce({ success: true, message: 'Page saved successfully' });
 
 		render(
 			<SaveLoadSection
@@ -94,10 +91,12 @@ describe('SaveLoadSection', () => {
 		await user.click(saveButton);
 
 		await waitFor(() => {
-			expect(global.fetch).toHaveBeenCalledWith('/api/pagebuilder/save', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ name: 'test-page', data: mockPageData })
+			expect(smartFetch).toHaveBeenCalledWith('/api/pagebuilder/save', {
+				requestInit: {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ name: 'test-page', data: mockPageData })
+				}
 			});
 		});
 
@@ -107,13 +106,9 @@ describe('SaveLoadSection', () => {
 	it('should show error message on save failure', async () => {
 		const user = userEvent.setup();
 
-		(global.fetch as any)
-			.mockResolvedValueOnce({
-				json: () => Promise.resolve({ success: true, pages: [] })
-			})
-			.mockResolvedValueOnce({
-				json: () => Promise.resolve({ success: false, message: 'Save failed' })
-			});
+		vi.mocked(smartFetch)
+			.mockResolvedValueOnce({ success: true, pages: [] })
+			.mockResolvedValueOnce({ success: false, message: 'Save failed' });
 
 		render(
 			<SaveLoadSection
@@ -136,9 +131,7 @@ describe('SaveLoadSection', () => {
 	it('should toggle load page list', async () => {
 		const user = userEvent.setup();
 
-		(global.fetch as any).mockResolvedValueOnce({
-			json: () => Promise.resolve({ success: true, pages: ['page1', 'page2'] })
-		});
+		vi.mocked(smartFetch).mockResolvedValueOnce({ success: true, pages: ['page1', 'page2'] });
 
 		render(
 			<SaveLoadSection
@@ -160,9 +153,7 @@ describe('SaveLoadSection', () => {
 	it('should show "No saved pages" when list is empty', async () => {
 		const user = userEvent.setup();
 
-		(global.fetch as any).mockResolvedValueOnce({
-			json: () => Promise.resolve({ success: true, pages: [] })
-		});
+		vi.mocked(smartFetch).mockResolvedValueOnce({ success: true, pages: [] });
 
 		render(
 			<SaveLoadSection
@@ -181,13 +172,9 @@ describe('SaveLoadSection', () => {
 		const user = userEvent.setup();
 		const loadedData = { components: [{ component: 'Callout', props: {}, children: [] }] };
 
-		(global.fetch as any)
-			.mockResolvedValueOnce({
-				json: () => Promise.resolve({ success: true, pages: ['test-page'] })
-			})
-			.mockResolvedValueOnce({
-				json: () => Promise.resolve({ success: true, data: loadedData })
-			});
+		vi.mocked(smartFetch)
+			.mockResolvedValueOnce({ success: true, pages: ['test-page'] })
+			.mockResolvedValueOnce({ success: true, data: loadedData });
 
 		render(
 			<SaveLoadSection
@@ -215,13 +202,9 @@ describe('SaveLoadSection', () => {
 		// Mock window.confirm
 		const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
 
-		(global.fetch as any)
-			.mockResolvedValueOnce({
-				json: () => Promise.resolve({ success: true, pages: ['test-page'] })
-			})
-			.mockResolvedValueOnce({
-				json: () => Promise.resolve({ success: true, message: 'Page deleted successfully' })
-			});
+		vi.mocked(smartFetch)
+			.mockResolvedValueOnce({ success: true, pages: ['test-page'] })
+			.mockResolvedValueOnce({ success: true, message: 'Page deleted successfully' });
 
 		render(
 			<SaveLoadSection
@@ -237,8 +220,10 @@ describe('SaveLoadSection', () => {
 		await user.click(deleteButton);
 
 		await waitFor(() => {
-			expect(global.fetch).toHaveBeenCalledWith('/api/pagebuilder/delete?name=test-page', {
-				method: 'DELETE'
+			expect(smartFetch).toHaveBeenCalledWith('/api/pagebuilder/delete?name=test-page', {
+				requestInit: {
+					method: 'DELETE'
+				}
 			});
 		});
 
@@ -253,9 +238,7 @@ describe('SaveLoadSection', () => {
 		// Mock window.confirm to return false
 		const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
 
-		(global.fetch as any).mockResolvedValueOnce({
-			json: () => Promise.resolve({ success: true, pages: ['test-page'] })
-		});
+		vi.mocked(smartFetch).mockResolvedValueOnce({ success: true, pages: ['test-page'] });
 
 		render(
 			<SaveLoadSection
@@ -271,7 +254,7 @@ describe('SaveLoadSection', () => {
 		await user.click(deleteButton);
 
 		// Should not call delete API
-		expect(global.fetch).toHaveBeenCalledTimes(1); // Only the initial list fetch
+		expect(smartFetch).toHaveBeenCalledTimes(1); // Only the initial list fetch
 
 		confirmSpy.mockRestore();
 	});
@@ -279,8 +262,9 @@ describe('SaveLoadSection', () => {
 	it('should use custom API endpoint', async () => {
 		const customEndpoint = '/custom/api';
 
-		(global.fetch as any).mockResolvedValueOnce({
-			json: () => Promise.resolve({ success: true, pages: [] })
+		vi.mocked(smartFetch).mockResolvedValueOnce({
+			success: true,
+			pages: []
 		});
 
 		render(
@@ -292,7 +276,7 @@ describe('SaveLoadSection', () => {
 		);
 
 		await waitFor(() => {
-			expect(global.fetch).toHaveBeenCalledWith(`${customEndpoint}/list`);
+			expect(smartFetch).toHaveBeenCalledWith(`${customEndpoint}/list`);
 		});
 	});
 
@@ -300,14 +284,10 @@ describe('SaveLoadSection', () => {
 		const user = userEvent.setup();
 
 		// Mock a slow save operation
-		(global.fetch as any)
-			.mockResolvedValueOnce({
-				json: () => Promise.resolve({ success: true, pages: [] })
-			})
+		vi.mocked(smartFetch)
+			.mockResolvedValueOnce({ success: true, pages: [] })
 			.mockImplementationOnce(() => new Promise(resolve =>
-				setTimeout(() => resolve({
-					json: () => Promise.resolve({ success: true, message: 'Saved' })
-				}), 100)
+				setTimeout(() => resolve({ success: true, message: 'Saved' }), 100)
 			));
 
 		render(
@@ -332,5 +312,106 @@ describe('SaveLoadSection', () => {
 		});
 
 		expect(saveButton).not.toBeDisabled();
+	});
+
+	describe('buildUrl URL Construction', () => {
+		describe('Load page URL building', () => {
+			it('should construct load URL with pathSegments and params (Section 1)', () => {
+				const apiEndpoint = '/api/pagebuilder';
+				const pageName = 'my-landing-page';
+
+				const loadUrl = buildUrl({
+					baseUrl: apiEndpoint,
+					pathSegments: ['load'],
+					params: { name: pageName }
+				});
+
+				expect(loadUrl).toBe('/api/pagebuilder/load?name=my-landing-page');
+			});
+
+			it('should properly encode page name with special characters', () => {
+				const apiEndpoint = '/api/pagebuilder';
+				const pageName = 'my page & stuff';
+
+				const loadUrl = buildUrl({
+					baseUrl: apiEndpoint,
+					pathSegments: ['load'],
+					params: { name: pageName }
+				});
+
+				expect(loadUrl).toContain('load');
+				expect(loadUrl).toContain('name=');
+				expect(loadUrl).not.toContain('&'); // & should be encoded
+			});
+
+			it('should handle different API endpoints', () => {
+				const endpoints = ['/api/pagebuilder', '/custom/pages', 'https://api.example.com/pages'];
+				
+				endpoints.forEach(endpoint => {
+					const loadUrl = buildUrl({
+						baseUrl: endpoint,
+						pathSegments: ['load'],
+						params: { name: 'test' }
+					});
+
+					expect(loadUrl).toContain(endpoint);
+					expect(loadUrl).toContain('load');
+					expect(loadUrl).toContain('name=test');
+				});
+			});
+		});
+
+		describe('Delete page URL building', () => {
+			it('should construct delete URL with pathSegments and params (Section 2)', () => {
+				const apiEndpoint = '/api/pagebuilder';
+				const pageName = 'test-page';
+
+				const deleteUrl = buildUrl({
+					baseUrl: apiEndpoint,
+					pathSegments: ['delete'],
+					params: { name: pageName }
+				});
+
+				expect(deleteUrl).toBe('/api/pagebuilder/delete?name=test-page');
+			});
+
+			it('should match load URL structure except path segment', () => {
+				const apiEndpoint = '/api/pagebuilder';
+				const pageName = 'my-page';
+
+				const loadUrl = buildUrl({
+					baseUrl: apiEndpoint,
+					pathSegments: ['load'],
+					params: { name: pageName }
+				});
+
+				const deleteUrl = buildUrl({
+					baseUrl: apiEndpoint,
+					pathSegments: ['delete'],
+					params: { name: pageName }
+				});
+
+				// Both should use same base and params, just different path segment
+				expect(loadUrl).toContain(apiEndpoint);
+				expect(deleteUrl).toContain(apiEndpoint);
+				expect(loadUrl).toContain(`name=${pageName}`);
+				expect(deleteUrl).toContain(`name=${pageName}`);
+				expect(loadUrl).toContain('load');
+				expect(deleteUrl).toContain('delete');
+			});
+		});
+
+		describe('List pages URL building', () => {
+			it('should construct list URL correctly', () => {
+				const apiEndpoint = '/api/pagebuilder';
+
+				const listUrl = buildUrl({
+					baseUrl: apiEndpoint,
+					pathSegments: ['list']
+				});
+
+				expect(listUrl).toBe('/api/pagebuilder/list');
+			});
+		});
 	});
 });

@@ -1,8 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getWordPressItems, photonToOriginalUrl } from '../components/integrations/wordpress.functions';
+import { buildUrl } from '../components/general/urlbuilder';
 
-// Mock fetch globally
-global.fetch = vi.fn();
+vi.mock('../components/general/smartfetch');
+
+const { smartFetch } = await import('../components/general/smartfetch');
+const mockSmartFetch = vi.mocked(smartFetch);
 
 describe('WordPress Functions', () => {
   beforeEach(() => {
@@ -107,24 +110,18 @@ describe('WordPress Functions', () => {
       }
     ];
 
-    beforeEach(() => {
+    it('should convert Photon URLs in featured_image during API fetch', async () => {
       let callCount = 0;
-      (global.fetch as any).mockImplementation(() => {
+      mockSmartFetch.mockImplementation(() => {
         callCount++;
         if (callCount === 1) {
-          return Promise.resolve({
-            json: () => Promise.resolve({ posts: mockPosts })
-          });
+          return Promise.resolve({ posts: mockPosts });
         } else {
           // Return empty posts to stop the loop
-          return Promise.resolve({
-            json: () => Promise.resolve({ posts: [] })
-          });
+          return Promise.resolve({ posts: [] });
         }
       });
-    });
 
-    it('should convert Photon URLs in featured_image during API fetch', async () => {
       const result = await getWordPressItems({ site: 'test.com' });
 
       expect(result).toBeDefined();
@@ -136,7 +133,7 @@ describe('WordPress Functions', () => {
     });
 
     it('should handle API errors gracefully', async () => {
-      (global.fetch as any).mockRejectedValue(new Error('API Error'));
+      mockSmartFetch.mockRejectedValue(new Error('API Error'));
 
       const result = await getWordPressItems({ site: 'test.com' });
 
@@ -144,29 +141,113 @@ describe('WordPress Functions', () => {
     });
 
     it('should call the correct WordPress API endpoint', async () => {
-      // Clear the global mock and set up specific mock for this test
-      vi.clearAllMocks();
-      
       let callCount = 0;
-      (global.fetch as any).mockImplementation(() => {
+      mockSmartFetch.mockImplementation(() => {
         callCount++;
         if (callCount === 1) {
-          return Promise.resolve({
-            json: () => Promise.resolve({ posts: [{ id: 1, title: { rendered: 'Test' } }] })
-          });
+          return Promise.resolve({ posts: [{ id: 1, title: { rendered: 'Test' } }] });
         } else {
-          return Promise.resolve({
-            json: () => Promise.resolve({ posts: [] })
-          });
+          return Promise.resolve({ posts: [] });
         }
       });
 
       await getWordPressItems({ site: 'myblog.com' });
 
       // Check that the first call was made with the correct URL
-      expect((global.fetch as any).mock.calls[0][0]).toBe(
-        'https://public-api.wordpress.com/rest/v1/sites/myblog.com/posts?number=100&page=1'
+      expect(mockSmartFetch).toHaveBeenNthCalledWith(
+        1,
+        'https://public-api.wordpress.com/rest/v1/sites/myblog.com/posts?number=100&page=1',
+        expect.any(Object)
       );
+    });
+  });
+
+  describe('buildUrl URL Construction for WordPress APIs', () => {
+    describe('WordPress REST API URL building', () => {
+      it('should construct WordPress posts URL with buildUrl (Section 1)', () => {
+        const baseUrl = 'https://public-api.wordpress.com/rest/v1/sites';
+        const site = 'myblog.com';
+
+        const postsUrl = buildUrl({
+          baseUrl: baseUrl,
+          pathSegments: [site, 'posts'],
+          params: { number: 100, page: 1 }
+        });
+
+        expect(postsUrl).toContain('public-api.wordpress.com');
+        expect(postsUrl).toContain(site);
+        expect(postsUrl).toContain('posts');
+        expect(postsUrl).toContain('number=100');
+        expect(postsUrl).toContain('page=1');
+      });
+
+      it('should handle different WordPress sites with buildUrl (Section 2)', () => {
+        const baseUrl = 'https://public-api.wordpress.com/rest/v1/sites';
+        const sites = ['blog1.com', 'blog2.wordpress.com', 'subdomain.blog.com'];
+
+        sites.forEach(site => {
+          const url = buildUrl({
+            baseUrl: baseUrl,
+            pathSegments: [site, 'posts'],
+            params: { number: 100 }
+          });
+
+          expect(url).toContain(site);
+          expect(url).toContain('posts');
+        });
+      });
+
+      it('should paginate WordPress posts with buildUrl (Section 3)', () => {
+        const baseUrl = 'https://public-api.wordpress.com/rest/v1/sites';
+        const site = 'example.com';
+
+        const page1 = buildUrl({
+          baseUrl: baseUrl,
+          pathSegments: [site, 'posts'],
+          params: { number: 100, page: 1 }
+        });
+
+        const page2 = buildUrl({
+          baseUrl: baseUrl,
+          pathSegments: [site, 'posts'],
+          params: { number: 100, page: 2 }
+        });
+
+        expect(page1).toContain('page=1');
+        expect(page2).toContain('page=2');
+      });
+
+      it('should construct WordPress single post URL (Section 4)', () => {
+        const baseUrl = 'https://public-api.wordpress.com/rest/v1/sites';
+        const site = 'myblog.com';
+
+        const postUrl = buildUrl({
+          baseUrl: baseUrl,
+          pathSegments: [site, 'posts', '12345']
+        });
+
+        expect(postUrl).toContain(site);
+        expect(postUrl).toContain('posts');
+        expect(postUrl).toContain('12345');
+      });
+
+      it('should handle WordPress API pagination correctly', () => {
+        const baseUrl = 'https://public-api.wordpress.com/rest/v1/sites';
+        const site = 'test.com';
+
+        const urls = [1, 2, 3, 4, 5].map(page =>
+          buildUrl({
+            baseUrl: baseUrl,
+            pathSegments: [site, 'posts'],
+            params: { number: 100, page }
+          })
+        );
+
+        urls.forEach((url, index) => {
+          expect(url).toContain(`page=${index + 1}`);
+          expect(url).toContain('number=100');
+        });
+      });
     });
   });
 });

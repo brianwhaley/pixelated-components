@@ -4,6 +4,8 @@
  */
 
 import { usePixelatedConfig } from '../config/config.client';
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
 
 interface PlacePrediction {
 	placeId: string;
@@ -72,16 +74,29 @@ export class GooglePlacesService {
 			}
 
 			const restrictions = config?.googlePlaces?.countryRestrictions || ['us'];
-			const componentFilter = restrictions.length > 0 ? `components=country:${restrictions.join('|country:')}` : '';
+			const params: Record<string, any> = {
+				input: input,
+				key: apiKey,
+				sessiontoken: this.sessionToken,
+			};
 
-			const apiUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${encodeURIComponent(input)}&key=${apiKey}&sessiontoken=${this.sessionToken}&${componentFilter}`;
-			
+			if (restrictions.length > 0) {
+				params.components = `country:${restrictions.join('|country:')}`;
+			}
+
 			// Use global proxy to avoid CORS issues
 			const proxyURL = config?.global?.proxyUrl || '';
-			const url = proxyURL ? `${proxyURL}${encodeURIComponent(apiUrl)}` : apiUrl;
 
-			const response = await fetch(url);
-			const data = await response.json();
+			const apiUrl = buildUrl({
+				baseUrl: 'https://maps.googleapis.com',
+				pathSegments: ['maps', 'api', 'place', 'autocomplete', 'json'],
+				params: params,
+				proxyUrl: proxyURL || undefined,
+			});
+
+			const data = await smartFetch(apiUrl, {
+				proxy: proxyURL ? { url: proxyURL, fallbackOnCors: true } : undefined,
+			});
 
 			if (!data.predictions) {
 				return [];
@@ -116,14 +131,24 @@ export class GooglePlacesService {
 				return null;
 			}
 
-			const apiUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&key=${apiKey}&fields=address_component,formatted_address&sessiontoken=${this.sessionToken}`;
-
 			// Use global proxy to avoid CORS issues
 			const proxyURL = config?.global?.proxyUrl || '';
-			const url = proxyURL ? `${proxyURL}${encodeURIComponent(apiUrl)}` : apiUrl;
 
-			const response = await fetch(url);
-			const data = await response.json();
+			const apiUrl = buildUrl({
+				baseUrl: 'https://maps.googleapis.com',
+				pathSegments: ['maps', 'api', 'place', 'details', 'json'],
+				params: {
+					place_id: placeId,
+					key: apiKey,
+					fields: 'address_component,formatted_address',
+					sessiontoken: this.sessionToken
+				},
+				proxyUrl: proxyURL || undefined,
+			});
+
+			const data = await smartFetch(apiUrl, {
+				proxy: proxyURL ? { url: proxyURL, fallbackOnCors: true } : undefined,
+			});
 
 			if (!data.result) return null;
 

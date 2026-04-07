@@ -4,6 +4,8 @@
  */
 
 import { getFullPixelatedConfig } from '../../config/config';
+import { smartFetch } from '../../general/smartfetch';
+import { buildUrl } from '../../general/urlbuilder';
 
 export interface GoogleFont {
   family: string;
@@ -69,15 +71,13 @@ export async function fetchGoogleFonts(): Promise<GoogleFont[]> {
 	}
 
 	try {
-		const response = await fetch(
-			`https://www.googleapis.com/webfonts/v1/webfonts?key=${apiKey}&sort=popularity`
-		);
+		const url = buildUrl({
+			baseUrl: 'https://www.googleapis.com',
+			pathSegments: ['webfonts', 'v1', 'webfonts'],
+			params: { key: apiKey, sort: 'popularity' }
+		});
 
-		if (!response.ok) {
-			throw new Error(`Google Fonts API error: ${response.status}`);
-		}
-
-		const data: GoogleFontsResponse = await response.json();
+		const data: GoogleFontsResponse = await smartFetch(url);
 
 		// Cache the results
 		fontsCache = data.items;
@@ -133,7 +133,11 @@ export function generateGoogleFontsUrl(fonts: string[]): string {
 		.map(font => font.replace(/\s+/g, '+'))
 		.join('|');
 
-	return `https://fonts.googleapis.com/css2?family=${fontParam}&display=swap`;
+	return buildUrl({
+		baseUrl: 'https://fonts.googleapis.com',
+		pathSegments: ['css2'],
+		params: { family: fontParam, display: 'swap' }
+	});
 }
 
 /**

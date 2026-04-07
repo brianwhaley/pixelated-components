@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from "prop-types";
 import { mergeDeep } from '../general/utilities';
 import { SmartImage } from '../general/smartimage';
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
 import { usePixelatedConfig } from '../config/config.client';
 import './socialcard.css';
 
@@ -100,14 +102,15 @@ export function SocialCards(props: SocialCardsType) {
 		if (debug) { console.log('Fetching RSS...', url ); }
 		async function fetchRSS () {
 			try {
-				const response = await fetch(url, {
-					method: 'GET',
-					credentials: 'same-origin',
-					// crossDomain: true,
-					mode: 'cors',
-					headers: { 'Content-Type': 'application/json' }
+				const text = await smartFetch(url, {
+					responseType: 'text',
+					requestInit: {
+						method: 'GET',
+						credentials: 'same-origin',
+						mode: 'cors',
+						headers: { 'Content-Type': 'application/json' }
+					}
 				});
-				const text = await response.text();
 				const parser = new DOMParser();
 				const xml = parser.parseFromString(text, 'application/xml');
 				let items;
@@ -164,7 +167,10 @@ export function SocialCards(props: SocialCardsType) {
 
 	async function getFeedEntries (myURL: string, entryCount: number) {
 		if (debug) { console.log('Getting Feed Entries... ', myURL); }
-		const proxiedURL = state.proxy.proxyURL + '?' + state.proxy.proxyURLParam + '=' + encodeURIComponent(myURL);
+		const proxiedURL = buildUrl({
+			baseUrl: myURL,
+			proxyUrl: state.proxy.proxyURL,
+		});
 		let sourceCardData: any[] = [];
 		// const result = await RSSFeedToJson(proxiedURL)
 		await RSSFeedToJson(proxiedURL)

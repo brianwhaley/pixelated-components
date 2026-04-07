@@ -2,6 +2,9 @@
 // Requires: GOOGLE_MAPS_API_KEY or hard-coded key
 // Flow: Place Details (reviews)
 
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
+
 export type GoogleReview = {
   author_name: string;
   profile_photo_url?: string;
@@ -28,12 +31,26 @@ export async function getGoogleReviewsByPlaceId(params: {
 }): Promise<{ place?: GooglePlaceSummary; reviews: GoogleReview[] }> {
 	const { placeId, language, maxReviews, proxyBase, apiKey } = params;
 
-	const detailsBase = 'https://maps.googleapis.com/maps/api/place/details/json';
-	const fields = encodeURIComponent('reviews,name,place_id,formatted_address');
-	const detailsUrl = `${detailsBase}?place_id=${encodeURIComponent(placeId)}&fields=${fields}${language ? `&language=${encodeURIComponent(language)}` : ''}&key=${apiKey}`;
+	const queryParams: Record<string, any> = {
+		place_id: placeId,
+		fields: 'reviews,name,place_id,formatted_address',
+		key: apiKey
+	};
+
+	if (language) {
+		queryParams.language = language;
+	}
+
+	const detailsUrl = buildUrl({
+		baseUrl: 'https://maps.googleapis.com',
+		pathSegments: ['maps', 'api', 'place', 'details', 'json'],
+		params: queryParams,
+		proxyUrl: proxyBase || undefined,
+	});
 	
-	const detResp = await fetch(proxyBase ? `${proxyBase}${encodeURIComponent(detailsUrl)}` : detailsUrl, { cache: 'no-store' });
-	const detData = await detResp.json();
+	const detData = await smartFetch(detailsUrl, {
+		proxy: proxyBase ? { url: proxyBase, fallbackOnCors: true } : undefined,
+	});
 	
 	if (detData.status !== 'OK' || !detData.result) {
 		return { reviews: [] };

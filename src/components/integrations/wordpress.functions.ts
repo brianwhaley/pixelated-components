@@ -1,9 +1,7 @@
 
 import PropTypes, { InferProps } from "prop-types";
-
-// const wpSite = "pixelatedviews.wordpress.com";
-// const wpSite = "19824045";
-// const wpSite = "blog.pixelated.tech";
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
 const wpApiURL = "https://public-api.wordpress.com/rest/v1/sites/";
 const wpCategoriesPath = "/categories";
 
@@ -63,17 +61,16 @@ export async function getWordPressItems(props: { site: string; count?: number; b
 	while (true) {
 		const remaining = requested ? Math.max(requested - posts.length, 0) : 100;
 		const number = Math.min(remaining || 100, 100);
-		const wpPostsURL = `${baseURL}${props.site}/posts?number=${number}&page=${page}`;
+		const wpPostsURL = buildUrl({
+			baseUrl: baseURL,
+			pathSegments: [props.site, 'posts'],
+			params: { number, page },
+		});
 		try {
-			// const response = await fetch(wpPostsURL);
-			const response = await fetch(wpPostsURL, {
-				// cache the HTTP response and mark it with a tag so it can be
-				// invalidated independently of the page cache.
-				cache: 'force-cache',
-				next: { revalidate: 60 * 60 * 24 * 7, tags: [tag] }, // revalidate once per week
+			const data = await smartFetch(wpPostsURL, {
+				nextCache: { revalidate: 60 * 60 * 24 * 7 }, // revalidate once per week
+				timeout: 30000,
 			});
-			// -> "HIT" or "MISS" (or "REVALIDATED" etc.)
-			const data = await response.json();
 			const batch: BlogPostType[] = Array.isArray(data.posts) ? data.posts : [];
 			if (batch.length === 0) {
 				break; // no more posts
@@ -131,11 +128,13 @@ export async function getWordPressItems(props: { site: string; count?: number; b
  */
 export async function getWordPressLastModified(props: { site: string; baseURL?: string }) {
 	const { baseURL = wpApiURL } = props;
-	const url = `${baseURL}${props.site}/posts?number=1&fields=modified`;
+	const url = buildUrl({
+		baseUrl: baseURL,
+		pathSegments: [props.site, 'posts'],
+		params: { number: 1, fields: 'modified' },
+	});
 	try {
-		const res = await fetch(url);
-		if (!res.ok) return null;
-		const data = await res.json();
+		const data = await smartFetch(url, {});
 		const modified = Array.isArray(data.posts) && data.posts[0]?.modified;
 		return modified || null;
 	} catch (e) {
@@ -236,8 +235,7 @@ export async function getWordPressCategories(props: { site: string; baseURL?: st
 	const wpCategoriesURL = baseURL + props.site + wpCategoriesPath ;
 	const categories = [];
 	try {
-		const response = await fetch(wpCategoriesURL);
-		const data = await response.json();
+		const data = await smartFetch(wpCategoriesURL, {});
 		// Check for total pages on the first page
 		const myCategories = data.categories.map((category: BlogPostCategoryType) => ( category.name ));
 		categories.push(...myCategories);

@@ -1,4 +1,6 @@
 import PropTypes, { InferProps } from "prop-types";
+import { smartFetch } from '../general/smartfetch';
+import { buildUrl } from '../general/urlbuilder';
 
 const debug = false;
 
@@ -28,11 +30,7 @@ export type callContentfulDeliveryAPIType = InferProps<typeof callContentfulDeli
 export async function callContentfulDeliveryAPI(props: callContentfulDeliveryAPIType) {
 	if(debug) console.log("Calling Contentful Delivery API:", props.full_url);
 	try {
-		const response = await fetch(props.full_url);
-		if (!response.ok) {
-			throw new Error(`Response status: ${response.status}`);
-		}
-		const json = await response.json();
+		const json = await smartFetch(props.full_url);
 		return json;
 	} catch (error) {
 		if (error instanceof Error) {
@@ -77,11 +75,11 @@ getContentfulEntries.propTypes = {
 export type getContentfulEntriesType = InferProps<typeof getContentfulEntries.propTypes>;
 export async function getContentfulEntries(props: getContentfulEntriesType) {
 	const { base_url, space_id, environment, delivery_access_token } = props.apiProps;
-	// const full_url = base_url + "/spaces/" + space_id + "/environments/" + environment + "/content_types/" + contentType + "?access_token=" + access_token ;
-	const full_url = base_url + 
-		"/spaces/" + space_id + 
-		"/environments/" + environment + 
-		"/entries?access_token=" + delivery_access_token ;
+	const full_url = buildUrl({
+		baseUrl: base_url,
+		pathSegments: ['spaces', space_id, 'environments', environment, 'entries'],
+		params: { access_token: delivery_access_token }
+	});
 	return await callContentfulDeliveryAPI({ full_url });
 }
 /* 
@@ -153,11 +151,14 @@ getContentfulContentType.propTypes = {
 export type getContentfulContentTypeType = InferProps<typeof getContentfulContentType.propTypes>;
 export async function getContentfulContentType(props: getContentfulContentTypeType) {
 	const { base_url, space_id, environment, access_token } = props.apiProps;
-	const full_url = base_url + 
-		"/spaces/" + space_id + 
-		"/environments/" + environment + 
-		"/content_types/" + props.contentType + 
-		"?access_token=" + access_token ;
+	if (!base_url || !space_id || !environment) {
+		throw new Error('Contentful API properties not configured: base_url, space_id, or environment');
+	}
+	const full_url = buildUrl({
+		baseUrl: base_url,
+		pathSegments: ['spaces', space_id as string, 'environments', environment as string, 'content_types', props.contentType],
+		params: { access_token }
+	});
 	return await callContentfulDeliveryAPI({ full_url });
 }
 
@@ -189,11 +190,14 @@ getContentfulEntryByEntryID.propTypes = {
 export type getContentfulEntryByEntryIDType = InferProps<typeof getContentfulEntryByEntryID.propTypes>;
 export async function getContentfulEntryByEntryID(props: getContentfulEntryByEntryIDType) {
 	const { base_url, space_id, environment, delivery_access_token } = props.apiProps;
-	const full_url = base_url + 
-		"/spaces/" + space_id + 
-		"/environments/" + environment + 
-		"/entries/" + props.entry_id + 
-		"?access_token=" + delivery_access_token ;
+	if (!base_url || !space_id || !environment) {
+		throw new Error('Contentful API properties not configured: base_url, space_id, or environment');
+	}
+	const full_url = buildUrl({
+		baseUrl: base_url,
+		pathSegments: ['spaces', space_id as string, 'environments', environment as string, 'entries', props.entry_id],
+		params: { access_token: delivery_access_token }
+	});
 	return await callContentfulDeliveryAPI({ full_url });
 }
 

@@ -1,6 +1,7 @@
 "use server";
 
 import { getFullPixelatedConfig } from '../../config/config';
+import { buildUrl } from '../../general/urlbuilder';
 import path from 'path';
 import type { GitCommit } from './site-health-types';
 import type { SiteConfig } from '../sites/sites.integration';
@@ -77,11 +78,11 @@ export async function analyzeGitHealth(siteConfig: SiteConfig, startDate?: strin
 			'Authorization': `token ${token}`
 		};
 
-		const params = new URLSearchParams();
-		if (since) params.set('since', since);
-		if (until) params.set('until', until);
-
-		const commitsUrl = `https://api.github.com/repos/${owner}/${repo}/commits?${params.toString()}`;
+		const commitsUrl = buildUrl({
+			baseUrl: 'https://api.github.com',
+			pathSegments: ['repos', owner as string, repo as string, 'commits'],
+			params: { ...(since && { since }), ...(until && { until }) }
+		});
 		const fetcher = httpFetch || (globalThis as any).fetch;
 		const commitsRes = await fetcher(commitsUrl, { headers });
 
