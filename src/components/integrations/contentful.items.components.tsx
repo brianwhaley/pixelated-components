@@ -86,7 +86,11 @@ export function ContentfulItems(props: ContentfulItemsType) {
     			return a.sys.createdAt < b.sys.createdAt ? -1 : 1;
     		});
     		if ( itemImagesMatches.length > 0 ) {
-    			item.fields.imageUrl = itemImagesMatches[0].fields.file.url;
+    			// Contentful Asset URLs start with two slashes, convert to absolute URL
+    			const imageUrl = itemImagesMatches[0].fields.file.url;
+    			item.fields.imageUrl = imageUrl.startsWith("//") 
+    				? "https:" + imageUrl 
+    				: imageUrl;
     			item.fields.imageAlt = itemImagesMatches[0].fields.title;
     		}
     		const newItem = <ContentfulListItem item={item} key={item.sys.id} 
@@ -177,7 +181,7 @@ export function ContentfulListItem(props: ContentfulListItemType) {
 	};
 
 	const itemImage = (props.cloudinaryProductEnv) 
-		? getImg({url: "https://" + thisItem.fields.imageUrl, product_env: props.cloudinaryProductEnv}) 
+		? getImg({url: thisItem.fields.imageUrl, product_env: props.cloudinaryProductEnv}) 
 		: thisItem.fields.imageUrl;
 
 	const config = usePixelatedConfig();
