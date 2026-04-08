@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { SiteHealthSecurity } from '../components/admin/site-health/site-health-security';
+import type { DependencyData, Vulnerability } from '../components/admin/site-health/site-health-types';
 
 // Mock the SiteHealthTemplate component
 vi.mock('../components/admin/site-health/site-health-template', () => ({
@@ -121,6 +122,91 @@ describe('SiteHealthSecurity Component', () => {
 		render(<SiteHealthSecurity {...defaultProps} />);
 		await waitFor(() => {
 			expect(screen.getByTestId('health-template')).toBeDefined();
+		});
+	});
+});
+
+describe('site-health-security - Real Tests Extended', () => {
+	describe('Type structure validation', () => {
+		it('should define Vulnerability interface properties', () => {
+			const vuln: Partial<Vulnerability> = {
+				name: 'test-package',
+				severity: 'high',
+				title: 'Test Vulnerability',
+				range: '1.0.0',
+				fixAvailable: true
+			};
+			expect(vuln.name).toBe('test-package');
+			expect(vuln.severity).toBe('high');
+		});
+
+		it('should support all severity levels', () => {
+			const severities: Vulnerability['severity'][] = ['info', 'low', 'moderate', 'high', 'critical'];
+			severities.forEach(s => {
+				expect(['info', 'low', 'moderate', 'high', 'critical'].includes(s)).toBe(true);
+			});
+		});
+
+		it('should create Vulnerability objects', () => {
+			const vuln: Vulnerability = {
+				name: 'package',
+				severity: 'critical',
+				title: 'Critical Issue',
+				range: '1.0.0',
+				fixAvailable: true,
+				url: 'https://example.com'
+			};
+			expect(vuln).toBeDefined();
+		});
+
+		it('should create valid DependencyData object', () => {
+			const data: DependencyData = {
+				success: true,
+				status: 'analyzed',
+				timestamp: new Date().toISOString(),
+				vulnerabilities: [],
+				summary: {
+					info: 0,
+					low: 0,
+					moderate: 0,
+					high: 0,
+					critical: 0,
+					total: 0,
+				},
+				dependencies: 100,
+				totalDependencies: 100,
+			};
+			expect(data.success).toBe(true);
+			expect(data.summary.total).toBe(0);
+		});
+
+		it('should handle vulnerabilities in DependencyData', () => {
+			const data: DependencyData = {
+				success: true,
+				status: 'analyzed',
+				timestamp: new Date().toISOString(),
+				vulnerabilities: [
+					{
+						name: 'test',
+						severity: 'high',
+						title: 'Test',
+						range: '1.0.0',
+						fixAvailable: false
+					}
+				],
+				summary: {
+					info: 0,
+					low: 0,
+					moderate: 0,
+					high: 1,
+					critical: 0,
+					total: 1,
+				},
+				dependencies: 50,
+				totalDependencies: 100,
+			};
+			expect(data.vulnerabilities).toHaveLength(1);
+			expect(data.summary.high).toBe(1);
 		});
 	});
 });

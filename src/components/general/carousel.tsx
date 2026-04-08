@@ -209,7 +209,7 @@ function CarouselCard( props: CarouselCardType ) {
 			{ (props.image) ? <div draggable='false' className="carousel-card-image">
 				<SmartImage draggable={false} src={props.image} title={props?.imageAlt} 
 					alt={props?.imageAlt || ""} className={imgFit} 
-					aboveFold={ props?.index === 0 ? true : false }
+					aboveFold={ props?.index === 0 ? true : undefined }
 					cloudinaryEnv={config?.cloudinary?.product_env ?? undefined}
 					cloudinaryDomain={config?.cloudinary?.baseUrl ?? undefined}
 					cloudinaryTransforms={config?.cloudinary?.transforms ?? undefined} />

@@ -1,5 +1,12 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 
+// Mock setTimeout to resolve instantly for tests
+const originalSetTimeout = global.setTimeout;
+global.setTimeout = vi.fn((callback: any) => {
+	callback();
+	return {} as any;
+}) as any;
+
 // Mock puppeteer at module level
 vi.mock('puppeteer', () => ({
 	default: {
@@ -45,19 +52,24 @@ vi.mock('../components/config/config', () => ({
 	getFullPixelatedConfig: vi.fn().mockReturnValue({ puppeteer: { executable_path: './chrome' } })
 }));
 
+// Import module once to avoid repeated slow imports
+let performAxeCoreAnalysis: any;
+
 describe('site-health-axe-core.integration', () => {
-	beforeEach(() => {
-		vi.clearAllMocks();
+	beforeEach(async () => {
+		// Only import once per test suite
+		if (!performAxeCoreAnalysis) {
+			const module = await import('../components/admin/site-health/site-health-axe-core.integration');
+			performAxeCoreAnalysis = module.performAxeCoreAnalysis;
+		}
 	});
 
 	describe('performAxeCoreAnalysis', () => {
-		it('should export performAxeCoreAnalysis function', async () => {
-			const { performAxeCoreAnalysis } = await import('../components/admin/site-health/site-health-axe-core.integration');
+		it('should export performAxeCoreAnalysis function', () => {
 			expect(typeof performAxeCoreAnalysis).toBe('function');
 		});
 
 		it('should accept URL parameter', async () => {
-			const { performAxeCoreAnalysis } = await import('../components/admin/site-health/site-health-axe-core.integration');
 			const result = await performAxeCoreAnalysis('https://example.com');
 			
 			expect(result).toBeDefined();
@@ -65,8 +77,6 @@ describe('site-health-axe-core.integration', () => {
 		});
 
 		it('should accept runtime_env parameter with "auto" default', async () => {
-			const { performAxeCoreAnalysis } = await import('../components/admin/site-health/site-health-axe-core.integration');
-			
 			const result1 = await performAxeCoreAnalysis('http://example.com');
 			expect(result1).toBeDefined();
 			
@@ -75,7 +85,7 @@ describe('site-health-axe-core.integration', () => {
 			
 			const result3 = await performAxeCoreAnalysis('http://example.com', 'prod');
 			expect(result3).toBeDefined();
-	}, 10000);
+		}, 15000);
 
 		it('should calculate summary with violation counts', async () => {
 			// For this test, we need to override the puppeteer mock to return violations
@@ -109,7 +119,6 @@ describe('site-health-axe-core.integration', () => {
 				close: vi.fn().mockResolvedValue(undefined)
 			} as any);
 
-			const { performAxeCoreAnalysis } = await import('../components/admin/site-health/site-health-axe-core.integration');
 			const result = await performAxeCoreAnalysis('http://example.com');
 
 			expect(result.summary.violations).toBeGreaterThanOrEqual(1);
@@ -121,7 +130,6 @@ describe('site-health-axe-core.integration', () => {
 			const puppeteerModule = await import('puppeteer');
 			vi.mocked(puppeteerModule.default.launch as any).mockRejectedValueOnce(new Error('Browser launch failed'));
 
-			const { performAxeCoreAnalysis } = await import('../components/admin/site-health/site-health-axe-core.integration');
 			const result = await performAxeCoreAnalysis('http://example.com');
 
 			expect(result.status).toBe('error');
@@ -130,7 +138,6 @@ describe('site-health-axe-core.integration', () => {
 		});
 
 		it('should return proper result structure on success', async () => {
-			const { performAxeCoreAnalysis } = await import('../components/admin/site-health/site-health-axe-core.integration');
 			const result = await performAxeCoreAnalysis('http://example.com');
 
 			expect(result).toHaveProperty('site');
@@ -141,21 +148,19 @@ describe('site-health-axe-core.integration', () => {
 			expect(result).toHaveProperty('status');
 		});
 
-	it('should handle different URL formats', async () => {
-		const { performAxeCoreAnalysis } = await import('../components/admin/site-health/site-health-axe-core.integration');
-		
-		const urls = [
-			'http://example.com',
-			'https://example.com',
-			'https://example.com/',
-			'https://example.com/page'
-		];
+		it('should handle different URL formats', async () => {
+			const urls = [
+				'http://example.com',
+				'https://example.com',
+				'https://example.com/',
+				'https://example.com/page'
+			];
 
-		for (const url of urls) {
-			const result = await performAxeCoreAnalysis(url);
-			expect(result).toBeDefined();
-			expect(result.url).toBe(url);
-		}
-	}, 30000);
+			for (const url of urls) {
+				const result = await performAxeCoreAnalysis(url);
+				expect(result).toBeDefined();
+				expect(result.url).toBe(url);
+			}
+		}, 20000);
 	});
 });

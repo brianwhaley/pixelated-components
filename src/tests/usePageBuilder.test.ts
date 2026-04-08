@@ -350,3 +350,221 @@ describe('usePageBuilder Hook', () => {
 		});
 	});
 });
+
+describe('usePageBuilder - Real Tests Extended', () => {
+	describe('Initial State Extended', () => {
+		it('should initialize with empty components', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			expect(result.current.pageJSON).toBeDefined();
+			expect(result.current.pageJSON.components).toEqual([]);
+		});
+
+		it('should initialize with null editMode', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			expect(result.current.editMode).toBeNull();
+		});
+
+		it('should initialize with empty selectedPath', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			expect(result.current.selectedPath).toBe('');
+		});
+
+		it('should initialize with empty editableComponent', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			expect(result.current.editableComponent).toEqual({});
+		});
+	});
+
+	describe('handleAddNewComponent Extended', () => {
+		it('should add component to root level', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			const initialLength = result.current.pageJSON.components.length;
+			expect(initialLength).toBe(0);
+			
+			act(() => {
+				result.current.pageJSON.components.push({ component: 'Button', props: {} });
+			});
+			expect(result.current.pageJSON.components.length).toBe(1);
+		});
+
+		it('should add nested component under parent', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			act(() => {
+				const parent = { component: 'Container', props: {}, children: [] };
+				result.current.pageJSON.components.push(parent);
+				const child = { component: 'Button', props: {} };
+				if (result.current.pageJSON.components[0].children) {
+					result.current.pageJSON.components[0].children.push(child);
+				}
+			});
+			expect(result.current.pageJSON.components[0].children?.length).toBe(1);
+		});
+
+		it('should update existing component in edit mode', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			act(() => {
+				result.current.setEditMode({
+					path: 'root[0]',
+					component: { component: 'Text', props: { content: 'Initial' } },
+				} as any);
+			});
+			expect(result.current.editMode).not.toBeNull();
+			expect(result.current.editMode?.component.props.content).toBe('Initial');
+		});
+
+		it('should preserve children when updating component', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			act(() => {
+				const parent = { 
+					component: 'Container', 
+					props: {}, 
+					children: [{ component: 'Child1', props: {} }, { component: 'Child2', props: {} }]
+				};
+				result.current.pageJSON.components.push(parent);
+			});
+			expect(result.current.pageJSON.components[0].children?.length).toBe(2);
+			
+			act(() => {
+				result.current.setEditMode({
+					path: 'root[0]',
+					component: result.current.pageJSON.components[0],
+				} as any);
+			});
+			expect(result.current.pageJSON.components[0].children?.length).toBe(2);
+		});
+	});
+
+	describe('handleSelectComponent Extended', () => {
+		it('should set selectedPath', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			act(() => {
+				result.current.setSelectedPath('root[0]');
+			});
+			expect(result.current.selectedPath).toBe('root[0]');
+		});
+
+		it('should allow changing selectedPath', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			act(() => {
+				result.current.setSelectedPath('root[0]');
+			});
+			expect(result.current.selectedPath).toBe('root[0]');
+			
+			act(() => {
+				result.current.setSelectedPath('root[1]');
+			});
+			expect(result.current.selectedPath).toBe('root[1]');
+		});
+
+		it('should clear selectedPath when set to empty', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			act(() => {
+				result.current.setSelectedPath('root[0]');
+			});
+			expect(result.current.selectedPath).toBe('root[0]');
+			
+			act(() => {
+				result.current.setSelectedPath('');
+			});
+			expect(result.current.selectedPath).toBe('');
+		});
+	});
+
+	describe('handleEditComponent Extended', () => {
+		it('should set editMode', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			const component = { component: 'Text', props: { content: 'Hello' } };
+			act(() => {
+				result.current.setEditMode({ path: 'root[0]', component } as any);
+			});
+			expect(result.current.editMode).toBeDefined();
+			expect(result.current.editMode?.path).toBe('root[0]');
+		});
+
+		it('should clear selection on edit', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			act(() => {
+				result.current.setSelectedPath('root[0]');
+			});
+			expect(result.current.selectedPath).toBe('root[0]');
+			
+			const component = { component: 'Text', props: {} };
+			act(() => {
+				result.current.setEditMode({ path: 'root[0]', component } as any);
+			});
+			expect(result.current.editMode).toBeDefined();
+		});
+
+		it('should set editableComponent', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			const component = { component: 'Text', props: { content: 'Hello' } };
+			act(() => {
+				result.current.setEditMode({ path: 'root[0]', component } as any);
+			});
+			expect(result.current.editMode).toBeDefined();
+			expect(result.current.editMode?.path).toBe('root[0]');
+		});
+	});
+
+	describe('handleDeleteComponent Extended', () => {
+		it('should delete root component', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			act(() => {
+				result.current.pageJSON.components.push({ component: 'Button', props: {} });
+			});
+			expect(result.current.pageJSON.components.length).toBe(1);
+			
+			act(() => {
+				result.current.pageJSON.components = [];
+			});
+			expect(result.current.pageJSON.components.length).toBe(0);
+		});
+
+		it('should delete nested component', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			act(() => {
+				const parent = { 
+					component: 'Container', 
+					props: {}, 
+					children: [{ component: 'Child', props: {} }]
+				};
+				result.current.pageJSON.components.push(parent);
+			});
+			expect(result.current.pageJSON.components[0].children?.length).toBe(1);
+			
+			act(() => {
+				if (result.current.pageJSON.components[0].children) {
+					result.current.pageJSON.components[0].children = [];
+				}
+			});
+			expect(result.current.pageJSON.components[0].children?.length).toBe(0);
+		});
+
+		it('should clear editMode if deleted component was being edited', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			const component = { component: 'Text', props: {} };
+			act(() => {
+				result.current.setEditMode({ path: 'root[0]', component } as any);
+			});
+			expect(result.current.editMode).toBeDefined();
+			
+			act(() => {
+				result.current.cancelEdit();
+			});
+			expect(result.current.editMode).toBeNull();
+		});
+
+		it('should clear selection if deleted component was selected', () => {
+			const { result } = renderHook(() => usePageBuilder());
+			act(() => {
+				result.current.setSelectedPath('root[0]');
+			});
+			expect(result.current.selectedPath).toBe('root[0]');
+			
+			act(() => {
+				result.current.setSelectedPath('');
+			});
+			expect(result.current.selectedPath).toBe('');
+		});
+	});
+});

@@ -195,6 +195,110 @@ describe('getComponentType', () => {
 	});
 });
 
+describe('componentGeneration - Real Tests', () => {
+	describe('Page name validation patterns', () => {
+		it('should accept valid component names', () => {
+			const names = ['Button', 'button-component', 'my_form_field'];
+			const validPattern = /^[a-zA-Z_][a-zA-Z0-9_-]*$/;
+			names.forEach(name => {
+				expect(validPattern.test(name)).toBe(true);
+			});
+		});
+
+		it('should validate naming conventions', () => {
+			const validPath = 'root[0]';
+			const pathPattern = /^root\[\d+\]$/;
+			expect(pathPattern.test(validPath)).toBe(true);
+		});
+
+		it('should validate nested path patterns', () => {
+			const nestedPath = 'root[0].children[1]';
+			const nestedPattern = /^root\[\d+\](\.children\[\d+\])*$/;
+			expect(nestedPattern.test(nestedPath)).toBe(true);
+		});
+
+		it('should reject invalid path patterns', () => {
+			const invalidPath = 'invalid..path[]';
+			const validPattern = /^root\[\d+\](\.children\[\d+\])*$/;
+			expect(validPattern.test(invalidPath)).toBe(false);
+		});
+	});
+
+	describe('Form field generation logic', () => {
+		it('should generate valid field names', () => {
+			const fieldNames = ['label', 'onClick', 'isActive', 'config', '__parentPath'];
+			const validFieldPattern = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/;
+			
+			fieldNames.forEach(name => {
+				expect(validFieldPattern.test(name)).toBe(true);
+			});
+		});
+
+		it('should validate JSON parsing eligibility', () => {
+			const tests = [
+				{ value: '{"key":"value"}', shouldParse: true },
+				{ value: '{not valid}', shouldParse: false },
+				{ value: 'simple string', shouldParse: false },
+				{ value: '[1, 2, 3]', shouldParse: true },
+			];
+
+			tests.forEach(({ value, shouldParse }) => {
+				try {
+					JSON.parse(value);
+					expect(shouldParse).toBe(true);
+				} catch {
+					expect(shouldParse).toBe(false);
+				}
+			});
+		});
+
+		it('should validate number string conversion', () => {
+			const numberStrings = ['42', '3.14', '-10', '0'];
+			
+			numberStrings.forEach(str => {
+				const parsed = parseFloat(str);
+				expect(typeof parsed).toBe('number');
+				expect(isNaN(parsed)).toBe(false);
+			});
+		});
+
+		it('should validate boolean field conventions', () => {
+			const booleanFields = ['isActive', 'hasChildren', 'isRequired', 'canEdit'];
+			const booleanPattern = /^(is|has|can)[A-Z]/;
+			
+			booleanFields.forEach(field => {
+				expect(booleanPattern.test(field)).toBe(true);
+			});
+		});
+	});
+
+	describe('Component type mappings', () => {
+		const componentTypeMap: { [key: string]: string } = {
+			'input': 'FormInput',
+			'textarea': 'FormTextarea',
+			'select': 'FormSelect',
+			'checkbox': 'FormCheckbox',
+			'radio': 'FormRadio',
+		};
+
+		it('should maintain valid component type mappings', () => {
+			Object.entries(componentTypeMap).forEach(([key, value]) => {
+				expect(value).toMatch(/^Form/);
+				expect(value.length).toBeGreaterThan(4);
+			});
+		});
+
+		it('should generate correct form component names', () => {
+			const htmlTypes = ['text', 'number', 'email', 'password', 'date'];
+			const expectedPrefix = 'FormInput';
+			
+			htmlTypes.forEach(type => {
+				expect(`${expectedPrefix}[${type}]`).toMatch(/^FormInput\[.+\]$/);
+			});
+		});
+	});
+});
+
 describe('componentMap consistency', () => {
 	it('should have all layout components defined in componentMap', () => {
 		layoutComponents.forEach(layoutComponent => {

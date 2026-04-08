@@ -188,6 +188,7 @@ export function GravatarCard(props: GravatarCardType) {
 		<div className="gravatar-avatar-container">
 			<SmartImage
 				src={avatarUrl}
+				aboveFold={true}
 				alt={displayName}
 				title={displayName}
 				width={avatarSize ?? 120}

@@ -6,6 +6,8 @@ import PropTypes, { InferProps } from "prop-types";
 import type { CarouselCardType } from "./carousel";
 import { Loading } from "../general/loading";
 import { SmartImage } from "./smartimage";
+import { Modal, handleModalOpen } from "./modal";
+import { PageSection, PageSectionHeader } from "./semantic";
 import { usePixelatedConfig } from '../config/config.client';
 import "../../css/pixelated.grid.scss";
 import "./tiles.css";
@@ -172,6 +174,64 @@ export function ProjectTiles(props: ProjectTilesType) {
 			<h3>{title}</h3>
 			<p>{description}</p>
 			<Tiles variant="caption" cards={tileCards} rowCount={3} imgClick={onImageClick} />
+		</>
+	);
+}
+
+/* ========== PROJECTS CLIENT ========== */
+/**
+ * ProjectsClient — Renders a list of projects with their respective tiles and handles modal interactions for images.
+ * The page title should be added to the page component using PageTitleHeader.
+ *
+ * @param {Object} props - The component props.
+ * @param {Array} props.projects - An array of project objects, each containing a title, description, and an array of tile cards.
+ * @returns {JSX.Element} The rendered ProjectsClient component.
+ */
+ProjectsClient.propTypes = {
+	projects: PropTypes.arrayOf(PropTypes.shape({
+		title: PropTypes.string.isRequired,
+		description: PropTypes.string.isRequired,
+		tileCards: PropTypes.arrayOf(PropTypes.shape({
+			index: PropTypes.number.isRequired,
+			cardIndex: PropTypes.number.isRequired,
+			cardLength: PropTypes.number.isRequired,
+			image: PropTypes.string.isRequired,
+			imageAlt: PropTypes.string,
+		})).isRequired,
+	})).isRequired,
+};
+export type ProjectsClientType = InferProps<typeof ProjectsClient.propTypes>;
+export function ProjectsClient(props: ProjectsClientType) {
+	const { projects } = props;
+	const [modalContent, setModalContent] = React.useState<React.ReactNode | undefined>(undefined);
+	const handleImageClick = (event: React.MouseEvent<HTMLImageElement>, url: string) => {
+		const myContent = <SmartImage src={url} title="Modal Image" alt="Modal Image" />;
+		setModalContent(myContent);
+		handleModalOpen(event as unknown as MouseEvent);
+	};
+
+	return (
+		<>
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="projects-section">
+				<PageSectionHeader title="Our Projects" />
+				{projects.map((project, idx) => (
+					<div key={idx} style={{ marginBottom: "40px" }}>
+						<ProjectTiles
+							title={project?.title || `Project ${idx + 1}`}
+							description={project?.description || ""}
+							tileCards={project?.tileCards.map((card, cardIdx) => ({
+								index: card?.index || cardIdx,
+								cardIndex: card?.cardIndex || cardIdx,
+								cardLength: card?.cardLength || project?.tileCards?.length || 0,
+								image: card?.image || "",
+								imageAlt: card?.imageAlt || `Project ${idx + 1} - Tile ${cardIdx + 1}`,
+							})) || []}
+							onImageClick={handleImageClick}
+						/>
+					</div>
+				))}
+			</PageSection>
+			<Modal modalContent={modalContent ?? <></>} />
 		</>
 	);
 }

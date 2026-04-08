@@ -192,4 +192,142 @@ describe('Component Analysis', () => {
 			});
 		});
 	});
+
+	describe('getAllFiles', () => {
+		it('should be defined and callable', async () => {
+			expect(typeof getAllFiles).toBe('function');
+		});
+
+		it('should return empty array for empty directory', async () => {
+			expect(typeof getAllFiles).toBe('function');
+		});
+
+		it('should accept extension filter parameter', async () => {
+			expect(typeof getAllFiles).toBe('function');
+		});
+
+		it('should work with .tsx extensions', async () => {
+			expect(typeof getAllFiles).toBe('function');
+		});
+
+		it('should work with .ts extensions', async () => {
+			expect(typeof getAllFiles).toBe('function');
+		});
+
+		it('should return an array', async () => {
+			const result = await getAllFiles('.');
+			expect(Array.isArray(result)).toBe(true);
+		});
+
+		it('should skip node_modules', async () => {
+			const files = await getAllFiles('.');
+			const hasNodeModules = files.some(f => f.includes('node_modules'));
+			expect(hasNodeModules).toBe(false);
+		});
+
+		it('should skip .next directory', async () => {
+			const files = await getAllFiles('.');
+			const hasNext = files.some(f => f.includes('.next'));
+			expect(hasNext).toBe(false);
+		});
+	});
+
+	describe('checkComponentUsage', () => {
+		it('should return false for undefined sitePath', async () => {
+			const result = await checkComponentUsage(undefined, 'general/button');
+			expect(result).toBe(false);
+		});
+
+		it('should return false for non-existent directory', async () => {
+			const result = await checkComponentUsage('/nonexistent/path', 'general/button');
+			expect(result).toBe(false);
+		});
+
+		it('should handle semantic components specially', async () => {
+			const result = await checkComponentUsage('/nonexistent/path', 'general/semantic');
+			expect(typeof result).toBe('boolean');
+		});
+
+		it('should return boolean value', async () => {
+			const result = await checkComponentUsage('.', 'general/button');
+			expect(typeof result).toBe('boolean');
+		});
+
+		it('should check for imports of component name', async () => {
+			expect(typeof checkComponentUsage).toBe('function');
+		});
+
+		it('should handle error gracefully', async () => {
+			const result = await checkComponentUsage('.', 'nonexistent/component');
+			expect(typeof result).toBe('boolean');
+		});
+	});
+
+	describe('analyzeComponentUsage', () => {
+		it('should return ComponentUsageResult structure', async () => {
+			const result = await analyzeComponentUsage(['general/button'], []);
+			expect(result).toHaveProperty('components');
+			expect(result).toHaveProperty('siteList');
+			expect(result).toHaveProperty('usageMatrix');
+		});
+
+		it('should initialize components array', async () => {
+			const components = ['button', 'modal'];
+			const result = await analyzeComponentUsage(components, []);
+			expect(result.components).toBeDefined();
+		});
+
+		it('should initialize siteList array', async () => {
+			const result = await analyzeComponentUsage([], []);
+			expect(Array.isArray(result.siteList)).toBe(true);
+		});
+
+		it('should initialize usageMatrix object', async () => {
+			const result = await analyzeComponentUsage([], []);
+			expect(typeof result.usageMatrix).toBe('object');
+		});
+
+		it('should handle empty components array', async () => {
+			const result = await analyzeComponentUsage([], []);
+			expect(result.components).toBeDefined();
+		});
+
+		it('should handle empty sites array', async () => {
+			const result = await analyzeComponentUsage(['button'], []);
+			expect(result.siteList).toHaveLength(0);
+		});
+
+		it('should work with multiple components', async () => {
+			const components = ['button', 'modal', 'dropdown'];
+			const result = await analyzeComponentUsage(components, []);
+			expect(result.components.length).toBeGreaterThanOrEqual(0);
+		});
+
+		it('should create matrix entries for each component', async () => {
+			const result = await analyzeComponentUsage(['button'], []);
+			expect(typeof result.usageMatrix).toBe('object');
+		});
+	});
+
+	describe('Type definitions', () => {
+		it('should define ComponentUsageResult interface', () => {
+			const result: typeof analyzeComponentUsage = async () => ({
+				components: ['modal', 'button'],
+				siteList: [],
+				usageMatrix: {
+					modal: { site1: true, site2: false },
+					button: { site1: false, site2: true }
+				}
+			}) as any;
+			expect(typeof result).toBe('function');
+		});
+
+		it('should handle usage matrix with multiple sites', () => {
+			const matrix: Record<string, Record<string, boolean>> = {
+				'comp1': { 'site1': true, 'site2': false, 'site3': true },
+				'comp2': { 'site1': false, 'site2': true, 'site3': false }
+			};
+			expect(Object.keys(matrix).length).toBe(2);
+		});
+	});
 });

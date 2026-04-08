@@ -203,4 +203,5 @@ export function DragHandler(props: DragHandlerType ) {
 		};
 	}, [props.activeIndex]);
 
+	return null;
 }

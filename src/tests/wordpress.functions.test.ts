@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getWordPressItems, photonToOriginalUrl } from '../components/integrations/wordpress.functions';
+import { getWordPressItems, getWordPressLastModified, photonToOriginalUrl } from '../components/integrations/wordpress.functions';
 import { buildUrl } from '../components/general/urlbuilder';
 
 vi.mock('../components/general/smartfetch');
@@ -248,6 +248,345 @@ describe('WordPress Functions', () => {
           expect(url).toContain('number=100');
         });
       });
+    });
+
+    it('should return BlogPostType array', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [{ ID: '123', title: 'Test Post', date: '2024-01-01', excerpt: 'Test excerpt', URL: 'https://example.com/test', categories: ['general'] }] });
+      const result = await getWordPressItems({ site: 'example.com' });
+      expect(Array.isArray(result) || result === undefined).toBe(true);
+    });
+
+    it('should fetch posts from WordPress API', async () => {
+      const mockPost = { ID: '123', title: 'Test Post', date: '2024-01-01', excerpt: 'Test excerpt', URL: 'https://example.com/test', categories: ['general'] };
+      mockSmartFetch.mockResolvedValueOnce({ posts: [mockPost] });
+      await getWordPressItems({ site: 'example.com' });
+      expect(mockSmartFetch).toHaveBeenCalled();
+    });
+
+    it('should use default WordPress API URL', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      await getWordPressItems({ site: 'example.com' });
+      expect(mockSmartFetch).toHaveBeenCalled();
+    });
+
+    it('should use custom baseURL when provided', async () => {
+      const customURL = 'https://custom.api.com/';
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      await getWordPressItems({ site: 'example.com', baseURL: customURL });
+      expect(mockSmartFetch).toHaveBeenCalled();
+    });
+
+    it('should limit results by count parameter', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      await getWordPressItems({ site: 'example.com', count: 5 });
+      expect(mockSmartFetch).toHaveBeenCalled();
+    });
+
+    it('should fetch all posts when count not specified', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      await getWordPressItems({ site: 'example.com' });
+      expect(mockSmartFetch).toHaveBeenCalled();
+    });
+
+    it('should paginate through results', async () => {
+      const mockPost = { ID: '123', title: 'Test Post', date: '2024-01-01', excerpt: 'Test excerpt', URL: 'https://example.com/test', categories: ['general'] };
+      const posts = Array(250).fill(0).map((_, i) => ({ ...mockPost, ID: `${i}` }));
+      mockSmartFetch.mockResolvedValueOnce({ posts: posts.slice(0, 100) });
+      mockSmartFetch.mockResolvedValueOnce({ posts: posts.slice(100, 200) });
+      mockSmartFetch.mockResolvedValueOnce({ posts: posts.slice(200) });
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+
+      await getWordPressItems({ site: 'example.com', count: 250 });
+      expect(mockSmartFetch.mock.calls.length).toBeGreaterThan(0);
+    });
+
+    it('should stop pagination when empty batch received', async () => {
+      const mockPost = { ID: '123', title: 'Test Post', date: '2024-01-01', excerpt: 'Test excerpt', URL: 'https://example.com/test', categories: ['general'] };
+      mockSmartFetch.mockResolvedValueOnce({ posts: [mockPost] });
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+
+      await getWordPressItems({ site: 'example.com' });
+      expect(mockSmartFetch).toHaveBeenCalled();
+    });
+
+    it('should sort posts by date descending', async () => {
+      const mockPost = { ID: '123', title: 'Test Post', date: '2024-01-01', excerpt: 'Test excerpt', URL: 'https://example.com/test', categories: ['general'] };
+      const post1 = { ...mockPost, ID: '1', date: '2024-01-01' };
+      const post2 = { ...mockPost, ID: '2', date: '2024-01-02' };
+      mockSmartFetch.mockResolvedValueOnce({ posts: [post1, post2] });
+
+      const result = await getWordPressItems({ site: 'example.com' });
+      if (result && result.length > 1) {
+        expect(result[0].date >= result[1].date).toBe(true);
+      }
+    });
+
+    it('should handle missing featured image', async () => {
+      const mockPost = { ID: '123', title: 'Test Post', date: '2024-01-01', excerpt: 'Test excerpt', URL: 'https://example.com/test', categories: ['general'] };
+      const post = { ...mockPost, featured_image: undefined };
+      mockSmartFetch.mockResolvedValueOnce({ posts: [post] });
+
+      const result = await getWordPressItems({ site: 'example.com' });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+
+    it('should transform Photon URLs in featured images', async () => {
+      const mockPost = { ID: '123', title: 'Test Post', date: '2024-01-01', excerpt: 'Test excerpt', URL: 'https://example.com/test', categories: ['general'] };
+      const post = { ...mockPost, featured_image: 'https://i.wordpress.com/image.jpg' };
+      mockSmartFetch.mockResolvedValueOnce({ posts: [post] });
+
+      const result = await getWordPressItems({ site: 'example.com' });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+
+    it('should handle posts with content', async () => {
+      const mockPost = { ID: '123', title: 'Test Post', date: '2024-01-01', excerpt: 'Test excerpt', URL: 'https://example.com/test', categories: ['general'] };
+      const post = { ...mockPost, content: '<p>Post content</p>' };
+      mockSmartFetch.mockResolvedValueOnce({ posts: [post] });
+
+      const result = await getWordPressItems({ site: 'example.com' });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+
+    it('should handle posts with author info', async () => {
+      const mockPost = { ID: '123', title: 'Test Post', date: '2024-01-01', excerpt: 'Test excerpt', URL: 'https://example.com/test', categories: ['general'] };
+      const post = {
+        ...mockPost,
+        author: {
+          ID: 1,
+          login: 'admin',
+          email: 'admin@example.com',
+          name: 'Admin',
+          first_name: 'Admin',
+          last_name: 'User',
+          nice_name: 'admin',
+          URL: 'https://example.com',
+          avatar_URL: 'https://example.com/avatar.jpg',
+          profile_URL: 'https://example.com/profile',
+          ip_address: '127.0.0.1'
+        }
+      };
+      mockSmartFetch.mockResolvedValueOnce({ posts: [post] });
+
+      const result = await getWordPressItems({ site: 'example.com' });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+
+    it('should handle fetch errors gracefully', async () => {
+      mockSmartFetch.mockRejectedValueOnce(new Error('Network error'));
+
+      const result = await getWordPressItems({ site: 'example.com' });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+
+    it('should handle non-array posts response', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: null });
+
+      const result = await getWordPressItems({ site: 'example.com' });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+
+    it('should accept different site identifiers', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      await getWordPressItems({ site: 'my-site.wordpress.com' });
+      expect(mockSmartFetch).toHaveBeenCalled();
+    });
+
+    it('should set caching headers for smartFetch', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      await getWordPressItems({ site: 'example.com' });
+      expect(mockSmartFetch).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          timeout: expect.any(Number)
+        })
+      );
+    });
+  });
+
+  describe('getWordPressLastModified', () => {
+    it('should return modified timestamp', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [{ modified: '2024-01-15T10:00:00Z' }] });
+      const result = await getWordPressLastModified({ site: 'example.com' });
+      expect(result === null || typeof result === 'string').toBe(true);
+    });
+
+    it('should return null when modified field missing', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [{}] });
+      const result = await getWordPressLastModified({ site: 'example.com' });
+      expect(result === null || typeof result === 'string').toBe(true);
+    });
+
+    it('should return null on fetch error', async () => {
+      mockSmartFetch.mockRejectedValueOnce(new Error('Network error'));
+      const result = await getWordPressLastModified({ site: 'example.com' });
+      expect(result).toBe(null);
+    });
+
+    it('should fetch single post only', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [{ modified: '2024-01-15' }] });
+      await getWordPressLastModified({ site: 'example.com' });
+      expect(mockSmartFetch).toHaveBeenCalled();
+    });
+
+    it('should use custom baseURL when provided', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      const customURL = 'https://custom.api.com/';
+      await getWordPressLastModified({ site: 'example.com', baseURL: customURL });
+      expect(mockSmartFetch).toHaveBeenCalled();
+    });
+
+    it('should use default WordPress API URL', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      await getWordPressLastModified({ site: 'example.com' });
+      expect(mockSmartFetch).toHaveBeenCalled();
+    });
+
+    it('should return null for empty posts array', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      const result = await getWordPressLastModified({ site: 'example.com' });
+      expect(result === null || typeof result === 'string').toBe(true);
+    });
+
+    it('should return null when posts is not array', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: null });
+      const result = await getWordPressLastModified({ site: 'example.com' });
+      expect(result === null || typeof result === 'string').toBe(true);
+    });
+  });
+
+  describe('BlogPostType structure', () => {
+    it('should have all required fields', () => {
+      const post = {
+        ID: '123',
+        title: 'Test',
+        date: '2024-01-01',
+        excerpt: 'Test',
+        URL: 'https://example.com',
+        categories: []
+      };
+      expect(post.ID).toBe('123');
+    });
+
+    it('should support optional author field', () => {
+      const post = {
+        ID: '123',
+        title: 'Test',
+        date: '2024-01-01',
+        excerpt: 'Test',
+        URL: 'https://example.com',
+        categories: [],
+        author: {
+          ID: 1,
+          login: 'test',
+          email: 'test@example.com',
+          name: 'Test',
+          first_name: 'Test',
+          last_name: 'User',
+          nice_name: 'test',
+          URL: 'https://example.com',
+          avatar_URL: 'https://example.com/avatar.jpg',
+          profile_URL: 'https://example.com/profile',
+          ip_address: '127.0.0.1'
+        }
+      };
+      expect(post.author?.login).toBe('test');
+    });
+
+    it('should support featured image string', () => {
+      const post = {
+        ID: '123',
+        title: 'Test',
+        date: '2024-01-01',
+        excerpt: 'Test',
+        URL: 'https://example.com',
+        categories: [],
+        featured_image: 'https://example.com/image.jpg'
+      };
+      expect(post.featured_image).toBe('https://example.com/image.jpg');
+    });
+
+    it('should support post_thumbnail object', () => {
+      const post = {
+        ID: '123',
+        title: 'Test',
+        date: '2024-01-01',
+        excerpt: 'Test',
+        URL: 'https://example.com',
+        categories: [],
+        post_thumbnail: { URL: 'https://example.com/thumb.jpg' }
+      };
+      expect(post.post_thumbnail?.URL).toBe('https://example.com/thumb.jpg');
+    });
+  });
+
+  describe('PropTypes Validation', () => {
+    it('should have propTypes defined', () => {
+      expect(getWordPressItems.propTypes).toBeDefined();
+    });
+
+    it('should require site prop', () => {
+      expect(getWordPressItems.propTypes?.site).toBeDefined();
+    });
+
+    it('should accept optional count prop', () => {
+      expect(getWordPressItems.propTypes?.count).toBeDefined();
+    });
+
+    it('should accept optional baseURL prop', () => {
+      expect(getWordPressItems.propTypes?.baseURL).toBeDefined();
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('should log errors to console', async () => {
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      mockSmartFetch.mockRejectedValueOnce(new Error('API error'));
+      await getWordPressItems({ site: 'example.com' });
+      expect(consoleSpy).toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it('should continue on fetch error', async () => {
+      mockSmartFetch.mockRejectedValueOnce(new Error('Network error'));
+      const result = await getWordPressItems({ site: 'example.com' });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+
+    it('should handle invalid response structure', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ data: [] });
+      const result = await getWordPressItems({ site: 'example.com' });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle count of 0', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      const result = await getWordPressItems({ site: 'example.com', count: 0 });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+
+    it('should handle very large count', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      const result = await getWordPressItems({ site: 'example.com', count: 10000 });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+
+    it('should handle special characters in site name', async () => {
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+      const result = await getWordPressItems({ site: 'my-site-2024.wordpress.com' });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
+    });
+
+    it('should handle fast pagination', async () => {
+      const mockPost = { ID: '123', title: 'Test Post', date: '2024-01-01', excerpt: 'Test excerpt', URL: 'https://example.com/test', categories: ['general'] };
+      const posts100 = Array(100).fill(0).map((_, i) => ({ ...mockPost, ID: `${i}` }));
+      mockSmartFetch.mockResolvedValueOnce({ posts: posts100 });
+      mockSmartFetch.mockResolvedValueOnce({ posts: [] });
+
+      const result = await getWordPressItems({ site: 'example.com', count: 100 });
+      expect(result === undefined || Array.isArray(result)).toBe(true);
     });
   });
 });

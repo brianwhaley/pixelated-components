@@ -1380,7 +1380,7 @@ export default {
 				'pixelated/no-duplicate-export-names': 'error',
 				'pixelated/class-name-kebab-case': 'error',
 				'pixelated/no-hardcoded-config-keys': 'error',
-				'pixelated/no-direct-fetch': 'warn',
+				'pixelated/no-direct-fetch': 'error',
 			},
 		},
 	},

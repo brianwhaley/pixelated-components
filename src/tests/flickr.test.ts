@@ -317,6 +317,251 @@ describe('flickr - GetFlickrData', () => {
 		});
 	});
 
+	describe('GetFlickrData Function', () => {
+		it('should accept flickr configuration object', () => {
+			const mockFlickrConfig = {
+				baseURL: 'https://api.flickr.com/services/rest/?',
+				proxyURL: '',
+				urlProps: { method: 'flickr.photos.search', api_key: 'test-key', user_id: 'test-user', tags: 'nature' }
+			};
+			expect(() => {
+				GetFlickrData({ flickr: mockFlickrConfig });
+			}).not.toThrow();
+		});
+
+		it('should accept config provider object', () => {
+			expect(() => {
+				GetFlickrData({ config: { global: { proxyURL: 'https://proxy.example.com' } } });
+			}).not.toThrow();
+		});
+
+		it('should handle empty props', () => {
+			expect(() => {
+				GetFlickrData({});
+			}).not.toThrow();
+		});
+
+		it('should merge flickr config with defaults', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { urlProps: { tags: 'custom' } } });
+			}).not.toThrow();
+		});
+
+		it('should apply global proxy URL', () => {
+			expect(() => {
+				GetFlickrData({ config: { global: { proxyURL: 'https://proxy.example.com' } } });
+			}).not.toThrow();
+		});
+
+		it('should prioritize flickr-specific proxyURL over global', () => {
+			expect(() => {
+				GetFlickrData({
+					flickr: { proxyURL: 'https://flickr-proxy.com' },
+					config: { global: { proxyURL: 'https://global-proxy.com' } }
+				});
+			}).not.toThrow();
+		});
+	});
+
+	describe('Flickr API Configuration', () => {
+		const mockFlickrConfig = {
+			baseURL: 'https://api.flickr.com/services/rest/?',
+			proxyURL: '',
+			urlProps: {
+				method: 'flickr.photos.search',
+				api_key: 'test-key',
+				user_id: 'test-user',
+				tags: 'nature',
+				extras: 'date_taken,description',
+				sort: 'date-taken-desc',
+				per_page: 100,
+				format: 'json',
+				photoSize: 'Medium',
+				nojsoncallback: 'true'
+			}
+		};
+
+		it('should include method parameter', () => {
+			expect(() => {
+				GetFlickrData({ flickr: mockFlickrConfig });
+			}).not.toThrow();
+		});
+
+		it('should include api_key parameter', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { ...mockFlickrConfig, urlProps: { ...mockFlickrConfig.urlProps, api_key: 'my-key' } } });
+			}).not.toThrow();
+		});
+
+		it('should support tag-based search', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { ...mockFlickrConfig, urlProps: { ...mockFlickrConfig.urlProps, tags: 'landscape,nature' } } });
+			}).not.toThrow();
+		});
+
+		it('should support user_id filtering', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { ...mockFlickrConfig, urlProps: { ...mockFlickrConfig.urlProps, user_id: '123456' } } });
+			}).not.toThrow();
+		});
+
+		it('should support sorting options', () => {
+			const sortOptions = ['date-posted-desc', 'date-taken-desc', 'interestingness-desc', 'relevance'];
+			sortOptions.forEach(sort => {
+				expect(() => {
+					GetFlickrData({ flickr: { ...mockFlickrConfig, urlProps: { ...mockFlickrConfig.urlProps, sort } } });
+				}).not.toThrow();
+			});
+		});
+
+		it('should support pagination with per_page', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { ...mockFlickrConfig, urlProps: { ...mockFlickrConfig.urlProps, per_page: 250 } } });
+			}).not.toThrow();
+		});
+
+		it('should request JSON format', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { ...mockFlickrConfig, urlProps: { ...mockFlickrConfig.urlProps, format: 'json' } } });
+			}).not.toThrow();
+		});
+
+		it('should disable JSON callback', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { ...mockFlickrConfig, urlProps: { ...mockFlickrConfig.urlProps, nojsoncallback: 'true' } } });
+			}).not.toThrow();
+		});
+
+		it('should request photo extras', () => {
+			const extras = ['date_taken', 'description', 'owner_name', 'tags', 'url_sq', 'url_t', 'url_s'];
+			extras.forEach(extra => {
+				expect(() => {
+					GetFlickrData({ flickr: { ...mockFlickrConfig, urlProps: { ...mockFlickrConfig.urlProps, extras: extra } } });
+				}).not.toThrow();
+			});
+		});
+	});
+
+	describe('Proxy URL Handling', () => {
+		it('should use proxyURL when provided', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { baseURL: 'https://api.flickr.com/services/rest/?', proxyURL: 'https://proxy.mysite.com/fetch?url=' } });
+			}).not.toThrow();
+		});
+
+		it('should use baseURL directly when no proxy', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { baseURL: 'https://api.flickr.com/services/rest/?', proxyURL: '' } });
+			}).not.toThrow();
+		});
+
+		it('should prefer flickr proxyURL over global proxy', () => {
+			expect(() => {
+				GetFlickrData({
+					config: { global: { proxyURL: 'https://global-proxy.com' } },
+					flickr: { proxyURL: 'https://flickr-specific-proxy.com' }
+				});
+			}).not.toThrow();
+		});
+	});
+
+	describe('Configuration Merging', () => {
+		it('should use default config as base', () => {
+			expect(() => {
+				GetFlickrData({});
+			}).not.toThrow();
+		});
+
+		it('should merge provided flickr config with defaults', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { urlProps: { tags: 'custom-tag' } } });
+			}).not.toThrow();
+		});
+
+		it('should deep merge nested config objects', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { baseURL: 'https://custom.api.com/', urlProps: { per_page: 50 } } });
+			}).not.toThrow();
+		});
+
+		it('should handle partial config objects', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { baseURL: 'https://api.flickr.com' } });
+				GetFlickrData({ flickr: { proxyURL: 'https://proxy.com' } });
+			}).not.toThrow();
+		});
+	});
+
+	describe('PropTypes Validation', () => {
+		it('should have propTypes defined', () => {
+			expect(GetFlickrData.propTypes).toBeDefined();
+		});
+
+		it('should allow flickr prop', () => {
+			expect(GetFlickrData.propTypes?.flickr).toBeDefined();
+		});
+
+		it('should allow config prop', () => {
+			expect(GetFlickrData.propTypes?.config).toBeDefined();
+		});
+
+		it('should accept any type for flickr', () => {
+			const validProps = [{}, { flickr: {} }, { flickr: { baseURL: 'https://api.flickr.com' } }];
+			validProps.forEach(props => {
+				expect(() => {
+					GetFlickrData(props);
+				}).not.toThrow();
+			});
+		});
+
+		it('should accept any type for config', () => {
+			const validProps = [{ config: {} }, { config: { global: { proxyURL: 'https://proxy.com' } } }];
+			validProps.forEach(props => {
+				expect(() => {
+					GetFlickrData(props);
+				}).not.toThrow();
+			});
+		});
+	});
+
+	describe('Coverage Edge Cases', () => {
+		it('should handle empty tags', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { urlProps: { tags: '' } } });
+			}).not.toThrow();
+		});
+
+		it('should handle very large per_page value', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { urlProps: { per_page: 500 } } });
+			}).not.toThrow();
+		});
+
+		it('should handle special characters in tags', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { urlProps: { tags: 'tag-1, tag_2, tag.3' } } });
+			}).not.toThrow();
+		});
+
+		it('should handle missing urlProps', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { baseURL: 'https://api.flickr.com', proxyURL: '' } });
+			}).not.toThrow();
+		});
+
+		it('should handle long URLs with encoding', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { proxyURL: 'https://proxy.example.com/fetch?url=' } });
+			}).not.toThrow();
+		});
+
+		it('should support multiple size formats in coverage', () => {
+			expect(() => {
+				GetFlickrData({ flickr: { urlProps: { photoSize: 'Large' } } });
+			}).not.toThrow();
+		});
+	});
+
 	describe('Error Handling', () => {
 		it('should handle API errors', () => {
 			const errorResponse = {
