@@ -31,6 +31,16 @@ Example: Don't say "vitest v8 doesn't support coverage thresholds" — test it f
   - `npm run build` - complete results displayed
   - Let the user see everything, always
 
+## Git Conventions
+
+### Remote Naming
+- Name Git remotes after the repository, not "origin"
+- Pattern: `git remote add <repo-name> https://github.com/<org>/<repo-name>.git`
+- Example: `git remote add pixelated-components https://github.com/brianwhaley/pixelated-components.git`
+- Benefits: Multiple remotes are self-documenting; `git fetch pixelated-components` is clearer than `git fetch upstream`
+- Monorepo context: pixelated-tech monorepo has remotes for all apps, making cross-project operations clear
+- Use `src/scripts/setup-remotes.sh` to configure all remotes consistently
+
 ## General
 
 ### Indentation
