@@ -1,0 +1,214 @@
+
+/* ========================================
+=====      SLIDING PANEL MENU         =====
+======================================== */
+
+.panel-menu-button {
+	/* background-color: rgba(255,255,255,0.7); */
+	/* display: none; */
+	/* display: inline; */
+
+	background-color: transparent;
+    border: none;
+
+	margin: 0px 10px 0px 0px;
+	padding: 5px;
+	text-align: center;
+	width: 35px;
+
+	/* .rounded; */
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+
+.panel-menu-button .hamburger{
+    cursor: pointer;
+   	font-family: Verdana;
+	font-size: 1.75rem;
+    color: #CCC;
+
+}
+
+.panel-menu-button .hamburger2{
+	/* 3 lines instead of unicode hamburger (U+2261) */
+    /* the tricks */
+	/* display: block; */
+	/* display inline-block is fine too */
+   	-webkit-transform: scaleX(1.5);
+   	-moz-transform: scaleX(1.5);
+   	-o-transform: caleX(1.5); 
+   	transform: scaleX(1.5);
+	writing-mode: vertical-lr;
+    /* optional */
+    font-size: 8pt;
+    cursor: pointer;
+    font-weight: 900;
+    color: #CCC;
+	padding-top: 5px;
+
+}
+
+/* hamburger hover style */
+/* .accordion-menu .hamburger:hover {
+    color: #FFC75F;
+} */
+
+@media screen and (max-width: 480px) {
+	.panel-menu-button {
+		display: inline;
+	}
+}
+
+.panelMenuHeader {
+	background-color: #336699;
+	/* background-image: url(/images/pix/pix-bg.gif); */
+	color: #FFFFFF;
+	padding: 15px;
+	/* .rounded; */
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+
+/* ========================================
+============  ACCORDION MENU   ============
+======================================== */
+
+.accordion-menu-wrapper {
+	/* background: #FFF; */
+	background: rgba(150, 190, 250, 0.7);
+	border-right: 1px solid #ccc;
+	height: auto;
+	/* height: 100%; */
+	position: fixed;
+	left: 0px;
+	top: 60px;
+	width: 220px;
+	z-index: 1000;
+    padding: 5px;
+}
+
+.accordion-in {
+	left: 0px;
+	transition: transform 0.5s ease-out 0.0s;
+	transform: translateX(0px);
+}
+
+.accordion-out {
+	left: 0px;
+	transition: transform 0.5s ease-out 0.0s;
+	transform: translateX(-250px);
+}
+
+.accordion-down {
+	top: 60px;
+	transition: transform 0.5s ease-out 0.0s;
+	transform: translateY(0px);
+}
+
+.accordion-up {
+	/* bottom: 0px; */
+	top: 60px;
+	transition: transform 0.55s ease-out 0.0s;
+	transform: translateY(-150%);
+}
+
+.accordion-menu,
+.accordion-menu ul {
+	/* ALL LIST LEVELS */
+	display: inline-block;
+	list-style-type: none;
+	padding: 0;
+	width: 200px;
+}
+
+.accordion-menu li {
+	/* ALL LIST ITEM LEVELS */
+	border-bottom: 1px solid #FFF;
+}
+
+.accordion-menu li:first-child {
+	/* ALL LIST ITEM LEVELS */
+	border-top: 1px solid #FFF;
+}
+
+.accordion-menu a {
+	color: #000;
+	display: block;
+	text-decoration: none;
+}
+
+/* ===== LEVEL 1 ===== */
+
+.accordion-menu > ul {
+	margin: 0px 0px 0px 5px;
+	padding: 0;
+	width: 200px;
+}
+
+.accordion-menu > ul > li > a {
+	/* this is the button */
+	color: black;
+	background: #CCC;
+    /* background-image: url(/images/pix/pix-bg-lite.jpg); */
+	font-weight: bold;
+	height: 30px;
+	line-height:30px;
+	padding-left: 10px;
+}
+
+.accordion-menu > ul > li > a:hover {
+	background: #EDD;
+    /* background-image: url(/images/pix/pix-bg-sm-bw.gif); */
+}
+
+/* ===== LEVEL 2 ===== */
+
+.accordion-menu > ul > ul {
+	margin: 0px 0px 0px 20px;
+	padding: 0;
+	width: 180px;
+}
+
+.menu-hide { 
+	animation: hide 0.25s linear;
+   	animation-fill-mode: forwards;
+}
+.menu-show { 
+	animation: show 0.25s linear;
+   	animation-fill-mode: forwards;
+}
+@keyframes hide {
+	0% { opacity: 1; display: inline-block; }
+	99% { display: inline-block; }
+	100% { opacity: 0;  display: none;}
+}
+@keyframes show {
+	0% { opacity: 0; display: none; }
+	1% { display: inline-block; }
+	100% { opacity: 1;  display: inline-block;}
+}
+
+
+.accordion-menu ul > ul > li:first-child {
+	/* ALL LIST ITEM LEVELS */
+	border-top: 0px;
+}
+
+.accordion-menu > ul > ul > li > a {
+	/* this is the button */
+	color: black;
+	background: #CCC;
+    /* background-image: url(/images/pix/pix-bg-lite.jpg); */
+	font-weight: bold;
+	height: 30px;
+	line-height:30px;
+}
+
+.accordion-menu > ul > ul > li > a:hover {
+	background: #EDD;
+    /* background-image: url(/images/pix/pix-bg-sm-bw.gif); */
+}

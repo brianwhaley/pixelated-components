@@ -1,0 +1,466 @@
+.config-builder {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.config-builder h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.file-upload-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+}
+
+.file-upload-label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.file-upload-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+.file-upload-input:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+}
+
+.site-info-section {
+  padding: 20px 0;
+}
+
+.site-info-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-group label {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: #555;
+  font-size: 14px;
+}
+
+.field-group input,
+.field-group select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.field-group input:focus,
+.field-group select:focus {
+  outline: none;
+  border-color: #007acc;
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.2);
+}
+
+.field-group input[type="color"] {
+  height: 40px;
+  cursor: pointer;
+}
+
+.address-section {
+  grid-column: 1 / -1;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.social-links-section {
+  grid-column: 1 / -1;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.social-links-section h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.social-link-item {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.social-link-item input {
+  flex: 2;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.social-link-item button {
+  flex-shrink: 0;
+  padding: 8px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.social-link-item button:hover {
+  background-color: #c82333;
+}
+
+.routes-section {
+  padding: 20px 0;
+}
+
+.routes-list {
+  margin-bottom: 15px;
+}
+
+.route-headers {
+  display: grid;
+  grid-template-columns: 2fr 2fr 2fr 2fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.route-item {
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.route-item input,
+.route-item select,
+.route-item textarea {
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: var(--font-size5);
+}
+
+.route-item label {
+  font-size: var(--font-size5);
+  font-weight: bold;
+}
+
+.route-item button {
+  padding: 6px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.route-item button:hover {
+  background-color: #c82333;
+}
+
+.config-builder button[type="button"] {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+  margin-top: 20px;
+}
+
+.config-builder button[type="button"]:hover {
+  background-color: #218838;
+}
+
+.config-builder pre {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  padding: 15px;
+  margin-top: 20px;
+  font-size: 12px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .site-info-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .address-section .site-info-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .route-item {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
+/* Save Button Validation Styles */
+.save-button-valid {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin: 20px 0;
+}
+
+.save-button-valid:hover {
+  background-color: #218838;
+}
+
+.save-button-invalid {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: not-allowed;
+  opacity: 0.6;
+  margin: 20px 0;
+}
+
+.validation-message {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 500;
+}
+/* AI Recommendations Modal */
+.ai-recommendations-modal {
+  max-width: 600px;
+}
+
+.ai-recommendations-modal h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.ai-loading {
+  text-align: center;
+  padding: 20px;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007acc;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 1s linear infinite;
+  margin: 10px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ai-error {
+  color: #dc3545;
+  padding: 10px;
+  background-color: #f8d7da;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.ai-recommendations {
+  margin: 20px 0;
+}
+
+.recommendation-item {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #007acc;
+}
+
+.recommendation-item label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+.recommendation-item input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: #007acc;
+}
+
+.recommendation-item label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.recommendation-item label:hover {
+  background-color: #f0f8ff;
+}
+
+.recommendation-content {
+  margin-left: 20px;
+}
+
+.current-value {
+  color: #666;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+}
+
+.suggested-value {
+  color: #007acc;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #dee2e6;
+}
+
+.modal-actions button {
+  padding: 8px 16px;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-actions button:hover {
+  background-color: #f8f9fa;
+}
+
+.accept-button {
+  background-color: #28a745 !important;
+  color: white !important;
+  border-color: #28a745 !important;
+}
+
+.accept-button:hover {
+  background-color: #218838 !important;
+}
+
+.accept-button:disabled {
+  background-color: #6c757d !important;
+  border-color: #6c757d !important;
+  cursor: not-allowed;
+  color: white !important;
+}
+
+/* Route management buttons */
+.route-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.route-button {
+  min-height: 32px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #fff;
+  color: #495057;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.route-button:hover {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.route-button.ai-recommend {
+  background-color: #4285f4;
+  color: #fff;
+  border-color: #4285f4;
+}
+
+.route-button.ai-recommend:hover {
+  background-color: #3367d6;
+  border-color: #3367d6;
+}
+
+.route-button.remove {
+  background-color: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}
+
+.route-button.remove:hover {
+  background-color: #c82333;
+  border-color: #c82333;
+}
+
+.ai-icon {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+}

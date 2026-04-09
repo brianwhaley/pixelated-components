@@ -1,0 +1,282 @@
+{
+  "fields": [
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "name",
+        "name": "name",
+        "label": "Site Name",
+        "required": true,
+        "placeholder": "Enter site name",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "author",
+        "name": "author",
+        "label": "Author",
+        "required": true,
+        "placeholder": "Enter author name",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormTextarea",
+      "props": {
+        "id": "description",
+        "name": "description",
+        "label": "Site Description",
+        "required": true,
+        "placeholder": "Enter site description",
+        "rows": "3"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "url",
+        "id": "url",
+        "name": "url",
+        "label": "Site URL",
+        "required": true,
+        "placeholder": "https://example.com",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "email",
+        "id": "email",
+        "name": "email",
+        "label": "Email",
+        "required": true,
+        "placeholder": "contact@example.com",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "favicon",
+        "name": "favicon",
+        "label": "Favicon",
+        "required": true,
+        "placeholder": "/favicon.ico",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "favicon_sizes",
+        "name": "favicon_sizes",
+        "label": "Favicon Sizes",
+        "required": true,
+        "placeholder": "64x64 32x32 24x24 16x16",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "favicon_type",
+        "name": "favicon_type",
+        "label": "Favicon Type",
+        "required": true,
+        "placeholder": "image/x-icon",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "color",
+        "id": "theme_color",
+        "name": "theme_color",
+        "label": "Theme Color",
+        "required": true,
+        "placeholder": "#ffffff"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "color",
+        "id": "background_color",
+        "name": "background_color",
+        "label": "Background Color",
+        "required": true,
+        "placeholder": "#ffffff"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "default_locale",
+        "name": "default_locale",
+        "label": "Default Locale",
+        "required": true,
+        "placeholder": "en",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormSelect",
+      "props": {
+        "id": "display",
+        "name": "display",
+        "label": "Display Mode",
+        "required": true,
+        "options": [
+          { "value": "standalone", "label": "Standalone" },
+          { "value": "fullscreen", "label": "Fullscreen" },
+          { "value": "minimal-ui", "label": "Minimal UI" },
+          { "value": "browser", "label": "Browser" }
+        ]
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "image",
+        "name": "image",
+        "label": "Site Image",
+        "placeholder": "/images/site-image.jpg",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "image_height",
+        "name": "image_height",
+        "label": "Image Height",
+        "placeholder": "512",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "image_width",
+        "name": "image_width",
+        "label": "Image Width",
+        "placeholder": "512",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "tel",
+        "id": "telephone",
+        "name": "telephone",
+        "label": "Telephone",
+        "placeholder": "+1-555-123-4567",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "openingHours",
+        "name": "openingHours",
+        "label": "Opening Hours",
+        "placeholder": "Mo-Fr 09:00-17:00",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "priceRange",
+        "name": "priceRange",
+        "label": "Price Range",
+        "placeholder": "$$",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "keywords",
+        "name": "keywords",
+        "label": "Keywords",
+        "placeholder": "web development, design, services",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormSelect",
+      "props": {
+        "id": "publisherType",
+        "name": "publisherType",
+        "label": "Publisher Type",
+        "options": [
+          { "value": "Organization", "label": "Organization" },
+          { "value": "LocalBusiness", "label": "Local Business" },
+          { "value": "Person", "label": "Person" }
+        ]
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "number",
+        "id": "copyrightYear",
+        "name": "copyrightYear",
+        "label": "Copyright Year",
+        "placeholder": "2024",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "potentialAction.@type",
+        "name": "potentialAction.@type",
+        "label": "Search Action Type",
+        "placeholder": "SearchAction",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "potentialAction.target",
+        "name": "potentialAction.target",
+        "label": "Search Target URL",
+        "placeholder": "https://example.com/search?q={search_term_string}",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "potentialAction.query-input",
+        "name": "potentialAction.query-input",
+        "label": "Query Input",
+        "placeholder": "required name=search_term_string",
+        "size": "40"
+      }
+    }
+  ]
+}

@@ -1,0 +1,386 @@
+{
+  "categories": {
+    "on-page": {
+      "name": "On-Page SEO",
+      "description": "Elements within individual page content",
+      "priority": 1,
+      "metrics": {
+        "semantic-tags": {
+          "id": "semantic-tags",
+          "title": "Semantic HTML Tags",
+          "description": "Checks for proper semantic HTML structure",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectSemanticTagsData",
+          "scorer": "calculateSemanticTagsScore"
+        },
+        "title-tags": {
+          "id": "title-tags",
+          "title": "Title Tags",
+          "description": "Validates title tag presence and optimal length",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectTitleTagsData",
+          "scorer": "calculateTitleTagsScore"
+        },
+        "meta-keywords": {
+          "id": "meta-keywords",
+          "title": "Meta Keywords",
+          "description": "Checks for meta keywords tag presence",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectMetaKeywordsData",
+          "scorer": "calculateMetaKeywordsScore"
+        },
+        "meta-descriptions": {
+          "id": "meta-descriptions",
+          "title": "Meta Descriptions",
+          "description": "Validates meta description presence and length",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectMetaDescriptionsData",
+          "scorer": "calculateMetaDescriptionsScore"
+        },
+        "content-type-charset": {
+          "id": "content-type-charset",
+          "title": "Content-Type and Charset",
+          "description": "Checks for proper content-type/charset declaration",
+          "scoreDisplayMode": "binary",
+          "pattern": "(<meta[^>]*http-equiv=[\"']content-type[\"'][^>]*>)|(<meta[^>]*charset=[\"'][^\"']*[\"'][^>]*>)",
+          "countLogic": "or",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} content-type/charset declaration(s) found"
+        },
+        "viewport-tags": {
+          "id": "viewport-tags",
+          "title": "Viewport Tags",
+          "description": "Checks for viewport meta tag on mobile pages",
+          "scoreDisplayMode": "binary",
+          "pattern": "<meta[^>]*name=[\"']viewport[\"'][^>]*content=[\"'][^\"']*[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} viewport tag(s) found"
+        },
+        "opengraph-tags": {
+          "id": "opengraph-tags",
+          "title": "OpenGraph Tags",
+          "description": "Checks for OpenGraph meta tags for social sharing",
+          "scoreDisplayMode": "binary",
+          "pattern": "<meta[^>]*property=[\"']og:[^\"']*[\"'][^>]*content=[\"'][^\"']*[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} OpenGraph tag(s) found"
+        },
+        "preconnect-tags": {
+          "id": "preconnect-tags",
+          "title": "Preconnect Tags",
+          "description": "Checks for preconnect link tags for performance",
+          "scoreDisplayMode": "binary",
+          "pattern": "<link[^>]*rel=[\"']preconnect[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} preconnect link(s) found"
+        },
+        "h1-tags": {
+          "id": "h1-tags",
+          "title": "H1 Tags",
+          "description": "Checks for proper H1 tag usage",
+          "scoreDisplayMode": "binary",
+          "pattern": "<h1[^>]*>[^<]*</h1>",
+          "countLogic": "exact",
+          "expectedCount": 1,
+          "scoreLogic": "exact",
+          "displayTemplate": "{{count}} H1 tag(s) found"
+        },
+        "h2-tags": {
+          "id": "h2-tags",
+          "title": "H2 Tags",
+          "description": "Checks for H2 tag usage",
+          "scoreDisplayMode": "binary",
+          "pattern": "<h2[^>]*>[^<]*</h2>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} H2 tag(s) found"
+        },
+        "canonical-urls": {
+          "id": "canonical-urls",
+          "title": "Canonical URLs",
+          "description": "Checks for canonical URL tags",
+          "scoreDisplayMode": "binary",
+          "pattern": "<link[^>]*rel=[\"']canonical[\"'][^>]*href=[\"'][^\"']*[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} canonical URL(s) found"
+        },
+        "language-tags": {
+          "id": "language-tags",
+          "title": "Language Tags",
+          "description": "Checks for lang attribute on html element",
+          "scoreDisplayMode": "binary",
+          "pattern": "<html[^>]*lang=[\"'][^\"']*[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} language tag(s) found"
+        },
+        "icon-tags": {
+          "id": "icon-tags",
+          "title": "Icon Tags",
+          "description": "Checks for icon link tags for browser tabs",
+          "scoreDisplayMode": "binary",
+          "pattern": "<link[^>]*rel=[\"']icon[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} icon link(s) found"
+        },
+        "shortcut-icon-tags": {
+          "id": "shortcut-icon-tags",
+          "title": "Shortcut Icon Tags",
+          "description": "Checks for shortcut icon link tags for browser tabs",
+          "scoreDisplayMode": "binary",
+          "pattern": "<link[^>]*rel=[\"']shortcut icon[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} shortcut icon link(s) found"
+        },
+        "manifest-tag": {
+          "id": "manifest-tag",
+          "title": "Manifest Tag",
+          "description": "Checks for manifest link tag to direct crawlers to WebManifest file",
+          "scoreDisplayMode": "binary",
+          "pattern": "<link[^>]*rel=[\"']manifest[\"'][^>]*href=[\"'][^\"']*[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} manifest link(s) found"
+        },
+        "twitter-cards": {
+          "id": "twitter-cards",
+          "title": "Twitter Cards",
+          "description": "Checks for Twitter Card meta tags",
+          "scoreDisplayMode": "binary",
+          "pattern": "<meta[^>]*name=[\"']twitter:[^\"']*[\"'][^>]*content=[\"'][^\"']*[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} Twitter Card tag(s) found"
+        },
+        "image-alt-text": {
+          "id": "image-alt-text",
+          "title": "Image Alt Text",
+          "description": "Checks for alt text on images",
+          "scoreDisplayMode": "binary",
+          "pattern": "<img[^>]*alt=[\"'][^\"']*[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} image(s) with alt text found"
+        },
+        "itemprop-tags": {
+          "id": "itemprop-tags",
+          "title": "ItemProp Tags",
+          "description": "Checks for ItemProp microdata tags for social media sharing",
+          "scoreDisplayMode": "binary",
+          "pattern": "<[^>]*itemprop=[\"'][^\"']*[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} ItemProp tag(s) found"
+        },
+        "robots-meta-directives": {
+          "id": "robots-meta-directives",
+          "title": "Robots Meta Directives",
+          "description": "Checks for robots meta tags (noindex, nofollow, noarchive)",
+          "scoreDisplayMode": "binary",
+          "pattern": "<meta[^>]*name=[\"']robots[\"'][^>]*content=[\"'][^\"']*[\"'][^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} robots meta tag(s) found"
+        },
+        "indexability-status": {
+          "id": "indexability-status",
+          "title": "Indexability Status",
+          "description": "Checks for unintended noindex directives",
+          "scoreDisplayMode": "binary",
+          "pattern": "<meta[^>]*name=[\"']?robots[\"']?[^>]*content=[\"']?[^\"']*noindex[^\"']*[\"']?[^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "exact",
+          "expectedCount": 0,
+          "displayTemplate": "{{count}} noindex directive(s) found"
+        },
+        "image-optimization": {
+          "id": "image-optimization",
+          "title": "Image Optimization",
+          "description": "Checks for lazy loading and modern image formats",
+          "scoreDisplayMode": "binary",
+          "pattern": "<img[^>]*loading=[\"']lazy[\"'][^>]*>|<img[^>]*\\.(webp|avif)[^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} optimized image(s) found"
+        },
+        "pagination-structure": {
+          "id": "pagination-structure",
+          "title": "Pagination Structure",
+          "description": "Checks for proper rel='next/prev' pagination links",
+          "scoreDisplayMode": "binary",
+          "pattern": "<link[^>]*rel=[\"']?(next|prev)[\"']?[^>]*href=[\"']?[^\"']*[\"']?[^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} pagination link(s) found"
+        },
+        "schema-blogposting": {
+          "id": "schema-blogposting",
+          "title": "BlogPosting Schema",
+          "description": "Checks for BlogPosting structured data markup",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectSchemaBlogPostingData",
+          "scorer": "calculateSchemaBlogPostingScore"
+        },
+        "schema-faq": {
+          "id": "schema-faq",
+          "title": "FAQ Schema",
+          "description": "Checks for FAQPage structured data markup",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectSchemaFAQData",
+          "scorer": "calculateSchemaFAQScore"
+        },
+        "schema-localbusiness": {
+          "id": "schema-localbusiness",
+          "title": "LocalBusiness Schema",
+          "description": "Checks for LocalBusiness structured data markup",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectSchemaLocalBusinessData",
+          "scorer": "calculateSchemaLocalBusinessScore"
+        },
+        "schema-services": {
+          "id": "schema-services",
+          "title": "Service Schema",
+          "description": "Checks for Service structured data markup",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectSchemaServicesData",
+          "scorer": "calculateSchemaServicesScore"
+        },
+        "schema-website": {
+          "id": "schema-website",
+          "title": "WebSite Schema",
+          "description": "Checks for WebSite structured data markup",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectSchemaWebsiteData",
+          "scorer": "calculateSchemaWebsiteScore"
+        },
+        "amp-validation": {
+          "id": "amp-validation",
+          "title": "AMP Validation",
+          "description": "Checks for Accelerated Mobile Pages implementation",
+          "scoreDisplayMode": "binary",
+          "pattern": "<html[^>]*amp[^>]*>|<script[^>]*src=[\"']?[^\"']*cdn\\.ampproject\\.org[^\"']*[\"']?[^>]*>",
+          "countLogic": "count",
+          "scoreLogic": "present",
+          "displayTemplate": "{{count}} AMP element(s) found"
+        },
+        "mobile-first-indexing": {
+          "id": "mobile-first-indexing",
+          "title": "Mobile-First Indexing",
+          "description": "Checks for mobile-friendly viewport and responsive design",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectMobileFirstIndexingData",
+          "scorer": "calculateMobileFirstIndexingScore"
+        },
+        "international-seo": {
+          "id": "international-seo",
+          "title": "International SEO",
+          "description": "Checks for currency and locale detection elements",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectInternationalSEOData",
+          "scorer": "calculateInternationalSEOData"
+        },
+        "faceted-navigation": {
+          "id": "faceted-navigation",
+          "title": "Faceted Navigation",
+          "description": "Checks for SEO-friendly filter and navigation URLs",
+          "scoreDisplayMode": "numeric",
+          "dataCollector": "collectFacetedNavigationData",
+          "scorer": "calculateFacetedNavigationScore"
+        }
+      }
+    },
+    "on-site": {
+      "name": "On-Site SEO",
+      "description": "Site-wide technical and structural elements",
+      "priority": 2,
+      "metrics": {
+        "https": {
+          "id": "https",
+          "title": "HTTPS",
+          "description": "Checks if site uses secure HTTPS protocol",
+          "scoreDisplayMode": "binary",
+          "dataCollector": null,
+          "scorer": null
+        },
+        "url-structure": {
+          "id": "url-structure",
+          "title": "URL Structure",
+          "description": "Checks for clean URL structure without excessive parameters",
+          "scoreDisplayMode": "binary",
+          "dataCollector": null,
+          "scorer": null
+        },
+        "robots-txt": {
+          "id": "robots-txt",
+          "title": "Robots.txt",
+          "description": "Checks for robots.txt file accessibility",
+          "scoreDisplayMode": "binary",
+          "dataCollector": null,
+          "scorer": null
+        },
+        "sitemap-xml": {
+          "id": "sitemap-xml",
+          "title": "Sitemap.xml",
+          "description": "Checks for sitemap.xml file accessibility",
+          "scoreDisplayMode": "binary",
+          "dataCollector": null,
+          "scorer": null
+        },
+        "internal-linking": {
+          "id": "internal-linking",
+          "title": "Internal Linking",
+          "description": "Checks for proper internal linking structure",
+          "scoreDisplayMode": "binary",
+          "dataCollector": null,
+          "scorer": null
+        },
+        "navigation": {
+          "id": "navigation",
+          "title": "Navigation",
+          "description": "Checks for proper navigation structure",
+          "scoreDisplayMode": "binary",
+          "dataCollector": null,
+          "scorer": null
+        },
+        "broken-links": {
+          "id": "broken-links",
+          "title": "Broken Links / 404s",
+          "description": "Checks for broken internal links",
+          "scoreDisplayMode": "binary",
+          "dataCollector": null,
+          "scorer": null
+        },
+        "manifest-file": {
+          "id": "manifest-file",
+          "title": "Manifest File",
+          "description": "Checks for manifest.webmanifest file accessibility",
+          "scoreDisplayMode": "binary",
+          "dataCollector": null,
+          "scorer": null
+        },
+        "gzip-compression": {
+          "id": "gzip-compression",
+          "title": "Gzip Compression",
+          "description": "Checks for server compression verification (requires HTTP headers analysis)",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectGzipCompressionData",
+          "scorer": "calculateGzipCompressionScore"
+        },
+        "browser-caching": {
+          "id": "browser-caching",
+          "title": "Browser Caching",
+          "description": "Checks cache headers for static assets (requires HTTP headers analysis)",
+          "scoreDisplayMode": "binary",
+          "dataCollector": "collectBrowserCachingData",
+          "scorer": "calculateBrowserCachingScore"
+        }
+      }
+    }
+  }
+}

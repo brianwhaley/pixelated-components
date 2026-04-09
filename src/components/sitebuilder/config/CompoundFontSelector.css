@@ -1,0 +1,25 @@
+.compound-font-selector {
+  margin-bottom: 1rem;
+}
+
+.compound-font-selector label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.compound-container {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.compound-container > .font-selector {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.compound-container > .font-selector label {
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
+}

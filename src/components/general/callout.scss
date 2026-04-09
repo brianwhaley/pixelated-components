@@ -1,0 +1,335 @@
+/* ========================================
+============  DEFAUTL CALLOUT  ============
+======================================== */
+
+.callout, 
+.callout * {
+    box-sizing: border-box; 
+    display: flex;
+    flex-flow: row;
+    padding: 0px;
+    /* border: 1px solid black; */
+}
+
+.callout {
+    padding: 20px;
+    align-items: stretch;
+    width: 100%;
+}
+
+.callout.vertical {
+    flex-direction: column;
+    padding: 0;
+}
+
+.callout .callout-image {
+    overflow: hidden;
+    width: 100%;
+    background-color: white;
+    /* position: relative; */
+    /* align-self: start; */
+    /* aspect-ratio causing some interesting results */
+    /* aspect-ratio: 1/1;  */
+}
+
+.callout.vertical .callout-image {
+    width: 70%;
+    margin: 0 auto;
+    aspect-ratio: 1;
+}
+
+.callout .callout-image a,
+.callout .callout-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+
+.callout .callout-image.square {
+    border-radius: 0%;
+}
+
+.callout .callout-image.bevel {
+    clip-path: rect(1% 98% 98% 1% round 5%);
+}
+
+.callout .callout-image.squircle {
+    clip-path: rect(1% 98% 98% 1% round 25%);
+}
+
+.callout .callout-image.round {
+    clip-path: rect(1% 98% 98% 1% round 100%);
+}
+
+.callout .callout-body {
+    flex-flow: column;
+}
+
+.callout .callout-body > * {
+    padding: 5px 20px;
+}
+
+.callout.left,
+.callout.right {
+    float: unset !important; /* OVERRIDE pixelated.global.css */
+}
+
+.callout.left .callout-body > * {
+    text-align: left;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.callout.right .callout-body > * {
+    text-align: right;
+    margin-right: 0;
+    margin-left: auto;
+}
+
+.callout .callout-header {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.callout .callout-header a {
+    --do-nothing: true;
+}
+
+.callout .callout-header h2 {
+    --do-nothing: true;
+}
+
+.callout .callout-title {
+    text-align: center;
+}
+
+.callout .callout-subtitle {
+    text-align: left;
+}
+
+.callout.vertical .callout-subtitle {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.callout .callout-subtitle h3 {
+    padding: 0;
+    --do-nothing: true;
+}
+
+.callout .callout-content {
+    --do-nothing: true;
+}
+
+.callout .callout-button { 
+    --do-nothing: true;
+}
+
+.callout .callout-button button { 
+    display: inline-block;
+    max-width: 250px;
+    margin: 10px auto !important;
+    padding: 10px 30px;
+    border: 1px solid #999;
+    background-color: #DDD;
+    text-align: center;
+    font: inherit;
+    font-weight: 700;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    /* cursor: pointer */
+}
+
+.callout .callout-button button:hover { 
+	color: #369;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+
+
+/* ========================================
+=============  BOXED CALLOUT  =============
+======================================== */
+
+.callout.boxed {
+	padding: 0px;
+    margin: 10px 0;
+    border: 1.5px solid #666;
+    /* border-radius: 25px; */ /* moved to specific box shapes */
+    overflow: hidden; /* hide image beyond round corners */
+}
+
+.callout.boxed.square {
+    border-radius: 0px;
+}
+
+.callout.boxed.bevel {
+    border-radius: 5px;
+}
+
+.callout.boxed.squircle {
+    border-radius: 25px;
+}
+
+.callout.boxed.round {
+    border-radius: 100%;
+}
+
+.callout.boxed .callout-image {
+	clip-path: none;
+    aspect-ratio: 1/1;
+    background-color: white;
+    width: 100% !important;
+}
+
+.callout.boxed .callout-body { 
+    --do-nothing: true;
+    padding: 5px 20px;
+}
+
+.callout.boxed.vertical .callout-body { 
+    --do-nothing: true;
+    padding: 20px 0px;
+}
+
+/* ========================================
+=============  FULL CALLOUT  =============
+======================================== */
+
+.callout.full {
+    padding: 0px;
+}
+
+.callout.full.vertical .callout-image {
+    width: 100%;
+}
+
+.callout.full .callout-body > * {
+    padding: 5px 5px;
+}
+
+/* ========================================
+=============  GRID CALLOUT  ==============
+======================================== */
+
+.callout.grid, 
+.callout.grid * {
+    display: grid;
+}
+
+@for $i from 1 through 11 {
+    @for $k from 1 through 11 {
+        .callout-grid-#{$i}-#{$k} { grid-template-columns: #{$i}fr #{$k}fr; }
+        @media screen and (max-width: 480px) {
+			.callout-grid-#{$i}-#{$k} { grid-template-columns: 1fr; }
+		}
+    }
+}
+
+.callout.grid {
+    --do-nothing: true;
+    /* assumes horizontal left */
+	/* grid-template-columns: 1fr 2fr; */ /* moved to tsx */
+}
+
+.callout.grid.right {
+    --do-nothing: true;
+    /* assumes horizontal right */
+	/* grid-template-columns: 2fr 1fr; */ /* moved to tsx */
+}
+
+.callout.grid.vertical {
+	grid-template-columns: 1fr;
+
+}
+
+.callout.grid .callout-image img {
+    /* duplicate of .callout .callout-image img */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+}
+
+.callout.grid .callout-body {
+	grid-auto-rows: min-content;
+}
+
+/* ========================================
+===========  OVERLAY CALLOUT  =============
+======================================== */
+
+.callout.overlay {
+    position: relative;
+    padding: 0;
+    overflow: hidden;
+}
+
+.callout.overlay .callout-image {
+    width: 100%;
+    height: 100%;
+}
+
+.callout.overlay .callout-body {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    /* padding: 20px; */
+}
+
+/* ========================================
+=========  SPLIT SCREEN CALLOUT  ==========
+======================================== */
+
+.callout.split, 
+.callout.split * {
+    padding: 0px;
+}
+
+.callout.split .callout-image,
+.callout.split .callout-body {
+    flex: 1;
+}
+
+.callout.split .callout-body > * {
+    padding: 5px 20px;
+}
+
+/* ========================================
+=========  CALLOUT MEDIA QUERIES  =========
+======================================== */
+
+@media screen and (max-width: 480px) {
+    .callout { 
+        flex-direction: column;
+        margin: 30px 0;
+        padding: 0;
+    }
+	.callout.full {
+		margin: 0;
+	}
+    .callout.grid {
+	    grid-template-columns: 1fr;
+    }
+    .callout .callout-image { 
+        width: 70%;
+        margin: 0 auto;
+    }
+    .callout.full .callout-image,
+    .callout.split .callout-image { 
+        width: 100%;
+        margin: 0 auto;
+    }
+    .callout .callout-body > * { 
+        margin: 0 auto !important;
+        text-align: center !important;
+    }
+    .callout .callout-content  { 
+        text-align: left !important;
+    }
+} 

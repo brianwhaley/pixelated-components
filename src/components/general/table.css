@@ -1,0 +1,73 @@
+table.pix-table, .pix-table th, .pix-table tr, .pix-table td {
+	border : 1px solid #ccc ;
+	text-align: left;
+}
+
+table.pix-table {
+	width: 100%
+}
+
+table.pix-table {
+	th {
+		text-transform: uppercase;
+		font-size: 1.2em;
+		padding: 5px;
+		color: #369;
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	th:hover {
+		text-decoration: underline;
+	}
+	td {
+		padding: 5px;
+	}
+} 
+
+button#showDialog, 
+button#saveDialog, 
+button#closeDialog {
+	font-size: 1.1em;
+    padding: 2px 5px;
+    margin: 5px !important;
+    vertical-align: middle;
+    outline: none;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+
+	padding: 5px 20px;
+	-webkit-box-shadow: 0 0 5px 2px #CCC;
+	-moz-box-shadow: 0 0 5px 2px #CCC;
+    box-shadow: 0 0 5px 2px #CCC;
+}
+
+button#showDialog:hover,
+button#saveDialog:hover, 
+button#closeDialog:hover {
+    outline: none;
+	border: 1px solid #0C0;
+	-webkit-box-shadow: 0 0 5px 2px #CCC;
+	-moz-box-shadow: 0 0 5px 2px #CCC;
+    box-shadow: 0 0 5px 2px #CCC;
+}
+
+dialog {
+	padding: 20px;
+	position: absolute;
+  	top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+}
+
+
+.sort-arrow {
+	display: inline-block;
+	margin-left: 5px;
+	font-size: 0.8em;
+}
+.sort-arrow.asc::before {
+	content: '▲'; /* Up arrow for ascending */
+}
+.sort-arrow.desc::before {
+	content: '▼'; /* Down arrow for descending */
+}

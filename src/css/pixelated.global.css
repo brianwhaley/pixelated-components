@@ -1,0 +1,374 @@
+
+/* ========================================
+===========  DEFAULT STYLES   =============
+======================================== */
+
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	-moz-background-clip: padding-box !important;
+	-webkit-background-clip: padding-box !important;
+	background-clip: padding-box !important;
+	margin: 0px;
+	padding: 0px;
+	/* -ms-touch-action: none; */
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+a:link,
+a:visited,
+a:active {
+	color: var(--primary-color);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+img {
+    text-align: center;
+	max-width: 100%;
+	height: auto;
+}
+
+input {
+	font-size: 1.1em;
+	padding: 2px 5px;
+	margin: 1px 5px !important;
+}
+
+input, select, textarea, button {
+	/* why these dont inherit by default is beyond me */
+  	font-family: inherit;
+  	font-size: inherit; 
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+	border: 1px solid var(--accent1-color);
+	-webkit-box-shadow: 0 0 5px 2px var(--accent2-color);
+	-moz-box-shadow: 0 0 5px 2px var(--accent2-color);
+    box-shadow: 0 0 5px 2px var(--accent2-color);
+}
+
+ol, ul {
+	margin: 20px 0;
+	padding-left: 40px;
+}
+
+blockquote {
+	margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 40px;
+    margin-right: 40px;
+    padding: 15px;
+    border-left: 3px solid var(--accent1-color);
+    border-right: 3px solid var(--accent1-color);
+    background-color: white;
+}
+
+blockquote p {
+	margin-bottom: 0px !important;
+}
+
+pre {
+	/* USED FOR SYNTAX HIGHLIGHTING */
+	white-space: pre-wrap;
+	width: 83.33%; /* grid10 */
+	display: inline-block;
+	margin: 10px 8.33%;
+	border: 1px solid var(--accent1-color);
+	background: var(--accent2-color);
+}
+
+
+
+
+/* ========================================
+===========  PAGE SCAFFOLDING   ===========
+======================================== */
+
+/* THESE ARE DUPLICATED FROM SEMANTIC TSX FILES 
+TEMPORARILY UNTIL FULL ADOPTION */
+
+main {
+	min-height: 400px;
+}
+
+@media screen and (max-width: 480px) {
+    main {
+		/* margin-top: 10px; */
+		padding-top: 10px
+	}
+}
+
+main p {
+	margin-bottom: 20px;
+}
+
+footer {
+	min-height: 50px;
+}
+
+
+
+
+
+/* ========================================
+=============  PRESENTATION   =============
+======================================== */
+
+.button, 
+.centered-button {
+    /* background-image: url(/images/pix/pix-bg-sm-bw.gif); */
+	border: 1px solid #999;
+	display: inline-block;
+	font-size: 14px !important;
+	font-weight: bold;
+	margin: 10px;
+	padding: 5px 20px;
+	/* .rounded; */
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.centered-button {
+	display: block;
+	margin: 10px auto;
+    text-align: center;
+	max-width: 220px;
+	transition: all .2s ease ;
+}
+
+.centered-button:hover {
+	font-size: 16px;
+}
+
+.gradient {
+	background: var(--accent1-color);
+	background-image: linear-gradient(top, var(--accent2-color) 0%, var(--accent1-color) 100%);
+	background-image: -o-linear-gradient(top, var(--accent2-color) 0%, var(--accent1-color) 100%);
+	background-image: -moz-linear-gradient(top, var(--accent2-color) 0%, var(--accent1-color) 100%);
+	background-image: -webkit-linear-gradient(top, var(--accent2-color) 0%, var(--accent1-color) 100%);
+	background-image: -ms-linear-gradient(top, var(--accent2-color) 0%, var(--accent1-color) 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, var(--accent2-color)), color-stop(1, var(--accent1-color)));
+}
+
+.text-outline {
+	color: white;
+	text-shadow:
+		-1px 1px 1px black,
+		1px 1px 1px black,
+		1px -1px 1px black,
+		-1px -1px 1px black,
+		-1px 1px 5px black,
+		1px 1px 5px black,
+		1px -1px 5px black,
+		-1px -1px 5px black;
+}
+
+.text-halo {
+	color: black;
+	text-shadow:
+		-1px 1px 1px white,
+		1px 1px 1px white,
+		1px -1px 1px white,
+		-1px -1px 1px white,
+		-1px 1px 5px white,
+		1px 1px 5px white,
+		1px -1px 5px white,
+		-1px -1px 5px white;
+}
+
+.border-bottom {
+  	border-bottom: 1px solid #AAA;
+  	padding-bottom: 5px;
+}
+
+/* USE THE FIX VERSIONS TO PREVENT MEDIA QUERIES FROM REDRAWING THEM */
+
+.left, 
+.pull-left {
+	float: left !important;
+	position: relative;
+	text-align: left;
+}
+
+.right, 
+.push-right {
+	float: right !important;
+	position: relative;
+	text-align: right;
+}
+
+.centered, .center {
+	float: none !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+	text-align: center !important;
+}
+
+.horizontal-centered {
+    position: absolute;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+}
+
+.vertical-centered {
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.no-select {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+
+
+
+/* ========================================
+   MEDIA QUERIES - PRINT
+   ======================================== */
+
+@media screen and (min-width: 480px) {
+    .mobile-only {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .no-mobile {
+        display: none;
+    }
+}
+
+
+
+
+/* ========================================
+   MEDIA QUERIES - PRINT
+   ======================================== */
+
+@media print {
+
+    .page-header,
+    .page-nav,
+    .page-footer {
+        display: none;
+    }
+
+    body {
+        background: none !important
+    }
+
+    /* THIS IS DONE TO MAINTAIN PAGE STRUCTURE AND LAYOUT */
+    .no-print {
+        visibility: hidden;
+    }
+
+}
+
+
+
+
+/* ========================================
+===========  GALLERY CAROUSEL    ===========
+======================================== */
+
+#gallery-section {
+	--do-nothing: true;
+}
+#gallery-section .carousel-container {
+	background: none;
+	border: none;
+}
+#gallery-section .carousel-card-image {
+    height: 550px !important;
+	margin-top: 5px !important;
+}
+#gallery-section .carousel-card-image .imgContain {
+	--do-nothing: true;
+}
+@media screen and (max-width: 480px) {
+    #gallery-section .carousel-card-image {
+        height: 300px !important;
+    }
+}
+#gallery-section .carousel-card-header { 
+    display: none;
+}
+#gallery-section .carousel-card-subheader { 
+    position: absolute;
+    bottom: 5px;
+    width: 100%;
+}
+#gallery-section .carousel-card-subheader h4 {
+    text-align: center;
+    font-size: 11px !important;
+    font-weight: normal !important;
+    color: white;
+    text-shadow: -1px 1px 1px black, 
+        1px 1px 1px black, 
+        1px -1px 1px black, 
+        -1px -1px 1px black, 
+        -1px 1px 5px black, 
+        1px 1px 5px black, 
+        1px -1px 5px black, 
+        -1px -1px 5px black;
+}
+
+
+/* ========================================
+=========  FEEDBACK CAROUSEL    ===========
+======================================== */
+
+#feedback-section {
+	margin-bottom: 50px;
+}
+#feedback-section .carousel-container {
+	background: none;
+	border: none;
+	height: 300px;
+}
+#feedback-section .carousel-cards-container {
+	width: 60%;
+	height: 300px;
+	margin: 0 auto;
+}
+#feedback-section .carousel-card-wrapper {
+	background-color: var(--accent1-color); /* white */
+	padding: 10px;
+}
+#feedback-section .carousel-card-body {
+	text-align: center;
+	padding-top: 40px;
+}
+@media screen and (max-width: 480px) {
+	#feedback-section .carousel-cards-container {
+		width: 90%;
+		font-size: 0.9em;
+	}
+}
+#feedback-section .carousel-card-header {
+	display: inline;
+	font-size: 1.2em;
+}
+#feedback-section .carousel-buttons {
+	display: none;
+}

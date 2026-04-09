@@ -1,0 +1,73 @@
+
+/* ========================================
+============  SIMPLE MENU   ============
+======================================== */
+
+.menu-wrapper {
+	height: 100%;
+}
+
+.menu-wrapper, .menu-wrapper * {
+	display: flex;
+	flex-direction: row;
+	flex-basis: 100%;
+	justify-content: center;  
+	align-items: center;
+	text-align: center;
+}
+
+.menu {
+	width: 100%;
+	padding: 5px 0;
+}
+
+.menu ul {
+	list-style-type: none;
+	margin: 0; /* override pixelated global styles */
+	padding: 0;
+}
+
+.menu a {
+	color: black;
+	text-decoration: none;
+}
+
+.menu-item {
+	border: 1px solid white;
+	background: none;
+	width: auto;
+	height: 30px;
+	border: none;
+	flex-grow: 1;
+	flex-shrink: 1;
+	flex-basis: content; /* each item is its own size instead of auto */
+}
+
+.menu-item-hidden {
+	display: none;
+}
+
+.menu-item:hover {
+	background-color: var(--accent1-color);
+}
+
+.menu-item:not(:first-child) {
+	border-left: 2px solid var(--primary-color);
+}
+
+.menu-item a {
+	/* this is the button */
+	background-color: var(--accent1-color);
+	font-weight: bold;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+}
+
+.menu-item a.selected {
+	background-color: var(--secondary-color);
+}
+
+.menu-item a:hover {
+	background-color: var(--accent2-color);
+}

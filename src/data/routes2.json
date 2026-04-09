@@ -1,0 +1,143 @@
+{
+	"siteInfo": {
+		"name": "Pixelated Technologies",
+		"description": "Custom web development and digital design agency specializing in React, Next.js, and modern web technologies",
+		"url": "https://pixelated.tech",
+		"email": "info@pixelated.tech",
+		"image": "/images/pix/pix-bg-512.gif",
+		"image_height": "512",
+		"image_width": "512",
+		"favicon": "/favicon.ico",
+		"telephone": "+1-973-710-8008",
+		"address": {
+			"streetAddress": "10 Jade Circle",
+			"addressLocality": "Denville",
+			"addressRegion": "NJ",
+			"postalCode": "07834",
+			"addressCountry": "US"
+		},
+		"priceRange": "$$",
+		"sameAs": [
+			"https://www.linkedin.com/in/brianwhaley",
+			"https://github.com/brianwhaley",
+			"https://twitter.com/brianwhaley"
+		],
+		"keywords": "pixelated, web development, react, next.js, custom websites, digital design, small business"
+	},
+	"routes": [
+		{ 
+			"name": "Home", 
+			"path": "/", 
+			"title": "Pixelated Technologies - Home",
+			"description": "Pixelated Technologies offers a wide varity of products and services, including custom web development for small businesses, stock photography, touchup services, home design and remodeling, and more.",
+			"keywords": "pixelated, web development, small business, stock photography, home redesign, remodeling, social media"  
+		} , { 
+			"name": "Process", 
+			"path": "/process", 
+			"title": "Pixelated Technologies - Our Process",
+			"description": "Pixelated Technologies offers a proven process to get results for you and your customer gather information, develop a strategy, implement, measure outcomes, refine results, and support. ",
+			"keywords": "pixelated, web development, small business, process, strategy, implement, measure, refine, support"  
+		} , { 
+			"name": "Portfolio", 
+			"path": "/portfolio", 
+			"title": "Pixelated Technologies - Portfolio",
+			"description": "Examples of web development and design work delivered by our team members over the years.  ",
+			"keywords": "pixelated, web development, design, small business, delivery"  
+		} , { 
+			"name": "Blog", 
+			"path": "/blog", 
+			"title": "Pixelated Technologies - Blog Posts",
+			"description": "Read the latest blog posts from Pixelated Technologies.",
+			"keywords": "pixelated, blog, web development, small business"  
+		} , { 
+			"name": "Schedule", 
+			"path": "/schedule", 
+			"title": "Pixelated Technologies - Schedule an Appointment",
+			"description": "Schedule a consult appointment with Pixelated Technologies for custom IT development work - web development, social media mearketing, search engine optimization, and small business modernization." ,
+			"keywords": "pixelated, brian whaley, schedule an appointment, schedule a meeting, web development, small business modernization" 
+		} , {
+			"name": "Terms", 
+			"path": "/terms", 
+			"title": "Pixelated Technologies - Terms of Service",
+			"description": "Pixelated Technologies Terms of Service",
+			"keywords": "pixelated, terms of service" 
+				
+		} , { 
+			"name": "Privacy", 
+			"path": "/privacy", 
+			"title": "Pixelated Technologies - Privacy Policy",
+			"description": "Pixelated Technologies Privacy Policy",
+			"keywords": "pixelated, privacy policy, data retention"  
+		} , { 
+			"name": "NerdJokes", 
+			"path": "/nerdjokes", 
+			"hidden": true,
+			"title": "Pixelated Technologies - NerdJokes",
+			"description": "NerdJokes Slack Bot - How To, Customer Support, Terms, and Privacy Policy",
+			"keywords": "" 
+		} , { 
+			"name": "Stkr", 
+			"path": "/stkr", 
+			"hidden": true,
+			"title": "Pixelated Technologies - Stkr",
+			"description": "Stkr Slack Bot - How To, Customer Support, Terms, and Privacy Policy",
+			"keywords": "" 
+		} , {
+			"name": "Form", 
+			"path": "/form", 
+			"hidden": true,
+			"title": "Pixelated Technologies - Form",
+			"description": "Test my Form Builder, Form Components, and Form Validations",
+			"keywords": "" 
+		} , { 
+			"name": "Form Build", 
+			"path": "/form/build", 
+			"hidden": true,
+			"title": "Pixelated Technologies - Form Builder",
+			"description": "Build your own form with my Form Builder",
+			"keywords": ""  
+		} , { 
+			"name": "Form Extract", 
+			"path": "/form/extract", 
+			"hidden": true,
+			"title": "Pixelated Technologies - Form Extract",
+			"description": "Extract the JSON needed from a live site to use my Form Builder",
+			"keywords": ""  
+		} , {
+			"name": "Sandbox",
+			"routes": [
+				{ 
+					"name": "NerdJokes", 
+					"path": "/nerdjokes", 
+					"title": "Pixelated Technologies - NerdJokes",
+					"description": "NerdJokes Slack Bot - How To, Customer Support, Terms, and Privacy Policy",
+					"keywords": "" 
+				} , { 
+					"name": "Stkr", 
+					"path": "/stkr", 
+					"title": "Pixelated Technologies - Stkr",
+					"description": "Stkr Slack Bot - How To, Customer Support, Terms, and Privacy Policy",
+					"keywords": "" 
+				} , {
+					"name": "Form", 
+					"path": "/form", 
+					"title": "Pixelated Technologies - Form",
+					"description": "Test my Form Builder, Form Components, and Form Validations",
+					"keywords": "" 
+				} , { 
+					"name": "Form Build", 
+					"path": "/form/build", 
+					"title": "Pixelated Technologies - Form Builder",
+					"description": "Build your own form with my Form Builder",
+					"keywords": ""  
+				} , { 
+					"name": "Form Extract", 
+					"path": "/form/extract", 
+					"title": "Pixelated Technologies - Form Extract",
+					"description": "Extract the JSON needed from a live site to use my Form Builder",
+					"keywords": ""  
+				}
+			]
+		}
+	]
+}

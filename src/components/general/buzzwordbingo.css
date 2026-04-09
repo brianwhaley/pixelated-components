@@ -1,0 +1,41 @@
+/* ========================================
+============  BUZZWORD BINGO   ============
+======================================== */
+
+.bingo-card {
+	border: 1px solid #AAA;
+	max-width: 640px;
+	margin: 0 auto;
+}
+
+.bingo-card {
+
+	.bingo-header{
+		border: 1px solid #AAA;
+		background-color: #CCC;
+		font-size: 2em;
+		font-weight: bold;
+		aspect-ratio : 3 / 1;
+	}
+
+	.bingo-box {
+		border: 1px solid #AAA;
+		aspect-ratio : 1 / 1;
+		width: 100%;
+		height: 100%;
+	}
+
+	.bingo-box-text, 
+	.bingo-box-free-space {
+		text-align:center;
+		margin: auto 0;
+		/* word-spacing: 1000px; */ /* force wrap after each word */
+	}
+
+	.bingo-box-free-space {
+		font-size: 1.1em;
+		font-weight: bold;
+	}
+	
+} 
+

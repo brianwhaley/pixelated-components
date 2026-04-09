@@ -1,0 +1,82 @@
+.font-selector-container {
+  margin-bottom: 1rem;
+}
+
+.font-selector-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.font-selector-required {
+  color: #e53e3e;
+  margin-left: 0.25rem;
+}
+
+.font-selector-tooltip {
+  margin-left: 0.5rem;
+  cursor: help;
+  opacity: 0.7;
+}
+
+.font-selector-input-container {
+  position: relative;
+}
+
+.font-selector-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+}
+
+.font-selector-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.font-selector-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.font-selector-option {
+  padding: 0.5rem;
+  cursor: pointer;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.font-selector-option:hover {
+  background-color: #f9fafb;
+}
+
+.font-selector-option:last-child {
+  border-bottom: none;
+}
+
+.font-selector-loading {
+  padding: 0.5rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.font-selector-font-name {
+  font-weight: 500;
+}
+
+.font-selector-font-category {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin-left: 0.5rem;
+}

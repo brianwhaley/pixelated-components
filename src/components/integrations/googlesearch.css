@@ -1,0 +1,32 @@
+
+/* ========================================
+===========  GENERAL SEARCH    ============
+======================================== */
+
+#page-search {
+	min-height: 50px;
+}
+
+
+
+/* ========================================
+============  GOOGLE SEARCH    ============
+======================================== */
+
+form.gsc-search-box {
+    max-width: 100% !important;
+
+	table td {
+		height: 15px;
+	}
+
+	input.gsc-input {
+		font-size: 1.0em !important;
+		background: none !important;
+	}
+
+	.gsc-input .gsc-input-box {
+		padding: 0px;
+	}
+
+}

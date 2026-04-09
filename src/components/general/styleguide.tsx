@@ -1,0 +1,85 @@
+"use client";
+
+import React from "react";
+import PropTypes, { InferProps } from "prop-types";
+import { PageTitleHeader, PageSection } from "@pixelated-tech/components";
+import { flattenRoutes } from "@pixelated-tech/components";
+import routesData from '../../data/routes.json';
+const routes = routesData.routes;
+
+/**
+ * StyleGuideUI — developer style guide and design tokens viewer (colors, fonts, IA routes).
+ *
+ * @param {array} [props.routes] - Route definitions used to display site information and navigation structure.
+ */
+StyleGuideUI.propTypes = {
+/** Array of route objects used to build example navigation and IA references. */
+	routes: PropTypes.array,
+};
+export type StyleGuideUIType = InferProps<typeof StyleGuideUI.propTypes>;
+export function StyleGuideUI(props: StyleGuideUIType) {
+
+	const { routes } = props;
+
+	let primaryHeaderFont = "N/A";
+	let primaryBodyFont = "N/A";
+	if (typeof document != 'undefined') {
+		const headerFonts = getComputedStyle(document.documentElement).getPropertyValue("--header-font").trim();
+		primaryHeaderFont = headerFonts.split(',')[0].replaceAll('"', '').replaceAll("'", '');
+		const bodyFonts = getComputedStyle(document.documentElement).getPropertyValue("--body-font").trim();
+		primaryBodyFont = bodyFonts.split(',')[0].replaceAll('"', '').replaceAll("'", '');
+	}
+
+	return (
+		<>
+			<PageTitleHeader title="Style Guide" />
+
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="colors-section">
+				<h2>Color Palette</h2>
+				<div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+					<div style={{ backgroundColor: 'var(--primary-color)', color: '#fff' }} className="color-swatch">Primary Color</div>
+					<div style={{ backgroundColor: 'var(--secondary-color)' }} className="color-swatch">Secondary Color</div>
+					<div style={{ backgroundColor: 'var(--accent1-color)' }} className="color-swatch">Accent 1 Color</div>
+					<div style={{ backgroundColor: 'var(--accent2-color)' }} className="color-swatch">Accent 2 Color</div>
+					<div style={{ backgroundColor: 'var(--bg-color)' }} className="color-swatch">Background Color</div>
+					<div style={{ backgroundColor: 'var(--text-color)' }} className="color-swatch">Text Color</div>
+				</div>
+			</PageSection>
+
+			<style>{`
+			.color-swatch {
+				color: #000; 
+				border: 1px solid #ccc; 
+				padding: 10px; 
+				flex: 1 0 150px; 
+				text-align: center;
+				align-items: center;
+				justify-content: center;
+				display: flex;
+			}
+			`}</style>
+
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="fonts-section">
+				<h1 suppressHydrationWarning>H1 - {primaryHeaderFont} font</h1>
+				<h2 suppressHydrationWarning>H2 - {primaryHeaderFont} font</h2>
+				<h3 suppressHydrationWarning>H3 - {primaryHeaderFont} font</h3>
+				<h4 suppressHydrationWarning>H4 - {primaryHeaderFont} font</h4>
+				<h5 suppressHydrationWarning>H5 - {primaryHeaderFont} font</h5>
+				<h6 suppressHydrationWarning>H6 - {primaryHeaderFont} font</h6>
+				<p suppressHydrationWarning>{primaryBodyFont} font.  This is a paragraph of text to demonstrate the body font style. </p>
+				<p suppressHydrationWarning>{primaryBodyFont} font.  The quick brown fox jumps over the lazy dog. </p>
+				<p suppressHydrationWarning>{primaryBodyFont} font.  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+			</PageSection>
+
+			<PageSection columns={1} maxWidth="1024px" padding="20px" id="fonts-section">
+				<h2>Information Architecture</h2>
+				<ul>
+					{ flattenRoutes(routes).map((r: any, index: number) => {
+						return <li key={index}>{r.name} - {r.path}</li>;
+					})}
+				</ul>
+			</PageSection>
+
+		</>
+	);
+}

@@ -1,0 +1,129 @@
+/* SidePanel styles */
+:root {
+	--sidepanel-tab-width: 20px;
+	--sidepanel-tab-height: 30px;
+	--sidepanel-tab-color: #007bff;
+	--sidepanel-tab-radius: 5px;
+	--sidepanel-z-index: 999;
+	--sidepanel-bg: #fff;
+	--sidepanel-overlay-bg: rgba(0, 0, 0, 0.5);
+	--sidepanel-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.sidepanel-portal { position: relative; z-index: 9999; }
+
+/* Overlay */
+.sidepanel-overlay {
+	position: fixed;
+	inset: 0;
+	background: var(--sidepanel-overlay-bg);
+	z-index: 998;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+.sidepanel-overlay[data-state="open"] { opacity: 1; visibility: visible; }
+
+/* Wrapper */
+.sidepanel-wrapper {
+	position: fixed;
+	top: 0; bottom: 0;
+	z-index: var(--sidepanel-z-index);
+	pointer-events: none;
+	display: flex;
+	width: fit-content;
+	max-width: 100vw;
+	transition: transform 0.3s ease;
+}
+.sidepanel-wrapper[data-has-tab="false"] {
+	--sidepanel-tab-width: 0px;
+}
+.sidepanel-wrapper > * { pointer-events: auto; }
+
+/* Left Position */
+.sidepanel-wrapper[data-position="left"] {
+	left: 0;
+	flex-direction: row;
+	transform: translateX(calc(-100% + var(--sidepanel-tab-width)));
+}
+.sidepanel-wrapper[data-position="left"][data-state="open"] {
+	transform: translateX(0);
+}
+
+/* Right Position */
+.sidepanel-wrapper[data-position="right"] {
+	right: 0;
+	flex-direction: row-reverse;
+	transform: translateX(calc(100% - var(--sidepanel-tab-width)));
+}
+.sidepanel-wrapper[data-position="right"][data-state="open"] {
+	transform: translateX(0);
+}
+
+/* Panel */
+.sidepanel {
+	position: relative;
+	width: var(--panel-width);
+	/* Dynamic max-width to ensure tab visibility */
+	max-width: calc(100vw - var(--sidepanel-tab-width));
+	flex: 1 1 auto;
+	background: var(--background-color, var(--sidepanel-bg));
+	box-shadow: var(--sidepanel-shadow);
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+.sidepanel-wrapper[data-position="left"] .sidepanel { border-radius: 0 8px 8px 0; }
+.sidepanel-wrapper[data-position="right"] .sidepanel { border-radius: 8px 0 0 8px; }
+
+.sidepanel-content { padding: 16px; height: 100%; }
+
+/* Tab */
+.sidepanel-fixed-tab {
+	position: relative;
+	flex: 0 0 auto;
+	align-self: center;
+	width: var(--sidepanel-tab-width);
+	height: var(--sidepanel-tab-height);
+	background: var(--sidepanel-tab-color);
+	color: white;
+	border: 1px solid var(--sidepanel-tab-color);
+	padding: 0;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1001;
+	border-radius: var(--sidepanel-tab-radius);
+}
+
+.sidepanel-wrapper[data-position="left"] .sidepanel-fixed-tab {
+	border-radius: 0 var(--sidepanel-tab-radius) var(--sidepanel-tab-radius) 0;
+	border-left: none;
+}
+
+.sidepanel-wrapper[data-position="right"] .sidepanel-fixed-tab {
+	border-radius: var(--sidepanel-tab-radius) 0 0 var(--sidepanel-tab-radius);
+	border-right: none;
+}
+
+.sidepanel-tab-icon { font-size: 18px; line-height: 1; display: block; }
+.sidepanel-tab-label { display: none; }
+
+/* Integration overrides for MenuAccordion inside SidePanel */
+.sidepanel-content .accordion-menu-wrapper {
+	position: relative !important;
+	top: auto !important;
+	left: auto !important;
+	width: 100% !important;
+	height: auto !important;
+	border: none !important;
+	padding: 0 !important;
+	background: transparent !important;
+	transform: none !important;
+}
+
+/* Ensure the inner list takes full width */
+.sidepanel-content .accordion-menu,
+.sidepanel-content .accordion-menu ul {
+	width: 100% !important;
+}

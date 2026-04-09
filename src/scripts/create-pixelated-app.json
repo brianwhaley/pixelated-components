@@ -1,0 +1,102 @@
+{
+	"templates": [
+		{
+			"name": "About",
+			"aliases": ["about", "about-us", "company", "our-company", "team", "our-team", "about-us-page"],
+			"src": "../../pixelated-template/src/app/(pages)/about"
+		},
+		{
+			"name": "Blog",
+			"aliases": ["blog", "blog-posts", "news", "updates", "articles"],
+			"src": "../../pixelated-template/src/app/(pages)/blog"
+		},
+		{
+			"name": "Blog Calendar",
+			"aliases": ["blogcalendar", "blog-calendar", "calendar", "event-calendar", "events"],
+			"src": "../../pixelated-template/src/app/(pages)/blogcalendar"
+		},
+		{
+			"name": "Contact",
+			"aliases": ["contact", "contact-us", "contact-us-page", "contactus", "support", "get-in-touch", "reach-out", "get-in-touch"],
+			"src": "../../pixelated-template/src/app/(pages)/contact",
+			"associated_files": ["src/app/data/contactform.json"]
+		},
+		{
+			"name": "FAQs",
+			"aliases": ["faq", "faqs", "qa", "q-and-a", "frequently-asked-question", "frequently-asked-questions"],
+			"src": "../../pixelated-template/src/app/(pages)/faqs",
+			"associated_files": ["src/app/data/faqs.json"]
+		},
+		{
+			"name": "Global Error",
+			"aliases": ["global-error", "globalerror", "error-boundary"],
+			"action": "ignore"
+		},
+		{
+			"name": "Humans.txt",
+			"aliases": ["humans", "humans-txt", "humans.txt", "humansfile", "humansfile.txt", "humanstext"],
+			"action": "ignore"
+		},
+		{
+			"name": "Loading",
+			"aliases": ["loading", "skeleton", "loader"],
+			"action": "ignore"
+		},
+		{
+			"name": "Manifest",
+			"aliases": ["manifest", "manifest.json", "manifest-json", "webmanifest"],
+			"action": "ignore"
+		},
+		{
+			"name": "Not Found",
+			"aliases": ["not-found", "notfound", "404", "error-404"],
+			"action": "ignore"
+		},
+		{
+			"name": "Partners",
+			"aliases": ["partners", "partner", "affiliates", "integration-partners", "integrations", "collaborators"],
+			"src": "../../pixelated-template/src/app/(pages)/partners"
+		},
+		{
+			"name": "Podcast",
+			"aliases": ["podcast", "podcasts", "audio", "episodes", "show"],
+			"src": "../../pixelated-template/src/app/(pages)/podcast"
+		},
+		{
+			"name": "Projects",
+			"aliases": ["gallery", "project", "projects", "portfolio", "work", "our-work", 
+				"our-projects", "our-project", "case-studies", "examples", "showcase", "samples"],
+			"src": "../../pixelated-template/src/app/(pages)/projects"
+		},
+		{
+			"name": "Robots",
+			"aliases": ["robots", "robots.txt", "robots-txt"],
+			"action": "ignore"
+		},
+		{
+			"name": "Security.txt",
+			"aliases": ["security", "security.txt", "securitytxt", "security-txt", "well-known", "securityfile", "securityfile.txt", "wellknown"],
+			"action": "ignore"
+		},
+		{
+			"name": "Services",
+			"aliases": ["services", "service", "our-services", "services-page", "offerings", "solutions", "products"],
+			"src": "../../pixelated-template/src/app/(pages)/services"
+		},
+		{
+			"name": "Sitemap",
+			"aliases": ["sitemap", "sitemap.xml", "sitemap-xml"],
+			"action": "ignore"
+		},
+		{
+			"name": "Style Guide",
+			"aliases": ["styleguide", "style-guide", "design-system", "ui-kit", "pattern-library"],
+			"src": "../../pixelated-template/src/app/(pages)/styleguide"
+		},
+		{
+			"name": "Updates",
+			"aliases": ["updates", "update", "changelog"],
+			"src": "../../pixelated-template/src/app/(pages)/updates"
+		}
+	]
+} 

@@ -1,0 +1,13 @@
+import { LinkedInAuthRecommendations } from '@/components/linkedin/pixelated.linkedin2';
+import '@/css/pixelated.global.css';
+
+export default {
+	title: 'General',
+	component: LinkedInAuthRecommendations
+};
+
+export const LinkedInRecommendations2 = {
+	args: {
+	}
+};
+

@@ -1,0 +1,112 @@
+{
+    "fields" : [
+        {
+            "component" : "FormInput",
+            "props" : {
+                "type" : "text",
+                "id" : "length",
+                "name" : "length",
+                "defaultValue" : null,
+                "placeholder": "L",
+				"size" : "10",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Length : ",
+				"tooltip" : "Please enter your Parcel Length"
+            }
+        },
+		{
+            "component" : "FormInput",
+            "props" : {
+                "type" : "text",
+                "id" : "width",
+                "name" : "width",
+                "defaultValue" : null,
+                "placeholder": "W",
+				"size" : "10",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Width : ",
+				"tooltip" : "Please enter your Parcel Width"
+            }
+        },
+		{
+            "component" : "FormInput",
+            "props" : {
+                "type" : "text",
+                "id" : "height",
+                "name" : "height",
+                "defaultValue" : null,
+                "placeholder": "H",
+				"size" : "10",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Height : ",
+				"tooltip" : "Please senter your Parcel Height"
+            }
+        },
+		{
+            "component" : "FormSelect",
+            "props" : {
+                "id" : "distance-unit",
+                "name" : "distance-unit",
+				"size" : null,
+				"defaultValue" : "",
+				"multiple" : null,
+				"required": true,
+				"display" : "horizontal",
+				"label" : "Distance Unit : ",
+				"tooltip" : "Please select your Parcel Distance Unit",
+				"options" : [
+					{ "value" : "", "text" : "" , "disabled" : "disabled"},
+					{ "value" : "in", "text" : "in" },
+					{ "value" : "cm", "text" : "cm" }
+				]
+            }
+        },
+		{
+            "component" : "FormInput",
+            "props" : {
+                "type" : "text",
+                "id" : "weight",
+                "name" : "weight",
+                "defaultValue" : null,
+                "placeholder": "W",
+				"size" : "10",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Weight : ",
+				"tooltip" : "Please enter your Parcel Weight"
+            }
+        },
+		{
+            "component" : "FormSelect",
+            "props" : {
+                "id" : "mass-unit",
+                "name" : "mass-unit",
+				"size" : null,
+				"defaultValue" : "",
+				"multiple" : null,
+				"required": true,
+				"display" : "horizontal",
+				"label" : "Mass Unit : ",
+				"tooltip" : "Please select your Parcel Mass Unit",
+				"options" : [
+					{ "value" : "", "text" : "" , "disabled" : "disabled"},
+					{ "value" : "oz", "text" : "oz" },
+					{ "value" : "lb", "text" : "lb" },
+					{ "value" : "g", "text" : "g" },
+					{ "value" : "kg", "text" : "kg" }
+				]
+            }
+        },
+		{
+            "component" : "FormButton",
+            "props" : {
+				"type" : "submit",
+                "id" : "submit",
+                "text" : "Submit"
+            }
+        }
+    ]
+}

@@ -1,0 +1,118 @@
+/* Gravatar Component Styles */
+
+.gravatar-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+	padding: 16px;
+	border: 2px solid #e0e0e0;
+	border-radius: 8px;
+	/* max-width: 400px; */
+}
+
+.gravatar-card-horizontal {
+	flex-direction: row;
+	align-items: flex-start;
+	/* max-width: 600px; */
+}
+
+.gravatar-avatar-container {
+	flex-shrink: 0;
+}
+
+.gravatar-avatar {
+	border-radius: 50%;
+	object-fit: cover;
+	display: block;
+}
+
+.gravatar-content {
+	flex: 1;
+	min-width: 0;
+}
+
+.gravatar-header {
+	margin-bottom: 8px;
+}
+
+.gravatar-name {
+	margin: 0;
+	font-size: 1.4em;
+}
+
+.gravatar-name-link {
+	text-decoration: none;
+	color: inherit;
+}
+
+.gravatar-pronouns {
+	font-size: 0.9em;
+	color: #666;
+	margin-left: 8px;
+}
+
+.gravatar-job-company {
+	font-size: 0.95em;
+	color: #555;
+	margin-bottom: 8px;
+}
+
+.gravatar-location {
+	font-size: 0.9em;
+	color: #777;
+	margin-bottom: 8px;
+}
+
+.gravatar-about {
+	margin: 12px 0;
+	font-size: 0.95em;
+	line-height: 1.5;
+	color: #333;
+}
+
+.gravatar-social-links {
+	display: flex;
+	gap: 12px;
+	margin-top: 12px;
+	flex-wrap: wrap;
+}
+
+.gravatar-social-link {
+	color: #333;
+	text-decoration: none;
+	font-size: 1.2em;
+}
+
+.gravatar-social-link-linkedin {
+	color: #0077b5;
+}
+
+.gravatar-social-link-twitter {
+	color: #1da1f2;
+}
+
+.gravatar-social-link-instagram {
+	color: #e4405f;
+}
+
+.gravatar-social-link-website {
+	color: #666;
+}
+
+/* Compact variant */
+.gravatar-card-compact .gravatar-name {
+	font-size: 1.1em;
+}
+
+.gravatar-card-compact .gravatar-about {
+	display: none;
+}
+
+/* Responsive: Stack horizontal layout vertically on small screens */
+@media (max-width: 480px) {
+	.gravatar-card-horizontal {
+		flex-direction: column;
+		align-items: center;
+	}
+}

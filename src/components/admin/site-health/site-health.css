@@ -1,0 +1,464 @@
+/* Site Health - Consolidated Styles */
+
+/* CSS Variables */
+:root {
+  --color-primary: #3b82f6; /* Blue accent for focus states and links */
+  --color-secondary: #6b7280; /* Neutral gray for secondary text */
+  --color-accent-1: #10b981; /* Green for success/good states */
+  --color-accent-2: #f59e0b; /* Amber for warning states */
+  --color-background: #f0f0f0; /* Main page background */
+  --color-border: #ddd; /* Default borders */
+  --color-text-primary: #111827; /* Primary text */
+  --color-text-secondary: #6b7280; /* Secondary text */
+  --color-text-muted: #374151; /* Muted text */
+  --color-success: #10b981; /* Success state */
+  --color-warning: #f59e0b; /* Warning state */
+  --color-error: #ef4444; /* Error state */
+  --color-neutral: #6b7280; /* Neutral state */
+}
+
+/* Page Layout */
+.site-health-page {
+  min-height: 100vh;
+  background-color: var(--color-background);
+  padding: 2rem;
+}
+
+.site-health-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.site-health-header {
+  margin-bottom: 2rem;
+}
+
+.site-health-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--color-text-primary);
+}
+
+.site-health-select {
+  margin-bottom: 2rem;
+}
+
+.site-health-select label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.site-health-select select {
+  display: block;
+  width: 100%;
+  max-width: 20rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  background-color: var(--color-background);
+}
+
+.site-health-select select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+/* Health Cards Grid */
+.site-health-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Standardized Health Card Styling */
+.health-card {
+  background: var(--color-background);
+  border: 2px solid var(--color-border);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.15s ease-in-out;
+}
+
+.health-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.health-card-title {
+  padding: 1rem 1.5rem;
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.health-card-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+/* Standardized Component Content */
+.health-site-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.health-site-url {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 1rem;
+}
+
+.health-timestamp {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Standardized Audit Items */
+.health-audit-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.health-audit-icon {
+  font-size: 0.875rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+  min-width: 1rem;
+  text-align: center;
+}
+
+.health-audit-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.health-audit-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.health-audit-description {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+/* Status Colors */
+.health-status-good { color: var(--color-success); }
+.health-status-warning { color: var(--color-warning); }
+.health-status-error { color: var(--color-error); }
+.health-status-neutral { color: var(--color-neutral); }
+
+/* Loading States */
+.health-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.health-loading-spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid var(--color-border);
+  border-top: 2px solid var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.health-loading-text {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* Error States */
+.health-error {
+  text-align: center;
+  padding: 2rem;
+}
+
+.health-error-text {
+  font-size: 0.875rem;
+  color: var(--color-error);
+}
+
+/* Score Displays */
+.health-score-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.health-score-item {
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 0.375rem;
+  background-color: var(--color-background);
+  text-align: center;
+}
+
+.health-score-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.5rem;
+  text-transform: capitalize;
+}
+
+.health-score-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.health-score-bar {
+  width: 100%;
+  height: 6px;
+  background-color: var(--color-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.health-score-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Core Web Vitals */
+.health-cwv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.health-cwv-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: var(--color-background);
+  border-radius: 0.375rem;
+  border: 1px solid var(--color-border);
+}
+
+.health-cwv-label {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.health-cwv-value {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Vulnerability Items */
+.health-vulnerability-item {
+  padding: 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid;
+  margin-bottom: 0.5rem;
+}
+
+.health-vulnerability-critical {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+}
+
+.health-vulnerability-high {
+  background-color: #fff7ed;
+  border-color: #fed7aa;
+}
+
+.health-vulnerability-moderate {
+  background-color: #fefce8;
+  border-color: #fde68a;
+}
+
+.health-vulnerability-low {
+  background-color: #fefefe;
+  border-color: #f3f4f6;
+}
+
+.health-vulnerability-info {
+  background-color: var(--color-background);
+  border-color: var(--color-border);
+}
+
+.health-vulnerability-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.health-vulnerability-severity {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.health-vulnerability-critical .health-vulnerability-severity {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.health-vulnerability-high .health-vulnerability-severity {
+  background-color: #fed7aa;
+  color: #ea580c;
+}
+
+.health-vulnerability-moderate .health-vulnerability-severity {
+  background-color: #fde68a;
+  color: #d97706;
+}
+
+.health-vulnerability-low .health-vulnerability-severity {
+  background-color: #e5e7eb;
+  color: #6b7280;
+}
+
+.health-vulnerability-info .health-vulnerability-severity {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.health-vulnerability-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.health-vulnerability-details {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.25rem;
+}
+
+.health-vulnerability-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.health-vulnerability-range {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+}
+
+.health-vulnerability-fix {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-success);
+}
+
+.health-vulnerability-link {
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.health-vulnerability-link:hover {
+  text-decoration: underline;
+}
+
+/* Utility Classes */
+.text-center { text-align: center; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+
+/* Table styling */
+td {
+  font-size: .875rem;
+  vertical-align: top;
+}
+
+table {
+  width: 100%;
+}
+
+th, td {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Helper & Semantic classes */
+.health-audit-list > * + * { margin-top: 0.0rem; }
+.health-section-list > * + * { margin-top: 1rem; }
+
+.health-text-muted { color: #9ca3af; }
+.health-text-secondary { color: var(--color-text-secondary); }
+.health-text-error { color: var(--color-error); }
+
+.health-visualization-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 16rem;
+}
+
+.health-version-tag {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  background-color: #dcfce7;
+  color: #166534;
+  border-radius: 0.25rem;
+  font-weight: 500;
+}
+
+.health-empty-state {
+  text-align: center;
+  padding: 1rem 0;
+  color: var(--color-text-secondary);
+}
+
+/* Print Styles */
+@media print {
+  .site-health-header {
+    display: none;
+  }
+}

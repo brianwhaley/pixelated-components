@@ -1,0 +1,118 @@
+
+/* ========================================
+=============    MASONRY     ==============
+======================================== */
+
+/* http://w3bits.com/css-masonry/ */
+
+.masonry { /* Masonry container */
+	-webkit-column-count: 4;
+    -moz-column-count: 4;
+    column-count: 4;
+	-webkit-column-gap: 0px; /* 0.5em */
+	-moz-column-gap: 0px;
+	column-gap: 0px;
+}
+@media screen and (max-width: 1024px) {
+	/* small desktop */
+	.masonry {
+		-webkit-column-count: 3;
+		-moz-column-count: 3;
+		column-count: 3;
+	}
+}
+@media screen and (max-width: 768px) {
+	/* tablet */
+	.masonry {
+		-webkit-column-count: 2;
+		-moz-column-count: 2;
+		column-count: 2;
+	}
+}
+@media screen and (max-width: 480px) {
+	/* mobile device */
+	.masonry {
+		-webkit-column-count: 1;
+		-moz-column-count: 1;
+		column-count: 1;
+	}
+}
+
+
+.masonry-item { /* Masonry bricks or child elements */
+    display: inline-block;
+    padding: 5px;
+    width: 100%;
+	-webkit-column-break-inside: avoid;
+    -moz-column-break-inside: avoid;
+    /* column-break-inside: avoid; */
+    break-inside: avoid;
+	page-break-inside: avoid;
+}
+
+
+
+/* ========================================
+================  CARDS   =================
+======================================== */
+
+.card {
+	border: 1px solid #999;
+	margin: 5px 0px 0px 0px;
+
+	/* .shadow ; */
+	/* -webkit-box-shadow: 5px 5px 5px #AAA;
+	-moz-box-shadow: 5px 5px 5px #AAA;
+	box-shadow: 5px 5px 5px #AAA; */
+
+	/* .wrapword ; */
+	white-space: -moz-pre-wrap !important;  /* Mozilla, since 1999 */
+	white-space: -pre-wrap;      /* Opera 4-6 */
+	white-space: -o-pre-wrap;    /* Opera 7 */
+	white-space: pre-wrap;       /* css-3 */
+	word-wrap: break-word;       /* Internet Explorer 5.5+ */
+	white-space: -webkit-pre-wrap; /* Newer versions of Chrome/Safari*/
+	word-break: break-all;
+	white-space: normal;
+}
+
+.card-title {
+	background-color: #EEE;
+	/* background-image: url(/images/pix/pix-bg-sm-bw.gif); */
+	border-bottom: 1px solid #999;
+	font-size: 1.3em;
+	padding: 5px;
+	word-wrap: break-word;
+}
+
+/* .cardTitle a {
+} */
+
+.card-icon {
+	background: #FFF;
+	border: 0;
+	height: 20px;
+	width: 20px;
+	vertical-align: bottom;
+	margin: 0px 5px 0px 0px;
+}
+
+.card-date {
+	background-color: #DDD;
+	border-top: 1px solid #999;
+	font-size: 0.8em;
+	padding: 5px;
+	text-align: right;
+}
+
+.card-body {
+	background-color: #fff;
+	display: inline-block;
+	padding: 5px;
+	width: 100%;
+}
+
+.cards-loading {
+    column-span: all;
+	text-align: center;
+}

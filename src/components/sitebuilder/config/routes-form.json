@@ -1,0 +1,67 @@
+{
+  "fields": [
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "name",
+        "name": "name",
+        "label": "Route Name",
+        "required": true,
+        "placeholder": "e.g., Home Page",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "path",
+        "name": "path",
+        "label": "Path",
+        "required": true,
+        "placeholder": "e.g., /",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "text",
+        "id": "title",
+        "name": "title",
+        "label": "Title",
+        "placeholder": "Page title for SEO",
+        "size": "40"
+      }
+    },
+    {
+      "component": "FormTextarea",
+      "props": {
+        "id": "description",
+        "name": "description",
+        "label": "Description",
+        "placeholder": "Meta description for SEO"
+      }
+    },
+    {
+      "component": "FormTextarea",
+      "props": {
+        "id": "keywords",
+        "name": "keywords",
+        "label": "Keywords",
+        "placeholder": "Comma-separated keywords for SEO",
+        "cols": "40"
+      }
+    },
+    {
+      "component": "FormInput",
+      "props": {
+        "type": "checkbox",
+        "id": "hidden",
+        "name": "hidden",
+        "label": "Hidden Route"
+      }
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+/* ========================================
+===============    EBAY     ===============
+======================================== */
+
+.ebay-items {
+    text-align: center;
+}
+
+@media screen and (max-width: 480px) {
+	.ebay-items {
+		padding: 20px;
+	}
+}
+
+.ebay-items-header {
+    font-size: 1.25em;
+    font-weight: bold;
+    text-align: center;
+}
+
+#ebay-items-filter {
+    font-size: 0.8em;
+    margin: 20px auto;
+}
+
+@media screen and (max-width: 480px) {
+    #ebayItemsFilter {
+        text-align: left;
+    }
+	.filter-input { 
+        display: block;
+    }
+}
+
+.ebay-item {
+    border: 1px solid #DDD;
+    text-align: left;
+    padding: 20px 5px !important;
+}
+
+@media screen and (max-width: 480px) {
+	.ebay-item {
+		text-align: center;
+	}
+}
+
+.ebay-item-body {
+    grid-auto-rows: min-content;
+    margin: 10px 0;
+}
+
+.ebay-item-header {
+    margin: 0 auto;
+}
+
+.ebay-item-header h2 {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+/* ===== PHOTO CAROUSEL ON EBAY ITEM DETAIL PAGE ===== */
+.ebay-item-photo-carousel {
+    width: 100%;
+    height: 400px;
+}
+
+.ebay-item-photo-carousel { 
+
+    .carousel-container {
+        background: none;
+        border: none;
+        height: 400px;
+    }
+
+    .carousel-cards-container {
+        height: 100%;
+    }
+
+    .carousel-buttons,
+    .carousel-button {
+        display: inline-block;
+    }
+
+}
+
+@media screen and (max-width: 480px) {
+	.ebay-item-photo-carousel {
+        height: 350px;
+    }
+    .ebay-item-photo-carousel .carousel-container {
+        height: 300px;
+    }
+}
+
+.ebay-item-photo {
+    overflow: hidden;
+}
+
+.ebay-item-photo img {
+    padding: 10px 0;
+    width: 100%;
+}
+
+.ebay-items .ebay-item-details {
+    display: none;
+}
+
+.ebay-item-details {
+    padding-bottom: 10px;
+}
+
+@media screen and (max-width: 480px) {
+	.ebay-item-details {
+        text-align: left;
+    }
+}
+
+.ebay-item-price{
+    font-size: 1.5em;
+    font-weight: bold;
+    /* background-image: url(/images/pix/pix-bg-sm-bw.gif); */
+    border: 2px solid #CCC;
+    border-radius: 5px;
+    display: inline-block;
+	margin: 0 auto;
+    padding: 5px 20px;
+    /* border: 1px solid #999;
+    -moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px; */
+}

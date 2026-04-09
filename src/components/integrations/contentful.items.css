@@ -1,0 +1,131 @@
+/* ========================================
+=========    CONTENTFUL ITEMS     =========
+======================================== */
+
+.contentful-items {
+    text-align: center;
+}
+
+@media screen and (max-width: 480px) {
+	.contentful-items {
+		padding: 20px;
+	}
+}
+
+.contentful-items-header {
+    font-size: 1.25em;
+    font-weight: bold;
+    text-align: center;
+}
+
+#contentful-items-filter {
+    font-size: 0.8em;
+    margin: 20px auto;
+}
+
+@media screen and (max-width: 480px) {
+    #contentful-items-filter {
+        text-align: left;
+    }
+	.filterInput { 
+        display: block;
+    }
+}
+
+.contentful-item {
+    border: 1px solid #DDD;
+    text-align: left;
+    padding: 20px 5px !important;
+}
+
+@media screen and (max-width: 480px) {
+	.contentful-item {
+		text-align: center;
+	}
+}
+
+.contentful-item-body {
+    grid-auto-rows: min-content;
+    margin: 10px 0;
+}
+
+.contentful-item-header {
+    margin: 0 auto;
+}
+
+.contentful-item-header h2 {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+/* ===== PHOTO CAROUSEL ON CONTENTFUL ITEM DETAIL PAGE ===== */
+.contentful-item-photo-carousel {
+    width: 100%;
+    height: 400px;
+}
+
+.contentful-item-photo-carousel { 
+
+    .carousel-container {
+        background: none;
+        border: none;
+        height: 400px;
+    }
+
+    .carousel-cards-container {
+        height: 100%;
+    }
+
+    .carousel-buttons,
+    .carousel-button {
+        display: inline-block;
+    }
+
+}
+
+@media screen and (max-width: 480px) {
+	.contentful-item-photo-carousel {
+        height: 350px;
+    }
+    .contentful-item-photo-carousel .carousel-container {
+        height: 300px;
+    }
+}
+
+.contentful-item-photo {
+    overflow: hidden;
+}
+
+.contentful-item-photo img {
+    padding: 10px 0;
+    width: 100%;
+}
+
+.contentful-items .contentful-item-details {
+    display: none;
+}
+
+.contentful-item-details {
+    padding-bottom: 10px;
+}
+
+@media screen and (max-width: 480px) {
+	.contentful-item-details {
+        text-align: left;
+    }
+}
+
+.contentful-item-price {
+    font-size: 1.5em;
+    font-weight: bold;
+    /* background-image: url(/images/pix/pix-bg-sm-bw.gif); */
+    border: 2px solid #CCC;
+    border-radius: 5px;
+    display: inline-block;
+	margin: 0 auto;
+    padding: 5px 20px;
+    /* border: 1px solid #999;
+    -moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px; */
+}

@@ -1,0 +1,169 @@
+
+/* ========================================
+==========      RESUME       ==============
+======================================== */ 
+
+.p-resume {
+	word-break: break-word;
+	line-height: 1.4;
+}
+
+.p-resume {
+	h1, h2, h3 {
+		display: block;
+		font-weight: bold;
+		margin-top:10px;
+		letter-spacing: -1px;
+		text-transform: uppercase;
+	}
+	h1	{
+		font-size: 2.5em;
+		text-align: center;
+	}
+	h2	{
+		font-size: 1.5em;
+	}
+	h3	{
+		font-size: 1.17em;
+	}
+	ul, ol {
+		margin: 0 0 10px 0;
+		padding-left: 20px;
+	}
+	[class*="grid"] {
+		padding: 10px;
+	}
+}
+
+.p-resume .p-skills div {
+	margin: 0 0 10px 0;
+}
+
+/* http://microformats.org/wiki/h-resume */
+
+.p-resume {
+	.p-name { --do-nothing: true }
+	.p-summary { --do-nothing: true }
+	.p-contact { --do-nothing: true }
+	.p-education { --do-nothing: true }
+	.p-experience { --do-nothing: true }
+	.p-skills { --do-nothing: true }
+	.p-skill-category { display: inline !important; } /* THIS ONE IS MINE */
+	.p-skill { --do-nothing: true }
+	.p-affiliation { --do-nothing: true }
+}
+
+/* ===== MY OWN SECTIONS ===== */
+
+.p-resume {
+	.p-projects { --do-nothing: true }
+	.p-project { --do-nothing: true }
+	.p-qualifications { --do-nothing: true }
+	.p-qualification { --do-nothing: true }
+	.p-volunteer { --do-nothing: true }
+	.p-certifications { --do-nothing: true }
+	.p-awards { --do-nothing: true }
+	.p-training { --do-nothing: true }
+	.p-references { --do-nothing: true }
+}
+
+/* http://microformats.org/wiki/h-card */
+
+.p-resume {
+	.p-name { --do-nothing: true }
+	.p-honorific-prefix { --do-nothing: true }
+	.p-given-name { --do-nothing: true }
+	.p-additional-name { --do-nothing: true }
+	.p-family-name { --do-nothing: true }
+	.p-sort-string { --do-nothing: true }
+	.p-honorific-suffix { --do-nothing: true }
+	.p-nickname { --do-nothing: true }
+	.u-email { --do-nothing: true }
+	.u-logo { --do-nothing: true }
+	.u-photo { --do-nothing: true }
+	.u-photo-icon { width: 12px; height: 12px; } /* THIS ONE IS MINE */
+	.u-url { --do-nothing: true }
+	.u-url-icon { background: #BDF; width: 12px; height: 12px; } /* THIS ONE IS MINE */
+	.u-uid { --do-nothing: true }
+	.p-category { --do-nothing: true }
+	.p-adr { --do-nothing: true }
+	.p-post-office-box { --do-nothing: true }
+	.p-extended-address { --do-nothing: true }
+	.p-street-address { --do-nothing: true }
+	.p-locality { --do-nothing: true }
+	.p-region { --do-nothing: true }
+	.p-postal-code { --do-nothing: true }
+	.p-country-name { --do-nothing: true }
+	.p-label { --do-nothing: true }
+	.p-geo { --do-nothing: true }
+	.u-geo { --do-nothing: true }
+	.p-latitude { --do-nothing: true }
+	.p-longitude { --do-nothing: true }
+	.p-altitude { --do-nothing: true }
+	.p-tel { --do-nothing: true }
+	.p-note { --do-nothing: true }
+	.dt-bday { --do-nothing: true }
+	.u-key { --do-nothing: true }
+	.p-org { --do-nothing: true }
+	.p-job-title { --do-nothing: true }
+	.p-role { --do-nothing: true }
+	.u-impp { --do-nothing: true }
+	.p-sex { --do-nothing: true }
+	.p-gender-identity { --do-nothing: true }
+	.dt-anniversary { --do-nothing: true }
+}
+
+/* http://microformats.org/wiki/h-event */
+
+.p-resume {
+	/* .p-name */
+	.p-summary { --do-nothing: true }
+	.dt-start {
+		font-weight: bold;
+		letter-spacing: -1px;
+	}
+	.dt-end {
+		font-weight: bold;
+		letter-spacing: -1px;
+	}
+	.dt-duration { --do-nothing: true }
+	.p-description { --do-nothing: true }
+	.e-content { --do-nothing: true } /* from h-entry */
+	/* .u-url { --do-nothing: true } */
+	/* .p-category { --do-nothing: true } */
+	.p-location { --do-nothing: true }
+}
+
+/* STYLES FOR DETAILS / SUMMARY EXPAND / COLLAPSE */
+
+details {
+	border: 1px solid #ccc;
+	margin-bottom: 10px; 
+}
+details[open] {
+	border: none;
+}
+summary {
+	background-color: #eee;
+	padding: 10px;
+	cursor: pointer;
+	list-style-position: outside;
+}
+summary > h2 {
+	margin: 0 !important;
+}
+
+/* OTHER STYLES */
+
+.divider {
+	border-right: 1px solid #ccc;
+}
+@media screen and (max-width: 480px) {
+	.divider {
+		border-right: 0;
+	}
+}
+@media print {
+	header { display: none; }
+	nav { display: none; }
+}

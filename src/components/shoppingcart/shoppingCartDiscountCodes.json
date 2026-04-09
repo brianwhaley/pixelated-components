@@ -1,0 +1,26 @@
+{
+    "discountCodes" : [
+        {
+            "codeName" : "EarlyBird10",
+            "codeDescription" : "10% Discount for Early Bird cients!",
+            "codeType" : "percentage",
+            "codeValue" : "0.10",
+            "codeStart" : "2025-07-01T05:00:00-05:00" ,
+            "codeEnd" : "2025-07-05T05:00:00-05:00" 
+        },{
+            "codeName" : "Subscribe10",
+            "codeDescription" : "10% Discount for New Subscribe clients!",
+            "codeType" : "percentage",
+            "codeValue" : "0.10",
+            "codeStart" : "1973-01-22T17:58:00-05:00" ,
+            "codeEnd" : "2173-01-22T17:58:00-05:00" 
+        },{
+            "codeName" : "Fireworks10",
+            "codeDescription" : "10% Discount for Independence Day!",
+            "codeType" : "percentage",
+            "codeValue" : "0.10",
+            "codeStart" : "2025-07-01T00:00:00-04:00" ,
+            "codeEnd" : "2025-07-06T00:00:00-04:00" 
+        }
+    ]
+}

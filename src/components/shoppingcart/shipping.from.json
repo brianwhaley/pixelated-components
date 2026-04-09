@@ -1,0 +1,101 @@
+{
+    "fields" : [
+        {
+            "component" : "FormInput",
+            "props" : {
+                "type" : "text",
+                "id" : "name",
+                "name" : "name",
+                "value" : "Pixelated Technologies",
+                "readOnly" : "readOnly",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Name : "
+            }
+        },
+		{
+            "component" : "FormInput",
+            "props" : {
+                "type" : "text",
+                "id" : "street1",
+                "name" : "street1",
+                "value" : "10 Jade Circle",
+                "readOnly" : "readOnly",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Street Address : "
+            }
+        },
+		{
+            "component" : "FormInput",
+            "props" : {
+                "type" : "text",
+                "id" : "city",
+                "name" : "city",
+                "value" : "Denville",
+                "readOnly" : "readOnly",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "City : "
+            }
+        },{
+            "component" : "FormInput",
+            "props" : {
+                "type" : "text",
+                "id" : "state",
+                "name" : "state",
+                "value" : "NJ",
+                "readOnly" : "readOnly",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "State : "
+            }
+        },
+		{
+            "component" : "FormInput",
+            "props" : {
+                "type" : "text",
+                "id" : "zip",
+                "name" : "zip",
+                "value" : "07834",
+                "readOnly" : "readOnly",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Zip Code : "
+            }
+        },
+		{
+            "component" : "FormInput",
+            "props" : {
+                "type" : "tel",
+                "id" : "phone",
+                "name" : "phone",
+                "value" : "(973) 710-8008",
+                "readOnly" : "readOnly",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Phone Number : "
+            }
+        },
+		{
+            "component" : "FormInput",
+            "props" : {
+                "type" : "email",
+                "id" : "email",
+                "name" : "email",
+                "value" : "brian.whaley@pixelated.tech",
+                "readOnly" : "readOnly",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Email Address : "
+            }
+        }
+    ]
+}

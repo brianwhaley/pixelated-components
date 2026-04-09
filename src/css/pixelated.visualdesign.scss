@@ -1,0 +1,88 @@
+/* ========================================
+========  DEFAULT COLOR STYLES   ==========
+======================================== */
+
+:root {
+  --primary-color: #369;
+  --secondary-color: #BCD;
+  --accent1-color: #CCC;
+  --accent2-color: #EEE;	
+  --bg-color: #fff;
+  --text-color: #000;
+}
+body{
+	background-color: var(--bg-color) !important;
+	color: var(--text-color);
+}
+
+/* ========================================
+======  DEFAULT FONT FACE STYLES   ========
+======================================== */
+
+:root {	
+	--header-font: "Montserrat", Verdana, sans-serif;
+	--body-font: "Roboto", Arial, sans-serif;
+}
+body { 
+	font-family: var(--body-font); 
+}
+h1, h2, h3, h4, h5, h6 {
+	line-height: 1.1;
+}
+html { font-size: 1.0rem; /* 16px; */ }
+
+/* ========================================
+=======  DEFAULT FONT SIZE STYLES   =======
+======================================== */
+
+/* 
+https://hanjing.medium.com/font-sizing-4259801c04c1
+https://www.learnui.design/blog/mobile-desktop-website-font-size-guidelines.html 
+https://www.smashingmagazine.com/2022/01/modern-fluid-typography-css-clamp/
+https://robertcelt95.medium.com/responsive-typography-that-actually-works-beyond-font-size-clamp-acf592b79774
+https://medium.com/better-web-type/the-state-of-fluid-web-typography-135cd26e0612
+*/
+
+/* --font-size1: font-size: 32px; 
+--font-size2: font-size: 24px; 
+--font-size3: font-size: 18.75px;
+--font-size4: font-size: 16px;
+--font-size5: font-size: 13.25px;
+--font-size6: font-size: 10.75px; */
+
+:root {
+  --font-size1-min: 2.00rem;
+  --font-size1-max: 3.00rem;
+
+  --font-size2-min: 1.35rem;
+  --font-size2-max: 1.75rem;
+
+  --font-size3-min: 1.17rem;
+  --font-size3-max: 1.35rem;
+
+  --font-size4-min: 1.00rem;
+  --font-size4-max: 1.25rem;
+
+  --font-size5-min: 0.83rem;
+  --font-size5-max: 1.00rem;
+
+  --font-size6-min: 0.67rem;
+  --font-size6-max: 0.85rem;
+
+  --font-min-screen: 375px;
+  --font-max-screen: 1440px;
+}
+
+$minScreen: var(--font-min-screen);
+$maxScreen: var(--font-max-screen);
+:root { 
+	@for $i from 1 through 6 {
+		$min: var(--font-size#{$i}-min); 
+		$max: var(--font-size#{$i}-max); 
+		$preferred: calc(#{$min} + ((#{$max} - #{$min}) * ((100vw - #{$minScreen}) / #{($maxScreen - $minScreen)})));
+		--font-size#{$i}: clamp(#{$min}, #{$preferred}, #{$max});
+	}
+}
+@for $i from 1 through 6 {
+   	h#{$i} { font-size: var(--font-size#{$i}); }
+}

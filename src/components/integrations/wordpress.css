@@ -1,0 +1,65 @@
+
+/* https://microformats.org/wiki/h-entry */
+
+
+.blog-post-summary { 
+    border: 1px solid #ccc;
+    margin: 10px; 
+    padding: 20px; 
+    border-radius: 25px;
+}
+
+.blog-post-categories { 
+    /* border: 1px solid #ccc; */
+    margin: 10px; 
+    padding: 20px; 
+    border-radius: 25px;
+}
+
+.blog-post-summary { 
+
+    article {
+        .p-name { --do-nothing: true; }
+        .p-summary { padding-bottom: 20px; }
+        .e-content { --do-nothing: true }
+        .dt-published { padding-bottom: 20px; }
+        .dt-updated { --do-nothing: true }
+        .p-author { --do-nothing: true }
+        .p-category { --do-nothing: true }
+        .u-url { --do-nothing: true }
+        .u-uid { --do-nothing: true }
+        .p-location { --do-nothing: true }
+        .u-syndication { --do-nothing: true }
+        .u-in-reply-to { --do-nothing: true } 
+        .p-rsvp { --do-nothing: true }
+        .u-like-of { --do-nothing: true }
+        .u-repost-of { --do-nothing: true }
+    }
+
+    article * {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-all;
+        word-break: break-word;
+        hyphens: auto;
+    }
+
+	.article-featured-image img {
+		/* border-radius: 20px; */
+		min-width: 100%;
+		min-height: 100%;
+		width: 100%;
+		height: 100%;
+		max-height: 150px;
+		object-fit: cover;
+	}
+
+}
+
+    .blog-post-summary .p-category img,
+    .blog-post-categories .p-category img { 
+        width: 30px;
+        height: 30px;
+        margin: 0 5px;
+        vertical-align: middle;
+    }

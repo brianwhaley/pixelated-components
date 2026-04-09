@@ -1,0 +1,240 @@
+{
+	"siteInfo": {
+		"name": "Pixelated Technologies",
+		"author": "Brian Whaley",
+		"description": "Custom web development and digital design agency specializing in React, Next.js, and modern web technologies",
+		"keywords": "pixelated, web development, react, next.js, custom websites, digital design, small business",
+		"url": "https://pixelated.tech",
+		"email": "info@pixelated.tech",
+		"favicon": "/favicon.ico",
+		"favicon_sizes": "64x64 32x32 24x24 16x16",
+		"favicon_type": "image/x-icon",
+		"theme_color": "#336699",
+		"background_color": "#ffffff",
+		"default_locale": "en",
+		"display": "standalone",
+		"image": "/images/pix/pix-bg-512.gif",
+		"image_height": "512",
+		"image_width": "512",
+		"telephone": "+1-973-710-8008",
+		"address": {
+			"streetAddress": "10 Jade Circle",
+			"addressLocality": "Denville",
+			"addressRegion": "NJ",
+			"postalCode": "07834",
+			"addressCountry": "US"
+		},
+		"priceRange": "$$",
+		"sameAs": [
+			"https://www.linkedin.com/in/brianwhaley",
+			"https://github.com/brianwhaley",
+			"https://twitter.com/brianwhaley"
+		]
+	},
+	"visualdesign": {
+		"primary-color": { "value": "#336699", "type": "color", "group": "palette", "label": "Primary color" },
+		"secondary-color": { "value": "#BBCCDD", "type": "color", "group": "palette", "label": "Secondary color" },
+		"accent1-color": { "value": "#CCCCCC", "type": "color", "group": "palette", "label": "Accent color 1" },
+		"accent2-color": { "value": "#EEEEEE", "type": "color", "group": "palette", "label": "Accent color 2" },
+		"bg-color": { "value": "#ffffff", "type": "color", "group": "palette", "label": "Background color" },
+		"text-color": { "value": "#000000", "type": "color", "group": "palette", "label": "Font color" },
+		"header-font": { "value": "\"Montserrat\", Verdana, sans-serif", "type": "font", "group": "typography", "label": "Header font" },
+		"body-font": { "value": "\"Roboto\", Arial, sans-serif", "type": "font", "group": "typography", "label": "Body font" },
+		"font-size1-min": { "value": "2.00rem", "type": "size", "group": "typography", "label": "Font size 1 min" },
+		"font-size1-max": { "value": "3.00rem", "type": "size", "group": "typography", "label": "Font size 1 max" },
+		"font-size2-min": { "value": "1.35rem", "type": "size", "group": "typography", "label": "Font size 2 min" },
+		"font-size2-max": { "value": "1.75rem", "type": "size", "group": "typography", "label": "Font size 2 max" },
+		"font-size3-min": { "value": "1.17rem", "type": "size", "group": "typography", "label": "Font size 3 min" },
+		"font-size3-max": { "value": "1.35rem", "type": "size", "group": "typography", "label": "Font size 3 max" },
+		"font-size4-min": { "value": "1.00rem", "type": "size", "group": "typography", "label": "Font size 4 min" },
+		"font-size4-max": { "value": "1.25rem", "type": "size", "group": "typography", "label": "Font size 4 max" },
+		"font-size5-min": { "value": "0.83rem", "type": "size", "group": "typography", "label": "Font size 5 min" },
+		"font-size5-max": { "value": "1.00rem", "type": "size", "group": "typography", "label": "Font size 5 max" },
+		"font-size6-min": { "value": "0.67rem", "type": "size", "group": "typography", "label": "Font size 6 min" },
+		"font-size6-max": { "value": "0.85rem", "type": "size", "group": "typography", "label": "Font size 6 max" },
+		"font-min-screen": { "value": "375px", "type": "size", "group": "typography", "label": "Font min screen" },
+		"font-max-screen": { "value": "1440px", "type": "size", "group": "typography", "label": "Font max screen" }
+	},
+	"routes": [
+		{ 
+			"name": "Home", 
+			"path": "/", 
+			"title": "Pixelated Technologies Home",
+			"description": "Pixelated Technologies offers a wide varity of products and services, including custom web development for small businesses, stock photography, touchup services, home design and remodeling, and more.",
+			"keywords": "pixelated, web development, small business, stock photography, home redesign, remodeling, social media"  
+		} , {
+			"name": "About Me",
+			"routes": [
+				{ 
+					"name": "Resume", 
+					"path": "/resume", 
+					"title": "Brian Whaley - Resume",
+					"description": "View the resume of Brian Whaley",
+					"keywords": "brian whaley, resume, curriculum vitae, professional summary, contact information, education, skills, qualifications, work history, projects, voluteer work, certifications, honors and awards, training and conferences, rererences" 
+				} , { 
+					"name": "ReadMe", 
+					"path": "/readme", 
+					"title": "Brian Whaley - ReadMe",
+					"description": "Every good piece of software needs a readme.  So do people.",
+					"keywords": "brian whaley, readme, management style"  
+				} , { 
+					"name": "Family Recipes", 
+					"path": "/recipes", 
+					"title": "Brian Whaley - Recipes",
+					"description": "Pace / Barbano / Whaley Recipes through the ages",
+					"keywords": "family recipes, pace family, barbano family, whaley family, italian recipes" 
+				} 
+			]
+		} , {
+			"name": "Web Development",
+			"routes": [
+				{ 
+					"name": "Work Overview", 
+					"path": "/workoverview", 
+					"title": "Brian Whaley - Work Overview",
+					"description": "An overview of my work experience, including my resume, a readme file, social media accounts, and personal family recipes." ,
+					"keywords": "pixelated, brian whaley, web development, custom, small business, global, high performance teams, digital products, technology strategy, highly available, e-commerce portal, web sites, web applications, onshore, offshore, hybrid teams" 
+				} , { 
+					"name": "Work Portfolio", 
+					"path": "/workportfolio", 
+					"title": "Brian Whaley - Work Portfolio",
+					"description": "A carousel gallery showing screenshots of some of the web properties I have worked on." ,
+					"keywords": "pixelated, brian whaley, carousel, gallery, screenshots, web development, work portfolio" 
+				} 
+			]
+		} , {
+			"name": "Photography",
+			"routes": [
+				{ 
+					"name": "Photo Overview", 
+					"path": "/photography", 
+					"title": "PixelVivid - Photography",
+					"description": "An overview of the PixelVivid phtography portfolio.",
+					"keywords": "pixelvivid, photography, overview, gallery, carousel, social media" 
+				} , { 
+					"name": "Photo Gallery", 
+					"path": "/photogallery", 
+					"title": "PixelVivid - Photo Gallery",
+					"description": "A carousel of some of my best photographs throughout my life. They are primarily landscape photographs, macro photographs, and travel photographs. ",
+					"keywords": "pixelvivid, gallery, carousel, photographs, landscape, macro, travel" 
+				} , { 
+					"name": "Social Media", 
+					"path": "/socialmedia", 
+					"title": "PixelVivid - Social Media",
+					"description": "Links to all my digital footprints",
+					"keywords": "pixelvivid, social media, photography, stock photography, istock, shutterstock, blurb, shutterfly, x, twitter, 500px, flickr, instagram" 
+				}
+			]
+		} , { 
+			"name" : "Custom Sunglasses",
+			"routes" : [
+				{ 
+					"name": "Customs Overview", 
+					"path": "/customsunglasses", 
+					"title": "PixelVivid - Custom Sunglasses",
+					"description": "A sampling of the custom sunglasses I paint in my spare time",
+					"keywords": "pixelvivid, custom sunglasses, oakley, refurbish, restore, custom paint, ebay, gallery, carousel" 
+				} , { 
+					"name": "Customs Gallery", 
+					"path": "/customsgallery", 
+					"title": "PixelVivid - Customs Gallery",
+					"description": "A carousel gallery of some of the paint styles I do on sunglasses, including marbles, splatters, drips, and repairs",
+					"keywords": "pixelvivid, gallery, carousel, custom paint, oakely, marble, splatter, drip, repair" 
+				} , { 
+					"name": "Customs on eBay", 
+					"path": "/ebay", 
+					"title": "PixelVivid - Customs on eBay",
+					"description": "Check out my store on ebay where I sell my custom sunglasses",
+					"keywords": "pixelvivid, online store, ecommerce, ebay, custom sunglasses" 
+				} , { 
+					"name": "Customs Request", 
+					"path": "/requests", 
+					"title": "PixelVivid - Customs Request",
+					"description": "Request some custom sunglass work for yourself.",
+					"keywords": "pixelvivid, online store, ecommerce, ebay, custom sunglasses, requests, form" 
+				} , { 
+					"name": "My Customs", 
+					"path": "/mycustoms", 
+					"title": "PixelVivid - My Customs",
+					"description": "These are pictures of the custom sunglasses in my personal collection.",
+					"keywords": "pixelvivid, custom sunglasses, personal collection, collection" 
+				} 
+			]
+		} , { 
+			"name": "Home Design",
+			"routes": [
+				{ 
+					"name": "Design Overview", 
+					"path": "/homedesign", 
+					"title": "PixelVivid - Home Design",
+					"description": "Overview of the home design and remodeling work our designers have worked on.",
+					"keywords": "pixelvivid, home design, home remodeling " 
+				} , { 
+					"name": "Design Gallery", 
+					"path": "/designgallery", 
+					"title": "PixelVivid - Design Gallery",
+					"description": "A gallery of photos from the home design and remodeling projects that our designers have worked on",
+					"keywords": "pixelvivid, home design, home remodeling, gallery, carousel" 
+				}
+			]
+		} , { 
+			"name": "Sandbox",
+			"routes": [
+				{ 
+					"name": "Buzzword Bingo", 
+					"path": "/buzzwordbingo", 
+					"title": "Pixelated Technologies Buzzword Bingo",
+					"description": "Buzzword Bingo is a game that is played in meetings to help keep you awake.",
+					"keywords": "" 
+				} , { 
+					"name": "NerdJokes", 
+					"path": "/nerdjokes", 
+					"title": "Pixelated Technologies NerdJokes",
+					"description": "NerdJokes Slack Bot - How To, Customer Support, Terms, and Privacy Policy",
+					"keywords": "" 
+				} , { 
+					"name": "Stkr", 
+					"path": "/stkr", 
+					"title": "Pixelated Technologies Stkr",
+					"description": "Stkr Slack Bot - How To, Customer Support, Terms, and Privacy Policy",
+					"keywords": "" 
+				} , {
+					"name": "Form", 
+					"path": "/form", 
+					"title": "Pixelated Technologies Form",
+					"description": "Test my Form Builder, Form Components, and Form Validations",
+					"keywords": "" 
+				} , { 
+					"name": "Form Build", 
+					"path": "/form/build", 
+					"title": "Pixelated Technologies Form Builder",
+					"description": "Build your own form with my Form Builder",
+					"keywords": ""  
+				} , { 
+					"name": "Form Extract", 
+					"path": "/form/extract", 
+					"title": "Pixelated Technologies Form Extract",
+					"description": "Extract the JSON needed from a live site to use my Form Builder",
+					"keywords": ""  
+				}
+			]
+		}, {
+			"name": "Legal",
+			"routes": [
+				{
+					"name": "Terms of Service", 
+					"path": "/terms", 
+					"title": "Pixelated Technologies Terms of Service",
+					"description": "Pixelated Technologies Terms of Service",
+					"keywords": "pixelated, terms of service"  
+				} , { 
+					"name": "Privacy Policy", 
+					"path": "/privacy", 
+					"title": "Pixelated Technologies Privacy Policy",
+					"description": "Pixelated Technologies Privacy Policy",
+					"keywords": "pixelated, privacy policy, data retention"  
+				}
+			]
+		}
+	]
+}

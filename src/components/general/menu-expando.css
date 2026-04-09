@@ -1,0 +1,139 @@
+
+
+/* ========================================
+=====    MENU EXPANDO COMPONENT       =====
+======================================== */
+
+.menu-expando {
+	display: inline-block;
+}
+
+details.menu-expando-wrapper {
+	display: inline-block;
+}
+
+details.menu-expando-wrapper > summary {
+	cursor: pointer;
+	user-select: none;
+	background: #336699;
+	color: white;
+	padding: 10px 15px;
+	border-radius: 4px;
+	font-weight: bold;
+	display: inline-block;
+	transition: background 0.3s ease;
+}
+
+
+details.menu-expando-wrapper > summary:hover {
+	background: #2d5a8a;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+details.menu-expando-wrapper > summary::marker,
+details.menu-expando-wrapper > summary::-webkit-details-marker {
+	display: none;
+}
+
+
+details.menu-expando-wrapper > summary::before {
+	content: '▼';
+	display: inline-block;
+}
+
+
+details.menu-expando-wrapper[open] > summary::before {
+	content: '▲';
+}
+
+
+details.menu-expando-wrapper ul {
+	margin-top: 10px;
+	padding-left: 20px;
+	list-style: none;
+	overflow: visible;
+	max-height: 1000px;
+}
+
+details.menu-expando-wrapper li {
+	margin: 5px 0;
+}
+
+details.menu-expando-wrapper a {
+	color: #333;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+details.menu-expando-wrapper a:hover {
+	color: #336699;
+	text-decoration: underline;
+}
+
+/* ========== NESTED MENU STYLING ========== */
+details.menu-expando-nested {
+	display: block;
+}
+
+details.menuExpandoNested > summary {
+	cursor: pointer;
+	user-select: none;
+	padding: 5px 0;
+	font-weight: 500;
+	display: list-item;
+	color: #333;
+	transition: color 0.2s ease;
+}
+
+details.menuExpandoNested > summary:hover {
+	color: #336699;
+}
+
+details.menuExpandoNested > summary a {
+	color: inherit;
+	text-decoration: none;
+}
+
+details.menuExpandoNested > summary a:hover {
+	text-decoration: underline;
+}
+
+details.menuExpandoNested > summary::marker,
+details.menuExpandoNested > summary::-webkit-details-marker {
+	color: #666;
+}
+
+details.menuExpandoNested > ul {
+    margin: 0px;
+	padding-left: 20px;
+	list-style: none;
+	max-height: 0px;
+	opacity: 0;
+	overflow: hidden;
+}
+
+details.menuExpandoNested li {
+	margin: 3px 0;
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes menu-expando-slide-down {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes menu-expando-slide-up {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+

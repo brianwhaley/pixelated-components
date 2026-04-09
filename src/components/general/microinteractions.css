@@ -1,0 +1,229 @@
+
+/* ========================================
+==========  MICRO ANIMATIONS    ===========
+======================================== */
+
+
+
+
+/* ========== BUTTON RING ON HOVER ========== */
+body.buttonring {
+  button,
+  .button,
+  .centered-button {
+    /* ALSO USE CLASS = BUTTON */
+    outline: 0px solid transparent !important; /* Initial transparent outline */
+    outline-offset: 3px; /* Optional: Adjusts the distance of the outline from the border */
+    transition: outline-width 0.25s ease-in-out, outline-color 0.3s ease-in-out;
+    /* cursor: pointer; */
+  }
+  button:hover,
+  .button:hover,
+  .centered-button:hover {
+    outline-width: 5px !important; /* Outline animates out 5px */
+    outline-color: #369 !important; /* Or a different color for the outline */
+  }
+}
+
+
+
+
+/* ========== SHOPPING CART BUTTON PULSE GLOW ========== */
+@keyframes pulse-glow {
+    0% {
+        transform: scale(1);
+        /* box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.7); */
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 1.0);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1.0);
+        box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+}
+body.cartpulse .pix-cart #pix-cart-button {
+    animation: pulse-glow 2s infinite;
+}
+
+
+
+
+/* ========== FORM GLOW ON HOVER AND FOCUS ========== */
+body.formglow {
+
+	form div {
+		padding: 5px
+	}
+	form button, input, select, textarea {
+		transition: all 0.25s ease-in-out, 
+			all 0.25s ease-in-out;
+		outline: 5px solid transparent !important;
+	}
+	form input:hover, 
+	select:hover, 
+	textarea:hover {
+		outline: 5px solid rgba(0, 208, 0, 0.2) !important;
+		outline-offset: 3px;
+	}
+	form button:hover, 
+	input:focus, input:focus:hover, 
+	select:focus, select:focus:hover, 
+	textarea:focus, textarea:focus:hover {
+		outline: 5px solid rgba(0, 208, 0, 1) !important;
+		outline-offset: 3px;
+	}
+
+}
+
+
+
+
+/* ========== IMG GREYSCALE HOVER ========== */
+body.grayscalehover {
+
+	img {
+		filter: grayscale(100%);
+		transition: filter 0.25s ease-in-out; /* Optional: for a smooth transition */
+	}
+	img:hover {
+		filter: grayscale(0%);
+	}
+
+}
+
+
+
+/* ========== IMG HUE ROTATE ON HOVER ========== */
+@keyframes RotateHue {
+    from { filter: hue-rotate(0deg); }
+    to { filter: hue-rotate(360deg); }
+}
+body.imghue img {
+  --do-nothing: true;
+}
+body.imghue img:hover {
+    animation: RotateHue 1.5s linear infinite alternate;
+}
+
+
+
+
+/* ========== IMG ZOOM AND ROTATE ON HOVER ========== */
+body.imgscale {
+	img:not(.imgContain, .imgCover) {
+		/* text-align: center;
+		max-width: 100%;
+		height: auto; */
+		transition: transform 125ms linear;
+	}
+	img:hover:not(.imgContain, .imgCover) {
+		transform: scale(1.1) ;
+	}
+}
+
+
+
+
+
+/* ========== IMG ZOOM AND ROTATE ON HOVER ========== */
+body.imgtwist {
+	img:not(.imgContain, .imgCover) {
+		/* text-align: center;
+		max-width: 100%;
+		height: auto; */
+		transition: transform 125ms linear;
+	}
+	img:hover:not(.imgContain, .imgCover) {
+		transform: scale(1.1) rotate(-5deg);
+	}
+}
+
+
+
+
+
+/* 
+/* ========== SIMPLE MENU BUTTON LEFT FILL HOVER ==========
+.menu-item a:before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: #1d93da;
+  transition: all .25s;
+  z-index: -1;
+}
+.menu-item a:hover {
+  border-left: 0px solid transparent !important;
+  text-indent: 0px !important;
+  color: #fff;
+}
+.menu-item a:hover:before {
+  width: 100%;
+}
+*/
+
+
+
+
+/* ========== SIMPLE MENU BUTTON CENTER FILL HOVER ========== */
+body.simplemenubutton .menu .menu-item {
+  	--do-nothing: true;
+}
+body.simplemenubutton .menu .menu-item {
+	a {
+		text-align: center;
+		position: relative;
+		text-indent: 0px !important;
+		z-index: 10;
+	}
+	a:before,
+	a:after {
+		content: "";
+		position: absolute;
+		background-color: #1d93da;
+		width: 0%;
+		height: 100%;
+		top: 0;
+		transition: all 0.25s ease-in-out;
+		z-index: -1;
+	}
+	a:before {
+		left: 50%;
+		transform: translateX(-50%);
+	}
+	a:after {
+		right: 50%;
+		transform: translateX(50%);
+	}
+	a:hover {
+		border-left: 0px solid transparent !important;
+		text-indent: 0px !important;
+		color: #fff;
+	}
+	a:hover:before,
+	a:hover:after {
+		width: 100%;
+	}
+}
+
+
+
+
+/* ========== SCROLL UP FADE ========== */
+@keyframes slideInFromBottom {
+  0% { transform: translateY(50%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.scrollfade {
+  animation: slideInFromBottom 0.5s ease-out forwards;
+  /* 'forwards' ensures the animation stays at its end state */
+}
+.hidden {
+  opacity: 0;
+  transform: translateY(50%); /* Or other initial state */
+}

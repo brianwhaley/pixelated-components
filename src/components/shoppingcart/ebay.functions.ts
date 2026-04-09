@@ -1,0 +1,550 @@
+import PropTypes, { InferProps } from "prop-types";
+import type { CartItemType } from "./shoppingcart.functions";
+import { getCloudinaryRemoteFetchURL as getImg} from "../integrations/cloudinary";
+import { CacheManager } from "../general/cache-manager";
+import { getDomain } from "../general/utilities";
+import { smartFetch } from "../general/smartfetch";
+import { buildUrl } from "../general/urlbuilder";
+
+const debug = false;
+
+// Initialize eBay Cache (Session storage, 1 hour TTL) — isolated per domain
+const ebayCache = new CacheManager({
+	mode: 'session',
+	domain: getDomain(),
+	namespace: 'ebay',
+	ttl: 60 * 60 * 1000
+});
+
+
+/* ===== EBAY BROWSE API DOCUMENTATION =====
+https://developer.ebay.com/api-docs/buy/browse/resources/item_summary/methods/search
+https://developer.ebay.com/api-docs/buy/static/ref-buy-browse-filters.html
+https://developer.ebay.com/api-docs/static/oauth-ui-tokens.html
+https://developer.ebay.com/my/keys
+https://developer.ebay.com/my/auth?env=production&index=0
+*/
+
+
+/**
+ * Merges provided props with server-side config if available.
+ * This ensures functions work out-of-the-box on the server without manual prop passing.
+ */
+function getMergedEbayConfig(providedApiProps: any): EbayApiType {
+	let apiProps = { 
+		proxyURL: '',
+		baseTokenURL: '',
+		baseSearchURL: '',
+		qsSearchURL: '',
+		baseItemURL: '',
+		qsItemURL: '',
+		baseAnalyticsURL: '',
+		...providedApiProps 
+	};
+
+	if (typeof window === 'undefined') {
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-require-imports
+			const { getFullPixelatedConfig } = require('../config/config');
+			const config = getFullPixelatedConfig();
+			if (config) {
+				apiProps = { 
+					proxyURL: config.global?.proxyUrl || '',
+					...apiProps,
+					...(config.ebay || {}),
+					...providedApiProps 
+				};
+			}
+		} catch (e) {
+			// Fail-silent, use what we have
+		}
+	}
+	return apiProps as EbayApiType;
+}
+
+
+export type EbayApiType = {
+    proxyURL: string,
+    baseTokenURL: string,
+    tokenScope: string, // changes per api call
+    baseSearchURL: string,
+    qsSearchURL: string,
+    baseItemURL: string,
+    qsItemURL: string,
+    baseAnalyticsURL: string,
+    appId: string, // clientId
+    appCertId: string, // clientSecret
+    globalId: string,
+    itemCategory?: string,
+}
+
+
+/**
+ * getShoppingCartItem — Convert an eBay API item object into the internal ShoppingCartType shape used by the cart.
+ *
+ * @param {any} [props.thisItem] - Raw eBay item object from the API.
+ * @param {string} [props.cloudinaryProductEnv] - Optional Cloudinary cloud name to transform image URLs.
+ * @param {any} [props.apiProps] - eBay API properties used to determine category/availability.
+ */
+getShoppingCartItem.propTypes = {
+/** Raw eBay item object */
+	thisItem: PropTypes.any.isRequired,
+	/** Optional Cloudinary product environment */
+	cloudinaryProductEnv: PropTypes.string,
+	/** eBay API properties */
+	apiProps: PropTypes.any,
+};
+export type getShoppingCartItemType = InferProps<typeof getShoppingCartItem.propTypes>;
+export function getShoppingCartItem(props: getShoppingCartItemType) {
+	let qty: number;
+	const thisItem = props.thisItem;
+	const apiProps = props.apiProps as EbayApiType;
+	const itemCategory = apiProps?.itemCategory;
+
+	if (thisItem.categoryId && thisItem.categoryId == itemCategory) {
+		qty = 1;
+	} else if (thisItem.categories?.[0]?.categoryId && thisItem.categories[0].categoryId == itemCategory) {
+		qty = 1;
+	} else {
+		qty = 10;
+	}
+	const shoppingCartItem: CartItemType = {
+		itemImageURL : ( thisItem.thumbnailImages && props.cloudinaryProductEnv ) 
+			? getImg({url: thisItem.thumbnailImages[0].imageUrl, product_env: props.cloudinaryProductEnv} ) 
+			: (thisItem.thumbnailImages) 
+				? thisItem.thumbnailImages[0].imageUrl 
+				: (thisItem.image && props.cloudinaryProductEnv)
+					? getImg({url: thisItem.image.imageUrl, product_env: props.cloudinaryProductEnv})
+					: thisItem.image?.imageUrl || '',
+		itemID: thisItem.legacyItemId,
+		itemURL: thisItem.itemWebUrl,
+		itemTitle: thisItem.title,
+		itemQuantity: qty,
+		itemCost: thisItem.price.value,
+	};
+	return shoppingCartItem;
+}
+
+/* 
+search tokenScope: 'https://api.ebay.com/oauth/api_scope',
+item tokenScope: 'https://api.ebay.com/oauth/api_scope/buy.item.bulk',
+getItem tokenScope: 'https://api.ebay.com/oauth/api_scope',
+*/
+
+
+/* ========== GET TOKEN ========== */
+
+
+/**
+ * getEbayAppToken — Retrieve an application access token from eBay for API calls.
+ *
+ * @param {object} [props.apiProps] - eBay API configuration (appId, appCertId, proxyURL, baseTokenURL, etc.).
+ */
+getEbayAppToken.propTypes = {
+/** eBay API configuration for token retrieval */
+	apiProps: PropTypes.object.isRequired,
+};
+export type getEbayAppTokenType = InferProps<typeof getEbayAppToken.propTypes>;
+export function getEbayAppToken(props: getEbayAppTokenType){
+	const apiProps = getMergedEbayConfig(props.apiProps);
+
+	const fetchToken = async () => {
+		if (debug) console.log("Fetching Token");
+		try {
+			const data = await smartFetch(
+				apiProps.proxyURL + apiProps.baseTokenURL, {
+					requestInit: {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded',
+							'Authorization': 'Basic ' + btoa(`${apiProps.appId}:${apiProps.appCertId}`) // Base64 encoded
+						},
+						body: new URLSearchParams({
+							grant_type: 'client_credentials',
+							scope: apiProps.tokenScope
+						})
+					}
+				});
+			const accessToken = data.access_token;
+			if (debug) console.log("Fetched eBay Access Token:", accessToken);
+			return accessToken;
+		} catch (error) {
+			console.error('Error fetching token:', error);
+		}
+	};
+	return fetchToken();
+}
+
+
+/* ========== ITEM SEARCH ========== */
+
+
+/**
+ * getEbayBrowseSearch — Execute a browse search request against the eBay Browse API and return results.
+ *
+ * @param {object} [props.apiProps] - eBay API configuration and query parameters.
+ * @param {string} [props.token] - OAuth token used to authorize the request.
+ */
+getEbayBrowseSearch.propTypes = {
+/** eBay API configuration */
+	apiProps: PropTypes.object.isRequired,
+	/** OAuth token to authorize the request */
+	token: PropTypes.string.isRequired,
+};
+export type getEbayBrowseSearchType = InferProps<typeof getEbayBrowseSearch.propTypes>;
+export function getEbayBrowseSearch(props: getEbayBrowseSearchType){
+	const apiProps = getMergedEbayConfig(props.apiProps);
+	const fetchData = async (token: string) => {
+		const fullURL = apiProps.baseSearchURL + apiProps.qsSearchURL;
+		const cacheKey = `search_${fullURL}`;
+
+		// Check Cache
+		const cached = ebayCache.get(cacheKey);
+		if (cached) {
+			if (debug) console.log("Returning cached eBay Search Data", cacheKey);
+			return cached;
+		}
+
+		if (debug) console.log("Fetching ebay API Browse Search Data");
+		try {
+			const data = await smartFetch(
+				buildUrl({
+					baseUrl: fullURL,
+					proxyUrl: apiProps.proxyURL,
+				}), {
+					requestInit: {
+						method: 'GET',
+						headers: {
+							'Authorization' : 'Bearer ' + token ,
+							'X-EBAY-C-MARKETPLACE-ID' : 'EBAY_US',
+							'X-EBAY-C-ENDUSERCTX' : 'affiliateCampaignId=<ePNCampaignId>,affiliateReferenceId=<referenceId>',
+							'X-EBAY-SOA-SECURITY-APPNAME' : 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe',
+						}
+					}
+				});
+			if (debug) console.log("Fetched eBay API Browse Search Data:", data);
+			
+			// Store in Cache
+			ebayCache.set(cacheKey, data);
+			
+			return data;
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	};
+	return fetchData(props.token);
+}
+
+
+/* ========== GET ITEM ========== */
+
+
+/**
+ * getEbayBrowseItem — Retrieve a single item detail from the eBay Browse API.
+ *
+ * @param {object} [props.apiProps] - eBay API configuration (item URL/qsItemURL).
+ * @param {string} [props.token] - OAuth token used to authorize the request.
+ */
+getEbayBrowseItem.propTypes = {
+/** eBay API configuration */
+	apiProps: PropTypes.object.isRequired,
+	/** OAuth token to authorize the request */
+	token: PropTypes.string.isRequired,
+};
+export type getEbayBrowseItemType = InferProps<typeof getEbayBrowseItem.propTypes>;
+export function getEbayBrowseItem(props: getEbayBrowseItemType){
+	const apiProps = getMergedEbayConfig(props.apiProps);
+	const fetchData = async (token: string) => {
+		const fullURL = (apiProps.baseItemURL ?? '') + (apiProps.qsItemURL ?? '');
+		const cacheKey = `item_${fullURL}`;
+
+		// Check Cache
+		const cached = ebayCache.get(cacheKey);
+		if (cached) {
+			if (debug) console.log("Returning cached eBay Item Data", cacheKey);
+			return cached;
+		}
+
+		if (debug) console.log("Fetching ebay API Browse Item Data");
+		try {
+			const data = await smartFetch(
+				buildUrl({
+					baseUrl: fullURL,
+					proxyUrl: apiProps.proxyURL,
+				}), {
+					requestInit: {
+						method: 'GET',
+						headers: {
+							'Authorization' : 'Bearer ' + token ,
+							'X-EBAY-C-MARKETPLACE-ID' : 'EBAY_US',
+							'X-EBAY-C-ENDUSERCTX' : 'affiliateCampaignId=<ePNCampaignId>,affiliateReferenceId=<referenceId>',
+							'X-EBAY-SOA-SECURITY-APPNAME' : 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe',
+						}
+					}
+				});
+			if (debug) console.log("Fetched eBay Item Data:", data);
+
+			// Store in Cache
+			ebayCache.set(cacheKey, data);
+
+			return data;
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	};
+	return fetchData(props.token);
+}
+
+
+/* ========== RATE LIMITS ========== */
+
+
+/**
+ * getEbayRateLimits — Fetch API rate limit information for the eBay analytics endpoints.
+ *
+ * @param {object} [props.apiProps] - eBay analytics API config (baseAnalyticsURL, proxyURL).
+ * @param {string} [props.token] - OAuth token used to authorize analytics requests.
+ */
+getEbayRateLimits.propTypes = {
+/** eBay analytics API configuration */
+	apiProps: PropTypes.object.isRequired,
+	/** OAuth token for analytics requests */
+	token: PropTypes.string.isRequired,
+};
+export type getEbayRateLimitsType = InferProps<typeof getEbayRateLimits.propTypes>;
+export function getEbayRateLimits(props: getEbayRateLimitsType){
+	const apiProps = getMergedEbayConfig(props.apiProps);
+	
+	const fetchAllLimits = async (token: string) => {
+		if (debug) console.log("Fetching all eBay API Rate Limits");
+		
+		try {
+			const rateLimitUrl = buildUrl({
+				baseUrl: apiProps.baseAnalyticsURL,
+				pathSegments: ['rate_limit'],
+				proxyUrl: apiProps.proxyURL,
+			});
+			const userRateLimitUrl = buildUrl({
+				baseUrl: apiProps.baseAnalyticsURL,
+				pathSegments: ['user_rate_limit'],
+				proxyUrl: apiProps.proxyURL,
+			});
+			const [rateLimitRes, userRateLimitRes] = await Promise.all([
+				smartFetch(rateLimitUrl, {
+					responseType: 'ok',
+					requestInit: {
+						method: 'GET',
+						headers: { 'Authorization' : 'Bearer ' + token }
+					}
+				}),
+				smartFetch(userRateLimitUrl, {
+					responseType: 'ok',
+					requestInit: {
+						method: 'GET',
+						headers: { 'Authorization' : 'Bearer ' + token }
+					}
+				})
+			]);
+
+			if (!rateLimitRes.ok || !userRateLimitRes.ok) {
+				throw new Error(`HTTP error! rate_limit: ${rateLimitRes.status}, user_rate_limit: ${userRateLimitRes.status}`);
+			}
+
+			const [rateLimit, userRateLimit] = await Promise.all([
+				rateLimitRes.json(),
+				userRateLimitRes.json()
+			]);
+
+			const combinedData = {
+				rate_limit: rateLimit,
+				user_rate_limit: userRateLimit
+			};
+
+			if (debug) console.log("Fetched Combined eBay Rate Limit Data:", combinedData);
+			return combinedData;
+			
+		} catch (error) {
+			console.error('Error fetching rate limits:', error);
+		}
+	};
+	
+	return fetchAllLimits(props.token);
+}
+
+
+/* ========== EXPORTED FUNCTIONS ========== */
+
+/* ========== GET EBAY ITEMS ========== */
+
+/**
+ * getEbayItems — Fetch a list of eBay items using the configured browse search helper.
+ *
+ * @param {object} [props.apiProps] - eBay API configuration and query parameters.
+ */
+getEbayItems.propTypes = {
+/** eBay API configuration and query params */
+	apiProps: PropTypes.object.isRequired,
+};
+export type getEbayItemsType = InferProps<typeof getEbayItems.propTypes>;
+export async function getEbayItems(props: getEbayItemsType) {
+	const apiProps = getMergedEbayConfig(props.apiProps);
+	try {
+		const response = await getEbayAppToken({apiProps: apiProps});
+		if (debug) console.log("eBay App Token Response:", response);
+		const data = await getEbayBrowseSearch({ apiProps: apiProps, token: response });
+		if (debug) console.log("eBay Browse Search Data:", data);
+		return data;
+	} catch (error) {
+		console.error("Failed to fetch eBay Items:", error);
+	}
+	// Return an empty object if there's an error
+	return {};
+}
+
+/* ========== GET EBAY ITEMS ========== */
+
+/**
+ * getEbayItem — Fetch a single eBay item using the configured eBay item helper.
+ *
+ * @param {object} [props.apiProps] - eBay API item config (baseItemURL, qsItemURL, proxyURL).
+ */
+getEbayItem.propTypes = {
+/** eBay API item config */
+	apiProps: PropTypes.object.isRequired,
+};
+export type getEbayItemType = InferProps<typeof getEbayItem.propTypes>;
+export async function getEbayItem(props: getEbayItemType) {
+	const apiProps = getMergedEbayConfig(props.apiProps);
+	try {
+		const response = await getEbayAppToken({apiProps: apiProps});
+		if (debug) console.log("eBay App Token Response:", response);
+		const data = await getEbayBrowseItem({ apiProps: apiProps, token: response });
+		if (debug) console.log("eBay Browse Item Data:", data);
+		return data;
+	} catch (error) {
+		console.error("Failed to fetch eBay Items:", error);
+	}
+	// Return an empty object if there's an error
+	return {};
+}
+
+
+
+
+/* ========== ITEM SEARCH ========== */
+
+export function getEbayItemsSearch(props: any){
+	const apiProps = getMergedEbayConfig(props.apiProps);
+	const fetchData = async (token: string) => {
+		const fullURL = apiProps.baseSearchURL + apiProps.qsSearchURL;
+		const cacheKey = `search_${fullURL}`;
+
+		// Check Cache
+		const cached = ebayCache.get(cacheKey);
+		if (cached) {
+			if (debug) console.log("Returning cached eBay Search Data", cacheKey);
+			return cached;
+		}
+
+		if (debug) console.log("Fetching ebay API Items Search Data");
+		try {
+			const data = await smartFetch(
+				apiProps.proxyURL + encodeURIComponent( fullURL ) , {
+					requestInit: {
+						method: 'GET',
+						headers: {
+							'Authorization' : 'Bearer ' + token ,
+							'X-EBAY-C-MARKETPLACE-ID' : 'EBAY_US',
+							'X-EBAY-C-ENDUSERCTX' : 'affiliateCampaignId=<ePNCampaignId>,affiliateReferenceId=<referenceId>',
+							'X-EBAY-SOA-SECURITY-APPNAME' : 'BrianWha-Pixelate-PRD-1fb4458de-1a8431fe',
+						}
+					}
+				});
+
+			// Store in Cache
+			ebayCache.set(cacheKey, data);
+
+			return data;
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	};
+	return fetchData(props.token);
+}
+
+
+/* ========== PRODUCT SCHEMA ========== */
+
+/**
+ * getEbayProductSchema — Convert an eBay item into schema.org/Product JSON-LD format.
+ *
+ * @param {object} [props.item] - eBay item object from the Browse API.
+ * @param {string} [props.brandName] - Optional brand name to include in the schema.
+ * @param {string} [props.siteUrl] - Optional site URL for the offer URL.
+ */
+getEbayProductSchema.propTypes = {
+	/** eBay item object */
+	item: PropTypes.any.isRequired,
+	/** Optional brand name */
+	brandName: PropTypes.string,
+	/** Optional site URL for offer */
+	siteUrl: PropTypes.string,
+};
+export type getEbayProductSchemaType = InferProps<typeof getEbayProductSchema.propTypes>;
+export function getEbayProductSchema(props: getEbayProductSchemaType) {
+	const item = props.item;
+	const brandName = props.brandName || 'eBay';
+	const siteUrl = props.siteUrl || item.itemWebUrl || '';
+
+	if (!item || !item.title || !item.price) {
+		return null;
+	}
+
+	// Get the primary image
+	const primaryImage = item.image?.imageUrl || item.thumbnailImages?.[0]?.imageUrl || '';
+	
+	// Collect all images
+	const allImages = [];
+	if (primaryImage) allImages.push(primaryImage);
+	if (Array.isArray(item.additionalImages)) {
+		item.additionalImages.forEach((img: any) => {
+			if (img.imageUrl) allImages.push(img.imageUrl);
+		});
+	}
+
+	const productSchema = {
+		'@context': 'https://schema.org/',
+		'@type': 'Product',
+		name: item.title,
+		description: item.title,
+		image: allImages.length > 1 ? allImages : (allImages[0] || ''),
+		brand: {
+			'@type': 'Brand',
+			name: brandName
+		},
+		offers: {
+			'@type': 'Offer',
+			url: siteUrl,
+			priceCurrency: item.price?.currency || 'USD',
+			price: String(item.price?.value || '0'),
+			availability: 'https://schema.org/InStock',
+			seller: {
+				'@type': 'Organization',
+				name: item.seller?.username || 'eBay Seller'
+			}
+		}
+	};
+
+	// Add seller rating if available
+	if (item.seller?.feedbackPercentage || item.seller?.feedbackScore) {
+		(productSchema as any).aggregateRating = {
+			'@type': 'AggregateRating',
+			ratingValue: item.seller.feedbackPercentage ? String(item.seller.feedbackPercentage) : '0',
+			reviewCount: item.seller.feedbackScore ? String(item.seller.feedbackScore) : '0'
+		};
+	}
+
+	if (debug) console.log("eBay Product Schema:", productSchema);
+	return productSchema;
+}
+

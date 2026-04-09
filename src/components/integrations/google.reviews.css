@@ -1,0 +1,92 @@
+.google-reviews-card {
+	padding: 16px;
+}
+
+.google-reviews-card h3 {
+	margin: 0 0 8px 0;
+}
+
+.google-reviews-card .address {
+	font-size: 0.9em;
+	color: #666;
+	margin-bottom: 16px;
+}
+
+.google-reviews-card .loading,
+.google-reviews-card .error,
+.google-reviews-card .no-reviews {
+	padding: 16px;
+}
+
+.google-reviews-card .error {
+	color: tomato;
+}
+
+.google-reviews-card ul {
+	list-style: none;
+	padding: 0;
+}
+
+.google-reviews-card li {
+	margin-bottom: 16px;
+	border-bottom: 1px solid #eee;
+	padding-bottom: 12px;
+}
+
+.google-reviews-card .review-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+.google-reviews-card .profile-photo-container {
+	width: 40px;
+	height: 40px;
+	margin-right: 12px;
+	flex-shrink: 0;
+	position: relative;
+}
+
+.google-reviews-card .profile-photo {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.google-reviews-card .profile-placeholder {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background-color: #e0e0e0;
+	color: #666;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 16px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.google-reviews-card .author-name {
+	font-weight: bold;
+}
+
+.google-reviews-card .rating {
+	font-size: 0.9em;
+	color: #666;
+}
+
+.google-reviews-card .review-text {
+	margin-top: 8px;
+	line-height: 1.5;
+}
+
+.google-reviews-card .write-review {
+	display: inline-block;
+	margin-top: 16px;
+	color: #1a73e8;
+	text-decoration: none;
+}

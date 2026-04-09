@@ -1,0 +1,74 @@
+.carousel-container {
+    height: 150px;
+}
+
+.carousel-cards-container {
+    height: 100%;
+}
+
+.carousel-card-wrapper { --do-nothing: true;}
+
+.carousel-card { --do-nothing: true;}
+
+.carousel-card-link { --do-nothing: true;}
+
+.carousel-card-image { 
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-card-header { 
+    position: absolute;
+    bottom: 0px;
+    left: 5px;
+    width: 50%;
+}
+.carousel-card-header h3 {
+    text-align: left;
+    font-size: 11px !important;
+    font-weight: normal !important;
+    color: white;
+    text-shadow: -1px 1px 1px black, 
+        1px 1px 1px black, 
+        1px -1px 1px black, 
+        -1px -1px 1px black, 
+        -1px 1px 5px black, 
+        1px 1px 5px black, 
+        1px -1px 5px black, 
+        -1px -1px 5px black;
+}
+
+.carousel-card-subheader { 
+    position: absolute;
+    bottom: 0px;
+    right: 5px;
+    width: 50%;
+    
+}
+.carousel-card-subheader h4 {
+    text-align: right;
+    font-size: 11px !important;
+    font-weight: normal !important;
+    color: white;
+    text-shadow: -1px 1px 1px black, 
+        1px 1px 1px black, 
+        1px -1px 1px black, 
+        -1px -1px 1px black, 
+        -1px 1px 5px black, 
+        1px 1px 5px black, 
+        1px -1px 5px black, 
+        -1px -1px 5px black;
+}
+
+.carousel-card-body { --do-nothing: true;}
+
+.carousel-buttons { 
+    display: none;
+}
+
+.carousel-button { 
+    display: none;
+}
+
+.carousel-loading { --do-nothing: true;}

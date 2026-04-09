@@ -1,0 +1,447 @@
+{
+	"properties": {
+		"name": "custom-request",
+		"id": "custom-request-form",
+		"toggleLoading": true,
+		"openModal": true,
+		"resetForm": true
+	},
+	"fields" : [
+        {
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "from",
+				"name" : "from",
+				"value" : "contactus@pixelvivid.com"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "to",
+				"name" : "to",
+				"value" : "contactus@pixelvivid.com"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "subject",
+				"name" : "subject",
+				"value" : "PixelVivid Custom Request Submit"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "domain",
+				"name" : "domain",
+				"value" : "pixelvivid.com"
+			}
+		},{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "hidden",
+				"id" : "formName",
+				"name" : "formName",
+				"value" : "custom-request"
+			}
+		},{
+			"component" : "FormSelect",
+			"props" : {
+				"id" : "title",
+				"name" : "title",
+				"defaultValue" : "",
+				"autoComplete" : "honorific-prefix",
+				"multiple" : null,
+				"required": true,
+				"display" : "horizontal",
+				"label" : "Title : ",
+				"options" : [
+					{ "value" : "", "text" : "", "disabled" : "disabled" },
+					{ "value" : "dr", "text" : "Dr." },
+					{ "value" : "mr", "text" : "Mr." },
+					{ "value" : "mrs", "text" : "Mrs." },
+					{ "value" : "ms", "text" : "Ms." },
+					{ "value" : "miss", "text" : "Miss" }
+				]
+			}
+		},	
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "text",
+				"id" : "firstname",
+				"name" : "firstname",
+				"defaultValue" : null,
+				"autoComplete" : "given-name",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "First Name : ",
+				"tooltip" : "Please type in your First Name"
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "text",
+				"id" : "lastname",
+				"name" : "lastname",
+				"defaultValue" : null,
+				"autoComplete" : "family-name",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Last Name : "
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "text",
+				"id" : "address",
+				"name" : "address",
+				"defaultValue" : null,
+				"autoComplete" : "street-address",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Street Address : "
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "text",
+				"id" : "city",
+				"name" : "city",
+				"defaultValue" : null,
+				"autoComplete" : "address-level2",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "City : "
+			}
+		},
+		{
+			"component" : "FormSelect",
+			"props" : {
+				"id" : "state",
+				"name" : "state",
+				"size" : "5",
+				"defaultValue" : ["NJ","SC"],
+				"autoComplete" : "address-level1",
+				"multiple" : "multiple",
+				"required": true,
+				"display" : "horizontal",
+				"label" : "State : ",
+				"tooltip" : "Please select your State",
+				"options" : [
+					{ "value" : "", "text" : "" , "disabled" : "disabled"},
+					{ "value" : "AL", "text" : "Alabama" },
+					{ "value" : "AK", "text" : "Alaska" },
+					{ "value" : "AZ", "text" : "Arizona" },
+					{ "value" : "AR", "text" : "Arkansas" },
+					{ "value" : "CA", "text" : "California" },
+					{ "value" : "CO", "text" : "Colorado" },
+					{ "value" : "CT", "text" : "Connecticut" },
+					{ "value" : "DE", "text" : "Delaware" },
+					{ "value" : "FL", "text" : "Florida" },
+					{ "value" : "GA", "text" : "Georgia" },
+					{ "value" : "HI", "text" : "Hawaii" },
+					{ "value" : "ID", "text" : "Idaho" },
+					{ "value" : "IL", "text" : "Illinois" },
+					{ "value" : "IN", "text" : "Indiana" },
+					{ "value" : "IA", "text" : "Iowa" },
+					{ "value" : "KS", "text" : "Kansas" },
+					{ "value" : "KY", "text" : "Kentucky" },
+					{ "value" : "LA", "text" : "Louisiana" },
+					{ "value" : "ME", "text" : "Maine" },
+					{ "value" : "MD", "text" : "Maryland" },
+					{ "value" : "MA", "text" : "Massachusetts" },
+					{ "value" : "MI", "text" : "Michigan" },
+					{ "value" : "MN", "text" : "Minnesota" },
+					{ "value" : "MS", "text" : "Mississippi" },
+					{ "value" : "MO", "text" : "Missouri" },
+					{ "value" : "MT", "text" : "Montana" },
+					{ "value" : "NB", "text" : "Nebraska" },
+					{ "value" : "NV", "text" : "Nevada" },
+					{ "value" : "NH", "text" : "New Hampshire" },
+					{ "value" : "NJ", "text" : "New Jersey" },
+					{ "value" : "NM", "text" : "New Mexico" },
+					{ "value" : "NY", "text" : "New York" },
+					{ "value" : "NC", "text" : "North Carolina" },
+					{ "value" : "ND", "text" : "North Dakota" },
+					{ "value" : "OH", "text" : "Ohio" },
+					{ "value" : "OK", "text" : "Oklahoma" },
+					{ "value" : "OR", "text" : "Oregon" },
+					{ "value" : "PA", "text" : "Pennsylvania" },
+					{ "value" : "RI", "text" : "Rhode Island" },
+					{ "value" : "SC", "text" : "South Carolina" },
+					{ "value" : "SD", "text" : "South Dakota" },
+					{ "value" : "TN", "text" : "Tennessee" },
+					{ "value" : "TX", "text" : "Texas" },
+					{ "value" : "UT", "text" : "Utah" },
+					{ "value" : "VT", "text" : "Vermont" },
+					{ "value" : "VA", "text" : "Virginia" },
+					{ "value" : "WA", "text" : "Washington" },
+					{ "value" : "WV", "text" : "West Virginia" },
+					{ "value" : "WI", "text" : "Wisconsin" },
+					{ "value" : "WY", "text" : "Wyoming" }
+				]
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "text",
+				"id" : "zipcode",
+				"name" : "zipcode",
+				"defaultValue" : null,
+				"autoComplete" : "postal-code",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Zip Code : ",
+				"validate" : "isValidUSZipCode"
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "tel",
+				"id" : "phone",
+				"name" : "phone",
+				"defaultValue" : null,
+				"autoComplete" : "tel",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Phone Number : ",
+				"validate" : "isValidUSPhoneNumber"
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "date",
+				"id" : "birthday",
+				"name" : "birthday",
+				"defaultValue" : null,
+				"autoComplete" : "bday",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Birthday : ",
+				"validate" : "isValidDate"
+			}
+		},
+		{
+			"component" : "FormSelect",
+			"props" : {
+				"id" : "age",
+				"name" : "age",
+				"defaultValue" : "",
+				"multiple" : null,
+				"required": true,
+				"display" : "horizontal",
+				"label" : "Age : ",
+				"options" : [
+					{ "value" : "", "text" : "" },
+					{ "value" : "-18", "text" : "18 or younger" },
+					{ "value" : "19-30", "text" : "19 to 30" },
+					{ "value" : "31-40", "text" : "31 to 40" },
+					{ "value" : "41-50", "text" : "41 to 50" },
+					{ "value" : "51-60", "text" : "51 to 60" },
+					{ "value" : "61-70", "text" : "61 to 70" },
+					{ "value" : "71-80", "text" : "71 to 80" },
+					{ "value" : "81-90", "text" : "81 to 90" },
+					{ "value" : "91-100", "text" : "91 to 100" },
+					{ "value" : "+100", "text" : "Above 100" }
+				]
+			}
+		},
+		{
+			"component" : "FormSelect",
+			"props" : {
+				"id" : "generation",
+				"name" : "generation",
+				"defaultValue" : null,
+				"multiple" : null,
+				"required": true,
+				"display" : "horizontal",
+				"label" : "Generation : ",
+				"options" : [
+					{ "value" : "", "text" : "" },
+					{ "value" : "greatest", "text" : "The Greatest Generation – born 1901-1924" },
+					{ "value" : "silent", "text" : "The Silent Generation – born 1925-1945" },
+					{ "value" : "boomer", "text" : "The Baby Boomer Generation – born 1946-1964" },
+					{ "value" : "genx", "text" : "Generation X – born 1965-1979" },
+					{ "value" : "millenial", "text" : "Millennials – born 1980-1994" },
+					{ "value" : "genz", "text" : "Generation Z – born 1995-2012" },
+					{ "value" : "gena", "text" : "Gen Alpha – born 2013 – 2025" }
+				]
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "email",
+				"id" : "email",
+				"name" : "email",
+				"defaultValue" : null,
+				"autoComplete" : "email",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Email Address : ",
+				"validate" : "isValidEmailAddress"
+			}
+		},
+		{
+			"component" : "FormRadio",
+			"props" : {
+				"id" : "gender",
+				"name" : "gender",
+				"autoComplete" : "sex",
+				"label" : "Gender : ",
+				"display" : "horizontal",
+				"required": true,
+				"validate" : "isOneRadioSelected",
+				"tooltip" : "Please select your gender",
+				"options" : [
+					{ "value" : "male", "text" : "Male", "checked" : "" },
+					{ "value" : "female", "text" : "Female", "checked" : "" }
+				]
+			}
+		},
+		{
+			"component" : "FormCheckbox",
+			"props" : {
+				"id" : "children",
+				"name" : "children",
+				"label" : "Children : ",
+				"display" : "horizontal",
+				"tooltip" : "Please select if you have children",
+				"validate" : "isOneChecked",
+				"options" : [
+					{ "value" : "y", "text" : "Yes", "selected" : "" },
+					{ "value" : "n", "text" : "No", "selected" : "" },
+					{ "value" : "m", "text" : "Maybe" }
+				]
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "text",
+				"id" : "jobtitle",
+				"name" : "jobtitle",
+				"defaultValue" : null,
+				"autoComplete" : "organization-title",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Job Title : "
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "text",
+				"id" : "company",
+				"name" : "company",
+				"defaultValue" : null,
+				"autoComplete" : "organization",
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Company : "
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "range",
+				"id" : "salary",
+				"name" : "salary",
+				"defaultValue" : null,
+				"size" : "40",
+				"display" : "horizontal",
+				"min" : "10000",
+				"max" : "1000000",
+				"step" : "1000",
+				"required": true,
+				"label" : "Salary : "
+			}
+		},
+		{
+			"component" : "FormInput",
+			"props" : {
+				"type" : "url",
+				"id" : "linkedin",
+				"name" : "linkedin",
+				"defaultValue" : null,
+				"size" : "40",
+				"display" : "horizontal",
+				"required": true,
+				"label" : "LinkedIn URL : ",
+				"validate" : "isValidUrl"
+			}
+		},
+		{
+			"component" : "FormTextarea",
+			"props" : {
+				"id" : "comments",
+				"name" : "comments",
+				"rows" : "5",
+				"cols" : "40",
+				"defaultValue" : null,
+				"display" : "horizontal",
+				"required": true,
+				"label" : "Comments : ",
+				"tooltip": "Please enter your comments"
+			}
+		},
+		{
+			"component" : "FormTagInput",
+			"props" : {
+				"id" : "tags",
+				"name" : "tags",
+				"defaultValue" : ["react", "javascript"],
+				"display" : "horizontal",
+				"label" : "Tags : ",
+				"placeholder" : "Add tags...",
+				"tooltip" : "Add tags by typing and pressing Enter or comma"
+			}
+		},
+		{
+			"component" : "FormHoneypot",
+			"props" : {
+				"id" : "winnie",
+				"name" : "website"
+			}
+		},
+		{
+			"component" : "FormGooglePlacesInput",
+			"props" : {
+				"id" : "delivery_address",
+				"name" : "delivery_address",
+				"placeholder" : "Enter delivery address",
+				"label" : "Delivery Address (Google Places) : ",
+				"tooltip" : "Start typing to see address suggestions from Google Places",
+				"display" : "horizontal"
+			}
+		},
+		{
+			"component" : "FormButton",
+			"props" : {
+				"type" : "submit",
+				"id" : "submit",
+				"text" : "Submit"
+			}
+		}
+	]
+}

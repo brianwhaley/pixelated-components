@@ -1,0 +1,105 @@
+/* Tab Component Styles */
+
+.tab-container {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  height: 100%;
+}
+
+.tab-top {
+  flex-direction: column;
+}
+
+.tab-bottom {
+  flex-direction: column-reverse;
+}
+
+.tab-left {
+  flex-direction: row;
+}
+
+.tab-right {
+  flex-direction: row-reverse;
+}
+
+.tab-headers {
+  display: flex;
+  background-color: #f5f5f5;
+}
+
+.tab-top .tab-headers,
+.tab-bottom .tab-headers {
+  flex-direction: row;
+  width: 100%;
+}
+
+.tab-left .tab-headers,
+.tab-right .tab-headers {
+  flex-direction: column;
+  height: 100%;
+}
+
+.tab-header {
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tab-top .tab-header,
+.tab-bottom .tab-header {
+  border-right: 1px solid #ddd;
+  border-bottom: none;
+}
+
+.tab-left .tab-header,
+.tab-right .tab-header {
+  border-right: none;
+  border-bottom: 1px solid #ddd;
+  height: auto;
+  padding: 20px 10px;
+}
+
+.tab-left .tab-header {
+  transform: rotate(-90deg);
+}
+
+.tab-right .tab-header {
+  transform: rotate(90deg);
+}
+
+.tab-header:last-child {
+  border-right: none;
+}
+
+.tab-top .tab-header:last-child,
+.tab-bottom .tab-header:last-child {
+  border-right: none;
+}
+
+.tab-left .tab-header:last-child,
+.tab-right .tab-header:last-child {
+  border-bottom: none;
+}
+
+.tab-header:hover {
+  background-color: #e0e0e0;
+}
+
+.tab-header.active {
+  background-color: #fff;
+  font-weight: bold;
+}
+
+.tab-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  min-height: 200px;
+  overflow: auto;
+}

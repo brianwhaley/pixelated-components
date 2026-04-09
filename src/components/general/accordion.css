@@ -1,0 +1,114 @@
+/* ========================================
+=====    ACCORDION COMPONENT       =====
+======================================== */
+
+.accordion {
+	margin: 0;
+	padding: 0;
+}
+
+.accordion-item {
+	margin-bottom: 0.5rem;
+	border: 1px solid #e1e5e9;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.accordion-title {
+	cursor: pointer;
+	padding: 1rem;
+	/* font-size: 1rem;
+	font-weight: 600; */
+	color: #1a202c;
+	background: none;
+	border: none;
+	width: 100%;
+	text-align: left;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	transition: background-color 0.2s ease;
+}
+
+.accordion-title:hover {
+	background-color: #f7fafc;
+}
+
+.accordion-title:focus {
+	outline: 2px solid #3182ce;
+	outline-offset: -2px;
+	background-color: #f7fafc;
+}
+
+/* Hide default triangle and add custom one */
+.accordion-title::before {
+	content: '▶';
+	font-size: 0.75rem;
+	color: #718096;
+	transition: transform 0.2s ease;
+	flex-shrink: 0;
+}
+
+details[open] .accordion-title::before {
+	content: '🔽';
+	transform: rotate(0deg);
+}
+
+/* Remove default marker */
+.accordion-title::-webkit-details-marker,
+.accordion-title::marker {
+	display: none;
+}
+
+.accordion-title h3 {
+	margin: 0;
+	/* font-size: inherit;
+	font-weight: inherit; */
+	color: inherit;
+	flex: 1;
+}
+
+.accordion-content {
+	padding: 1rem;
+	border-top: 1px solid #e1e5e9;
+	background-color: #f7fafc;
+}
+
+.accordion-content p {
+	margin: 0 0 1rem 0;
+}
+
+.accordion-content p:last-child {
+	margin-bottom: 0;
+}
+
+/* Animation for smooth expand/collapse */
+.accordion-content {
+	animation: accordionSlideDown 0.3s ease-out;
+}
+
+details[open] .accordion-content {
+	animation: accordionSlideDown 0.3s ease-out;
+}
+
+@keyframes accordionSlideDown {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+	.accordion-content {
+		animation: none;
+	}
+
+	.accordion-title::before {
+		transition: none;
+	}
+}
