@@ -30,11 +30,28 @@ export function buildZipArgs(zipName = 'Pixelated.zip') {
 
 export function zipPixelatedTheme(inputPath, zipName = 'Pixelated.zip') {
 	const scriptDir = path.resolve(new URL(import.meta.url).pathname, '..');
-	// repo layout: <repo-root>/pixelated-components/src/scripts
-	const repoRoot = path.resolve(scriptDir, '..', '..');
-	const themeDir = inputPath
-		? path.resolve(process.cwd(), inputPath)
-		: path.resolve(repoRoot, '..', 'pixelated-blog-wp-theme');
+	// In monorepo: packages/pixelated-components/src/scripts → monorepo root: ../../../
+	// In standalone: src/scripts → repo root: ../..
+	
+	let repoRoot, themeDir;
+	
+	if (inputPath) {
+		// If path provided, use it as-is
+		themeDir = path.resolve(process.cwd(), inputPath);
+	} else {
+		// Try monorepo path first (../../tools/pixelated-blog-wp-theme from repo root)
+		const monoRepoThemePath = path.resolve(scriptDir, '..', '..', '..', '..', 'tools', 'pixelated-blog-wp-theme');
+		// Fallback to standalone path (../pixelated-blog-wp-theme)
+		const standaloneThemePath = path.resolve(scriptDir, '..', '..', '..', 'pixelated-blog-wp-theme');
+		
+		if (fs.existsSync(monoRepoThemePath)) {
+			themeDir = monoRepoThemePath;
+		} else if (fs.existsSync(standaloneThemePath)) {
+			themeDir = standaloneThemePath;
+		} else {
+			themeDir = monoRepoThemePath; // Default to monorepo path for error message
+		}
+	}
 
 	if (!fs.existsSync(themeDir) || !fs.statSync(themeDir).isDirectory()) {
 		throw new Error(`Theme directory not found or not a directory: ${themeDir}`);

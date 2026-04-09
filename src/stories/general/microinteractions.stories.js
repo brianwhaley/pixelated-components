@@ -19,7 +19,7 @@ const PageMicroInteractions = () => {
 			// grayscalehover: true,
 			imghue: true,
 			imgtwist: true,	
-			scrollfadeElements: '.callout, .scrollFadeElement',
+			scrollfadeElements: '.callout, scroll-fade-element',
 		});
 	}, []);
 	

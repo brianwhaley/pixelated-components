@@ -6,9 +6,15 @@ import reactPlugin from 'eslint-plugin-react';
 // import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import importPlugin from 'eslint-plugin-import';
 import a11yPlugin from 'eslint-plugin-jsx-a11y';
-import pixelatedPlugin from './src/scripts/pixelated-eslint-plugin.js';
+import pixelatedPlugin from './dist/scripts/pixelated-eslint-plugin.js';
 
 export default [
+	{
+		ignores: [
+			'src/scripts/**', 
+			'dist/scripts/**'
+		],
+	},
 	{
 		// files: ['**/*.{js,jsx,mjs,mjsx,cjs,cjsx,ts,tsx,mts,mtsx,cts,ctsx}'],
 		files: ['**/*.*{js,jsx,ts,tsx}'],

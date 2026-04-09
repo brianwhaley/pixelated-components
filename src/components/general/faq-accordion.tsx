@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useMemo } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { Accordion, AccordionItem } from '../general/accordion';

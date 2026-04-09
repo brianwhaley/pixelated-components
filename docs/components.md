@@ -697,7 +697,7 @@ import { MicroInteractions } from '@pixelated-tech/components';
   cartpulse={true}
   formglow={true}
   imgscale={true}
-  scrollfadeElements=".fade-on-scroll"
+  scrollfadeElements=".scroll-fade-element"
 />
 ```
 

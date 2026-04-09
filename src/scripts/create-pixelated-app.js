@@ -546,10 +546,10 @@ async function main() {
 		// Create a copy of pixelated-template inside the current workspace
 		console.log(`\nStep ${stepNumber++}: Template Copy`);
 		console.log('================================================================================\n');
-		const workspaceRoot = path.resolve(__dirname, '..', '..', '..');
-		const templatePath = path.resolve(workspaceRoot, 'pixelated-template');
+		const workspaceRoot = path.resolve(__dirname, '..', '..', '..', '..');
+		const templatePath = path.resolve(workspaceRoot, 'apps', 'pixelated-template');
 		if (!(await exists(templatePath))) {
-			console.error(`\n❌ Template not found at ${templatePath}. Please ensure this tool is run inside the workspace that contains pixelated-template.`);
+			console.error(`\n❌ Template not found at ${templatePath}. Please ensure this tool is run inside the monorepo that contains apps/pixelated-template.`);
 			process.exit(1);
 		}
 
@@ -557,8 +557,8 @@ async function main() {
 		const manifest = await loadManifest(__dirname);
 		// Note: available templates will be printed later just before prompting for pages
 		
-		// Destination is implicitly the top-level Git folder + site name to avoid prompting for it
-		const destPath = path.resolve(workspaceRoot, siteName);
+		// Destination is implicitly the apps folder + site name
+		const destPath = path.resolve(workspaceRoot, 'apps', siteName);
 		console.log(`\nThe new site will be created at: ${destPath}`);
 		const proceed = (await rl.question('Proceed? (Y/n): ')) || 'y';
 		if (proceed.toLowerCase() !== 'y' && proceed.toLowerCase() !== 'yes') {

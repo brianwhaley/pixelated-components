@@ -38,6 +38,48 @@ export type SitemapConfig = {
 	routes?: any; // accept route data like myRoutes
 };
 
+/**
+ * Builds a SitemapConfig object based on the pixelated.config.json
+ * Automatically enables features based on what's configured
+ */
+export function buildSitemapConfig(
+	pixelatedConfig: any,
+	routes: any
+): SitemapConfig {
+	const sitemapConfig: SitemapConfig = {
+		routes,
+		createPageURLs: true,
+		createImageURLsFromJSON: true,
+	};
+
+	// WordPress integration
+	if (pixelatedConfig.wordpress?.site) {
+		sitemapConfig.wordpress = { site: pixelatedConfig.wordpress.site };
+		sitemapConfig.createWordPressURLs = true;
+		sitemapConfig.createWordPressImageURLs = true;
+	}
+
+	// Contentful integration
+	if (pixelatedConfig.contentful?.space_id) {
+		const hasCompleteContentfulConfig = !!pixelatedConfig.contentful?.delivery_access_token;
+		sitemapConfig.contentful = {
+			base_url: pixelatedConfig.contentful.base_url ?? '',
+			space_id: pixelatedConfig.contentful.space_id ?? '',
+			environment: pixelatedConfig.contentful.environment ?? '',
+			access_token: pixelatedConfig.contentful.delivery_access_token ?? '',
+		};
+		sitemapConfig.createContentfulURLs = false;
+		sitemapConfig.createContentfulAssetURLs = hasCompleteContentfulConfig;
+	}
+
+	// eBay integration
+	if (pixelatedConfig.ebay?.appId) {
+		sitemapConfig.createEbayItemURLs = true;
+	}
+
+	return sitemapConfig;
+}
+
 
 
 

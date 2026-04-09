@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, useMemo } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { getFontOptions } from './google-fonts';

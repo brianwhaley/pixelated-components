@@ -157,7 +157,7 @@ const propTypesInferPropsRule = {
 					const componentName = node.id.name;
 
 					// Check if this is a client component (contains client-only patterns)
-					const sourceCode = context.getSourceCode();
+					const sourceCode = context.sourceCode || context.getSourceCode?.();
 					const fileContent = sourceCode.text;
 					if (componentName[0] === componentName[0].toUpperCase() && isClientComponent(fileContent)) {
 						if (!components.has(componentName)) {
@@ -268,7 +268,8 @@ const requiredSchemasRule = {
 		},
 	},
 	create(context) {
-		if (!context.getFilename().endsWith('layout.tsx')) return {};
+		const filename = context.sourceCode?.filename || context.getFilename?.() || '';
+		if (!filename.endsWith('layout.tsx')) return {};
 
 		const requiredSchemas = ['WebsiteSchema', 'LocalBusinessSchema', 'ServicesSchema'];
 		const foundSchemas = new Set();
@@ -567,7 +568,7 @@ const propTypesJsdocRule = {
 					node.left.property.name === 'propTypes'
 				) {
 					const componentName = node.left.object.name;
-					const sourceCode = context.getSourceCode();
+					const sourceCode = context.sourceCode || context.getSourceCode?.();
 					const fileContent = sourceCode.text;
 					// Only enforce for client components (match prop-types-inferprops behavior)
 					if (!isClientComponent(fileContent)) return;
@@ -657,7 +658,8 @@ const requiredFilesRule = {
 	},
 	create(context) {
 		// Only run this check once per project execution, ideally on layout.tsx
-		if (!context.getFilename().endsWith('layout.tsx')) return {};
+		const filename = context.sourceCode?.filename || context.getFilename?.() || '';
+		if (!filename.endsWith('layout.tsx')) return {};
 
 		const projectRoot = context.cwd;
 		const requiredFiles = [
@@ -666,7 +668,7 @@ const requiredFilesRule = {
 			{ name: 'not-found', pattern: /not-found\.tsx$/ },
 			{ name: 'robots', pattern: /robots\.(ts|tsx)$/ },
 			{ name: 'proxy.ts', pattern: /^proxy\.ts$/ },
-			{ name: 'amplify.yml', pattern: /^amplify\.yml$/ },
+			/* { name: 'amplify.yml', pattern: /^amplify\.yml$/ }, */
 		];
 
 		return {
@@ -793,7 +795,7 @@ const validateTestLocationsRule = {
 		schema: [],
 	},
 	create(context) {
-		const filename = context.getFilename();
+		const filename = context.sourceCode?.filename;
 		if (!filename || filename === '<input>' || filename === '<text>') return {};
 
 		// identify test-like filenames
@@ -883,7 +885,8 @@ const noProcessEnvRule = {
 			},
 
 			'Program:exit'() {
-				const source = context.getSourceCode().text;
+				const sourceCode = context.sourceCode || context.getSourceCode?.();
+				const source = sourceCode?.text || '';
 				if (/\bprocess\s*\.\s*env\b/.test(source) && !(new RegExp('(?:' + ALLOWED_ENV_VARS.map(s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|') + ')').test(source)) ) {
 					context.report({ loc: { line: 1, column: 0 }, messageId: 'forbiddenEnv' });
 				}
@@ -907,7 +910,7 @@ const noDebugTrueRule = {
 		schema: [],
 	},
 	create(context) {
-		const filename = context.getFilename() || '';
+		const filename = context.sourceCode?.filename || '';
 		// Allow debug=true in test/story files
 		if (filename.includes('/src/tests/') || filename.includes('/src/test/') || filename.includes('/src/stories/')) {
 			return {};
@@ -967,7 +970,8 @@ const requiredFaqRule = {
 	},
 	create(context) {
 		// Only check this when linting layout.tsx
-		if (!context.getFilename().endsWith('layout.tsx')) return {};
+		const filename = context.sourceCode?.filename || context.getFilename?.() || '';
+		if (!filename.endsWith('layout.tsx')) return {};
 
 		const projectRoot = context.cwd;
 
@@ -1063,7 +1067,7 @@ const fileNameKebabCaseRule = (function fileNameKebabCaseRule(){
 			return {
 				Program(node) {
 					try {
-						const filename = context.getFilename();
+						const filename = context.sourceCode?.filename;
 						if (!filename || filename === '<input>') return;
 						const fn = filename.replace(/\\\\/g, '/').split('/').pop();
 						if (!fn) return;
@@ -1095,11 +1099,11 @@ const noDuplicateExportNamesRule = {
 		messages: { duplicateExport: 'Duplicate export "{{name}}" found in multiple modules: {{modules}}' },
 	},
 	create(context) {
-		const filename = context.getFilename();
+		const filename = context.sourceCode?.filename;
 		return {
 			Program() {
 				try {
-					const sourceCode = context.getSourceCode();
+					const sourceCode = context.sourceCode || context.getSourceCode?.();
 					const exportAll = sourceCode.ast.body.filter(n => n.type === 'ExportAllDeclaration');
 					if (exportAll.length < 2) return; // nothing to compare
 
@@ -1308,7 +1312,7 @@ const noDirectFetchRule = {
 		},
 	},
 	create(context) {
-		const filename = context.getFilename() || '';
+		const filename = context.sourceCode?.filename || '';
 		
 		// Skip ESLint config files, tests, node_modules, build scripts, old files, and smartfetch itself
 		if (

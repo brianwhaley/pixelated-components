@@ -184,6 +184,7 @@ export async function smartFetch(
 						const controller = new AbortController();
 						const timeoutId = setTimeout(() => controller.abort(), timeout);
 
+						// eslint-disable-next-line pixelated/no-direct-fetch
 						const response = await fetch(url, {
 							signal: controller.signal,
 							...requestInit,
@@ -236,6 +237,7 @@ export async function smartFetch(
 					const controller = new AbortController();
 					const timeoutId = setTimeout(() => controller.abort(), timeout);
 
+					// eslint-disable-next-line pixelated/no-direct-fetch
 					const response = await fetch(fetchUrl, {
 						signal: controller.signal,
 						...requestInit,

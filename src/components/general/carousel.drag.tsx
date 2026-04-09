@@ -1,4 +1,6 @@
 
+'use client';
+
 import { useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 

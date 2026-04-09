@@ -13,7 +13,9 @@ echo "Base directory: $BASE_DIR"
 REPOS=(
     "brianwhaley"
     "informationfocus"
+	"jz-home-improvement"
 	"leadscraper"
+	"manningmetalworks"
     "oaktreelandscaping"
     "palmetto-epoxy"
     "pixelated"
@@ -21,6 +23,7 @@ REPOS=(
     "pixelated-components"
     "pixelated-template"
     "pixelvivid"
+	"threemuses"
 )
 
 # GitHub username/organization

@@ -274,7 +274,7 @@ describe('MicroInteractions Component', () => {
     it('should enable form animations with scroll fade', () => {
       MicroInteractions({
         formglow: true,
-        scrollfadeElements: '.form-section, .scrollFadeElement'
+        scrollfadeElements: '.form-section, scroll-fade-element'
       });
       expect(document.body.classList.contains('formglow')).toBe(true);
     });

@@ -39,6 +39,11 @@
 			"import": "./dist/index.adminclient.js",
 			"default": "./dist/index.adminclient.js"
 		},
+		"./config": {
+			"types": "./dist/types/index.config.d.ts",
+			"import": "./dist/index.config.js",
+			"default": "./dist/index.config.js"
+		},
 		"./dist/components/*": "./dist/components/*",
 		"./css/*": "./dist/css/*",
 		"./scripts/*": "./dist/scripts/*"
@@ -62,18 +67,6 @@
 	"scripts": {
 		"build": "bash src/scripts/build.sh",
 		"validate-exports": "npx tsx src/scripts/validate-exports.js",
-		"copy2brianwhaley": "rm -rf ../brianwhaley/node_modules/@pixelated-tech/components/dist && cp -r dist ../brianwhaley/node_modules/@pixelated-tech/components/",
-		"copy2informationfocus": "rm -rf ../informationfocus/node_modules/@pixelated-tech/components/dist && cp -r dist ../informationfocus/node_modules/@pixelated-tech/components/",
-		"copy2jzhomeimprovement": "rm -rf ../jz-home-improvement/node_modules/@pixelated-tech/components/dist && cp -r dist ../jz-home-improvement/node_modules/@pixelated-tech/components/",
-		"copy2manningmetalworks": "rm -rf ../manning-metal-works/node_modules/@pixelated-tech/components/dist && cp -r dist ../manningmetalworks/node_modules/@pixelated-tech/components/",
-		"copy2oaktreelandscaping": "rm -rf ../oaktreelandscaping/node_modules/@pixelated-tech/components/dist && cp -r dist ../oaktreelandscaping/node_modules/@pixelated-tech/components/",
-		"copy2palmettoepoxy": "rm -rf ../palmetto-epoxy/node_modules/@pixelated-tech/components/dist && cp -r dist ../palmetto-epoxy/node_modules/@pixelated-tech/components/",
-		"copy2pixelated": "rm -rf ../pixelated/node_modules/@pixelated-tech/components/dist && cp -r dist ../pixelated/node_modules/@pixelated-tech/components/",
-		"copy2pixelatedadmin": "rm -rf ../pixelated-admin/node_modules/@pixelated-tech/components/dist && cp -r dist ../pixelated-admin/node_modules/@pixelated-tech/components/",
-		"copy2template": "rm -rf ../pixelated-template/node_modules/@pixelated-tech/components/dist && cp -r dist ../pixelated-template/node_modules/@pixelated-tech/components/",
-		"copy2pixelvivid": "rm -rf ../pixelvivid/node_modules/@pixelated-tech/components/dist && cp -r dist ../pixelvivid/node_modules/@pixelated-tech/components/",
-		"copy2threemuses": "rm -rf ../threemuses/node_modules/@pixelated-tech/components/dist && cp -r dist ../threemuses/node_modules/@pixelated-tech/components/",
-		"copy2all": "npm run copy2brianwhaley && npm run copy2informationfocus && npm run copy2jzhomeimprovement && npm run copy2manningmetalworks && npm run copy2oaktreelandscaping && npm run copy2palmettoepoxy && npm run copy2pixelated && npm run copy2pixelatedadmin && npm run copy2template && npm run copy2pixelvivid && npm run copy2threemuses",
 		"storybook": "rm -rf node_modules/.cache && storybook dev -p 6006",
 		"buildStorybook": "rm -rf node_modules/.cache && NODE_OPTIONS=\"--max-old-space-size=8192\" storybook build",
 		"test-storybook": "npx storybook test -c .storybook",
@@ -82,7 +75,7 @@
 		"test:coverage": "vitest run --coverage",
 		"test:watch": "vitest",
 		"lint": "eslint --fix",
-		"release:prep": "npm run update && npm run lint && npm run test:coverage && npm run build && npm run buildStorybook && npm run copy2all",
+		"release:prep": "npm run update && npm run lint && npm run test:coverage && npm run build && npm run buildStorybook",
 		"release": "./src/scripts/release.sh",
 		"vault": "npx tsx src/scripts/config-vault.ts",
 		"config:vault": "npm run vault --",

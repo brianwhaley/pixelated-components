@@ -155,11 +155,11 @@ footer {
 
 .gradient {
 	background: var(--accent1-color);
-	background-image: linear-gradient(top, var(--accent2-color) 0%, var(--accent1-color) 100%);
-	background-image: -o-linear-gradient(top, var(--accent2-color) 0%, var(--accent1-color) 100%);
-	background-image: -moz-linear-gradient(top, var(--accent2-color) 0%, var(--accent1-color) 100%);
-	background-image: -webkit-linear-gradient(top, var(--accent2-color) 0%, var(--accent1-color) 100%);
-	background-image: -ms-linear-gradient(top, var(--accent2-color) 0%, var(--accent1-color) 100%);
+	background-image: linear-gradient(to bottom, var(--accent2-color) 0%, var(--accent1-color) 100%);
+	background-image: -o-linear-gradient(to bottom, var(--accent2-color) 0%, var(--accent1-color) 100%);
+	background-image: -moz-linear-gradient(to bottom, var(--accent2-color) 0%, var(--accent1-color) 100%);
+	background-image: -webkit-linear-gradient(to bottom, var(--accent2-color) 0%, var(--accent1-color) 100%);
+	background-image: -ms-linear-gradient(to bottom, var(--accent2-color) 0%, var(--accent1-color) 100%);
 	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, var(--accent2-color)), color-stop(1, var(--accent1-color)));
 }
 

@@ -30,7 +30,7 @@ echo "✅ Removed previous dist/ directory"
 echo ""
 echo "Step $((step++)): TypeScript build"
 echo "================================================="
-npx tsc --project tsconfig.json
+npx tsc --project tsconfig.json --noEmit false
 echo "✅ TypeScript compilation completed"
 
 

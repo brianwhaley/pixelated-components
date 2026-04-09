@@ -1,4 +1,6 @@
 
+'use client';
+
 import { useState } from 'react';
 import { generateComponentObject } from './componentGeneration';
 import type { PageData, EditMode, ComponentData } from './types';

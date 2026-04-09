@@ -24,7 +24,10 @@ for type in "" --dev --optional; do
         UPDATES=$(npm outdated $flag | awk 'NR>1 {print $1"@"$4}' || true)
     fi
     if [ -n "$UPDATES" ]; then
+		echo ""
+    	echo "================================================="
         echo "Updating $type packages: $UPDATES"
+    	echo "================================================="
         if [ "$type" = "--peer" ]; then
             echo "peer deps need manual bumping: $UPDATES"
         else
@@ -38,7 +41,9 @@ done
 
 # Handle peer dependencies
 echo ""
+echo "================================================="
 echo "Checking peer dependencies for updates..."
+echo "================================================="
 {
 if command -v jq &> /dev/null; then
     peers=$(jq -r '.peerDependencies // {} | to_entries[] | "\(.key)=\(.value)"' package.json 2>/dev/null)
@@ -69,4 +74,9 @@ else
 fi
 } || true
 
+
+echo ""
+echo "================================================="
+echo "Updating Audit Fixes..."
+echo "================================================="
 npm audit fix 2>/dev/null || true

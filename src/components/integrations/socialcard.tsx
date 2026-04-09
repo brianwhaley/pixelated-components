@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from "prop-types";
 import { mergeDeep } from '../general/utilities';

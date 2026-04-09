@@ -1,4 +1,6 @@
 
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 // import { FormEngine } from '../../form/pixelated.form';
