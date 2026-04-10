@@ -14,13 +14,39 @@ import { encrypt, decrypt, isEncrypted } from '../components/config/crypto';
  *  - `decrypt` writes atomically to the plain filename (when given a `.enc` file it writes to the base name)
  */
 
-const [,, command, targetPath, argKey] = process.argv;
+const rawArgs = process.argv.length > 1 && fs.existsSync(process.argv[1])
+	? process.argv.slice(2)
+	: process.argv.slice(1);
+const [command, targetPath, argKey] = rawArgs;
+
+const searchParents = (startDir: string): string | null => {
+	let currentDir = startDir;
+	while (true) {
+		const candidate = path.join(currentDir, '.env.local');
+		if (fs.existsSync(candidate)) return candidate;
+		const parentDir = path.dirname(currentDir);
+		if (parentDir === currentDir) break;
+		currentDir = parentDir;
+	}
+	return null;
+};
+
+const findEnvLocal = (): string | null => {
+	const startDirs = [];
+	if (process.env.INIT_CWD) startDirs.push(process.env.INIT_CWD);
+	startDirs.push(process.cwd());
+	for (const dir of startDirs) {
+		const found = searchParents(dir);
+		if (found) return found;
+	}
+	return null;
+};
 
 // Helper: obtain key from arg or env or .env.local (only used for encrypt/decrypt)
 let key = argKey || process.env.PIXELATED_CONFIG_KEY;
 if (!key) {
-	const envPath = path.join(process.cwd(), '.env.local');
-	if (fs.existsSync(envPath)) {
+	const envPath = findEnvLocal();
+	if (envPath) {
 		try {
 			const envContent = fs.readFileSync(envPath, 'utf8');
 			const match = envContent.match(/^PIXELATED_CONFIG_KEY=(.*)$/m);
@@ -107,8 +133,8 @@ function decryptPostBuild(opts: { debug?: boolean } = {}): void {
 	// Resolve key (env preferred, then .env.local)
 	let keyLocal = process.env.PIXELATED_CONFIG_KEY;
 	if (!keyLocal) {
-		const envPath = path.join(process.cwd(), '.env.local');
-		if (fs.existsSync(envPath)) {
+		const envPath = findEnvLocal();
+		if (envPath) {
 			try {
 				const envContent = fs.readFileSync(envPath, 'utf8');
 				const match = envContent.match(/^PIXELATED_CONFIG_KEY=(.*)$/m);
