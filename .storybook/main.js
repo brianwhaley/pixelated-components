@@ -69,7 +69,15 @@ const config = {
             {
                 test: /\.(ts|tsx|mts|cts|mtsx|ctsx)$/,
                 exclude: /node_modules/,
-                use: "ts-loader",
+                use: {
+                    loader: "ts-loader",
+                    options: {
+                        transpileOnly: true,
+                        compilerOptions: {
+                            noEmit: false,
+                        },
+                    },
+                },
             },
             {
                 test: /\.(bmp|gif|jpg|jpeg|png|svg|webp)$/,
