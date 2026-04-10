@@ -78,7 +78,7 @@
 		"release:prep": "npm run update && npm run lint && npm run test:coverage && npm run build && npm run buildStorybook",
 		"release": "./src/scripts/release.sh",
 		"vault": "npx tsx src/scripts/config-vault.ts",
-		"config:vault": "npm run vault --",
+		"config:vault": "npx tsx $(node -e 'console.log(require.resolve(\"@pixelated-tech/components/scripts/config-vault.js\"))') postbuild",
 		"config:encrypt": "npm run config:vault -- encrypt src/config/pixelated.config.json",
 		"config:decrypt": "npm run config:vault -- decrypt src/config/pixelated.config.json.enc",
 		"create-pixelated-app": "node src/scripts/create-pixelated-app.js",
