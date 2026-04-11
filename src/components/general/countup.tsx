@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { useIntersectionObserver } from '@pixelated-tech/components';
+import { useIntersectionObserver } from '../general/intersection-observer';
 import "./countup.css";
 
 /**

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { Table } from '@pixelated-tech/components';
+import { Table } from '../../../components/general/table';
 import { SiteHealthTemplate } from './site-health-template';
 import type { GitData } from './site-health-types';
 

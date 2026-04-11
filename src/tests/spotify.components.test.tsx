@@ -5,12 +5,11 @@ import { PodcastEpisodeList } from '../components/integrations/spotify.component
 import type { SpotifyPodcastEpisodeType } from '../components/integrations/spotify.functions';
 
 // Mock the component dependencies
-vi.mock('../components/general/tiles', () => ({
+vi.mock('../components/general/semantic', () => ({
 	PageGridItem: ({ children }: any) => <div data-testid="grid-item">{children}</div>
 }));
 
-vi.mock('@pixelated-tech/components', () => ({
-	PageGridItem: ({ children }: any) => <div data-testid="grid-item">{children}</div>,
+vi.mock('../components/integrations/wordpress.components', () => ({
 	BlogPostSummary: ({ title, excerpt, date, URL, featured_image, ID }: any) => (
 		<div data-testid={`episode-${ID}`} className="blog-post-summary">
 			<h3>{title}</h3>

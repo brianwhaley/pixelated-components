@@ -3,7 +3,7 @@
 
 import React, { useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { SmartImage } from '@pixelated-tech/components';
+import { SmartImage } from './smartimage';
 import "./hero.css";
 
 /**

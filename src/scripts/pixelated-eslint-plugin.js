@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { builtinModules } from 'module';
 
 /**
  * Pixelated ESLint Plugin
@@ -50,6 +51,480 @@ export function isClientComponent(fileContent) {
 	return CLIENT_ONLY_PATTERNS.some(pattern => pattern.test(fileContent));
 }
 
+function isRelativeOrAliasImport(source) {
+	return source.startsWith('.') || source.startsWith('/') || source.startsWith('@/') || source.startsWith('~/');
+}
+
+function getPackageNameFromSource(source) {
+	if (!source || typeof source !== 'string') return null;
+	if (isRelativeOrAliasImport(source)) return null;
+	if (source.startsWith('node:')) source = source.slice(5);
+	const segments = source.split('/');
+	if (source.startsWith('@')) {
+		return segments.length >= 2 ? `${segments[0]}/${segments[1]}` : source;
+	}
+	return segments[0];
+}
+
+function isBuiltinModule(name) {
+	if (!name || typeof name !== 'string') return false;
+	if (name.startsWith('node:')) name = name.slice(5);
+	return builtinModules.includes(name);
+}
+
+function getNearestPackageJsonPath(filename) {
+	if (!filename || filename === '<input>' || filename === '<text>') {
+		const cwd = process.cwd();
+		const candidate = path.join(cwd, 'package.json');
+		return fs.existsSync(candidate) ? candidate : null;
+	}
+
+	let current = path.resolve(filename);
+	if (fs.existsSync(current) && fs.statSync(current).isFile()) {
+		current = path.dirname(current);
+	}
+
+	while (true) {
+		const candidate = path.join(current, 'package.json');
+		if (fs.existsSync(candidate)) return candidate;
+		const parent = path.dirname(current);
+		if (parent === current) break;
+		current = parent;
+	}
+	return null;
+}
+
+function readPackageJson(packageJsonPath) {
+	try {
+		return JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+	} catch {
+		return null;
+	}
+}
+
+function getContextFilename(context) {
+	if (!context) return null;
+	if (typeof context.getFilename === 'function') return context.getFilename();
+	if (typeof context.filename === 'string') return context.filename;
+	if (context.sourceCode?.filename) return context.sourceCode.filename;
+	return null;
+}
+
+function getContextSourceCode(context) {
+	if (!context) return null;
+	if (typeof context.getSourceCode === 'function') return context.getSourceCode();
+	if (context.sourceCode) return context.sourceCode;
+	return null;
+}
+
+function stripComments(source) {
+	return source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+}
+
+function collectImportsFromSource(source) {
+	const cleaned = stripComments(source);
+	const imports = new Set();
+	const regex = /(?:import\s+(?:[^'"\n]+?\s+from\s+)?|export\s+(?:\*\s+from\s+|\{[^}]*\}\s+from\s+)?|require\(\s*|import\()(['"])([^'"\\]+)\1/g;
+	let match;
+	while ((match = regex.exec(cleaned))) {
+		const specifier = match[2];
+		const name = getPackageNameFromSource(specifier);
+		if (name) imports.add(name);
+	}
+	return [...imports];
+}
+
+function collectPackagesFromScript(script) {
+	const packages = new Set();
+	if (typeof script !== 'string' || !script.trim()) return packages;
+
+	const cleaned = script.replace(/#.*/g, '').trim();
+	const tokens = cleaned.split(/[\s|&;]+/);
+	const ignoredCommands = new Set([
+		'npm', 'npx', 'pnpm', 'yarn', 'node', 'bash', 'sh', 'git', 'cd', 'mkdir',
+		'rimraf', 'cross-env', 'run', 'exec', 'npm/run', 'pnpm/exec', 'yarn/exec',
+	]);
+
+	for (const token of tokens) {
+		if (!token || token.startsWith('-')) continue;
+		const normalized = token.replace(/^node_modules\/\.bin\//, '');
+		if (!normalized || normalized.startsWith('.') || normalized.startsWith('/')) continue;
+		if (ignoredCommands.has(normalized)) continue;
+		const candidate = getPackageNameFromSource(normalized);
+		if (candidate) packages.add(candidate);
+	}
+
+	return packages;
+}
+
+function collectCommandPackagesFromScript(script, declaredPackages) {
+	const packages = new Set();
+	if (typeof script !== 'string' || !script.trim()) return packages;
+
+	const cleaned = script.replace(/#.*/g, '').trim();
+	const tokens = cleaned.split(/[\s|&;]+/);
+	const ignoredCommands = new Set([
+		'npm', 'npx', 'pnpm', 'yarn', 'node', 'bash', 'sh', 'git', 'cd', 'mkdir',
+		'rimraf', 'cross-env', 'run', 'exec', 'npm/run', 'pnpm/exec', 'yarn/exec',
+	]);
+
+	for (const token of tokens) {
+		if (!token || token.startsWith('-')) continue;
+		const normalized = token.replace(/^node_modules\/\.bin\//, '');
+		if (!normalized || normalized.startsWith('.') || normalized.startsWith('/')) continue;
+		if (ignoredCommands.has(normalized)) continue;
+
+		const candidate = getPackageNameFromSource(normalized);
+		if (candidate && declaredPackages.has(candidate)) {
+			packages.add(candidate);
+			continue;
+		}
+
+		for (const declared of declaredPackages) {
+			if (declared === normalized || declared.endsWith(`/${normalized}`)) {
+				packages.add(declared);
+				break;
+			}
+		}
+	}
+
+	return packages;
+}
+
+function scanPackageJsonScriptPackages(projectRoot, manifest) {
+	const packages = new Set();
+	if (!manifest || !manifest.scripts) return packages;
+
+	const declaredPackages = new Set([
+		...Object.keys(manifest.dependencies || {}),
+		...Object.keys(manifest.devDependencies || {}),
+		...Object.keys(manifest.optionalDependencies || {}),
+		...Object.keys(manifest.peerDependencies || {}),
+	]);
+
+	for (const script of Object.values(manifest.scripts || {})) {
+		collectCommandPackagesFromScript(script, declaredPackages).forEach(pkg => packages.add(pkg));
+	}
+
+	return packages;
+}
+
+const reportedUnusedDependencyRoots = new Set();
+
+function scanProjectImports(projectRoot) {
+	const importedPackages = new Set();
+	const extensions = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs', '.mts', '.cts']);
+
+	function walk(directory) {
+		let entries;
+		try {
+			entries = fs.readdirSync(directory, { withFileTypes: true });
+		} catch {
+			return;
+		}
+
+		for (const entry of entries) {
+			if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === '.next' || entry.name === 'dist' || entry.name.startsWith('.')) {
+				continue;
+			}
+
+			const fullPath = path.join(directory, entry.name);
+			if (entry.isDirectory()) {
+				walk(fullPath);
+				continue;
+			}
+
+			if (!extensions.has(path.extname(entry.name))) continue;
+			let source;
+			try {
+				source = fs.readFileSync(fullPath, 'utf8');
+			} catch {
+				continue;
+			}
+			collectImportsFromSource(source).forEach(pkg => importedPackages.add(pkg));
+		}
+	}
+
+	walk(projectRoot);
+	return importedPackages;
+}
+
+function scanProjectRuntimeImports(projectRoot) {
+	const importedPackages = new Set();
+	const extensions = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs', '.mts', '.cts']);
+
+	function walk(directory) {
+		let entries;
+		try {
+			entries = fs.readdirSync(directory, { withFileTypes: true });
+		} catch {
+			return;
+		}
+
+		for (const entry of entries) {
+			if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === '.next' || entry.name === 'dist' || entry.name.startsWith('.')) {
+				continue;
+			}
+
+			const fullPath = path.join(directory, entry.name);
+			if (entry.isDirectory()) {
+				walk(fullPath);
+				continue;
+			}
+
+			if (!extensions.has(path.extname(entry.name))) continue;
+			const normalizedPath = fullPath.replace(/\\/g, '/');
+			if (
+				normalizedPath.includes('/tests/') ||
+				normalizedPath.includes('/__tests__/') ||
+				normalizedPath.includes('/stories/') ||
+				/\.(?:test|spec)\.(?:t|j)sx?$/i.test(normalizedPath)
+			) continue;
+			if (isDevFile(normalizedPath)) continue;
+			let source;
+			try {
+				source = fs.readFileSync(fullPath, 'utf8');
+			} catch {
+				continue;
+			}
+			collectImportsFromSource(source).forEach(pkg => importedPackages.add(pkg));
+		}
+	}
+
+	walk(projectRoot);
+	return importedPackages;
+}
+
+function isConfigFile(filename) {
+	if (!filename) return false;
+	const normalized = filename.replace(/\\/g, '/');
+	return [
+		/\.rc(?:\.(?:js|cjs|mjs|ts|tsx|json))?$/i,
+		/\.(?:config)\.(?:js|cjs|mjs|ts|tsx|json)$/i,
+	].some(re => re.test(normalized));
+}
+
+function isTestFile(filename) {
+	if (!filename) return false;
+	const normalized = filename.replace(/\\/g, '/');
+	return [
+		/(?:^|\/)(?:tests?|__tests?)(?:\/|$)/i,
+		/\.(?:test|spec)\.(?:t|j)sx?$/i,
+		/\.stories?\.(?:t|j)sx?$/i,
+	].some(re => re.test(normalized));
+}
+
+function isDevFile(filename) {
+	if (!filename) return false;
+	if (isConfigFile(filename)) return true;
+	if (isTestFile(filename)) return true;
+	const normalized = filename.replace(/\\/g, '/');
+	const patterns = [
+		/\/(?:scripts|build|tools|config)\//,
+		/\b(?:jest|vite|webpack|rollup|tailwind|postcss|tsconfig|swc|vitest|eslint)\.(?:js|cjs|mjs|ts|tsx|json)$/i,
+	];
+	return patterns.some(re => re.test(normalized));
+}
+
+const packageJsonNoUnusedDependencyRule = {
+	meta: {
+		type: 'suggestion',
+		docs: {
+			description: 'Detect dependencies declared in package.json that are not imported from runtime source.',
+			category: 'Dependencies',
+			recommended: true,
+		},
+		messages: {
+			unusedDependency: 'Package "{{name}}" is declared in dependencies but not imported by any runtime source file. Remove it if it is no longer needed.',
+			unusedOptionalDependency: 'Package "{{name}}" is declared in optionalDependencies but not imported by any runtime source file. Move it to devDependencies if it is only used by tests/build tooling, or remove it if it is no longer needed.',
+		},
+		schema: [],
+	},
+	create(context) {
+		const filename = getContextFilename(context);
+		const packageJsonPath = getNearestPackageJsonPath(filename);
+		if (!packageJsonPath) return {};
+		const projectRoot = path.dirname(packageJsonPath);
+		const manifest = readPackageJson(packageJsonPath);
+		if (!manifest) return {};
+
+		const dependencies = manifest.dependencies || {};
+		const optionalDependencies = manifest.optionalDependencies || {};
+		const declaredPackages = new Set([ ...Object.keys(dependencies), ...Object.keys(optionalDependencies) ]);
+		if (reportedUnusedDependencyRoots.has(projectRoot)) return {};
+		reportedUnusedDependencyRoots.add(projectRoot);
+
+		return {
+			'Program:exit'() {
+				const usedPackages = scanProjectImports(projectRoot);
+				scanPackageJsonScriptPackages(projectRoot, manifest).forEach(pkg => usedPackages.add(pkg));
+				const sourceCode = getContextSourceCode(context);
+				for (const name of declaredPackages) {
+					if (name.startsWith('@types/')) continue;
+					if (!usedPackages.has(name)) {
+						const messageId = optionalDependencies[name]
+							? 'unusedOptionalDependency'
+							: 'unusedDependency';
+						context.report({ node: sourceCode?.ast || null, messageId, data: { name } });
+					}
+				}
+			},
+		};
+	},
+};
+
+const packageJsonMissingDependencyRule = {
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Detect imports that are not declared in package.json.',
+			category: 'Dependencies',
+			recommended: true,
+		},
+		messages: {
+			missingDependency: 'Package "{{name}}" is imported but not declared in package.json.',
+		},
+		schema: [],
+	},
+	create(context) {
+		const filename = getContextFilename(context);
+		const packageJsonPath = getNearestPackageJsonPath(filename);
+		if (!packageJsonPath) return {};
+		const manifest = readPackageJson(packageJsonPath);
+		if (!manifest) return {};
+
+		const declaredPackages = new Set([
+			...Object.keys(manifest.dependencies || {}),
+			...Object.keys(manifest.devDependencies || {}),
+			...Object.keys(manifest.optionalDependencies || {}),
+			...Object.keys(manifest.peerDependencies || {}),
+		]);
+
+		function checkSource(node, source) {
+			const name = getPackageNameFromSource(source);
+			if (!name) return;
+			if (declaredPackages.has(name)) return;
+			if (isBuiltinModule(name)) return;
+			context.report({ node, messageId: 'missingDependency', data: { name } });
+		}
+
+		return {
+			ImportDeclaration(node) {
+				checkSource(node.source, node.source.value);
+			},
+			ExportAllDeclaration(node) {
+				if (node.source) checkSource(node.source, node.source.value);
+			},
+			ExportNamedDeclaration(node) {
+				if (node.source) checkSource(node.source, node.source.value);
+			},
+			CallExpression(node) {
+				if (node.callee.type === 'Identifier' && node.callee.name === 'require' && node.arguments.length === 1) {
+					const arg = node.arguments[0];
+					if (arg.type === 'Literal' && typeof arg.value === 'string') {
+						checkSource(node, arg.value);
+					}
+				}
+			},
+			ImportExpression(node) {
+				if (node.source.type === 'Literal' && typeof node.source.value === 'string') {
+					checkSource(node, node.source.value);
+				}
+			},
+		};
+	},
+};
+
+const packageJsonWrongDependencyTypeRule = {
+	meta: {
+		type: 'problem',
+		docs: {
+			description: 'Detect mismatches between import file locations and package.json dependency type.',
+			category: 'Dependencies',
+			recommended: true,
+		},
+		messages: {
+			prodUsedInDev: 'Package "{{name}}" is declared in {{declaredType}} but imported from dev-only source "{{filename}}". Move it to devDependencies if it is only used for development or testing.',
+			devUsedInProd: 'Package "{{name}}" is declared in devDependencies but imported by runtime source "{{filename}}". Move it to dependencies or optionalDependencies.',
+			optionalUsedInDev: 'Package "{{name}}" is declared in optionalDependencies but imported from dev-only source "{{filename}}". Move it to devDependencies if it is a build/test-only dependency.',
+		},
+		schema: [],
+	},
+	create(context) {
+		const filename = getContextFilename(context);
+		const packageJsonPath = getNearestPackageJsonPath(filename);
+		if (!packageJsonPath) return {};
+		const manifest = readPackageJson(packageJsonPath);
+		if (!manifest) return {};
+
+		const categories = {
+			dependencies: new Set(Object.keys(manifest.dependencies || {})),
+			devDependencies: new Set(Object.keys(manifest.devDependencies || {})),
+			optionalDependencies: new Set(Object.keys(manifest.optionalDependencies || {})),
+			peerDependencies: new Set(Object.keys(manifest.peerDependencies || {})),
+		};
+
+		const fileIsDev = isDevFile(filename);
+	const runtimePackages = scanProjectRuntimeImports(path.dirname(packageJsonPath));
+
+	function getDeclaredType(name) {
+		if (categories.devDependencies.has(name)) return 'devDependencies';
+		if (categories.optionalDependencies.has(name)) return 'optionalDependencies';
+		if (categories.dependencies.has(name)) return 'dependencies';
+		if (categories.peerDependencies.has(name)) return 'peerDependencies';
+		return null;
+	}
+
+	function checkSource(node, source) {
+		const name = getPackageNameFromSource(source);
+		if (!name) return;
+		const declaredType = getDeclaredType(name);
+		if (!declaredType) return;
+		if (fileIsDev) {
+			if ((declaredType === 'dependencies' || declaredType === 'optionalDependencies') && runtimePackages.has(name)) {
+				return;
+			}
+			if (declaredType === 'dependencies') {
+				if (isConfigFile(filename)) return;
+				context.report({ node, messageId: 'prodUsedInDev', data: { name, declaredType, filename } });
+			}
+			if (declaredType === 'optionalDependencies') {
+				context.report({ node, messageId: 'optionalUsedInDev', data: { name, declaredType, filename } });
+			}
+			return;
+		}
+		// runtime source
+		if (declaredType === 'devDependencies') {
+			context.report({ node, messageId: 'devUsedInProd', data: { name, declaredType, filename } });
+		}
+	};
+
+		return {
+			ImportDeclaration(node) {
+				checkSource(node.source, node.source.value);
+			},
+			ExportAllDeclaration(node) {
+				if (node.source) checkSource(node.source, node.source.value);
+			},
+			ExportNamedDeclaration(node) {
+				if (node.source) checkSource(node.source, node.source.value);
+			},
+			CallExpression(node) {
+				if (node.callee.type === 'Identifier' && node.callee.name === 'require' && node.arguments.length === 1) {
+					const arg = node.arguments[0];
+					if (arg.type === 'Literal' && typeof arg.value === 'string') {
+						checkSource(node, arg.value);
+					}
+				}
+			},
+			ImportExpression(node) {
+				if (node.source.type === 'Literal' && typeof node.source.value === 'string') {
+					checkSource(node, node.source.value);
+				}
+			},
+		};
+	},
+};
 
 const propTypesInferPropsRule = {
 	meta: {
@@ -1363,6 +1838,9 @@ export default {
 		'no-duplicate-export-names': noDuplicateExportNamesRule,
 		'class-name-kebab-case': classNameKebabCaseRule,
 		'no-hardcoded-config-keys': noHardcodedConfigKeysRule,
+		'package-json-missing-dependency': packageJsonMissingDependencyRule,
+		'package-json-wrong-dependency-type': packageJsonWrongDependencyTypeRule,
+		'package-json-no-unused-dependency': packageJsonNoUnusedDependencyRule,
 		'no-direct-fetch': noDirectFetchRule,
 	},
 	configs: {
@@ -1384,7 +1862,10 @@ export default {
 				'pixelated/no-duplicate-export-names': 'error',
 				'pixelated/class-name-kebab-case': 'error',
 				'pixelated/no-hardcoded-config-keys': 'error',
-				'pixelated/no-direct-fetch': 'error',
+				'pixelated/package-json-missing-dependency': 'error',
+			'pixelated/package-json-wrong-dependency-type': 'warn',
+			'pixelated/package-json-no-unused-dependency': 'warn',
+			'pixelated/no-direct-fetch': 'error',
 			},
 		},
 	},

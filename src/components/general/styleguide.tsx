@@ -2,8 +2,8 @@
 
 import React from "react";
 import PropTypes, { InferProps } from "prop-types";
-import { PageTitleHeader, PageSection } from "@pixelated-tech/components";
-import { flattenRoutes } from "@pixelated-tech/components";
+import { PageTitleHeader, PageSection } from "./semantic";
+import { flattenRoutes } from "./sitemap";
 import routesData from '../../data/routes.json';
 const routes = routesData.routes;
 

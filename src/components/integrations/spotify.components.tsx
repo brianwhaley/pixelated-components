@@ -1,9 +1,9 @@
 
 import React from 'react';
 import PropTypes, { InferProps } from "prop-types";
-import { PageGridItem } from '@pixelated-tech/components';
+import { PageGridItem } from '../general/semantic';
 import { type SpotifyPodcastEpisodeType } from './spotify.functions';
-import { BlogPostSummary } from '@pixelated-tech/components';
+import { BlogPostSummary } from './wordpress.components';
 
 
 
