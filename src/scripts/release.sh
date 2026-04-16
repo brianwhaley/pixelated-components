@@ -1,28 +1,17 @@
 #!/bin/bash
 
 # Universal Release Script for Pixelated Projects
-# Three modes: --prep (validate all), --simple (monorepo commit), default (full release)
 # Usage: 
 #   bash release.sh              (full release process)
-#   bash release.sh --prep       (validate: update → lint → build per-workspace)
-#   bash release.sh --simple     (monorepo: version → commit → push with tags)
 
 set -e
 
 # ============================================================
 # GLOBAL STATE (shared across all steps & workflows)
 # ============================================================
-PREP_MODE=false
-SIMPLE_MODE=false
 STEP_COUNT=1
-declare -a LINT_FAILURES
-declare -a TEST_FAILURES
-declare -a BUILD_FAILURES
-declare -a WORKSPACES_AFTER_LINT
-declare -a WORKSPACES_AFTER_TEST
 declare -a SUCCESSFUL_WORKSPACES
 declare -a PUSH_ERRORS
-UPDATE_FAILED=false
 REMOTE_NAME=""
 VERSION_TYPE=""
 COMMIT_MESSAGE=""
@@ -41,12 +30,6 @@ RELEASE_MODE="both"
 MONOREPO_MODE=false
 
 # Detect flags
-if [[ "$*" == *"--prep"* ]]; then
-    PREP_MODE=true
-fi
-if [[ "$*" == *"--simple"* ]]; then
-    SIMPLE_MODE=true
-fi
 if [[ "$*" == *"--monorepo"* ]]; then
     MONOREPO_MODE=true
 fi
@@ -317,19 +300,6 @@ step_select_remote() {
     fi
 }
 
-step_update_globally() {
-    echo ""
-    echo "📦 Step $((STEP_COUNT++)): Updating dependencies (once globally)..."
-    echo "================================================="
-    if ! npm run update > /tmp/update_output.log 2>&1; then
-        echo "❌ Update failed"
-        UPDATE_FAILED=true
-        cat /tmp/update_output.log
-    else
-        echo "✅ Update completed"
-    fi
-}
-
 generate_sitemap_images_for_workspace() {
     local workspace_name="$1"
     local workspace_dir="$2"
@@ -342,151 +312,6 @@ generate_sitemap_images_for_workspace() {
         return 1
     fi
     return 0
-}
-
-workspace_has_vitest_or_tests() {
-    local workspace_dir="$1"
-    node -e "const pkg=require(process.argv[1]); const scripts=pkg.scripts||{}; const deps=Object.assign({}, pkg.dependencies||{}, pkg.devDependencies||{}, pkg.optionalDependencies||{}, pkg.peerDependencies||{}); const hasVitest=typeof deps.vitest !== 'undefined'; const hasTestScript=typeof scripts.test !== 'undefined' || typeof scripts['test:coverage'] !== 'undefined' || typeof scripts['test:run'] !== 'undefined'; console.log(hasVitest || hasTestScript ? 'yes':'no');" "$workspace_dir/package.json"
-}
-
-workspace_has_test_validator_script() {
-    local workspace_dir="$1"
-    node -e "const pkg=require(process.argv[1]); const scripts=pkg.scripts||{}; console.log(!!scripts['test:validator'] ? 'yes' : 'no');" "$workspace_dir/package.json"
-}
-
-step_run_tests_if_available() {
-    local workspace_name="$1"
-    local workspace_dir="$2"
-
-    if [ "$(workspace_has_vitest_or_tests "$workspace_dir")" != "yes" ]; then
-        return 0
-    fi
-
-    echo "  🧪 Running tests for $workspace_name..."
-    echo "================================================="
-
-    local has_validator_script
-    has_validator_script=$(workspace_has_test_validator_script "$workspace_dir")
-
-    if [ -f "$workspace_dir/src/scripts/test-validator.js" ]; then
-        if ! node src/scripts/test-validator.js > /tmp/test_validator_output.log 2>&1; then
-            echo "❌ Test validator failed for $workspace_name at $workspace_dir"
-            cat /tmp/test_validator_output.log
-            return 1
-        fi
-    elif [ "$has_validator_script" = "yes" ]; then
-        if ! npm run test:validator > /tmp/test_validator_output.log 2>&1; then
-            echo "❌ Test validator failed for $workspace_name at $workspace_dir"
-            cat /tmp/test_validator_output.log
-            return 1
-        fi
-    fi
-
-    if ! npm exec -- vitest run --coverage --silent > /tmp/test_coverage_output.log 2>&1; then
-        echo "❌ Vitest coverage failed for $workspace_name at $workspace_dir"
-        cat /tmp/test_coverage_output.log
-        return 1
-    fi
-
-    return 0
-}
-
-step_lint_per_workspace() {
-    echo ""
-    echo "🔄 Running lint for each workspace..."
-    echo "================================================="
-    echo ""
-
-    shopt -s nullglob
-    for workspace_pattern in "${WORKSPACE_DIRS[@]}"; do
-        for workspace_dir in $workspace_pattern; do
-            if [ -d "$workspace_dir" ] && [ -f "$workspace_dir/package.json" ]; then
-                local workspace_name
-                workspace_name=$(node -p "require('$workspace_dir/package.json').name" 2>/dev/null || basename "$workspace_dir")
-                local workspace_path
-                workspace_path=$(basename "$workspace_dir")
-
-                echo ""
-                echo "================================================="
-                echo "📍 Linting: $workspace_name"
-                echo "================================================="
-                pushd "$workspace_dir" >/dev/null
-
-                if ! npm run lint > /tmp/lint_output.log 2>&1; then
-                    echo "❌ Lint failed for $workspace_name at $workspace_path"
-                    LINT_FAILURES+=("$workspace_name")
-                    cat /tmp/lint_output.log
-                else
-                    WORKSPACES_AFTER_LINT+=("$workspace_dir")
-                fi
-
-                popd >/dev/null
-            fi
-        done
-    done
-}
-
-step_run_tests_per_workspace() {
-    echo ""
-    echo "🔄 Running tests for each workspace..."
-    echo "================================================="
-    echo ""
-
-    for workspace_dir in "${WORKSPACES_AFTER_LINT[@]}"; do
-        if [ -d "$workspace_dir" ] && [ -f "$workspace_dir/package.json" ]; then
-            local workspace_name
-            workspace_name=$(node -p "require('$workspace_dir/package.json').name" 2>/dev/null || basename "$workspace_dir")
-            local workspace_path
-            workspace_path=$(basename "$workspace_dir")
-
-            echo ""
-            echo "================================================="
-            echo "📍 Testing: $workspace_name"
-            echo "================================================="
-            pushd "$workspace_dir" >/dev/null
-
-            if ! step_run_tests_if_available "$workspace_name" "$workspace_dir"; then
-                TEST_FAILURES+=("$workspace_name")
-            else
-                WORKSPACES_AFTER_TEST+=("$workspace_dir")
-            fi
-
-            popd >/dev/null
-        fi
-    done
-}
-
-step_build_per_workspace() {
-    echo ""
-    echo "🔄 Running build for each workspace..."
-    echo "================================================="
-    echo ""
-
-    for workspace_dir in "${WORKSPACES_AFTER_TEST[@]}"; do
-        if [ -d "$workspace_dir" ] && [ -f "$workspace_dir/package.json" ]; then
-            local workspace_name
-            workspace_name=$(node -p "require('$workspace_dir/package.json').name" 2>/dev/null || basename "$workspace_dir")
-            local workspace_path
-            workspace_path=$(basename "$workspace_dir")
-
-            echo ""
-            echo "================================================="
-            echo "📍 Building: $workspace_name"
-            echo "================================================="
-            pushd "$workspace_dir" >/dev/null
-
-            if ! npm run build > /tmp/build_output.log 2>&1; then
-                echo "❌ Build failed for $workspace_name at $workspace_path"
-                BUILD_FAILURES+=("$workspace_name")
-                cat /tmp/build_output.log
-            else
-                echo "  ✅ $workspace_name build complete"
-                SUCCESSFUL_WORKSPACES+=("$workspace_name")
-            fi
-
-            popd >/dev/null
-        fi
-    done
 }
 
 step_generate_sitemap_images() {
@@ -754,81 +579,8 @@ step_git_subtree_deploy() {
 # SUMMARY FUNCTIONS (print final status)
 # ============================================================
 
-print_summary_prep() {
-    echo ""
-    echo "================================================="
-    echo "📊 PREP MODE SUMMARY"
-    echo "================================================="
-    echo ""
-    
-    if [ "$UPDATE_FAILED" = true ]; then
-        echo "❌ Update Phase: FAILED"
-        echo ""
-    else
-        echo "✅ Update Phase: Completed"
-        echo ""
-    fi
-    
-    echo "✅ Successful Workspaces: ${#SUCCESSFUL_WORKSPACES[@]}"
-    for ws in "${SUCCESSFUL_WORKSPACES[@]}"; do
-        echo "   ✓ $ws"
-    done
-    echo ""
-    
-    if [ ${#LINT_FAILURES[@]} -gt 0 ]; then
-        echo "❌ Lint Failures: ${#LINT_FAILURES[@]}"
-        for ws in "${LINT_FAILURES[@]}"; do
-            echo "   ✗ $ws"
-        done
-        echo ""
-    fi
-    
-    if [ ${#TEST_FAILURES[@]} -gt 0 ]; then
-        echo "❌ Test Failures: ${#TEST_FAILURES[@]}"
-        for ws in "${TEST_FAILURES[@]}"; do
-            echo "   ✗ $ws"
-        done
-        echo ""
-    fi
-
-    if [ ${#BUILD_FAILURES[@]} -gt 0 ]; then
-        echo "❌ Build Failures: ${#BUILD_FAILURES[@]}"
-        for ws in "${BUILD_FAILURES[@]}"; do
-            echo "   ✗ $ws"
-        done
-        echo ""
-    fi
-
-    if [ ${#IMAGE_FAILURES[@]} -gt 0 ]; then
-        echo "❌ Image Generation Failures: ${#IMAGE_FAILURES[@]}"
-        for ws in "${IMAGE_FAILURES[@]}"; do
-            echo "   ✗ $ws"
-        done
-        echo ""
-    fi
-    
-    echo "================================================="
-    
-    if [ "$UPDATE_FAILED" = true ] || [ ${#LINT_FAILURES[@]} -gt 0 ] || [ ${#BUILD_FAILURES[@]} -gt 0 ] || [ ${#IMAGE_FAILURES[@]} -gt 0 ]; then
-        echo "❌ PREP MODE FAILED: See errors above"
-        exit 1
-    else
-        echo "✅ PREP MODE COMPLETE: All workspaces ready"
-        exit 0
-    fi
-}
-
-print_summary_simple() {
-    echo ""
-    echo "================================================="
-    echo "✅ SIMPLE MODE COMPLETE"
-    echo "   Version: $NEW_VERSION"
-    echo "   Remote: $REMOTE_NAME"
-    echo "   All changes pushed to dev and main with tags"
-    echo "================================================="
-}
-
 print_summary_full() {
+
     echo ""
     echo "================================================="
     echo "✅ FULL RELEASE COMPLETE"
@@ -843,53 +595,8 @@ print_summary_full() {
 # WORKFLOW DEFINITIONS (sequences of steps)
 # ============================================================
 
-run_prep_workflow() {
-    echo ""
-    echo "================================================="
-    echo "🚀 PREP MODE: Update → Lint → Build per-workspace"
-    echo "================================================="
-    
-    if [ "$CONTEXT_TYPE" = "root" ]; then
-        cd "$MONOREPO_ROOT"
-    else
-        cd "$WORKSPACE_ROOT"
-    fi
-    step_update_globally
-    step_lint_per_workspace
-    step_run_tests_per_workspace
-    step_build_per_workspace
-    step_generate_sitemap_images
-    print_summary_prep
-}
-
-run_simple_workflow() {
-    echo ""
-    echo "================================================="
-    echo "📦 SIMPLE MODE: Monorepo Version → Commit → Push"
-    echo "================================================="
-    
-    if [ "$CONTEXT_TYPE" = "root" ]; then
-        cd "$MONOREPO_ROOT"
-    else
-        cd "$WORKSPACE_ROOT"
-    fi
-    step_check_dev_branch
-    step_select_remote
-    step_prompt_version
-    if [ "$CONTEXT_TYPE" = "root" ]; then
-        bump_all_workspaces
-    else
-        step_bump_version
-    fi
-    step_generate_sitemap_images
-    step_commit_changes
-    step_push_dev
-    step_push_tags
-    step_push_to_main
-    print_summary_simple
-}
-
 run_full_workflow() {
+
     echo ""
     echo "================================================="
     echo "🚀 FULL RELEASE: Complete release cycle"
@@ -914,7 +621,11 @@ run_full_workflow() {
     step_verify_github_token
     step_verify_dist_config
     step_prompt_version
-    step_bump_version
+    if [ "$CONTEXT_TYPE" = "root" ]; then
+        bump_all_workspaces
+    else
+        step_bump_version
+    fi
     step_commit_changes
     step_push_dev
     step_push_tags
@@ -1039,14 +750,8 @@ detect_context
 #fi
 
 #if [ "$MONOREPO_MODE" = true ]; then
-#    echo "⚠️  --monorepo flow is currently disabled. Use --simple from the monorepo root instead."
+#    echo "⚠️  --monorepo flow is currently disabled."
 #    exit 1
 #fi
 
-if [ "$PREP_MODE" = true ]; then
-    run_prep_workflow
-elif [ "$SIMPLE_MODE" = true ]; then
-    run_simple_workflow
-else
-    run_full_workflow
-fi
+run_full_workflow

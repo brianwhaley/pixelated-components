@@ -127,6 +127,7 @@
 		"@storybook/addon-docs": "^10.3.5",
 		"@storybook/addon-webpack5-compiler-babel": "^4.0.1",
 		"@storybook/preset-scss": "^1.0.3",
+		"@storybook/react-dom-shim": "^10.1.4",
 		"@storybook/react-webpack5": "^10.3.5",
 		"@testing-library/dom": "^10.4.1",
 		"@testing-library/jest-dom": "^6.9.1",
