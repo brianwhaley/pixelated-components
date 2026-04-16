@@ -46,7 +46,11 @@ run_update_in_dir() {
     local SKIP_PACKAGES=""
     local OPTIONAL_PACKAGES=""
     if command -v jq &> /dev/null; then
-        SKIP_PACKAGES=$(jq -r '.devDependencies // {} | to_entries[] | select(.value | test("^[0-9]")) | .key' package.json 2>/dev/null | paste -sd '|' - || echo "")
+        # Skip pinned numeric versions and workspace wildcard dependencies.
+        # Workspace dependencies using "*" must not be updated here, because npm workspaces
+        # resolves them to the local package. If this script rewrites "*" to a concrete
+        # version, it breaks local workspace linking and can cause stale package installs.
+        SKIP_PACKAGES=$(jq -r '(.dependencies // {}) + (.devDependencies // {}) + (.optionalDependencies // {}) | to_entries[] | select(.value == "*" or (.value | test("^[0-9]"))) | .key' package.json 2>/dev/null | paste -sd '|' - || echo "")
         OPTIONAL_PACKAGES=$(jq -r '.optionalDependencies // {} | keys[]' package.json 2>/dev/null | paste -sd '|' - || echo "")
     fi
 
