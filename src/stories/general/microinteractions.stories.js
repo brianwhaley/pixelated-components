@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Callout } from "@/components/general/callout";
 const cloudinaryAPI = "https://res.cloudinary.com/pixelated-tech/image/fetch/w_600,h_600,c_fill,q_auto,f_auto/";
-import { MicroInteractions } from "@/components/general/microinteractions";
+import { MicroInteractions } from "@/components/foundation/microinteractions";
 import "@/css/pixelated.grid.scss";
 import "@/css/pixelated.global.css";
 
