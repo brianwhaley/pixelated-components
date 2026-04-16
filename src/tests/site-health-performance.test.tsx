@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { SiteHealthPerformance } from '../components/admin/site-health/site-health-performance';
+import { createSiteHealthResponse } from '../test/test-data';
 
 // Mock the SiteHealthTemplate component
 vi.mock('../components/admin/site-health/site-health-template', () => ({
@@ -10,50 +11,17 @@ vi.mock('../components/admin/site-health/site-health-template', () => ({
 		const [loading, setLoading] = React.useState(true);
 
 		React.useEffect(() => {
-			// Simulate API response with performance data
-			const mockSiteData = {
-				site: 'test-site',
-				url: 'https://test-site.com',
-				scores: {
-					performance: 0.85,
-					accessibility: 0.90,
-					best_practices: 0.88,
-					seo: 0.92
-				},
-				status: 'success',
-				categories: {
-					performance: {
-						audits: [
-							{
-								id: 'first-contentful-paint',
-								title: 'First Contentful Paint',
-								score: 0.95,
-								scoreDisplayMode: 'numeric',
-								displayValue: '0.9 s'
-							},
-							{
-								id: 'largest-contentful-paint',
-								title: 'Largest Contentful Paint',
-								score: 0.88,
-								scoreDisplayMode: 'numeric',
-								displayValue: '2.1 s'
-							}
-						]
-					},
-					pwa: {
-						audits: []
-					}
-				}
-			};
+			(async () => {
+				const mockSiteResponse = await createSiteHealthResponse(siteName || 'test-site', 'https://www.example.com');
 
-			// Apply response transformer if provided
-			const transformedData = endpoint?.responseTransformer
-				? endpoint.responseTransformer(mockSiteData)
-				: mockSiteData;
+				const transformedData = endpoint?.responseTransformer
+					? endpoint.responseTransformer(mockSiteResponse)
+					: mockSiteResponse;
 
-			setData(transformedData);
-			setLoading(false);
-		}, [endpoint]);
+				setData(transformedData);
+				setLoading(false);
+			})();
+		}, [endpoint, siteName]);
 
 		if (loading) {
 			return <div>Loading...</div>;

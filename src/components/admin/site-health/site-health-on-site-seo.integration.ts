@@ -10,7 +10,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer';
-import { smartFetch } from '../../general/smartfetch';
+import { smartFetch } from '../../foundation/smartfetch';
 import {
 	EXCLUDED_URL_PATTERNS,
 	EXCLUDED_FILE_EXTENSIONS,

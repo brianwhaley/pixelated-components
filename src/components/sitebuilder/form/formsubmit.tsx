@@ -4,11 +4,11 @@ import React, { useCallback, useState } from 'react';
 import type { FormEvent } from 'react';
 import { createContext, useContext } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { ToggleLoading } from '../../general/loading';
+import { ToggleLoading } from '../../foundation/loading';
 import { handleModalOpen } from '../../general/modal';
-import { Loading } from '../../general/loading';
+import { Loading } from '../../foundation/loading';
 import { Modal } from '../../general/modal';
-import { smartFetch } from '../../general/smartfetch';
+import { smartFetch } from '../../foundation/smartfetch';
 
 /* 
 event.target.id = form id

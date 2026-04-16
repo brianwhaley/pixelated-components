@@ -5,11 +5,11 @@ import {
 	getInstagramTiles,
 	type InstagramMedia
 } from '../components/integrations/instagram.functions';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 
-vi.mock('../components/general/smartfetch');
+vi.mock('../components/foundation/smartfetch');
 
-const { smartFetch } = await import('../components/general/smartfetch');
+const { smartFetch } = await import('../components/foundation/smartfetch');
 const mockSmartFetch = vi.mocked(smartFetch);
 
 describe('Instagram Functions', () => {

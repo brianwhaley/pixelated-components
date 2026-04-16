@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import PropTypes from 'prop-types';
 import { getShoppingCartItem, getEbayAppToken } from '../components/shoppingcart/ebay.functions';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 import type { CartItemType } from '../components/shoppingcart/shoppingcart.functions';
 
 // Mock dependencies

@@ -3,7 +3,7 @@ import { buzzwords } from "@/components/general/buzzwordbingo.words";
 import '@/css/pixelated.global.css';
 
 export default {
-	title: 'General',
+	title: 'General/Buzzword Bingo',
 	component: BuzzwordBingo
 };
 

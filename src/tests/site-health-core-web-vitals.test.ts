@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 
 describe('PSI (PageSpeed Insights) - buildUrl URL Construction', () => {
 	describe('fetchPSIData URL building', () => {

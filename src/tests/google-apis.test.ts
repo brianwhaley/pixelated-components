@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 import { getGoogleReviewsByPlaceId } from '../components/integrations/google.reviews.functions';
 import { GooglePlacesService } from '../components/integrations/googleplaces';
 
 // Mock smartFetch for all tests
-vi.mock('../components/general/smartfetch', () => ({
+vi.mock('../components/foundation/smartfetch', () => ({
 	smartFetch: vi.fn()
 }));
 

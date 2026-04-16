@@ -3,11 +3,11 @@ import { getSpotifyEpisodes, type SpotifyPodcastEpisodeType } from '../component
 import { PodcastEpisodeList } from '../components/integrations/spotify.components';
 
 // Mock smartFetch module
-vi.mock('../components/general/smartfetch', () => ({
+vi.mock('../components/foundation/smartfetch', () => ({
 	smartFetch: vi.fn(),
 }));
 
-import { smartFetch } from '../components/general/smartfetch';
+import { smartFetch } from '../components/foundation/smartfetch';
 
 describe('Spotify Podcast Integration', () => {
 	beforeEach(() => {

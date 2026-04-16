@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { CountUp } from '../components/general/countup';
 
 // Mock useIntersectionObserver
-vi.mock('../components/general/intersection-observer', () => ({
+vi.mock('../components/foundation/intersection-observer', () => ({
 	useIntersectionObserver: (callback: Function, options: any) => {
 		const ref = { current: { isIntersecting: true } };
 		// Simulate intersection after component mounts
@@ -270,5 +270,24 @@ describe('CountUp Component', () => {
 		);
 		const contentP = container.querySelector('.countup p');
 		expect(contentP?.textContent).toBe('');
+	});
+
+	it('should animate to the end value once visible', async () => {
+		const { container } = render(
+			<CountUp
+				id="anim"
+				start={0}
+				end={10}
+				duration={64}
+			/>
+		);
+
+		await waitFor(() => {
+			expect(container.querySelector('#anim')?.textContent).not.toBe('0');
+		}, { timeout: 1500 });
+
+		await waitFor(() => {
+			expect(container.querySelector('#anim')?.textContent).toBe('10');
+		}, { timeout: 2000 });
 	});
 });

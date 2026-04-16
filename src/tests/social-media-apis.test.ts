@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 
 describe('Social Media APIs - buildUrl Integration', () => {
 	describe('Gravatar API URLs', () => {

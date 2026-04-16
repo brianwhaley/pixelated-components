@@ -4,7 +4,7 @@ import {
 	mapPodcastSeriesToSchema,
 	type PodcastEpisodeSchema,
 	type PodcastSeriesSchema,
-} from '@/components/general/schema.functions';
+} from '@/components/foundation/schema.functions';
 import type { SpotifyPodcastEpisodeType, SpotifyPodcastSeriesType } from '@/components/integrations/spotify.functions';
 
 describe('Podcast Schema Functions', () => {

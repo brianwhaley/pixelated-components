@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from "prop-types";
-import { mergeDeep } from '../general/utilities';
+import { mergeDeep } from '../foundation/utilities';
 import { SmartImage } from '../general/smartimage';
-import { smartFetch } from '../general/smartfetch';
-import { buildUrl } from '../general/urlbuilder';
+import { smartFetch } from '../foundation/smartfetch';
+import { buildUrl } from '../foundation/urlbuilder';
 import { usePixelatedConfig } from '../config/config.client';
 import './socialcard.css';
 

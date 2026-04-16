@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import userEvent from '@testing-library/user-event';
 import { render, screen } from '../test/test-utils';
-import { GlobalErrorUI } from '../components/general/global-error';
+import { GlobalErrorUI } from '../components/foundation/global-error';
 
 describe('GlobalError', () => {
   it('renders message and calls reset when Try again clicked', async () => {

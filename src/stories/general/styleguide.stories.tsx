@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleGuideUI } from '@/components/general/styleguide';
+import { StyleGuideUI } from '@/components/foundation/styleguide';
 
 const meta = {
   title: 'General/Style Guide',

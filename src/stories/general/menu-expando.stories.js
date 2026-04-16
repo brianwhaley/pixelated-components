@@ -5,7 +5,7 @@ import myRoutes from '@/data/routes.json';
 const allRoutes = myRoutes.routes;
 
 export default {
-	title: 'General',
+	title: 'General/Menu Expando',
 	component: MenuExpando
 };
 

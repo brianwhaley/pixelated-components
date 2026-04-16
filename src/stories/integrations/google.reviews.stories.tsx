@@ -55,7 +55,7 @@ import { GoogleReviewsCard } from '@/components/integrations/google.reviews.comp
  */
 
 export default {
-	title: 'General',
+	title: 'Integrations/Google Reviews',
 	component: GoogleReviewsCard,
 	argTypes: {
 		placeId: { control: 'text' },

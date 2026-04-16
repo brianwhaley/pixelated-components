@@ -52,12 +52,15 @@ describe('Google Analytics Components', () => {
 			expect(initScript?.textContent).toContain('G-CUSTOM123');
 		});
 
-		it('should throw error when no ID provided and config missing', () => {
+		it('should render fallback when no ID provided and config missing', () => {
 			const originalGoogleAnalytics = pixelatedConfigStub.googleAnalytics;
 			pixelatedConfigStub.googleAnalytics = undefined;
-			expect(() => {
-				render(React.createElement(GoogleAnalytics, {}));
-			}).toThrow(/Google Analytics ID/);
+
+			const { container } = render(React.createElement(GoogleAnalytics, {}));
+
+			expect(container.textContent).toMatch(/Sorry, something went wrong loading/i);
+			expect(container.textContent).toMatch(/GoogleAnalytics/i);
+
 			pixelatedConfigStub.googleAnalytics = originalGoogleAnalytics;
 		});
 
@@ -80,6 +83,18 @@ describe('Google Analytics Components', () => {
 			
 			// Should still exist from first render (not duplicated)
 			expect(initScript1?.textContent).toBe(initScript2?.textContent);
+		});
+
+		it('should render fallback when GoogleAnalytics throws', () => {
+			const originalGoogleAnalytics = pixelatedConfigStub.googleAnalytics;
+			pixelatedConfigStub.googleAnalytics = undefined;
+
+			const { container } = render(React.createElement(GoogleAnalytics, {}));
+
+			expect(container.textContent).toMatch(/Sorry, something went wrong loading/i);
+			expect(container.textContent).toMatch(/GoogleAnalytics/i);
+
+			pixelatedConfigStub.googleAnalytics = originalGoogleAnalytics;
 		});
 
 		it('should initialize window.dataLayer', () => {

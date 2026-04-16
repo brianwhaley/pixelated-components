@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { usePixelatedConfig } from '../config/config.client';
-import { smartFetch } from '../general/smartfetch';
+import { smartFetch } from '../foundation/smartfetch';
 
 
 

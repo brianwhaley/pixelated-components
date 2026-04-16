@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import PropTypes, { InferProps } from "prop-types";
-import { smartFetch } from '../general/smartfetch';
+import { smartFetch } from '../foundation/smartfetch';
 import "../../css/pixelated.grid.scss";
 import "./nerdjoke.css";
 

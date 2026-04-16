@@ -3,11 +3,11 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { YelpReviews } from '../components/integrations/yelp';
 
 // Mock smartFetch
-vi.mock('../components/general/smartfetch', () => ({
+vi.mock('../components/foundation/smartfetch', () => ({
 	smartFetch: vi.fn()
 }));
 
-import { smartFetch } from '../components/general/smartfetch';
+import { smartFetch } from '../components/foundation/smartfetch';
 
 describe('YelpReviews Component', () => {
 	beforeEach(() => {

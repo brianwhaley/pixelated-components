@@ -1,6 +1,6 @@
 import React from 'react';
 import { within } from '@testing-library/dom';
-import { Skeleton } from '@/components/general/skeleton';
+import { Skeleton } from '@/components/foundation/skeleton';
 
 export default {
   title: 'General/Skeleton',

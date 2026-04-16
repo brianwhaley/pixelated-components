@@ -14,11 +14,11 @@ vi.mock('../components/cms/smartimage', () => ({
 }));
 
 // Mock smartFetch
-vi.mock('../components/general/smartfetch', () => ({
+vi.mock('../components/foundation/smartfetch', () => ({
   smartFetch: vi.fn()
 }));
 
-import { smartFetch } from '../components/general/smartfetch';
+import { smartFetch } from '../components/foundation/smartfetch';
 
 describe('Markdown Component', () => {
   describe('Basic Rendering', () => {

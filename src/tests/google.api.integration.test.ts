@@ -42,7 +42,7 @@ vi.mock('googleapis', () => ({
 }));
 
 import { google } from 'googleapis';
-import { CacheManager } from '../components/general/cache-manager';
+import { CacheManager } from '../components/foundation/cache-manager';
 import {
   calculateDateRanges,
   formatChartDate,

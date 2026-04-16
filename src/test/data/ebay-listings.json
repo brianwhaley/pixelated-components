@@ -1,0 +1,34 @@
+[
+  {
+    "legacyItemId": "123456789",
+    "title": "Vintage Apple Computer",
+    "price": "199.99",
+    "currency": "USD",
+    "condition": "Used",
+    "conditionId": "3000",
+    "categoryId": "11450",
+    "image": "https://i.ebayimg.com/images/g/example.jpg",
+    "seller": {
+      "username": "example_seller",
+      "feedbackScore": 1500,
+      "positivePercent": 98.5,
+      "topRatedSeller": true
+    },
+    "shipping": {
+      "method": "Multi-category",
+      "cost": 10.0,
+      "expedited": true,
+      "free": false
+    },
+    "itemLocation": {
+      "country": "United States",
+      "zipcode": "12345"
+    },
+    "viewCount": 45,
+    "watchCount": 12,
+    "soldCount": 5
+  },
+  { "legacyItemId": "111", "title": "Vintage Apple Computer", "price": "199.99", "currency": "USD", "condition": "Used", "conditionId": "3000", "categoryId": "11450", "image": "https://i.ebayimg.com/images/g/example.jpg", "seller": { "username": "example_seller", "feedbackScore": 1500, "positivePercent": 98.5, "topRatedSeller": true }, "shipping": { "method": "Multi-category", "cost": 10.0, "expedited": true, "free": false }, "itemLocation": { "country": "United States", "zipcode": "12345" }, "viewCount": 45, "watchCount": 12, "soldCount": 5 },
+  { "legacyItemId": "222", "title": "Vintage Apple Computer", "price": "249.99", "currency": "USD", "condition": "Used", "conditionId": "3000", "categoryId": "11450", "image": "https://i.ebayimg.com/images/g/example.jpg", "seller": { "username": "example_seller", "feedbackScore": 1500, "positivePercent": 98.5, "topRatedSeller": true }, "shipping": { "method": "Multi-category", "cost": 10.0, "expedited": true, "free": false }, "itemLocation": { "country": "United States", "zipcode": "12345" }, "viewCount": 45, "watchCount": 12, "soldCount": 5 },
+  { "legacyItemId": "333", "title": "Vintage Apple Computer", "price": "149.99", "currency": "USD", "condition": "Used", "conditionId": "3000", "categoryId": "11450", "image": "https://i.ebayimg.com/images/g/example.jpg", "seller": { "username": "example_seller", "feedbackScore": 1500, "positivePercent": 98.5, "topRatedSeller": true }, "shipping": { "method": "Multi-category", "cost": 10.0, "expedited": true, "free": false }, "itemLocation": { "country": "United States", "zipcode": "12345" }, "viewCount": 45, "watchCount": 12, "soldCount": 5 }
+]

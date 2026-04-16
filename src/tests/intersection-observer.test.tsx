@@ -4,7 +4,7 @@ import {
 	isElementPartiallyInViewport,
 	observeIntersection,
 	useIntersectionObserver
-} from '../components/general/intersection-observer';
+} from '../components/foundation/intersection-observer';
 
 describe('Intersection Observer Utilities', () => {
 

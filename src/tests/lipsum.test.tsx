@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { getLipsum } from '../components/integrations/lipsum';
 
-vi.mock('../components/general/smartfetch');
+vi.mock('../components/foundation/smartfetch');
 
 describe('Lipsum Functions', () => {
 	beforeEach(() => {
@@ -16,7 +16,7 @@ describe('Lipsum Functions', () => {
 			</div>
 		`;
 		
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue(mockHTML);
 		
 		const result = await getLipsum({
@@ -29,7 +29,7 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should construct correct proxy URL with parameters', async () => {
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
@@ -52,7 +52,7 @@ describe('Lipsum Functions', () => {
 			</div>
 		`;
 		
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue(mockHTML);
 		
 		const result = await getLipsum({
@@ -66,7 +66,7 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should handle Word type', async () => {
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
@@ -79,7 +79,7 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should handle Char type', async () => {
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
@@ -92,7 +92,7 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should start with Lorem Ipsum when flag is true', async () => {
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
@@ -115,7 +115,7 @@ describe('Lipsum Functions', () => {
 			</div>
 		`;
 		
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue(mockHTML);
 		
 		const result = await getLipsum({
@@ -128,7 +128,7 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should return empty array on fetch error', async () => {
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockRejectedValue(new Error('Network error'));
 		
 		const result = await getLipsum({
@@ -142,7 +142,7 @@ describe('Lipsum Functions', () => {
 	it('should return empty array when lipsum element not found', async () => {
 		const mockHTML = '<div>No lipsum element</div>';
 		
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue(mockHTML);
 		
 		const result = await getLipsum({
@@ -154,7 +154,7 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should use proxy.pixelated.tech URL', async () => {
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
@@ -168,7 +168,7 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should URL encode the lipsum.com endpoint', async () => {
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue('<div id="lipsum"></div>');
 		
 		await getLipsum({
@@ -189,7 +189,7 @@ describe('Lipsum Functions', () => {
 			</div>
 		`;
 		
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue(mockHTML);
 		
 		const result = await getLipsum({
@@ -204,7 +204,7 @@ describe('Lipsum Functions', () => {
 	});
 
 	it('should handle HTML parsing errors gracefully', async () => {
-		const { smartFetch } = await import('../components/general/smartfetch');
+		const { smartFetch } = await import('../components/foundation/smartfetch');
 		vi.mocked(smartFetch).mockResolvedValue('Invalid HTML <<<<>>>>');
 		
 		const result = await getLipsum({

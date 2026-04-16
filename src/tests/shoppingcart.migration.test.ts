@@ -1,5 +1,5 @@
 import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
-import { CacheManager } from '@/components/general/cache-manager';
+import { CacheManager } from '@/components/foundation/cache-manager';
 import {
   setCart,
   getCart,

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { getGravatarAvatarUrl, getGravatarProfile, getGravatarAccountUrl, type GravatarProfile } from '../components/integrations/gravatar.functions';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 
 describe('Gravatar Functions', () => {
 	describe('getGravatarAvatarUrl', () => {

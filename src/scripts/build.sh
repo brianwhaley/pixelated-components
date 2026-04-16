@@ -1,6 +1,41 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+PACKAGE_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+MONOREPO_ROOT="$(git -C "$PACKAGE_ROOT" rev-parse --show-toplevel)"
+CURRENT_DIR="$(pwd)"
+BUILD_TARGET="$PACKAGE_ROOT"
+CONTEXT_TYPE=""
+
+find_workspace_root() {
+    local dir="$CURRENT_DIR"
+    while [ "$dir" != "$MONOREPO_ROOT" ] && [ "$dir" != "/" ]; do
+        if [ -f "$dir/package.json" ]; then
+            echo "$dir"
+            return 0
+        fi
+        dir=$(dirname "$dir")
+    done
+    echo "$CURRENT_DIR"
+}
+
+detect_context() {
+    local workspace_root
+    workspace_root="$(find_workspace_root)"
+
+    if [[ "$workspace_root" == "$MONOREPO_ROOT/packages/pixelated-components"* ]]; then
+        CONTEXT_TYPE="component"
+        BUILD_TARGET="$workspace_root"
+    else
+        CONTEXT_TYPE="root"
+        BUILD_TARGET="$PACKAGE_ROOT"
+    fi
+}
+
+detect_context
+cd "$BUILD_TARGET"
+
 step=1
 
 

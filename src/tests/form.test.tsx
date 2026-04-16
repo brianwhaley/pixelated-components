@@ -4,6 +4,17 @@ import { render, screen, fireEvent, waitFor } from '../test/test-utils';
 import { FormEngine } from '../components/sitebuilder/form/formengine';
 import { FormBuilder, FormBuild } from '../components/sitebuilder/form/formbuilder';
 import { FormExtractor } from '../components/sitebuilder/form/formextractor';
+import {
+  emptyFormData,
+  singleTextInputFormData,
+  multipleTextInputsFormData,
+  stringNumericMaxLengthFormData,
+  numericMaxLengthFormData,
+  minLengthStringFormData,
+  rowsStringFormData,
+  nullMaxLengthFormData,
+  emptyStringMaxLengthFormData,
+} from '@/test/fixtures';
 
 describe('Form Component', () => {
   const mockOnSubmitHandler = vi.fn();
@@ -14,9 +25,7 @@ describe('Form Component', () => {
 
   describe('FormEngine Basic Rendering', () => {
     it('should render form element', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} onSubmitHandler={mockOnSubmitHandler} />
       );
@@ -24,9 +33,7 @@ describe('Form Component', () => {
     });
 
     it('should render with default form element type', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -34,9 +41,7 @@ describe('Form Component', () => {
     });
 
     it('should apply form name prop', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} name="test-form" />
       );
@@ -44,9 +49,7 @@ describe('Form Component', () => {
     });
 
     it('should apply form id prop', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} id="my-form" />
       );
@@ -54,9 +57,7 @@ describe('Form Component', () => {
     });
 
     it('should apply form method prop', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} method="post" />
       );
@@ -64,9 +65,7 @@ describe('Form Component', () => {
     });
 
     it('should render form without errors', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -76,9 +75,7 @@ describe('Form Component', () => {
 
   describe('FormEngine Field Generation', () => {
     it('should render form with no fields', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -87,19 +84,7 @@ describe('Form Component', () => {
     });
 
     it('should render single text input field', () => {
-      const formData = {
-        fields: [
-          {
-            component: 'FormInput',
-            props: {
-              type: 'text',
-              id: 'username',
-              name: 'username',
-              placeholder: 'Enter username'
-            }
-          }
-        ]
-      };
+      const formData = singleTextInputFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -108,18 +93,7 @@ describe('Form Component', () => {
     });
 
     it('should render multiple input fields', () => {
-      const formData = {
-        fields: [
-          {
-            component: 'FormInput',
-            props: { type: 'text', id: 'name', name: 'name' }
-          },
-          {
-            component: 'FormInput',
-            props: { type: 'email', id: 'email', name: 'email' }
-          }
-        ]
-      };
+      const formData = multipleTextInputsFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -128,18 +102,7 @@ describe('Form Component', () => {
     });
 
     it('should convert string numeric props to numbers', () => {
-      const formData = {
-        fields: [
-          {
-            component: 'FormInput',
-            props: {
-              type: 'text',
-              name: 'test',
-              maxLength: '100'
-            }
-          }
-        ]
-      };
+      const formData = stringNumericMaxLengthFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -168,18 +131,7 @@ describe('Form Component', () => {
     });
 
     it('should handle minLength numeric conversion', () => {
-      const formData = {
-        fields: [
-          {
-            component: 'FormInput',
-            props: {
-              type: 'text',
-              name: 'text',
-              minLength: '5'
-            }
-          }
-        ]
-      };
+      const formData = minLengthStringFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -188,17 +140,7 @@ describe('Form Component', () => {
     });
 
     it('should handle rows numeric conversion for textarea', () => {
-      const formData = {
-        fields: [
-          {
-            component: 'FormTextarea',
-            props: {
-              name: 'message',
-              rows: '10'
-            }
-          }
-        ]
-      };
+      const formData = rowsStringFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -207,18 +149,7 @@ describe('Form Component', () => {
     });
 
     it('should not convert already numeric props', () => {
-      const formData = {
-        fields: [
-          {
-            component: 'FormInput',
-            props: {
-              type: 'number',
-              name: 'number',
-              maxLength: 25
-            }
-          }
-        ]
-      };
+      const formData = numericMaxLengthFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -227,18 +158,7 @@ describe('Form Component', () => {
     });
 
     it('should ignore null numeric prop values', () => {
-      const formData = {
-        fields: [
-          {
-            component: 'FormInput',
-            props: {
-              type: 'text',
-              name: 'text',
-              maxLength: null
-            }
-          }
-        ]
-      };
+      const formData = nullMaxLengthFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -246,18 +166,7 @@ describe('Form Component', () => {
     });
 
     it('should ignore empty string numeric prop values', () => {
-      const formData = {
-        fields: [
-          {
-            component: 'FormInput',
-            props: {
-              type: 'text',
-              name: 'text',
-              maxLength: ''
-            }
-          }
-        ]
-      };
+      const formData = emptyStringMaxLengthFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -284,9 +193,7 @@ describe('Form Component', () => {
     });
 
     it('should prevent default form submission behavior', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} onSubmitHandler={mockOnSubmitHandler} />
       );
@@ -298,9 +205,7 @@ describe('Form Component', () => {
     });
 
     it('should handle form submission without onSubmitHandler', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -311,9 +216,7 @@ describe('Form Component', () => {
 
   describe('Form Attributes', () => {
     it('should apply custom form attributes', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine 
           formData={formData as any} 
@@ -329,9 +232,7 @@ describe('Form Component', () => {
     });
 
     it('should exclude formData from form props', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} />
       );
@@ -340,9 +241,7 @@ describe('Form Component', () => {
     });
 
     it('should exclude onSubmitHandler from form props', () => {
-      const formData = {
-        fields: []
-      };
+      const formData = emptyFormData;
       const { container } = render(
         <FormEngine formData={formData as any} onSubmitHandler={mockOnSubmitHandler} />
       );

@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import type { PageData } from '../lib/types';
-import { smartFetch } from '../../../general/smartfetch';
-import { buildUrl } from '../../../general/urlbuilder';
+import { smartFetch } from '../../../foundation/smartfetch';
+import { buildUrl } from '../../../foundation/urlbuilder';
 
 /**
  * SaveLoadSection — UI for saving and loading page JSON to/from the configured API endpoint.

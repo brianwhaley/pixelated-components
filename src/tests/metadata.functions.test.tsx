@@ -7,7 +7,7 @@ import {
 	getAccordionMenuData,
 	generateMetaTags,
 	type Route
-} from '../components/general/metadata.functions';
+} from '../components/foundation/metadata.functions';
 import type { SiteInfo } from '../components/config/config.types';
 
 describe('Metadata Functions', () => {

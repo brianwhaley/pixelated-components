@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
-// import { useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { usePixelatedConfig } from "../config/config.client";
+import { SmartErrorBoundary } from "../foundation/smarterrorboundary";
 
 
 /* 
@@ -47,39 +47,45 @@ export function GoogleAnalytics( props: GoogleAnalyticsType ) {
 	const config = usePixelatedConfig();
 	const id = props.id || config?.googleAnalytics?.id;
 	const adId = config?.googleAnalytics?.adId;
-	
-	if (!id) {
-		throw new Error('Google Analytics ID not provided. Set id prop or ensure PixelatedServerConfigProvider is configured with googleAnalytics.id.');
-	}
-	
-	if(typeof window === 'undefined'){ return; }
-	if(typeof document === 'undefined'){ return; }
-	if(isGA()){ return; }
-	const gaSRC = "https://www.googletagmanager.com/gtag/js?id=" + id;
-	// useEffect(() => {
-	// INIT GA TAG TO PAGE
-	const gaInit = document.createElement("script");
-	gaInit.setAttribute("id", "ga-init");
-	gaInit.type = "text/javascript";
-	// could also be InnerHTML, but not innerText
-	gaInit.text = `
+
+	function GoogleAnalyticsContent() {
+		if (!id) {
+			throw new Error('Google Analytics ID not provided. Set id prop or ensure PixelatedServerConfigProvider is configured with googleAnalytics.id.');
+		}
+
+		useEffect(() => {
+			if (typeof window === 'undefined') { return; }
+			if (typeof document === 'undefined') { return; }
+			if (isGA()) { return; }
+
+			const gaSRC = "https://www.googletagmanager.com/gtag/js?id=" + id;
+			const gaInit = document.createElement("script");
+			gaInit.setAttribute("id", "ga-init");
+			gaInit.type = "text/javascript";
+			gaInit.text = `
 window.dataLayer = window.dataLayer || [];
 window.gtag = function gtag(){ window.dataLayer.push(arguments); }
 window.gtag('js', new Date());
 window.gtag('config', '${id}');
 ${adId ? `window.gtag('config', '${adId}');` : ''}
 `;
-	document.head.appendChild(gaInit);
-	// INSTALL GA SCRIPT
-	const ga = document.createElement("script");
-	ga.setAttribute("id", "ga");
-	ga.type = "text/javascript";
-	ga.async = true;
-	ga.src = gaSRC;
-	document.head.appendChild(ga);
-	// }, []); 
+			document.head.appendChild(gaInit);
+
+			const ga = document.createElement("script");
+			ga.setAttribute("id", "ga");
+			ga.type = "text/javascript";
+			ga.async = true;
+			ga.src = gaSRC;
+			document.head.appendChild(ga);
+		}, [id, adId]);
+
+		return <div className="ga" suppressHydrationWarning />;
+	}
+
 	return (
-		<div className="ga" suppressHydrationWarning />
+		<SmartErrorBoundary boundaryName="GoogleAnalytics">
+			<GoogleAnalyticsContent />
+		</SmartErrorBoundary>
 	);
 }
 /**
@@ -96,15 +102,14 @@ GoogleAnalyticsEvent.propTypes = {
 };
 export type GoogleAnalyticsEventType = InferProps<typeof GoogleAnalyticsEvent.propTypes>;
 export function GoogleAnalyticsEvent( props: GoogleAnalyticsEventType ) {
-	if(typeof window === 'undefined'){ return; }
-	if(typeof document === 'undefined'){ return; }
-	// if(isGA()){ 
-	const ga_evt = document.createElement("script");
-	ga_evt.setAttribute("id", "ga-event");
-	ga_evt.type = "text/javascript";
-	ga_evt.async = true;
-	ga_evt.innerHTML = `gtag('event', '${props.event_name}', ${JSON.stringify(props.event_parameters)});`;
-	document.head.appendChild(ga_evt);
-	// }
-	return ( null );
+	useEffect(() => {
+		if (typeof window === 'undefined') { return; }
+		if (typeof document === 'undefined') { return; }
+		const dataLayer = window.dataLayer || [];
+		window.dataLayer = dataLayer;
+		window.gtag = window.gtag || function gtag(){ dataLayer.push(arguments); };
+		window.gtag('event', props.event_name, props.event_parameters);
+	}, [props.event_name, JSON.stringify(props.event_parameters)]);
+
+	return null;
 }

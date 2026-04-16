@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as contentfulManagement from '../components/integrations/contentful.management';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 
 describe('Contentful Management Module', () => {
 	beforeEach(() => {

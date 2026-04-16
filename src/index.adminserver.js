@@ -19,6 +19,6 @@ export * from './components/admin/site-health/site-health-utils';
 
 export * from './components/admin/sites/sites.integration';
 
-export * from './components/general/cache-manager';
+export * from './components/foundation/cache-manager';
 
 export * from './components/integrations/contentful.management';

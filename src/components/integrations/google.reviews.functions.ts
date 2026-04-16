@@ -2,8 +2,8 @@
 // Requires: GOOGLE_MAPS_API_KEY or hard-coded key
 // Flow: Place Details (reviews)
 
-import { smartFetch } from '../general/smartfetch';
-import { buildUrl } from '../general/urlbuilder';
+import { smartFetch } from '../foundation/smartfetch';
+import { buildUrl } from '../foundation/urlbuilder';
 
 export type GoogleReview = {
   author_name: string;

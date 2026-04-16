@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect } from 'vitest';
 import { render } from '../test/test-utils';
-import { Skeleton } from '../components/general/skeleton';
+import { Skeleton } from '../components/foundation/skeleton';
 
 describe('Skeleton', () => {
   it('renders text lines by default', () => {

@@ -1,11 +1,11 @@
 
 import PropTypes, { InferProps } from 'prop-types';
-import { mergeDeep } from '../general/utilities';
-import { hashCode } from '../general/utilities';
-import { CacheManager } from '../general/cache-manager';
-import { getDomain } from '../general/utilities';
-import { smartFetch } from '../general/smartfetch';
-import { buildUrl } from '../general/urlbuilder';
+import { mergeDeep } from '../foundation/utilities';
+import { hashCode } from '../foundation/utilities';
+import { CacheManager } from '../foundation/cache-manager';
+import { getDomain } from '../foundation/utilities';
+import { smartFetch } from '../foundation/smartfetch';
+import { buildUrl } from '../foundation/urlbuilder';
 import type { CarouselCardType } from '../general/carousel';
 import type { FlickrConfig, GlobalConfig } from '../config/config.types';
 

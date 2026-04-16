@@ -57,7 +57,7 @@ const timelineData = [
 ];
 
 export default {
-	title: 'General',
+	title: 'General/Timeline',
 	component: Timeline,
 };
 

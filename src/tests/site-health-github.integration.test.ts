@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import * as configModule from '../components/config/config';
 import { analyzeGitHealth } from '../components/admin/site-health/site-health-github.integration';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 
 
 const mockToken = 'test-token-123';

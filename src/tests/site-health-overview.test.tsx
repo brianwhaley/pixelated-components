@@ -1,9 +1,11 @@
 /// <reference types="vitest/globals" />
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import { render, screen, waitFor } from '../test/test-utils';
 import React, { useState, useEffect } from 'react';
 import { SiteHealthOverview } from '../components/admin/site-health/site-health-overview';
 import type { CoreWebVitalsResponse, CoreWebVitalsData } from '../components/admin/site-health/site-health-types';
+import { processPSIData } from '../components/admin/site-health/site-health-core-web-vitals.integration';
+import { googlePsiExampleCom } from '../test/test-data';
 
 // Mock fetch
 const mockFetch = vi.fn();
@@ -51,70 +53,20 @@ vi.mock('../components/admin/site-health/site-health-template', () => ({
 }));
 
 describe('SiteHealthOverview', () => {
-  beforeEach(() => {
-    mockFetch.mockClear();
+  let mockData: CoreWebVitalsData;
+
+  beforeAll(async () => {
+    mockData = await processPSIData(googlePsiExampleCom, 'test-site', 'https://www.example.com');
   });
 
-  const mockData: CoreWebVitalsData = {
-    site: 'test-site',
-    url: 'https://test-site.com',
-    status: 'success',
-    timestamp: '2024-01-01T00:00:00Z',
-    metrics: {
-      cls: 0.05,
-      fid: 50,
-      lcp: 2000,
-      fcp: 1500,
-      ttfb: 200,
-      speedIndex: 2500,
-      interactive: 3000,
-      totalBlockingTime: 100,
-      firstMeaningfulPaint: 1800,
-    },
-    scores: {
-      performance: 0.85,
-      accessibility: 0.9,
-      'best-practices': 0.8,
-      seo: 0.75,
-      pwa: 0.7,
-    },
-    categories: {
-      performance: {
-        id: 'performance',
-        title: 'Performance',
-        score: 0.85,
-        audits: []
-      },
-      accessibility: {
-        id: 'accessibility',
-        title: 'Accessibility',
-        score: 0.9,
-        audits: []
-      },
-      'best-practices': {
-        id: 'best-practices',
-        title: 'Best Practices',
-        score: 0.8,
-        audits: []
-      },
-      seo: {
-        id: 'seo',
-        title: 'SEO',
-        score: 0.75,
-        audits: []
-      },
-      pwa: {
-        id: 'pwa',
-        title: 'PWA',
-        score: 0.7,
-        audits: []
-      },
-    }
-  };
+  beforeEach(() => {
+    mockFetch.mockClear();
+    mockResponse.data = [mockData];
+  });
 
   const mockResponse: CoreWebVitalsResponse = {
     success: true,
-    data: [mockData]
+    data: [] as CoreWebVitalsData[]
   };
 
   it('renders nothing when no siteName is provided', () => {
@@ -133,7 +85,7 @@ describe('SiteHealthOverview', () => {
       expect(screen.getByText('test site')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('URL: https://test-site.com')).toBeInTheDocument();
+    expect(screen.getByText(`URL: ${mockData.url}`)).toBeInTheDocument();
   });
 
   it('renders performance scores with correct colors', async () => {
@@ -148,11 +100,11 @@ describe('SiteHealthOverview', () => {
     });
 
     // Check that scores are displayed
-    expect(screen.getByText('85%')).toBeInTheDocument();
-    expect(screen.getByText('90%')).toBeInTheDocument();
-    expect(screen.getByText('80%')).toBeInTheDocument();
-    expect(screen.getByText('75%')).toBeInTheDocument();
-    expect(screen.getByText('70%')).toBeInTheDocument();
+    Object.values(mockData.scores)
+      .filter((score): score is number => score !== null)
+      .forEach((score) => {
+        expect(screen.getAllByText(`${Math.round(score * 100)}%`).length).toBeGreaterThan(0);
+      });
   });
 
   it('renders Core Web Vitals metrics', async () => {
@@ -167,11 +119,11 @@ describe('SiteHealthOverview', () => {
     });
 
     expect(screen.getByText('Cumulative Layout Shift:')).toBeInTheDocument();
-    expect(screen.getByText('0.050')).toBeInTheDocument();
+    expect(screen.getByText(`${mockData.metrics.cls.toFixed(3)}`)).toBeInTheDocument();
     expect(screen.getByText('First Input Delay:')).toBeInTheDocument();
-    expect(screen.getByText('50ms')).toBeInTheDocument();
+    expect(screen.getAllByText(`${Math.round(mockData.metrics.fid)}ms`).length).toBeGreaterThan(0);
     expect(screen.getByText('Largest Contentful Paint:')).toBeInTheDocument();
-    expect(screen.getByText('2000ms')).toBeInTheDocument();
+    expect(screen.getAllByText(`${Math.round(mockData.metrics.lcp)}ms`).length).toBeGreaterThan(0);
   });
 
   it('displays error message when API fails', async () => {
@@ -257,6 +209,7 @@ describe('SiteHealthOverview', () => {
     // Performance score should not be displayed since it's null
     expect(screen.queryByText('performance')).not.toBeInTheDocument();
     // Other scores should still be displayed
-    expect(screen.getByText('90%')).toBeInTheDocument();
+    const otherScoreValue = Math.round((dataWithNulls.scores.accessibility ?? 0) * 100);
+    expect(screen.getAllByText(`${otherScoreValue}%`).length).toBeGreaterThan(0);
   });
 });

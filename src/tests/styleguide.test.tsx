@@ -15,7 +15,7 @@ vi.mock('@pixelated-tech/components', () => {
   };
 });
 
-import { StyleGuideUI }  from '../components/general/styleguide';
+import { StyleGuideUI }  from '../components/foundation/styleguide';
 
 const nestedRoutes = [
   { name: 'Home', path: '/' },

@@ -1,0 +1,31 @@
+{
+  "siteUrl": "https://test-site.com",
+  "blogName": "Test Blog",
+  "description": "A test WordPress site",
+  "home": "https://test-site.com",
+  "namespaces": [
+    "wp/v2",
+    "jetpack/v4"
+  ],
+  "routes": {
+    "/wp/v2/posts": {
+      "namespace": "wp/v2",
+      "endpoints": [
+        {
+          "methods": ["GET"],
+          "args": {
+            "context": {
+              "required": false,
+              "default": "view"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "authentication": {
+    "schema": {
+      "description": "Basic auth for WordPress REST API"
+    }
+  }
+}

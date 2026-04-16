@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { useIntersectionObserver } from '../general/intersection-observer';
+import { useIntersectionObserver } from '../foundation/intersection-observer';
 import "./countup.css";
 
 /**

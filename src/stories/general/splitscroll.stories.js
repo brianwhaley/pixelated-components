@@ -3,7 +3,7 @@ import { SplitScroll } from '@/components/general/splitscroll';
 import '@/css/pixelated.grid.scss';
 
 export default {
-	title: 'General',
+	title: 'General/SplitScroll',
 	component: SplitScroll,
 	decorators: [
 		(Story) => (

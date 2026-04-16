@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { preloadImages, preloadImages_v2 } from '../components/general/image';
+import { preloadImages, preloadImages_v2 } from '../components/foundation/image';
 
 describe('Image Utilities', () => {
 	beforeEach(() => {

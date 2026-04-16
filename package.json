@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.15.2",
+	"version": "3.15.6",
 	"type": "module",
 	"private": false,
 	"author": {
@@ -48,6 +48,9 @@
 		"./css/*": "./dist/css/*",
 		"./scripts/*": "./dist/scripts/*"
 	},
+	"bin": {
+		"update2": "./dist/scripts/update.sh"
+	},
 	"homepage": "https://github.com/brianwhaley/pixelated-components#readme",
 	"bugs": {
 		"url": "https://github.com/brianwhaley/pixelated-components/issues"
@@ -66,24 +69,24 @@
 	},
 	"scripts": {
 		"build": "bash src/scripts/build.sh",
+		"lint": "eslint --fix",
+		"create-pixelated-app": "node src/scripts/create-pixelated-app.js",
+		"zip-theme": "node src/scripts/zip-pixelated-theme.js ../pixelated-blog-wp-theme Pixelated.zip",
 		"validate-exports": "npx tsx src/scripts/validate-exports.js",
 		"storybook": "rm -rf node_modules/.cache && storybook dev -p 6006",
 		"buildStorybook": "rm -rf node_modules/.cache && NODE_OPTIONS=\"--max-old-space-size=8192\" storybook build",
 		"test-storybook": "npx storybook test -c .storybook",
-		"test": "vitest run --silent",
+		"test:validator": "node src/scripts/test-validator.js",
+		"test": "npm run test:validator && vitest run --silent",
 		"test:ui": "vitest --ui",
-		"test:coverage": "vitest run --coverage",
+		"test:coverage": "npm run test:validator && vitest run --coverage",
 		"test:watch": "vitest",
-		"lint": "eslint --fix",
-		"release:prep": "npm run update && npm run lint && npm run test:coverage && npm run build && npm run buildStorybook",
-		"release": "./src/scripts/release.sh",
-		"vault": "npx tsx src/scripts/config-vault.ts",
 		"config:vault": "npx tsx $(node -e 'console.log(require.resolve(\"@pixelated-tech/components/scripts/config-vault.js\"))')",
-		"config:encrypt": "npm run config:vault -- encrypt src/config/pixelated.config.json",
-		"config:decrypt": "npm run config:vault -- decrypt src/config/pixelated.config.json.enc",
-		"create-pixelated-app": "node src/scripts/create-pixelated-app.js",
-		"zip-theme": "node src/scripts/zip-pixelated-theme.js ../pixelated-blog-wp-theme Pixelated.zip",
-		"update": "bash dist/scripts/update.sh"
+		"config:encrypt": "npm run config:vault -- encrypt src/app/config/pixelated.config.json",
+		"config:decrypt": "npm run config:vault -- decrypt src/app/config/pixelated.config.json.enc",
+		"release:prep": "node src/scripts/release-prep.js",
+		"release": "bash $(node -e 'console.log(require.resolve(\"@pixelated-tech/components/scripts/release.sh\"))')",
+		"update": "bash $(node -e 'console.log(require.resolve(\"@pixelated-tech/components/scripts/update.sh\"))')"
 	},
 	"scripts-20260113": {
 		"build": "npm run validate-exports && npm run buildClean && npm run tsc && npm run rsync && npm run tscClean ",
@@ -105,9 +108,9 @@
 		"@aws-sdk/client-amplify": "^3.1029.0",
 		"@aws-sdk/client-iam": "^3.1029.0",
 		"date-fns": "^4.1.0",
-		"globals": "^17.4.0",
+		"globals": "^17.5.0",
 		"html-entities": "^2.6.0",
-		"next": "^16.2.3",
+		"next": "^16.2.4",
 		"prop-types": "^15.8.1",
 		"react": "^19.2.5",
 		"react-dom": "^19.2.5"
@@ -139,6 +142,7 @@
 		"@vitejs/plugin-react": "^6.0.1",
 		"@vitest/coverage-v8": "^4.1.4",
 		"@vitest/ui": "^4.1.4",
+		"glob": "^10.3.2",
 		"ajv": "^8.18.0",
 		"ajv-keywords": "^5.1.0",
 		"babel-loader": "^10.1.1",
@@ -164,7 +168,7 @@
 		"typescript": "^6.0.2",
 		"url-loader": "^4.1.1",
 		"vitest": "^4.1.4",
-		"webpack": "^5.106.1",
+		"webpack": "^5.106.2",
 		"webpack-dev-server": "^5.2.3",
 		"webpack-node-externals": "^3.0.0"
 	},
@@ -172,21 +176,17 @@
 		"flatted": "^3.4.2"
 	},
 	"peerDependencies": {
-		"next": "^16.2.3",
 		"react": "^19.2.5",
 		"react-dom": "^19.2.5"
 	},
 	"optionalDependencies": {
 		"@aws-sdk/client-cloudwatch": "^3.1029.0",
 		"@aws-sdk/client-route-53": "^3.1029.0",
-		"@vitejs/plugin-react": "^6.0.1",
 		"clean-webpack-plugin": "^4.0.0",
 		"copy-webpack-plugin": "^14.0.0",
-		"eslint": "9.39.4",
-		"eslint-plugin-import": "^2.32.0",
 		"googleapis": "^171.4.0",
 		"md5": "^2.3.0",
-		"puppeteer": "^24.40.0",
+		"puppeteer": "^24.41.0",
 		"recharts": "^3.8.1"
 	}
 }

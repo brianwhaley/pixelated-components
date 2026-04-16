@@ -1,7 +1,7 @@
 import { CompoundFontSelector } from '@/components/sitebuilder/config/CompoundFontSelector';
 
 export default {
-	title: 'Admin/SiteBuilder/Config',
+	title: 'SiteBuilder/Compound Font Selector',
 	component: CompoundFontSelector,
 	parameters: {
 		layout: 'padded',

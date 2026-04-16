@@ -2,7 +2,7 @@ import React from 'react';
 import { SmartImage, SmartImageType } from '@/components/general/smartimage';
 
 export default {
-	title: 'General',
+	title: 'General/SmartImage',
 	component: SmartImage,
 	argTypes: {
 		variant: {

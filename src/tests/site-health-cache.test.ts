@@ -1,6 +1,6 @@
 /// <reference types="vitest/globals" />
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { CacheManager } from '../components/general/cache-manager';
+import { CacheManager } from '../components/foundation/cache-manager';
 
 describe('CacheManager (site-health compatibility)', () => {
   let cache: any;

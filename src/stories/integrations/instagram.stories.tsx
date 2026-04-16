@@ -41,7 +41,7 @@ import { InstagramTiles } from '@/components/integrations/instagram.components';
  */
 
 export default {
-	title: 'General',
+	title: 'Integrations/Instagram',
 	component: InstagramTiles,
 	argTypes: {
 		limit: { control: { type: 'number', min: 1, max: 50 } },

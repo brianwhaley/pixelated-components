@@ -7,12 +7,13 @@ import { SmartImage } from '../general/smartimage';
 import { PageGridItem } from '../general/semantic';
 import type { BlogPostType } from './wordpress.functions';
 import { getWordPressItems, getWordPressLastModified } from './wordpress.functions';
-import { Loading, ToggleLoading } from '../general/loading';
-import { CacheManager, type CacheMode } from "../general/cache-manager";
-import { getDomain } from '../general/utilities';
+import { Loading, ToggleLoading } from '../foundation/loading';
+import { CacheManager, type CacheMode } from "../foundation/cache-manager";
+import { getDomain } from '../foundation/utilities';
 import "./wordpress.css";
-import { SchemaBlogPosting } from '../general/schema';
-import { mapWordPressToBlogPosting } from '../general/schema.functions';
+import { SchemaBlogPosting } from '../foundation/schema';
+import { mapWordPressToBlogPosting } from '../foundation/schema.functions';
+import { SmartErrorBoundary } from '../foundation/smarterrorboundary';
 
 // https://microformats.org/wiki/h-entry
 
@@ -132,8 +133,8 @@ export function BlogPostList(props: BlogPostListType) {
 	}, [site, baseURL, count, cachedPosts]);
 
 	return (
-		<>
-			<Loading />
+		<SmartErrorBoundary boundaryName="BlogPostList">
+			<Loading key="loading" />
 			{posts.map((post: BlogPostType) => (
 				<PageGridItem key={post.ID}>
 					<SchemaBlogPosting key={post.ID} post={mapWordPressToBlogPosting(post, false)} />
@@ -149,7 +150,7 @@ export function BlogPostList(props: BlogPostListType) {
 					/>
 				</PageGridItem>
 			))}
-		</>
+		</SmartErrorBoundary>
 	);
 }
 

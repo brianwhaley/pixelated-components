@@ -4,6 +4,7 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { usePixelatedConfig } from "../config/config.client";
 import { SmartImage } from "./smartimage";
+import { SmartErrorBoundary } from "../foundation/smarterrorboundary";
 import "../../css/pixelated.grid.scss";
 import "./semantic.scss";
 
@@ -146,6 +147,7 @@ export function PageSection({
 	alignItems = 'stretch',
 	children,
 }: PageSectionType) {
+	const boundaryName = id ? `PageSection:${id}` : 'PageSection';
 	const sectionStyle: React.CSSProperties = {
 		...(background && { background }),
 	};
@@ -157,54 +159,60 @@ export function PageSection({
 	// Add layout-specific styles
 	if (layoutType === 'grid') {
 		return (
-			<section id={id || undefined} 
-				className={"page-section" + (className ? ` ${className}` : '') } 
-				style={sectionStyle}>
-				{backgroundImage && <PageSectionBackgroundImage backgroundImage={backgroundImage} id={id} />}
-				<div 
-					className={"page-section-content" + " row-" + columns + "col"}
-					style={{
-						...contentStyle,
-						...(gap && { gap }),
-						...(autoFlow && { gridAutoFlow: autoFlow }),
-						...(alignItems && { alignItems }),
-						...(justifyItems && { justifyItems }),
-					}}
-				>
-					{children}
-				</div>
-			</section>
+			<SmartErrorBoundary boundaryName={boundaryName}>
+				<section id={id || undefined} 
+					className={"page-section" + (className ? ` ${className}` : '') } 
+					style={sectionStyle}>
+					{backgroundImage && <PageSectionBackgroundImage backgroundImage={backgroundImage} id={id} />}
+					<div 
+						className={"page-section-content" + " row-" + columns + "col"}
+						style={{
+							...contentStyle,
+							...(gap && { gap }),
+							...(autoFlow && { gridAutoFlow: autoFlow }),
+							...(alignItems && { alignItems }),
+							...(justifyItems && { justifyItems }),
+						}}
+					>
+						{children}
+					</div>
+				</section>
+			</SmartErrorBoundary>
 		);
 	}
 	if (layoutType === 'flex') {
 		return (
-			<section id={id || undefined} className="page-section page-section-flex" style={sectionStyle}>
-				{backgroundImage && <PageSectionBackgroundImage backgroundImage={backgroundImage} id={id} />}
-				<div 
-					className="page-section-content"
-					style={{
-						...contentStyle,
-						display: 'flex',
-						...(direction && { flexDirection: direction as React.CSSProperties['flexDirection'] }),
-						...(wrap && { flexWrap: wrap as React.CSSProperties['flexWrap'] }),
-						...(gap && { gap }),
-						...(alignItems && { alignItems: alignItems as React.CSSProperties['alignItems'] }),
-						...(justifyContent && { justifyContent: justifyContent as React.CSSProperties['justifyContent'] }),
-					}}
-				>
-					{children}
-				</div>
-			</section>
+			<SmartErrorBoundary boundaryName={boundaryName}>
+				<section id={id || undefined} className="page-section page-section-flex" style={sectionStyle}>
+					{backgroundImage && <PageSectionBackgroundImage backgroundImage={backgroundImage} id={id} />}
+					<div 
+						className="page-section-content"
+						style={{
+							...contentStyle,
+							display: 'flex',
+							...(direction && { flexDirection: direction as React.CSSProperties['flexDirection'] }),
+							...(wrap && { flexWrap: wrap as React.CSSProperties['flexWrap'] }),
+							...(gap && { gap }),
+							...(alignItems && { alignItems: alignItems as React.CSSProperties['alignItems'] }),
+							...(justifyContent && { justifyContent: justifyContent as React.CSSProperties['justifyContent'] }),
+						}}
+					>
+						{children}
+					</div>
+				</section>
+			</SmartErrorBoundary>
 		);
 	}
 	// layoutType === 'none'
 	return (
-		<section id={id || undefined} className="page-section page-section-none" style={sectionStyle}>
-			{backgroundImage && <PageSectionBackgroundImage backgroundImage={backgroundImage} id={id} />}
-			<div className="page-section-content" style={contentStyle}>
-				{children}
-			</div>
-		</section>
+		<SmartErrorBoundary boundaryName={boundaryName}>
+			<section id={id || undefined} className="page-section page-section-none" style={sectionStyle}>
+				{backgroundImage && <PageSectionBackgroundImage backgroundImage={backgroundImage} id={id} />}
+				<div className="page-section-content" style={contentStyle}>
+					{children}
+				</div>
+			</section>
+		</SmartErrorBoundary>
 	);
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Accordion } from '@/components/general/accordion';
 
 export default {
-  title: 'General',
+  title: 'General/Accordion',
   component: Accordion,
 };
 

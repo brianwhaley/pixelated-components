@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '../test/test-utils';
+import { fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PageBuilderUI } from "../components/sitebuilder/page/components/PageBuilderUI";
 import { usePageBuilder } from '../components/sitebuilder/page/lib/usePageBuilder';
@@ -22,9 +23,19 @@ vi.mock('../components/sitebuilder/page/components/ComponentSelector', () => ({
 
 vi.mock('../components/sitebuilder/page/components/ComponentPropertiesForm', () => ({
 	ComponentPropertiesForm: ({ editableComponent, onSubmit }: any) => (
-		<div data-testid="component-properties-form">
+		<div data-testid="component-properties-form" data-has-submit={typeof onSubmit === 'function'}>
 			ComponentPropertiesForm
 			{editableComponent && <span>Has Component</span>}
+			<button data-testid="component-properties-submit" onClick={() => onSubmit?.({ component: 'Callout', props: {} })}>Submit</button>
+		</div>
+	)
+}));
+
+vi.mock('../components/sitebuilder/page/components/SaveLoadSection', () => ({
+	SaveLoadSection: ({ pageData, onLoad, apiEndpoint }: any) => (
+		<div data-testid="save-load-section" data-has-onload={typeof onLoad === 'function'} data-api-endpoint={apiEndpoint}>
+			SaveLoadSection
+			<button data-testid="save-load-button" onClick={() => onLoad?.({ components: [{ component: 'Callout', props: {}, children: [] }] })}>Load</button>
 		</div>
 	)
 }));
@@ -38,14 +49,6 @@ vi.mock('../components/sitebuilder/page/components/PageEngine', () => ({
 			{selectedPath && <span>Selected: {selectedPath}</span>}
 		</div>
 	)
-}));
-
-vi.mock('../components/sitebuilder/page/components/SaveLoadSection', () => ({
-	SaveLoadSection: vi.fn(({ pageData, onLoad, apiEndpoint }) => (
-		<div data-testid="save-load-section">
-			SaveLoadSection
-		</div>
-	))
 }));
 
 describe('PageBuilderUI', () => {
@@ -203,6 +206,36 @@ describe('PageBuilderUI', () => {
 		// The SaveLoadSection should receive the custom endpoint
 		// This is tested implicitly through the component rendering
 		expect(screen.getByTestId('save-load-section')).toBeInTheDocument();
+	});
+
+	it('should pass SaveLoadSection props and handle onLoad correctly', () => {
+		const pageJSON = { components: [{ component: 'Callout', props: {}, children: [] }] };
+		render(<PageBuilderUI />);
+
+		const saveLoadSection = screen.getByTestId('save-load-section');
+		expect(saveLoadSection.dataset.hasOnload).toBe('true');
+		expect(saveLoadSection.dataset.apiEndpoint).toBe('/api/pagebuilder');
+
+		fireEvent.click(screen.getByTestId('save-load-button'));
+		expect(mockPageBuilderState.setPageJSON).toHaveBeenCalledWith(pageJSON);
+		expect(mockPageBuilderState.setEditableComponent).toHaveBeenCalledWith({});
+		expect(mockPageBuilderState.setSelectedPath).toHaveBeenCalledWith('');
+		expect(mockPageBuilderState.setEditMode).toHaveBeenCalledWith(null);
+		expect(mockPageBuilderState.setPageJSON).toHaveBeenCalledWith(pageJSON);
+		expect(mockPageBuilderState.setEditableComponent).toHaveBeenCalledWith({});
+		expect(mockPageBuilderState.setSelectedPath).toHaveBeenCalledWith('');
+		expect(mockPageBuilderState.setEditMode).toHaveBeenCalledWith(null);
+	});
+
+	it('should wrap add component callback and reset selector', () => {
+		render(<PageBuilderUI />);
+
+		const submitButton = screen.getByTestId('component-properties-submit');
+		expect(submitButton).toBeInTheDocument();
+
+		fireEvent.click(submitButton);
+		expect(mockPageBuilderState.handleAddNewComponent).toHaveBeenCalledWith({ component: 'Callout', props: {} });
+		expect(mockPageBuilderState.setEditableComponent).toHaveBeenCalledWith({});
 	});
 
 	it('should reset selector key when loading page', () => {

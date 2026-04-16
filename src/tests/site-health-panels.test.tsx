@@ -2,39 +2,12 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { SiteHealthPerformance, type SiteHealthPerformanceType } from '../components/admin/site-health/site-health-performance';
 import { SiteHealthSEO, type SiteHealthSEOType } from '../components/admin/site-health/site-health-seo';
+import { siteHealthData } from '../test/test-data';
 
 // Mock dependencies
 vi.mock('../components/admin/site-health/site-health-template', () => ({
 	SiteHealthTemplate: ({ children, title, siteName }: any) => {
-		const mockData = {
-			data: [{
-				site: 'test-site',
-				url: 'https://test.com',
-				status: 'success',
-				scores: {
-					performance: 0.85,
-					seo: 0.9,
-					'best-practices': 0.8,
-					accessibility: 0.88,
-					pwa: 0.75
-				},
-				categories: {
-					performance: {
-						audits: [
-							{ id: 'audit1', score: 0.9, title: 'Test Audit', scoreDisplayMode: 'numeric', displayValue: 'Good' }
-						]
-					},
-					seo: {
-						audits: [
-							{ id: 'seo-audit', score: 0.95, title: 'SEO Test', scoreDisplayMode: 'numeric', displayValue: 'Excellent' }
-						]
-					},
-					pwa: {
-						audits: []
-					}
-				}
-			}]
-		};
+		const mockData = siteHealthData.panels.data[0];
 		return <div data-testid={`health-${title}`}>{children(mockData)}</div>;
 	}
 }));

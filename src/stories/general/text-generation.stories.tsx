@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { stringTo1337 } from '@/components/general/utilities';
+import { stringTo1337 } from '@/components/foundation/utilities';
 import { LoremIpsum as LoremIpsumComponent, type LoremIpsumType } from '@/components/integrations/loremipsum';
 import { getLipsum, type LipsumType } from '@/components/integrations/lipsum';
 

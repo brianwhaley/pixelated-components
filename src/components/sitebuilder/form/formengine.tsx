@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { generateKey } from '../../general/utilities';
+import { generateKey } from '../../foundation/utilities';
 import { FormValidationProvider, useFormValidation } from './formvalidator';
 import { FormSubmitWrapper, useFormSubmitContext } from './formsubmit';
 

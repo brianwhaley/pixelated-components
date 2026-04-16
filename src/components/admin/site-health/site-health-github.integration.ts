@@ -1,7 +1,7 @@
 "use server";
 
 import { getFullPixelatedConfig } from '../../config/config';
-import { buildUrl } from '../../general/urlbuilder';
+import { buildUrl } from '../../foundation/urlbuilder';
 import path from 'path';
 import type { GitCommit } from './site-health-types';
 import type { SiteConfig } from '../sites/sites.integration';

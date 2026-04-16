@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { usePixelatedConfig } from '../config/config.client';
-import { smartFetch } from '../general/smartfetch';
-import { buildUrl } from '../general/urlbuilder';
+import { smartFetch } from '../foundation/smartfetch';
+import { buildUrl } from '../foundation/urlbuilder';
 
 const debug = false; 
 

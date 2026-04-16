@@ -4,8 +4,8 @@ const debug = false;
 
 import { CoreWebVitalsData, PSIScores, PSICategory, PSIAudit } from './site-health-types';
 import { getFullPixelatedConfig } from '../../config/config';
-import { smartFetch } from '../../general/smartfetch';
-import { buildUrl } from '../../general/urlbuilder';
+import { smartFetch } from '../../foundation/smartfetch';
+import { buildUrl } from '../../foundation/urlbuilder';
 
 
 /**
@@ -61,8 +61,7 @@ export async function performCoreWebVitalsAnalysis(
 		const psiData = await fetchPSIData(url);
 
 		// Process the PSI data
-		const resultData = processPSIData(psiData, siteName, url);
-
+		const resultData = await processPSIData(psiData, siteName, url);
 		// Cache successful results (if caching is enabled)
 		if (useCache) {
 			psiCache.set(cacheKey, {
@@ -134,7 +133,7 @@ export async function fetchPSIData(url: string): Promise<any> {
 			url,
 			key: apiKey,
 			strategy: 'mobile',
-			category: 'performance,accessibility,best-practices,seo'
+			category: ['performance', 'accessibility', 'best-practices', 'seo']
 		}
 	});
 
@@ -201,7 +200,7 @@ export async function fetchPSIData(url: string): Promise<any> {
 	}
 }
 
-function processPSIData(psiData: any, siteName: string, url: string): CoreWebVitalsData {
+export async function processPSIData(psiData: any, siteName: string, url: string): Promise<CoreWebVitalsData> {
 	const audits = psiData.lighthouseResult.audits;
 	const categories = psiData.lighthouseResult.categories;
 

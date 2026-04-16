@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { FourOhFour } from '../components/general/404';
+import { FourOhFour } from '../components/foundation/404';
 
 // Mock usePixelatedConfig
 vi.mock('../components/config/config.client', () => ({

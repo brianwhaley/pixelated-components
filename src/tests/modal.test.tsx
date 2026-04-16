@@ -148,6 +148,23 @@ describe('Modal Component', () => {
       
       expect(mockClose).toHaveBeenCalled();
     });
+
+    it('should hide modal overlay when clicked without handleCloseEvent', () => {
+      render(<Modal modalContent={<p>Test</p>} isOpen={true} />);
+      const modal = document.getElementById('myModal');
+      fireEvent.click(modal!);
+      expect(modal).toHaveStyle('display: none');
+    });
+  });
+
+  describe('Keyboard Interaction', () => {
+    it('should call handleCloseEvent on Escape when provided', () => {
+      const mockClose = vi.fn();
+      render(<Modal modalContent={<p>Test</p>} isOpen={true} handleCloseEvent={mockClose} />);
+      const modal = document.getElementById('myModal');
+      fireEvent.keyDown(modal!, { key: 'Escape', code: 'Escape' });
+      expect(mockClose).toHaveBeenCalled();
+    });
   });
 
   describe('handleModalOpen Function', () => {

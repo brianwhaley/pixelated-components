@@ -1,0 +1,162 @@
+{
+  "apiResponse": {
+    "itemSummaries": [
+      {
+        "legacyItemId": "item-123",
+        "title": "Vintage Camera",
+        "price": { "value": "49.99", "currency": "USD" },
+        "image": { "imageUrl": "https://example.com/camera.jpg" },
+        "thumbnailImages": [
+          { "imageUrl": "https://example.com/camera-thumb.jpg" }
+        ],
+        "condition": "Good",
+        "categories": [
+          {
+            "categoryId": "12345",
+            "categoryName": "Electronics"
+          }
+        ],
+        "seller": {
+          "username": "seller123",
+          "sellerUserName": "seller123",
+          "sellerAccountStatus": "Active",
+          "feedbackScore": 500,
+          "feedbackPercentage": 99.5
+        },
+        "buyingOptions": ["FIXED_PRICE"],
+        "itemLocation": {
+          "postalCode": "95131",
+          "country": "US"
+        },
+        "itemCreationDate": "2024-01-01T00:00:00.000Z",
+        "shippingOptions": [
+          {
+            "shippingCostType": "CALCULATED",
+            "shippingCost": { "value": "10.00" }
+          }
+        ]
+      }
+    ],
+    "refinement": {
+      "aspectDistributions": []
+    }
+  },
+  "listings": [
+    {
+      "legacyItemId": "123456789",
+      "title": "Vintage Apple Computer",
+      "price": "199.99",
+      "currency": "USD",
+      "condition": "Used",
+      "conditionId": "3000",
+      "categoryId": "11450",
+      "image": "https://i.ebayimg.com/images/g/example.jpg",
+      "seller": {
+        "username": "example_seller",
+        "feedbackScore": 1500,
+        "positivePercent": 98.5,
+        "topRatedSeller": true
+      },
+      "shipping": {
+        "method": "Multi-category",
+        "cost": 10.0,
+        "expedited": true,
+        "free": false
+      },
+      "itemLocation": {
+        "country": "United States",
+        "zipcode": "12345"
+      },
+      "viewCount": 45,
+      "watchCount": 12,
+      "soldCount": 5
+    },
+    {
+      "legacyItemId": "111",
+      "title": "Vintage Apple Computer",
+      "price": "199.99",
+      "currency": "USD",
+      "condition": "Used",
+      "conditionId": "3000",
+      "categoryId": "11450",
+      "image": "https://i.ebayimg.com/images/g/example.jpg",
+      "seller": {
+        "username": "example_seller",
+        "feedbackScore": 1500,
+        "positivePercent": 98.5,
+        "topRatedSeller": true
+      },
+      "shipping": {
+        "method": "Multi-category",
+        "cost": 10.0,
+        "expedited": true,
+        "free": false
+      },
+      "itemLocation": {
+        "country": "United States",
+        "zipcode": "12345"
+      },
+      "viewCount": 45,
+      "watchCount": 12,
+      "soldCount": 5
+    },
+    {
+      "legacyItemId": "222",
+      "title": "Vintage Apple Computer",
+      "price": "249.99",
+      "currency": "USD",
+      "condition": "Used",
+      "conditionId": "3000",
+      "categoryId": "11450",
+      "image": "https://i.ebayimg.com/images/g/example.jpg",
+      "seller": {
+        "username": "example_seller",
+        "feedbackScore": 1500,
+        "positivePercent": 98.5,
+        "topRatedSeller": true
+      },
+      "shipping": {
+        "method": "Multi-category",
+        "cost": 10.0,
+        "expedited": true,
+        "free": false
+      },
+      "itemLocation": {
+        "country": "United States",
+        "zipcode": "12345"
+      },
+      "viewCount": 45,
+      "watchCount": 12,
+      "soldCount": 5
+    },
+    {
+      "legacyItemId": "333",
+      "title": "Vintage Apple Computer",
+      "price": "149.99",
+      "currency": "USD",
+      "condition": "Used",
+      "conditionId": "3000",
+      "categoryId": "11450",
+      "image": "https://i.ebayimg.com/images/g/example.jpg",
+      "seller": {
+        "username": "example_seller",
+        "feedbackScore": 1500,
+        "positivePercent": 98.5,
+        "topRatedSeller": true
+      },
+      "shipping": {
+        "method": "Multi-category",
+        "cost": 10.0,
+        "expedited": true,
+        "free": false
+      },
+      "itemLocation": {
+        "country": "United States",
+        "zipcode": "12345"
+      },
+      "viewCount": 45,
+      "watchCount": 12,
+      "soldCount": 5
+    }
+  ]
+}

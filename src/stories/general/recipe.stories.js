@@ -6,7 +6,7 @@ import '@/css/pixelated.global.css';
 const categories = ['bread', 'appetizer', 'dinner', 'slow cooker', 'side dish', 'salad', 'dessert'];
 
 export default {
-	title: 'General',
+	title: 'General/Recipe',
 	component: RecipeBook,
 };
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { ProjectTiles } from '@/components/general/tiles';
 
 export default {
-	title: 'General',
+	title: 'General/Project Tiles',
 	component: ProjectTiles,
 };
 

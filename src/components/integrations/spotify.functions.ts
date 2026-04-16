@@ -1,6 +1,6 @@
 
 import PropTypes, { InferProps } from "prop-types";
-import { smartFetch } from '../general/smartfetch';
+import { smartFetch } from '../foundation/smartfetch';
 
 
 export type SpotifyPodcastSeriesType = {

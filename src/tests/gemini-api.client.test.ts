@@ -2,11 +2,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { GeminiApiService, createGeminiApiService } from '../components/integrations/gemini-api.client';
 
 // Mock smartFetch
-vi.mock('../components/general/smartfetch', () => ({
+vi.mock('../components/foundation/smartfetch', () => ({
 	smartFetch: vi.fn()
 }));
 
-import { smartFetch } from '../components/general/smartfetch';
+import { smartFetch } from '../components/foundation/smartfetch';
 
 // Complete SiteInfo fixture with all required fields
 const completeSiteInfo = {

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { getLipsum } from '@/components/integrations/lipsum';
 
-vi.mock('@/components/general/smartfetch');
+vi.mock('@/components/foundation/smartfetch');
 
 describe('getLipsum Integration', () => {
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('getLipsum Integration', () => {
   describe('HTML Parsing', () => {
     it('parses HTML response into paragraph strings', async () => {
       const html = `<!doctype html><html><body><div id="lipsum"><p>First paragraph</p><p>Second paragraph</p></div></body></html>`;
-      const { smartFetch } = await import('@/components/general/smartfetch');
+      const { smartFetch } = await import('@/components/foundation/smartfetch');
       vi.mocked(smartFetch).mockResolvedValue(html);
 
       const res = await getLipsum({ LipsumTypeId: 'Paragraph', Amount: 2, StartWithLoremIpsum: true });
@@ -26,7 +26,7 @@ describe('getLipsum Integration', () => {
 
     it('parses single paragraph correctly', async () => {
       const html = `<!doctype html><html><body><div id="lipsum"><p>Single paragraph</p></div></body></html>`;
-      const { smartFetch } = await import('@/components/general/smartfetch');
+      const { smartFetch } = await import('@/components/foundation/smartfetch');
       vi.mocked(smartFetch).mockResolvedValue(html);
 
       const res = await getLipsum({ LipsumTypeId: 'Paragraph', Amount: 1, StartWithLoremIpsum: false });
@@ -38,7 +38,7 @@ describe('getLipsum Integration', () => {
     it('parses multiple paragraphs', async () => {
       const paragraphs = Array.from({ length: 5 }, (_, i) => `<p>Paragraph ${i + 1}</p>`).join('');
       const html = `<!doctype html><html><body><div id="lipsum">${paragraphs}</div></body></html>`;
-      const { smartFetch } = await import('@/components/general/smartfetch');
+      const { smartFetch } = await import('@/components/foundation/smartfetch');
       vi.mocked(smartFetch).mockResolvedValue(html);
 
       const res = await getLipsum({ LipsumTypeId: 'Paragraph', Amount: 5, StartWithLoremIpsum: true });
@@ -50,7 +50,7 @@ describe('getLipsum Integration', () => {
   describe('API Requests', () => {
     it('sends request to proxy URL', async () => {
       const html = `<!doctype html><html><body><div id="lipsum"><p>Test</p></div></body></html>`;
-      const { smartFetch } = await import('@/components/general/smartfetch');
+      const { smartFetch } = await import('@/components/foundation/smartfetch');
       vi.mocked(smartFetch).mockResolvedValue(html);
 
       await getLipsum({ LipsumTypeId: 'Paragraph', Amount: 2, StartWithLoremIpsum: true });
@@ -60,7 +60,7 @@ describe('getLipsum Integration', () => {
 
     it('includes LipsumTypeId in request', async () => {
       const html = `<!doctype html><html><body><div id="lipsum"><p>Test</p></div></body></html>`;
-      const { smartFetch } = await import('@/components/general/smartfetch');
+      const { smartFetch } = await import('@/components/foundation/smartfetch');
       vi.mocked(smartFetch).mockResolvedValue(html);
 
       await getLipsum({ LipsumTypeId: 'Sentence', Amount: 5, StartWithLoremIpsum: false });
@@ -70,7 +70,7 @@ describe('getLipsum Integration', () => {
 
     it('includes amount parameter', async () => {
       const html = `<!doctype html><html><body><div id="lipsum"><p>Test</p></div></body></html>`;
-      const { smartFetch } = await import('@/components/general/smartfetch');
+      const { smartFetch } = await import('@/components/foundation/smartfetch');
       vi.mocked(smartFetch).mockResolvedValue(html);
 
       await getLipsum({ LipsumTypeId: 'Paragraph', Amount: 5, StartWithLoremIpsum: true });
@@ -79,9 +79,10 @@ describe('getLipsum Integration', () => {
     });
   });
 
+
   describe('Error Handling', () => {
     it('returns empty array when fetch fails', async () => {
-      const { smartFetch } = await import('@/components/general/smartfetch');
+      const { smartFetch } = await import('@/components/foundation/smartfetch');
       vi.mocked(smartFetch).mockRejectedValue(new Error('Network error'));
 
       const res = await getLipsum({ LipsumTypeId: 'Paragraph', Amount: 1, StartWithLoremIpsum: false });
@@ -90,7 +91,7 @@ describe('getLipsum Integration', () => {
     });
 
     it('handles network errors gracefully', async () => {
-      const { smartFetch } = await import('@/components/general/smartfetch');
+      const { smartFetch } = await import('@/components/foundation/smartfetch');
       vi.mocked(smartFetch).mockRejectedValue(new TypeError('Failed to fetch'));
 
       const res = await getLipsum({ LipsumTypeId: 'Paragraph', Amount: 2, StartWithLoremIpsum: true });
@@ -101,7 +102,7 @@ describe('getLipsum Integration', () => {
 
     it('handles empty HTML response', async () => {
       const html = `<!doctype html><html><body><div id="lipsum"></div></body></html>`;
-      const { smartFetch } = await import('@/components/general/smartfetch');
+      const { smartFetch } = await import('@/components/foundation/smartfetch');
       vi.mocked(smartFetch).mockResolvedValue(html);
 
       const res = await getLipsum({ LipsumTypeId: 'Paragraph', Amount: 1, StartWithLoremIpsum: false });
@@ -111,7 +112,7 @@ describe('getLipsum Integration', () => {
 
     it('handles missing lipsum div', async () => {
       const html = `<!doctype html><html><body><p>No lipsum div</p></body></html>`;
-      const { smartFetch } = await import('@/components/general/smartfetch');
+      const { smartFetch } = await import('@/components/foundation/smartfetch');
       vi.mocked(smartFetch).mockResolvedValue(html);
 
       const res = await getLipsum({ LipsumTypeId: 'Paragraph', Amount: 1, StartWithLoremIpsum: false });

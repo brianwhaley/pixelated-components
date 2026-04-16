@@ -1,7 +1,7 @@
 
 import { getContentfulDiscountCodes } from "../integrations/contentful.delivery";
-import { CacheManager } from "../general/cache-manager";
-import { getDomain } from "../general/utilities";
+import { CacheManager } from "../foundation/cache-manager";
+import { getDomain } from "../foundation/utilities";
 
 // Migration-time verbose tracing per user request — remove after verification
 const debug = false;

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { smartFetch } from '../components/general/smartfetch';
+import { smartFetch } from '../components/foundation/smartfetch';
 
 describe('smartFetch', () => {
 	beforeEach(() => {

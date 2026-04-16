@@ -1,5 +1,5 @@
 import PropTypes, { InferProps } from 'prop-types';
-import { smartFetch } from '../general/smartfetch';
+import { smartFetch } from '../foundation/smartfetch';
 
 // https://www.outsystems.com/forge/component-documentation/12204/lorem-ipsum-lipsum-com-o11/0
 

@@ -7,8 +7,8 @@
 "use server";
 
 import { google } from 'googleapis';
-import { CacheManager } from '../../general/cache-manager';
-import { getDomain } from '../../general/utilities';
+import { CacheManager } from '../../foundation/cache-manager';
+import { getDomain } from '../../foundation/utilities';
 import { calculateDateRanges, formatChartDate, getCachedData, setCachedData } from './google.api.utils';
 
 // Migration-time debug flag (owner requested): verbose cache traces during migration

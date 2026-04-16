@@ -1,7 +1,7 @@
 
 import PropTypes, { InferProps } from "prop-types";
-import { smartFetch } from '../general/smartfetch';
-import { buildUrl } from '../general/urlbuilder';
+import { smartFetch } from '../foundation/smartfetch';
+import { buildUrl } from '../foundation/urlbuilder';
 const wpApiURL = "https://public-api.wordpress.com/rest/v1/sites/";
 const wpCategoriesPath = "/categories";
 

@@ -5,8 +5,8 @@
  */
 
 import type { ContentfulConfig } from '../config/config.types';
-import { smartFetch } from '../general/smartfetch';
-import { buildUrl } from '../general/urlbuilder';
+import { smartFetch } from '../foundation/smartfetch';
+import { buildUrl } from '../foundation/urlbuilder';
 
 export interface ContentfulEntry {
 	sys: {

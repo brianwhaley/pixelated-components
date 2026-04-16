@@ -1,0 +1,28 @@
+{
+  "components": [
+    {
+      "component": "Callout",
+      "props": {
+        "title": "Test Callout",
+        "content": "Test content"
+      },
+      "children": []
+    },
+    {
+      "component": "Page Section",
+      "props": {
+        "items": []
+      },
+      "children": [
+        {
+          "component": "Callout",
+          "props": {
+            "title": "Child Callout",
+            "content": "Child content"
+          },
+          "children": []
+        }
+      ]
+    }
+  ]
+}

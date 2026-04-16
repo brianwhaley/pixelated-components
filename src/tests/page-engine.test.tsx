@@ -1,7 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '../test/test-utils';
+import { fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { PageEngine } from "../components/sitebuilder/page/components/PageEngine";
+import { mockPageEngineData } from '../test/fixtures';
 
 describe('PageEngine', () => {
 	const mockOnEditComponent = vi.fn();
@@ -10,34 +12,7 @@ describe('PageEngine', () => {
 	const mockOnMoveUp = vi.fn();
 	const mockOnMoveDown = vi.fn();
 
-	const mockPageData = {
-		components: [
-			{
-				component: 'Callout',
-				props: {
-					title: 'Test Callout',
-					content: 'Test content'
-				},
-				children: []
-			},
-			{
-				component: 'Page Section',
-				props: {
-					items: []
-				},
-				children: [
-					{
-						component: 'Callout',
-						props: {
-							title: 'Child Callout',
-							content: 'Child content'
-						},
-						children: []
-					}
-				]
-			}
-		]
-	};
+	const mockPageData = mockPageEngineData;
 
 	beforeEach(() => {
 		vi.clearAllMocks();
@@ -132,6 +107,66 @@ describe('PageEngine', () => {
 			);
 
 			expect(screen.getByText('Test Callout')).toBeInTheDocument();
+		});
+
+		it('should invoke edit, move, delete, and add-child callbacks in edit mode', () => {
+			const pageData = {
+				components: [
+					{
+						component: 'Page Section',
+						props: { title: 'Section Title' },
+						children: [
+							{
+								component: 'Callout',
+								props: { title: 'Child Callout' },
+								children: []
+							}
+						]
+					}
+				]
+			};
+
+			render(
+				<PageEngine
+					pageData={pageData}
+					editMode={true}
+					onEditComponent={mockOnEditComponent}
+					onSelectComponent={mockOnSelectComponent}
+					onDeleteComponent={mockOnDeleteComponent}
+					onMoveUp={mockOnMoveUp}
+					onMoveDown={mockOnMoveDown}
+				/>
+			);
+
+			const editButtons = screen.getAllByTitle('Edit properties');
+			const deleteButtons = screen.getAllByTitle('Delete component');
+			const moveUpButtons = screen.getAllByTitle('Move up');
+			const moveDownButtons = screen.getAllByTitle('Move down');
+			const addChildButton = screen.getByTitle('Add child component');
+
+			editButtons.forEach((button) => fireEvent.click(button));
+			deleteButtons.forEach((button) => fireEvent.click(button));
+			moveUpButtons.forEach((button) => fireEvent.click(button));
+			moveDownButtons.forEach((button) => fireEvent.click(button));
+			fireEvent.click(addChildButton);
+
+			expect(mockOnEditComponent).toHaveBeenCalled();
+			expect(mockOnDeleteComponent).toHaveBeenCalled();
+			expect(mockOnMoveUp).toHaveBeenCalled();
+			expect(mockOnMoveDown).toHaveBeenCalled();
+			expect(mockOnSelectComponent).toHaveBeenCalled();
+		});
+
+		it('should apply selected class when selectedPath matches', () => {
+			render(
+				<PageEngine
+					pageData={mockPageData}
+					editMode={true}
+					selectedPath='root[0]'
+				/>
+			);
+
+			expect(document.querySelector('.selected')).toBeInTheDocument();
 		});
 	});
 

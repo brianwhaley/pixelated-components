@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { GoogleMaps } from '../components/integrations/googlemap';
-import { renderWithProviders } from './test-utils';
+import { renderWithProviders } from '../test/test-utils';
 
 
 describe('Google Map Components', () => {

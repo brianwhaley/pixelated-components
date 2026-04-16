@@ -2,7 +2,7 @@ import React from 'react';
 import { PageBuilderUI } from '@/components/sitebuilder/page/components/PageBuilderUI';
 
 export default {
-	title: 'Admin/SiteBuilder/Page',
+	title: 'SiteBuilder/Page Builder Usage Guide',
 	component: PageBuilderUI,
 	parameters: {
 		layout: 'fullscreen',

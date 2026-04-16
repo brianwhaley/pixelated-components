@@ -16,7 +16,10 @@ PREP_MODE=false
 SIMPLE_MODE=false
 STEP_COUNT=1
 declare -a LINT_FAILURES
+declare -a TEST_FAILURES
 declare -a BUILD_FAILURES
+declare -a WORKSPACES_AFTER_LINT
+declare -a WORKSPACES_AFTER_TEST
 declare -a SUCCESSFUL_WORKSPACES
 declare -a PUSH_ERRORS
 UPDATE_FAILED=false
@@ -27,10 +30,15 @@ NEW_VERSION=""
 MONOREPO_ROOT=$(git rev-parse --show-toplevel)
 PROJECT_NAME=""
 CONTEXT_TYPE="unknown"
+WORKSPACE_ROOT=""
+WORKSPACE_TYPE=""
+WORKSPACE_NAME=""
+WORKSPACE_DIRS=()
 APP_NAME=""
 GITHUB_TOKEN=""
 GITHUB_TOKEN_SOURCE=""
 RELEASE_MODE="both"
+MONOREPO_MODE=false
 
 # Detect flags
 if [[ "$*" == *"--prep"* ]]; then
@@ -39,24 +47,69 @@ fi
 if [[ "$*" == *"--simple"* ]]; then
     SIMPLE_MODE=true
 fi
+if [[ "$*" == *"--monorepo"* ]]; then
+    MONOREPO_MODE=true
+fi
 
 # ============================================================
-# CONTEXT DETECTION (run early to populate CONTEXT_TYPE, APP_NAME)
+# CONTEXT DETECTION (run early to populate CONTEXT_TYPE, WORKSPACE_ROOT)
 # ============================================================
+
+find_workspace_root() {
+    local dir="$CURRENT_DIR"
+    while [ "$dir" != "$MONOREPO_ROOT" ] && [ "$dir" != "/" ]; do
+        if [ -f "$dir/package.json" ]; then
+            echo "$dir"
+            return 0
+        fi
+        dir=$(dirname "$dir")
+    done
+
+    if [ -f "$MONOREPO_ROOT/package.json" ]; then
+        echo "$MONOREPO_ROOT"
+        return 0
+    fi
+
+    echo "$CURRENT_DIR"
+}
 
 detect_context() {
-    local current_dir=$(pwd)
-    PROJECT_NAME=$(node -p "require('./package.json').name" 2>/dev/null || echo "")
-    
-    if [[ "$PROJECT_NAME" == "@pixelated-tech/components" ]] || [[ "$current_dir" == *"pixelated-components"* ]]; then
-        CONTEXT_TYPE="component"
-    elif [[ "$current_dir" == *"apps/"* ]] || [[ "$current_dir" == *"tools/"* ]]; then
+    CURRENT_DIR=$(pwd)
+    WORKSPACE_ROOT=$(find_workspace_root)
+    local relative_path="${WORKSPACE_ROOT#$MONOREPO_ROOT/}"
+
+    if [ "$WORKSPACE_ROOT" = "$MONOREPO_ROOT" ]; then
+        CONTEXT_TYPE="root"
+        WORKSPACE_TYPE="root"
+        WORKSPACE_NAME=$(basename "$MONOREPO_ROOT")
+    elif [[ "$relative_path" == apps/* ]]; then
         CONTEXT_TYPE="app"
-        APP_NAME=$(basename "$current_dir")
+        WORKSPACE_TYPE="app"
+        WORKSPACE_NAME=$(basename "$WORKSPACE_ROOT")
+        APP_NAME="$WORKSPACE_NAME"
+    elif [[ "$relative_path" == tools/* ]]; then
+        CONTEXT_TYPE="tool"
+        WORKSPACE_TYPE="tool"
+        WORKSPACE_NAME=$(basename "$WORKSPACE_ROOT")
+        APP_NAME="$WORKSPACE_NAME"
+    elif [[ "$relative_path" == packages/* ]]; then
+        WORKSPACE_TYPE="package"
+        WORKSPACE_NAME=$(basename "$WORKSPACE_ROOT")
+        if [[ "$relative_path" == packages/pixelated-components* ]]; then
+            CONTEXT_TYPE="component"
+        else
+            CONTEXT_TYPE="package"
+        fi
     else
         CONTEXT_TYPE="standalone"
-        # Try to use current directory name as app name for remote matching
-        APP_NAME=$(basename "$current_dir")
+        WORKSPACE_TYPE="standalone"
+        WORKSPACE_NAME=$(basename "$WORKSPACE_ROOT")
+    fi
+
+    if [ "$CONTEXT_TYPE" = "root" ]; then
+        WORKSPACE_DIRS=("$MONOREPO_ROOT" "$MONOREPO_ROOT/packages/*" "$MONOREPO_ROOT/apps/*" "$MONOREPO_ROOT/tools/*")
+    else
+        WORKSPACE_DIRS=("$WORKSPACE_ROOT")
     fi
 }
 
@@ -277,54 +330,194 @@ step_update_globally() {
     fi
 }
 
-step_lint_build_per_workspace() {
+generate_sitemap_images_for_workspace() {
+    local workspace_name="$1"
+    local workspace_dir="$2"
+
+    echo "  📦 Generating sitemap images for $workspace_name..."
+    echo "================================================="
+    if ! node $(node -e 'console.log(require.resolve("@pixelated-tech/components/scripts/generate-site-images.js"))') > /tmp/generate_site_images_output.log 2>&1; then
+        echo "❌ Sitemap image generation failed for $workspace_name at $workspace_dir"
+        cat /tmp/generate_site_images_output.log
+        return 1
+    fi
+    return 0
+}
+
+workspace_has_vitest_or_tests() {
+    local workspace_dir="$1"
+    node -e "const pkg=require(process.argv[1]); const scripts=pkg.scripts||{}; const deps=Object.assign({}, pkg.dependencies||{}, pkg.devDependencies||{}, pkg.optionalDependencies||{}, pkg.peerDependencies||{}); const hasVitest=typeof deps.vitest !== 'undefined'; const hasTestScript=typeof scripts.test !== 'undefined' || typeof scripts['test:coverage'] !== 'undefined' || typeof scripts['test:run'] !== 'undefined'; console.log(hasVitest || hasTestScript ? 'yes':'no');" "$workspace_dir/package.json"
+}
+
+workspace_has_test_validator_script() {
+    local workspace_dir="$1"
+    node -e "const pkg=require(process.argv[1]); const scripts=pkg.scripts||{}; console.log(!!scripts['test:validator'] ? 'yes' : 'no');" "$workspace_dir/package.json"
+}
+
+step_run_tests_if_available() {
+    local workspace_name="$1"
+    local workspace_dir="$2"
+
+    if [ "$(workspace_has_vitest_or_tests "$workspace_dir")" != "yes" ]; then
+        return 0
+    fi
+
+    echo "  🧪 Running tests for $workspace_name..."
+    echo "================================================="
+
+    local has_validator_script
+    has_validator_script=$(workspace_has_test_validator_script "$workspace_dir")
+
+    if [ -f "$workspace_dir/src/scripts/test-validator.js" ]; then
+        if ! node src/scripts/test-validator.js > /tmp/test_validator_output.log 2>&1; then
+            echo "❌ Test validator failed for $workspace_name at $workspace_dir"
+            cat /tmp/test_validator_output.log
+            return 1
+        fi
+    elif [ "$has_validator_script" = "yes" ]; then
+        if ! npm run test:validator > /tmp/test_validator_output.log 2>&1; then
+            echo "❌ Test validator failed for $workspace_name at $workspace_dir"
+            cat /tmp/test_validator_output.log
+            return 1
+        fi
+    fi
+
+    if ! npm exec -- vitest run --coverage --silent > /tmp/test_coverage_output.log 2>&1; then
+        echo "❌ Vitest coverage failed for $workspace_name at $workspace_dir"
+        cat /tmp/test_coverage_output.log
+        return 1
+    fi
+
+    return 0
+}
+
+step_lint_per_workspace() {
     echo ""
-    echo "🔄 Running lint + build for each workspace..."
+    echo "🔄 Running lint for each workspace..."
     echo "================================================="
     echo ""
-    
-    for workspace_dir in "$MONOREPO_ROOT"/packages/* "$MONOREPO_ROOT"/apps/* "$MONOREPO_ROOT"/tools/*; do
+
+    shopt -s nullglob
+    for workspace_pattern in "${WORKSPACE_DIRS[@]}"; do
+        for workspace_dir in $workspace_pattern; do
+            if [ -d "$workspace_dir" ] && [ -f "$workspace_dir/package.json" ]; then
+                local workspace_name
+                workspace_name=$(node -p "require('$workspace_dir/package.json').name" 2>/dev/null || basename "$workspace_dir")
+                local workspace_path
+                workspace_path=$(basename "$workspace_dir")
+
+                echo ""
+                echo "================================================="
+                echo "📍 Linting: $workspace_name"
+                echo "================================================="
+                pushd "$workspace_dir" >/dev/null
+
+                if ! npm run lint > /tmp/lint_output.log 2>&1; then
+                    echo "❌ Lint failed for $workspace_name at $workspace_path"
+                    LINT_FAILURES+=("$workspace_name")
+                    cat /tmp/lint_output.log
+                else
+                    WORKSPACES_AFTER_LINT+=("$workspace_dir")
+                fi
+
+                popd >/dev/null
+            fi
+        done
+    done
+}
+
+step_run_tests_per_workspace() {
+    echo ""
+    echo "🔄 Running tests for each workspace..."
+    echo "================================================="
+    echo ""
+
+    for workspace_dir in "${WORKSPACES_AFTER_LINT[@]}"; do
         if [ -d "$workspace_dir" ] && [ -f "$workspace_dir/package.json" ]; then
             local workspace_name
             workspace_name=$(node -p "require('$workspace_dir/package.json').name" 2>/dev/null || basename "$workspace_dir")
             local workspace_path
             workspace_path=$(basename "$workspace_dir")
-            
+
             echo ""
             echo "================================================="
-            echo "📍 Processing: $workspace_name"
+            echo "📍 Testing: $workspace_name"
             echo "================================================="
-            cd "$workspace_dir"
-            
-            local workspace_failed=false
-            
-            # Lint
-            echo ""
-            echo "  🔍 Linting $workspace_name..."
-            if ! npm run lint > /tmp/lint_output.log 2>&1; then
-                echo "❌ Lint failed for $workspace_name at $workspace_path"
-                LINT_FAILURES+=("$workspace_name")
-                workspace_failed=true
-                cat /tmp/lint_output.log
+            pushd "$workspace_dir" >/dev/null
+
+            if ! step_run_tests_if_available "$workspace_name" "$workspace_dir"; then
+                TEST_FAILURES+=("$workspace_name")
+            else
+                WORKSPACES_AFTER_TEST+=("$workspace_dir")
             fi
-            
-            # Build (only if lint passed)
-            if [ "$workspace_failed" = false ]; then
-                echo "  🔨 Building $workspace_name..."
-                if ! npm run build > /tmp/build_output.log 2>&1; then
-                    echo "❌ Build failed for $workspace_name at $workspace_path"
-                    BUILD_FAILURES+=("$workspace_name")
-                    workspace_failed=true
-                    cat /tmp/build_output.log
-                fi
-            fi
-            
-            if [ "$workspace_failed" = false ]; then
-                echo "  ✅ $workspace_name complete"
-                SUCCESSFUL_WORKSPACES+=("$workspace_name")
-            fi
+
+            popd >/dev/null
         fi
     done
+}
+
+step_build_per_workspace() {
+    echo ""
+    echo "🔄 Running build for each workspace..."
+    echo "================================================="
+    echo ""
+
+    for workspace_dir in "${WORKSPACES_AFTER_TEST[@]}"; do
+        if [ -d "$workspace_dir" ] && [ -f "$workspace_dir/package.json" ]; then
+            local workspace_name
+            workspace_name=$(node -p "require('$workspace_dir/package.json').name" 2>/dev/null || basename "$workspace_dir")
+            local workspace_path
+            workspace_path=$(basename "$workspace_dir")
+
+            echo ""
+            echo "================================================="
+            echo "📍 Building: $workspace_name"
+            echo "================================================="
+            pushd "$workspace_dir" >/dev/null
+
+            if ! npm run build > /tmp/build_output.log 2>&1; then
+                echo "❌ Build failed for $workspace_name at $workspace_path"
+                BUILD_FAILURES+=("$workspace_name")
+                cat /tmp/build_output.log
+            else
+                echo "  ✅ $workspace_name build complete"
+                SUCCESSFUL_WORKSPACES+=("$workspace_name")
+            fi
+
+            popd >/dev/null
+        fi
+    done
+}
+
+step_generate_sitemap_images() {
+    echo ""
+    echo "🔄 Running sitemap image generation for each workspace..."
+    echo "================================================="
+    echo ""
+
+    shopt -s nullglob
+    for workspace_pattern in "${WORKSPACE_DIRS[@]}"; do
+        for workspace_dir in $workspace_pattern; do
+            if [ -d "$workspace_dir" ] && [ -f "$workspace_dir/package.json" ]; then
+                local workspace_name
+                workspace_name=$(node -p "require('$workspace_dir/package.json').name" 2>/dev/null || basename "$workspace_dir")
+                local workspace_path
+                workspace_path=$(basename "$workspace_dir")
+
+            echo ""
+            echo "================================================="
+            echo "📍 Generating sitemap images: $workspace_name"
+            echo "================================================="
+            pushd "$workspace_dir" >/dev/null
+
+            if ! generate_sitemap_images_for_workspace "$workspace_name" "$workspace_path"; then
+                IMAGE_FAILURES+=("$workspace_name")
+            fi
+
+            popd >/dev/null
+        fi
+    done
+  done
 }
 
 step_prompt_version() {
@@ -340,6 +533,38 @@ step_bump_version() {
         NEW_VERSION=$(get_current_version)
         echo "✅ Bumped to version $NEW_VERSION"
     fi
+}
+
+bump_workspace_package() {
+    local workspace_dir="$1"
+    local workspace_name
+    workspace_name=$(node -p "require('$workspace_dir/package.json').name" 2>/dev/null || basename "$workspace_dir")
+    echo "🔖 Bumping $workspace_name"
+    pushd "$workspace_dir" >/dev/null
+    npm version "$VERSION_TYPE" --force --no-git-tag-version
+    popd >/dev/null
+}
+
+bump_all_workspaces() {
+    if [ "$VERSION_TYPE" = "none" ]; then
+        echo "ℹ️  Skipping version bump for all workspaces"
+        return
+    fi
+
+    echo ""
+    echo "🏷️  Step $((STEP_COUNT++)): Bump all workspaces with '$VERSION_TYPE'..."
+    echo "================================================="
+    shopt -s nullglob
+    local workspace_patterns=("$MONOREPO_ROOT/packages/*" "$MONOREPO_ROOT/apps/*" "$MONOREPO_ROOT/tools/*")
+    for workspace_pattern in "${workspace_patterns[@]}"; do
+        for workspace_dir in $workspace_pattern; do
+            if [ -f "$workspace_dir/package.json" ]; then
+                bump_workspace_package "$workspace_dir"
+            fi
+        done
+    done
+    NEW_VERSION="$VERSION_TYPE"
+    echo "✅ Applied '$VERSION_TYPE' bump to all workspace packages"
 }
 
 step_commit_changes() {
@@ -494,15 +719,15 @@ step_git_subtree_deploy() {
     echo ""
     echo "🚀 Step $((STEP_COUNT++)): Git Subtree Push (if applicable)..."
     echo "================================================="
-    if [ "$CONTEXT_TYPE" != "app" ]; then
+    if [ "$CONTEXT_TYPE" != "app" ] && [ "$CONTEXT_TYPE" != "tool" ]; then
         echo "ℹ️  Not an app/tool - skipping git subtree push"
         return
     fi
     
     local APP_TYPE
-    if [[ "$CURRENT_DIR" == *"apps/"* ]]; then
+    if [[ "$WORKSPACE_ROOT" == "$MONOREPO_ROOT"/apps/* ]]; then
         APP_TYPE="apps"
-    elif [[ "$CURRENT_DIR" == *"tools/"* ]]; then
+    elif [[ "$WORKSPACE_ROOT" == "$MONOREPO_ROOT"/tools/* ]]; then
         APP_TYPE="tools"
     else
         return
@@ -558,6 +783,14 @@ print_summary_prep() {
         echo ""
     fi
     
+    if [ ${#TEST_FAILURES[@]} -gt 0 ]; then
+        echo "❌ Test Failures: ${#TEST_FAILURES[@]}"
+        for ws in "${TEST_FAILURES[@]}"; do
+            echo "   ✗ $ws"
+        done
+        echo ""
+    fi
+
     if [ ${#BUILD_FAILURES[@]} -gt 0 ]; then
         echo "❌ Build Failures: ${#BUILD_FAILURES[@]}"
         for ws in "${BUILD_FAILURES[@]}"; do
@@ -565,10 +798,18 @@ print_summary_prep() {
         done
         echo ""
     fi
+
+    if [ ${#IMAGE_FAILURES[@]} -gt 0 ]; then
+        echo "❌ Image Generation Failures: ${#IMAGE_FAILURES[@]}"
+        for ws in "${IMAGE_FAILURES[@]}"; do
+            echo "   ✗ $ws"
+        done
+        echo ""
+    fi
     
     echo "================================================="
     
-    if [ "$UPDATE_FAILED" = true ] || [ ${#LINT_FAILURES[@]} -gt 0 ] || [ ${#BUILD_FAILURES[@]} -gt 0 ]; then
+    if [ "$UPDATE_FAILED" = true ] || [ ${#LINT_FAILURES[@]} -gt 0 ] || [ ${#BUILD_FAILURES[@]} -gt 0 ] || [ ${#IMAGE_FAILURES[@]} -gt 0 ]; then
         echo "❌ PREP MODE FAILED: See errors above"
         exit 1
     else
@@ -608,9 +849,16 @@ run_prep_workflow() {
     echo "🚀 PREP MODE: Update → Lint → Build per-workspace"
     echo "================================================="
     
-    cd "$MONOREPO_ROOT"
+    if [ "$CONTEXT_TYPE" = "root" ]; then
+        cd "$MONOREPO_ROOT"
+    else
+        cd "$WORKSPACE_ROOT"
+    fi
     step_update_globally
-    step_lint_build_per_workspace
+    step_lint_per_workspace
+    step_run_tests_per_workspace
+    step_build_per_workspace
+    step_generate_sitemap_images
     print_summary_prep
 }
 
@@ -620,10 +868,20 @@ run_simple_workflow() {
     echo "📦 SIMPLE MODE: Monorepo Version → Commit → Push"
     echo "================================================="
     
+    if [ "$CONTEXT_TYPE" = "root" ]; then
+        cd "$MONOREPO_ROOT"
+    else
+        cd "$WORKSPACE_ROOT"
+    fi
     step_check_dev_branch
     step_select_remote
     step_prompt_version
-    step_bump_version
+    if [ "$CONTEXT_TYPE" = "root" ]; then
+        bump_all_workspaces
+    else
+        step_bump_version
+    fi
+    step_generate_sitemap_images
     step_commit_changes
     step_push_dev
     step_push_tags
@@ -637,25 +895,22 @@ run_full_workflow() {
     echo "🚀 FULL RELEASE: Complete release cycle"
     echo "================================================="
     
-    # Initialize project context
+    if [ "$CONTEXT_TYPE" = "root" ]; then
+        cd "$MONOREPO_ROOT"
+    else
+        cd "$WORKSPACE_ROOT"
+    fi
+
     PROJECT_NAME=$(node -p "require('./package.json').name" 2>/dev/null || echo "unknown-project")
     CURRENT_DIR=$(pwd)
-    
-    if [[ "$PROJECT_NAME" == "@pixelated-tech/components" ]] || [[ "$CURRENT_DIR" == *"pixelated-components"* ]]; then
-        CONTEXT_TYPE="component"
-    elif [[ "$CURRENT_DIR" == *"apps/"* ]] || [[ "$CURRENT_DIR" == *"tools/"* ]]; then
-        CONTEXT_TYPE="app"
-        APP_NAME=$(basename "$CURRENT_DIR")
-    else
-        CONTEXT_TYPE="standalone"
-    fi
-    
+
     echo "📦 Context: $PROJECT_NAME ($CONTEXT_TYPE)"
     echo ""
     
     # Run full workflow steps
     step_check_dev_branch
     step_select_remote
+    step_generate_sitemap_images
     step_verify_github_token
     step_verify_dist_config
     step_prompt_version
@@ -670,12 +925,123 @@ run_full_workflow() {
     print_summary_full
 }
 
+run_monorepo_workflow() {
+    echo ""
+    echo "================================================="
+    echo "🚀 MONOREPO RELEASE: Deploy apps/tools via git subtree"
+    echo "================================================="
+
+    cd "$MONOREPO_ROOT"
+
+    local remotes
+    remotes=$(git remote | sort)
+    local remotes_array=($remotes)
+    local remotes_count=${#remotes_array[@]}
+
+    if [ $remotes_count -eq 0 ]; then
+        echo "❌ No git remotes configured"
+        echo "Run: ./setup-remotes.sh"
+        exit 1
+    fi
+
+    echo "📦 Available remotes to deploy:"
+    echo ""
+    for i in "${!remotes_array[@]}"; do
+        num=$((i+1))
+        echo "$num) ${remotes_array[$i]}"
+    done
+    echo "$((remotes_count+1))) All"
+    echo ""
+
+    read -p "Select remotes to deploy (comma-separated numbers, or enter for all): " selection
+    selection=${selection:-$((remotes_count+1))}
+
+    local deploy_remotes=()
+    if [ "$selection" = "$((remotes_count+1))" ]; then
+        deploy_remotes=("${remotes_array[@]}")
+    else
+        IFS=',' read -ra indices <<< "$selection"
+        for idx in "${indices[@]}"; do
+            idx=$(echo $idx | xargs)
+            if [[ $idx =~ ^[0-9]+$ ]] && [ $idx -gt 0 ] && [ $idx -le $remotes_count ]; then
+                deploy_remotes+=("${remotes_array[$((idx-1))]}")
+            fi
+        done
+    fi
+
+    if [ ${#deploy_remotes[@]} -eq 0 ]; then
+        echo "❌ No valid remotes selected"
+        exit 1
+    fi
+
+    echo ""
+    echo "🎯 Deploying to: ${deploy_remotes[@]}"
+    echo ""
+
+    local failed=()
+    local success=()
+
+    for remote in "${deploy_remotes[@]}"; do
+        echo "-------------------------------------------"
+        echo "📤 Pushing to: $remote"
+
+        local app_path=""
+        if [ -d "apps/$remote" ]; then
+            app_path="apps/$remote"
+        elif [ -d "tools/$remote" ]; then
+            app_path="tools/$remote"
+        elif [ -d "packages/$remote" ]; then
+            app_path="packages/$remote"
+        else
+            echo "❌ Could not find app/tool folder for '$remote'"
+            failed+=("$remote (folder not found)")
+            continue
+        fi
+
+        if git subtree push --prefix="$app_path" "$remote" main 2>/dev/null; then
+            echo "✅ Successfully deployed $remote"
+            success+=("$remote")
+        else
+            echo "⚠️  Git subtree push encountered an issue for $remote"
+            echo "   This might be normal if there are no changes to push."
+            success+=("$remote (with warnings)")
+        fi
+        echo ""
+    done
+
+    echo "================================================="
+    echo "📊 Deployment Summary"
+    echo "================================================="
+    echo "✅ Successful: ${#success[@]}"
+    for item in "${success[@]}"; do
+        echo "   - $item"
+    done
+
+    if [ ${#failed[@]} -gt 0 ]; then
+        echo "❌ Failed: ${#failed[@]}"
+        for item in "${failed[@]}"; do
+            echo "   - $item"
+        done
+    fi
+
+    echo ""
+}
+
 # ============================================================
 # MAIN DISPATCHER
 # ============================================================
 
 # Detect context early (sets CONTEXT_TYPE, APP_NAME)
 detect_context
+
+#if [ "$MONOREPO_MODE" = true ]; then
+#    run_monorepo_workflow
+#fi
+
+#if [ "$MONOREPO_MODE" = true ]; then
+#    echo "⚠️  --monorepo flow is currently disabled. Use --simple from the monorepo root instead."
+#    exit 1
+#fi
 
 if [ "$PREP_MODE" = true ]; then
     run_prep_workflow

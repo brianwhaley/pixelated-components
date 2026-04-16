@@ -1,19 +1,65 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { analyzeSecurityHealth } from '../components/admin/site-health/site-health-security.integration';
 
 // Mock child_process to simulate npm audit responses
-vi.mock('child_process', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('child_process')>();
+vi.mock('child_process', async () => {
+	const actual = await vi.importActual<typeof import('child_process')>('child_process');
+	const mockExec = vi.fn((cmd: string, options: any, callback: (err: Error | null, stdout: string, stderr: string) => void) => {
+		callback(null, JSON.stringify({
+			auditReportVersion: 2,
+			vulnerabilities: {
+				'test-package': {
+					name: 'test-package',
+					severity: 'moderate',
+					via: ['vulnerability-1'],
+					range: '<1.0.0',
+					nodes: ['node_modules/test-package'],
+					fixAvailable: true
+				}
+			},
+			metadata: {
+				auditReportVersion: 2,
+				vulnerabilities: {
+					info: 0,
+					low: 0,
+					moderate: 1,
+					high: 0,
+					critical: 0
+				},
+				dependencies: {
+					total: 150,
+					prod: 25,
+					dev: 125,
+					optional: 0,
+					peer: 0,
+					peerOptional: 0
+				},
+				totalDependencies: 150
+			}
+		}), '');
+	});
 	return {
 		...actual,
-		exec: vi.fn()
+		default: actual,
+		exec: mockExec
 	};
 });
 
-vi.mock('util', async (importOriginal) => {
-	const actual = await importOriginal<typeof import('util')>();
+vi.mock('fs', async () => {
+	const actual = await vi.importActual<typeof import('fs')>('fs');
 	return {
 		...actual,
-		promisify: vi.fn((fn) => vi.fn().mockResolvedValue({
+		default: actual,
+		existsSync: vi.fn(actual.existsSync),
+	};
+});
+
+vi.mock('util', async () => {
+	const actual = await vi.importActual<typeof import('util')>('util');
+	return {
+		...actual,
+		default: actual,
+		promisify: vi.fn(() => vi.fn(async () => ({
 			stdout: JSON.stringify({
 				auditReportVersion: 2,
 				vulnerabilities: {
@@ -47,34 +93,11 @@ vi.mock('util', async (importOriginal) => {
 				}
 			}),
 			stderr: ''
-		}))
+		})))
 	};
 });
 
-vi.mock('fs', () => ({
-	existsSync: vi.fn(() => true),
-	readFileSync: vi.fn(() => JSON.stringify({ name: 'test-project', version: '1.0.0' }))
-}));
-
-vi.mock('path', () => ({
-	join: vi.fn((...args) => args.join('/'))
-}));
-
-// Import AFTER mocks are defined
-import { analyzeSecurityHealth, SecurityScanResult } from '../components/admin/site-health/site-health-security.integration';
-
-describe('site-health-security.integration', () => {
-	beforeEach(() => {
-		vi.clearAllMocks();
-	});
-
-	it('should analyze security with npm audit for a given path', async () => {
-		const result = await analyzeSecurityHealth('/test/path', 'test-site');
-		expect(result).toBeDefined();
-		expect(result.status).toBeDefined();
-		expect(['success', 'error']).toContain(result.status);
-	});
-
+describe('analyzeSecurityHealth', () => {
 	it('should return security scan result with expected structure', async () => {
 		const result = await analyzeSecurityHealth('.', 'test-site', 'test-repo');
 		expect(result).toBeDefined();

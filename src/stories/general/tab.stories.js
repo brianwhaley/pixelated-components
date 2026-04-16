@@ -2,7 +2,7 @@ import React from 'react';
 import { Tab } from '@/components/general/tab';
 
 export default {
-	title: 'General',
+	title: 'General/Tab',
 	component: Tab,
 	argTypes: {
 		orientation: {

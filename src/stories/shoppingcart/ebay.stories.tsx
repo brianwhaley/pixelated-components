@@ -2,7 +2,7 @@ import React from 'react';
 import { EbayRateLimitsVisualizer } from '@/components/shoppingcart/ebay.components';
 
 export default {
-	title: 'ShoppingCart',
+	title: 'ShoppingCart/eBay Rate Limits Visualizer',
 	component: EbayRateLimitsVisualizer,
 	argTypes: {
 		token: { control: 'text' },

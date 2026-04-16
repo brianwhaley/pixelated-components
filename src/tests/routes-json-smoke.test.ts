@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import myRoutes from '@/data/routes.json';
-import { flattenRoutes } from '../components/general/sitemap';
+import { flattenRoutes } from '../components/foundation/sitemap';
 
 describe('routes.json — integration smoke', () => {
   it('uses canonical siteInfo from src/data/routes.json', () => {

@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { PayPal } from '../components/shoppingcart/paypal';
+import { mockPayPalOrder } from '../test/fixtures';
 
 // Mock window.paypal
 (window as any).paypal = {
@@ -42,49 +43,6 @@ describe('PayPal Integration Tests', () => {
 		shippingTo: {
 			name: 'John Doe',
 		},
-	};
-
-	const mockPayPalOrder = {
-		id: 'ORDER-12345',
-		status: 'CREATED',
-		purchase_units: [
-			{
-				amount: {
-					currency_code: 'USD',
-					value: '99.99',
-					breakdown: {
-						item_total: { currency_code: 'USD', value: '89.99' },
-						tax_total: { currency_code: 'USD', value: '10.00' },
-						shipping: { currency_code: 'USD', value: '0.00' },
-					},
-				},
-				items: [
-					{
-						name: 'Laptop Computer',
-						unit_amount: { currency_code: 'USD', value: '89.99' },
-						quantity: '1',
-						sku: 'LAPTOP-001',
-						category: 'PHYSICAL_GOODS',
-					},
-				],
-				shipping: {
-					name: { full_name: 'John Doe' },
-					address: {
-						address_line_1: '2211 N First St',
-						admin_area_2: 'San Jose',
-						admin_area_1: 'CA',
-						postal_code: '95131',
-						country_code: 'US',
-					},
-				},
-			},
-		],
-		payer: {
-			name: { given_name: 'John', surname: 'Doe' },
-			email_address: 'john@example.com',
-			payer_id: 'PAYERID12345',
-		},
-		create_time: new Date().toISOString(),
 	};
 
 	const mockPayPalCapture = {

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { CacheManager } from '@/components/general/cache-manager';
+import { CacheManager } from '@/components/foundation/cache-manager';
 
 describe('CacheManager — unit tests', () => {
 	beforeEach(() => {

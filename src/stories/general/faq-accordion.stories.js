@@ -42,7 +42,7 @@ const mockFaqsData = {
 };
 
 export default {
-	title: 'General',
+	title: 'General/FAQ Accordion',
 	component: FAQAccordion,
 	parameters: {
 		layout: 'padded',

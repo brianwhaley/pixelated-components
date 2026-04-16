@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { setClientMetadata } from '../components/general/metadata.components';
+import { setClientMetadata } from '../components/foundation/metadata.components';
 
 describe('Metadata Components', () => {
 	it('should export setClientMetadata function', () => {

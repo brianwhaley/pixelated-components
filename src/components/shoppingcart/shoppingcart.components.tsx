@@ -9,7 +9,7 @@ import { FormEngine } from "../sitebuilder/form/formengine";
 import { FormButton } from '../sitebuilder/form/formcomponents';
 import { emailJSON } from "../sitebuilder/form/formsubmit";
 import '../sitebuilder/form/form.css';
-import { MicroInteractions } from '../general/microinteractions';
+import { MicroInteractions } from '../foundation/microinteractions';
 import { Modal, handleModalOpen } from '../general/modal';
 import { Table } from "../general/table";
 import { getCart, getShippingInfo, setShippingInfo, setDiscountCodes, getRemoteDiscountCodes, getCheckoutData, removeFromShoppingCart, clearShoppingCart, formatAsUSD, getCartItemCount } from "./shoppingcart.functions";

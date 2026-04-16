@@ -5,30 +5,10 @@ import PropTypes, { InferProps } from 'prop-types';
 import Image from 'next/image';
 import { buildCloudinaryUrl } from '../integrations/cloudinary';
 import { usePixelatedConfig } from '../config/config.client';
+import { parseNumber, safeString, sanitizeMediaString } from './smartmediautils';
 
 const CLOUDINARY_DOMAIN = 'https://res.cloudinary.com/';
 const CLOUDINARY_TRANSFORMS = 'f_auto,c_limit,q_auto,dpr_auto';
-
-function parseNumber(v?: string | number): number | undefined {
-	if (typeof v === 'number') return v > 0 ? v : undefined;
-	if (typeof v === 'string') {
-		const n = parseInt(v, 10);
-		return Number.isFinite(n) && n > 0 ? n : undefined;
-	}
-	return undefined;
-}
-
-function safeString(str: any) {
-	return (str === undefined || str === null) 
-		? undefined 
-		: String(str);
-}
-
-function sanitizeString(str: any) {
-	return (str === undefined || str === null) 
-		? undefined 
-		: String(str).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-}
 
 function generateSrcSet(
 	src: string, 
@@ -172,9 +152,9 @@ export function SmartImage(props: SmartImageType) {
 
 	const filename = (String(newProps.src || '')).split('/').pop()?.split('?')[0] || '';
 	const imageName = filename.replace(/\.[^.]+$/, '');
-	newProps.id = newProps.id || newProps.name || sanitizeString(newProps.title) || sanitizeString(newProps.alt) || sanitizeString(imageName);
-	newProps.name = newProps.name || newProps.id || sanitizeString(newProps.title) || sanitizeString(newProps.alt) || sanitizeString(imageName);
-	newProps.title = newProps.title || newProps.alt || sanitizeString(imageName);
+	newProps.id = newProps.id || newProps.name || sanitizeMediaString(newProps.title) || sanitizeMediaString(newProps.alt) || sanitizeMediaString(imageName);
+	newProps.name = newProps.name || newProps.id || sanitizeMediaString(newProps.title) || sanitizeMediaString(newProps.alt) || sanitizeMediaString(imageName);
+	newProps.title = newProps.title || newProps.alt || sanitizeMediaString(imageName);
 
 	newProps.src = String(newProps.src);
 

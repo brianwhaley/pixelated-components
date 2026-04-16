@@ -11,17 +11,19 @@ export * from './components/config/config.types';
 export * from './components/config/config.validators';
 export * from './components/config/crypto';
 
-export * from './components/general/manifest';
-export * from './components/general/metadata.functions';
-export * from './components/general/proxy-handler';
+export * from './components/foundation/manifest';
+export * from './components/foundation/metadata.functions';
+export * from './components/foundation/proxy-handler';
+export * from './components/foundation/schema.functions';
+export * from './components/foundation/sitemap';
+export * from './components/foundation/skeleton';
+export * from './components/foundation/smartfetch';
+export * from './components/foundation/urlbuilder';
+export * from './components/foundation/well-known';
+export * from './components/foundation/utilities';
+
 export * from './components/general/resume';
-export * from './components/general/schema.functions';
-export * from './components/general/sitemap';
-export * from './components/general/skeleton';
-export * from './components/general/smartfetch';
-export * from './components/general/urlbuilder';
-export * from './components/general/well-known';
-export * from './components/general/utilities';
+export * from './components/general/smartmediautils';
 
 export * from './components/integrations/contentful.delivery';
 export * from './components/integrations/contentful.management';

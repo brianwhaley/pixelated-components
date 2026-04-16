@@ -2,7 +2,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, act } from '../test/test-utils';
 import { SiteHealthTemplate } from '../components/admin/site-health/site-health-template';
-import * as smartFetchModule from '../components/general/smartfetch';
+import * as smartFetchModule from '../components/foundation/smartfetch';
 
 // Mock smartFetch
 const mockSmartFetch = vi.fn();

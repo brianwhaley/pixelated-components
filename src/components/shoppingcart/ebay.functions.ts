@@ -1,10 +1,10 @@
 import PropTypes, { InferProps } from "prop-types";
 import type { CartItemType } from "./shoppingcart.functions";
 import { getCloudinaryRemoteFetchURL as getImg} from "../integrations/cloudinary";
-import { CacheManager } from "../general/cache-manager";
-import { getDomain } from "../general/utilities";
-import { smartFetch } from "../general/smartfetch";
-import { buildUrl } from "../general/urlbuilder";
+import { CacheManager } from "../foundation/cache-manager";
+import { getDomain } from "../foundation/utilities";
+import { smartFetch } from "../foundation/smartfetch";
+import { buildUrl } from "../foundation/urlbuilder";
 
 const debug = false;
 

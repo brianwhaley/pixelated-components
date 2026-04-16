@@ -7,7 +7,7 @@ import '@/css/pixelated.global.css';
 ResumeData.items[0].properties.references = ReferencesData.items[0].properties.references;
 
 export default {
-	title: 'General',
+	title: 'General/Resume',
 	component: Resume,
 };
 

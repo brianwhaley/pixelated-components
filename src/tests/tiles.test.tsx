@@ -3,6 +3,12 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '../test/test-utils';
 import { Tiles } from '@/components/general/tiles';
 import type { CarouselCardType } from '@/components/general/carousel';
+import {
+  tileCards,
+  tileCardsWithoutLinks,
+  tileCardsWithoutAlt,
+  tileCardsWithoutBody,
+} from '@/test/fixtures';
 
 // Mock SmartImage component
 vi.mock('@/components/general/smartimage', () => ({
@@ -20,35 +26,7 @@ vi.mock('@/components/general/loading', () => ({
 }));
 
 describe('Tiles Component', () => {
-  const mockCards: CarouselCardType[] = [
-    {
-      index: 0,
-      cardIndex: 0,
-      cardLength: 3,
-      link: '/tile1',
-      image: 'https://example.com/image1.jpg',
-      imageAlt: 'Tile 1',
-      bodyText: 'First tile description'
-    },
-    {
-      index: 1,
-      cardIndex: 1,
-      cardLength: 3,
-      link: '/tile2',
-      image: 'https://example.com/image2.jpg',
-      imageAlt: 'Tile 2',
-      bodyText: 'Second tile description'
-    },
-    {
-      index: 2,
-      cardIndex: 2,
-      cardLength: 3,
-      link: '/tile3',
-      image: 'https://example.com/image3.jpg',
-      imageAlt: 'Tile 3',
-      bodyText: 'Third tile description'
-    }
-  ];
+  const mockCards = tileCards;
 
   describe('Basic Rendering', () => {
     it('should render tiles container', () => {
@@ -255,7 +233,7 @@ describe('Tiles Component', () => {
   describe('Empty State', () => {
     it('should render Loading component when cards array is empty', () => {
       const { container } = render(<Tiles cards={[]} />);
-      expect(container.querySelector('[data-testid="loading-spinner"]')).toBeInTheDocument();
+      expect(container.querySelector('#loadingSpinner')).toBeInTheDocument();
     });
 
     it('should not render tiles container when cards are empty', () => {

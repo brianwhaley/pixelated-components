@@ -5,11 +5,11 @@ import { useFormSubmit } from '../components/sitebuilder/form/formsubmit';
 import { FormValidationProvider } from '../components/sitebuilder/form/formvalidator';
 
 // Mock smartFetch
-vi.mock('../components/general/smartfetch', () => ({
+vi.mock('../components/foundation/smartfetch', () => ({
 	smartFetch: vi.fn()
 }));
 
-import { smartFetch } from '../components/general/smartfetch';
+import { smartFetch } from '../components/foundation/smartfetch';
 
 function TestForm({ options }: any) {
   const { handleSubmit, isSubmitting, submitError, modalContent } = useFormSubmit(options);

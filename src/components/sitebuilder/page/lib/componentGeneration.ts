@@ -18,34 +18,31 @@ export function generateComponentObject(event: Event): {
 } {
 	const props: Record<string, any> = {};
 	const target = event.target as HTMLFormElement;
-	
-	for (const prop in target) {
-		const thisProp = (target as any)[prop];
-		if (thisProp && thisProp.value && (thisProp.value !== Object(thisProp.value))) { 
-			let value = thisProp.value;
-			
-			// Try to parse JSON objects
-			if (thisProp.name !== 'type' && value.startsWith('{')) {
-				try {
-					value = JSON.parse(value);
-				} catch ( err ) {
-					console.log('Invalid JSON for prop:', err, thisProp.name, value);
-					// Keep as string if not valid JSON
-				}
-			}
-			
-			// Convert number strings to numbers
-			if (thisProp.type === 'number') {
-				value = parseFloat(value) || value;
-			}
-			
-			// Convert checkbox values to boolean
-			if (thisProp.type === 'checkbox') {
-				value = thisProp.checked;
-			}
-			
-			props[thisProp.name] = value;
+	const fields = Array.from(target.elements) as Array<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>;
+
+	for (const field of fields) {
+		if (!field.name) continue;
+
+		const name = field.name;
+		const input = field as HTMLInputElement;
+		let value: any = field.value;
+
+		if (input.type === 'checkbox') {
+			value = input.checked;
+		} else if (input.type === 'number') {
+			value = input.value === '' ? input.value : parseFloat(input.value);
 		}
+
+		if (name !== 'type' && typeof value === 'string' && value.startsWith('{')) {
+			try {
+				value = JSON.parse(value);
+			} catch (err) {
+				console.log('Invalid JSON for prop:', err, name, value);
+			}
+		}
+
+		if (input.type !== 'checkbox' && value === '') continue;
+		props[name] = value;
 	}
 	
 	const parentPath = props.__parentPath;

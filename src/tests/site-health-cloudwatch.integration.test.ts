@@ -24,7 +24,7 @@ vi.mock('@aws-sdk/client-cloudwatch', () => {
 	};
 });
 
-vi.mock('../components/general/cache-manager', () => {
+vi.mock('../components/foundation/cache-manager', () => {
 	return {
 		CacheManager: vi.fn(function(this: any) {
 			this.cache = new Map();
@@ -35,7 +35,7 @@ vi.mock('../components/general/cache-manager', () => {
 	};
 });
 
-vi.mock('../components/general/utilities', () => ({
+vi.mock('../components/foundation/utilities', () => ({
 	getDomain: vi.fn(() => 'example.com')
 }));
 

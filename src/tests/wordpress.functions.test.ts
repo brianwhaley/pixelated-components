@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getWordPressItems, getWordPressLastModified, photonToOriginalUrl } from '../components/integrations/wordpress.functions';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
+import { mockWordPressPosts } from '../test/fixtures';
 
-vi.mock('../components/general/smartfetch');
+vi.mock('../components/foundation/smartfetch');
 
-const { smartFetch } = await import('../components/general/smartfetch');
+const { smartFetch } = await import('../components/foundation/smartfetch');
 const mockSmartFetch = vi.mocked(smartFetch);
 
 describe('WordPress Functions', () => {
@@ -74,41 +75,7 @@ describe('WordPress Functions', () => {
   });
 
   describe('getWordPressItems', () => {
-    const mockPosts = [
-      {
-        ID: 1,
-        title: 'Test Post 1',
-        featured_image: 'https://i0.wp.com/example.com/image1.jpg',
-        content: 'Test content 1',
-        excerpt: 'Excerpt 1',
-        date: '2024-01-01T00:00:00+00:00',
-        URL: 'https://example.com/post-1',
-        categories: [],
-        author: null
-      },
-      {
-        ID: 2,
-        title: 'Test Post 2',
-        featured_image: 'https://example.com/image2.jpg', // Already direct URL
-        content: 'Test content 2',
-        excerpt: 'Excerpt 2',
-        date: '2024-01-02T00:00:00+00:00',
-        URL: 'https://example.com/post-2',
-        categories: [],
-        author: null
-      },
-      {
-        ID: 3,
-        title: 'Test Post 3',
-        featured_image: null, // No featured image
-        content: 'Test content 3',
-        excerpt: 'Excerpt 3',
-        date: '2024-01-03T00:00:00+00:00',
-        URL: 'https://example.com/post-3',
-        categories: [],
-        author: null
-      }
-    ];
+    const mockPosts = mockWordPressPosts;
 
     it('should convert Photon URLs in featured_image during API fetch', async () => {
       let callCount = 0;

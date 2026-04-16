@@ -1,8 +1,8 @@
 "use server";
 
 import { RouteType, SiteInfoType } from '../sitebuilder/config/ConfigBuilder';
-import { smartFetch } from '../general/smartfetch';
-import { buildUrl } from '../general/urlbuilder';
+import { smartFetch } from '../foundation/smartfetch';
+import { buildUrl } from '../foundation/urlbuilder';
 import { getFullPixelatedConfig } from '../config/config';
 
 // Debug logging: set to true to inspect raw Gemini API responses locally

@@ -9,7 +9,7 @@ import './google.reviews.css';
 
 
 /* 
-https://maps.googleapis.com/maps/api/place/textsearch/json?query=Manning+Metalworks+Morris+Plains+NJ&key=AIzaSyBJVi0O9Ir9imRgINLZbojTifatX-Z4aUs
+https://maps.googleapis.com/maps/api/place/textsearch/json?query=Manning+Metalworks+Morris+Plains+NJ&key=[API_KEY]
 */
 
 

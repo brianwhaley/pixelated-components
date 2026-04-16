@@ -2,6 +2,11 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '../test/test-utils';
 import userEvent from '@testing-library/user-event';
 import { Carousel, CarouselCardType } from '../components/general/carousel';
+import {
+  carouselMockCards,
+  createManyCarouselCards,
+  carouselMinimalCards,
+} from '@/test/fixtures';
 
 // Mock SmartImage component
 vi.mock('../components/cms/smartimage', () => ({
@@ -18,38 +23,7 @@ vi.mock('../components/general/carousel.drag', () => ({
 // Import the mocked DragHandler
 import { DragHandler } from '../components/general/carousel.drag';
 
-const mockCards: CarouselCardType[] = [
-	{
-		index: 0,
-		cardIndex: 0,
-		cardLength: 3,
-		image: 'https://example.com/image1.jpg',
-		imageAlt: 'Image 1',
-		headerText: 'Card 1',
-		subHeaderText: 'Subheader 1',
-		bodyText: 'Body text 1',
-	},
-	{
-		index: 1,
-		cardIndex: 1,
-		cardLength: 3,
-		image: 'https://example.com/image2.jpg',
-		imageAlt: 'Image 2',
-		headerText: 'Card 2',
-		subHeaderText: 'Subheader 2',
-		bodyText: 'Body text 2',
-	},
-	{
-		index: 2,
-		cardIndex: 2,
-		cardLength: 3,
-		image: 'https://example.com/image3.jpg',
-		imageAlt: 'Image 3',
-		headerText: 'Card 3',
-		link: 'https://example.com/card3',
-		linkTarget: '_blank',
-	},
-	];
+const mockCards = carouselMockCards;
 
 describe('Carousel Component', () => {
 	beforeEach(() => {

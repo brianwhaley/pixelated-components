@@ -35,7 +35,7 @@ const mySources = {
 };
 
 export default {
-	title: 'General',
+	title: 'General/SocialCard',
 	component: SocialCards,
 };
 

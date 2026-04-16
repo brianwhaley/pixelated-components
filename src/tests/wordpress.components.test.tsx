@@ -79,6 +79,13 @@ describe('WordPress Components', () => {
 
 			expect(screen.getByText('First Post')).toBeInTheDocument();
 		});
+
+		it('should remain wrapped by SmartErrorBoundary and render safely', () => {
+			render(<BlogPostList posts={mockPosts} />);
+
+			expect(screen.getByText('First Post')).toBeInTheDocument();
+			expect(screen.queryByText(/Sorry, something went wrong loading/i)).not.toBeInTheDocument();
+		});
 	});
 
 	describe('BlogPostSummary Component', () => {

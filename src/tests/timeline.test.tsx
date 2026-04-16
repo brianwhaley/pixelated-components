@@ -17,12 +17,10 @@ vi.mock('@/components/general/smartimage', () => ({
   },
 }));
 
+import { mockCloudinary } from '../test/test-data';
+
 const mockConfig = {
-  cloudinary: {
-    product_env: 'test-env',
-    baseUrl: 'https://test.cloudinary.com',
-    transforms: 'test-transforms',
-  },
+  cloudinary: mockCloudinary,
 };
 
 const renderWithConfig = (component: React.ReactElement, config = mockConfig) => {

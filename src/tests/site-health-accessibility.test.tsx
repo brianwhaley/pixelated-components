@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { SiteHealthAccessibility } from '../components/admin/site-health/site-health-accessibility';
+import { createSiteHealthResponse } from '../test/test-data';
 
 // Mock the SiteHealthTemplate component
 vi.mock('../components/admin/site-health/site-health-template', () => ({
@@ -10,28 +11,17 @@ vi.mock('../components/admin/site-health/site-health-template', () => ({
 		const [loading, setLoading] = React.useState(true);
 
 		React.useEffect(() => {
-			// Simulate API response with accessibility audit data
-			const mockSiteData = {
-				site: 'test-site',
-				url: 'https://test-site.com',
-				status: 'success',
-				scores: {
-					accessibility: 0.92
-				},
-				audits: [
-					{ id: 'color-contrast', score: 1.0, title: 'Color contrast' },
-					{ id: 'label-elements', score: 0.95, title: 'Form labels' }
-				]
-			};
+			(async () => {
+				const mockSiteResponse = await createSiteHealthResponse(siteName || 'test-site', 'https://www.example.com');
 
-			// Apply response transformer if provided
-			const transformedData = endpoint?.responseTransformer
-				? endpoint.responseTransformer(mockSiteData)
-				: mockSiteData;
+				const transformedData = endpoint?.responseTransformer
+					? endpoint.responseTransformer(mockSiteResponse)
+					: mockSiteResponse;
 
-			setData(transformedData);
-			setLoading(false);
-		}, [endpoint]);
+				setData(transformedData);
+				setLoading(false);
+			})();
+		}, [endpoint, siteName]);
 
 		if (loading) {
 			return <div>Loading...</div>;

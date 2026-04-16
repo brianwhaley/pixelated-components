@@ -295,6 +295,21 @@ describe('NerdJoke Component', () => {
       expect(question).toBeInTheDocument();
       expect(answer).toBeInTheDocument();
     });
+
+    it('should display the fetched joke text when the API resolves', async () => {
+      render(<NerdJoke />);
+      await waitFor(() => {
+        expect(screen.getByText(/Because he didn.t get arrays./i)).toBeInTheDocument();
+      });
+    });
+
+    it('should continue rendering when the joke fetch fails', async () => {
+      (global.fetch as any).mockImplementationOnce(() => Promise.reject(new Error('Fetch failed')));
+      render(<NerdJoke />);
+      await waitFor(() => {
+        expect(document.querySelector('.nerd-joke')).toBeInTheDocument();
+      });
+    });
   });
 
   describe('Timer Functionality', () => {

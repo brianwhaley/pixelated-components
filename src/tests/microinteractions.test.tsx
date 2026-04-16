@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { MicroInteractions } from '../components/general/microinteractions';
+import { MicroInteractions } from '../components/foundation/microinteractions';
 
 describe('MicroInteractions Component', () => {
   let originalBody: HTMLElement;

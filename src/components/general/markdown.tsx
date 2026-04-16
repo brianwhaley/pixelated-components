@@ -7,7 +7,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes, { InferProps } from "prop-types";
 import { SmartImage } from "./smartimage";
 import { usePixelatedConfig } from "../config/config.client";
-import { smartFetch } from "./smartfetch";
+import { smartFetch } from "../foundation/smartfetch";
 import "./markdown.css";
 
 

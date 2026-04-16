@@ -2,7 +2,7 @@ import { FormExtractor } from '@/components/sitebuilder/form/formextractor';
 import '@/css/pixelated.global.css';
 
 export default {
-	title: 'Admin/SiteBuilder/Form',
+	title: 'SiteBuilder/Form Extractor',
 	component: FormExtractor
 };
 

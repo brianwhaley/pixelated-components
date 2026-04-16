@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { NextRequest } from "next/server";
-import { handlePixelatedProxy } from "../components/general/proxy-handler";
+import { handlePixelatedProxy } from "../components/foundation/proxy-handler";
 
 describe('handlePixelatedProxy', () => {
     // Helper to create a NextRequest

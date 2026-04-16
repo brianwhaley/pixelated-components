@@ -4,6 +4,7 @@
 import React, { useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { SmartImage } from './smartimage';
+import { SmartVideo } from './smartvideo';
 import "./hero.css";
 
 /**
@@ -105,13 +106,16 @@ export function Hero({ img, imgAlt, video, videoPoster, imgId, variant = 'static
 	} else if (variant === 'video' && !!video) {
 		return (
 			<div id={id} className="hero video" style={{ height: height ?? '60vh' }}>
-				<video
+				<SmartVideo
 					src={video}
 					poster={videoPoster || undefined}
-					autoPlay
-					muted
-					loop
-					playsInline
+					autoPlay={true}
+					muted={true}
+					loop={true}
+					controls={false}
+					playsInline={true}
+					// preload: PropTypes.oneOf(['auto', 'metadata', 'none']),
+					// captionsSrc: PropTypes.string,
 					className="hero-video"
 				/>
 				{children}

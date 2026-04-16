@@ -6,7 +6,7 @@ import '@/css/pixelated.global.css';
 import './carousel-hero.stories.css';
 
 export default {
-	title: 'General',
+	title: 'General/Carousel Hero',
 	component: Carousel,
 };
 

@@ -2,7 +2,7 @@ import { PageTitleHeader, PageSectionHeader } from "@/components/general/semanti
 import '@/css/pixelated.global.css';
 
 export default {
-	title: 'General',
+	title: 'General/Headers',
 	component: PageTitleHeader,
 };
 

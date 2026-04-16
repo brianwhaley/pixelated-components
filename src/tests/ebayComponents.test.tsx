@@ -1,7 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { EbayItems } from '../components/shoppingcart/ebay.components';
-import { renderWithProviders } from './test-utils';
+import { renderWithProviders } from '../test/test-utils';
+import { ebayData } from '../test/test-data';
 
 vi.mock('../components/shoppingcart/ebay.functions', () => ({
 	getEbayItems: vi.fn(),
@@ -38,11 +39,9 @@ vi.mock('../general/loading', () => ({
 }));
 
 describe('eBay Components Suite', () => {
+	const rawEbayListing = ebayData.listings[0];
 	const mockEbayListing = {
-		legacyItemId: '123456789',
-		title: 'Vintage Apple Computer',
-		price: '199.99',
-		currency: 'USD',
+		...rawEbayListing,
 		condition: 'Used',
 		conditionId: '3000',
 		categoryId: '11450',

@@ -727,6 +727,23 @@ describe('PageSection Component', () => {
       const section = container.querySelector('.page-section');
       expect(section).toHaveClass('page-section', 'custom-class');
     });
+
+    it('should render fallback when a child throws', () => {
+      const originalConsoleError = console.error;
+      console.error = () => undefined;
+      const ProblemChild = () => { throw new Error('PageSection crash'); };
+
+      const { container } = render(
+        <PageSection>
+          <ProblemChild />
+        </PageSection>
+      );
+
+      expect(container.textContent).toMatch(/Sorry, something went wrong loading/i);
+      expect(container.textContent).toMatch(/PageSection/i);
+
+      console.error = originalConsoleError;
+    });
   });
 });
 

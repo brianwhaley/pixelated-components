@@ -12,7 +12,7 @@ import {
   logAllChange,
   extractDomainName,
   getDomain
-} from '../components/general/utilities';
+} from '../components/foundation/utilities';
 
 describe('Utility Functions', () => {
   describe('html2dom', () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { GlobalErrorUI } from '../components/general/global-error';
+import { GlobalErrorUI } from '../components/foundation/global-error';
 
 describe('GlobalErrorUI - Extended Coverage', () => {
   const mockReset = vi.fn();

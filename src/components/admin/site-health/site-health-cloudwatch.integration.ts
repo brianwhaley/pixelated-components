@@ -6,8 +6,8 @@
 "use server";
 
 import { CloudWatchClient, GetMetricDataCommand } from '@aws-sdk/client-cloudwatch';
-import { CacheManager } from '../../general/cache-manager';
-import { getDomain } from '../../general/utilities';
+import { CacheManager } from '../../foundation/cache-manager';
+import { getDomain } from '../../foundation/utilities';
 import { getFullPixelatedConfig } from '../../config/config';
 
 const debug = false; // migration-time verbose logging

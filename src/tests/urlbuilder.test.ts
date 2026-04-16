@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 
 describe('buildUrl', () => {
 	describe('simple query parameters', () => {
@@ -45,6 +45,18 @@ describe('buildUrl', () => {
 			});
 			expect(result).toContain('active=true');
 			expect(result).toContain('archived=false');
+		});
+
+		it('should handle array params by repeating keys', () => {
+			const result = buildUrl({
+				baseUrl: 'https://api.example.com/search',
+				params: { q: 'test', tags: ['red', 'blue'] },
+			});
+
+			expect(result).toContain('q=test');
+			expect(result).toContain('tags=red');
+			expect(result).toContain('tags=blue');
+			expect(result.match(/tags=/g)?.length).toBe(2);
 		});
 
 		it('should handle numeric params', () => {

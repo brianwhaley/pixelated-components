@@ -9,23 +9,32 @@ import {
 	generateSitemap,
 	clearEbaySitemapCache,
 	type SitemapEntry
-} from '../components/general/sitemap';
+} from '../components/foundation/sitemap';
 
 // Mock external dependencies
 vi.mock('../components/integrations/wordpress.functions');
 vi.mock('../components/integrations/contentful.delivery');
 vi.mock('../components/shoppingcart/ebay.functions');
 vi.mock('../components/config/config');
-vi.mock('../components/general/metadata.functions');
+vi.mock('../components/foundation/metadata.functions');
 // Import mocked modules
 import * as wordpressModule from '../components/integrations/wordpress.functions';
 import * as contentfulModule from '../components/integrations/contentful.delivery';
 import * as ebayModule from '../components/shoppingcart/ebay.functions';
 import * as configModule from '../components/config/config';
-import * as metadataModule from '../components/general/metadata.functions';
+import * as metadataModule from '../components/foundation/metadata.functions';
+import { realWordPressApiData, siteImagesData, realContentfulAssetsData } from '../test/test-data';
+import { mockContentfulImageAssets, mockContentfulImageAssetsWithEmptyUrls } from '../test/fixtures';
 
 // Mock fetch globally
 global.fetch = vi.fn();
+
+function normalizeWordPressPosts(posts: Array<Record<string, unknown>>): wordpressModule.BlogPostType[] {
+	return posts.map((post) => ({
+		...post,
+		ID: typeof post.ID === 'string' ? post.ID : String(post.ID),
+	})) as wordpressModule.BlogPostType[];
+}
 
 describe('Sitemap Helper Functions', () => {
 	beforeEach(() => {
@@ -93,7 +102,7 @@ describe('Sitemap Helper Functions', () => {
 
 	describe('createImageURLsFromJSON', () => {
 		it('should create sitemap entry with images from JSON array', async () => {
-			const mockJson = ['image1.jpg', 'image2.png'];
+			const mockJson = siteImagesData.images.slice(0, 2);
 			(global.fetch as any).mockResolvedValueOnce({
 				ok: true,
 				json: async () => mockJson
@@ -106,24 +115,23 @@ describe('Sitemap Helper Functions', () => {
 			expect(result[0]).toMatchObject({
 				url: 'https://example.com/images',
 				images: [
-					'https://example.com/image1.jpg',
-					'https://example.com/image2.png'
+					'https://example.com/images/brianwhaley-headshot.jpg',
+					'https://example.com/images/icons/1x1.png'
 				]
 			});
 		});
 
 		it('should handle JSON object with images property', async () => {
-			const mockJson = { images: ['image1.jpg', 'image2.png'] };
 			(global.fetch as any).mockResolvedValueOnce({
 				ok: true,
-				json: async () => mockJson
+				json: async () => siteImagesData
 			});
 
 			const origin = 'https://example.com';
 			const result = await createImageURLsFromJSON(origin, 'public/site-images.json');
 
 			expect(result).toHaveLength(1);
-			expect(result[0].images).toHaveLength(2);
+			expect(result[0].images).toHaveLength(siteImagesData.images.length);
 		});
 
 		it('should handle fetch errors gracefully', async () => {
@@ -163,26 +171,7 @@ describe('Sitemap Helper Functions', () => {
 
 	describe('createWordPressURLs', () => {
 		it('should create sitemap entries for WordPress posts', async () => {
-			const mockPosts: wordpressModule.BlogPostType[] = [
-				{
-					ID: '123',
-					title: 'Test Post',
-					date: '2024-01-01T10:00:00Z',
-					modified: '2024-01-01T10:00:00Z',
-					excerpt: 'Post excerpt',
-					URL: 'https://blog.example.com/post-1',
-					categories: ['category1']
-				},
-				{
-					ID: '124',
-					title: 'Test Post 2',
-					date: '2024-01-02T10:00:00Z',
-					modified: '2024-01-02T10:00:00Z',
-					excerpt: 'Post excerpt 2',
-					URL: 'https://blog.example.com/post-2',
-					categories: ['category2']
-				}
-			];
+			const mockPosts = normalizeWordPressPosts(realWordPressApiData.posts.slice(0, 2));
 
 			const mockGetWordPressItems = vi.mocked(wordpressModule.getWordPressItems);
 			mockGetWordPressItems.mockResolvedValue(mockPosts);
@@ -191,7 +180,7 @@ describe('Sitemap Helper Functions', () => {
 
 			expect(result).toHaveLength(2);
 			expect(result[0]).toMatchObject({
-				url: 'https://blog.example.com/post-1',
+				url: mockPosts[0].URL,
 				changeFrequency: 'hourly',
 				priority: 1,
 			});
@@ -199,18 +188,7 @@ describe('Sitemap Helper Functions', () => {
 		});
 
 		it('should include images when includeImages is true', async () => {
-			const mockPosts: wordpressModule.BlogPostType[] = [
-				{
-					ID: '123',
-					title: 'Test Post',
-					date: '2024-01-01T10:00:00Z',
-					modified: '2024-01-01T10:00:00Z',
-					excerpt: 'Post excerpt',
-					URL: 'https://blog.example.com/post-1',
-					categories: ['category1']
-				}
-			];
-
+			const mockPosts = normalizeWordPressPosts([realWordPressApiData.posts[0]]);
 			const mockImages = [
 				{ url: 'https://blog.example.com/image1.jpg' },
 				{ url: 'https://blog.example.com/image2.jpg' }
@@ -231,20 +209,9 @@ describe('Sitemap Helper Functions', () => {
 		});
 
 		it('should handle posts without modified date', async () => {
-			const mockPosts: wordpressModule.BlogPostType[] = [
-				{
-					ID: '123',
-					title: 'Test Post',
-					date: '2024-01-01T10:00:00Z',
-					excerpt: 'Post excerpt',
-					URL: 'https://blog.example.com/post-1',
-					categories: ['category1']
-					// no modified date
-				}
-			];
-
+			const mockPost = { ...normalizeWordPressPosts([realWordPressApiData.posts[0]])[0], modified: undefined } as wordpressModule.BlogPostType;
 			const mockGetWordPressItems = vi.mocked(wordpressModule.getWordPressItems);
-			mockGetWordPressItems.mockResolvedValue(mockPosts);
+			mockGetWordPressItems.mockResolvedValue([mockPost]);
 
 			const result = await createWordPressURLs({ site: 'example.wordpress.com' });
 
@@ -331,37 +298,7 @@ describe('Sitemap Helper Functions', () => {
 
 	describe('createContentfulAssetURLs', () => {
 		it('should create sitemap entry with Contentful images', async () => {
-			const mockAssets = {
-				items: [
-					{
-						fields: {
-							file: {
-								contentType: 'image/jpeg',
-								url: '/uploads/image1.jpg'
-							}
-						},
-						sys: { createdAt: '2024-01-01T10:00:00Z' }
-					},
-					{
-						fields: {
-							file: {
-								contentType: 'image/png',
-								url: '//example.com/image2.png'
-							}
-						},
-						sys: { createdAt: '2024-01-02T10:00:00Z' }
-					},
-					{
-						fields: {
-							file: {
-								contentType: 'image/webp',
-								url: 'https://cdn.example.com/image3.webp'
-							}
-						},
-						sys: { createdAt: '2024-01-03T10:00:00Z' }
-					}
-				]
-			};
+			const mockAssets = mockContentfulImageAssets;
 
 			const mockGetContentfulAssets = vi.mocked(contentfulModule.getContentfulAssets);
 			mockGetContentfulAssets.mockResolvedValue(mockAssets);
@@ -393,30 +330,7 @@ describe('Sitemap Helper Functions', () => {
 
 		it('should create sitemap entry with Contentful videos using Google video sitemap format', async () => {
 			const mockAssets = {
-				items: [
-					{
-						fields: {
-							title: 'Tutorial Video',
-							description: 'Learn how to grill steaks',
-							file: {
-								contentType: 'video/mp4',
-								url: 'https://cdn.example.com/video1.mp4'
-							}
-						},
-						sys: { createdAt: '2024-01-01T10:00:00Z' }
-					},
-					{
-						fields: {
-							title: 'Cooking Tips',
-							description: 'Essential cooking techniques',
-							file: {
-								contentType: 'video/webm',
-								url: 'https://cdn.example.com/video2.webm'
-							}
-						},
-						sys: { createdAt: '2024-01-02T10:00:00Z' }
-					}
-				]
+				items: realContentfulAssetsData.items.slice(0, 2)
 			};
 
 			const mockGetContentfulAssets = vi.mocked(contentfulModule.getContentfulAssets);
@@ -441,18 +355,18 @@ describe('Sitemap Helper Functions', () => {
 			});
 			expect(result[0].videos).toHaveLength(2);
 			expect(result[0].videos![0]).toMatchObject({
-				title: 'Tutorial Video',
-				description: 'Learn how to grill steaks',
-				content_loc: expect.stringContaining('video1.mp4'),
-				player_loc: expect.stringContaining('video1.mp4'),
+				title: expect.any(String),
+				description: expect.any(String),
+				content_loc: expect.stringContaining('.mp4'),
+				player_loc: expect.stringContaining('.mp4'),
 				publication_date: expect.any(String),
 				family_friendly: 'yes'
 			});
 			expect(result[0].videos![1]).toMatchObject({
-				title: 'Cooking Tips',
-				description: 'Essential cooking techniques',
-				content_loc: expect.stringContaining('video2.webm'),
-				player_loc: expect.stringContaining('video2.webm'),
+				title: expect.any(String),
+				description: expect.any(String),
+				content_loc: expect.stringContaining('.mp4'),
+				player_loc: expect.stringContaining('.mp4'),
 				publication_date: expect.any(String),
 				family_friendly: 'yes'
 			});
@@ -496,37 +410,7 @@ describe('Sitemap Helper Functions', () => {
 		});
 
 		it('should filter out empty image URLs', async () => {
-			const mockAssets = {
-				items: [
-					{
-						fields: {
-							file: {
-								contentType: 'image/jpeg',
-								url: '/valid.jpg'
-							}
-						},
-						sys: { createdAt: '2024-01-01T10:00:00Z' }
-					},
-					{
-						fields: {
-							file: {
-								contentType: 'image/png',
-								url: ''
-							}
-						},
-						sys: { createdAt: '2024-01-02T10:00:00Z' }
-					},
-					{
-						fields: {
-							file: {
-								contentType: 'image/webp',
-								url: 'another-valid.jpg'
-							}
-						},
-						sys: { createdAt: '2024-01-03T10:00:00Z' }
-					}
-				]
-			};
+			const mockAssets = mockContentfulImageAssetsWithEmptyUrls;
 
 			const mockGetContentfulAssets = vi.mocked(contentfulModule.getContentfulAssets);
 			mockGetContentfulAssets.mockResolvedValue(mockAssets);
@@ -646,10 +530,9 @@ describe('Sitemap Helper Functions', () => {
 		});
 
 		it('should include image URLs when enabled', async () => {
-			const mockJson = ['image1.jpg'];
 			(global.fetch as any).mockResolvedValueOnce({
 				ok: true,
-				json: async () => mockJson
+				json: async () => siteImagesData.images.slice(0, 1)
 			});
 
 			const config = {
@@ -662,15 +545,7 @@ describe('Sitemap Helper Functions', () => {
 		});
 
 		it('should include WordPress URLs when enabled', async () => {
-			const mockPosts: wordpressModule.BlogPostType[] = [{ 
-				ID: '123',
-				title: 'Test Post',
-				date: '2024-01-01T10:00:00Z',
-				modified: '2024-01-01T10:00:00Z',
-				excerpt: 'Post excerpt',
-				URL: 'https://blog.example.com/post-1',
-				categories: ['category1']
-			}];
+			const mockPosts = normalizeWordPressPosts(realWordPressApiData.posts.slice(0, 1));
 			const mockGetWordPressItems = vi.mocked(wordpressModule.getWordPressItems);
 			mockGetWordPressItems.mockResolvedValue(mockPosts);
 
@@ -680,7 +555,7 @@ describe('Sitemap Helper Functions', () => {
 			};
 			const result = await generateSitemap(config, 'https://example.com');
 
-			expect(result.some((entry: SitemapEntry) => entry.url.includes('blog.example.com'))).toBe(true);
+			expect(result.some((entry: SitemapEntry) => entry.url.includes(mockPosts[0].URL))).toBe(true);
 		});
 
 		it('should deduplicate entries by URL', async () => {

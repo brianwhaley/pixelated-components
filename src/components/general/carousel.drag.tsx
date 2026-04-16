@@ -81,7 +81,7 @@ export function DragHandler(props: DragHandlerType ) {
 		} else if (event instanceof TouchEvent) {
 			drag.firstX = Math.round(event.touches[0].pageX );
 		} 
-		if (event instanceof DragEvent) {
+		if (typeof DragEvent !== 'undefined' && event instanceof DragEvent) {
 			const dragEvent = event as DragEvent;
 			if (dragEvent.dataTransfer) {
 				dragEvent.dataTransfer.setData('text/plain', currentTarget.id);

@@ -1,0 +1,39 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "name": "Test FAQs",
+  "description": "Frequently asked questions for testing",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is this component?",
+      "category": "Getting Started",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This is a FAQ accordion component that displays frequently asked questions in an expandable format."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does search work?",
+      "category": "Technical Details",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": [
+          "The search functionality allows users to filter FAQs by typing keywords.",
+          "It searches both question titles and answer content.",
+          "Results update in real-time as you type."
+        ]
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I customize the appearance?",
+      "category": "Technical Details",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, the component uses CSS classes that can be customized."
+      }
+    }
+  ]
+}

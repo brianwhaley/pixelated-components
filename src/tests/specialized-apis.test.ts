@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 
 describe('Specialized APIs - buildUrl Integration', () => {
 	describe('Flickr API URLs', () => {

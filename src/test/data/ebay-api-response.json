@@ -1,0 +1,42 @@
+{
+  "itemSummaries": [
+    {
+      "legacyItemId": "item-123",
+      "title": "Vintage Camera",
+      "price": { "value": "49.99", "currency": "USD" },
+      "image": { "imageUrl": "https://example.com/camera.jpg" },
+      "thumbnailImages": [
+        { "imageUrl": "https://example.com/camera-thumb.jpg" }
+      ],
+      "condition": "Good",
+      "categories": [
+        {
+          "categoryId": "12345",
+          "categoryName": "Electronics"
+        }
+      ],
+      "seller": {
+        "username": "seller123",
+        "sellerUserName": "seller123",
+        "sellerAccountStatus": "Active",
+        "feedbackScore": 500,
+        "feedbackPercentage": 99.5
+      },
+      "buyingOptions": ["FIXED_PRICE"],
+      "itemLocation": {
+        "postalCode": "95131",
+        "country": "US"
+      },
+      "itemCreationDate": "2024-01-01T00:00:00.000Z",
+      "shippingOptions": [
+        {
+          "shippingCostType": "CALCULATED",
+          "shippingCost": { "value": "10.00" }
+        }
+      ]
+    }
+  ],
+  "refinement": {
+    "aspectDistributions": []
+  }
+}

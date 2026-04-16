@@ -52,7 +52,7 @@ export interface BuildUrlOptions {
 	 * Values ARE encoded automatically
 	 * null/undefined values are filtered out
 	 */
-	params?: Record<string, string | number | boolean | null | undefined>;
+	params?: Record<string, string | number | boolean | (string | number | boolean)[] | null | undefined>;
 
 	/**
 	 * Optional proxy URL to wrap the built URL
@@ -90,8 +90,15 @@ export function buildUrl(options: BuildUrlOptions): string {
 		const searchParams = new URLSearchParams();
 
 		Object.entries(params).forEach(([key, value]) => {
-			// Skip null/undefined values
-			if (value !== null && value !== undefined) {
+			if (value === null || value === undefined) {
+				return;
+			}
+
+			if (Array.isArray(value)) {
+				value.forEach(item => {
+					searchParams.append(key, String(item));
+				});
+			} else {
 				searchParams.append(key, String(value));
 			}
 		});

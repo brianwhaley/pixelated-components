@@ -55,46 +55,11 @@ vi.mock('../components/integrations/cloudinary', () => ({
 }));
 
 import { getEbayItems, getShoppingCartItem } from '../components/shoppingcart/ebay.functions';
+import { ebayData } from '../test/test-data';
 
 describe('eBay integration Tests', () => {
-	const mockEbayItem = {
-		legacyItemId: 'item-123',
-		title: 'Vintage Camera',
-		price: { value: '49.99', currency: 'USD' },
-		image: { imageUrl: 'https://example.com/camera.jpg' },
-		thumbnailImages: [{
-			imageUrl: 'https://example.com/camera-thumb.jpg'
-		}],
-		condition: 'Good',
-		categories: [{
-			categoryId: '12345',
-			categoryName: 'Electronics'
-		}],
-		seller: { 
-			username: 'seller123',
-			sellerUserName: 'seller123',
-			sellerAccountStatus: 'Active',
-			feedbackScore: 500,
-			feedbackPercentage: 99.5
-		},
-		buyingOptions: ['FIXED_PRICE'],
-		itemLocation: {
-			postalCode: '95131',
-			country: 'US'
-		},
-		itemCreationDate: new Date().toISOString(),
-		shippingOptions: [{
-			shippingCostType: 'CALCULATED',
-			shippingCost: { value: '10.00' }
-		}]
-	};
-
-	const mockApiResponse = {
-		itemSummaries: [mockEbayItem],
-		refinement: {
-			aspectDistributions: []
-		}
-	};
+	const mockApiResponse = ebayData.apiResponse;
+	const mockEbayItem = mockApiResponse.itemSummaries[0];
 
 	beforeEach(() => {
 		vi.clearAllMocks();

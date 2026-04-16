@@ -6,7 +6,7 @@ import "@/css/pixelated.grid.scss";
 import "@/css/pixelated.global.css";
 
 export default {
-	title: 'General',
+	title: 'General/Microinteractions',
 	component: MicroInteractions,
 };
 

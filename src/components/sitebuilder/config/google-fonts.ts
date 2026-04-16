@@ -4,8 +4,8 @@
  */
 
 import { getFullPixelatedConfig } from '../../config/config';
-import { smartFetch } from '../../general/smartfetch';
-import { buildUrl } from '../../general/urlbuilder';
+import { smartFetch } from '../../foundation/smartfetch';
+import { buildUrl } from '../../foundation/urlbuilder';
 
 export interface GoogleFont {
   family: string;

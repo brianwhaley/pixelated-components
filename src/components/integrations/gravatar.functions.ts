@@ -2,8 +2,8 @@
 // Fetch avatar and profile data from Gravatar API
 
 import md5 from 'md5';
-import { smartFetch } from '../general/smartfetch';
-import { buildUrl } from '../general/urlbuilder';
+import { smartFetch } from '../foundation/smartfetch';
+import { buildUrl } from '../foundation/urlbuilder';
 
 export type GravatarAccount = {
 	domain: string;

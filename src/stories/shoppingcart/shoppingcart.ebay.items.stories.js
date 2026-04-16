@@ -3,7 +3,7 @@ import { EbayItems } from '@/components/shoppingcart/ebay.components';
 import '@/css/pixelated.global.css';
 
 export default {
-	title: 'ShoppingCart',
+	title: 'ShoppingCart/eBay Items',
 	component: EbayItems,
 };
 

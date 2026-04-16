@@ -5,9 +5,9 @@ import { FormGooglePlacesInput } from '../components/sitebuilder/form/formcompon
 import { FormValidationProvider } from '../components/sitebuilder/form/formvalidator';
 import { GooglePlacesService } from '../components/integrations/googleplaces';
 
-vi.mock('../components/general/smartfetch');
+vi.mock('../components/foundation/smartfetch');
 
-const { smartFetch } = await import('../components/general/smartfetch');
+const { smartFetch } = await import('../components/foundation/smartfetch');
 const mockSmartFetch = vi.mocked(smartFetch);
 
 describe('GooglePlacesService', () => {

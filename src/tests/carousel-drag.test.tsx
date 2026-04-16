@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import { DragHandler } from '../components/general/carousel.drag';
 
 const TestDragHandler = (props: any) => {
@@ -137,6 +137,100 @@ describe('Carousel Drag Functionality', () => {
 			expect(momentum).toBeGreaterThan(0);
 			expect(typeof momentum).toBe('number');
 		});
+
+		describe('Event Dispatch and DOM Integration', () => {
+			it('should call nextImage when a far left drag is completed', () => {
+				document.body.innerHTML = `
+					<div class="carousel-card-wrapper">
+						<div class="carousel-card">Slide 1</div>
+					</div>
+				`;
+
+				render(<TestDragHandler
+					activeIndex={0}
+					targetDiv='carousel-card-wrapper'
+					nextImage={mockNextImage}
+					previousImage={mockPreviousImage}
+				/>);
+
+				const wrapper = document.querySelector('.carousel-card-wrapper') as HTMLElement;
+				fireEvent.mouseDown(wrapper, { pageX: 100, clientX: 100, screenX: 100, bubbles: true });
+				fireEvent.mouseMove(wrapper, { pageX: 0, clientX: 0, screenX: 0, bubbles: true });
+				fireEvent.mouseUp(wrapper, { pageX: 0, clientX: 0, screenX: 0, bubbles: true });
+
+				expect(mockNextImage).toHaveBeenCalledTimes(1);
+				expect(mockPreviousImage).not.toHaveBeenCalled();
+			});
+
+			it('should call previousImage when a far right drag is completed', () => {
+				document.body.innerHTML = `
+					<div class="carousel-card-wrapper">
+						<div class="carousel-card">Slide 1</div>
+					</div>
+				`;
+
+				render(<TestDragHandler
+					activeIndex={0}
+					targetDiv='carousel-card-wrapper'
+					nextImage={mockNextImage}
+					previousImage={mockPreviousImage}
+				/>);
+
+				const wrapper = document.querySelector('.carousel-card-wrapper') as HTMLElement;
+				fireEvent.mouseDown(wrapper, { pageX: 0, clientX: 0, screenX: 0, bubbles: true });
+				fireEvent.mouseMove(wrapper, { pageX: 100, clientX: 100, screenX: 100, bubbles: true });
+				fireEvent.mouseUp(wrapper, { pageX: 100, clientX: 100, screenX: 100, bubbles: true });
+
+				expect(mockPreviousImage).toHaveBeenCalledTimes(1);
+				expect(mockNextImage).not.toHaveBeenCalled();
+			});
+
+			it('should not call any callbacks for a short drag', () => {
+				document.body.innerHTML = `
+					<div class="carousel-card-wrapper">
+						<div class="carousel-card">Slide 1</div>
+					</div>
+				`;
+
+				render(<TestDragHandler
+					activeIndex={0}
+					targetDiv='carousel-card-wrapper'
+					nextImage={mockNextImage}
+					previousImage={mockPreviousImage}
+				/>);
+
+				const wrapper = document.querySelector('.carousel-card-wrapper') as HTMLElement;
+				fireEvent.mouseDown(wrapper, { pageX: 100, clientX: 100, screenX: 100, bubbles: true });
+				fireEvent.mouseMove(wrapper, { pageX: 90, clientX: 90, screenX: 90, bubbles: true });
+				fireEvent.mouseUp(wrapper, { pageX: 90, clientX: 90, screenX: 90, bubbles: true });
+
+				expect(mockNextImage).not.toHaveBeenCalled();
+				expect(mockPreviousImage).not.toHaveBeenCalled();
+			});
+
+			it('should reset wrapper left position after transition end', () => {
+				document.body.innerHTML = `
+					<div class="carousel-card-wrapper">
+						<div class="carousel-card">Slide 1</div>
+					</div>
+				`;
+
+				render(<TestDragHandler
+					activeIndex={0}
+					targetDiv='carousel-card-wrapper'
+					nextImage={mockNextImage}
+					previousImage={mockPreviousImage}
+				/>);
+
+				const wrapper = document.querySelector('.carousel-card-wrapper') as HTMLElement;
+				wrapper.style.left = '100px';
+
+				fireEvent.transitionEnd(wrapper, { bubbles: true });
+
+				expect(wrapper.style.left).toBe('0px');
+			});
+		});
+
 	});
 
 	describe('Drag Transformation Styles', () => {

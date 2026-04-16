@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { render, screen } from '../test/test-utils';
-import { Loading, ToggleLoading } from '../components/general/loading';
+import { Loading, ToggleLoading } from '../components/foundation/loading';
 
 describe('Loading Component', () => {
   describe('Loading Spinner', () => {

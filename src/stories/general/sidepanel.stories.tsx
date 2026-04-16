@@ -3,7 +3,7 @@ import { SidePanel, SidePanelType } from '@/components/general/sidepanel';
 import { MenuAccordion } from '@/components/general/menu-accordion';
 
 export default {
-	title: 'General',
+	title: 'General/SidePanel',
 	component: SidePanel,
 	parameters: { layout: 'fullscreen' },
 	argTypes: {

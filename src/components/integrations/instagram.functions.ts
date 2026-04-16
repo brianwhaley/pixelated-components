@@ -2,8 +2,8 @@
 // Requires: Instagram Business/Creator account, Facebook Page, OAuth access token
 // Returns: Array compatible with Tiles/Carousel components
 
-import { smartFetch } from '../general/smartfetch';
-import { buildUrl } from '../general/urlbuilder';
+import { smartFetch } from '../foundation/smartfetch';
+import { buildUrl } from '../foundation/urlbuilder';
 import type { CarouselCardType } from '../general/carousel';
 
 export type InstagramMedia = {

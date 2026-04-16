@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { BlogPostList } from '../components/integrations/wordpress.components';
+import { mockBlogPost, mockPosts, mockNoExcerptPost } from '@/test/fixtures';
 
 // Mock WordPress API functions
 vi.mock('../components/integrations/wordpress.functions', () => ({
@@ -32,11 +33,11 @@ vi.mock('../components/general/cache-manager', () => ({
 	}
 }));
 
-vi.mock('../components/general/schema', () => ({
+vi.mock('../components/foundation/schema', () => ({
 	SchemaBlogPosting: () => null
 }));
 
-vi.mock('../components/general/schema.functions', () => ({
+vi.mock('../components/foundation/schema.functions', () => ({
 	mapWordPressToBlogPosting: (post: any) => post
 }));
 
@@ -55,46 +56,6 @@ vi.mock('../components/general/utilities', () => ({
 import { getWordPressItems } from '../components/integrations/wordpress.functions';
 
 describe('WordPress Integration Tests', () => {
-	const mockBlogPost = {
-		id: 123,
-		title: 'Test Post Title',
-		content: '<p>Post content here</p>',
-		excerpt: 'Post excerpt...',
-		date: '2024-01-01T10:00:00',
-		modified: '2024-01-02T10:00:00',
-		author: { name: 'John Doe' },
-		slug: 'test-post-title',
-		featured_media: 42,
-		link: 'https://example.com/test-post'
-	};
-
-	// Primary test data - first post MUST be 123, second MUST be 124
-	const mockPosts = [
-		{
-			id: 123,
-			title: 'Test Post Title',
-			content: '<p>Post content here</p>',
-			excerpt: 'Post excerpt...',
-			date: '2024-01-01T10:00:00',
-			modified: '2024-01-02T10:00:00',
-			author: { name: 'John Doe' },
-			slug: 'test-post-title',
-			featured_media: 42,
-			link: 'https://example.com/test-post'
-		},
-		{
-			id: 124,
-			title: 'Another Post',
-			content: '<p>Post content here</p>',
-			excerpt: 'Post excerpt...',
-			date: '2024-01-01T10:00:00',
-			modified: '2024-01-02T10:00:00',
-			author: { name: 'John Doe' },
-			slug: 'another-post',
-			featured_media: 42,
-			link: 'https://example.com/another-post'
-		}
-	];
 
 	beforeEach(() => {
 		vi.clearAllMocks();

@@ -4,7 +4,7 @@ import '@/css/pixelated.global.css';
 
 
 export default {
-	title: 'General',
+	title: 'General/Table',
 	component: Table
 };
 

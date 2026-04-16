@@ -2,14 +2,14 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '../test/test-utils';
 import userEvent from '@testing-library/user-event';
 import { SaveLoadSection } from "../components/sitebuilder/page/components/SaveLoadSection";
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 
 // Mock smartFetch
-vi.mock('../components/general/smartfetch', () => ({
+vi.mock('../components/foundation/smartfetch', () => ({
 	smartFetch: vi.fn()
 }));
 
-const { smartFetch } = await import('../components/general/smartfetch');
+const { smartFetch } = await import('../components/foundation/smartfetch');
 
 describe('SaveLoadSection', () => {
 	const mockOnLoad = vi.fn();

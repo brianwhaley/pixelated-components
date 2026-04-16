@@ -38,7 +38,7 @@
  * });
  */
 
-import type { CacheManager } from './cache-manager';
+import type { CacheManager } from '../foundation/cache-manager';
 
 export type ResponseType = 'json' | 'text' | 'blob' | 'ok' | 'status';
 export type CacheStrategy = 'none' | 'next' | 'local' | 'both';

@@ -1,0 +1,22 @@
+{
+  "urlset": [
+    {
+      "loc": "https://test-site.com/",
+      "lastmod": "2024-01-01",
+      "changefreq": "daily",
+      "priority": 1.0
+    },
+    {
+      "loc": "https://test-site.com/about",
+      "lastmod": "2024-01-01",
+      "changefreq": "weekly",
+      "priority": 0.8
+    },
+    {
+      "loc": "https://test-site.com/blog/post-1",
+      "lastmod": "2024-01-01",
+      "changefreq": "weekly",
+      "priority": 0.7
+    }
+  ]
+}

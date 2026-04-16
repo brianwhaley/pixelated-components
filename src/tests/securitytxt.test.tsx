@@ -6,7 +6,7 @@ import {
   sanitizeString,
   generateSecurityTxt,
   createWellKnownResponse,
-} from '@/components/general/well-known';
+} from '@/components/foundation/well-known';
 
 import testData from '../test/test-data';
 

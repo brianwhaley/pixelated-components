@@ -2,11 +2,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { generateAiRecommendations, GeminiRecommendationRequest, GeminiRecommendationResponse } from '../components/integrations/gemini-api.server';
 
 // Mock smartFetch
-vi.mock('../components/general/smartfetch', () => ({
+vi.mock('../components/foundation/smartfetch', () => ({
 	smartFetch: vi.fn()
 }));
 
-import { smartFetch } from '../components/general/smartfetch';
+import { smartFetch } from '../components/foundation/smartfetch';
 
 describe('Gemini API Server Integration', () => {
 	const mockSiteInfo = {

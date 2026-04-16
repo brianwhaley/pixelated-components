@@ -5,7 +5,7 @@ import { usePixelatedConfig } from "@/components/config/config.client";
 import '@/css/pixelated.global.css';
 
 export default {
-	title: 'General',
+	title: 'Integrations/Contentful',
 	component: Carousel,
 };
 

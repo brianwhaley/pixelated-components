@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from "react";
 import PropTypes, { InferProps } from 'prop-types';
-import { smartFetch } from '../general/smartfetch';
+import { smartFetch } from '../foundation/smartfetch';
 
 /* 
 NOTE : development has stopped for this component 
@@ -38,8 +38,19 @@ export function YelpReviews(props: YelpReviewsType) {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<Error>();
 
+	const safeSetState = (setter: React.Dispatch<React.SetStateAction<any>>, value: any) => {
+		if (typeof window !== 'undefined') {
+			setter(value);
+		}
+	};
+
 	useEffect(() => {
+		let isMounted = true;
 		const fetchReviews = async () => {
+			if (typeof window === 'undefined' || !isMounted) {
+				return;
+			}
+
 			const apiKey = 'YOUR_YELP_API_KEY';
 			const url = `https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/${props.businessID}/reviews`;
 
@@ -52,15 +63,21 @@ export function YelpReviews(props: YelpReviewsType) {
 					},
 				});
 
-				setReviews(data.reviews);
-				setLoading(false);
+				if (!isMounted) return;
+				safeSetState(setReviews, data.reviews);
+				safeSetState(setLoading, false);
 			} catch (e: any) {
-				setError(e);
-				setLoading(false);
+				if (!isMounted) return;
+				safeSetState(setError, e);
+				safeSetState(setLoading, false);
 			}
 		};
 
 		fetchReviews();
+
+		return () => {
+			isMounted = false;
+		};
 	}, [props.businessID]);
 
 	if (loading) {

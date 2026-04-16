@@ -2,7 +2,7 @@ import { GoogleSearch } from '@/components/integrations/googlesearch';
 import '@/css/pixelated.global.css';
 
 export default {
-	title: 'General',
+	title: 'Integrations/Google Search',
 	component: GoogleSearch
 };
 

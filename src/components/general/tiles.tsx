@@ -4,7 +4,7 @@
 import React from 'react';
 import PropTypes, { InferProps } from "prop-types";
 import type { CarouselCardType } from "./carousel";
-import { Loading } from "../general/loading";
+import { Loading } from "../foundation/loading";
 import { SmartImage } from "./smartimage";
 import { Modal, handleModalOpen } from "./modal";
 import { PageSection, PageSectionHeader } from "./semantic";

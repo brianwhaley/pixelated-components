@@ -3,7 +3,7 @@
 import React, { Children, useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import { Callout } from './callout';
-import { observeIntersection } from './intersection-observer';
+import { observeIntersection } from '../foundation/intersection-observer';
 import './splitscroll.css';
 
 /**

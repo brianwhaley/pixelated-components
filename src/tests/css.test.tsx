@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { preloadAllCSS, deferAllCSS } from '../components/general/css';
+import { preloadAllCSS, deferAllCSS } from '../components/foundation/css';
 
 describe('CSS Utilities', () => {
   let originalHead: HTMLElement;

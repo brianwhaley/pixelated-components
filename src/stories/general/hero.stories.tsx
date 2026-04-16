@@ -3,7 +3,7 @@ import { Hero } from '@/components/general/hero';
 import { LoremIpsum } from '@/components/integrations/loremipsum';
 
 export default {
-  title: 'General',
+  title: 'General/Hero',
   component: Hero,
   argTypes: {
 	img: { control: { type: 'text' } },

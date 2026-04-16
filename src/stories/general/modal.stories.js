@@ -3,7 +3,7 @@ import { Callout } from "@/components/general/callout";
 import { Modal, handleModalOpen } from "@/components/general/modal";
 
 export default {
-	title: 'General',
+	title: 'General/Modal',
 	component: Modal,
 };
 

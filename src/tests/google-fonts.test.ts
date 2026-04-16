@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { generateGoogleFontsUrl, generateGoogleFontsLink } from '../components/sitebuilder/config/google-fonts';
-import { buildUrl } from '../components/general/urlbuilder';
+import { buildUrl } from '../components/foundation/urlbuilder';
 
 const mockApiKey = 'test-api-key-123';
 

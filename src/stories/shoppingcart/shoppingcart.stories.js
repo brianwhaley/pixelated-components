@@ -3,7 +3,7 @@ import { addToShoppingCart, clearShoppingCart, setShippingInfo } from '@/compone
 import { ShoppingCart } from '@/components/shoppingcart/shoppingcart.components';
 
 export default {
-	title: 'ShoppingCart',
+	title: 'ShoppingCart/Shopping Cart',
 	component: ShoppingCart,
 };
 

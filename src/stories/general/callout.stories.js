@@ -3,7 +3,7 @@ import { Callout } from '@/components/general/callout';
 import '@/css/pixelated.grid.scss';
 
 export default {
-	title: 'General',
+	title: 'General/Callout',
 	component: Callout,
 };
 

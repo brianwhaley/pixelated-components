@@ -2,93 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { SiteHealthOnSiteSEO } from '../components/admin/site-health/site-health-on-site-seo';
+import { siteHealthData } from '../test/test-data';
 
 // Mock data matching the OnSiteSEOData interface
-const mockSiteData = {
-	site: 'test-site.com',
-	url: 'https://test-site.com',
-	overallScore: 0.75,
-	totalPages: 2,
-	status: 'success' as const,
-	timestamp: new Date().toISOString(),
-	pagesAnalyzed: [
-		{
-			url: 'https://test-site.com',
-			title: 'Home Page',
-			statusCode: 200,
-			crawledAt: new Date().toISOString(),
-			audits: [
-				{
-					id: 'h1-tags',
-					title: 'H1 Tags',
-					score: 1,
-					scoreDisplayMode: 'binary' as const,
-					displayValue: '1 H1 tag(s) found',
-					category: 'on-page' as const,
-					details: {
-						items: [
-							{ tag: 'h1', text: 'Welcome' }
-						]
-					}
-				},
-				{
-					id: 'title-tags',
-					title: 'Title Tags',
-					score: 1,
-					scoreDisplayMode: 'binary' as const,
-					displayValue: 'Title tag found',
-					category: 'on-page' as const
-				}
-			]
-		},
-		{
-			url: 'https://test-site.com/page1',
-			title: 'Page 1',
-			statusCode: 200,
-			crawledAt: new Date().toISOString(),
-			audits: [
-				{
-					id: 'h1-tags',
-					title: 'H1 Tags',
-					score: 0,
-					scoreDisplayMode: 'binary' as const,
-					displayValue: '0 H1 tag(s) found',
-					category: 'on-page' as const
-				},
-				{
-					id: 'title-tags',
-					title: 'Title Tags',
-					score: 1,
-					scoreDisplayMode: 'binary' as const,
-					displayValue: 'Title tag found',
-					category: 'on-page' as const
-				}
-			]
-		}
-	],
-	onSiteAudits: [
-		{
-			id: 'https',
-			title: 'HTTPS',
-			score: 1,
-			scoreDisplayMode: 'binary' as const,
-			displayValue: 'Site uses HTTPS',
-			category: 'on-site' as const
-		}
-	]
-};
-
-const mockErrorData = {
-	site: 'test-site.com',
-	url: 'https://test-site.com',
-	overallScore: null,
-	totalPages: 0,
-	status: 'error' as const,
-	error: 'Failed to analyze site',
-	timestamp: new Date().toISOString(),
-	pagesAnalyzed: [],
-	onSiteAudits: []
-};
+const mockSiteData = siteHealthData.onSiteSeo;
+const mockErrorData = siteHealthData.onSiteSeoError;
 
 // Mock the SiteHealthTemplate component
 vi.mock('../components/admin/site-health/site-health-template', () => ({

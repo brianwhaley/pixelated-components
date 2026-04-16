@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render } from '../test/test-utils';
-import { ReviewSchema, type ReviewSchemaType } from '@/components/general/schema';
+import { ReviewSchema, type ReviewSchemaType } from '@/components/foundation/schema';
 
 const defaultReview: ReviewSchemaType['review'] = {
 	'@context': 'https://schema.org/',

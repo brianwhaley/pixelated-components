@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { generateManifest, type ManifestOptions } from '@/components/general/manifest';
+import { generateManifest, type ManifestOptions } from '@/components/foundation/manifest';
 import type { SiteInfo } from '@/components/config/config.types';
 import { siteInfoFull as mockSiteInfo } from '../test/test-data';
 

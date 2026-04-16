@@ -98,7 +98,7 @@ FormBuild.propTypes = {
 export type FormBuildType = InferProps<typeof FormBuild.propTypes>;
 export function FormBuild(props: FormBuildType) {
 
-	function generateFieldJSON (component: string, type: string) {
+	function generateFormBuilderFieldJSON (component: string, type: string) {
 		// GENERATE THE JSON TO DISPLAY A FORM TO ADD A FIELD - INTERNAL
 		if (debug) console.log("Generating Form JSON for ", component , " Type : ", type);
 		const form: { fields: { [key: string]: any }[] } = { fields: [] };
@@ -139,7 +139,7 @@ export function FormBuild(props: FormBuildType) {
 		const typeElement = target.elements.namedItem('type') as HTMLInputElement;
 		const myType = typeElement ? typeElement.value : '';
 		const myComponent = mapTypeToComponent(myType);
-		const fieldJSON = generateFieldJSON(myComponent, myType);
+		const fieldJSON = generateFormBuilderFieldJSON(myComponent, myType);
 		props.setFormData(fieldJSON);
 		return true;
 	}

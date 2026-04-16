@@ -2,7 +2,7 @@ import React from 'react';
 import { BlogPostList } from '@/components/integrations/wordpress.components';
 
 export default {
-	title: 'General',
+	title: 'Integrations/WordPress',
 	component: BlogPostList,
 	argTypes: {
 		count: {

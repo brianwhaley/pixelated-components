@@ -3,6 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { SiteHealthSecurity } from '../components/admin/site-health/site-health-security';
 import type { DependencyData, Vulnerability } from '../components/admin/site-health/site-health-types';
+import { createSiteHealthResponse } from '../test/test-data';
 
 // Mock the SiteHealthTemplate component
 vi.mock('../components/admin/site-health/site-health-template', () => ({
@@ -11,24 +12,17 @@ vi.mock('../components/admin/site-health/site-health-template', () => ({
 		const [loading, setLoading] = React.useState(true);
 
 		React.useEffect(() => {
-			const mockSiteData = {
-				site: 'test-site',
-				url: 'https://test-site.com',
-				status: 'success',
-				scores: {
-					security: 0.95
-				},
-				certStatus: 'valid',
-				certExpires: '2025-12-31'
-			};
+			(async () => {
+				const mockSiteResponse = await createSiteHealthResponse(siteName || 'test-site', 'https://www.example.com');
 
-			const transformedData = endpoint?.responseTransformer
-				? endpoint.responseTransformer(mockSiteData)
-				: mockSiteData;
+				const transformedData = endpoint?.responseTransformer
+					? endpoint.responseTransformer(mockSiteResponse)
+					: mockSiteResponse;
 
-			setData(transformedData);
-			setLoading(false);
-		}, [endpoint]);
+				setData(transformedData);
+				setLoading(false);
+			})();
+		}, [endpoint, siteName]);
 
 		if (loading) return <div>Loading...</div>;
 

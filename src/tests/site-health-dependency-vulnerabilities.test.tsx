@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { SiteHealthDependencyVulnerabilities } from '../components/admin/site-health/site-health-dependency-vulnerabilities';
+import { siteHealthData } from '../test/test-data';
 
 // Mock the SiteHealthTemplate component
 vi.mock('../components/admin/site-health/site-health-template', () => ({
@@ -11,36 +12,9 @@ vi.mock('../components/admin/site-health/site-health-template', () => ({
 
 		React.useEffect(() => {
 			const mockSiteData = {
-				success: true,
-				status: 'Low Risk',
+				...siteHealthData.dependencyVulnerabilities,
 				timestamp: new Date().toISOString(),
 				url: 'https://test-site.com',
-				vulnerabilities: [
-					{ 
-						name: 'lodash', 
-						severity: 'high', 
-						range: '4.17.20',
-						fixAvailable: true,
-						title: 'Prototype pollution vulnerability'
-					},
-					{ 
-						name: 'react', 
-						severity: 'low', 
-						range: '16.0.0',
-						fixAvailable: true,
-						title: 'Minor security update'
-					}
-				],
-				summary: {
-					info: 0,
-					low: 1,
-					moderate: 0,
-					high: 1,
-					critical: 0,
-					total: 2
-				},
-				dependencies: 150,
-				totalDependencies: 150
 			};
 
 			const transformedData = endpoint?.responseTransformer

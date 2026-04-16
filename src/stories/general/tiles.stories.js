@@ -30,7 +30,7 @@ function fetchFlickrOnce(cfg) {
 };
 
 export default {
-	title: 'General',
+	title: 'General/Tiles',
 	component: Tiles,
 };
 

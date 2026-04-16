@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes, { InferProps } from 'prop-types';
 import * as FC from './formcomponents';
 import * as FVF from './formfieldvalidations';
-import { capitalize, attributeMap } from '../../general/utilities';
+import { capitalize, attributeMap } from '../../foundation/utilities';
 import { FormEngine } from './formengine';
 const debug = false;
 

@@ -1,0 +1,195 @@
+{
+  "dependencyVulnerabilities": {
+    "success": true,
+    "status": "Low Risk",
+    "timestamp": "2024-01-01T00:00:00.000Z",
+    "url": "https://test-site.com",
+    "vulnerabilities": [
+      {
+        "name": "lodash",
+        "severity": "high",
+        "range": "4.17.20",
+        "fixAvailable": true,
+        "title": "Prototype pollution vulnerability"
+      },
+      {
+        "name": "react",
+        "severity": "low",
+        "range": "16.0.0",
+        "fixAvailable": true,
+        "title": "Minor security update"
+      }
+    ],
+    "summary": {
+      "info": 0,
+      "low": 1,
+      "moderate": 0,
+      "high": 1,
+      "critical": 0,
+      "total": 2
+    },
+    "dependencies": 150,
+    "totalDependencies": 150
+  },
+  "onSiteSeo": {
+    "site": "test-site.com",
+    "url": "https://test-site.com",
+    "overallScore": 0.75,
+    "totalPages": 2,
+    "status": "success",
+    "timestamp": "2024-01-01T00:00:00.000Z",
+    "pagesAnalyzed": [
+      {
+        "url": "https://test-site.com",
+        "title": "Home Page",
+        "statusCode": 200,
+        "crawledAt": "2024-01-01T00:00:00.000Z",
+        "audits": [
+          {
+            "id": "h1-tags",
+            "title": "H1 Tags",
+            "score": 1,
+            "scoreDisplayMode": "binary",
+            "displayValue": "1 H1 tag(s) found",
+            "category": "on-page",
+            "details": {
+              "items": [
+                { "tag": "h1", "text": "Welcome" }
+              ]
+            }
+          },
+          {
+            "id": "title-tags",
+            "title": "Title Tags",
+            "score": 1,
+            "scoreDisplayMode": "binary",
+            "displayValue": "Title tag found",
+            "category": "on-page"
+          }
+        ]
+      },
+      {
+        "url": "https://test-site.com/page1",
+        "title": "Page 1",
+        "statusCode": 200,
+        "crawledAt": "2024-01-01T00:00:00.000Z",
+        "audits": [
+          {
+            "id": "h1-tags",
+            "title": "H1 Tags",
+            "score": 0,
+            "scoreDisplayMode": "binary",
+            "displayValue": "0 H1 tag(s) found",
+            "category": "on-page"
+          },
+          {
+            "id": "title-tags",
+            "title": "Title Tags",
+            "score": 1,
+            "scoreDisplayMode": "binary",
+            "displayValue": "Title tag found",
+            "category": "on-page"
+          }
+        ]
+      }
+    ],
+    "onSiteAudits": [
+      {
+        "id": "https",
+        "title": "HTTPS",
+        "score": 1,
+        "scoreDisplayMode": "binary",
+        "displayValue": "Site uses HTTPS",
+        "category": "on-site"
+      }
+    ]
+  },
+  "panels": {
+    "data": [
+      {
+        "site": "test-site",
+        "url": "https://test.com",
+        "status": "success",
+        "scores": {
+          "performance": 0.85,
+          "seo": 0.9,
+          "best-practices": 0.8,
+          "accessibility": 0.88,
+          "pwa": 0.75
+        },
+        "categories": {
+          "performance": {
+            "audits": [
+              {
+                "id": "audit1",
+                "score": 0.9,
+                "title": "Test Audit",
+                "scoreDisplayMode": "numeric",
+                "displayValue": "Good"
+              }
+            ]
+          },
+          "seo": {
+            "audits": [
+              {
+                "id": "seo-audit",
+                "score": 0.95,
+                "title": "SEO Test",
+                "scoreDisplayMode": "numeric",
+                "displayValue": "Excellent"
+              }
+            ]
+          },
+          "pwa": {
+            "audits": []
+          }
+        }
+      }
+    ]
+  },
+  "performance": {
+    "site": "test-site",
+    "url": "https://test-site.com",
+    "scores": {
+      "performance": 0.85,
+      "accessibility": 0.90,
+      "best_practices": 0.88,
+      "seo": 0.92
+    },
+    "status": "success",
+    "categories": {
+      "performance": {
+        "audits": [
+          {
+            "id": "first-contentful-paint",
+            "title": "First Contentful Paint",
+            "score": 0.95,
+            "scoreDisplayMode": "numeric",
+            "displayValue": "0.9 s"
+          },
+          {
+            "id": "largest-contentful-paint",
+            "title": "Largest Contentful Paint",
+            "score": 0.88,
+            "scoreDisplayMode": "numeric",
+            "displayValue": "2.1 s"
+          }
+        ]
+      },
+      "pwa": {
+        "audits": []
+      }
+    }
+  },
+  "onSiteSeoError": {
+    "site": "test-site.com",
+    "url": "https://test-site.com",
+    "overallScore": null,
+    "totalPages": 0,
+    "status": "error",
+    "error": "Failed to analyze site",
+    "timestamp": "2024-01-01T00:00:00.000Z",
+    "pagesAnalyzed": [],
+    "onSiteAudits": []
+  }
+}

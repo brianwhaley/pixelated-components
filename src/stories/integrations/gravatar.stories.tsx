@@ -84,7 +84,7 @@ const GravatarStoryWrapper = (args: GravatarCardType & { email?: string; debug?:
 };
 
 export default {
-	title: 'General',
+	title: 'Integrations/Gravatar',
 	component: GravatarCard,
 	argTypes: {
 		layout: {

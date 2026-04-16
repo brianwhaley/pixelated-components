@@ -22,7 +22,7 @@ function FormEngineWithJSONPropertiesStory() {
 }
 
 export default {
-	title: 'Admin/SiteBuilder/Form',
+	title: 'SiteBuilder/Form Engine',
 	component: FormEngine,
 };
 

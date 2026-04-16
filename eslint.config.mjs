@@ -47,6 +47,7 @@ export default [
 				"@next/next/no-html-link-for-pages": "off",
 				// '@typescript-eslint/explicit-function-return-type': 'off',
 				'@typescript-eslint/no-explicit-any': 'off',
+				'@typescript-eslint/no-redeclare': 'error',
 				// Disable rules that conflict with propTypes + InferProps pattern
 				'@typescript-eslint/no-unused-vars': 'off', // Allow unused props in function signatures and exported types
 				'react/prop-types': 'off', // We use our own propTypes system

@@ -25,12 +25,10 @@ class MockIntersectionObserver {
 window.IntersectionObserver = MockIntersectionObserver as any;
 const mockIntersectionObserver = vi.spyOn(window, 'IntersectionObserver');
 
+import { mockCloudinary } from '../test/test-data';
+
 const mockConfig = {
-	cloudinary: {
-		product_env: 'test-env',
-		baseUrl: 'https://test.cloudinary.com',
-		transforms: 'test-transforms',
-	},
+	cloudinary: mockCloudinary,
 };
 
 const renderWithConfig = (component: React.ReactElement) => {

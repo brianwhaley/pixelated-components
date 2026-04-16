@@ -6,7 +6,7 @@ import { getWordPressItems, getWordPressItemImages } from "../integrations/wordp
 import { getContentfulFieldValues, getContentfulAssets } from "../integrations/contentful.delivery";
 import { getEbayAppToken, getEbayItemsSearch } from "../shoppingcart/ebay.functions";
 import { getFullPixelatedConfig } from '../config/config';
-import { CacheManager } from '../general/cache-manager';
+import { CacheManager } from '../foundation/cache-manager';
 import { getDomain } from './utilities';
 import { smartFetch } from './smartfetch';
 

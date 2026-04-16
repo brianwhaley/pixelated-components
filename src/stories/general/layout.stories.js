@@ -2,7 +2,7 @@ import React from 'react';
 import { PageSection, PageGridItem, PageFlexItem } from '@/components/general/semantic';
 
 export default {
-	title: 'General',
+	title: 'General/Layout',
 	component: PageSection,
 	parameters: {
 		docs: {
