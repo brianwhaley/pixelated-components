@@ -402,7 +402,11 @@ step_select_remote() {
     local remote_repo
     remote_repo=$(basename -s .git "${remote_url##*/}")
     local local_repo
-    local_repo=$(basename "$(git rev-parse --show-toplevel)")
+    if [ "$WORKSPACE_ROOT" != "$MONOREPO_ROOT" ]; then
+        local_repo=$(basename "$WORKSPACE_ROOT")
+    else
+        local_repo=$(basename "$MONOREPO_ROOT")
+    fi
     
     if [ -n "$remote_repo" ] && [ "$remote_repo" != "$local_repo" ]; then
         echo "⚠️  Warning: Remote '$REMOTE_NAME' points to '$remote_repo' but you're in '$local_repo'"

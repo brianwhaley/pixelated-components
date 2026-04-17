@@ -1,6 +1,6 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.15.11",
+	"version": "3.15.12",
 	"type": "module",
 	"private": false,
 	"repository": {
@@ -79,8 +79,8 @@
 		"test:coverage": "npm run test:validator && vitest run --coverage",
 		"test:watch": "vitest",
 		"config:vault": "npx tsx $(node -e 'console.log(require.resolve(\"@pixelated-tech/components/scripts/config-vault.js\"))')",
-		"config:encrypt": "npm run config:vault -- encrypt src/app/config/pixelated.config.json",
-		"config:decrypt": "npm run config:vault -- decrypt src/app/config/pixelated.config.json.enc",
+		"config:encrypt": "npm run config:vault -- encrypt src/config/pixelated.config.json",
+		"config:decrypt": "npm run config:vault -- decrypt src/config/pixelated.config.json.enc",
 		"release:prep": "node src/scripts/release-prep.js",
 		"release": "bash $(node -e 'console.log(require.resolve(\"@pixelated-tech/components/scripts/release.sh\"))')",
 		"update": "bash $(node -e 'console.log(require.resolve(\"@pixelated-tech/components/scripts/update.sh\"))')"
