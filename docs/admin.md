@@ -1,4 +1,4 @@
-# Admin Components
+# Admin Components 
 
 This section covers administrative components and utilities for managing Pixelated Components applications.
 
