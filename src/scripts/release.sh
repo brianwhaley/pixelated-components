@@ -1,4 +1,4 @@
-# Detect changed workspaces (apps/packages) since a base ref
+# Detect changed workspaces (apps/packages/tools) since a base ref
 get_changed_workspaces() {
     # Usage: get_changed_workspaces <base_ref>
     local base_ref="$1"
@@ -16,9 +16,33 @@ get_changed_workspaces() {
         fi
     fi
 
-    git diff --name-only "$base_ref"...HEAD | \
-        grep -E '^apps/' | \
+    {
+        git diff --name-only "$base_ref"...HEAD
+        git diff --name-only --cached
+        git diff --name-only
+        git ls-files --others --exclude-standard
+    } | \
+        grep -E '^(apps|packages|tools)/' | \
         awk -F/ '{print $1"/"$2}' | sort -u
+}
+
+collect_changed_workspaces() {
+    local base_ref="${REMOTE_NAME}/main"
+    CHANGED_WORKSPACES=()
+    while IFS= read -r workspace; do
+        if [ -n "$workspace" ]; then
+            CHANGED_WORKSPACES+=("$workspace")
+        fi
+    done < <(get_changed_workspaces "$base_ref")
+
+    if [ ${#CHANGED_WORKSPACES[@]} -eq 0 ]; then
+        echo "ℹ️  No changed workspaces detected relative to $base_ref"
+    else
+        echo "✅ Changed workspaces (${#CHANGED_WORKSPACES[@]}):"
+        for workspace in "${CHANGED_WORKSPACES[@]}"; do
+            echo "  - $workspace"
+        done
+    fi
 }
 #!/bin/bash
 
@@ -34,6 +58,7 @@ set -e
 STEP_COUNT=1
 declare -a SUCCESSFUL_WORKSPACES
 declare -a PUSH_ERRORS
+declare -a CHANGED_WORKSPACES
 REMOTE_NAME=""
 VERSION_TYPE=""
 COMMIT_MESSAGE=""
@@ -338,18 +363,21 @@ generate_sitemap_images_for_workspace() {
 
 step_generate_sitemap_images() {
     echo ""
-    echo "🔄 Running sitemap image generation for each workspace..."
+    echo "🔄 Running sitemap image generation for changed workspaces..."
     echo "================================================="
     echo ""
 
-    shopt -s nullglob
-    for workspace_pattern in "${WORKSPACE_DIRS[@]}"; do
-        for workspace_dir in $workspace_pattern; do
-            if [ -d "$workspace_dir" ] && [ -f "$workspace_dir/package.json" ]; then
-                local workspace_name
-                workspace_name=$(node -p "require('$workspace_dir/package.json').name" 2>/dev/null || basename "$workspace_dir")
-                local workspace_path
-                workspace_path=$(basename "$workspace_dir")
+    if [ ${#CHANGED_WORKSPACES[@]} -eq 0 ]; then
+        echo "ℹ️  No changed workspaces to generate sitemap images for"
+        return
+    fi
+
+    for workspace_dir in "${CHANGED_WORKSPACES[@]}"; do
+        if [ -d "$workspace_dir" ] && [ -f "$workspace_dir/package.json" ]; then
+            local workspace_name
+            workspace_name=$(node -p "require('$workspace_dir/package.json').name" 2>/dev/null || basename "$workspace_dir")
+            local workspace_path
+            workspace_path=$(basename "$workspace_dir")
 
             echo ""
             echo "================================================="
@@ -364,7 +392,6 @@ step_generate_sitemap_images() {
             popd >/dev/null
         fi
     done
-  done
 }
 
 step_prompt_version() {
@@ -401,14 +428,11 @@ bump_all_workspaces() {
     echo ""
     echo "🏷️  Step $((STEP_COUNT++)): Bump all changed apps with '$VERSION_TYPE'..."
     echo "================================================="
-    shopt -s nullglob
-    local base_ref="${REMOTE_NAME:-origin}/main"
-    local changed_dirs=( $(get_changed_workspaces "$base_ref") )
-    if [ ${#changed_dirs[@]} -eq 0 ]; then
+    if [ ${#CHANGED_WORKSPACES[@]} -eq 0 ]; then
         echo "ℹ️  No changed apps detected. Skipping bump."
         return
     fi
-    for workspace_dir in "${changed_dirs[@]}"; do
+    for workspace_dir in "${CHANGED_WORKSPACES[@]}"; do
         if [ -f "$MONOREPO_ROOT/$workspace_dir/package.json" ]; then
             bump_workspace_package "$MONOREPO_ROOT/$workspace_dir"
         fi
@@ -642,6 +666,8 @@ run_full_workflow() {
     # Run full workflow steps
     step_check_dev_branch
     step_select_remote
+    echo ""
+    collect_changed_workspaces
     step_generate_sitemap_images
     step_verify_github_token
     step_verify_dist_config

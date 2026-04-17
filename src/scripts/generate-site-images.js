@@ -22,6 +22,14 @@ function listFiles(dir, exts = ['.jpg','.jpeg','.png','.webp','.avif','.gif']) {
 	return out;
 }
 
+if (!fs.existsSync(publicDir)) {
+	fs.mkdirSync(publicDir, { recursive: true });
+}
+
+if (!fs.existsSync(publicDir)) {
+	fs.mkdirSync(publicDir, { recursive: true });
+}
+
 const files = listFiles(publicDir);
 const manifest = {
 	metadata: {
