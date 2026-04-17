@@ -2,6 +2,20 @@
 get_changed_workspaces() {
     # Usage: get_changed_workspaces <base_ref>
     local base_ref="$1"
+
+    if ! git rev-parse --verify --quiet "$base_ref" >/dev/null; then
+        if git rev-parse --verify --quiet "main" >/dev/null; then
+            echo "⚠️  Warning: base ref '$base_ref' not found. Falling back to 'main'." >&2
+            base_ref="main"
+        elif git rev-parse --verify --quiet "HEAD^" >/dev/null; then
+            echo "⚠️  Warning: base ref '$base_ref' not found. Falling back to 'HEAD^'." >&2
+            base_ref="HEAD^"
+        else
+            echo "⚠️  Warning: base ref '$base_ref' not found. Falling back to 'HEAD'." >&2
+            base_ref="HEAD"
+        fi
+    fi
+
     git diff --name-only "$base_ref"...HEAD | \
         grep -E '^apps/' | \
         awk -F/ '{print $1"/"$2}' | sort -u
