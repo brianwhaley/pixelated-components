@@ -402,7 +402,7 @@ bump_all_workspaces() {
     echo "🏷️  Step $((STEP_COUNT++)): Bump all changed apps with '$VERSION_TYPE'..."
     echo "================================================="
     shopt -s nullglob
-    local base_ref="origin/main"
+    local base_ref="${REMOTE_NAME:-origin}/main"
     local changed_dirs=( $(get_changed_workspaces "$base_ref") )
     if [ ${#changed_dirs[@]} -eq 0 ]; then
         echo "ℹ️  No changed apps detected. Skipping bump."
