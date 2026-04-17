@@ -222,6 +222,74 @@ prompt_remote_selection() {
     esac
 }
 
+get_workspace_repository_url() {
+    local package_json="$WORKSPACE_ROOT/package.json"
+    if [ ! -f "$package_json" ]; then
+        return 1
+    fi
+
+    node -e '
+const fs = require("fs");
+const file = process.argv[1];
+let data;
+try {
+  data = JSON.parse(fs.readFileSync(file, "utf8"));
+} catch (err) {
+  process.exit(1);
+}
+const repo = data.repository;
+if (!repo) process.exit(1);
+if (typeof repo === "string") {
+  console.log(repo);
+  process.exit(0);
+}
+if (repo && typeof repo.url === "string") {
+  console.log(repo.url);
+  process.exit(0);
+}
+process.exit(1);
+' "$package_json"
+}
+
+normalize_git_repo_path() {
+    local repo_url="$1"
+    repo_url="${repo_url%/}"
+    repo_url="${repo_url#git@github.com:}"
+    repo_url="${repo_url#ssh://git@github.com/}"
+    repo_url="${repo_url#https://github.com/}"
+    repo_url="${repo_url#http://github.com/}"
+    repo_url="${repo_url#git://github.com/}"
+    repo_url="${repo_url%.git}"
+    echo "${repo_url%%/}"
+}
+
+find_remote_by_repository_url() {
+    local repository_url="$1"
+    local target_repo
+    target_repo=$(normalize_git_repo_path "$repository_url")
+    if [ -z "$target_repo" ]; then
+        return 1
+    fi
+
+    local remote
+    for remote in $(git remote); do
+        local remote_url
+        remote_url=$(git remote get-url "$remote" 2>/dev/null || true)
+        if [ -z "$remote_url" ]; then
+            continue
+        fi
+
+        local remote_repo
+        remote_repo=$(normalize_git_repo_path "$remote_url")
+        if [ "$remote_repo" = "$target_repo" ]; then
+            echo "$remote"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
 prompt_version_type() {
     echo "Current version: $(get_current_version)" >&2
     echo "Select version bump type:" >&2
@@ -352,7 +420,6 @@ generate_sitemap_images_for_workspace() {
     local workspace_dir="$2"
 
     echo "  📦 Generating sitemap images for $workspace_name..."
-    echo "================================================="
     if ! node $(node -e 'console.log(require.resolve("@pixelated-tech/components/scripts/generate-site-images.js"))') > /tmp/generate_site_images_output.log 2>&1; then
         echo "❌ Sitemap image generation failed for $workspace_name at $workspace_dir"
         cat /tmp/generate_site_images_output.log
@@ -363,8 +430,9 @@ generate_sitemap_images_for_workspace() {
 
 step_generate_sitemap_images() {
     echo ""
-    echo "🔄 Running sitemap image generation for changed workspaces..."
+    echo "🔄 Step $((STEP_COUNT++)): Sitemap image generation ..."
     echo "================================================="
+    echo " * ONLY FOR WORKSPACES WITH CHANGES * "
     echo ""
 
     if [ ${#CHANGED_WORKSPACES[@]} -eq 0 ]; then
@@ -380,7 +448,6 @@ step_generate_sitemap_images() {
             workspace_path=$(basename "$workspace_dir")
 
             echo ""
-            echo "================================================="
             echo "📍 Generating sitemap images: $workspace_name"
             echo "================================================="
             pushd "$workspace_dir" >/dev/null
@@ -467,7 +534,7 @@ step_push_tags() {
     echo ""
     echo "🏷️  Step $((STEP_COUNT++)): Push tags..."
     echo "================================================="
-    if [ -z "$NEW_VERSION" ]; then
+    if [ -z "$NEW_VERSION" ] || [[ "$NEW_VERSION" =~ ^(patch|minor|major|none)$ ]]; then
         NEW_VERSION=$(get_current_version)
     fi
     git_push_tags "$REMOTE_NAME" "$NEW_VERSION" "$COMMIT_MESSAGE"
@@ -609,11 +676,25 @@ step_git_subtree_deploy() {
     
     echo "📤 Deploying app/tool via git subtree push..."
     
-    local MATCHING_REMOTE
-    MATCHING_REMOTE=$(git remote | grep "$APP_NAME" | head -1)
-    
+    local repository_url
+    repository_url=$(get_workspace_repository_url 2>/dev/null || true)
+    local MATCHING_REMOTE=""
+
+    if [ -n "$repository_url" ]; then
+        echo "ℹ️  Resolving remote from package.json repository metadata..."
+        MATCHING_REMOTE=$(find_remote_by_repository_url "$repository_url" 2>/dev/null || true)
+    fi
+
+    if [ -z "$MATCHING_REMOTE" ] && [ -n "$APP_NAME" ]; then
+        MATCHING_REMOTE=$(git remote | grep -x "$APP_NAME" | head -1 || true)
+    fi
+
     if [ -z "$MATCHING_REMOTE" ]; then
-        echo "⚠️  No remote found matching app name '$APP_NAME'; skipping subtree push"
+        if [ -n "$repository_url" ]; then
+            echo "⚠️  No git remote found matching repository.url '$repository_url'; skipping subtree push"
+        else
+            echo "⚠️  No repository metadata found in package.json and no remote found matching app name '$APP_NAME'; skipping subtree push"
+        fi
         return
     fi
     

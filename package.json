@@ -1,8 +1,20 @@
 {
 	"name": "@pixelated-tech/components",
-	"version": "3.15.10",
+	"version": "3.15.11",
 	"type": "module",
 	"private": false,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/brianwhaley/pixelated-components.git"
+	},
+	"homepage": "https://github.com/brianwhaley/pixelated-components#readme",
+	"bugs": {
+		"url": "https://github.com/brianwhaley/pixelated-components/issues"
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org",
+		"access": "public"
+	},
 	"author": {
 		"name": "Pixelated Technologies",
 		"url": "https://www.pixelated.tech/"
@@ -47,21 +59,6 @@
 		"./dist/components/*": "./dist/components/*",
 		"./css/*": "./dist/css/*",
 		"./scripts/*": "./dist/scripts/*"
-	},
-	"bin": {
-		"update2": "./dist/scripts/update.sh"
-	},
-	"homepage": "https://github.com/brianwhaley/pixelated-components#readme",
-	"bugs": {
-		"url": "https://github.com/brianwhaley/pixelated-components/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/brianwhaley/pixelated-components.git"
-	},
-	"publishConfig": {
-		"registry": "https://registry.npmjs.org",
-		"access": "public"
 	},
 	"browser": {
 		"fs": false,
