@@ -1,3 +1,11 @@
+# Detect changed workspaces (apps/packages) since a base ref
+get_changed_workspaces() {
+    # Usage: get_changed_workspaces <base_ref>
+    local base_ref="$1"
+    git diff --name-only "$base_ref"...HEAD | \
+        grep -E '^apps/' | \
+        awk -F/ '{print $1"/"$2}' | sort -u
+}
 #!/bin/bash
 
 # Universal Release Script for Pixelated Projects
@@ -377,19 +385,22 @@ bump_all_workspaces() {
     fi
 
     echo ""
-    echo "🏷️  Step $((STEP_COUNT++)): Bump all workspaces with '$VERSION_TYPE'..."
+    echo "🏷️  Step $((STEP_COUNT++)): Bump all changed apps with '$VERSION_TYPE'..."
     echo "================================================="
     shopt -s nullglob
-    local workspace_patterns=("$MONOREPO_ROOT/packages/*" "$MONOREPO_ROOT/apps/*" "$MONOREPO_ROOT/tools/*")
-    for workspace_pattern in "${workspace_patterns[@]}"; do
-        for workspace_dir in $workspace_pattern; do
-            if [ -f "$workspace_dir/package.json" ]; then
-                bump_workspace_package "$workspace_dir"
-            fi
-        done
+    local base_ref="origin/main"
+    local changed_dirs=( $(get_changed_workspaces "$base_ref") )
+    if [ ${#changed_dirs[@]} -eq 0 ]; then
+        echo "ℹ️  No changed apps detected. Skipping bump."
+        return
+    fi
+    for workspace_dir in "${changed_dirs[@]}"; do
+        if [ -f "$MONOREPO_ROOT/$workspace_dir/package.json" ]; then
+            bump_workspace_package "$MONOREPO_ROOT/$workspace_dir"
+        fi
     done
     NEW_VERSION="$VERSION_TYPE"
-    echo "✅ Applied '$VERSION_TYPE' bump to all workspace packages"
+    echo "✅ Applied '$VERSION_TYPE' bump to changed apps"
 }
 
 step_commit_changes() {
